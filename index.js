@@ -72,12 +72,12 @@ initDb();
 
 // Fayl manzillari
 // const DB_FILE = path.join(DATA_DIR, 'ranking_db.json');
-// const SETTINGS_FILE = path.join(DATA_DIR, 'settings.json');
-// const QUESTIONS_FILE = path.join(DATA_DIR, 'custom_questions.json');
-// const VIP_FILE = path.join(DATA_DIR, 'vip_users.json');
-// const SESSION_FILE = path.join(DATA_DIR, 'session.json');
+const SETTINGS_FILE = path.join(DATA_DIR, 'settings.json');
+const QUESTIONS_FILE = path.join(DATA_DIR, 'custom_questions.json');
+const VIP_FILE = path.join(DATA_DIR, 'vip_users.json');
+const SESSION_FILE = path.join(DATA_DIR, 'session.json');
 
-// const SUBJECTS_FILE = path.join(__dirname, 'subjects.json');
+const SUBJECTS_FILE = path.join(__dirname, 'subjects.json');
 // // const adminStates = {}; // Admin holatlarini saqlash uchun
 // // 2. Bazalarni tekshirish va funksiyalar
 // if (!fs.existsSync(DB_FILE)) fs.writeFileSync(DB_FILE, JSON.stringify({ users: {} }));
