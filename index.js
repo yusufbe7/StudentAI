@@ -1390,8 +1390,13 @@ bot.start(async (ctx) => {
     if (user && !user.isRegistered) {
         user.step = 'wait_name'; 
         saveDb(db);
-        return ctx.reply("Siz ro'yxatdan o'tishni boshlagan ekansiz. Davom etish uchun ismingizni kiriting:");
-    }
+return ctx.replyWithHTML(
+    `✨ <b>Yaxshi boshlanish!</b>\n\n` +
+    `Profilingizni yakunlash uchun juda oz qoldi. Keling, tanishib olaylik:\n\n` +
+    `👤 <b>Ismingiz va familiyangizni yozib yuboring:</b>\n` +
+    `<i>(Masalan: Islom Karimov)</i>`,
+    Markup.keyboard([['🚫 Bekor qilish']]).resize() // Agar bekor qilish tugmasi kerak bo'lsa
+);    }
 
     // 3. Agar mutlaqo yangi foydalanuvchi bo'lsa, birinchi marta yaratamiz
     db.users[userId] = {
