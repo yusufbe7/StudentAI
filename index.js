@@ -562,6 +562,30 @@ async function sendTourQuestion(ctx, isNew = false) {
     }, currentStepTime * 1000);
 }
 
+// Admin musobaqa ma'lumotlarini kiritib bo'lgach (masalan, count kiritilgandan keyin)
+async function showTourPreview(ctx) {
+    const s = ctx.session;
+    const text = `📝 <b>Yangi musobaqa tafsilotlari:</b>\n\n` +
+                 `📅 Sana: ${s.tourDate}\n` +
+                 `🕒 Vaqt: ${s.tourTime}\n` +
+                 `🔢 Savollar soni: ${s.tourCount} ta\n\n` +
+                 `Hamma ma'lumotlar to'g'rimi?`;
+
+    return ctx.replyWithHTML(text, Markup.inlineKeyboard([
+        [Markup.button.callback("✅ Tasdiqlash va E'lon qilish", "confirm_tour")],
+        [Markup.button.callback("❌ Rad etish (Bekor qilish)", "reject_tour")]
+    ]));
+}
+
+// Rad etish action'i
+bot.action("reject_tour", async (ctx) => {
+    const db = getDb();
+    db.tournament = { isActive: false }; // Musobaqani o'chirish
+    saveDb(db);
+    ctx.session.adminStep = null;
+    await ctx.editMessageText("❌ Musobaqa bekor qilindi va o'chirildi.");
+});
+
 async function checkSubscription(ctx) {
     try {
         // Kanal yuzernami yoki ID orqali tekshirish
@@ -908,52 +932,66 @@ bot.action("cancel_restart", (ctx) => {
 });
 
 bot.action("confirm_tour", async (ctx) => {
-    // 1. Admin ekanligini tekshirish
     if (ctx.from.id !== ADMIN_ID) return ctx.answerCbQuery("Ruxsat yo'q!");
     
     try {
         const db = getDb();
         const s = ctx.session;
 
-        // 2. Eskidan qolib ketgan natijalarni hammaning profilidan tozalash
-        // Bu yangi musobaqada hamma nol ball bilan boshlashi va tugmani ko'rishi uchun shart
+        // 1. Hammaning holatini tozalash
         Object.keys(db.users).forEach(id => {
-            db.users[id].tourScore = 0;       // Musobaqa balini nolga tushirish
-            db.users[id].tourFinished = false; // "Tugatdi" degan belgi olib tashlanadi
+            db.users[id].tourScore = 0;
+            db.users[id].tourFinished = false;
         });
 
-        // 3. Savollarni barcha fanlardan aralashtirib yig'ish
-        // prepareTournamentQuestions funksiyasi barcha fanlardan tasodifiy savollarni yig'adi
         const tourQuestions = prepareTournamentQuestions(parseInt(s.tourCount));
 
-        // 4. Musobaqa ma'lumotlarini bazaga saqlash
+        // 2. Musobaqani saqlash
         db.tournament = {
             isActive: true,
             date: s.tourDate,
             time: s.tourTime,
             count: parseInt(s.tourCount),
-            participants: [], // Ro'yxatdan o'tganlar ro'yxati (IDlar)
-            questions: tourQuestions // Aralashgan savollar paketi
+            participants: [],
+            questions: tourQuestions
         };
 
         saveDb(db);
 
-        // 5. Admin xabarini yangilash
+        // 3. Admin xabarini yangilash
         await ctx.editMessageText(
-            `✅ <b>Musobaqa muvaffaqiyatli yaratildi!</b>\n\n` +
+            `✅ <b>Musobaqa e'lon qilindi!</b>\n\n` +
             `📅 Sana: ${s.tourDate}\n` +
-            `🕒 Vaqt: ${s.tourTime}\n` +
-            `📝 Savollar: ${s.tourCount} ta\n\n` +
-            `Barcha foydalanuvchilar menyusida "🏆 Xalqaro test musobaqa" tugmasi paydo bo'ldi.`,
+            `🕒 Vaqt: ${s.tourTime}\n\n` +
+            `Hozir barcha foydalanuvchilarga xabar yuborilmoqda...`,
             { parse_mode: 'HTML' }
         );
 
-        // Sessiyadagi admin vaqtinchalik ma'lumotlarini tozalaymiz
+        // 4. 🔥 FOYDALANUVCHILARGA XABAR YUBORISH VA MENYUNI O'ZGARTIRISH
+        const userIds = Object.keys(db.users);
+        const announceText = `📣 <b>YANGI MUSOBAQA REJALASHTIRILDI!</b>\n\n` +
+                             `📅 Sana: <b>${s.tourDate}</b>\n` +
+                             `🕒 Vaqt: <b>${s.tourTime}</b>\n` +
+                             `📝 Savollar soni: <b>${s.tourCount} ta</b>\n\n` +
+                             `Musobaqada qatnashish uchun quyidagi tugmani bosing:`;
+
+        for (const userId of userIds) {
+            try {
+                await ctx.telegram.sendMessage(userId, announceText, {
+                    parse_mode: 'HTML',
+                    // Oddiy menyu o'rniga faqat bitta tugma chiqadi:
+                    ...Markup.keyboard([["🏆 Musobaqaga o'tish"]]).resize()
+                });
+            } catch (e) {
+                console.log(`${userId} botni bloklagan.`);
+            }
+        }
+
         s.adminStep = null;
 
     } catch (err) {
-        console.error("Musobaqa yaratishda xato:", err);
-        await ctx.reply("❌ Musobaqani saqlashda texnik xatolik yuz berdi.");
+        console.error("Xato:", err);
+        await ctx.reply("❌ Texnik xatolik.");
     }
 });
 
@@ -992,9 +1030,36 @@ bot.action("cancel_join", async (ctx) => {
 
 // Musobaqani rad etish actioni
 bot.action("reject_tour", async (ctx) => {
+    // 1. Admin ekanligini tekshirish
     if (ctx.from.id !== ADMIN_ID) return ctx.answerCbQuery("Ruxsat yo'q!");
-    ctx.session.adminStep = null;
-    await ctx.editMessageText("❌ Musobaqa yaratish bekor qilindi.");
+
+    try {
+        const db = getDb();
+        
+        // 2. Musobaqa hali e'lon qilinmagani uchun uni isActive: false qilib qo'yamiz
+        // Bu tasodifiy xatoliklarning oldini oladi
+        db.tournament.isActive = false;
+        db.tournament.participants = [];
+        saveDb(db);
+
+        // 3. Admin sessiyasini tozalash (qadamlarni nolga tushirish)
+        ctx.session.adminStep = null;
+        ctx.session.tourDate = null;
+        ctx.session.tourTime = null;
+        ctx.session.tourCount = null;
+
+        // 4. Admin xabarini yangilash va Loadingni to'xtatish
+        await ctx.answerCbQuery("Musobaqa bekor qilindi");
+        await ctx.editMessageText(
+            "❌ <b>Musobaqa yaratish jarayoni bekor qilindi.</b>\n\n" +
+            "Hech qanday xabar yuborilmadi va bazaga ma'lumot yozilmadi.",
+            { parse_mode: 'HTML' }
+        );
+
+    } catch (error) {
+        console.error("Reject tour error:", error);
+        await ctx.reply("❌ Bekor qilishda xatolik yuz berdi.");
+    }
 });
 
 bot.action(/tourans_(\d+)/, async (ctx) => {
@@ -1107,7 +1172,31 @@ bot.use(async (ctx, next) => {
 });
 
 
-// 2. Inline tugmalar javobi
+bot.hears("🏆 Musobaqaga o'tish", async (ctx) => {
+    const db = getDb();
+    const tour = db.tournament;
+
+    if (!tour || !tour.isActive) {
+        return ctx.reply("Hozircha faol musobaqa yo'q.", showSubjectMenu(ctx));
+    }
+
+    const text = `🏆 <b>Xalqaro musobaqa rejasi</b>\n\n` +
+                 `📅 Sana: ${tour.date}\n` +
+                 `🕒 Vaqt: ${tour.time}\n` +
+                 `📝 Savollar: ${tour.count} ta\n\n` +
+                 `Ro'yxatdan o'tish uchun quyidagi tugmani bosing:`;
+
+    return ctx.replyWithHTML(text, Markup.inlineKeyboard([
+        [Markup.button.callback("✅ Ro'yxatdan o'tish", "join_tour")],
+        [Markup.button.callback("⬅️ Fanlarga qaytish", "back_to_main")]
+    ]));
+});
+
+// Fanlarga qaytish (Menyuni tiklash)
+bot.action("back_to_main", async (ctx) => {
+    try { await ctx.deleteMessage(); } catch (e) {}
+    return showSubjectMenu(ctx); // showSubjectMenu avvalgi fanlar menyusini qaytaradi
+});
 
 
 bot.hears('🗑 Botni Restart qilish', (ctx) => {
