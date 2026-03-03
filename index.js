@@ -245,7 +245,7 @@ function showSubjectMenu(ctx) {
     try {
         const db = getDb();
         const userId = ctx.from.id;
-        const tour = db.tournament; // Musobaqa ma'lumotlari
+        const tour = db.tournament;
 
         if (!db || !db.users) {
             return ctx.reply("❌ Ma'lumotlar bazasi topilmadi. Iltimos, /start bosing.");
@@ -259,7 +259,7 @@ function showSubjectMenu(ctx) {
         let keyboard = [];
         const yonalish = user.yonalish;
 
-        // Yo'nalishga qarab fanlar (Sizning kodingiz)
+        // 1. Yo'nalishga qarab fanlarni yuklash
         if (yonalish === "Dasturiy Injiniring") {
             keyboard = [
                 ["📝 Akademik yozuv", "📜 Tarix"],
@@ -280,33 +280,15 @@ function showSubjectMenu(ctx) {
         }
 
         // ==========================================
-        // 🏆 MUSOBAQA TUGMASINI DINAMIK TEKSHIRISH
+        // 🏆 MUSOBAQA TUGMASI (ADMIN TASDIQLASHI BILAN CHIQADI)
         // ==========================================
-        if (tour && tour.isActive) {
-            // Jami davomiylikni hisoblaymiz (soniyadan millisoniyaga: count * 30 * 1000)
-            const totalDurationMs = tour.count * 30 * 1000;
-            const [hour, min] = tour.time.split(':').map(Number);
-            
-            // Bugungi sana bilan boshlanish vaqti
-            const startTime = new Date();
-            startTime.setHours(hour, min, 0, 0);
-            
-            // Tugash vaqti
-            const endTime = new Date(startTime.getTime() + totalDurationMs);
-            const currentTime = new Date();
-
-            // SHART: Vaqt o'tmagan bo'lsa VA user hali yechib tugatmagan bo'lsa
-            if (currentTime < endTime && !user.tourFinished) {
-                // Musobaqa tugmasini eng tepaga qo'shamiz
-                keyboard.unshift(["🏆 Xalqaro test musobaqa"]);
-            } else if (currentTime >= endTime && tour.isActive) {
-                // Agar vaqt o'tgan bo'lsa, musobaqani bazada passiv qilib qo'yamiz
-                db.tournament.isActive = false;
-                saveDb(db);
-            }
+        // Shart: Musobaqa isActive (faol) bo'lsa VA user hali yechib tugatmagan bo'lsa
+        if (tour && tour.isActive === true && !user.tourFinished) {
+            // Admin vaqtni qachonga belgilaganidan qat'iy nazar tugma ko'rinadi
+            keyboard.unshift(["🏆 Xalqaro test musobaqa"]);
         }
 
-        // Qolgan tizim menyulari
+        // 2. Qolgan menyularni qo'shish
         if (db.settings?.turboMode) {
             keyboard.push(["🚀 TURBO YODLASH"]);
         }
@@ -315,7 +297,7 @@ function showSubjectMenu(ctx) {
         keyboard.push(["⚙️ Sozlamalar"]);
 
         const welcomeText = `👤 <b>Foydalanuvchi:</b> ${user.name || "Talaba"}\n` +
-                            `🎓 <b>Yo'nalish:</b> ${yonalish}\n\n` +
+                            `🎓 <b>Yo'nalish:</b> ${yonalish || "Noma'lum"}\n\n` +
                             `Fanni tanlang:`;
 
         return ctx.replyWithHTML(welcomeText, Markup.keyboard(keyboard).resize());
@@ -325,7 +307,6 @@ function showSubjectMenu(ctx) {
         return ctx.reply("❌ Menyuni yuklashda xatolik yuz berdi.");
     }
 }
-
 function makeUserVip(userId) {
     const db = getDb();
     if (db.users[userId]) {
