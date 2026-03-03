@@ -1003,9 +1003,11 @@ bot.action(/tourans_(\d+)/, async (ctx) => {
     const s = ctx.session;
     const db = getDb();
     const tour = db.tournament;
-    const choiceIdx = parseInt(ctx.match[1]); // Foydalanuvchi tanlagan variant indeksi
+    const userId = ctx.from.id;
+    const choiceIdx = parseInt(ctx.match[1]);
 
-    // Vaqt tugab qolmaganini tekshirish
+    // 1. Vaqt va sessiya tekshiruvi
+    if (s.tourIndex === undefined || !tour) return;
     if (Date.now() > s.tourEndTime) {
         return ctx.answerCbQuery("❌ Musobaqa vaqti tugadi!", { show_alert: true });
     }
@@ -1013,19 +1015,67 @@ bot.action(/tourans_(\d+)/, async (ctx) => {
     const currentQuestion = tour.questions[s.tourIndex];
     const userAnswer = s.currentOptions[choiceIdx];
 
-    // Javobni tekshirish
+    // 2. Javobni tekshirish va ball berish
     if (userAnswer === currentQuestion.a) {
-        s.tourScore++; // To'g'ri bo'lsa ball qo'shamiz
-        await ctx.answerCbQuery("✅ To'g'ri!");
+        s.tourScore++;
+        await ctx.answerCbQuery("✅");
     } else {
-        await ctx.answerCbQuery("❌ Noto'g'ri!");
+        await ctx.answerCbQuery("❌");
     }
 
-    // Keyingi savolga o'tish
+    // 3. Indeksni oshirish
     s.tourIndex++;
+
+    // 4. MUHIM: Agar bu oxirgi savol bo'lsa, ballni bazaga yozish
+    if (s.tourIndex >= tour.count) {
+        if (!db.users[userId]) db.users[userId] = {}; // Xavfsizlik uchun
+        db.users[userId].tourScore = s.tourScore;
+        db.users[userId].tourFinished = true;
+        saveDb(db);
+        
+        // Keyingi qadam: finalize/finish qismi sendTourQuestion ichida hal bo'ladi
+    }
     
-    // Keyingi savolni yuborish (false - editMessageText qiladi)
     return sendTourQuestion(ctx, false);
+});
+
+bot.action("start_actual_tour", async (ctx) => {
+    const s = ctx.session;
+    const db = getDb();
+    const tour = db.tournament;
+    const userId = ctx.from.id;
+
+    // 1. Musobaqa hali faolmi?
+    if (!tour || !tour.isActive) {
+        return ctx.answerCbQuery("❌ Musobaqa yakunlangan yoki topilmadi.", { show_alert: true });
+    }
+
+    // 2. Foydalanuvchi ro'yxatdan o'tganmi?
+    if (!tour.participants.includes(userId)) {
+        return ctx.answerCbQuery("❌ Siz ro'yxatdan o'tmagansiz!", { show_alert: true });
+    }
+
+    // 3. Foydalanuvchi allaqachon tugatgan bo'lsa
+    if (db.users[userId].tourFinished) {
+        return ctx.answerCbQuery("✅ Siz bu musobaqani yechib bo'lgansiz!", { show_alert: true });
+    }
+
+    // 4. Test sessionini (imtihon muhitini) sozlash
+    s.tourIndex = 0;    // 1-savoldan boshlash
+    s.tourScore = 0;    // Ballarni nolga tushirish
+    s.userName = db.users[userId].name;
+    
+    // Umumiy tugash vaqtini hisoblash (Hozirgi vaqt + jami test vaqti)
+    s.tourEndTime = Date.now() + (tour.count * 30 * 1000);
+
+    await ctx.answerCbQuery("🚀 Musobaqa boshlandi! Omad!");
+    
+    // Eski xabarni o'chirib, birinchi savolni chiqarish
+    try {
+        await ctx.deleteMessage();
+    } catch (e) {}
+
+    return sendTourQuestion(ctx, true); // Birinchi savolga yuboramiz
 });
 
 bot.use(async (ctx, next) => {
