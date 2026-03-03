@@ -148,31 +148,46 @@ function updateGlobalScore(userId, name, username, score) {
 
 function getLeaderboard(ctx) {
     const db = getDb();
-    if (!db.users) return "Hozircha hech kim test topshirmadi.";
     
+    // 1. Bazada foydalanuvchilar borligini tekshirish
+    if (!db || !db.users || Object.keys(db.users).length === 0) {
+        return "🏆 Hozircha hech kim test topshirmadi. Birinchi bo'ling! 🚀";
+    }
+    
+    // 2. Obyektni massivga o'tkazish
     const usersArray = Object.values(db.users);
-    if (usersArray.length === 0) return "Hozircha hech kim test topshirmadi.";
     
-    // BU YERGA O'ZINGIZNING ID RAQAMINGIZNI YOZING
-    const ADMIN_ID = 123456789; 
+    // 3. FILTRLASH: Faqat ismi bor va balli 0 dan baland foydalanuvchilarni olish
+    const sorted = usersArray
+        .filter(u => u && u.name && u.name !== "undefined" && (u.score || 0) > 0) 
+        .sort((a, b) => (b.score || 0) - (a.score || 0))
+        .slice(0, 10);
+
+    if (sorted.length === 0) {
+        return "🏆 Hozircha reytingda hech kim yo'q.";
+    }
+    
+    // Admin ekanligingizni tekshirish
     const isRequesterAdmin = ctx && ctx.from && ctx.from.id === ADMIN_ID;
 
-    // Saralash (ballar bo'yicha)
-    const sorted = usersArray.sort((a, b) => (b.score || 0) - (a.score || 0)).slice(0, 10);
-    
     let res = "🏆 <b>TOP 10 REYTING</b>\n\n";
+    
     sorted.forEach((u, i) => {
         const medal = i === 0 ? "🥇" : i === 1 ? "🥈" : i === 2 ? "🥉" : "🔹";
-        const name = u.name || "Nomalum";
         
-        // NIK (username) FAQAT ADMIN UCHUN SHAKLLANTIRILADI
+        // Ma'lumotlarni chiroyli formatlash
+        const name = u.name.trim();
+        const score = parseFloat(u.score || 0).toFixed(1);
+        
+        // Username faqat admin uchun ko'rinadi
         let userLink = "";
         if (isRequesterAdmin && u.username && u.username !== "Lichka yopiq") {
-            userLink = ` (@${u.username})`;
+            userLink = ` (<code>${u.username}</code>)`;
         }
 
-        res += `${medal} <b>${name}</b>${userLink} — ${(u.score || 0).toFixed(1)} ball\n`;
+        res += `${medal} <b>${name}</b>${userLink} — <b>${score}</b> ball\n`;
     });
+    
     return res;
 }
 
