@@ -483,35 +483,38 @@ async function sendTourQuestion(ctx, isNew = false) {
     if (timers[userId]) clearTimeout(timers[userId]);
 
     // ==========================================
-    // 🏁 1. TEST YAKUNLANISHI
+    // 🏁 1. TEST YAKUNLANISHI (VAQT YOKI SAVOL TUGASA)
     // ==========================================
-    if (s.tourIndex >= tour.count) {
+    const isTimeOut = Date.now() > s.tourEndTime; // Vaqt tugaganini tekshirish
+
+    if (s.tourIndex >= tour.count || isTimeOut) {
         // Ma'lumotlarni bazaga saqlash
         if (db.users[userId]) {
             db.users[userId].tourScore = s.tourScore;
-            db.users[userId].tourFinished = true; // Bu showSubjectMenu'da tugmani o'chiradi
+            db.users[userId].tourFinished = true; 
             saveDb(db);
         }
         
-        const resultMsg = `🏁 <b>Musobaqa yakunlandi!</b>\n\n` +
+        // Vaqt tugagan bo'lsa boshqacha xabar, savol tugagan bo'lsa boshqacha xabar
+        const title = isTimeOut ? "⏰ <b>Vaqtingiz tugadi!</b>" : "🏁 <b>Musobaqa yakunlandi!</b>";
+        const subTitle = isTimeOut ? "Musobaqa uchun ajratilgan umumiy vaqt yakunlandi." : "Barcha savollarga javob berib bo'ldingiz.";
+
+        const resultMsg = `${title}\n\n` +
+                          `${subTitle}\n\n` +
                           `👤 Ishtirokchi: <b>${s.userName}</b>\n` +
                           `✅ To'g'ri javoblar: <b>${s.tourScore} ta</b>\n\n` +
-                          `🏆 Natijangiz saqlandi. Admin natijalarni e'lon qilishini kuting!`;
+                          `🏆 Natijangiz saqlandi. G'oliblarni kuting!`;
 
-        // 🛡 1. Avvalgi test savolini o'chirish (toza bo'lishi uchun)
+        // 🛡 Eski test savolini o'chirib, yangi xabar va menyuni yuboramiz
         try { await ctx.deleteMessage(); } catch (e) {}
 
-        // 🛡 2. Natijani yangi xabar sifatida yuboramiz
         await ctx.replyWithHTML(resultMsg);
-        
-        // 🛡 3. MENYUNI YANGILASH (Bu yerda tugma avtomatik yo'qoladi)
-        return showSubjectMenu(ctx); 
+        return showSubjectMenu(ctx); // Tugma bu yerda yo'qoladi
     }
 
     // ==========================================
-    // 2. VAQT VA TAYMERNI HISOBLASH
+    // 2. VAQTNI HISOBLASH (DINAMIK)
     // ==========================================
-    // ... (Qolgan kodingiz o'zgarishsiz qoladi)
     if (!s.tourEndTime) {
         const totalDurationMs = tour.count * 30 * 1000;
         s.tourEndTime = Date.now() + totalDurationMs;
@@ -522,6 +525,7 @@ async function sendTourQuestion(ctx, isNew = false) {
     const remSec = Math.max(0, Math.floor((remainingMs % 60000) / 1000));
     const globalTimerStr = `${String(remMin).padStart(2, '0')}:${String(remSec).padStart(2, '0')}`;
 
+    // Savol ma'lumotlarini olish
     const qData = tour.questions[s.tourIndex];
     if (!qData) {
         s.tourIndex++;
@@ -539,7 +543,7 @@ async function sendTourQuestion(ctx, isNew = false) {
     const labels = ['A', 'B', 'C', 'D'];
 
     let text = `🏆 <b>MUSOBAQA REJIMI</b>\n` +
-               `⏱ <b>Tugashiga: ${globalTimerStr} qoldi</b>\n` +
+               `⏱ <b>Tugashiga: ${globalTimerStr} qoldi</b>\n` + 
                `📊 Progress: [${progress}]\n` +
                `🔢 Savol: <b>${s.tourIndex + 1} / ${tour.count}</b>\n` +
                `⌛️ Bu savol uchun: <b>${currentStepTime}s</b>\n` +
@@ -565,9 +569,13 @@ async function sendTourQuestion(ctx, isNew = false) {
         await ctx.replyWithHTML(text, inlineButtons);
     }
 
+    // ==========================================
+    // 4. AVTOMATIK KEYINGI SAVOL (30 SONIYA)
+    // ==========================================
     timers[userId] = setTimeout(async () => {
         if (ctx.session && ctx.session.tourIndex === s.tourIndex) {
             ctx.session.tourIndex++;
+            // Keyingisiga o'tishdan oldin vaqt tugaganini sendTourQuestion o'zi tekshiradi
             sendTourQuestion(ctx, false); 
         }
     }, currentStepTime * 1000);
@@ -1014,24 +1022,33 @@ bot.action(/tourans_(\d+)/, async (ctx) => {
     const tour = db.tournament;
     const userId = ctx.from.id;
     
-    // 1. Xavfsizlik tekshiruvlari
+    // 1. Sessiya va Musobaqa mavjudligini tekshirish
     if (!s || s.tourIndex === undefined || !tour) {
-        return ctx.answerCbQuery("Sessiya topilmadi.");
+        return ctx.answerCbQuery("❌ Sessiya topilmadi yoki musobaqa yakunlangan.");
     }
 
-    // 2. Vaqt tugaganini tekshirish
+    // 2. Qat'iy vaqt nazorati (Admin belgilagan vaqt tugagan bo'lsa)
+    // Date.now() hozirgi vaqtni s.tourEndTime (belgilangan tugash vaqti) bilan solishtiradi
     if (Date.now() > s.tourEndTime) {
-        await ctx.answerCbQuery("❌ Musobaqa vaqti tugadi!", { show_alert: true });
-        // Vaqt tugasa, to'g'ri natijaga o'tkazib yuboramiz
+        if (timers[userId]) clearTimeout(timers[userId]); // Taymerni to'xtatamiz
+        
+        await ctx.answerCbQuery("⏰ Musobaqa vaqti tugadi!", { show_alert: true });
+        
+        // Indeksni oxirgi savolga surib, sendTourQuestion orqali testni yopamiz
         s.tourIndex = tour.count; 
         return sendTourQuestion(ctx, false);
     }
 
+    // 3. Foydalanuvchi tanlovi
     const choiceIdx = parseInt(ctx.match[1]);
     const currentQuestion = tour.questions[s.tourIndex];
+    
+    // Xatolikni oldini olish (agar savol topilmasa)
+    if (!currentQuestion || !s.currentOptions) return ctx.answerCbQuery();
+
     const userAnswer = s.currentOptions[choiceIdx];
 
-    // 3. Javobni tekshirish (Loadingni yo'qotish uchun darhol answerCbQuery qilamiz)
+    // 4. Javobni tekshirish (Loadingni yo'qotish uchun darhol answerCbQuery)
     if (userAnswer === currentQuestion.a) {
         s.tourScore++;
         await ctx.answerCbQuery("✅ To'g'ri!");
@@ -1039,20 +1056,21 @@ bot.action(/tourans_(\d+)/, async (ctx) => {
         await ctx.answerCbQuery("❌ Noto'g'ri!");
     }
 
-    // 4. Indeksni oshirish
+    // 5. Indeksni oshirish
     s.tourIndex++;
 
-    // 5. MUHIM: Har bir javobdan keyin ballni vaqtinchalik saqlab borish (Xavfsizlik uchun)
+    // 6. Har bir javobdan keyin ballni DBga saqlash (Xavfsizlik uchun)
     if (db.users[userId]) {
         db.users[userId].tourScore = s.tourScore;
-        // Agar oxirgi savol bo'lsa, tugatganini belgilaymiz
+        
+        // Agar bu oxirgi savol bo'lsa, foydalanuvchini "Tugatganlar" safiga qo'shish
         if (s.tourIndex >= tour.count) {
             db.users[userId].tourFinished = true;
         }
         saveDb(db);
     }
     
-    // Keyingi savolga yoki natijaga o'tamiz
+    // 7. Keyingi savolga o'tish (sendTourQuestion o'zi vaqtni yana bir bor tekshiradi)
     return sendTourQuestion(ctx, false);
 });
 
