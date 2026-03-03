@@ -628,20 +628,21 @@ async function finalizeTournament(ctx) {
     const db = getDb();
     const tour = db.tournament;
 
-    if (!tour || tour.participants.length === 0) {
-        return ctx.reply("❌ Musobaqa ishtirokchilari topilmadi.");
+    if (!tour || !tour.participants || tour.participants.length === 0) {
+        return ctx.reply("❌ Hali hech kim ro'yxatdan o'tmagan yoki musobaqa ma'lumotlari topilmadi.");
     }
 
     // 1. Ishtirokchilarni ballari bo'yicha saralash
-    // Ballari bir xil bo'lsa, kim kamroq vaqt sarflaganini ham hisobga olish mumkin (agar vaqtni saqlasangiz)
     const leaderboard = tour.participants
         .map(id => {
             const u = db.users[id];
-            return { id: id, name: u.name, score: u.tourScore || 0 };
+            // Agar user bazadan o'chib ketgan bo'lsa xatolik bermasligi uchun
+            return u ? { id: id, name: u.name, score: u.tourScore || 0 } : null;
         })
-        .sort((a, b) => b.score - a.score); // Kamayish tartibida
+        .filter(item => item !== null) // Bo'sh userlarni olib tashlaymiz
+        .sort((a, b) => b.score - a.score);
 
-    if (leaderboard.length === 0) return ctx.reply("Hali hech kim testni tugatmagan.");
+    if (leaderboard.length === 0) return ctx.reply("❌ Hali hech kim testni yechib tugatmagan.");
 
     // 2. Umumiy reyting xabarini tayyorlash
     let rankingMsg = `🏆 <b>HAFTALIK MUSOBAQA NATIJALARI</b>\n`;
@@ -651,7 +652,9 @@ async function finalizeTournament(ctx) {
     const medals = ["🥇", "🥈", "🥉"];
     leaderboard.slice(0, 10).forEach((user, i) => {
         const medal = medals[i] || `${i + 1}.`;
-        rankingMsg += `${medal} <b>${user.name}</b> — ${user.score} ball\n`;
+        // Ismlardagi belgilarni tozalaymiz (HTML xatosi bermasligi uchun)
+        const safeName = user.name.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        rankingMsg += `${medal} <b>${safeName}</b> — ${user.score} ball\n`;
     });
 
     // 3. G'olibga (1-o'rin) maxsus xabar yuborish
@@ -659,20 +662,26 @@ async function finalizeTournament(ctx) {
     if (winner && winner.score > 0) {
         const winnerMsg = `🥳 <b>TABRIKLAYMIZ!</b>\n\n` +
                           `Siz haftalik musobaqada <b>${winner.score} ball</b> bilan <b>1-o‘rinni</b> egalladingiz! 🏆\n\n` +
-                          `Bilimingiz va tezkorligingiz sizga g‘alaba keltirdi. Shunday davom eting! 💪✨`;
+                          `Siz botimizning ushbu haftadagi chempionisiz! 💪✨`;
         
         try {
             await ctx.telegram.sendMessage(winner.id, winnerMsg, { parse_mode: 'HTML' });
         } catch (e) {
-            console.log("G'olibga xabar yuborib bo'lmadi.");
+            console.log(`G'olib (${winner.id}) botni bloklagan bo'lishi mumkin.`);
         }
     }
 
-    // 4. Barcha foydalanuvchilarga natijalarni e'lon qilish
-    // (Ixtiyoriy: hamma ko'rishi uchun guruhga yoki har bir userga yuborish mumkin)
-    await ctx.replyWithHTML(rankingMsg);
+    // 4. Barcha qatnashchilarga natijani yuborish (Hamma o'z o'rnini ko'rishi uchun)
+    for (const userId of tour.participants) {
+        try {
+            await ctx.telegram.sendMessage(userId, rankingMsg, { parse_mode: 'HTML' });
+        } catch (e) {}
+    }
 
-    // 5. Musobaqani yakunlash (tugmani butunlay yo'q qilish)
+    // 5. Adminning o'ziga ham tasdiq yuboramiz
+    await ctx.replyWithHTML(`✅ Natijalar barcha ishtirokchilarga yuborildi!\n\n${rankingMsg}`);
+
+    // 6. Musobaqani yakunlash (Tugmani menyudan yo'qotish uchun)
     db.tournament.isActive = false;
     saveDb(db);
 }
@@ -711,10 +720,11 @@ bot.command('admin', (ctx) => {
         return ctx.reply(`🛠 **Admin Panel**`, 
             Markup.keyboard([
                 ['💰 Pullik versiya', '🆓 Bepul versiya'],
-                ['🏆 Haftalik musobaqa', '📢 Musobaqa natijalari'], // Natijalar tugmasi qo'shildi
-                [statusEmoji, '📊 Statistika'],
-                ['🗑 Botni Restart qilish', '🧹 Reytingni tozalash'],
-                ['📣 Xabar tarqatish', '⬅️ Orqaga (Fanlar)']
+                ['🏆 Haftalik musobaqa', '🚀 Musobaqani start berish'], // Yangi start tugmasi
+                ['📢 Musobaqa natijalari', '📊 Statistika'],
+                [statusEmoji, '🗑 Botni Restart qilish'],
+                ['🧹 Reytingni tozalash', '📣 Xabar tarqatish'],
+                ['⬅️ Orqaga (Fanlar)']
             ]).resize());
     }
 });
@@ -1131,7 +1141,57 @@ bot.hears("🎓 Yo'nalishni qayta tanlash", (ctx) => {
 });
 
 
+bot.hears("🚀 Musobaqani start berish", async (ctx) => {
+    if (ctx.from.id !== ADMIN_ID) return;
 
+    const db = getDb();
+    const tour = db.tournament;
+
+    // 1. Musobaqa borligini va faolligini tekshirish
+    if (!tour || !tour.isActive) {
+        return ctx.reply("❌ Xato: Hozirda faol musobaqa belgilanmagan. Avval yangi musobaqa yarating!");
+    }
+
+    // 2. Musobaqa vaqti o'tib ketganligini tekshirish
+    const totalDurationMs = tour.count * 30 * 1000;
+    const [hour, min] = tour.time.split(':').map(Number);
+    const startTime = new Date();
+    startTime.setHours(hour, min, 0, 0);
+    const endTime = new Date(startTime.getTime() + totalDurationMs);
+    const currentTime = new Date();
+
+    if (currentTime > endTime) {
+        // Musobaqa vaqti o'tib bo'lgan bo'lsa, isActive'ni o'chirib qo'yamiz
+        db.tournament.isActive = false;
+        saveDb(db);
+        return ctx.reply(`⚠️ Bu musobaqa muddati tugagan!\n📅 Sana: ${tour.date}\n🏁 Tugash vaqti: ${tour.time} edi.\n\nIltimos, yangi musobaqa yarating.`);
+    }
+
+    // 3. Agar hammasi joyida bo'lsa, start berish
+    if (tour.participants.length === 0) {
+        return ctx.reply("❌ Musobaqada hali hech kim ro'yxatdan o'tmagan. Start berib bo'lmaydi.");
+    }
+
+    let sentCount = 0;
+    for (const userId of tour.participants) {
+        try {
+            await ctx.telegram.sendMessage(userId, 
+                `🔔 <b>DIQQAT: MUSOBAQA BOSHLANDI!</b>\n\n` +
+                `Admin tomonidan start berildi. Omad tilaymiz!\n` +
+                `Pastdagi tugmani bosing va testni boshlang:`, 
+                { 
+                    parse_mode: 'HTML',
+                    ...Markup.inlineKeyboard([[Markup.button.callback("🏁 TESTNI BOSHLASH", "start_actual_tour")]])
+                }
+            );
+            sentCount++;
+        } catch (e) {
+            console.log(`${userId} botni bloklagan.`);
+        }
+    }
+
+    return ctx.reply(`🚀 Musobaqa ${sentCount} ta ishtirokchi uchun muvaffaqiyatli boshlandi!`);
+});
 
 
 
