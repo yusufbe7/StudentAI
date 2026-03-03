@@ -85,21 +85,23 @@ cron.schedule('* * * * *', async () => {
         console.log("🚀 Musobaqa avtomatik boshlanmoqda...");
 
         // Barcha ro'yxatdan o'tgan ishtirokchilarga xabar yuborish
-        for (const userId of tour.participants) {
-            try {
-                await bot.telegram.sendMessage(userId, 
-                    `🔔 <b>DIQQAT: MUSOBAQA BOSHLANDI!</b>\n\n` +
-                    `Soat aynan 15:00 bo'ldi. Omad tilaymiz!\n` +
-                    `Pastdagi tugmani bosing va testni boshlang:`, 
-                    { 
-                        parse_mode: 'HTML',
-                        ...Markup.inlineKeyboard([[Markup.button.callback("🏁 TESTNI BOSHLASH", "start_actual_tour")]])
-                    }
-                );
-            } catch (e) {
-                console.log(`${userId} botni bloklagan bo'lishi mumkin.`);
+     for (const userId of tour.participants) {
+    try {
+        await bot.telegram.sendMessage(userId, 
+            `🔔 <b>DIQQAT: MUSOBAQA BOSHLANDI!</b>\n\n` +
+            `Soat aynan <b>${tour.time}</b> bo'ldi. Omad tilaymiz!\n` + // Admin kiritgan vaqt chiqadi
+            `Pastdagi tugmani bosing va testni boshlang:`, 
+            { 
+                parse_mode: 'HTML',
+                ...Markup.inlineKeyboard([
+                    [Markup.button.callback("🏁 TESTNI BOSHLASH", "start_actual_tour")]
+                ])
             }
-        }
+        );
+    } catch (e) {
+        console.log(`${userId} botni bloklagan bo'lishi mumkin.`);
+    }
+}
     }
 });
 
@@ -478,52 +480,66 @@ async function sendTourQuestion(ctx, isNew = false) {
     const db = getDb();
     const tour = db.tournament;
 
+    // Taymerni tozalash
     if (timers[userId]) clearTimeout(timers[userId]);
 
     // ==========================================
     // 1. TEST YAKUNLANISHI
     // ==========================================
     if (s.tourIndex >= tour.count) {
-        // Natijani saqlash (bu funksiyani alohida yozish kerak)
-        updateTourScore(userId, s.userName, s.tourScore); 
+        // Natijani bazaga saqlash
+        if (db.users[userId]) {
+            db.users[userId].tourScore = s.tourScore;
+            db.users[userId].tourFinished = true; // Keyingi safar kirmasligi uchun
+            saveDb(db);
+        }
         
-        return await ctx.replyWithHTML(
-            `🏁 <b>Musobaqa yakunlandi!</b>\n\n` +
-            `👤 Ishtirokchi: <b>${s.userName}</b>\n` +
-            `✅ To'g'ri javoblar: <b>${s.tourScore} ta</b>\n` +
-            `🏆 Natijangiz saqlandi. G'oliblarni kuting!`
-        );
+        const resultMsg = `🏁 <b>Musobaqa yakunlandi!</b>\n\n` +
+                          `👤 Ishtirokchi: <b>${s.userName}</b>\n` +
+                          `✅ To'g'ri javoblar: <b>${s.tourScore} ta</b>\n\n` +
+                          `🏆 Natijangiz saqlandi. Admin natijalarni e'lon qilishini kuting!`;
+
+        try {
+            // Testni tahrirlab natijani chiqaramiz
+            return await ctx.editMessageText(resultMsg, { parse_mode: 'HTML' });
+        } catch (e) {
+            // Agar tahrirlash imkoni bo'lmasa (masalan rasm bo'lsa), yangi xabar yuboramiz
+            return await ctx.replyWithHTML(resultMsg);
+        }
     }
 
     // ==========================================
     // 2. VAQT VA TAYMERNI HISOBLASH
     // ==========================================
-    // Musobaqa boshlanganida umumiy tugash vaqtini bir marta hisoblab olamiz
     if (!s.tourEndTime) {
-        const totalDurationMs = tour.count * 30 * 1000; // Masalan: 20 ta test * 30s = 600.000ms (10 daqiqa)
+        const totalDurationMs = tour.count * 30 * 1000;
         s.tourEndTime = Date.now() + totalDurationMs;
     }
 
     const remainingMs = s.tourEndTime - Date.now();
-    const remMin = Math.floor(remainingMs / 60000);
-    const remSec = Math.floor((remainingMs % 60000) / 1000);
-    
-    // Soat:Minut:Soniya ko'rinishida formatlash
+    const remMin = Math.max(0, Math.floor(remainingMs / 60000));
+    const remSec = Math.max(0, Math.floor((remainingMs % 60000) / 1000));
     const globalTimerStr = `${String(remMin).padStart(2, '0')}:${String(remSec).padStart(2, '0')}`;
 
+    // Savol ma'lumotlarini olish
     const qData = tour.questions[s.tourIndex];
+    if (!qData) {
+        s.tourIndex++;
+        return sendTourQuestion(ctx, false);
+    }
+
     const safeQuestion = escapeHTML(qData.q);
     const progress = getProgressBar(s.tourIndex + 1, tour.count);
 
     // ==========================================
     // 3. TEST KO'RINISHI
     // ==========================================
-    const currentStepTime = 30; // Har bir savol uchun 30s
+    const currentStepTime = 30; 
     s.currentOptions = shuffle([...qData.options]);
     const labels = ['A', 'B', 'C', 'D'];
 
     let text = `🏆 <b>MUSOBAQA REJIMI</b>\n` +
-               `⏱ <b>Tugashiga: ${globalTimerStr} qoldi</b>\n` + // Jami vaqt
+               `⏱ <b>Tugashiga: ${globalTimerStr} qoldi</b>\n` +
                `📊 Progress: [${progress}]\n` +
                `🔢 Savol: <b>${s.tourIndex + 1} / ${tour.count}</b>\n` +
                `⌛️ Bu savol uchun: <b>${currentStepTime}s</b>\n` +
@@ -539,26 +555,24 @@ async function sendTourQuestion(ctx, isNew = false) {
         [Markup.button.callback("🛑 Chiqish", "stop_tour")]
     ]);
 
-    // Xabarni yangilash (Eski xabarni tahrirlash orqali)
+    // Xabarni tahrirlash yoki yangi yuborish
     try {
         if (isNew) {
-            const msg = await ctx.replyWithHTML(text, inlineButtons);
-            s.lastTourMsgId = msg.message_id; // Xabarni tahrirlash uchun ID ni saqlaymiz
+            await ctx.replyWithHTML(text, inlineButtons);
         } else {
             await ctx.editMessageText(text, { parse_mode: 'HTML', ...inlineButtons });
         }
     } catch (e) {
-        const msg = await ctx.replyWithHTML(text, inlineButtons);
-        s.lastTourMsgId = msg.message_id;
+        await ctx.replyWithHTML(text, inlineButtons);
     }
 
     // ==========================================
     // 4. AVTOMATIK KEYINGI SAVOL (30 SONIYA)
     // ==========================================
     timers[userId] = setTimeout(async () => {
+        // Faqat foydalanuvchi hali ham shu savolda bo'lsagina keyingisiga o'tkazamiz
         if (ctx.session && ctx.session.tourIndex === s.tourIndex) {
             ctx.session.tourIndex++;
-            // Xato deb hisoblab keyingisiga o'tamiz
             sendTourQuestion(ctx, false); 
         }
     }, currentStepTime * 1000);
@@ -1004,38 +1018,46 @@ bot.action(/tourans_(\d+)/, async (ctx) => {
     const db = getDb();
     const tour = db.tournament;
     const userId = ctx.from.id;
-    const choiceIdx = parseInt(ctx.match[1]);
-
-    // 1. Vaqt va sessiya tekshiruvi
-    if (s.tourIndex === undefined || !tour) return;
-    if (Date.now() > s.tourEndTime) {
-        return ctx.answerCbQuery("❌ Musobaqa vaqti tugadi!", { show_alert: true });
+    
+    // 1. Xavfsizlik tekshiruvlari
+    if (!s || s.tourIndex === undefined || !tour) {
+        return ctx.answerCbQuery("Sessiya topilmadi.");
     }
 
+    // 2. Vaqt tugaganini tekshirish
+    if (Date.now() > s.tourEndTime) {
+        await ctx.answerCbQuery("❌ Musobaqa vaqti tugadi!", { show_alert: true });
+        // Vaqt tugasa, to'g'ri natijaga o'tkazib yuboramiz
+        s.tourIndex = tour.count; 
+        return sendTourQuestion(ctx, false);
+    }
+
+    const choiceIdx = parseInt(ctx.match[1]);
     const currentQuestion = tour.questions[s.tourIndex];
     const userAnswer = s.currentOptions[choiceIdx];
 
-    // 2. Javobni tekshirish va ball berish
+    // 3. Javobni tekshirish (Loadingni yo'qotish uchun darhol answerCbQuery qilamiz)
     if (userAnswer === currentQuestion.a) {
         s.tourScore++;
-        await ctx.answerCbQuery("✅");
+        await ctx.answerCbQuery("✅ To'g'ri!");
     } else {
-        await ctx.answerCbQuery("❌");
+        await ctx.answerCbQuery("❌ Noto'g'ri!");
     }
 
-    // 3. Indeksni oshirish
+    // 4. Indeksni oshirish
     s.tourIndex++;
 
-    // 4. MUHIM: Agar bu oxirgi savol bo'lsa, ballni bazaga yozish
-    if (s.tourIndex >= tour.count) {
-        if (!db.users[userId]) db.users[userId] = {}; // Xavfsizlik uchun
+    // 5. MUHIM: Har bir javobdan keyin ballni vaqtinchalik saqlab borish (Xavfsizlik uchun)
+    if (db.users[userId]) {
         db.users[userId].tourScore = s.tourScore;
-        db.users[userId].tourFinished = true;
+        // Agar oxirgi savol bo'lsa, tugatganini belgilaymiz
+        if (s.tourIndex >= tour.count) {
+            db.users[userId].tourFinished = true;
+        }
         saveDb(db);
-        
-        // Keyingi qadam: finalize/finish qismi sendTourQuestion ichida hal bo'ladi
     }
     
+    // Keyingi savolga yoki natijaga o'tamiz
     return sendTourQuestion(ctx, false);
 });
 
