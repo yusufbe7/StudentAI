@@ -54,26 +54,55 @@ app.get('/api/tournament', (ctx_api, res) => {
 
 const PORT = process.env.PORT || 3000;
 
-http.createServer((req, res) => {
-    // 1. API: Web App ochilganda bazadagi ma'lumotni shu yerga kelib so'raydi
-    if (req.url === '/api/tournament') {
-        const db = getDb(); // Bazani o'qiydi
+http.createServer(async (req, res) => {
+    // 1. API: Musobaqa ma'lumotlarini olish
+    if (req.url === '/api/tournament' && req.method === 'GET') {
+        const db = getDb();
         res.writeHead(200, { 'Content-Type': 'application/json' });
-        // Bazadagi musobaqa ma'lumotlarini JSON qilib Web App-ga yuboradi
         return res.end(JSON.stringify(db.tournament || { isActive: false }));
     }
 
-    // 2. WEB APP: Brauzerda (yoki Telegram Web App-da) sahifa ochilganda
+    // 🔥 2. API: Musobaqani rad etish (Web App'dan keladi)
+    if (req.url === '/api/reject' && req.method === 'POST') {
+        const db = getDb();
+        
+        // Bazani tozalash
+        db.tournament.isActive = false;
+        db.tournament.date = null;
+        db.tournament.time = null;
+        db.tournament.participants = [];
+        saveDb(db);
+
+        // Hamma userlarga xabar yuborish va menyusini tozalash
+        const userIds = Object.keys(db.users);
+        
+        // Bu jarayon biroz vaqt olishi mumkin, shuning uchun for-of ishlatamiz
+        for (const id of userIds) {
+            try {
+                await bot.telegram.sendMessage(id, "🚫 <b>E'lon:</b> Rejalashtirilgan musobaqa bekor qilindi.", {
+                    parse_mode: 'HTML',
+                    ...Markup.keyboard([
+                        ['📝 Akademik yozuv', '📜 Tarix'],
+                        ['➕ Matematika', '📊 Reyting'],
+                        ['👤 Profilim']
+                    ]).resize()
+                });
+            } catch (e) {
+                console.log(`User ${id} botni bloklagan, xabar bormadi.`);
+            }
+        }
+
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        return res.end(JSON.stringify({ success: true }));
+    }
+
+    // 3. WEB APP: index.html faylini ko'rsatish
     if (req.url === '/' || req.url === '/index.html') {
-        
-        // MANA SHU YERDA YO'LNI KO'RSATASIZ:
         const filePath = path.join(__dirname, 'public', 'index.html');
-        
         fs.readFile(filePath, (err, data) => {
             if (err) {
-                // Agar 'public' papkasi yoki 'index.html' bo'lmasa, shu xato chiqadi
                 res.writeHead(404);
-                return res.end("HTML fayl topilmadi. 'public' papkasini tekshiring.");
+                return res.end("HTML fayl topilmadi.");
             }
             res.writeHead(200, { 'Content-Type': 'text/html' });
             res.end(data);
@@ -81,7 +110,7 @@ http.createServer((req, res) => {
         return;
     }
 
-    // 3. Boshqa har qanday so'rovda (Masalan Railway tekshirganda)
+    // 4. Default javob
     res.writeHead(200);
     res.end('Bot is running...');
 
