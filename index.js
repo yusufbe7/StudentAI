@@ -55,18 +55,23 @@ app.get('/api/tournament', (ctx_api, res) => {
 const PORT = process.env.PORT || 3000;
 
 http.createServer((req, res) => {
-    // 1. API: Web App musobaqa ma'lumotlarini so'raganda
+    // 1. API: Web App ochilganda bazadagi ma'lumotni shu yerga kelib so'raydi
     if (req.url === '/api/tournament') {
-        const db = getDb();
+        const db = getDb(); // Bazani o'qiydi
         res.writeHead(200, { 'Content-Type': 'application/json' });
+        // Bazadagi musobaqa ma'lumotlarini JSON qilib Web App-ga yuboradi
         return res.end(JSON.stringify(db.tournament || { isActive: false }));
     }
 
-    // 2. WEB APP: Asosiy sahifani (index.html) ko'rsatish
+    // 2. WEB APP: Brauzerda (yoki Telegram Web App-da) sahifa ochilganda
     if (req.url === '/' || req.url === '/index.html') {
+        
+        // MANA SHU YERDA YO'LNI KO'RSATASIZ:
         const filePath = path.join(__dirname, 'public', 'index.html');
+        
         fs.readFile(filePath, (err, data) => {
             if (err) {
+                // Agar 'public' papkasi yoki 'index.html' bo'lmasa, shu xato chiqadi
                 res.writeHead(404);
                 return res.end("HTML fayl topilmadi. 'public' papkasini tekshiring.");
             }
@@ -76,7 +81,7 @@ http.createServer((req, res) => {
         return;
     }
 
-    // 3. Qolgan barcha holatlarda (Railway uchun "Bot is running")
+    // 3. Boshqa har qanday so'rovda (Masalan Railway tekshirganda)
     res.writeHead(200);
     res.end('Bot is running...');
 
