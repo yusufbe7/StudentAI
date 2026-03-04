@@ -6,80 +6,266 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <title>Admin Panel</title>
     <style>
-        body { font-family: sans-serif; background: #f4f4f9; display: flex; justify-content: center; padding: 20px; }
-        .container { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 100%; max-width: 400px; }
-        input { width: 90%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 8px; }
-        button { width: 100%; padding: 12px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
-        .login-btn { background: #0088cc; color: white; }
-        .reject-btn { background: #e74c3c; color: white; margin-top: 20px; }
-        .info-card { border: 1px solid #ddd; padding: 15px; border-radius: 10px; margin-top: 15px; }
+        /* Umumiy sahifa ko'rinishi */
+body { 
+    font-family: sans-serif; 
+    background: #0f172a; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; /* Markazda turishi uchun */
+    min-height: 100dvh; /* Dynamic viewport height telefonlar uchun muhim */
+    margin: 0;
+    padding: 10px;
+    box-sizing: border-box;
+}
+.container { 
+    background: #1e293b; 
+    padding: 30px; 
+    border-radius: 20px; 
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3); 
+    width: 100%; 
+    max-width: 400px; 
+    color: white;
+    text-align: center;
+    /* Klaviatura ochilganda elementlar siqilmasligi uchun */
+    position: relative;
+    z-index: 1;
+}
+h3 {
+    margin-bottom: 10px;
+    font-size: 20px;
+    background: linear-gradient(to right, #fff, #94a3b8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* input { 
+    width: 90%; 
+    padding: 12px; 
+    margin: 20px 0; 
+    border: 1px solid #334155; 
+    border-radius: 10px; 
+    background: #0f172a;
+    color: white;
+} */
+#pass-input { 
+    width: 90%; 
+    padding: 14px; 
+    margin: 25px 0; 
+    border: 2px solid #1e293b; 
+    border-radius: 12px; 
+    background: #070b14; /* To'q qora fon */
+    color: #ffffff;
+    font-size: 16px;
+    outline: none;
+    transition: all 0.4s ease;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+    letter-spacing: 2px; /* Parol nuqtalari chiroyli turishi uchun */
+}
+
+/* Inputga bosilganda (Focus) yonish effekti */
+#pass-input:focus {
+    border-color: #8f51ea; /* Binafsha chegara */
+    box-shadow: 0 0 15px rgba(143, 81, 234, 0.5), 
+                inset 0 0 5px rgba(143, 81, 234, 0.2);
+    background: #0f172a;
+    transform: translateY(-2px); /* Kichik ko'tarilish effekti */
+}
+
+/* Placeholder (ichidagi yozuv) rangi */
+#pass-input::placeholder {
+    color: #64748b;
+    letter-spacing: normal;
+    font-size: 14px;
+}
+
+.info-card { 
+    border: 1px solid #334155; 
+    padding: 15px; 
+    border-radius: 10px; 
+    margin-top: 15px; 
+    background: #0f172a;
+}
+
+/* --- SPACE BUTTON ASOSIY STILI --- */
+.btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%; /* Konteynerga moslashish uchun */
+    overflow: hidden;
+    height: 3.5rem;
+    background-size: 300% 300%;
+    cursor: pointer;
+    backdrop-filter: blur(1rem);
+    border-radius: 5rem;
+    transition: 0.5s;
+    animation: gradient_301 5s ease infinite;
+    border: double 4px transparent;
+    background-image: linear-gradient(#212121, #212121),
+      linear-gradient(137.48deg, #ffdb3b 10%, #fe53bb 45%, #8f51ea 67%, #0044ff 87%);
+    background-origin: border-box;
+    background-clip: content-box, border-box;
+    position: relative;
+    margin-top: 10px;
+}
+
+/* Rad etish tugmasi uchun qizilroq rang effekti */
+.reject-btn {
+    background-image: linear-gradient(#212121, #212121),
+      linear-gradient(137.48deg, #ff5f6d 10%, #ffc371 45%, #e74c3c 67%, #ff5f6d 87%);
+}
+
+#container-stars {
+    position: absolute;
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    transition: 0.5s;
+    backdrop-filter: blur(1rem);
+    border-radius: 5rem;
+}
+
+strong {
+    z-index: 2;
+    font-family: sans-serif;
+    font-size: 14px;
+    letter-spacing: 3px;
+    color: #ffffff;
+    text-shadow: 0 0 4px white;
+}
+
+#glow {
+    position: absolute;
+    display: flex;
+    width: 12rem;
+}
+
+.circle {
+    width: 100%;
+    height: 30px;
+    filter: blur(2rem);
+    animation: pulse_3011 4s infinite;
+    z-index: -1;
+}
+
+.circle:nth-of-type(1) { background: rgba(254, 83, 186, 0.636); }
+.circle:nth-of-type(2) { background: rgba(142, 81, 234, 0.704); }
+
+/* Rad etish tugmasi nurlari */
+.reject-btn .circle:nth-of-type(1) { background: rgba(231, 76, 60, 0.636); }
+.reject-btn .circle:nth-of-type(2) { background: rgba(255, 95, 109, 0.704); }
+
+.btn:hover #container-stars { z-index: 1; background-color: #212121; }
+.btn:hover { transform: scale(1.05); }
+.btn:active { border: double 4px #fe53bb; animation: none; }
+
+/* Animatsiyalar (Siz yuborgan koddagidek qoladi) */
+#stars { position: relative; background: transparent; width: 200rem; height: 200rem; }
+#stars::after, #stars::before {
+    content: ""; position: absolute; width: 100%; height: 100%;
+    background-image: radial-gradient(#ffffff 1px, transparent 1%);
+    background-size: 50px 50px;
+}
+#stars::after { animation: animStarRotate 90s linear infinite; top: -10rem; left: -100rem; }
+#stars::before { animation: animStar 60s linear infinite; opacity: 0.5; }
+
+@keyframes animStar { from { transform: translateY(0); } to { transform: translateY(-135rem); } }
+@keyframes animStarRotate { from { transform: rotate(360deg); } to { transform: rotate(0); } }
+@keyframes gradient_301 { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+@keyframes pulse_3011 { 0% { transform: scale(0.75); } 70% { transform: scale(1); } 100% { transform: scale(0.75); } }
     </style>
 </head>
 <body>
     <div class="container">
-        <div id="login-screen">
-            <h3>🔒 Admin Kirish</h3>
-            <input type="password" id="pass-input" placeholder="Parolni kiriting...">
-            <button class="login-btn" onclick="checkPass()">Kirish</button>
-        </div>
-
-        <div id="admin-panel" style="display:none;">
-            <h3>🏆 Faol Musobaqa</h3>
-            <div id="tour-data" class="info-card">
-                <p>Yuklanmoqda...</p>
-            </div>
-            <button id="reject-button" class="reject-btn" style="display:none;" onclick="confirmReject()">Rad etish</button>
-        </div>
+    <div id="login-screen">
+        <h3>🔒 Admin Kirish</h3>
+        <input type="password" id="pass-input" placeholder="Parolni kiriting...">
+        
+        <button type="button" class="btn login-btn" onclick="checkPass()">
+            <strong>KIRISH</strong>
+            <div id="container-stars"><div id="stars"></div></div>
+            <div id="glow"><div class="circle"></div><div class="circle"></div></div>
+        </button>
     </div>
 
+    <div id="admin-panel" style="display:none;">
+        <h3>🏆 Faol Musobaqa</h3>
+        <div id="tour-data" class="info-card">
+            <p>Yuklanmoqda...</p>
+        </div>
+        
+        <button type="button" id="reject-button" class="btn reject-btn" style="display:none;" onclick="confirmReject()">
+            <strong>RAD ETISH</strong>
+            <div id="container-stars"><div id="stars"></div></div>
+            <div id="glow"><div class="circle"></div><div class="circle"></div></div>
+        </button>
+    </div>
+</div>
+
     <script>
-        const tg = window.Telegram.WebApp;
-        tg.expand(); // WebAppni to'liq ekranga yoyish
+    const tg = window.Telegram.WebApp;
+    tg.expand();
 
-        const SECRET_PASS = "AD4863403";
+    const SECRET_PASS = "AD4863403";
+    const inputField = document.getElementById('pass-input');
 
-        function checkPass() {
-            const val = document.getElementById('pass-input').value;
-            if(val === SECRET_PASS) {
-                document.getElementById('login-screen').style.display = 'none';
-                document.getElementById('admin-panel').style.display = 'block';
-                fetchTournament(); // Bazadan ma'lumotni o'qish
+    // --- KLAVIATURA BILAN ISHLASH QISMI ---
+    inputField.addEventListener('focus', () => {
+        // Klaviatura chiqishi uchun 300ms kutib, keyin o'rtaga suradi
+        setTimeout(() => {
+            inputField.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 300);
+    });
+
+    inputField.addEventListener('blur', () => {
+        // Klaviatura yopilganda sahifani joyiga qaytaradi
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+    // --------------------------------------
+
+    function checkPass() {
+        const val = inputField.value; // yuqoridagi o'zgaruvchidan foydalanamiz
+        if(val === SECRET_PASS) {
+            document.getElementById('login-screen').style.display = 'none';
+            document.getElementById('admin-panel').style.display = 'block';
+            fetchTournament();
+        } else {
+            alert("Parol noto'g'ri!");
+        }
+    }
+
+    async function fetchTournament() {
+        try {
+            const response = await fetch('/api/tournament');
+            const tour = await response.json();
+            const container = document.getElementById('tour-data');
+            const btn = document.getElementById('reject-button');
+
+            if (tour && tour.isActive) {
+                container.innerHTML = `
+                    <p>📅 <b>Sana:</b> ${tour.date}</p>
+                    <p>🕒 <b>Vaqt:</b> ${tour.time}</p>
+                    <p>📝 <b>Savollar:</b> ${tour.count} ta</p>
+                `;
+                // Space button stilida bo'lsa, 'flex' qilish ma'qulroq
+                btn.style.display = 'flex'; 
             } else {
-                alert("Parol noto'g'ri!");
+                container.innerHTML = "<p>❌ Hozircha rejalashtirilgan musobaqa yo'q.</p>";
+                btn.style.display = 'none';
             }
+        } catch (e) {
+            console.error("Xatolik:", e);
         }
+    }
 
-        async function fetchTournament() {
-            try {
-                // API orqali bazadagi oxirgi saqlangan ma'lumotni oladi
-                const response = await fetch('/api/tournament');
-                const tour = await response.json();
-                const container = document.getElementById('tour-data');
-                const btn = document.getElementById('reject-button');
-
-                if (tour && tour.isActive) {
-                    container.innerHTML = `
-                        <p>📅 <b>Sana:</b> ${tour.date}</p>
-                        <p>🕒 <b>Vaqt:</b> ${tour.time}</p>
-                        <p>📝 <b>Savollar:</b> ${tour.count} ta</p>
-                    `;
-                    btn.style.display = 'block';
-                } else {
-                    container.innerHTML = "<p>❌ Hozircha rejalashtirilgan musobaqa yo'q.</p>";
-                    btn.style.display = 'none';
-                }
-            } catch (e) {
-                console.error("Xatolik:", e);
-            }
+    function confirmReject() {
+        if (confirm("Rostan ham ushbu musobaqani bekor qilmoqchimisiz?")) {
+            tg.sendData("reject_tournament_action");
+            tg.close();
         }
-
-        function confirmReject() {
-            if (confirm("Rostan ham ushbu musobaqani bekor qilmoqchimisiz?")) {
-                // Botga xabar yuboradi
-                tg.sendData("reject_tournament_action");
-                tg.close();
-            }
-        }
-    </script>
+    }
+</script>
 </body>
 </html>
