@@ -647,65 +647,93 @@ function prepareTournamentQuestions(count) {
 }
 
 async function finalizeTournament(ctx) {
-    const db = getDb();
-    const tour = db.tournament;
+    try {
+        const db = getDb();
+        const tour = db.tournament;
 
-    if (!tour || !tour.participants || tour.participants.length === 0) {
-        return ctx.reply("❌ Hali hech kim ro'yxatdan o'tmagan yoki musobaqa ma'lumotlari topilmadi.");
-    }
-
-    // 1. Ishtirokchilarni ballari bo'yicha saralash
-    const leaderboard = tour.participants
-        .map(id => {
-            const u = db.users[id];
-            // Agar user bazadan o'chib ketgan bo'lsa xatolik bermasligi uchun
-            return u ? { id: id, name: u.name, score: u.tourScore || 0 } : null;
-        })
-        .filter(item => item !== null) // Bo'sh userlarni olib tashlaymiz
-        .sort((a, b) => b.score - a.score);
-
-    if (leaderboard.length === 0) return ctx.reply("❌ Hali hech kim testni yechib tugatmagan.");
-
-    // 2. Umumiy reyting xabarini tayyorlash
-    let rankingMsg = `🏆 <b>HAFTALIK MUSOBAQA NATIJALARI</b>\n`;
-    rankingMsg += `📅 Sana: ${tour.date}\n`;
-    rankingMsg += `_________________________\n\n`;
-
-    const medals = ["🥇", "🥈", "🥉"];
-    leaderboard.slice(0, 10).forEach((user, i) => {
-        const medal = medals[i] || `${i + 1}.`;
-        // Ismlardagi belgilarni tozalaymiz (HTML xatosi bermasligi uchun)
-        const safeName = user.name.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-        rankingMsg += `${medal} <b>${safeName}</b> — ${user.score} ball\n`;
-    });
-
-    // 3. G'olibga (1-o'rin) maxsus xabar yuborish
-    const winner = leaderboard[0];
-    if (winner && winner.score > 0) {
-        const winnerMsg = `🥳 <b>TABRIKLAYMIZ!</b>\n\n` +
-                          `Siz haftalik musobaqada <b>${winner.score} ball</b> bilan <b>1-o‘rinni</b> egalladingiz! 🏆\n\n` +
-                          `Siz botimizning ushbu haftadagi chempionisiz! 💪✨`;
-        
-        try {
-            await ctx.telegram.sendMessage(winner.id, winnerMsg, { parse_mode: 'HTML' });
-        } catch (e) {
-            console.log(`G'olib (${winner.id}) botni bloklagan bo'lishi mumkin.`);
+        if (!tour || !tour.participants || tour.participants.length === 0) {
+            return ctx.reply("❌ Ishtirokchilar ro'yxati bo'sh.");
         }
+
+        // 1. Ishtirokchilarni ballari bo'yicha saralash
+        const leaderboard = tour.participants
+            .map(id => {
+                const u = db.users[id];
+                return u ? { 
+                    id: id, 
+                    name: u.name || "Foydalanuvchi", 
+                    score: u.tourScore || 0 
+                } : null;
+            })
+            .filter(item => item !== null)
+            .sort((a, b) => b.score - a.score);
+
+        if (leaderboard.length === 0) return ctx.reply("❌ Natijalar hisoblanmadi.");
+
+        // 2. Reyting xabarini shakllantirish
+        let rankingMsg = `🏆 <b>HAFTALIK MUSOBAQA NATIJALARI</b>\n`;
+        rankingMsg += `📅 Sana: ${tour.date || "---"}\n`;
+        rankingMsg += `_________________________\n\n`;
+
+        const medals = ["🥇", "🥈", "🥉"];
+        leaderboard.slice(0, 10).forEach((user, i) => {
+            const medal = medals[i] || `${i + 1}.`;
+            const safeName = String(user.name).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+            rankingMsg += `${medal} <b>${safeName}</b> — ${user.score} ball\n`;
+        });
+
+        // 3. G'olibga tabrik (faqat 1-o'ringa)
+        const winner = leaderboard[0];
+        if (winner && winner.score > 0) {
+            try {
+                await ctx.telegram.sendMessage(winner.id, `🥳 <b>TABRIKLAYMIZ!</b>\n\nSiz 1-o‘rinni egalladingiz! 🏆`, { parse_mode: 'HTML' });
+            } catch (e) { console.log("G'olib botni bloklagan."); }
+        }
+
+        // 4. 🔥 KO'P ISHTIROKCHILAR UCHUN OPTIMIZATSIYA (Batch processing)
+        // Xabarlarni 20 tadan bo'lib, har bir guruh orasida 1 soniya kutamiz
+        const chunkSize = 20;
+        const participants = tour.participants;
+
+        for (let i = 0; i < participants.length; i += chunkSize) {
+            const chunk = participants.slice(i, i + chunkSize);
+            
+            // Har bir guruhni parallel yuboramiz
+            await Promise.allSettled(chunk.map(async (userId) => {
+                try {
+                    // Natijani yuborish
+                    await ctx.telegram.sendMessage(userId, rankingMsg, { parse_mode: 'HTML' });
+                    
+                    // Menyuni yangilash (Musobaqa tugmasini olib tashlash)
+                    await ctx.telegram.sendMessage(userId, "🏁 Musobaqa yakunlandi. Asosiy menyudasiz:", {
+                        ...Markup.keyboard([
+                            ['📝 Akademik yozuv', '📜 Tarix'],
+                            ['➕ Matematika', '📊 Reyting'],
+                            ['👤 Profilim']
+                        ]).resize()
+                    });
+                } catch (err) {
+                    console.log(`User ${userId} xabar olmadi (Bloklagan bo'lishi mumkin)`);
+                }
+            }));
+
+            // Telegram API cheklovlariga tushmaslik uchun ozgina kutish (1 soniya)
+            if (i + chunkSize < participants.length) {
+                await new Promise(resolve => setTimeout(resolve, 1000));
+            }
+        }
+
+        // 5. Musobaqani yopish
+        db.tournament.isActive = false;
+        saveDb(db);
+
+        // 6. Adminni xabardor qilish
+        return ctx.replyWithHTML(`✅ Natijalar ${participants.length} ta foydalanuvchiga yuborildi!\n\n${rankingMsg}`);
+
+    } catch (err) {
+        console.error("CRITICAL ERROR in finalizeTournament:", err);
+        return ctx.reply("❌ Natijalarni e'lon qilishda xatolik yuz berdi.");
     }
-
-    // 4. Barcha qatnashchilarga natijani yuborish (Hamma o'z o'rnini ko'rishi uchun)
-    for (const userId of tour.participants) {
-        try {
-            await ctx.telegram.sendMessage(userId, rankingMsg, { parse_mode: 'HTML' });
-        } catch (e) {}
-    }
-
-    // 5. Adminning o'ziga ham tasdiq yuboramiz
-    await ctx.replyWithHTML(`✅ Natijalar barcha ishtirokchilarga yuborildi!\n\n${rankingMsg}`);
-
-    // 6. Musobaqani yakunlash (Tugmani menyudan yo'qotish uchun)
-    db.tournament.isActive = false;
-    saveDb(db);
 }
 
 // BU FUNKSIYANI KODINGIZNING OXIRIGA QO'SHIB QO'YING
@@ -1384,8 +1412,27 @@ bot.hears('📢 Musobaqa natijalari', async (ctx) => {
 
 // Action qismi
 bot.action("announce_results", async (ctx) => {
-    await ctx.editMessageText("🔄 Natijalar hisoblanmoqda...");
-    await finalizeTournament(ctx);
+    // 1. Faqat admin ekanligini tekshirish (Xavfsizlik uchun)
+    if (ctx.from.id !== ADMIN_ID) return ctx.answerCbQuery("Ruxsat yo'q!");
+
+    try {
+        // 2. Loading xabarini ko'rsatish
+        await ctx.editMessageText("🔄 Natijalar hisoblanmoqda va foydalanuvchilarga yuborilmoqda...");
+
+        // 3. Funksiyani chaqiramiz va u tugashini kutamiz (await)
+        await finalizeTournament(ctx);
+
+        // 4. Muvaffaqiyatli yakunlangach, xabarni yangilaymiz
+        await ctx.editMessageText("✅ Natijalar barcha ishtirokchilarga muvaffaqiyatli yuborildi va musobaqa yakunlandi.");
+        
+        // 5. Telegram tepasidagi kichik bildirishnomani chiqarish
+        await ctx.answerCbQuery("✅ Jarayon yakunlandi!");
+
+    } catch (error) {
+        console.error("Natija e'lon qilishda xato:", error);
+        // Xatolik bo'lsa, adminni xabardor qilamiz
+        await ctx.reply("❌ Natijalarni yuborishda xatolik yuz berdi. Logsni tekshiring.");
+    }
 });
 
 // 2. Musobaqani yoqish mantiqi
@@ -1634,7 +1681,7 @@ bot.on('text', async (ctx, next) => {
         const currentUser = db.users[userId];
 
         // --- ISM KIRITISH ---
-        if (currentUser.step === 'wait_name') {
+     if (currentUser.step === 'wait_name') {
             const forbidden = [
                 "📝 Akademik yozuv", "📜 Tarix", "➕ Matematika", "💻 Dasturlash 1", 
                 "🧲 Fizika", "🇬🇧 Perfect English", "📊 Reyting", "👤 Profil", 
@@ -1646,9 +1693,13 @@ bot.on('text', async (ctx, next) => {
                 return ctx.reply("❌ Xato! Ism va familiyangizni to'g'ri kiriting (kamida 3 harf):", Markup.removeKeyboard());
             }
 
-            currentUser.name = text;
-            currentUser.step = 'wait_univ';
-            saveDb(db);
+            // 🔥 MUHIM O'ZGARISH:
+            // Ismni bazaning asosiy user obyekti ichiga yozamiz
+            db.users[userId].name = text; 
+            db.users[userId].step = 'wait_univ';
+            
+            saveDb(db); // Darhol bazaga yozamiz
+
             return ctx.reply(`Rahmat, ${text}!\n\nO'qish joyingizni tanlang:`, 
                 Markup.keyboard([["Alfraganus Universiteti", "Perfect Universiteti"], ["TATU", "TDPU"]]).oneTime().resize());
         }
@@ -1958,10 +2009,11 @@ bot.hears(["⚡️ Blitz (25)", "📝 To'liq test"], async (ctx) => {
 });
 bot.hears("📊 Reyting", async (ctx) => {
     const db = getDb(); 
-    const users = Object.values(db.users);
+    // db.users obyektini massivga aylantiramiz
+    const usersArray = Object.values(db.users);
 
-    // 1. Saralash va "undefined" ismlarni tozalash
-    const sortedUsers = users
+    // 1. Saralash (Balli 0 dan katta bo'lganlar)
+    const sortedUsers = usersArray
         .filter(u => u.score > 0) 
         .sort((a, b) => b.score - a.score)
         .slice(0, 10);
@@ -1973,14 +2025,22 @@ bot.hears("📊 Reyting", async (ctx) => {
     let report = "🏆 <b>TOP 10 REYTING</b>\n\n";
     
     sortedUsers.forEach((user, index) => {
-        // Ism undefined bo'lsa "Ismsiz foydalanuvchi" deb chiqaradi
-        // escapeHTML() funksiyasi ismlardagi < > belgilarini tozalaydi
-        let userName = user.name || "Noma'lum foydalanuvchi";
-        
-        // Agar ism baribir "undefined" degan yozuv bo'lib qolgan bo'lsa
-        if (userName === "undefined") userName = "Ismsiz foydalanuvchi";
+        // ISMNI ANIQLASH TARTIBI:
+        // 1. Bazadagi foydalanuvchi yozgan ism (user.name)
+        // 2. Agar u bo'lmasa, Telegramdagi birinchi ismi (user.first_name)
+        // 3. Agar u ham bo'lmasa, "Foydalanuvchi" so'zi
+        let displayName = user.name || user.first_name || "Foydalanuvchi";
 
-        report += `${index + 1}. <b>${userName}</b> — <b>${user.score}</b> ball\n`;
+        // HTML xatolarini oldini olish uchun belgilarni tozalash
+        const safeName = String(displayName)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;");
+
+        const medals = ["🥇", "🥈", "🥉", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣", "🔟"];
+        const icon = medals[index] || `${index + 1}.`;
+
+        report += `${icon} <b>${safeName}</b> — <b>${user.score}</b> ball\n`;
     });
 
     return ctx.replyWithHTML(report);
