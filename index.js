@@ -1377,6 +1377,26 @@ app.get('/api/top-user', (req, res) => {
     });
 });
 
+// TOP 10 reyting (leaderboard)
+app.get('/api/leaderboard', (req, res) => {
+    const db = getDb();
+    const sorted = Object.values(db.users)
+        .filter(u => u && isValidName(u.name) && (u.score || 0) > 0)
+        .sort((a, b) => (b.score || 0) - (a.score || 0))
+        .slice(0, 10)
+        .map(u => ({
+            name:       u.name       || '—',
+            tgUsername: (u.username  || '').replace('@', ''),
+            score:      u.score      || 0,
+            totalTests: u.totalTests || 0,
+            univ:       u.univ       || '',
+            kurs:       u.kurs       || '',
+            yonalish:   u.yonalish   || '',
+        }));
+    res.json(sorted);
+});
+
+
 app.get('/api/tournament', (req, res) => {
     const db = getDb();
     res.json(db.tournament || { isActive: false });
