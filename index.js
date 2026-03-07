@@ -675,10 +675,30 @@ bot.action('buy_vip', (ctx) => {
 bot.action(/^approve_(\d+)$/, async (ctx) => {
     const targetId = parseInt(ctx.match[1]);
     const db       = getDb();
-    if (db.users[targetId]) { db.users[targetId].isVip = true; saveDb(db); }
+    const now      = Date.now();
+    const oneMonth = 30 * 24 * 60 * 60 * 1000;
+    const vipStart = now;
+    const vipEnd   = now + oneMonth;
+
+    if (db.users[targetId]) {
+        db.users[targetId].isVip    = true;
+        db.users[targetId].vipStart = vipStart;
+        db.users[targetId].vipEnd   = vipEnd;
+        saveDb(db);
+    }
     if (!vipUsers.includes(targetId)) { vipUsers.push(targetId); saveVip(); }
-    await ctx.telegram.sendMessage(targetId, "🎉 <b>Xushxabar!</b>\n\nTo'lovingiz tasdiqlandi! Barcha testlarning 💡 tushuntirishlarini va 🏆 Musobaqani ko'rishingiz mumkin.", { parse_mode: 'HTML' }).catch(() => {});
-    return ctx.editMessageCaption("✅ <b>Tasdiqlandi:</b> Foydalanuvchi VIP bo'ldi.", { parse_mode: 'HTML' });
+
+    const fmt = ts => new Date(ts).toLocaleDateString('ru-RU', { day:'2-digit', month:'2-digit', year:'numeric' });
+
+    await ctx.telegram.sendMessage(targetId,
+        `\u{1F389} <b>Xushxabar! VIP a'zolik tasdiqlandi!</b>\n\n` +
+        `\u{1F4C5} To'lov sanasi: <b>${fmt(vipStart)}</b>\n` +
+        `\u{23F3} Mudati tugash sanasi: <b>${fmt(vipEnd)}</b>\n\n` +
+        `\u{1F48E} Siz endi barcha testlarning tushuntirishlarini va musobaqani ko'rishingiz mumkin.\n\n` +
+        `\u26A0\uFE0F 1 oy o'tgach VIP mudati avtomatik tugaydi.`,
+        { parse_mode: 'HTML' }
+    ).catch(() => {});
+    return ctx.editMessageCaption(`\u2705 <b>Tasdiqlandi:</b> VIP — ${fmt(vipStart)} dan ${fmt(vipEnd)} gacha.`, { parse_mode: 'HTML' });
 });
 
 bot.action(/^reject_vip_(\d+)$/, async (ctx) => {
@@ -1352,6 +1372,8 @@ app.get('/api/user-stats', (req, res) => {
         kurs:         user.kurs         || '—',
         yonalish:     user.yonalish     || '—',
         isVip:        user.isVip        || false,
+        vipStart:     user.vipStart     || null,
+        vipEnd:       user.vipEnd       || null,
         subjects:     user.subjects     || {},
     });
 });

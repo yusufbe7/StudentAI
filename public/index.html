@@ -197,14 +197,14 @@ body::before{
 .sidebar.open{left:0;}
 
 .sidebar-header{
-  padding:24px 20px 16px;
+  padding:66px 20px 16px;
   border-bottom:1px solid var(--border);
 }
 .sidebar-user{
   display:flex;align-items:center;gap:12px;
 }
 .sb-avatar{
-  width:50px;height:50px;border-radius:14px;
+  width:50px;height:50px;border-radius:50%;
   background:linear-gradient(135deg,var(--accent),var(--a2));
   display:flex;align-items:center;justify-content:center;
   font-size:18px;font-weight:700;cursor:pointer;flex-shrink:0;
@@ -487,6 +487,48 @@ body::before{
 .tab-panel.active .card{animation:slideIn .25s ease both;}
 .tab-panel.active .card:nth-child(2){animation-delay:.05s;}
 .tab-panel.active .card:nth-child(3){animation-delay:.1s;}
+
+/* ── INFO LINKS ── */
+.info-link-row{
+  display:flex;align-items:center;gap:12px;
+  padding:11px 0;border-bottom:1px solid var(--border);
+  text-decoration:none;color:var(--text);cursor:pointer;
+  transition:all .2s;
+}
+.info-link-row:last-child{border-bottom:none;}
+.info-link-row:hover .info-link-name{color:var(--accent);}
+.info-link-icon{
+  width:38px;height:38px;border-radius:11px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;flex-shrink:0;
+}
+.info-link-text{flex:1;min-width:0;}
+.info-link-name{font-size:14px;font-weight:600;}
+.info-link-sub{font-size:11px;color:var(--muted2);margin-top:1px;}
+.info-link-arrow{color:var(--muted);font-size:14px;font-weight:600;flex-shrink:0;}
+
+/* ── VIP INFO CARD ── */
+.vip-info-card{
+  background:linear-gradient(135deg,rgba(245,158,11,.08),rgba(251,191,36,.04));
+  border:1px solid rgba(245,158,11,.25);
+  border-radius:14px;padding:14px;margin-top:12px;
+}
+.vip-info-title{
+  font-size:13px;font-weight:700;color:var(--warn);
+  margin-bottom:10px;display:flex;align-items:center;gap:6px;
+}
+.vip-date-row{
+  display:flex;justify-content:space-between;
+  padding:6px 0;font-size:12px;border-bottom:1px solid rgba(245,158,11,.15);
+}
+.vip-date-row:last-child{border-bottom:none;}
+.vip-date-lbl{color:rgba(245,158,11,.7);}
+.vip-date-val{font-weight:600;color:var(--warn);font-family:'JetBrains Mono',monospace;font-size:12px;}
+.vip-expired{
+  background:rgba(244,63,94,.08);border:1px solid rgba(244,63,94,.2);
+  border-radius:14px;padding:12px 14px;margin-top:12px;
+  font-size:12px;color:var(--danger);text-align:center;font-weight:600;
+}
 </style>
 </head>
 <body>
@@ -501,6 +543,13 @@ body::before{
       <div class="login-logo-icon">⚡</div>
       <div class="login-logo-text">Student Bot</div>
       <div class="login-logo-sub">AITEX · O'quv platformasi</div>
+    </div>
+
+    <!-- Admin kirish link -->
+    <div style="text-align:center;margin-bottom:14px;">
+      <span style="font-size:12px;color:var(--muted);cursor:pointer;" onclick="openAdminModal()">
+        🔐 Admin sifatida kirish
+      </span>
     </div>
 
     <div class="l-tabs">
@@ -598,6 +647,12 @@ body::before{
         <span>Profil</span>
       </div>
       <div class="nav-sep"></div>
+      <!-- Ma'lumot bo'limi -->
+      <div class="nav-item" id="nav-info" onclick="navTo('info');closeSidebar();">
+        <div class="nav-icon">ℹ️</div>
+        <span>Ma'lumot</span>
+      </div>
+      <div class="nav-sep"></div>
       <!-- Admin nav — faqat admin uchun -->
       <div class="nav-item" id="nav-admin" style="display:none;" onclick="navTo('admin');closeSidebar();">
         <div class="nav-icon">⚙️</div>
@@ -673,6 +728,11 @@ body::before{
             <div class="s-box"><div class="s-lbl">OTM</div><div class="s-val sm" id="st-univ">—</div></div>
             <div class="s-box"><div class="s-lbl">Kurs</div><div class="s-val sm" id="st-kurs">—</div></div>
           </div>
+          <div style="margin-top:12px;">
+            <div class="t-row"><span class="t-lbl">Jami savollar</span><span class="t-val" id="st-total-q" style="color:var(--accent);font-family:'JetBrains Mono',monospace;">—</span></div>
+            <div class="t-row"><span class="t-lbl">Xato javoblar</span><span class="t-val" id="st-total-w" style="color:var(--danger);font-family:'JetBrains Mono',monospace;">—</span></div>
+            <div class="t-row"><span class="t-lbl">To'g'rilik %</span><span class="t-val" id="st-accuracy" style="color:var(--success);font-family:'JetBrains Mono',monospace;">—</span></div>
+          </div>
         </div>
 
         <!-- Fanlar bo'yicha -->
@@ -711,6 +771,9 @@ body::before{
             <div class="prof-name-display" id="prof-name-disp">—</div>
             <div class="prof-username-display" id="prof-uname-disp">@—</div>
           </div>
+
+          <!-- VIP ma'lumot bloki -->
+          <div id="prof-vip-info" style="display:none;"></div>
 
           <div class="divider"></div>
           <div class="edit-section-title">Ma'lumotlarni tahrirlash</div>
@@ -798,6 +861,89 @@ body::before{
           <button id="adm-reject-btn" style="display:none;width:100%;margin-top:12px;padding:12px;background:rgba(244,63,94,.1);color:var(--danger);border:1px solid rgba(244,63,94,.3);border-radius:12px;font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:700;cursor:pointer;" onclick="confirmReject()">
             ✕ Musobaqani bekor qilish
           </button>
+        </div>
+
+      </div>
+
+      <!-- ── MA'LUMOT TAB ── -->
+      <div class="tab-panel" id="tab-info">
+
+        <!-- Bot haqida -->
+        <div class="card">
+          <div class="card-glow-top"></div>
+          <div style="text-align:center;padding:8px 0 16px;">
+            <div style="width:64px;height:64px;border-radius:18px;background:linear-gradient(135deg,var(--accent),var(--a2));display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 12px;box-shadow:0 6px 20px rgba(79,124,255,.3);">⚡</div>
+            <div style="font-size:18px;font-weight:700;letter-spacing:-.01em;">Student Bot</div>
+            <div style="font-size:12px;color:var(--muted2);margin-top:4px;">AITEX · O'quv platformasi</div>
+          </div>
+          <div style="height:1px;background:var(--border);margin:4px 0 14px;"></div>
+          <div style="font-size:13px;color:var(--muted2);line-height:1.7;text-align:center;">
+            Testlar, musobaqalar va VIP a'zolik bilan o'qishni yangi darajaga olib chiqing.
+          </div>
+        </div>
+
+        <!-- Ijtimoiy tarmoqlar -->
+        <div class="card">
+          <div class="card-glow-top"></div>
+          <div class="card-title">🔗 Ijtimoiy tarmoqlar</div>
+
+          <a href="https://github.com/yusufbe" target="_blank" class="info-link-row" id="link-github">
+            <div class="info-link-icon" style="background:rgba(255,255,255,.06);">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="color:#e8edf5;"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 21.795 24 17.295 24 12c0-6.63-5.37-12-12-12"/></svg>
+            </div>
+            <div class="info-link-text">
+              <div class="info-link-name">GitHub</div>
+              <div class="info-link-sub">@yusufbe</div>
+            </div>
+            <div class="info-link-arrow">→</div>
+          </a>
+
+          <a href="https://instagram.com/yusufbe" target="_blank" class="info-link-row" id="link-instagram">
+            <div class="info-link-icon" style="background:rgba(225,48,108,.12);">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#e1306c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+            </div>
+            <div class="info-link-text">
+              <div class="info-link-name">Instagram</div>
+              <div class="info-link-sub">@yusufbe</div>
+            </div>
+            <div class="info-link-arrow">→</div>
+          </a>
+
+          <a href="https://facebook.com/yusufbe" target="_blank" class="info-link-row" id="link-facebook">
+            <div class="info-link-icon" style="background:rgba(24,119,242,.12);">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="#1877f2"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+            </div>
+            <div class="info-link-text">
+              <div class="info-link-name">Facebook</div>
+              <div class="info-link-sub">@yusufbe</div>
+            </div>
+            <div class="info-link-arrow">→</div>
+          </a>
+
+          <a href="https://t.me/yusufbe_dev" target="_blank" class="info-link-row">
+            <div class="info-link-icon" style="background:rgba(0,136,204,.12);">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="#0088cc"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+            </div>
+            <div class="info-link-text">
+              <div class="info-link-name">Telegram</div>
+              <div class="info-link-sub">@yusufbe_dev</div>
+            </div>
+            <div class="info-link-arrow">→</div>
+          </a>
+        </div>
+
+        <!-- Ilova yoki sayt -->
+        <div class="card">
+          <div class="card-glow-top card-glow-warn"></div>
+          <div class="card-title">📱 Ilova / Sayt</div>
+          <a href="https://yusufbe.uz" target="_blank" class="info-link-row" style="text-decoration:none;">
+            <div class="info-link-icon" style="background:rgba(245,158,11,.12);">🌐</div>
+            <div class="info-link-text">
+              <div class="info-link-name">Rasmiy sayt</div>
+              <div class="info-link-sub">yusufbe.uz</div>
+            </div>
+            <div class="info-link-arrow" style="color:var(--warn);">→</div>
+          </a>
         </div>
 
       </div>
@@ -905,7 +1051,7 @@ function renderAvatarEl(el, photo, name) {
 // NAVIGATION
 // ════════════════════════════════════════
 let _curTab = 'dash';
-const TAB_TITLES = { dash:'Dashboard', stats:'Statistika', profile:'Profil', admin:'Admin Panel' };
+const TAB_TITLES = { dash:'Dashboard', stats:'Statistika', profile:'Profil', admin:'Admin Panel', info:'Ma\'lumot' };
 
 function navTo(tab) {
   _curTab = tab;
@@ -918,6 +1064,7 @@ function navTo(tab) {
   if (tab === 'stats')   loadStats();
   if (tab === 'admin')   loadAdminPanel();
   if (tab === 'profile') loadProfileForm();
+  if (tab === 'info')    loadInfoPage();
 }
 
 // ════════════════════════════════════════
@@ -993,7 +1140,7 @@ function errf(errId, inpId) {
 // ════════════════════════════════════════
 function doSignIn() {
   const u = document.getElementById('si-u').value.trim().toLowerCase();
-  const p = document.getElementById('si-pass')?.value || document.getElementById('si-p').value;
+  const p = document.getElementById('si-p').value;
   const errEl = document.getElementById('si-err');
   errEl.classList.remove('on');
 
@@ -1036,7 +1183,21 @@ function openApp(username, isAdmin) {
     fillTopbarAvatar(photo, user.name);
     navTo('dash');
     loadDashboard(user.name, false);
+    // Check VIP status from bot
+    checkAndSetVipBadge(user.name, user.username);
   }
+}
+
+async function checkAndSetVipBadge(name, username) {
+  try {
+    const r = await fetch('/api/user-stats?name='+encodeURIComponent(name));
+    if (!r.ok) return;
+    const d = await r.json();
+    if (d.isVip && d.vipEnd && Date.now() < d.vipEnd) {
+      document.getElementById('sb-badge').textContent = '💎 VIP';
+      document.getElementById('sb-badge').className   = 'sb-badge vip';
+    }
+  } catch {}
 }
 
 function fillSidebar(name, username, photo, badgeType) {
@@ -1160,6 +1321,13 @@ async function loadStats() {
         document.getElementById('st-wrong').textContent   = d.totalWrong||'0';
         document.getElementById('st-univ').textContent    = d.univ||'—';
         document.getElementById('st-kurs').textContent    = d.kurs||'—';
+        // Total questions = correct + wrong
+        const totQ = (d.totalCorrect||0) + (d.totalWrong||0);
+        const totW = d.totalWrong||0;
+        const acc  = totQ > 0 ? ((d.totalCorrect||0)/totQ*100).toFixed(1)+'%' : '—';
+        document.getElementById('st-total-q').textContent = totQ || '—';
+        document.getElementById('st-total-w').textContent = totW || '—';
+        document.getElementById('st-accuracy').textContent= acc;
 
         if (d.subjects && Object.keys(d.subjects).length > 0) {
           renderSubjects(d.subjects);
@@ -1254,9 +1422,40 @@ function loadProfileForm() {
     document.getElementById('prof-uname-disp').textContent = '@'+user.username;
     document.getElementById('p-u').value = user.username;
     document.getElementById('p-n').value = user.name;
+    // VIP info — botdan olish
+    fetchVipInfoForProfile(user.name, user.username);
   }
   document.getElementById('p-pw').value  = '';
   document.getElementById('p-pw2').value = '';
+}
+
+async function fetchVipInfoForProfile(name, username) {
+  const el = document.getElementById('prof-vip-info');
+  if (!el) return;
+  el.style.display = 'none';
+  try {
+    let r = await fetch('/api/user-stats?name='+encodeURIComponent(name));
+    if (!r.ok && username) r = await fetch('/api/user-stats?username='+encodeURIComponent(username));
+    if (!r.ok) return;
+    const d = await r.json();
+    if (d.isVip && d.vipEnd) {
+      const now      = Date.now();
+      const fmt = ts => new Date(ts).toLocaleDateString('ru-RU',{day:'2-digit',month:'2-digit',year:'numeric'});
+      const isExpired = now > d.vipEnd;
+      if (isExpired) {
+        el.innerHTML = '<div class="vip-expired">⚠️ VIP mudatingiz tugagan. Yangilash uchun adminga murojaat qiling.</div>';
+      } else {
+        const daysLeft = Math.ceil((d.vipEnd - now)/(1000*60*60*24));
+        el.innerHTML = '<div class="vip-info-card">' +
+          '<div class="vip-info-title">💎 VIP Azolik malumoti</div>' +
+          '<div class="vip-date-row"><span class="vip-date-lbl">Tolov sanasi</span><span class="vip-date-val">'+(d.vipStart ? fmt(d.vipStart) : '—')+'</span></div>' +
+          '<div class="vip-date-row"><span class="vip-date-lbl">Mudati tugaydi</span><span class="vip-date-val">'+fmt(d.vipEnd)+'</span></div>' +
+          '<div class="vip-date-row"><span class="vip-date-lbl">Qolgan kunlar</span><span class="vip-date-val" style="color:var(--success);">'+daysLeft+' kun</span></div>' +
+          '</div>';
+      }
+      el.style.display = 'block';
+    }
+  } catch {}
 }
 
 // ════════════════════════════════════════
@@ -1303,7 +1502,7 @@ function handleAdminPhoto(input) { handlePhotoUpload(input); }
 function updateAllAvatars(photo, name) {
   // Sidebar
   const sbAv = document.getElementById('sb-avatar');
-  sbAv.innerHTML = `<img src="${photo}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:14px;"><div class="sb-avatar-edit">✏️</div>`;
+  sbAv.innerHTML = `<img src="${photo}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:50%;"><div class="sb-avatar-edit">✏️</div>`;
   // Topbar
   fillTopbarAvatar(photo, name);
 }
@@ -1498,6 +1697,14 @@ function doLogout() {
   document.getElementById('si-u').value = '';
   document.getElementById('si-p').value = '';
   lTab('in');
+}
+
+// ════════════════════════════════════════
+// INFO PAGE
+// ════════════════════════════════════════
+function loadInfoPage() {
+  // Links are static HTML — nothing dynamic needed
+  // Could update owner links dynamically if needed
 }
 
 // ════════════════════════════════════════
