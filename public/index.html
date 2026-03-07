@@ -2,494 +2,392 @@
 <html lang="uz">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-    <title>Panel</title>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet">
+    <title>Student Bot</title>
     <style>
         :root {
-            --bg:        #060910;
-            --surface:   #0d1117;
-            --card:      #111827;
-            --border:    #1f2937;
-            --accent:    #6366f1;
-            --accent2:   #8b5cf6;
-            --danger:    #ef4444;
-            --success:   #10b981;
-            --text:      #f1f5f9;
-            --muted:     #64748b;
-            --input-bg:  #0a0e18;
+            --bg:       #060910;
+            --surface:  #0d1117;
+            --card:     #111827;
+            --card2:    #161f2e;
+            --border:   #1f2937;
+            --accent:   #6366f1;
+            --accent2:  #8b5cf6;
+            --danger:   #ef4444;
+            --success:  #10b981;
+            --warn:     #f59e0b;
+            --text:     #f1f5f9;
+            --muted:    #64748b;
+            --input-bg: #0a0e18;
         }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
+        * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+        html, body { height:100%; }
         body {
-            font-family: 'DM Sans', sans-serif;
-            background: var(--bg);
-            min-height: 100dvh;
-            color: var(--text);
-            overflow-x: hidden;
+            font-family:'DM Sans',sans-serif;
+            background:var(--bg);
+            color:var(--text);
+            overflow-x:hidden;
+            min-height:100dvh;
         }
 
-        /* ── NOISE TEXTURE ── */
+        /* NOISE */
         body::before {
-            content: '';
-            position: fixed; inset: 0;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-            pointer-events: none;
-            z-index: 999;
+            content:''; position:fixed; inset:0;
+            background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+            pointer-events:none; z-index:9999;
         }
 
-        /* ── AMBIENT GLOW ── */
-        .glow-orb {
-            position: fixed;
-            border-radius: 50%;
-            filter: blur(80px);
-            pointer-events: none;
-            z-index: 0;
-        }
-        .orb1 { width: 300px; height: 300px; background: rgba(99,102,241,0.12); top: -50px; left: -80px; }
-        .orb2 { width: 200px; height: 200px; background: rgba(139,92,246,0.08); bottom: 50px; right: -50px; }
+        /* ORBS */
+        .orb { position:fixed; border-radius:50%; filter:blur(80px); pointer-events:none; z-index:0; }
+        .orb1 { width:320px;height:320px;background:rgba(99,102,241,0.11);top:-60px;left:-80px; }
+        .orb2 { width:220px;height:220px;background:rgba(139,92,246,0.08);bottom:40px;right:-60px; }
 
-        /* ── TOP BAR ── */
+        /* ════ TOPBAR ════ */
         .topbar {
-            position: fixed; top: 0; left: 0; right: 0;
-            height: 52px;
-            display: flex; align-items: center; justify-content: space-between;
-            padding: 0 20px;
-            background: rgba(6,9,16,0.8);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--border);
-            z-index: 100;
+            position:fixed;top:0;left:0;right:0;height:52px;
+            display:flex;align-items:center;justify-content:space-between;
+            padding:0 16px;
+            background:rgba(6,9,16,0.85);
+            backdrop-filter:blur(20px);
+            border-bottom:1px solid var(--border);
+            z-index:100;
         }
         .topbar-logo {
-            font-family: 'Syne', sans-serif;
-            font-weight: 800;
-            font-size: 15px;
-            letter-spacing: 0.05em;
-            background: linear-gradient(90deg, var(--accent), var(--accent2));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            font-family:'Syne',sans-serif;font-weight:800;font-size:14px;
+            letter-spacing:.06em;
+            background:linear-gradient(90deg,var(--accent),var(--accent2));
+            -webkit-background-clip:text;-webkit-text-fill-color:transparent;
         }
-        .admin-btn {
-            font-family: 'DM Sans', sans-serif;
-            font-size: 11px;
-            font-weight: 500;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            color: var(--muted);
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            padding: 6px 12px;
-            cursor: pointer;
-            transition: all 0.2s;
+        .topbar-right { display:flex;gap:8px;align-items:center; }
+        .topbar-btn {
+            font-size:11px;font-weight:500;letter-spacing:.07em;text-transform:uppercase;
+            color:var(--muted);background:var(--card);
+            border:1px solid var(--border);border-radius:6px;
+            padding:5px 11px;cursor:pointer;transition:all .2s;
         }
-        .admin-btn:hover { color: var(--text); border-color: var(--accent); }
+        .topbar-btn:hover { color:var(--text);border-color:var(--accent); }
+        .topbar-btn.danger { color:var(--danger);border-color:rgba(239,68,68,.3); }
+        .topbar-btn.danger:hover { background:rgba(239,68,68,.1); }
 
-        /* ── MAIN WRAPPER ── */
-        .main {
-            min-height: 100dvh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 72px 16px 24px;
-            position: relative;
-            z-index: 1;
-        }
+        /* ════ PAGES ════ */
+        .page { display:none;min-height:100dvh;padding:68px 16px 28px;position:relative;z-index:1; }
+        .page.active { display:block; }
+        .page-center { display:flex;align-items:center;justify-content:center; }
 
-        /* ── AUTH CARD ── */
-        .auth-card {
-            width: 100%;
-            max-width: 380px;
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 32px 28px;
-            position: relative;
-            overflow: hidden;
+        /* ════ CARD ════ */
+        .card {
+            background:var(--card);border:1px solid var(--border);
+            border-radius:18px;padding:22px;margin-bottom:12px;
+            position:relative;overflow:hidden;
         }
-        .auth-card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+        .card::before {
+            content:'';position:absolute;top:0;left:0;right:0;height:1px;
+            background:linear-gradient(90deg,transparent,var(--accent),transparent);
         }
+        .card.danger-card::before { background:linear-gradient(90deg,transparent,var(--danger),transparent); }
+        .card.success-card::before { background:linear-gradient(90deg,transparent,var(--success),transparent); }
 
-        .auth-title {
-            font-family: 'Syne', sans-serif;
-            font-size: 22px;
-            font-weight: 700;
-            margin-bottom: 6px;
-        }
-        .auth-sub {
-            font-size: 13px;
-            color: var(--muted);
-            margin-bottom: 28px;
-            line-height: 1.5;
-        }
-
-        /* Tabs */
+        /* ════ AUTH ════ */
+        .auth-wrap { width:100%;max-width:380px;margin:0 auto; }
         .tabs {
-            display: flex;
-            gap: 4px;
-            background: var(--surface);
-            border-radius: 10px;
-            padding: 4px;
-            margin-bottom: 24px;
+            display:flex;gap:4px;background:var(--surface);
+            border-radius:10px;padding:4px;margin-bottom:22px;
         }
         .tab {
-            flex: 1;
-            text-align: center;
-            padding: 8px;
-            border-radius: 7px;
-            font-size: 13px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.25s;
-            color: var(--muted);
-            user-select: none;
+            flex:1;text-align:center;padding:8px;border-radius:7px;
+            font-size:13px;font-weight:500;cursor:pointer;
+            transition:all .25s;color:var(--muted);user-select:none;
         }
-        .tab.active {
-            background: var(--accent);
-            color: #fff;
-            box-shadow: 0 2px 12px rgba(99,102,241,0.35);
-        }
+        .tab.active { background:var(--accent);color:#fff;box-shadow:0 2px 12px rgba(99,102,241,.35); }
 
-        /* Form */
-        .form-group { margin-bottom: 16px; }
+        .form-group { margin-bottom:14px; }
         .form-label {
-            display: block;
-            font-size: 12px;
-            font-weight: 500;
-            color: var(--muted);
-            margin-bottom: 7px;
-            letter-spacing: 0.05em;
-            text-transform: uppercase;
+            display:block;font-size:11px;font-weight:500;color:var(--muted);
+            margin-bottom:6px;letter-spacing:.06em;text-transform:uppercase;
         }
         .form-input {
-            width: 100%;
-            padding: 13px 16px;
-            background: var(--input-bg);
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            color: var(--text);
-            font-family: 'DM Sans', sans-serif;
-            font-size: 14px;
-            outline: none;
-            transition: all 0.25s;
+            width:100%;padding:12px 14px;
+            background:var(--input-bg);border:1px solid var(--border);
+            border-radius:10px;color:var(--text);
+            font-family:'DM Sans',sans-serif;font-size:14px;
+            outline:none;transition:all .25s;
         }
-        .form-input:focus {
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(99,102,241,0.15);
-        }
-        .form-input::placeholder { color: #374151; }
-        .form-input.error { border-color: var(--danger); box-shadow: 0 0 0 3px rgba(239,68,68,0.1); }
+        .form-input:focus { border-color:var(--accent);box-shadow:0 0 0 3px rgba(99,102,241,.15); }
+        .form-input::placeholder { color:#374151; }
+        .form-input.error { border-color:var(--danger);box-shadow:0 0 0 3px rgba(239,68,68,.1); }
+        .err-msg { font-size:12px;color:var(--danger);margin-top:5px;display:none; }
+        .err-msg.show { display:block; }
 
-        /* Xato xabar */
-        .err-msg {
-            font-size: 12px;
-            color: var(--danger);
-            margin-top: 5px;
-            display: none;
-        }
-        .err-msg.show { display: block; }
+        .auth-title { font-family:'Syne',sans-serif;font-size:21px;font-weight:700;margin-bottom:5px; }
+        .auth-sub { font-size:13px;color:var(--muted);margin-bottom:22px;line-height:1.5; }
 
-        /* Submit tugma */
-        .submit-btn {
-            width: 100%;
-            padding: 13px;
-            background: linear-gradient(135deg, var(--accent), var(--accent2));
-            color: #fff;
-            border: none;
-            border-radius: 10px;
-            font-family: 'Syne', sans-serif;
-            font-size: 14px;
-            font-weight: 600;
-            letter-spacing: 0.05em;
-            cursor: pointer;
-            transition: all 0.25s;
-            margin-top: 8px;
-            position: relative;
-            overflow: hidden;
+        /* Buttons */
+        .btn {
+            width:100%;padding:13px;border:none;border-radius:10px;
+            font-family:'Syne',sans-serif;font-size:14px;font-weight:600;
+            letter-spacing:.04em;cursor:pointer;transition:all .25s;margin-top:8px;
         }
-        .submit-btn:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(99,102,241,0.35); }
-        .submit-btn:active { transform: translateY(0); }
-        .submit-btn.loading { opacity: 0.7; pointer-events: none; }
-        .submit-btn.loading::after {
-            content: '';
-            position: absolute; right: 16px; top: 50%; transform: translateY(-50%);
-            width: 14px; height: 14px;
-            border: 2px solid rgba(255,255,255,0.3);
-            border-top-color: #fff;
-            border-radius: 50%;
-            animation: spin 0.6s linear infinite;
+        .btn-primary {
+            background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;
         }
+        .btn-primary:hover { transform:translateY(-1px);box-shadow:0 8px 24px rgba(99,102,241,.35); }
+        .btn-primary:active { transform:translateY(0); }
+        .btn-danger {
+            background:rgba(239,68,68,.1);color:var(--danger);
+            border:1px solid rgba(239,68,68,.3);
+        }
+        .btn-danger:hover { background:rgba(239,68,68,.2);border-color:var(--danger); }
+        .btn-ghost {
+            background:var(--surface);color:var(--muted);
+            border:1px solid var(--border);margin-top:6px;
+        }
+        .btn-ghost:hover { color:var(--text);border-color:var(--accent); }
 
-        /* ── DASHBOARD ── */
-        #dashboard { display: none; }
-        .dash-card {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 12px;
-            position: relative;
-            overflow: hidden;
-        }
-        .dash-card::before {
-            content: '';
-            position: absolute; top: 0; left: 0; right: 0; height: 1px;
-            background: linear-gradient(90deg, transparent, var(--accent), transparent);
-        }
-
-        .user-header {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            margin-bottom: 20px;
-        }
+        /* ════ AVATAR ════ */
+        .avatar-wrap { position:relative;display:inline-block; }
         .avatar {
-            width: 52px; height: 52px;
-            background: linear-gradient(135deg, var(--accent), var(--accent2));
-            border-radius: 14px;
-            display: flex; align-items: center; justify-content: center;
-            font-family: 'Syne', sans-serif;
-            font-size: 20px;
-            font-weight: 700;
-            flex-shrink: 0;
+            width:64px;height:64px;border-radius:16px;
+            background:linear-gradient(135deg,var(--accent),var(--accent2));
+            display:flex;align-items:center;justify-content:center;
+            font-family:'Syne',sans-serif;font-size:22px;font-weight:700;
+            overflow:hidden;flex-shrink:0;cursor:pointer;
         }
+        .avatar img { width:100%;height:100%;object-fit:cover; }
+        .avatar-edit {
+            position:absolute;bottom:-4px;right:-4px;
+            width:22px;height:22px;border-radius:50%;
+            background:var(--accent);border:2px solid var(--bg);
+            display:flex;align-items:center;justify-content:center;
+            font-size:10px;cursor:pointer;
+        }
+
+        /* User header */
+        .user-header { display:flex;align-items:center;gap:14px;margin-bottom:18px; }
+        .user-info { flex:1;min-width:0; }
         .user-name {
-            font-family: 'Syne', sans-serif;
-            font-size: 18px;
-            font-weight: 700;
+            font-family:'Syne',sans-serif;font-size:17px;font-weight:700;
+            white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
         }
-        .user-role {
-            font-size: 12px;
-            color: var(--muted);
-            margin-top: 2px;
+        .user-sub { font-size:12px;color:var(--muted);margin-top:2px; }
+        .user-badge {
+            font-size:10px;padding:2px 8px;border-radius:20px;font-weight:500;
+            letter-spacing:.04em;display:inline-block;margin-top:4px;
         }
+        .badge-vip { background:rgba(251,191,36,.15);color:#fbbf24;border:1px solid rgba(251,191,36,.3); }
+        .badge-free { background:rgba(100,116,139,.15);color:var(--muted);border:1px solid var(--border); }
+        .badge-admin { background:rgba(99,102,241,.15);color:var(--accent);border:1px solid rgba(99,102,241,.3); }
+        .badge-active { background:rgba(16,185,129,.15);color:var(--success);border:1px solid rgba(16,185,129,.3); }
 
         /* Stats grid */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-bottom: 12px;
-        }
-        .stat-item {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 14px;
-        }
-        .stat-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px; }
-        .stat-value { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700; }
-        .stat-value.green { color: var(--success); }
-        .stat-value.red { color: var(--danger); }
-        .stat-value.purple { color: var(--accent); }
+        .stats-grid { display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:0; }
+        .stat-item { background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:13px; }
+        .stat-label { font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px; }
+        .stat-value { font-family:'Syne',sans-serif;font-size:17px;font-weight:700; }
+        .stat-value.purple { color:var(--accent); }
+        .stat-value.green  { color:var(--success); }
+        .stat-value.red    { color:var(--danger); }
+        .stat-value.warn   { color:var(--warn); }
+        .stat-value.small  { font-size:13px; }
 
-        /* Tournament card */
-        .tour-info { }
-        .tour-title {
-            font-family: 'Syne', sans-serif;
-            font-size: 14px;
-            font-weight: 700;
-            margin-bottom: 12px;
-            display: flex; align-items: center; gap: 8px;
+        /* Subjects list */
+        .subject-list { margin-top:12px; }
+        .subject-item {
+            display:flex;justify-content:space-between;align-items:center;
+            padding:9px 0;border-bottom:1px solid var(--border);font-size:13px;
         }
-        .badge {
-            font-size: 10px;
-            padding: 2px 8px;
-            border-radius: 20px;
-            font-weight: 500;
-            letter-spacing: 0.05em;
-        }
-        .badge.active { background: rgba(16,185,129,0.15); color: var(--success); border: 1px solid rgba(16,185,129,0.3); }
-        .badge.inactive { background: rgba(100,116,139,0.15); color: var(--muted); border: 1px solid var(--border); }
+        .subject-item:last-child { border-bottom:none; }
+        .subject-name { color:var(--muted); }
+        .subject-stats { display:flex;gap:8px;align-items:center; }
+        .sub-stat { font-size:11px;padding:2px 7px;border-radius:5px;font-weight:500; }
+        .sub-correct { background:rgba(16,185,129,.1);color:var(--success); }
+        .sub-wrong   { background:rgba(239,68,68,.1);color:var(--danger); }
+        .sub-total   { background:rgba(99,102,241,.1);color:var(--accent); }
 
+        /* Tour row */
         .tour-row {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 8px 0;
-            border-bottom: 1px solid var(--border);
-            font-size: 13px;
+            display:flex;justify-content:space-between;align-items:center;
+            padding:8px 0;border-bottom:1px solid var(--border);font-size:13px;
         }
-        .tour-row:last-child { border-bottom: none; }
-        .tour-row span:first-child { color: var(--muted); }
-        .tour-row span:last-child { font-weight: 500; }
+        .tour-row:last-child { border-bottom:none; }
+        .tour-row .lbl { color:var(--muted); }
+        .tour-row .val { font-weight:500; }
 
-        /* Danger button */
-        .danger-btn {
-            width: 100%;
-            padding: 13px;
-            background: rgba(239,68,68,0.1);
-            color: var(--danger);
-            border: 1px solid rgba(239,68,68,0.3);
-            border-radius: 10px;
-            font-family: 'Syne', sans-serif;
-            font-size: 13px;
-            font-weight: 600;
-            letter-spacing: 0.05em;
-            cursor: pointer;
-            transition: all 0.25s;
-            margin-top: 4px;
+        /* Section title */
+        .section-title {
+            font-family:'Syne',sans-serif;font-size:13px;font-weight:700;
+            color:var(--muted);text-transform:uppercase;letter-spacing:.08em;
+            margin-bottom:10px;display:flex;align-items:center;gap:6px;
         }
-        .danger-btn:hover { background: rgba(239,68,68,0.2); border-color: var(--danger); }
 
-        /* Logout */
-        .logout-link {
-            text-align: center;
-            margin-top: 16px;
-            font-size: 12px;
-            color: var(--muted);
-            cursor: pointer;
-            transition: color 0.2s;
+        /* Top user card */
+        .top-user-card {
+            background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:13px;
+            display:flex;align-items:center;gap:12px;
         }
-        .logout-link:hover { color: var(--text); }
+        .top-user-avatar {
+            width:42px;height:42px;border-radius:12px;
+            background:linear-gradient(135deg,var(--accent),var(--accent2));
+            display:flex;align-items:center;justify-content:center;
+            font-family:'Syne',sans-serif;font-size:15px;font-weight:700;flex-shrink:0;
+            overflow:hidden;
+        }
+        .top-user-avatar img { width:100%;height:100%;object-fit:cover; }
+        .top-user-info { flex:1;min-width:0; }
+        .top-user-name { font-family:'Syne',sans-serif;font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
+        .top-user-sub { font-size:11px;color:var(--muted);margin-top:2px; }
+        .top-user-score { font-family:'Syne',sans-serif;font-size:17px;font-weight:700;color:var(--accent);flex-shrink:0; }
 
-        /* ── ADMIN MODAL ── */
+        /* ════ MODAL ════ */
         .modal-overlay {
-            position: fixed; inset: 0;
-            background: rgba(0,0,0,0.7);
-            backdrop-filter: blur(8px);
-            z-index: 200;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            padding: 16px;
+            position:fixed;inset:0;background:rgba(0,0,0,.75);
+            backdrop-filter:blur(10px);z-index:200;
+            display:none;align-items:center;justify-content:center;padding:16px;
         }
-        .modal-overlay.show { display: flex; }
+        .modal-overlay.show { display:flex; }
         .modal {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 28px;
-            width: 100%; max-width: 360px;
-            position: relative;
+            background:var(--card);border:1px solid var(--border);
+            border-radius:18px;padding:26px;width:100%;max-width:360px;position:relative;
         }
         .modal::before {
-            content: '';
-            position: absolute; top: 0; left: 0; right: 0; height: 1px;
-            background: linear-gradient(90deg, transparent, #ef4444, transparent);
+            content:'';position:absolute;top:0;left:0;right:0;height:1px;
+            background:linear-gradient(90deg,transparent,var(--accent),transparent);
         }
-        .modal-title {
-            font-family: 'Syne', sans-serif;
-            font-size: 16px;
-            font-weight: 700;
-            margin-bottom: 6px;
-        }
-        .modal-sub { font-size: 13px; color: var(--muted); margin-bottom: 20px; }
+        .modal.danger-modal::before { background:linear-gradient(90deg,transparent,var(--danger),transparent); }
+        .modal-title { font-family:'Syne',sans-serif;font-size:16px;font-weight:700;margin-bottom:6px; }
+        .modal-sub { font-size:13px;color:var(--muted);margin-bottom:18px; }
         .modal-close {
-            position: absolute; top: 16px; right: 16px;
-            width: 28px; height: 28px;
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            color: var(--muted);
-            font-size: 14px;
-            cursor: pointer;
-            display: flex; align-items: center; justify-content: center;
-            transition: all 0.2s;
+            position:absolute;top:14px;right:14px;width:28px;height:28px;
+            background:var(--surface);border:1px solid var(--border);border-radius:6px;
+            color:var(--muted);font-size:13px;cursor:pointer;
+            display:flex;align-items:center;justify-content:center;transition:all .2s;
         }
-        .modal-close:hover { color: var(--text); }
+        .modal-close:hover { color:var(--text); }
 
         /* Toast */
         .toast {
-            position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px);
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            padding: 12px 20px;
-            font-size: 13px;
-            white-space: nowrap;
-            opacity: 0;
-            transition: all 0.3s;
-            z-index: 500;
-            pointer-events: none;
+            position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(20px);
+            background:var(--card);border:1px solid var(--border);border-radius:10px;
+            padding:11px 18px;font-size:13px;white-space:nowrap;
+            opacity:0;transition:all .3s;z-index:9998;pointer-events:none;
         }
-        .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-        .toast.success { border-color: rgba(16,185,129,0.4); color: var(--success); }
-        .toast.error { border-color: rgba(239,68,68,0.4); color: var(--danger); }
+        .toast.show { opacity:1;transform:translateX(-50%) translateY(0); }
+        .toast.success { border-color:rgba(16,185,129,.4);color:var(--success); }
+        .toast.error   { border-color:rgba(239,68,68,.4);color:var(--danger); }
+        .toast.warn    { border-color:rgba(245,158,11,.4);color:var(--warn); }
 
-        @keyframes spin { to { transform: translateY(-50%) rotate(360deg); } }
+        /* Divider */
+        .divider { height:1px;background:var(--border);margin:14px 0; }
 
-        .divider { height: 1px; background: var(--border); margin: 16px 0; }
+        /* Profile avatar selector */
+        .avatar-options {
+            display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:12px;
+        }
+        .avatar-option {
+            aspect-ratio:1;border-radius:10px;cursor:pointer;
+            display:flex;align-items:center;justify-content:center;font-size:20px;
+            background:var(--surface);border:2px solid var(--border);transition:all .2s;
+        }
+        .avatar-option.selected { border-color:var(--accent);box-shadow:0 0 0 3px rgba(99,102,241,.2); }
+        .avatar-option:hover { border-color:var(--accent); }
+
+        @keyframes spin { to { transform:translateY(-50%) rotate(360deg); } }
+        @keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+        .card { animation:fadeIn .3s ease; }
     </style>
 </head>
 <body>
-    <div class="glow-orb orb1"></div>
-    <div class="glow-orb orb2"></div>
+    <div class="orb orb1"></div>
+    <div class="orb orb2"></div>
 
-    <!-- TOP BAR -->
+    <!-- ══ TOPBAR ══ -->
     <header class="topbar">
         <div class="topbar-logo">⚡ STUDENT BOT</div>
-        <button class="admin-btn" onclick="openAdminModal()">Admin</button>
+        <div class="topbar-right" id="topbar-right">
+            <button class="topbar-btn" onclick="openAdminModal()">Admin</button>
+        </div>
     </header>
 
-    <!-- MAIN CONTENT -->
-    <main class="main">
-
-        <!-- AUTH CARD -->
-        <div class="auth-card" id="auth-section">
-            <div class="tabs">
-                <div class="tab active" id="tab-signup" onclick="switchTab('signup')">Ro'yxatdan o'tish</div>
-                <div class="tab" id="tab-signin" onclick="switchTab('signin')">Kirish</div>
-            </div>
-
-            <!-- SIGN UP -->
-            <div id="signup-form">
-                <p class="auth-title">Xush kelibsiz 👋</p>
-                <p class="auth-sub">Akkaunt yarating va o'z profilingizga kiring.</p>
-
-                <div class="form-group">
-                    <label class="form-label">Ism</label>
-                    <input class="form-input" id="su-name" type="text" placeholder="Ism Familiya" autocomplete="off">
-                    <div class="err-msg" id="su-name-err">Ism kamida 3 ta harf bo'lishi kerak</div>
+    <!-- ══════════════════════════════════════
+         PAGE: AUTH
+    ══════════════════════════════════════ -->
+    <div class="page page-center active" id="page-auth">
+        <div class="auth-wrap">
+            <div class="card">
+                <div class="tabs">
+                    <div class="tab active" id="tab-signup" onclick="switchTab('signup')">Ro'yxatdan o'tish</div>
+                    <div class="tab" id="tab-signin" onclick="switchTab('signin')">Kirish</div>
                 </div>
-                <div class="form-group">
-                    <label class="form-label">Parol</label>
-                    <input class="form-input" id="su-pass" type="password" placeholder="Parol kiriting">
-                    <div class="err-msg" id="su-pass-err">Parol kamida 6 ta belgi</div>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Parolni tasdiqlash</label>
-                    <input class="form-input" id="su-pass2" type="password" placeholder="Parolni takrorlang">
-                    <div class="err-msg" id="su-pass2-err">Parollar mos kelmadi</div>
-                </div>
-                <button class="submit-btn" onclick="doSignUp()">Ro'yxatdan o'tish</button>
-            </div>
 
-            <!-- SIGN IN -->
-            <div id="signin-form" style="display:none;">
-                <p class="auth-title">Qaytib keldingiz 🔐</p>
-                <p class="auth-sub">Akkauntingizga kiring.</p>
+                <!-- SIGN UP -->
+                <div id="signup-form">
+                    <p class="auth-title">Xush kelibsiz 👋</p>
+                    <p class="auth-sub">Akkaunt yarating va profilingizga kiring.</p>
+                    <div class="form-group">
+                        <label class="form-label">Username</label>
+                        <input class="form-input" id="su-username" type="text" placeholder="username (belgilar va raqam)" autocomplete="off">
+                        <div class="err-msg" id="su-username-err">Username kamida 3 ta belgi, faqat lotin harf/raqam/_</div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Ism Familiya</label>
+                        <input class="form-input" id="su-name" type="text" placeholder="To'liq ism" autocomplete="off">
+                        <div class="err-msg" id="su-name-err">Ism kamida 3 ta harf bo'lishi kerak</div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Parol</label>
+                        <input class="form-input" id="su-pass" type="password" placeholder="Parol kiriting">
+                        <div class="err-msg" id="su-pass-err">Parol kamida 6 ta belgi</div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Parolni tasdiqlash</label>
+                        <input class="form-input" id="su-pass2" type="password" placeholder="Parolni takrorlang">
+                        <div class="err-msg" id="su-pass2-err">Parollar mos kelmadi</div>
+                    </div>
+                    <button class="btn btn-primary" onclick="doSignUp()">Ro'yxatdan o'tish</button>
+                </div>
 
-                <div class="form-group">
-                    <label class="form-label">Ism</label>
-                    <input class="form-input" id="si-name" type="text" placeholder="Ism Familiya" autocomplete="off">
+                <!-- SIGN IN -->
+                <div id="signin-form" style="display:none;">
+                    <p class="auth-title">Qaytib keldingiz 🔐</p>
+                    <p class="auth-sub">Username va parolingiz bilan kiring.</p>
+                    <div class="form-group">
+                        <label class="form-label">Username</label>
+                        <input class="form-input" id="si-username" type="text" placeholder="username" autocomplete="off">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Parol</label>
+                        <input class="form-input" id="si-pass" type="password" placeholder="Parol">
+                    </div>
+                    <div class="err-msg" id="si-err" style="margin-bottom:8px;">Username yoki parol noto'g'ri</div>
+                    <button class="btn btn-primary" onclick="doSignIn()">Kirish</button>
                 </div>
-                <div class="form-group">
-                    <label class="form-label">Parol</label>
-                    <input class="form-input" id="si-pass" type="password" placeholder="Parol">
-                </div>
-                <div class="err-msg" id="si-err" style="margin-bottom:8px;">Ism yoki parol noto'g'ri</div>
-                <button class="submit-btn" onclick="doSignIn()">Kirish</button>
             </div>
         </div>
+    </div>
 
-        <!-- DASHBOARD -->
-        <div id="dashboard" style="display:none; width:100%; max-width:380px;">
-            <div class="dash-card">
+    <!-- ══════════════════════════════════════
+         PAGE: DASHBOARD (foydalanuvchi)
+    ══════════════════════════════════════ -->
+    <div class="page" id="page-dash">
+        <div style="max-width:420px;margin:0 auto;">
+
+            <!-- Profil header -->
+            <div class="card">
                 <div class="user-header">
-                    <div class="avatar" id="dash-avatar">A</div>
-                    <div>
+                    <div class="avatar-wrap">
+                        <div class="avatar" id="dash-avatar" onclick="goProfile()">A</div>
+                        <div class="avatar-edit" onclick="goProfile()">✏️</div>
+                    </div>
+                    <div class="user-info">
                         <div class="user-name" id="dash-name">—</div>
-                        <div class="user-role">Foydalanuvchi</div>
+                        <div class="user-sub" id="dash-username">@—</div>
+                        <span class="user-badge badge-free" id="dash-badge">Oddiy</span>
                     </div>
                 </div>
 
-                <div class="stats-grid" id="stats-grid">
+                <!-- Asosiy statistika -->
+                <div class="stats-grid">
                     <div class="stat-item">
                         <div class="stat-label">Jami ball</div>
                         <div class="stat-value purple" id="stat-score">—</div>
@@ -499,8 +397,16 @@
                         <div class="stat-value" id="stat-tests">—</div>
                     </div>
                     <div class="stat-item">
+                        <div class="stat-label">✅ To'g'ri</div>
+                        <div class="stat-value green" id="stat-correct">—</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">❌ Xato</div>
+                        <div class="stat-value red" id="stat-wrong">—</div>
+                    </div>
+                    <div class="stat-item">
                         <div class="stat-label">OTM</div>
-                        <div class="stat-value" style="font-size:13px;" id="stat-univ">—</div>
+                        <div class="stat-value small" id="stat-univ">—</div>
                     </div>
                     <div class="stat-item">
                         <div class="stat-label">Kurs</div>
@@ -509,38 +415,170 @@
                 </div>
             </div>
 
-            <!-- MUSOBAQA CARD -->
-            <div class="dash-card">
-                <div class="tour-title">
+            <!-- Fanlar statistikasi -->
+            <div class="card" id="subject-card" style="display:none;">
+                <div class="section-title">📚 Fanlar bo'yicha</div>
+                <div class="subject-list" id="subject-list"></div>
+            </div>
+
+            <!-- Musobaqa -->
+            <div class="card">
+                <div class="section-title">
                     🏆 Musobaqa
-                    <span class="badge inactive" id="tour-badge">Yuklanmoqda</span>
+                    <span class="user-badge badge-free" id="tour-badge" style="margin-left:auto;">Yuklanmoqda</span>
                 </div>
                 <div id="tour-info">
-                    <div class="tour-row"><span>Holat</span><span id="ti-status">—</span></div>
-                    <div class="tour-row"><span>Sana</span><span id="ti-date">—</span></div>
-                    <div class="tour-row"><span>Vaqt</span><span id="ti-time">—</span></div>
-                    <div class="tour-row"><span>Savollar</span><span id="ti-count">—</span></div>
+                    <div class="tour-row"><span class="lbl">Holat</span><span class="val" id="ti-status">—</span></div>
+                    <div class="tour-row"><span class="lbl">Sana</span><span class="val" id="ti-date">—</span></div>
+                    <div class="tour-row"><span class="lbl">Vaqt</span><span class="val" id="ti-time">—</span></div>
+                    <div class="tour-row"><span class="lbl">Savollar</span><span class="val" id="ti-count">—</span></div>
                 </div>
-                <button class="danger-btn" id="reject-btn" style="display:none;" onclick="confirmReject()">
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════
+         PAGE: PROFIL TAHRIRLASH
+    ══════════════════════════════════════ -->
+    <div class="page" id="page-profile">
+        <div style="max-width:420px;margin:0 auto;">
+
+            <div class="card">
+                <div class="section-title">👤 Mening profilim</div>
+
+                <!-- Avatar tanlash -->
+                <div style="text-align:center;margin-bottom:18px;">
+                    <div class="avatar" id="profile-avatar-big" style="width:80px;height:80px;font-size:28px;margin:0 auto 12px;">A</div>
+                    <p style="font-size:12px;color:var(--muted);">Avatarni tanlang:</p>
+                </div>
+                <div class="avatar-options" id="avatar-options"></div>
+
+                <div class="divider"></div>
+
+                <div class="form-group">
+                    <label class="form-label">Username</label>
+                    <input class="form-input" id="prof-username" type="text" placeholder="username">
+                    <div class="err-msg" id="prof-username-err">Username kamida 3 ta belgi, faqat lotin harf/raqam/_</div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Ism Familiya</label>
+                    <input class="form-input" id="prof-name" type="text" placeholder="To'liq ism">
+                    <div class="err-msg" id="prof-name-err">Ism kamida 3 ta harf</div>
+                </div>
+                <div class="divider"></div>
+                <p style="font-size:12px;color:var(--muted);margin-bottom:10px;">Parolni o'zgartirish (ixtiyoriy):</p>
+                <div class="form-group">
+                    <label class="form-label">Yangi parol</label>
+                    <input class="form-input" id="prof-newpass" type="password" placeholder="Qoldiring bo'sh = o'zgarmaydi">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Parolni tasdiqlash</label>
+                    <input class="form-input" id="prof-newpass2" type="password" placeholder="Takrorlang">
+                    <div class="err-msg" id="prof-pass-err">Parollar mos kelmadi</div>
+                </div>
+                <button class="btn btn-primary" onclick="saveProfile()">💾 Saqlash</button>
+                <button class="btn btn-ghost" onclick="goBack()">← Orqaga</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════
+         PAGE: ADMIN DASHBOARD
+    ══════════════════════════════════════ -->
+    <div class="page" id="page-admin">
+        <div style="max-width:420px;margin:0 auto;">
+
+            <!-- Admin profil -->
+            <div class="card">
+                <div class="user-header">
+                    <div class="avatar-wrap">
+                        <div class="avatar" id="admin-avatar" onclick="goAdminProfile()">A</div>
+                        <div class="avatar-edit" onclick="goAdminProfile()">✏️</div>
+                    </div>
+                    <div class="user-info">
+                        <div class="user-name" id="admin-name">Admin</div>
+                        <div class="user-sub" id="admin-username">@admin</div>
+                        <span class="user-badge badge-admin">Administrator</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Eng faol foydalanuvchi -->
+            <div class="card success-card" id="top-user-wrap" style="display:none;">
+                <div class="section-title">🔥 Eng faol foydalanuvchi</div>
+                <div class="top-user-card" id="top-user-card"></div>
+            </div>
+
+            <!-- Musobaqa boshqaruvi -->
+            <div class="card">
+                <div class="section-title">
+                    🏆 Musobaqa
+                    <span class="user-badge badge-free" id="admin-tour-badge" style="margin-left:auto;">—</span>
+                </div>
+                <div id="admin-tour-info">
+                    <div class="tour-row"><span class="lbl">Holat</span><span class="val" id="ati-status">—</span></div>
+                    <div class="tour-row"><span class="lbl">Sana</span><span class="val" id="ati-date">—</span></div>
+                    <div class="tour-row"><span class="lbl">Vaqt</span><span class="val" id="ati-time">—</span></div>
+                    <div class="tour-row"><span class="lbl">Savollar</span><span class="val" id="ati-count">—</span></div>
+                    <div class="tour-row"><span class="lbl">Ishtirokchilar</span><span class="val" id="ati-parts">—</span></div>
+                </div>
+                <button class="btn btn-danger" id="admin-reject-btn" style="display:none;margin-top:10px;" onclick="confirmReject()">
                     ✕ Musobaqani bekor qilish
                 </button>
             </div>
 
-            <div class="logout-link" onclick="doLogout()">← Chiqish</div>
         </div>
-    </main>
+    </div>
 
-    <!-- ADMIN MODAL -->
+    <!-- ══════════════════════════════════════
+         PAGE: ADMIN PROFIL TAHRIRLASH
+    ══════════════════════════════════════ -->
+    <div class="page" id="page-admin-profile">
+        <div style="max-width:420px;margin:0 auto;">
+            <div class="card">
+                <div class="section-title">⚙️ Admin profili</div>
+                <div style="text-align:center;margin-bottom:18px;">
+                    <div class="avatar" id="ap-avatar-big" style="width:80px;height:80px;font-size:28px;margin:0 auto 12px;">A</div>
+                </div>
+                <div class="avatar-options" id="ap-avatar-options"></div>
+                <div class="divider"></div>
+                <div class="form-group">
+                    <label class="form-label">Username</label>
+                    <input class="form-input" id="ap-username" type="text" placeholder="username">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Ism</label>
+                    <input class="form-input" id="ap-name" type="text" placeholder="To'liq ism">
+                </div>
+                <div class="divider"></div>
+                <div class="form-group">
+                    <label class="form-label">Yangi parol (ixtiyoriy)</label>
+                    <input class="form-input" id="ap-newpass" type="password" placeholder="Bo'sh qoldiring = o'zgarmaydi">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Parolni tasdiqlash</label>
+                    <input class="form-input" id="ap-newpass2" type="password" placeholder="Takrorlang">
+                    <div class="err-msg" id="ap-pass-err">Parollar mos kelmadi</div>
+                </div>
+                <button class="btn btn-primary" onclick="saveAdminProfile()">💾 Saqlash</button>
+                <button class="btn btn-ghost" onclick="goBack()">← Orqaga</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══ ADMIN KIRISH MODAL ══ -->
     <div class="modal-overlay" id="admin-modal">
-        <div class="modal">
+        <div class="modal danger-modal">
             <button class="modal-close" onclick="closeAdminModal()">✕</button>
             <div class="modal-title">🔐 Admin Kirish</div>
             <div class="modal-sub">Admin parolini kiriting.</div>
             <div class="form-group">
-                <input class="form-input" id="admin-pass" type="password" placeholder="Admin parol" onkeydown="if(event.key==='Enter')checkAdmin()">
+                <input class="form-input" id="admin-pass-input" type="password"
+                    placeholder="Admin parol"
+                    onkeydown="if(event.key==='Enter')checkAdmin()">
             </div>
-            <div class="err-msg show" id="admin-err" style="display:none!important; margin-bottom:8px;"></div>
-            <button class="submit-btn" onclick="checkAdmin()">Kirish</button>
+            <button class="btn btn-primary" onclick="checkAdmin()">Kirish</button>
         </div>
     </div>
 
@@ -548,207 +586,391 @@
     <div class="toast" id="toast"></div>
 
     <script>
-    // ════════════════════════════════════════
+    // ══════════════════════════════════════════
     // TELEGRAM WEB APP
-    // ════════════════════════════════════════
+    // ══════════════════════════════════════════
     const tg = window.Telegram?.WebApp;
-    if (tg) tg.expand();
+    if (tg) { tg.expand(); tg.enableClosingConfirmation(); }
 
-    // ════════════════════════════════════════
+    // ══════════════════════════════════════════
     // SOZLAMALAR
-    // ════════════════════════════════════════
-    const ADMIN_SECRET = "AD4863403";
-    const STORAGE_KEY  = "aitex_user";   // localStorage kaliti
+    // ══════════════════════════════════════════
+    const ADMIN_SECRET  = "AD4863403";
+    const USERS_KEY     = "aitex_users_v2";   // {username: {username, name, pass, avatar, createdAt}}
+    const SESSION_KEY   = "aitex_session_v2"; // {username, isAdmin}
+    const ADMIN_KEY     = "aitex_admin_v2";   // {username, name, pass, avatar}
 
-    // ════════════════════════════════════════
-    // TOAST
-    // ════════════════════════════════════════
-    function showToast(msg, type = 'success') {
+    // Avatar emojilari
+    const AVATARS = ['👤','🎓','🧑‍💻','👨‍🎓','👩‍🎓','🦊','🐺','🦁','🐯','🎯','🚀','⚡','🌟','🔥','💎','🏆','🎮','📚','🧠','🤖'];
+
+    // ══════════════════════════════════════════
+    // YORDAMCHI FUNKSIYALAR
+    // ══════════════════════════════════════════
+    function toast(msg, type='success') {
         const t = document.getElementById('toast');
         t.textContent = msg;
         t.className = `toast ${type} show`;
-        setTimeout(() => { t.className = 'toast'; }, 3000);
+        clearTimeout(t._timer);
+        t._timer = setTimeout(() => t.className = 'toast', 3000);
     }
 
-    // ════════════════════════════════════════
-    // TAB SWITCH
-    // ════════════════════════════════════════
-    function switchTab(tab) {
-        const isSignup = tab === 'signup';
-        document.getElementById('signup-form').style.display = isSignup ? 'block' : 'none';
-        document.getElementById('signin-form').style.display = isSignup ? 'none' : 'block';
-        document.getElementById('tab-signup').className = 'tab' + (isSignup ? ' active' : '');
-        document.getElementById('tab-signin').className = 'tab' + (!isSignup ? ' active' : '');
-        clearErrors();
+    function showPage(id) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        window.scrollTo(0,0);
     }
 
-    function clearErrors() {
+    function goBack() {
+        const sess = getSession();
+        if (!sess) { showPage('page-auth'); return; }
+        if (sess.isAdmin) showPage('page-admin');
+        else showPage('page-dash');
+    }
+
+    function clearFormErrors() {
         document.querySelectorAll('.err-msg').forEach(e => e.classList.remove('show'));
         document.querySelectorAll('.form-input').forEach(i => i.classList.remove('error'));
     }
 
-    function showErr(id, inputId) {
-        const e = document.getElementById(id);
+    function showErr(errId, inputId) {
+        const e = document.getElementById(errId);
         if (e) e.classList.add('show');
-        if (inputId) {
-            const inp = document.getElementById(inputId);
-            if (inp) inp.classList.add('error');
+        const inp = document.getElementById(inputId);
+        if (inp) inp.classList.add('error');
+    }
+
+    // Username validatsiya
+    function isValidUsername(u) {
+        return u && u.length >= 3 && /^[a-zA-Z0-9_]+$/.test(u);
+    }
+
+    // ══════════════════════════════════════════
+    // STORAGE
+    // ══════════════════════════════════════════
+    function getUsers() {
+        try { return JSON.parse(localStorage.getItem(USERS_KEY) || '{}'); } catch { return {}; }
+    }
+    function saveUsers(data) { localStorage.setItem(USERS_KEY, JSON.stringify(data)); }
+
+    function getSession() {
+        try { return JSON.parse(localStorage.getItem(SESSION_KEY)); } catch { return null; }
+    }
+    function saveSession(data) { localStorage.setItem(SESSION_KEY, JSON.stringify(data)); }
+    function clearSession() { localStorage.removeItem(SESSION_KEY); }
+
+    function getAdminData() {
+        try {
+            const raw = localStorage.getItem(ADMIN_KEY);
+            return raw ? JSON.parse(raw) : { username: 'admin', name: 'Administrator', pass: ADMIN_SECRET, avatar: '🏆' };
+        } catch { return { username: 'admin', name: 'Administrator', pass: ADMIN_SECRET, avatar: '🏆' }; }
+    }
+    function saveAdminData(d) { localStorage.setItem(ADMIN_KEY, JSON.stringify(d)); }
+
+    // ══════════════════════════════════════════
+    // AVATAR RENDER
+    // ══════════════════════════════════════════
+    function renderAvatar(el, avatarEmoji, nameInitials) {
+        if (!el) return;
+        if (avatarEmoji && AVATARS.includes(avatarEmoji)) {
+            el.textContent = avatarEmoji;
+            el.style.fontSize = el.style.width === '80px' ? '30px' : '22px';
+        } else {
+            el.textContent = (nameInitials || '?').slice(0,2).toUpperCase();
+            el.style.fontSize = '';
         }
     }
 
-    // ════════════════════════════════════════
+    function buildAvatarGrid(containerId, bigAvatarId, currentAvatar, onSelect) {
+        const grid = document.getElementById(containerId);
+        const big  = document.getElementById(bigAvatarId);
+        if (!grid) return;
+        grid.innerHTML = '';
+        let selected = currentAvatar || AVATARS[0];
+
+        AVATARS.forEach(em => {
+            const div = document.createElement('div');
+            div.className = 'avatar-option' + (em === selected ? ' selected' : '');
+            div.textContent = em;
+            div.onclick = () => {
+                grid.querySelectorAll('.avatar-option').forEach(d => d.classList.remove('selected'));
+                div.classList.add('selected');
+                selected = em;
+                if (big) { big.textContent = em; big.style.fontSize = '30px'; }
+                onSelect(em);
+            };
+            grid.appendChild(div);
+        });
+
+        if (big) { big.textContent = selected; big.style.fontSize = '30px'; }
+    }
+
+    // ══════════════════════════════════════════
+    // TAB SWITCH
+    // ══════════════════════════════════════════
+    function switchTab(tab) {
+        const isSU = tab === 'signup';
+        document.getElementById('signup-form').style.display = isSU ? 'block' : 'none';
+        document.getElementById('signin-form').style.display = isSU ? 'none' : 'block';
+        document.getElementById('tab-signup').className = 'tab' + (isSU ? ' active' : '');
+        document.getElementById('tab-signin').className = 'tab' + (!isSU ? ' active' : '');
+        clearFormErrors();
+    }
+
+    // ══════════════════════════════════════════
     // SIGN UP
-    // ════════════════════════════════════════
+    // ══════════════════════════════════════════
     function doSignUp() {
-        clearErrors();
-        const name  = document.getElementById('su-name').value.trim();
-        const pass  = document.getElementById('su-pass').value;
-        const pass2 = document.getElementById('su-pass2').value;
+        clearFormErrors();
+        const username = document.getElementById('su-username').value.trim().toLowerCase();
+        const name     = document.getElementById('su-name').value.trim();
+        const pass     = document.getElementById('su-pass').value;
+        const pass2    = document.getElementById('su-pass2').value;
         let ok = true;
 
-        if (name.length < 3) { showErr('su-name-err', 'su-name'); ok = false; }
-        if (pass.length < 6) { showErr('su-pass-err', 'su-pass'); ok = false; }
-        if (pass !== pass2)  { showErr('su-pass2-err', 'su-pass2'); ok = false; }
+        if (!isValidUsername(username)) { showErr('su-username-err','su-username'); ok = false; }
+        if (name.length < 3)           { showErr('su-name-err','su-name'); ok = false; }
+        if (pass.length < 6)           { showErr('su-pass-err','su-pass'); ok = false; }
+        if (pass !== pass2)            { showErr('su-pass2-err','su-pass2'); ok = false; }
         if (!ok) return;
 
-        // Faqat bitta akkaunt — ism allaqachon bor bo'lsa rad etish
-        const existing = localStorage.getItem(STORAGE_KEY);
-        if (existing) {
-            const ex = JSON.parse(existing);
-            if (ex.name.toLowerCase() === name.toLowerCase()) {
-                showToast("Bu ism allaqachon ro'yxatdan o'tgan!", 'error');
-                return;
-            }
+        const users = getUsers();
+        if (users[username]) { showErr('su-username-err','su-username'); document.getElementById('su-username-err').textContent = "Bu username allaqachon band!"; ok = false; return; }
+
+        // Admin username bandi
+        const adm = getAdminData();
+        if (username === adm.username.toLowerCase()) {
+            showErr('su-username-err','su-username');
+            document.getElementById('su-username-err').textContent = "Bu username band!";
+            return;
         }
 
-        // Saqlash
-        const userData = { name, pass, createdAt: Date.now() };
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(userData));
-
-        showToast("✅ Muvaffaqiyatli ro'yxatdan o'tildi!");
+        users[username] = { username, name, pass, avatar: '👤', createdAt: Date.now() };
+        saveUsers(users);
+        toast("✅ Ro'yxatdan o'tildi!");
         setTimeout(() => switchTab('signin'), 800);
-
-        // Inputlarni tozalash
+        document.getElementById('su-username').value = '';
         document.getElementById('su-name').value = '';
         document.getElementById('su-pass').value = '';
         document.getElementById('su-pass2').value = '';
     }
 
-    // ════════════════════════════════════════
+    // ══════════════════════════════════════════
     // SIGN IN
-    // ════════════════════════════════════════
+    // ══════════════════════════════════════════
     function doSignIn() {
-        clearErrors();
-        const name = document.getElementById('si-name').value.trim();
-        const pass = document.getElementById('si-pass').value;
+        clearFormErrors();
+        const username = document.getElementById('si-username').value.trim().toLowerCase();
+        const pass     = document.getElementById('si-pass').value;
 
-        const stored = localStorage.getItem(STORAGE_KEY);
-        if (!stored) {
-            document.getElementById('si-err').classList.add('show');
-            return;
-        }
-
-        const user = JSON.parse(stored);
-        if (user.name.toLowerCase() !== name.toLowerCase() || user.pass !== pass) {
+        const users = getUsers();
+        const user  = users[username];
+        if (!user || user.pass !== pass) {
             document.getElementById('si-err').classList.add('show');
             document.getElementById('si-pass').classList.add('error');
             return;
         }
 
-        // Session saqlash
-        sessionStorage.setItem('logged_user', user.name);
-        showDashboard(user.name);
+        saveSession({ username, isAdmin: false });
+        openDashboard(username);
     }
 
-    // ════════════════════════════════════════
-    // DASHBOARD
-    // ════════════════════════════════════════
-    async function showDashboard(name) {
-        document.getElementById('auth-section').style.display = 'none';
-        document.getElementById('dashboard').style.display = 'block';
+    // ══════════════════════════════════════════
+    // DASHBOARD (foydalanuvchi)
+    // ══════════════════════════════════════════
+    async function openDashboard(username) {
+        const users = getUsers();
+        const user  = users[username];
+        if (!user) { clearSession(); showPage('page-auth'); return; }
 
-        // Avatar harf
-        const initials = name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
-        document.getElementById('dash-avatar').textContent = initials;
-        document.getElementById('dash-name').textContent = name;
+        // Topbar: profil + chiqish
+        document.getElementById('topbar-right').innerHTML = `
+            <button class="topbar-btn" onclick="goProfile()">Profil</button>
+            <button class="topbar-btn danger" onclick="doLogout()">Chiqish</button>
+        `;
 
-        // Bot dan foydalanuvchi ma'lumotlarini olish
-        await loadUserStats(name);
+        // Avatar & ism
+        renderAvatar(document.getElementById('dash-avatar'), user.avatar, user.name);
+        document.getElementById('dash-name').textContent    = user.name;
+        document.getElementById('dash-username').textContent = '@' + user.username;
+        const badge = document.getElementById('dash-badge');
+        badge.textContent = 'Oddiy';
+        badge.className   = 'user-badge badge-free';
 
-        // Musobaqa ma'lumotlarini olish
-        await fetchTournament();
+        showPage('page-dash');
+
+        // Bot dan ma'lumot olish
+        await loadUserStats(user.name, user.username);
+        await fetchTournamentUser();
     }
 
-    async function loadUserStats(name) {
+    async function loadUserStats(name, username) {
         try {
-            const res = await fetch('/api/user-stats?name=' + encodeURIComponent(name));
+            // Ism yoki username orqali qidirish
+            let res = await fetch('/api/user-stats?name=' + encodeURIComponent(name));
+            if (!res.ok && username) {
+                res = await fetch('/api/user-stats?username=' + encodeURIComponent(username));
+            }
+
             if (res.ok) {
-                const data = await res.json();
-                document.getElementById('stat-score').textContent = data.score !== undefined ? parseFloat(data.score).toFixed(1) : '—';
-                document.getElementById('stat-tests').textContent = data.totalTests ?? '—';
-                document.getElementById('stat-univ').textContent  = data.univ || '—';
-                document.getElementById('stat-kurs').textContent  = data.kurs || '—';
+                const d = await res.json();
+                document.getElementById('stat-score').textContent   = d.score !== undefined ? parseFloat(d.score).toFixed(1) : '0';
+                document.getElementById('stat-tests').textContent   = d.totalTests ?? '0';
+                document.getElementById('stat-correct').textContent = d.totalCorrect ?? '—';
+                document.getElementById('stat-wrong').textContent   = d.totalWrong   ?? '—';
+                document.getElementById('stat-univ').textContent    = d.univ || '—';
+                document.getElementById('stat-kurs').textContent    = d.kurs || '—';
+
+                // VIP badge
+                if (d.isVip) {
+                    const b = document.getElementById('dash-badge');
+                    b.textContent = '💎 VIP'; b.className = 'user-badge badge-vip';
+                }
+
+                // Fanlar statistikasi
+                if (d.subjects && Object.keys(d.subjects).length > 0) {
+                    renderSubjects(d.subjects);
+                }
             } else {
                 setDefaultStats();
             }
-        } catch {
-            setDefaultStats();
-        }
+        } catch { setDefaultStats(); }
     }
 
     function setDefaultStats() {
-        document.getElementById('stat-score').textContent = '0';
-        document.getElementById('stat-tests').textContent = '0';
-        document.getElementById('stat-univ').textContent  = '—';
-        document.getElementById('stat-kurs').textContent  = '—';
+        ['stat-score','stat-tests','stat-correct','stat-wrong','stat-univ','stat-kurs']
+            .forEach(id => document.getElementById(id).textContent = '—');
     }
 
-    async function fetchTournament() {
+    function renderSubjects(subjects) {
+        const card = document.getElementById('subject-card');
+        const list = document.getElementById('subject-list');
+        const subNames = {
+            academic:'Akademik yozuv', history:'Tarix', math:'Matematika',
+            dasturlash:'Dasturlash 1', physics:'Fizika', english:'Perfect English'
+        };
+        let html = '';
+        for (const [key, val] of Object.entries(subjects)) {
+            const namePart = key.split('_').pop();
+            const subName  = subNames[namePart] || namePart;
+            html += `<div class="subject-item">
+                <span class="subject-name">${subName}</span>
+                <div class="subject-stats">
+                    <span class="sub-stat sub-total">${val.tests || 0} test</span>
+                    <span class="sub-stat sub-correct">✅${val.correct || 0}</span>
+                    <span class="sub-stat sub-wrong">❌${val.wrong || 0}</span>
+                </div>
+            </div>`;
+        }
+        if (html) { list.innerHTML = html; card.style.display = 'block'; }
+    }
+
+    async function fetchTournamentUser() {
         try {
-            const res = await fetch('/api/tournament');
+            const res  = await fetch('/api/tournament');
             const tour = await res.json();
             const badge = document.getElementById('tour-badge');
-            const btn = document.getElementById('reject-btn');
-
             if (tour?.isActive) {
-                badge.className = 'badge active';
-                badge.textContent = 'FAOL';
+                badge.textContent = 'FAOL'; badge.className = 'user-badge badge-active';
                 document.getElementById('ti-status').textContent = '✅ Faol';
                 document.getElementById('ti-date').textContent   = tour.date || '—';
                 document.getElementById('ti-time').textContent   = tour.time || '—';
                 document.getElementById('ti-count').textContent  = (tour.count || '—') + ' ta';
-                // Rad etish tugmasi faqat admin uchun — bu oddiy foydalanuvchi, yashirin
-                btn.style.display = 'none';
             } else {
-                badge.className = 'badge inactive';
-                badge.textContent = 'FAOL EMAS';
-                document.getElementById('ti-status').textContent = '❌ Yo\'q';
-                document.getElementById('ti-date').textContent   = '—';
-                document.getElementById('ti-time').textContent   = '—';
-                document.getElementById('ti-count').textContent  = '—';
-                btn.style.display = 'none';
+                badge.textContent = 'YO\'Q'; badge.className = 'user-badge badge-free';
+                document.getElementById('ti-status').textContent = '❌ Hozircha yo\'q';
+                ['ti-date','ti-time','ti-count'].forEach(id => document.getElementById(id).textContent = '—');
             }
-        } catch {
-            document.getElementById('tour-badge').textContent = 'Xatolik';
-        }
+        } catch { document.getElementById('tour-badge').textContent = '—'; }
     }
 
+    // ══════════════════════════════════════════
+    // LOGOUT
+    // ══════════════════════════════════════════
     function doLogout() {
-        sessionStorage.removeItem('logged_user');
-        document.getElementById('dashboard').style.display = 'none';
-        document.getElementById('auth-section').style.display = 'block';
-        document.getElementById('si-name').value = '';
-        document.getElementById('si-pass').value = '';
+        clearSession();
+        document.getElementById('topbar-right').innerHTML = `<button class="topbar-btn" onclick="openAdminModal()">Admin</button>`;
+        ['si-username','si-pass'].forEach(id => document.getElementById(id).value = '');
         switchTab('signin');
+        showPage('page-auth');
     }
 
-    // ════════════════════════════════════════
+    // ══════════════════════════════════════════
+    // PROFIL TAHRIRLASH (user)
+    // ══════════════════════════════════════════
+    let _selectedAvatar = '👤';
+
+    function goProfile() {
+        const sess  = getSession();
+        if (!sess) return;
+        const users = getUsers();
+        const user  = users[sess.username];
+        if (!user) return;
+
+        clearFormErrors();
+        _selectedAvatar = user.avatar || '👤';
+        document.getElementById('prof-username').value = user.username;
+        document.getElementById('prof-name').value     = user.name;
+        document.getElementById('prof-newpass').value  = '';
+        document.getElementById('prof-newpass2').value = '';
+
+        buildAvatarGrid('avatar-options', 'profile-avatar-big', _selectedAvatar, (em) => { _selectedAvatar = em; });
+
+        showPage('page-profile');
+    }
+
+    function saveProfile() {
+        clearFormErrors();
+        const sess       = getSession();
+        const users      = getUsers();
+        const oldUser    = users[sess.username];
+        const newUsername= document.getElementById('prof-username').value.trim().toLowerCase();
+        const newName    = document.getElementById('prof-name').value.trim();
+        const newPass    = document.getElementById('prof-newpass').value;
+        const newPass2   = document.getElementById('prof-newpass2').value;
+
+        if (!isValidUsername(newUsername)) { showErr('prof-username-err','prof-username'); return; }
+        if (newName.length < 3)           { showErr('prof-name-err','prof-name'); return; }
+        if (newPass && newPass !== newPass2) { showErr('prof-pass-err','prof-newpass2'); return; }
+
+        // Username o'zgargan bo'lsa — band emasligini tekshir
+        if (newUsername !== sess.username) {
+            if (users[newUsername]) {
+                toast('Bu username allaqachon band!','error'); return;
+            }
+            const adm = getAdminData();
+            if (newUsername === adm.username.toLowerCase()) {
+                toast('Bu username band!','error'); return;
+            }
+        }
+
+        // Yangi user obyekti
+        const updated = {
+            ...oldUser,
+            username: newUsername,
+            name:     newName,
+            avatar:   _selectedAvatar,
+        };
+        if (newPass) updated.pass = newPass;
+
+        // Eski kalit o'chiriladi, yangi kiritiladi
+        delete users[sess.username];
+        users[newUsername] = updated;
+        saveUsers(users);
+
+        // Sessionni yangilash
+        saveSession({ username: newUsername, isAdmin: false });
+
+        toast('✅ Profil yangilandi!');
+        setTimeout(() => openDashboard(newUsername), 800);
+    }
+
+    // ══════════════════════════════════════════
     // ADMIN MODAL
-    // ════════════════════════════════════════
+    // ══════════════════════════════════════════
     function openAdminModal() {
         document.getElementById('admin-modal').classList.add('show');
-        document.getElementById('admin-pass').value = '';
-        document.getElementById('admin-pass').focus();
+        document.getElementById('admin-pass-input').value = '';
+        setTimeout(() => document.getElementById('admin-pass-input').focus(), 100);
     }
 
     function closeAdminModal() {
@@ -756,101 +978,184 @@
     }
 
     function checkAdmin() {
-        const val = document.getElementById('admin-pass').value;
-        if (val === ADMIN_SECRET) {
+        const val = document.getElementById('admin-pass-input').value;
+        const adm = getAdminData();
+        if (val === adm.pass || val === ADMIN_SECRET) {
             closeAdminModal();
-            showAdminDashboard();
+            saveSession({ username: adm.username || 'admin', isAdmin: true });
+            openAdminDashboard();
         } else {
-            document.getElementById('admin-pass').classList.add('error');
-            showToast("Parol noto'g'ri!", 'error');
+            document.getElementById('admin-pass-input').classList.add('error');
+            toast("Parol noto'g'ri!",'error');
         }
     }
 
-    async function showAdminDashboard() {
-        // Admin bo'lsa, dashboard ochib rad etish tugmasini ko'rsatish
-        const stored = localStorage.getItem(STORAGE_KEY);
-        const name = stored ? JSON.parse(stored).name : 'Admin';
-        sessionStorage.setItem('logged_user', name);
+    // ══════════════════════════════════════════
+    // ADMIN DASHBOARD
+    // ══════════════════════════════════════════
+    async function openAdminDashboard() {
+        const adm = getAdminData();
 
-        document.getElementById('auth-section').style.display = 'none';
-        document.getElementById('dashboard').style.display = 'block';
+        // Topbar
+        document.getElementById('topbar-right').innerHTML = `
+            <button class="topbar-btn" onclick="goAdminProfile()">Profil</button>
+            <button class="topbar-btn danger" onclick="doLogout()">Chiqish</button>
+        `;
 
-        const initials = name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2) || 'A';
-        document.getElementById('dash-avatar').textContent = initials;
-        document.getElementById('dash-name').textContent = name + ' (Admin)';
+        // Admin profil
+        renderAvatar(document.getElementById('admin-avatar'), adm.avatar, adm.name || 'Admin');
+        document.getElementById('admin-name').textContent     = adm.name || 'Administrator';
+        document.getElementById('admin-username').textContent = '@' + (adm.username || 'admin');
 
-        await loadUserStats(name);
+        showPage('page-admin');
+
+        // Musobaqa
         await fetchTournamentAdmin();
+
+        // Top user
+        await loadTopUser();
+    }
+
+    async function loadTopUser() {
+        try {
+            const res = await fetch('/api/top-user');
+            if (!res.ok) return;
+            const u = await res.json();
+            if (!u?.name) return;
+
+            const wrap = document.getElementById('top-user-wrap');
+            const card = document.getElementById('top-user-card');
+            const initials = (u.name || 'U').slice(0,2).toUpperCase();
+
+            card.innerHTML = `
+                <div class="top-user-avatar">${initials}</div>
+                <div class="top-user-info">
+                    <div class="top-user-name">${u.name}</div>
+                    <div class="top-user-sub">
+                        ${u.tgUsername ? '@'+u.tgUsername : ''} · ${u.univ || ''} · ${u.kurs || ''}
+                        <br>Testlar: ${u.totalTests || 0} | Yo'nalish: ${u.yonalish || '—'}
+                    </div>
+                </div>
+                <div class="top-user-score">${parseFloat(u.score||0).toFixed(1)}</div>
+            `;
+            wrap.style.display = 'block';
+        } catch {}
     }
 
     async function fetchTournamentAdmin() {
         try {
-            const res = await fetch('/api/tournament');
+            const res  = await fetch('/api/tournament');
             const tour = await res.json();
-            const badge = document.getElementById('tour-badge');
-            const btn = document.getElementById('reject-btn');
+            const badge = document.getElementById('admin-tour-badge');
+            const btn   = document.getElementById('admin-reject-btn');
 
             if (tour?.isActive) {
-                badge.className = 'badge active';
-                badge.textContent = 'FAOL';
-                document.getElementById('ti-status').textContent = '✅ Faol';
-                document.getElementById('ti-date').textContent   = tour.date || '—';
-                document.getElementById('ti-time').textContent   = tour.time || '—';
-                document.getElementById('ti-count').textContent  = (tour.count || '—') + ' ta';
+                badge.textContent = 'FAOL'; badge.className = 'user-badge badge-active';
+                document.getElementById('ati-status').textContent = '✅ Faol';
+                document.getElementById('ati-date').textContent   = tour.date || '—';
+                document.getElementById('ati-time').textContent   = tour.time || '—';
+                document.getElementById('ati-count').textContent  = (tour.count || '—') + ' ta';
+                document.getElementById('ati-parts').textContent  = (tour.participants?.length || 0) + ' kishi';
                 btn.style.display = 'block';
             } else {
-                badge.className = 'badge inactive';
-                badge.textContent = 'FAOL EMAS';
-                document.getElementById('ti-status').textContent = '❌ Yo\'q';
-                document.getElementById('ti-date').textContent   = '—';
-                document.getElementById('ti-time').textContent   = '—';
-                document.getElementById('ti-count').textContent  = '—';
+                badge.textContent = 'FAOL EMAS'; badge.className = 'user-badge badge-free';
+                document.getElementById('ati-status').textContent = '❌ Hozircha yo\'q';
+                ['ati-date','ati-time','ati-count'].forEach(id => document.getElementById(id).textContent = '—');
+                document.getElementById('ati-parts').textContent = '0 kishi';
                 btn.style.display = 'none';
             }
-        } catch {
-            document.getElementById('tour-badge').textContent = 'Xatolik';
-        }
+        } catch {}
     }
 
     async function confirmReject() {
-        if (!confirm("Rostan ham ushbu musobaqani bekor qilmoqchimisiz?")) return;
+        if (!confirm("Musobaqani bekor qilmoqchimisiz?")) return;
         try {
-            const res = await fetch('/api/reject', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' }
-            });
+            const res = await fetch('/api/reject', { method:'POST', headers:{'Content-Type':'application/json'} });
             if (res.ok) {
-                showToast('✅ Musobaqa bekor qilindi!');
-                document.getElementById('reject-btn').style.display = 'none';
-                document.getElementById('tour-badge').className = 'badge inactive';
-                document.getElementById('tour-badge').textContent = 'FAOL EMAS';
-                document.getElementById('ti-status').textContent = '❌ Yo\'q';
+                toast('✅ Musobaqa bekor qilindi!');
+                document.getElementById('admin-reject-btn').style.display = 'none';
+                document.getElementById('admin-tour-badge').textContent = 'FAOL EMAS';
+                document.getElementById('admin-tour-badge').className   = 'user-badge badge-free';
+                document.getElementById('ati-status').textContent = "❌ Hozircha yo'q";
                 if (tg) setTimeout(() => tg.close(), 1500);
-            } else {
-                showToast('❌ Server xatosi!', 'error');
-            }
-        } catch {
-            showToast('⚠️ Tarmoq xatosi!', 'error');
-        }
+            } else { toast('❌ Server xatosi!','error'); }
+        } catch { toast('⚠️ Tarmoq xatosi!','error'); }
     }
 
-    // ════════════════════════════════════════
-    // SAHIFA YUKLANGANDA — SESSION TEKSHIRISH
-    // ════════════════════════════════════════
+    // ══════════════════════════════════════════
+    // ADMIN PROFIL TAHRIRLASH
+    // ══════════════════════════════════════════
+    let _adminAvatar = '🏆';
+
+    function goAdminProfile() {
+        const adm = getAdminData();
+        _adminAvatar = adm.avatar || '🏆';
+        document.getElementById('ap-username').value  = adm.username || 'admin';
+        document.getElementById('ap-name').value      = adm.name || 'Administrator';
+        document.getElementById('ap-newpass').value   = '';
+        document.getElementById('ap-newpass2').value  = '';
+
+        buildAvatarGrid('ap-avatar-options','ap-avatar-big', _adminAvatar, (em) => { _adminAvatar = em; });
+        showPage('page-admin-profile');
+    }
+
+    function saveAdminProfile() {
+        clearFormErrors();
+        const newUser  = document.getElementById('ap-username').value.trim().toLowerCase();
+        const newName  = document.getElementById('ap-name').value.trim();
+        const newPass  = document.getElementById('ap-newpass').value;
+        const newPass2 = document.getElementById('ap-newpass2').value;
+
+        if (newPass && newPass !== newPass2) { showErr('ap-pass-err','ap-newpass2'); return; }
+
+        const adm = getAdminData();
+        const updated = {
+            ...adm,
+            username: newUser || adm.username,
+            name:     newName || adm.name,
+            avatar:   _adminAvatar,
+        };
+        if (newPass) updated.pass = newPass;
+        saveAdminData(updated);
+
+        // Sessionni ham yangilash
+        saveSession({ username: updated.username, isAdmin: true });
+
+        toast('✅ Admin profili yangilandi!');
+        setTimeout(() => openAdminDashboard(), 800);
+    }
+
+    // ══════════════════════════════════════════
+    // SAHIFA YUKLANGANDA
+    // ══════════════════════════════════════════
     window.addEventListener('DOMContentLoaded', () => {
-        const loggedName = sessionStorage.getItem('logged_user');
-        if (loggedName) {
-            // Sahifadan chiqib qayta kirsa ham akkaunt saqlanadi
-            showDashboard(loggedName);
-        } else {
-            // localStorage da akkaunt bormi? — sign in tabga o'tkazish
-            const stored = localStorage.getItem(STORAGE_KEY);
-            if (stored) switchTab('signin');
+        // ✅ SESSION TEKSHIRISH — bir marta kirdimi, qayta so'ramaymiz
+        const sess = getSession();
+        if (sess) {
+            if (sess.isAdmin) {
+                document.getElementById('topbar-right').innerHTML = `
+                    <button class="topbar-btn" onclick="goAdminProfile()">Profil</button>
+                    <button class="topbar-btn danger" onclick="doLogout()">Chiqish</button>
+                `;
+                openAdminDashboard();
+            } else {
+                document.getElementById('topbar-right').innerHTML = `
+                    <button class="topbar-btn" onclick="goProfile()">Profil</button>
+                    <button class="topbar-btn danger" onclick="doLogout()">Chiqish</button>
+                `;
+                openDashboard(sess.username);
+            }
+            return;
         }
 
-        // Enter tugmasi bilan kirish
-        document.getElementById('si-pass').addEventListener('keydown', e => { if (e.key === 'Enter') doSignIn(); });
-        document.getElementById('su-pass2').addEventListener('keydown', e => { if (e.key === 'Enter') doSignUp(); });
+        // Akkaunt bor, signin tabga o'tkazish
+        const users = getUsers();
+        if (Object.keys(users).length > 0) switchTab('signin');
+
+        // Enter tugmalari
+        document.getElementById('si-pass').addEventListener('keydown', e => { if(e.key==='Enter') doSignIn(); });
+        document.getElementById('su-pass2').addEventListener('keydown', e => { if(e.key==='Enter') doSignUp(); });
+        document.getElementById('admin-pass-input').addEventListener('keydown', e => { if(e.key==='Enter') checkAdmin(); });
     });
     </script>
 </body>

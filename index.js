@@ -184,19 +184,29 @@ async function getSubKeyboard(ctx) {
     return Markup.inlineKeyboard(buttons);
 }
 
-function updateGlobalScore(userId, name, username, score) {
+function updateGlobalScore(userId, name, username, score, totalInTest, wrongCount, subjectKey) {
     try {
         const db = getDb();
         if (!db.users[userId]) {
-            db.users[userId] = { name: name || 'Foydalanuvchi', username: username || 'Lichka yopiq', score: 0, totalTests: 0 };
+            db.users[userId] = { name: name || 'Foydalanuvchi', username: username || 'Lichka yopiq', score: 0, totalTests: 0, totalCorrect: 0, totalWrong: 0, subjects: {} };
         }
         const u = db.users[userId];
-        u.totalTests = (u.totalTests || 0) + 1;
-        u.score      = (u.score || 0) + score;
-        // ✅ TUZATILDI: Ismni bazadagi to'g'ri ism bilan yangilaymiz
-        // Agar bazada haqiqiy ism bo'lsa, uni saqlaymiz — session ismi bilan ezib yubormaymiz
+        u.totalTests   = (u.totalTests   || 0) + 1;
+        u.score        = (u.score        || 0) + score;
+        u.totalCorrect = (u.totalCorrect || 0) + score;
+        u.totalWrong   = (u.totalWrong   || 0) + (wrongCount || 0);
         if (name && isValidName(name)) u.name = name;
         if (username) u.username = username;
+
+        // Fan bo'yicha statistika
+        if (subjectKey) {
+            if (!u.subjects) u.subjects = {};
+            if (!u.subjects[subjectKey]) u.subjects[subjectKey] = { tests: 0, correct: 0, wrong: 0 };
+            u.subjects[subjectKey].tests   = (u.subjects[subjectKey].tests   || 0) + 1;
+            u.subjects[subjectKey].correct = (u.subjects[subjectKey].correct || 0) + score;
+            u.subjects[subjectKey].wrong   = (u.subjects[subjectKey].wrong   || 0) + (wrongCount || 0);
+        }
+
         saveDb(db);
     } catch (err) { console.error('[Score]', err.message); }
 }
@@ -317,7 +327,11 @@ async function sendQuestion(ctx, isNew = false) {
     if (timers[userId]) clearTimeout(timers[userId]);
 
     if (!s.activeList || s.index >= s.activeList.length) {
-        if (!s.isTurbo) updateGlobalScore(userId, s.userName, ctx.from.username || 'Lichka yopiq', s.score);
+        const wrongCount = (s.wrongs || []).length;
+        if (!s.isTurbo) updateGlobalScore(
+            userId, s.userName, ctx.from.username || 'Lichka yopiq',
+            s.score, s.activeList?.length || 0, wrongCount, s.currentSubject || null
+        );
 
         const total   = s.activeList?.length || 1;
         const percent = ((s.score / total) * 100).toFixed(1);
@@ -1309,13 +1323,58 @@ cron.schedule('* * * * *', async () => {
 // ============================================================
 // EXPRESS API
 // ============================================================
+
+// Foydalanuvchi statistikasi — ism YOKI username orqali
 app.get('/api/user-stats', (req, res) => {
-    const name = (req.query.name||'').toLowerCase().trim();
-    if (!name) return res.status(400).json({ error: 'name kerak' });
+    const nameQ     = (req.query.name     || '').toLowerCase().trim();
+    const usernameQ = (req.query.username || '').toLowerCase().trim();
+    if (!nameQ && !usernameQ) return res.status(400).json({ error: 'name yoki username kerak' });
+
     const db   = getDb();
-    const user = Object.values(db.users).find(u => (u.name||'').toLowerCase().trim() === name);
+    let user   = null;
+
+    if (nameQ) {
+        user = Object.values(db.users).find(u => (u.name || '').toLowerCase().trim() === nameQ);
+    }
+    if (!user && usernameQ) {
+        user = Object.values(db.users).find(u =>
+            (u.username || '').toLowerCase().replace('@','').trim() === usernameQ.replace('@','')
+        );
+    }
     if (!user) return res.status(404).json({ error: 'Topilmadi' });
-    res.json({ score: user.score||0, totalTests: user.totalTests||0, univ: user.univ||'—', kurs: user.kurs||'—', yonalish: user.yonalish||'—' });
+
+    res.json({
+        score:        user.score        || 0,
+        totalTests:   user.totalTests   || 0,
+        totalCorrect: user.totalCorrect || null,
+        totalWrong:   user.totalWrong   || null,
+        univ:         user.univ         || '—',
+        kurs:         user.kurs         || '—',
+        yonalish:     user.yonalish     || '—',
+        isVip:        user.isVip        || false,
+        subjects:     user.subjects     || {},
+    });
+});
+
+// Eng ko'p test ishlagan foydalanuvchi
+app.get('/api/top-user', (req, res) => {
+    const db = getDb();
+    const sorted = Object.values(db.users)
+        .filter(u => u && isValidName(u.name) && (u.totalTests || 0) > 0)
+        .sort((a, b) => (b.totalTests || 0) - (a.totalTests || 0));
+
+    if (!sorted.length) return res.status(404).json({ error: 'Hech kim yo\'q' });
+
+    const top = sorted[0];
+    res.json({
+        name:       top.name       || '—',
+        tgUsername: (top.username || '').replace('@',''),
+        score:      top.score      || 0,
+        totalTests: top.totalTests || 0,
+        univ:       top.univ       || '—',
+        kurs:       top.kurs       || '—',
+        yonalish:   top.yonalish   || '—',
+    });
 });
 
 app.get('/api/tournament', (req, res) => {
