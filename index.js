@@ -17,7 +17,7 @@ const BOT_TOKEN = process.env.BOT_TOKEN;
 const ADMIN_ID  = parseInt(process.env.ADMIN_ID);
 const PORT      = process.env.PORT || 3000;
 
-// ✅ TUZATILDI: Ikkita kanal — majburiy obunaa
+// ✅ TUZATILDI: Ikkita kanal — majburiy obunacha
 const REQUIRED_CHANNELS = [
     { id: '@Doniyorbeksblog', name: `Doniyorbek's blog`,  link: 'https://t.me/Doniyorbeksblog' },
     // { id: '@yusufbe_dev',   name: 'Yusufbe Dev',    link: 'https://t.me/yusufbe_dev'   },
