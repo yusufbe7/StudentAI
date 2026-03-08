@@ -19,8 +19,10 @@ const PORT      = process.env.PORT || 3000;
 
 // ✅ TUZATILDI: Ikkita kanal — majburiy obunacha
 const REQUIRED_CHANNELS = [
-    { id: '@Doniyorbeksblog', name: `Doniyorbek's blog`,  link: 'https://t.me/Doniyorbeksblog' },
-    // { id: '@yusufbe_dev',   name: 'Yusufbe Dev',    link: 'https://t.me/yusufbe_dev'   },
+    // { id: '@Doniyorbeksblog', name: `Doniyorbek's blog`,  link: 'https://t.me/Doniyorbeksblog' },
+    { id: '@yusufbe_dev',   name: 'Yusufbe Dev',    link: 'https://t.me/yusufbe_dev'   },
+    { id: '@student_aitex',   name: 'AI Simulyator News',    link: 'https://t.me/student_aitex'   },
+
 ];
 
 if (!BOT_TOKEN) throw new Error("BOT_TOKEN env o'zgaruvchisi topilmadi!");
