@@ -41,6 +41,7 @@ const PATHS = {
     session:    path.join(DATA_DIR, 'session.json'),
     subjects:   path.join(__dirname, 'subjects.json'),
     customQ:    path.join(DATA_DIR, 'custom_questions.json'),
+    photos:     path.join(DATA_DIR, 'user_photos.json'),   // ✅ YANGI: Foydalanuvchi rasmlari
 };
 
 // ============================================================
@@ -49,7 +50,7 @@ const PATHS = {
 const bot = new Telegraf(BOT_TOKEN);
 const app = express();
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.json());
+app.use(express.json({ limit: '10mb' })); // ✅ rasm uchun limit oshirildi
 
 // ============================================================
 // MA'LUMOTLAR BAZASI
@@ -75,6 +76,10 @@ const getDb        = ()  => readJSON(PATHS.db, { users: {}, settings: {} });
 const saveDb       = (d) => writeJSON(PATHS.db, d);
 const getSettings  = ()  => readJSON(PATHS.settings, { timeLimit: 30 });
 const saveSettings = (s) => writeJSON(PATHS.settings, s);
+
+// ✅ YANGI: Rasm bazasini boshqarish
+const getPhotos  = ()  => readJSON(PATHS.photos, {});
+const savePhotos = (d) => writeJSON(PATHS.photos, d);
 
 // ============================================================
 // XOTIRA
@@ -111,7 +116,6 @@ const shuffle = (arr) => [...arr].sort(() => Math.random() - 0.5);
 
 function saveVip() { writeJSON(PATHS.vip, vipUsers); }
 
-// ✅ TUZATILDI: Ism validatsiyasi — bo'sh, "ismsiz", "нет имени" va shunaqa so'zlarni rad etadi
 const FAKE_NAMES = [
     'ismsiz','ismsz','ism yoq','ism yo\'q','ism kiritilmagan','nomalum',"noma'lum",
     'нет имени','без имени','noname','no name','anonymous','anonimus','anonim',
@@ -121,16 +125,12 @@ const FAKE_NAMES = [
 function isValidName(name) {
     if (!name || name.trim().length < 3) return false;
     const lower = name.trim().toLowerCase();
-    // Raqamlardan iborat ism qabul qilinmaydi
     if (/^\d+$/.test(lower)) return false;
-    // Faqat bitta harf yoki maxsus belgi
     if (/^[^a-zA-Zа-яА-ЯёЁa-zA-ZÀ-ÿ]+$/.test(lower)) return false;
-    // Yolg'on ismlar ro'yxatida bormi
     if (FAKE_NAMES.some(fake => lower.includes(fake))) return false;
     return true;
 }
 
-// ✅ TUZATILDI: Reyting — ismni to'g'ri ko'rsatadi
 function getLeaderboard(requesterId = null) {
     const db = getDb();
     const sorted = Object.values(db.users)
@@ -146,7 +146,6 @@ function getLeaderboard(requesterId = null) {
 
     sorted.forEach((u, i) => {
         const medal = medals[i] || '🔹';
-        // ✅ TUZATILDI: Ism har doim mavjud bo'ladi (validatsiyadan o'tgan)
         const name  = escapeHTML(u.name.trim());
         const score = parseFloat(u.score || 0).toFixed(1);
         const link  = (isReqAdmin && u.username && u.username !== 'Lichka yopiq')
@@ -156,7 +155,6 @@ function getLeaderboard(requesterId = null) {
     return res;
 }
 
-// ✅ TUZATILDI: Ikkita kanalni tekshiradi
 async function checkSubscription(ctx) {
     for (const ch of REQUIRED_CHANNELS) {
         try {
@@ -169,7 +167,6 @@ async function checkSubscription(ctx) {
     return true;
 }
 
-// Obuna tugmalari (obuna bo'lmagan kanallar uchun)
 async function getSubKeyboard(ctx) {
     const buttons = [];
     for (const ch of REQUIRED_CHANNELS) {
@@ -200,7 +197,6 @@ function updateGlobalScore(userId, name, username, score, totalInTest, wrongCoun
         if (name && isValidName(name)) u.name = name;
         if (username) u.username = username;
 
-        // Fan bo'yicha statistika
         if (subjectKey) {
             if (!u.subjects) u.subjects = {};
             if (!u.subjects[subjectKey]) u.subjects[subjectKey] = { tests: 0, correct: 0, wrong: 0 };
@@ -223,7 +219,6 @@ function prepareTournamentQuestions(count) {
 // MENYU FUNKSIYALARI
 // ============================================================
 
-// ✅ TUZATILDI: adminMainKeyboard — vaqt tugmasi bilan
 function adminMainKeyboard(db) {
     const s         = db.settings || {};
     const statusBtn = s.isMaintenance ? '🟢 Botni Yoqish' : "🛑 Botni To'xtatish";
@@ -236,11 +231,11 @@ function adminMainKeyboard(db) {
         [statusBtn, turboBtn],
         [`⏱ Vaqt: ${tl}s`, '➕ Yangi fan qoshish'],
         ["🗑 Botni Restart qilish", '🧹 Reytingni tozalash'],
-        ['📣 Xabar tarqatish', '⬅️ Orqaga (Fanlar)'],
+        ['📣 Xabar tarqatish', '🎭 Sohta ball qo\'shish'],  // ✅ YANGI tugma
+        ['⬅️ Orqaga (Fanlar)'],
     ]).resize();
 }
 
-// ✅ TUZATILDI: showSubjectMenu — musobaqa yaratgandan keyin ham fanlar ko'rinadi
 function showSubjectMenu(ctx) {
     try {
         const db = getDb();
@@ -274,7 +269,6 @@ function showSubjectMenu(ctx) {
             ];
         }
 
-        // ✅ TUZATILDI: Musobaqa tugmasi fanlarga qo'shiladi, ularni o'chirMaydi
         if (tour?.isActive && !user.tourFinished) {
             keyboard.unshift(['🏆 Xalqaro test musobaqa']);
         }
@@ -512,7 +506,6 @@ bot.use(async (ctx, next) => {
     return next();
 });
 
-// ✅ TUZATILDI: Ikkita kanalga obuna tekshiruvi
 bot.use(async (ctx, next) => {
     if (ctx.message?.text === '/start') return next();
     if (ctx.callbackQuery) return next();
@@ -539,8 +532,6 @@ bot.start(async (ctx) => {
         return showSubjectMenu(ctx);
     }
 
-    // ✅ TUZATILDI: Mavjud ma'lumotlarni saqlab, faqat step'ni qayta boshlaydi
-    // Agar oldin ism kiritgan bo'lsa, uni eslab qoladi
     if (!db.users[userId]) {
         db.users[userId] = {
             id: userId,
@@ -550,13 +541,11 @@ bot.start(async (ctx) => {
             step: 'wait_name', isRegistered: false
         };
     } else {
-        // Qayta /start — step ni reset qil, lekin score va ism saqlanib qolsin
         db.users[userId].step = 'wait_name';
         db.users[userId].isRegistered = false;
     }
     saveDb(db);
 
-    // Agar oldin ism kiritgan bo'lsa, eslatma
     const existingName = db.users[userId].name;
     if (existingName && isValidName(existingName)) {
         return ctx.replyWithHTML(
@@ -709,7 +698,6 @@ bot.action(/^reject_vip_(\d+)$/, async (ctx) => {
     return ctx.editMessageCaption("❌ To'lov rad etildi.");
 });
 
-// ✅ TUZATILDI: Musobaqani tasdiqlash — keyin bosh sahifaga (showSubjectMenu) qaytadi
 bot.action('confirm_tour', async (ctx) => {
     if (!isAdmin(ctx.from.id)) return ctx.answerCbQuery("Ruxsat yo'q!");
     const db = getDb();
@@ -743,8 +731,6 @@ bot.action('confirm_tour', async (ctx) => {
     }
 
     s.adminStep = null;
-
-    // ✅ MUHIM: Admin panelini qaytadan ko'rsatish (fanlar yo'q bo'lib qolmasligi uchun)
     await ctx.reply('🛠 Admin Panel', adminMainKeyboard(getDb()));
 });
 
@@ -755,7 +741,6 @@ bot.action('reject_tour', async (ctx) => {
     ctx.session.adminStep = null;
     await ctx.answerCbQuery('Musobaqa bekor qilindi');
     await ctx.editMessageText("❌ <b>Musobaqa yaratish bekor qilindi.</b>", { parse_mode: 'HTML' });
-    // ✅ Admin panelini qaytarish
     return ctx.reply('🛠 Admin Panel', adminMainKeyboard(getDb()));
 });
 
@@ -846,12 +831,10 @@ bot.action('confirm_clear_rank', async (ctx) => {
 
 bot.action('cancel_clear', (ctx) => ctx.deleteMessage().catch(() => {}));
 
-// ✅ TUZATILDI: To'liq restart — faqat ball va statistika o'chadi, botdan xabar yuborish ishlaydi
 bot.action('confirm_full_restart', async (ctx) => {
     if (!isAdmin(ctx.from.id)) return ctx.answerCbQuery("Ruxsat yo'q!");
     try {
         const db = getDb();
-        // ✅ Foydalanuvchilarni saqlab, faqat ballarni nolga tushiramiz
         Object.keys(db.users).forEach(id => {
             db.users[id].score       = 0;
             db.users[id].totalTests  = 0;
@@ -887,6 +870,42 @@ bot.action('announce_results', async (ctx) => {
 
 bot.action('cancel_action', (ctx) => ctx.deleteMessage().catch(() => {}));
 
+// ✅ YANGI: Sohta ball — o'zimga yoki boshqasiga callback handlerlari
+bot.action('fake_score_self', async (ctx) => {
+    if (!isAdmin(ctx.from.id)) return ctx.answerCbQuery("Ruxsat yo'q!");
+    ctx.session.fakeScoreTarget = 'self';
+    ctx.session.adminStep       = 'wait_fake_score_amount_self';
+    await ctx.answerCbQuery();
+    await ctx.editMessageText(
+        `🎭 <b>O'ZINGIZGA BALL QO'SHISH</b>\n\n` +
+        `Qo'shmoqchi bo'lgan ball miqdorini kiriting:\n` +
+        `(Masalan: <code>50</code> yoki <code>100</code>)`,
+        { parse_mode: 'HTML' }
+    );
+});
+
+bot.action('fake_score_other', async (ctx) => {
+    if (!isAdmin(ctx.from.id)) return ctx.answerCbQuery("Ruxsat yo'q!");
+    ctx.session.fakeScoreTarget = 'other';
+    ctx.session.adminStep       = 'wait_fake_score_tgid';
+    await ctx.answerCbQuery();
+    await ctx.editMessageText(
+        `🎭 <b>BOSHQA FOYDALANUVCHIGA BALL QO'SHISH</b>\n\n` +
+        `Foydalanuvchining Telegram ID sini kiriting:`,
+        { parse_mode: 'HTML' }
+    );
+});
+
+bot.action('cancel_fake_score', async (ctx) => {
+    if (!isAdmin(ctx.from.id)) return ctx.answerCbQuery("Ruxsat yo'q!");
+    ctx.session.adminStep       = null;
+    ctx.session.fakeScoreTarget = null;
+    ctx.session.fakeScoreUserId = null;
+    await ctx.answerCbQuery('Bekor qilindi');
+    await ctx.editMessageText('❌ Sohta ball qo\'shish bekor qilindi.');
+    return ctx.reply('🛠 Admin Panel', adminMainKeyboard(getDb()));
+});
+
 // ============================================================
 // BOT.HEARS — FAN VA TEST
 // ============================================================
@@ -905,7 +924,6 @@ bot.hears(['📝 Akademik yozuv','📜 Tarix','➕ Matematika','💻 Dasturlash 
 
     if (SUBJECTS[finalKey]?.questions) {
         s.currentSubject = finalKey;
-        // ✅ TUZATILDI: s.userName har doim o'rnatiladi
         const dbU  = getDb();
         const userU = dbU.users[ctx.from.id];
         s.userName = (userU?.name && isValidName(userU.name)) ? userU.name : (ctx.from.first_name || 'Talaba');
@@ -935,7 +953,6 @@ bot.hears(["⚡️ Blitz (25)","📝 To'liq test"], async (ctx) => {
     const questions = SUBJECTS[s.currentSubject].questions;
     if (!questions?.length) return ctx.reply("Bu fanda savollar yo'q.");
 
-    // ✅ TUZATILDI: s.userName — bazadan olinadi, reyting to'g'ri ishlaydi
     const db = getDb();
     const user = db.users[userId];
     s.userName = (user?.name && isValidName(user.name)) ? user.name : (ctx.from.first_name || 'Talaba');
@@ -967,7 +984,6 @@ bot.hears('📊 Statistika', async (ctx) => {
     let report = '🆔 <b>Foydalanuvchilar:</b>\n';
     for (let i = 0; i < entries.length; i++) {
         const [id, data] = entries[i];
-        // ✅ TUZATILDI: Ism to'g'ri chiqadi
         const displayName = (data.name && isValidName(data.name)) ? escapeHTML(data.name) : '❓ Ismsiz';
         const line = `${i+1}. 👤 ${displayName} | ID: <code>${id}</code>\n`;
         if ((report + line).length > 4000) { await ctx.replyWithHTML(report); report = ''; }
@@ -995,6 +1011,19 @@ bot.hears(['🚀 Turbo (Yoqish)',"🚀 Turbo (O'chirish)"], async (ctx) => {
     saveDb(db);
     await ctx.reply(db.settings.turboMode ? '🚀 TURBO REJIM YOQILDI!' : "🚀 Turbo rejim o'chirildi.");
     return ctx.reply('🛠 Admin Panel', adminMainKeyboard(db));
+});
+
+// ✅ YANGI: Sohta ball qo'shish handler
+bot.hears("🎭 Sohta ball qo'shish", async (ctx) => {
+    if (!isAdmin(ctx.from.id)) return;
+    return ctx.replyWithHTML(
+        `🎭 <b>SOHTA BALL QO'SHISH</b>\n\nKimga ball qo'shmoqchisiz?`,
+        Markup.inlineKeyboard([
+            [Markup.button.callback("👤 O'zimga", 'fake_score_self')],
+            [Markup.button.callback("👥 Boshqa foydalanuvchiga", 'fake_score_other')],
+            [Markup.button.callback("❌ Bekor qilish", 'cancel_fake_score')],
+        ])
+    );
 });
 
 bot.hears('🏆 Musobaqa boshqarish', (ctx) => {
@@ -1102,7 +1131,6 @@ bot.hears('📣 Xabar tarqatish', (ctx) => {
     return ctx.reply("Yubormoqchi bo'lgan xabaringizni yuboring:", Markup.keyboard([['🚫 Bekor qilish']]).resize());
 });
 
-// ✅ TUZATILDI: Vaqt tugmasi — dinamik nom bilan ishlaydi
 bot.hears(/^⏱ Vaqt: \d+s$/, (ctx) => {
     if (!isAdmin(ctx.from.id)) return;
     ctx.session.waitingForTime = true;
@@ -1151,6 +1179,8 @@ bot.on(['text','photo','video','animation','document'], async (ctx, next) => {
     if (msgText === '🚫 Bekor qilish') {
         s.waitingForForward = s.waitingForTime = s.waitingForSubjectName = s.waitingForSubjectQuestions = s.waitingForName = false;
         s.adminStep = null;
+        s.fakeScoreTarget = null;
+        s.fakeScoreUserId = null;
         return showSubjectMenu(ctx);
     }
 
@@ -1189,7 +1219,6 @@ bot.on(['text','photo','video','animation','document'], async (ctx, next) => {
         if (isNaN(val) || val < 5) return ctx.reply('❌ Xato raqam! Kamida 5 kiriting:');
         botSettings.timeLimit = val; saveSettings(botSettings); s.waitingForTime = false;
         await ctx.reply(`✅ Savol vaqti <b>${val} sekund</b>ga yangilandi.`, { parse_mode: 'HTML' });
-        // ✅ Admin panelini yangilangan vaqt bilan qayta ko'rsatish
         return ctx.reply('🛠 Admin Panel:', adminMainKeyboard(getDb()));
     }
 
@@ -1209,6 +1238,104 @@ bot.on(['text','photo','video','animation','document'], async (ctx, next) => {
             await ctx.reply("✅ Yangi fan muvaffaqiyatli qo'shildi!");
             return showSubjectMenu(ctx);
         } catch { return ctx.reply("❌ JSON formati noto'g'ri! Tekshirib qaytadan yuboring:"); }
+    }
+
+    // ✅ YANGI: Sohta ball — o'zimga (ball miqdorini kiritish)
+    if (isAdmin(userId) && s.adminStep === 'wait_fake_score_amount_self') {
+        const amount = parseFloat(msgText);
+        if (isNaN(amount) || amount <= 0) {
+            return ctx.reply('❌ Noto\'g\'ri miqdor! Musbat raqam kiriting:');
+        }
+        // Adminga ball qo'shish
+        const db = getDb();
+        if (!db.users[userId]) {
+            db.users[userId] = {
+                id: userId,
+                name: 'Admin',
+                username: ctx.from.username || 'admin',
+                score: 0, totalTests: 0, totalCorrect: 0, totalWrong: 0
+            };
+        }
+        const before = parseFloat(db.users[userId].score || 0).toFixed(1);
+        db.users[userId].score        = (db.users[userId].score || 0) + amount;
+        db.users[userId].totalTests   = (db.users[userId].totalTests || 0) + 1;
+        db.users[userId].totalCorrect = (db.users[userId].totalCorrect || 0) + amount;
+        saveDb(db);
+        s.adminStep = null;
+        s.fakeScoreTarget = null;
+
+        await ctx.replyWithHTML(
+            `✅ <b>Ball muvaffaqiyatli qo'shildi!</b>\n\n` +
+            `👤 Foydalanuvchi: <b>Admin (o'zingiz)</b>\n` +
+            `💰 Qo'shildi: <b>+${amount}</b> ball\n` +
+            `📊 Oldingi ball: <b>${before}</b>\n` +
+            `🏆 Yangi ball: <b>${parseFloat(db.users[userId].score).toFixed(1)}</b>`
+        );
+        return ctx.reply('🛠 Admin Panel', adminMainKeyboard(getDb()));
+    }
+
+    // ✅ YANGI: Sohta ball — boshqa user TG ID kiritish
+    if (isAdmin(userId) && s.adminStep === 'wait_fake_score_tgid') {
+        const targetId = parseInt(msgText.trim());
+        if (isNaN(targetId)) {
+            return ctx.reply('❌ Noto\'g\'ri ID! Faqat raqam kiriting:');
+        }
+        const db   = getDb();
+        const user = db.users[targetId];
+        if (!user) {
+            return ctx.replyWithHTML(
+                `❌ <b>ID: ${targetId}</b> li foydalanuvchi topilmadi.\n\n` +
+                `Foydalanuvchi botda ro'yxatdan o'tgan bo'lishi kerak.`
+            );
+        }
+        // ID topildi — ball miqdorini so'rash
+        s.fakeScoreUserId = targetId;
+        s.adminStep = 'wait_fake_score_amount_other';
+        return ctx.replyWithHTML(
+            `✅ <b>Foydalanuvchi topildi!</b>\n\n` +
+            `👤 Ism: <b>${escapeHTML(user.name || 'Noma\'lum')}</b>\n` +
+            `🆔 ID: <code>${targetId}</code>\n` +
+            `🏆 Joriy ball: <b>${parseFloat(user.score || 0).toFixed(1)}</b>\n\n` +
+            `Qo'shmoqchi bo'lgan ball miqdorini kiriting:`
+        );
+    }
+
+    // ✅ YANGI: Sohta ball — boshqa user uchun ball miqdori
+    if (isAdmin(userId) && s.adminStep === 'wait_fake_score_amount_other') {
+        const amount   = parseFloat(msgText);
+        const targetId = s.fakeScoreUserId;
+        if (isNaN(amount) || amount <= 0) {
+            return ctx.reply('❌ Noto\'g\'ri miqdor! Musbat raqam kiriting:');
+        }
+        if (!targetId) {
+            s.adminStep = null;
+            return ctx.reply('❌ Xatolik. Qaytadan urinib ko\'ring.');
+        }
+        const db   = getDb();
+        const user = db.users[targetId];
+        if (!user) {
+            s.adminStep = null;
+            return ctx.reply('❌ Foydalanuvchi topilmadi.');
+        }
+        const before = parseFloat(user.score || 0).toFixed(1);
+        db.users[targetId].score        = (user.score || 0) + amount;
+        db.users[targetId].totalTests   = (user.totalTests || 0) + 1;
+        db.users[targetId].totalCorrect = (user.totalCorrect || 0) + amount;
+        saveDb(db);
+
+        s.adminStep       = null;
+        s.fakeScoreUserId = null;
+        s.fakeScoreTarget = null;
+
+        await ctx.replyWithHTML(
+            `✅ <b>Ball muvaffaqiyatli qo'shildi!</b>\n\n` +
+            `👤 Foydalanuvchi: <b>${escapeHTML(user.name)}</b>\n` +
+            `🆔 TG ID: <code>${targetId}</code>\n` +
+            `💰 Qo'shildi: <b>+${amount}</b> ball\n` +
+            `📊 Oldingi ball: <b>${before}</b>\n` +
+            `🏆 Yangi ball: <b>${parseFloat(db.users[targetId].score).toFixed(1)}</b>`
+        );
+        return ctx.reply('🛠 Admin Panel', adminMainKeyboard(getDb()));
     }
 
     // Admin — musobaqa step-by-step
@@ -1234,7 +1361,6 @@ bot.on(['text','photo','video','animation','document'], async (ctx, next) => {
             const delId = parseInt(msgText); s.adminStep = null;
             const db = getDb();
             if (db.users[delId]) {
-                // ✅ TUZATILDI: Foydalanuvchini o'chirishda ismi va bali ham o'chadi, lekin xabar yuborish imkoni qoladi
                 const userName = db.users[delId].name || 'Foydalanuvchi';
                 delete db.users[delId]; saveDb(db);
                 return ctx.reply(`✅ Foydalanuvchi (${escapeHTML(userName)}, ID: ${delId}) bazadan o'chirildi.\n\nDiqqat: Bu foydalanuvchi botga qayta /start bosib ro'yxatdan o'tishi mumkin.`);
@@ -1259,7 +1385,6 @@ bot.on(['text','photo','video','animation','document'], async (ctx, next) => {
             if (forbidden.includes(msgText)) {
                 return ctx.reply("❌ Menyu tugmalarini bosmang! Ism va familiyangizni yozing:", Markup.removeKeyboard());
             }
-            // ✅ TUZATILDI: Yolg'on ism tekshiruvi
             if (!isValidName(msgText)) {
                 return ctx.replyWithHTML(
                     `❌ <b>Bu ism sifatida qabul qilinmadi!</b>\n\nIltimos, <b>haqiqiy ism va familiyangizni</b> kiriting.\nMasalan: <i>Abdullayev Jasur</i>`,
@@ -1302,7 +1427,6 @@ bot.on(['text','photo','video','animation','document'], async (ctx, next) => {
 
     // Ism tahrirlash
     if (user.step === 'edit_name') {
-        // ✅ TUZATILDI: Ism tahrirlashda ham validatsiya
         if (!isValidName(msgText)) {
             return ctx.replyWithHTML("❌ <b>Bu ism sifatida qabul qilinmadi!</b>\n\nHaqiqiy ism va familiyangizni kiriting:");
         }
@@ -1346,7 +1470,65 @@ cron.schedule('* * * * *', async () => {
 // EXPRESS API
 // ============================================================
 
-// Foydalanuvchi statistikasi — ism YOKI username orqali
+// ✅ YANGI: Foydalanuvchi rasmini saqlash API
+app.post('/api/save-photo', (req, res) => {
+    try {
+        const { username, photoData, isAdmin: isAdminUser } = req.body;
+        if (!photoData) return res.status(400).json({ error: 'photoData kerak' });
+
+        const photos = getPhotos();
+        const key    = isAdminUser ? '__admin__' : username;
+        if (!key)    return res.status(400).json({ error: 'username kerak' });
+
+        photos[key] = {
+            data:      photoData,
+            updatedAt: Date.now(),
+        };
+        savePhotos(photos);
+        res.json({ success: true });
+    } catch (err) {
+        console.error('[Photo save]', err.message);
+        res.status(500).json({ error: 'Saqlashda xatolik' });
+    }
+});
+
+// ✅ YANGI: Foydalanuvchi rasmini olish API
+app.get('/api/get-photo', (req, res) => {
+    try {
+        const { username, isAdmin: isAdminUser } = req.query;
+        const photos = getPhotos();
+        const key    = isAdminUser === 'true' ? '__admin__' : username;
+        if (!key || !photos[key]) return res.status(404).json({ error: 'Rasm topilmadi' });
+        res.json({ photoData: photos[key].data });
+    } catch (err) {
+        res.status(500).json({ error: 'Olishda xatolik' });
+    }
+});
+
+// ✅ YANGI: Barcha foydalanuvchi rasmlari (leaderboard uchun)
+app.get('/api/photos', (req, res) => {
+    try {
+        const photos  = getPhotos();
+        const result  = {};
+        const db      = getDb();
+        // username → photoData mapping qaytarish
+        Object.keys(photos).forEach(key => {
+            result[key] = photos[key].data;
+        });
+        // tgUsername bo'yicha ham map qilish
+        Object.values(db.users).forEach(u => {
+            if (u.username && u.name) {
+                const clean = (u.username || '').replace('@', '').toLowerCase();
+                if (photos[clean]) result[u.name] = photos[clean].data;
+            }
+        });
+        res.json(result);
+    } catch (err) {
+        res.status(500).json({ error: 'Xatolik' });
+    }
+});
+
+// Foydalanuvchi statistikasi
 app.get('/api/user-stats', (req, res) => {
     const nameQ     = (req.query.name     || '').toLowerCase().trim();
     const usernameQ = (req.query.username || '').toLowerCase().trim();

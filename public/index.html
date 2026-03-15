@@ -348,6 +348,15 @@ body::before{
 }
 .prof-username-display{font-size:13px;color:var(--muted2);margin-top:2px;}
 
+/* ✅ YANGI: Rasm yuklash progress */
+.photo-upload-status{
+  font-size:11px;color:var(--muted2);margin-top:6px;
+  display:none;text-align:center;
+}
+.photo-upload-status.on{display:block;}
+.photo-upload-status.ok{color:var(--success);}
+.photo-upload-status.bad{color:var(--danger);}
+
 .divider{height:1px;background:var(--border);margin:16px 0;}
 
 .edit-section-title{
@@ -389,7 +398,7 @@ body::before{
   display:flex;align-items:center;justify-content:center;
   font-size:14px;font-weight:700;flex-shrink:0;overflow:hidden;
 }
-.lb-avatar img{width:100%;height:100%;object-fit:cover;}
+.lb-avatar img{width:100%;height:100%;object-fit:cover;border-radius:10px;}
 .lb-info{flex:1;min-width:0;}
 .lb-name{font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .lb-sub{font-size:11px;color:var(--muted2);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
@@ -647,13 +656,11 @@ body::before{
         <span>Profil</span>
       </div>
       <div class="nav-sep"></div>
-      <!-- Ma'lumot bo'limi -->
       <div class="nav-item" id="nav-info" onclick="navTo('info');closeSidebar();">
         <div class="nav-icon">ℹ️</div>
         <span>Ma'lumot</span>
       </div>
       <div class="nav-sep"></div>
-      <!-- Admin nav — faqat admin uchun -->
       <div class="nav-item" id="nav-admin" style="display:none;" onclick="navTo('admin');closeSidebar();">
         <div class="nav-icon">⚙️</div>
         <span>Admin Panel</span>
@@ -767,7 +774,10 @@ body::before{
               </div>
             </div>
             <input type="file" id="photo-input" accept="image/*" onchange="handlePhotoUpload(this)">
+            <!-- ✅ YANGI: Rasm yuklash holati -->
+            <div class="photo-upload-status" id="photo-upload-status">Yuklanmoqda...</div>
             <div class="change-photo-btn" onclick="triggerPhotoInput()">📷 Rasmni o'zgartirish</div>
+            <div style="font-size:10px;color:var(--muted);margin-top:4px;">Rasm barcha foydalanuvchilarga ko'rinadi</div>
             <div class="prof-name-display" id="prof-name-disp">—</div>
             <div class="prof-username-display" id="prof-uname-disp">@—</div>
           </div>
@@ -816,6 +826,7 @@ body::before{
               </div>
             </div>
             <input type="file" id="adm-photo-input" accept="image/*" onchange="handleAdminPhoto(this)">
+            <div class="photo-upload-status" id="adm-photo-status">Yuklanmoqda...</div>
             <div class="change-photo-btn" onclick="triggerAdminPhoto()">📷 Rasm</div>
             <div class="prof-name-display" id="adm-name-disp">Admin</div>
             <div class="prof-username-display" id="adm-uname-disp">@admin</div>
@@ -887,7 +898,7 @@ body::before{
           <div class="card-glow-top"></div>
           <div class="card-title">🔗 Ijtimoiy tarmoqlar</div>
 
-          <a href="https://github.com/yusufbe7" target="_blank" class="info-link-row" id="link-github">
+          <a href="https://github.com/yusufbe7" target="_blank" class="info-link-row">
             <div class="info-link-icon" style="background:rgba(255,255,255,.06);">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="color:#e8edf5;"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 21.795 24 17.295 24 12c0-6.63-5.37-12-12-12"/></svg>
             </div>
@@ -898,7 +909,7 @@ body::before{
             <div class="info-link-arrow">→</div>
           </a>
 
-          <a href="https://instagram.com/yusufbee71" target="_blank" class="info-link-row" id="link-instagram">
+          <a href="https://instagram.com/yusufbee71" target="_blank" class="info-link-row">
             <div class="info-link-icon" style="background:rgba(225,48,108,.12);">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#e1306c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
             </div>
@@ -909,7 +920,7 @@ body::before{
             <div class="info-link-arrow">→</div>
           </a>
 
-          <a href="https://facebook.com/yusufbe7" target="_blank" class="info-link-row" id="link-facebook">
+          <a href="https://facebook.com/yusufbe7" target="_blank" class="info-link-row">
             <div class="info-link-icon" style="background:rgba(24,119,242,.12);">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="#1877f2"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
             </div>
@@ -997,9 +1008,53 @@ const clearSess   = () => localStorage.removeItem(SESSION_KEY);
 const getAdm      = () => { try { const r=localStorage.getItem(ADMIN_KEY); return r ? JSON.parse(r) : {username:'admin',name:'Administrator',pass:ADMIN_SECRET,photo:null}; } catch { return {username:'admin',name:'Administrator',pass:ADMIN_SECRET,photo:null}; }};
 const saveAdm     = d  => localStorage.setItem(ADMIN_KEY, JSON.stringify(d));
 
-// Photo storage
-function savePhoto(key, dataUrl) { try { localStorage.setItem(key, dataUrl); } catch(e) { console.warn('Photo save failed',e); }}
-function getPhoto(key) { try { return localStorage.getItem(key); } catch { return null; }}
+// ✅ YANGI: Server API orqali rasm saqlash/olish (barcha foydalanuvchilarga ko'rinadi)
+async function savePhotoToServer(username, photoData, isAdmin = false) {
+  try {
+    const r = await fetch('/api/save-photo', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, photoData, isAdmin })
+    });
+    return r.ok;
+  } catch (err) {
+    console.error('[savePhoto]', err);
+    return false;
+  }
+}
+
+async function getPhotoFromServer(username, isAdmin = false) {
+  try {
+    const url = isAdmin
+      ? '/api/get-photo?isAdmin=true'
+      : `/api/get-photo?username=${encodeURIComponent(username)}`;
+    const r = await fetch(url);
+    if (!r.ok) return null;
+    const d = await r.json();
+    return d.photoData || null;
+  } catch {
+    return null;
+  }
+}
+
+// ✅ YANGI: Barcha foydalanuvchi rasmlari (leaderboard uchun)
+let _photosCache = {};
+async function loadAllPhotos() {
+  try {
+    const r = await fetch('/api/photos');
+    if (r.ok) _photosCache = await r.json();
+  } catch {}
+}
+
+function getPhotoForName(name, tgUsername) {
+  if (!name) return null;
+  if (_photosCache[name]) return _photosCache[name];
+  if (tgUsername) {
+    const clean = tgUsername.replace('@','').toLowerCase();
+    if (_photosCache[clean]) return _photosCache[clean];
+  }
+  return null;
+}
 
 // ════════════════════════════════════════
 // HELPERS
@@ -1013,37 +1068,38 @@ function toast(msg, type='ok') {
 
 function isValidUname(u) { return u && u.length >= 3 && /^[a-z0-9_]+$/.test(u); }
 
-function setAvatar(el, textEl, photo, name, isRound) {
-  if (!el) return;
+function fillTopbarAvatar(photo, name) {
+  const el = document.getElementById('topbar-avatar');
   if (photo) {
-    el.innerHTML = `<img src="${photo}" alt="">`;
+    el.innerHTML = `<img src="${photo}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:10px;">`;
   } else {
     const initials = (name||'?').split(' ').filter(Boolean).map(w=>w[0]).join('').toUpperCase().slice(0,2);
-    if (textEl) { textEl.textContent = initials; } else { el.textContent = initials; }
-    el.querySelector && el.querySelector('img') && el.querySelector('img').remove();
+    el.textContent = initials;
   }
 }
 
-function renderAvatarEl(el, photo, name) {
-  if (!el) return;
+function updateAllAvatars(photo, name) {
+  const sbAv = document.getElementById('sb-avatar');
   if (photo) {
-    el.innerHTML = `<img src="${photo}" alt="">`;
-    if (el.querySelector) {
-      const ov = el.querySelector('.prof-avatar-overlay');
-      if (ov) el.appendChild(ov);
-    }
+    sbAv.innerHTML = `<img src="${photo}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:50%;"><div class="sb-avatar-edit">✏️</div>`;
+  }
+  fillTopbarAvatar(photo, name);
+}
+
+// ✅ Avatar elementini rasm yoki initials bilan to'ldirish
+function setAvatarEl(el, photo, name) {
+  if (!el) return;
+  const initials = (name||'?').split(' ').filter(Boolean).map(w=>w[0]).join('').toUpperCase().slice(0,2);
+  if (photo) {
+    // overlay ni saqlaymiz
+    const overlay = el.querySelector('.prof-avatar-overlay');
+    el.innerHTML = `<img src="${photo}" alt="" style="width:100%;height:100%;object-fit:cover;">`;
+    if (overlay) el.appendChild(overlay);
   } else {
-    const initials = (name||'?').split(' ').filter(Boolean).map(w=>w[0]).join('').toUpperCase().slice(0,2);
-    // Remove old img
     const img = el.querySelector('img');
     if (img) img.remove();
-    const textSpan = el.querySelector('span:not(.cam-icon):not([class])') || el.querySelector('#prof-av-text') || el.querySelector('#adm-av-text') || el.querySelector('#sb-av-text');
-    if (textSpan) textSpan.textContent = initials;
-    else {
-      const s = document.createElement('span');
-      s.textContent = initials;
-      el.prepend(s);
-    }
+    const span = el.querySelector('span:not(.cam-icon)') || el.querySelector('[id$="-av-text"]');
+    if (span) span.textContent = initials;
   }
 }
 
@@ -1158,18 +1214,19 @@ function doSignIn() {
 // ════════════════════════════════════════
 // OPEN APP
 // ════════════════════════════════════════
-function openApp(username, isAdmin) {
+async function openApp(username, isAdmin) {
   document.getElementById('screen-login').classList.remove('active');
   document.getElementById('screen-app').classList.add('active');
 
-  const sess = getSess();
+  // ✅ Barcha rasmlari yuklash
+  await loadAllPhotos();
 
   if (isAdmin) {
-    const adm = getAdm();
-    const photo = adm.photo || getPhoto('adm_photo');
+    const adm   = getAdm();
+    // ✅ Server dan rasm olish
+    const photo = await getPhotoFromServer(adm.username || 'admin', true) || adm.photo;
     fillSidebar(adm.name||'Admin', adm.username||'admin', photo, 'admin');
     document.getElementById('nav-admin').style.display = 'flex';
-    // Topbar avatar
     fillTopbarAvatar(photo, adm.name||'Admin');
     navTo('dash');
     loadDashboard(null, true);
@@ -1177,13 +1234,13 @@ function openApp(username, isAdmin) {
     const users = getUsers();
     const user  = users[username];
     if (!user) { doLogout(); return; }
-    const photo = user.photo || getPhoto('user_photo_'+username);
+    // ✅ Server dan rasm olish
+    const photo = await getPhotoFromServer(username) || user.photo;
     fillSidebar(user.name, user.username, photo, 'free');
     document.getElementById('nav-admin').style.display = 'none';
     fillTopbarAvatar(photo, user.name);
     navTo('dash');
     loadDashboard(user.name, false);
-    // Check VIP status from bot
     checkAndSetVipBadge(user.name, user.username);
   }
 }
@@ -1220,16 +1277,6 @@ function fillSidebar(name, username, photo, badgeType) {
     sbText.textContent = initials;
     const img = sbAv.querySelector('img');
     if (img) img.remove();
-  }
-}
-
-function fillTopbarAvatar(photo, name) {
-  const el = document.getElementById('topbar-avatar');
-  if (photo) {
-    el.innerHTML = `<img src="${photo}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:10px;">`;
-  } else {
-    const initials = name.split(' ').filter(Boolean).map(w=>w[0]).join('').toUpperCase().slice(0,2);
-    el.textContent = initials;
   }
 }
 
@@ -1280,14 +1327,19 @@ function setMyDefault() {
   ['my-score','my-tests','my-correct','my-wrong'].forEach(id=>document.getElementById(id).textContent='0');
 }
 
+// ✅ YANGI: Top3 rasmlar bilan
 function renderTop3(list) {
   const medals = ['🥇','🥈','🥉'];
   const rankCls= ['gold','silver','bronze'];
   let html = '';
   list.forEach((u,i) => {
+    const photo = getPhotoForName(u.name, u.tgUsername);
+    const avatarHtml = photo
+      ? `<img src="${photo}" alt="">`
+      : (u.name||'?').slice(0,2).toUpperCase();
     html += `<div class="lb-item">
       <div class="lb-rank ${rankCls[i]}">${medals[i]}</div>
-      <div class="lb-avatar">${(u.name||'?').slice(0,2).toUpperCase()}</div>
+      <div class="lb-avatar">${avatarHtml}</div>
       <div class="lb-info">
         <div class="lb-name">${u.name||'—'}</div>
         <div class="lb-sub">${u.totalTests||0} test · ${u.univ||''}</div>
@@ -1305,8 +1357,9 @@ async function loadStats() {
   const sess = getSess();
   if (!sess) return;
 
+  await loadAllPhotos();
+
   if (!sess.isAdmin) {
-    // Foydalanuvchi o'z statistikasi
     const users = getUsers();
     const user  = users[sess.username];
     if (!user) return;
@@ -1321,7 +1374,6 @@ async function loadStats() {
         document.getElementById('st-wrong').textContent   = d.totalWrong||'0';
         document.getElementById('st-univ').textContent    = d.univ||'—';
         document.getElementById('st-kurs').textContent    = d.kurs||'—';
-        // Total questions = correct + wrong
         const totQ = (d.totalCorrect||0) + (d.totalWrong||0);
         const totW = d.totalWrong||0;
         const acc  = totQ > 0 ? ((d.totalCorrect||0)/totQ*100).toFixed(1)+'%' : '—';
@@ -1336,7 +1388,7 @@ async function loadStats() {
     } catch {}
   }
 
-  // TOP 10 leaderboard
+  // TOP 10 leaderboard — rasmlar bilan
   try {
     const r = await fetch('/api/leaderboard');
     if (r.ok) {
@@ -1365,14 +1417,19 @@ function renderSubjects(subjects) {
   if (html) { list.innerHTML = html; card.style.display = 'block'; }
 }
 
+// ✅ YANGI: Leaderboard — serverdan olingan rasmlar bilan
 function renderLeaderboard(list) {
   const medals = ['🥇','🥈','🥉'];
   const rankCls= ['gold','silver','bronze'];
   let html = '';
   list.forEach((u,i) => {
+    const photo = getPhotoForName(u.name, u.tgUsername);
+    const avatarHtml = photo
+      ? `<img src="${photo}" alt="">`
+      : (u.name||'?').slice(0,2).toUpperCase();
     html += `<div class="lb-item">
       <div class="lb-rank ${rankCls[i]||''}">${medals[i]||`#${i+1}`}</div>
-      <div class="lb-avatar">${(u.name||'?').slice(0,2).toUpperCase()}</div>
+      <div class="lb-avatar">${avatarHtml}</div>
       <div class="lb-info">
         <div class="lb-name">${u.name||'—'}</div>
         <div class="lb-sub">${u.tgUsername?'@'+u.tgUsername+' · ':''}${u.totalTests||0} test · ${u.univ||''}</div>
@@ -1386,20 +1443,15 @@ function renderLeaderboard(list) {
 // ════════════════════════════════════════
 // PROFIL FORM
 // ════════════════════════════════════════
-function loadProfileForm() {
+async function loadProfileForm() {
   const sess = getSess();
   if (!sess) return;
 
   if (sess.isAdmin) {
-    const adm = getAdm();
-    const photo = adm.photo || getPhoto('adm_photo');
+    const adm   = getAdm();
+    const photo = await getPhotoFromServer(adm.username || 'admin', true) || adm.photo;
     const profAv = document.getElementById('prof-avatar');
-    const profText = document.getElementById('prof-av-text');
-    if (photo) {
-      profAv.innerHTML = `<img src="${photo}" alt=""><div class="prof-avatar-overlay"><span class="cam-icon">📷</span><span>O'zgartirish</span></div>`;
-    } else {
-      if (profText) profText.textContent = (adm.name||'A').slice(0,2).toUpperCase();
-    }
+    setAvatarEl(profAv, photo, adm.name||'Admin');
     document.getElementById('prof-name-disp').textContent  = adm.name||'Admin';
     document.getElementById('prof-uname-disp').textContent = '@'+(adm.username||'admin');
     document.getElementById('p-u').value = adm.username||'';
@@ -1408,21 +1460,13 @@ function loadProfileForm() {
     const users = getUsers();
     const user  = users[sess.username];
     if (!user) return;
-    const photo = user.photo || getPhoto('user_photo_'+sess.username);
-    const profAv   = document.getElementById('prof-avatar');
-    const profText = document.getElementById('prof-av-text');
-    if (photo) {
-      profAv.innerHTML = `<img src="${photo}" alt=""><div class="prof-avatar-overlay"><span class="cam-icon">📷</span><span>O'zgartirish</span></div>`;
-    } else {
-      const img = profAv.querySelector('img');
-      if (img) img.remove();
-      if (profText) profText.textContent = user.name.split(' ').filter(Boolean).map(w=>w[0]).join('').toUpperCase().slice(0,2);
-    }
+    const photo = await getPhotoFromServer(sess.username) || user.photo;
+    const profAv = document.getElementById('prof-avatar');
+    setAvatarEl(profAv, photo, user.name);
     document.getElementById('prof-name-disp').textContent  = user.name;
     document.getElementById('prof-uname-disp').textContent = '@'+user.username;
     document.getElementById('p-u').value = user.username;
     document.getElementById('p-n').value = user.name;
-    // VIP info — botdan olish
     fetchVipInfoForProfile(user.name, user.username);
   }
   document.getElementById('p-pw').value  = '';
@@ -1459,53 +1503,101 @@ async function fetchVipInfoForProfile(name, username) {
 }
 
 // ════════════════════════════════════════
-// PHOTO UPLOAD
+// ✅ YANGI: PHOTO UPLOAD — SERVER ORQALI
 // ════════════════════════════════════════
 function triggerPhotoInput() { document.getElementById('photo-input').click(); }
 function triggerAdminPhoto() { document.getElementById('adm-photo-input').click(); }
 
-function handlePhotoUpload(input) {
+// Rasm o'lchamini kichraytirish (5MB dan oshmasligi uchun)
+function compressImage(file, maxWidth, maxHeight, quality) {
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        let { width, height } = img;
+        const ratio = Math.min(maxWidth / width, maxHeight / height, 1);
+        canvas.width  = Math.round(width  * ratio);
+        canvas.height = Math.round(height * ratio);
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        resolve(canvas.toDataURL('image/jpeg', quality));
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+async function handlePhotoUpload(input) {
   const file = input.files[0];
   if (!file) return;
-  const reader = new FileReader();
-  reader.onload = e => {
-    const dataUrl = e.target.result;
-    const sess    = getSess();
 
-    if (sess?.isAdmin) {
-      // Admin profil rasmi
+  const sess   = getSess();
+  const isAdm  = sess?.isAdmin;
+  const statusEl = document.getElementById(isAdm ? 'adm-photo-status' : 'photo-upload-status');
+
+  if (statusEl) { statusEl.textContent = '⏳ Yuklanmoqda...'; statusEl.className = 'photo-upload-status on'; }
+
+  try {
+    // Rasmni siqish (600x600, 0.7 sifat)
+    const compressed = await compressImage(file, 600, 600, 0.7);
+
+    if (isAdm) {
+      // Admin profili
       const adm = getAdm();
-      adm.photo = dataUrl;
-      saveAdm(adm);
-      savePhoto('adm_photo', dataUrl);
-      updateAllAvatars(dataUrl, adm.name||'Admin');
+      const ok = await savePhotoToServer(adm.username || 'admin', compressed, true);
+      if (ok) {
+        adm.photo = compressed;
+        saveAdm(adm);
+        updateAllAvatars(compressed, adm.name||'Admin');
+        const profAv = document.getElementById('prof-avatar');
+        setAvatarEl(profAv, compressed, adm.name||'Admin');
+        const admAv = document.getElementById('adm-avatar');
+        setAvatarEl(admAv, compressed, adm.name||'Admin');
+        if (statusEl) { statusEl.textContent = '✅ Rasm saqlandi!'; statusEl.className = 'photo-upload-status on ok'; }
+        toast('✅ Rasm yangilandi! Barcha foydalanuvchilarga ko\'rinadi.');
+        await loadAllPhotos(); // keshni yangilash
+      } else {
+        if (statusEl) { statusEl.textContent = '❌ Saqlashda xatolik'; statusEl.className = 'photo-upload-status on bad'; }
+        toast('❌ Server xatosi!', 'bad');
+      }
     } else {
-      // User profil rasmi
+      // Oddiy foydalanuvchi
       const users = getUsers();
       const user  = users[sess.username];
       if (!user) return;
-      user.photo = dataUrl;
-      saveUsers(users);
-      savePhoto('user_photo_'+sess.username, dataUrl);
-      updateAllAvatars(dataUrl, user.name);
+
+      const ok = await savePhotoToServer(sess.username, compressed, false);
+      if (ok) {
+        user.photo = compressed;
+        saveUsers(users);
+        updateAllAvatars(compressed, user.name);
+        const profAv = document.getElementById('prof-avatar');
+        setAvatarEl(profAv, compressed, user.name);
+        if (statusEl) { statusEl.textContent = '✅ Rasm saqlandi!'; statusEl.className = 'photo-upload-status on ok'; }
+        toast('✅ Rasm yangilandi! Boshqa foydalanuvchilar reytingda ko\'radi.');
+        await loadAllPhotos(); // keshni yangilash
+      } else {
+        if (statusEl) { statusEl.textContent = '❌ Saqlashda xatolik'; statusEl.className = 'photo-upload-status on bad'; }
+        toast('❌ Server xatosi!', 'bad');
+      }
     }
-    // Profil avatarini yangilash
-    const profAv = document.getElementById('prof-avatar');
-    profAv.innerHTML = `<img src="${dataUrl}" alt=""><div class="prof-avatar-overlay"><span class="cam-icon">📷</span><span>O'zgartirish</span></div>`;
-    toast('✅ Rasm yangilandi!');
-  };
-  reader.readAsDataURL(file);
+  } catch (err) {
+    console.error('[upload]', err);
+    if (statusEl) { statusEl.textContent = '❌ Xatolik yuz berdi'; statusEl.className = 'photo-upload-status on bad'; }
+    toast('❌ Xatolik!', 'bad');
+  }
+
+  // 3 soniyadan keyin statusni yashirish
+  if (statusEl) setTimeout(() => statusEl.classList.remove('on'), 3000);
+
+  // input ni tozalash (bir xil rasmni qayta yuklash uchun)
+  input.value = '';
 }
 
-function handleAdminPhoto(input) { handlePhotoUpload(input); }
-
-function updateAllAvatars(photo, name) {
-  // Sidebar
-  const sbAv = document.getElementById('sb-avatar');
-  sbAv.innerHTML = `<img src="${photo}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:50%;"><div class="sb-avatar-edit">✏️</div>`;
-  // Topbar
-  fillTopbarAvatar(photo, name);
-}
+async function handleAdminPhoto(input) { await handlePhotoUpload(input); }
 
 // ════════════════════════════════════════
 // SAVE PROFILE
@@ -1531,24 +1623,20 @@ function saveProfile() {
     saveAdm(adm);
     saveSess({ username:newU, isAdmin:true });
     toast('✅ Admin profili yangilandi!');
-    fillSidebar(newN, newU, adm.photo||getPhoto('adm_photo'), 'admin');
-    fillTopbarAvatar(adm.photo||getPhoto('adm_photo'), newN);
+    getPhotoFromServer(newU, true).then(photo => {
+      fillSidebar(newN, newU, photo||adm.photo, 'admin');
+      fillTopbarAvatar(photo||adm.photo, newN);
+    });
     document.getElementById('prof-name-disp').textContent  = newN;
     document.getElementById('prof-uname-disp').textContent = '@'+newU;
   } else {
     const users = getUsers();
     const old   = users[sess.username];
     if (!old) return;
-    // Username o'zgardi?
     if (newU !== sess.username) {
       if (users[newU]) { errf('p-u-e','p-u'); document.getElementById('p-u-e').textContent='Bu username band!'; return; }
       const adm = getAdm();
       if (newU === adm.username?.toLowerCase()) { errf('p-u-e','p-u'); document.getElementById('p-u-e').textContent='Bu username band!'; return; }
-      const photo = old.photo;
-      if (photo) {
-        savePhoto('user_photo_'+newU, photo);
-        localStorage.removeItem('user_photo_'+sess.username);
-      }
       delete users[sess.username];
       users[newU] = { ...old, username:newU, name:newN };
     } else {
@@ -1558,8 +1646,10 @@ function saveProfile() {
     saveUsers(users);
     saveSess({ username:newU, isAdmin:false });
     toast('✅ Profil yangilandi!');
-    fillSidebar(newN, newU, users[newU].photo||getPhoto('user_photo_'+newU), 'free');
-    fillTopbarAvatar(users[newU].photo||getPhoto('user_photo_'+newU), newN);
+    getPhotoFromServer(newU).then(photo => {
+      fillSidebar(newN, newU, photo||users[newU].photo, 'free');
+      fillTopbarAvatar(photo||users[newU].photo, newN);
+    });
     document.getElementById('prof-name-disp').textContent  = newN;
     document.getElementById('prof-uname-disp').textContent = '@'+newU;
   }
@@ -1581,21 +1671,16 @@ function saveAdminProfile() {
   saveAdm(adm);
   saveSess({ username:adm.username, isAdmin:true });
   toast('✅ Admin profili yangilandi!');
-  fillSidebar(adm.name, adm.username, adm.photo||getPhoto('adm_photo'), 'admin');
+  getPhotoFromServer(adm.username, true).then(photo => {
+    fillSidebar(adm.name, adm.username, photo||adm.photo, 'admin');
+  });
 }
 
 async function loadAdminPanel() {
-  const adm = getAdm();
-  const photo = adm.photo || getPhoto('adm_photo');
+  const adm   = getAdm();
+  const photo = await getPhotoFromServer(adm.username || 'admin', true) || adm.photo;
   const admAv = document.getElementById('adm-avatar');
-  const admText = document.getElementById('adm-av-text');
-  if (photo) {
-    admAv.innerHTML = `<img src="${photo}" alt=""><div class="prof-avatar-overlay"><span class="cam-icon">📷</span><span>O'zgartirish</span></div>`;
-  } else {
-    const img = admAv.querySelector('img');
-    if (img) img.remove();
-    if (admText) admText.textContent = (adm.name||'A').slice(0,2).toUpperCase();
-  }
+  setAvatarEl(admAv, photo, adm.name||'Admin');
   document.getElementById('adm-name-disp').textContent  = adm.name||'Admin';
   document.getElementById('adm-uname-disp').textContent = '@'+(adm.username||'admin');
   document.getElementById('adm-u').value = adm.username||'';
@@ -1662,7 +1747,6 @@ async function confirmReject() {
 // ════════════════════════════════════════
 // ADMIN MODAL
 // ════════════════════════════════════════
-// Topbar admin button (only shows when not logged in)
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') closeAdminModal();
 });
@@ -1702,53 +1786,23 @@ function doLogout() {
 // ════════════════════════════════════════
 // INFO PAGE
 // ════════════════════════════════════════
-function loadInfoPage() {
-  // Links are static HTML — nothing dynamic needed
-  // Could update owner links dynamically if needed
-}
+function loadInfoPage() {}
 
 // ════════════════════════════════════════
 // INIT
 // ════════════════════════════════════════
-window.addEventListener('DOMContentLoaded', () => {
-  // ✅ Session tekshirish — bir marta kirdimi, qaytib kirmasin
+window.addEventListener('DOMContentLoaded', async () => {
   const sess = getSess();
   if (sess) {
     openApp(sess.username, sess.isAdmin);
     return;
   }
-  // Akkaunt bor — signin ko'rsin
   const users = getUsers();
   if (Object.keys(users).length > 0) lTab('in');
 
-  // Enter tugmalari
   document.getElementById('si-p').addEventListener('keydown', e => { if(e.key==='Enter') doSignIn(); });
   document.getElementById('su-p2').addEventListener('keydown', e => { if(e.key==='Enter') doSignUp(); });
 });
-
-// index.js da /api/leaderboard endpoint yo'q — frontend fallback
-// Agar endpoint bo'lmasa, /api/user-stats dan emas,
-// lekin index.js ga qo'shamiz: u frontendda ko'rinadi
 </script>
-
-<!-- index.js ga qo'shiladigan endpoint eslatma:
-app.get('/api/leaderboard', (req, res) => {
-  const db = getDb();
-  const sorted = Object.values(db.users)
-    .filter(u => u && u.name && isValidName(u.name))
-    .sort((a,b) => (b.score||0)-(a.score||0))
-    .slice(0,10)
-    .map(u => ({
-      name: u.name,
-      tgUsername: (u.username||'').replace('@',''),
-      score: u.score||0,
-      totalTests: u.totalTests||0,
-      univ: u.univ||'',
-      kurs: u.kurs||'',
-      yonalish: u.yonalish||'',
-    }));
-  res.json(sorted);
-});
--->
 </body>
 </html>
