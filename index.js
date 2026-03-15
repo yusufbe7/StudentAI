@@ -227,12 +227,12 @@ function adminMainKeyboard(db) {
     return Markup.keyboard([
         ['💰 Pullik versiya', '🆓 Bepul versiya'],
         ['🏆 Haftalik musobaqa', '🚀 Musobaqani start berish'],
-        ['📢 Musobaqa natijalari', '📊 Statistika'],
-        [statusBtn, turboBtn],
-        [`⏱ Vaqt: ${tl}s`, '➕ Yangi fan qoshish'],
-        ["🗑 Botni Restart qilish", '🧹 Reytingni tozalash'],
-        ['📣 Xabar tarqatish', '🎭 Sohta ball qo\'shish'],  // ✅ YANGI tugma
-        ['⬅️ Orqaga (Fanlar)'],
+        ['📢 Musobaqa natijalari', '👥 Musobaqani boshqarish'],
+        ['📊 Statistika', statusBtn],
+        [turboBtn, `⏱ Vaqt: ${tl}s`],
+        ['➕ Yangi fan qoshish', "🗑 Botni Restart qilish"],
+        ['🧹 Reytingni tozalash', '📣 Xabar tarqatish'],
+        ["🎭 Sohta ball qo'shish", '⬅️ Orqaga (Fanlar)'],
     ]).resize();
 }
 
@@ -1026,13 +1026,133 @@ bot.hears("🎭 Sohta ball qo'shish", async (ctx) => {
     );
 });
 
-bot.hears('🏆 Musobaqa boshqarish', (ctx) => {
+// ✅ YANGI: Musobaqani boshqarish — barcha foydalanuvchilarni qo'shish imkoniyati
+bot.hears('👥 Musobaqani boshqarish', async (ctx) => {
     if (!isAdmin(ctx.from.id)) return;
-    const db     = getDb();
-    const status = db.tournament?.isActive ? '✅ FAOL' : "❌ FAOL EMAS";
-    return ctx.reply(`🏆 Musobaqa boshqaruv paneli\nHolat: ${status}`, Markup.keyboard([
-        ['🟢 Yoqish',"🔴 O'chirish"], ['📢 Boshlash haqida xabar','📊 Natijalar'], ['⬅️ Orqaga (Admin)']
-    ]).resize());
+    const db   = getDb();
+    const tour = db.tournament;
+
+    if (!tour?.isActive) {
+        return ctx.replyWithHTML(
+            `👥 <b>MUSOBAQANI BOSHQARISH</b>\n\n❌ Hozircha faol musobaqa yo'q.\n\nAvval "🏆 Haftalik musobaqa" tugmasi orqali musobaqa yarating.`,
+            adminMainKeyboard(db)
+        );
+    }
+
+    const totalUsers = Object.keys(db.users).length;
+    const joined     = tour.participants?.length || 0;
+    const vipCount   = Object.values(db.users).filter(u => u.isVip || vipUsers.includes(parseInt(u.id || 0))).length;
+
+    return ctx.replyWithHTML(
+        `👥 <b>MUSOBAQANI BOSHQARISH</b>\n\n` +
+        `📅 Sana: <b>${tour.date || '—'}</b>\n` +
+        `🕒 Vaqt: <b>${tour.time || '—'}</b>\n` +
+        `📝 Savollar: <b>${tour.count || '—'} ta</b>\n` +
+        `_________________________\n\n` +
+        `👥 Jami foydalanuvchilar: <b>${totalUsers} ta</b>\n` +
+        `✅ Musobaqaga qo'shilganlar: <b>${joined} ta</b>\n` +
+        `💎 VIP foydalanuvchilar: <b>${vipCount} ta</b>\n\n` +
+        `Kimni qo'shmoqchisiz?`,
+        Markup.inlineKeyboard([
+            [Markup.button.callback(`👥 Barcha foydalanuvchilarni qo'shish (${totalUsers} ta)`, 'tour_add_all')],
+            [Markup.button.callback(`💎 Faqat VIP foydalanuvchilarni qo'shish (${vipCount} ta)`, 'tour_add_vip')],
+            [Markup.button.callback('🔍 Bitta ID bo\'yicha qo\'shish', 'tour_add_one')],
+            [Markup.button.callback('❌ Bekor qilish', 'cancel_action')],
+        ])
+    );
+});
+
+// ✅ Barcha foydalanuvchilarni musobaqaga qo'shish callback
+bot.action('tour_add_all', async (ctx) => {
+    if (!isAdmin(ctx.from.id)) return ctx.answerCbQuery("Ruxsat yo'q!");
+    const db   = getDb();
+    const tour = db.tournament;
+    if (!tour?.isActive) return ctx.answerCbQuery('❌ Musobaqa faol emas!', { show_alert: true });
+
+    await ctx.answerCbQuery('⏳ Qo\'shilmoqda...');
+    const allIds = Object.keys(db.users).map(id => parseInt(id)).filter(id => !isNaN(id));
+    let added = 0, notified = 0;
+
+    for (const uid of allIds) {
+        if (!tour.participants.includes(uid)) {
+            tour.participants.push(uid);
+            added++;
+        }
+        // Xabar yuborish (qo'shilganmi yoki yo'qmi baribir bildirish)
+        try {
+            await bot.telegram.sendMessage(uid,
+                `🏆 <b>MUSOBAQAGA QO'SHILDINGIZ!</b>\n\n` +
+                `📅 Sana: <b>${tour.date || '—'}</b>\n` +
+                `🕒 Vaqt: <b>${tour.time || '—'}</b>\n` +
+                `📝 Savollar: <b>${tour.count || '—'} ta</b>\n\n` +
+                `✅ Admin tomonidan musobaqaga qo'shildingiz.\nBoshlanish vaqtida xabar keladi!`,
+                { parse_mode: 'HTML' }
+            );
+            notified++;
+        } catch {}
+    }
+
+    db.tournament = tour;
+    saveDb(db);
+
+    await ctx.editMessageText(
+        `✅ <b>Muvaffaqiyatli!</b>\n\n` +
+        `👥 Jami: ${allIds.length} ta\n` +
+        `➕ Yangi qo'shildi: ${added} ta\n` +
+        `📨 Xabar oldi: ${notified} ta`,
+        { parse_mode: 'HTML' }
+    );
+    return ctx.reply('🛠 Admin Panel', adminMainKeyboard(getDb()));
+});
+
+// ✅ Faqat VIP foydalanuvchilarni qo'shish
+bot.action('tour_add_vip', async (ctx) => {
+    if (!isAdmin(ctx.from.id)) return ctx.answerCbQuery("Ruxsat yo'q!");
+    const db   = getDb();
+    const tour = db.tournament;
+    if (!tour?.isActive) return ctx.answerCbQuery('❌ Musobaqa faol emas!', { show_alert: true });
+
+    await ctx.answerCbQuery('⏳ VIP foydalanuvchilar qo\'shilmoqda...');
+    const vipIds = Object.entries(db.users)
+        .filter(([id, u]) => u.isVip || vipUsers.includes(parseInt(id)))
+        .map(([id]) => parseInt(id));
+
+    if (!vipIds.length) {
+        return ctx.editMessageText('❌ VIP foydalanuvchilar topilmadi.', { parse_mode: 'HTML' });
+    }
+
+    let added = 0, notified = 0;
+    for (const uid of vipIds) {
+        if (!tour.participants.includes(uid)) { tour.participants.push(uid); added++; }
+        try {
+            await bot.telegram.sendMessage(uid,
+                `💎 <b>VIP SIFATIDA MUSOBAQAGA QO'SHILDINGIZ!</b>\n\n` +
+                `📅 ${tour.date || '—'} · 🕒 ${tour.time || '—'}\n` +
+                `📝 ${tour.count || '—'} ta savol`,
+                { parse_mode: 'HTML' }
+            );
+            notified++;
+        } catch {}
+    }
+
+    db.tournament = tour;
+    saveDb(db);
+
+    await ctx.editMessageText(
+        `✅ <b>VIP foydalanuvchilar qo'shildi!</b>\n\n💎 VIP soni: ${vipIds.length}\n➕ Yangi: ${added}\n📨 Xabar: ${notified}`,
+        { parse_mode: 'HTML' }
+    );
+    return ctx.reply('🛠 Admin Panel', adminMainKeyboard(getDb()));
+});
+
+// ✅ Bitta ID bo'yicha qo'shish
+bot.action('tour_add_one', async (ctx) => {
+    if (!isAdmin(ctx.from.id)) return ctx.answerCbQuery("Ruxsat yo'q!");
+    ctx.session.adminStep = 'wait_tour_add_id';
+    await ctx.answerCbQuery();
+    await ctx.editMessageText('🔍 Musobaqaga qo\'shmoqchi bo\'lgan foydalanuvchining Telegram ID sini kiriting:',
+        { parse_mode: 'HTML' }
+    );
 });
 
 bot.hears('🟢 Yoqish', (ctx) => {
@@ -1604,8 +1724,93 @@ app.get('/api/leaderboard', (req, res) => {
 
 
 app.get('/api/tournament', (req, res) => {
-    const db = getDb();
-    res.json(db.tournament || { isActive: false });
+    const db   = getDb();
+    const tour = db.tournament || { isActive: false };
+    // ✅ YANGI: Ishtirokchilar ma'lumotlarini ham qaytarish
+    if (tour.participants?.length) {
+        tour.participantDetails = tour.participants.map(id => {
+            const u = db.users[id];
+            return u ? {
+                id,
+                name:       u.name       || 'Foydalanuvchi',
+                username:   (u.username  || '').replace('@', ''),
+                univ:       u.univ       || '—',
+                kurs:       u.kurs       || '—',
+                tourScore:  u.tourScore  || 0,
+                isVip:      u.isVip      || false,
+            } : { id, name: 'Noma\'lum', username: '' };
+        });
+    }
+    res.json(tour);
+});
+
+// ✅ YANGI: Barcha foydalanuvchilarni musobaqaga qo'shish
+app.post('/api/tournament/add-all', async (req, res) => {
+    try {
+        const db   = getDb();
+        const tour = db.tournament;
+        if (!tour?.isActive) return res.status(400).json({ error: 'Musobaqa faol emas' });
+
+        const allUserIds = Object.keys(db.users).map(id => parseInt(id)).filter(id => !isNaN(id));
+        let added = 0;
+        for (const uid of allUserIds) {
+            if (!tour.participants.includes(uid)) {
+                tour.participants.push(uid);
+                added++;
+            }
+        }
+        db.tournament = tour;
+        saveDb(db);
+
+        // Foydalanuvchilarga xabar yuborish
+        let notified = 0;
+        for (const uid of allUserIds) {
+            try {
+                await bot.telegram.sendMessage(uid,
+                    `🏆 <b>Musobaqaga qo'shildingiz!</b>\n\n` +
+                    `📅 Sana: <b>${tour.date||'—'}</b>\n` +
+                    `🕒 Vaqt: <b>${tour.time||'—'}</b>\n` +
+                    `📝 Savollar: <b>${tour.count||'—'} ta</b>\n\n` +
+                    `✅ Siz musobaqaga avtomatik qo'shildingiz. Boshlanish vaqtida xabar keladi!`,
+                    { parse_mode: 'HTML' }
+                );
+                notified++;
+            } catch {}
+        }
+
+        res.json({ success: true, total: allUserIds.length, added, notified });
+    } catch (err) {
+        console.error('[add-all]', err.message);
+        res.status(500).json({ error: 'Xatolik yuz berdi' });
+    }
+});
+
+// ✅ YANGI: Musobaqaga bitta foydalanuvchi qo'shish (vip yoki ID bo'yicha)
+app.post('/api/tournament/add-user', async (req, res) => {
+    try {
+        const { userId } = req.body;
+        const db   = getDb();
+        const tour = db.tournament;
+        if (!tour?.isActive) return res.status(400).json({ error: 'Musobaqa faol emas' });
+
+        const uid = parseInt(userId);
+        if (isNaN(uid) || !db.users[uid]) return res.status(404).json({ error: 'Foydalanuvchi topilmadi' });
+
+        if (!tour.participants.includes(uid)) {
+            tour.participants.push(uid);
+            db.tournament = tour;
+            saveDb(db);
+            // Xabar yuborish
+            await bot.telegram.sendMessage(uid,
+                `🏆 <b>Musobaqaga qo'shildingiz!</b>\n\n📅 ${tour.date||'—'} · 🕒 ${tour.time||'—'}`,
+                { parse_mode: 'HTML' }
+            ).catch(() => {});
+        }
+
+        res.json({ success: true, name: db.users[uid].name || 'Foydalanuvchi' });
+    } catch (err) {
+        res.status(500).json({ error: 'Xatolik' });
+    }
 });
 
 app.post('/api/reject', async (req, res) => {

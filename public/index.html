@@ -538,6 +538,92 @@ body::before{
   border-radius:14px;padding:12px 14px;margin-top:12px;
   font-size:12px;color:var(--danger);text-align:center;font-weight:600;
 }
+
+/* ── PARTICIPANTS MODAL ── */
+.parts-modal{
+  position:fixed;inset:0;
+  background:rgba(0,0,0,0.75);backdrop-filter:blur(12px);
+  z-index:300;display:none;
+  align-items:flex-end;justify-content:center;
+}
+.parts-modal.on{display:flex;}
+.parts-sheet{
+  width:100%;max-width:480px;max-height:80vh;
+  background:var(--s1);
+  border-top-left-radius:24px;border-top-right-radius:24px;
+  border:1px solid var(--border2);border-bottom:none;
+  display:flex;flex-direction:column;
+  overflow:hidden;
+}
+.parts-header{
+  padding:18px 20px 14px;
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  flex-shrink:0;
+}
+.parts-header-title{font-size:15px;font-weight:700;}
+.parts-header-count{
+  font-size:12px;font-weight:600;
+  background:rgba(79,124,255,.12);color:var(--accent);
+  padding:3px 10px;border-radius:20px;
+  border:1px solid rgba(79,124,255,.25);
+}
+.parts-close{
+  width:28px;height:28px;border-radius:8px;
+  background:var(--s2);border:1px solid var(--border);
+  color:var(--muted2);cursor:pointer;font-size:14px;
+  display:flex;align-items:center;justify-content:center;
+  margin-left:8px;flex-shrink:0;
+}
+.parts-list{
+  flex:1;overflow-y:auto;padding:12px 16px;
+  -webkit-overflow-scrolling:touch;
+}
+.part-item{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 0;border-bottom:1px solid var(--border);
+}
+.part-item:last-child{border-bottom:none;}
+.part-num{
+  width:26px;height:26px;border-radius:8px;
+  background:var(--s2);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:600;color:var(--muted2);flex-shrink:0;
+  font-family:'JetBrains Mono',monospace;
+}
+.part-av{
+  width:34px;height:34px;border-radius:10px;
+  background:linear-gradient(135deg,var(--accent),var(--a2));
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;font-weight:700;flex-shrink:0;overflow:hidden;
+}
+.part-av img{width:100%;height:100%;object-fit:cover;border-radius:10px;}
+.part-info{flex:1;min-width:0;}
+.part-name{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.part-meta{font-size:11px;color:var(--muted2);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.part-vip{
+  font-size:10px;padding:2px 6px;border-radius:6px;
+  background:rgba(245,158,11,.12);color:var(--warn);
+  border:1px solid rgba(245,158,11,.25);font-weight:600;
+  flex-shrink:0;
+}
+.parts-empty{
+  text-align:center;padding:32px 16px;
+  color:var(--muted);font-size:13px;
+}
+.parts-search{
+  padding:10px 16px;border-bottom:1px solid var(--border);flex-shrink:0;
+}
+.parts-search input{
+  width:100%;padding:9px 12px;
+  background:var(--s2);border:1px solid var(--border);
+  border-radius:10px;color:var(--text);
+  font-family:'Space Grotesk',sans-serif;font-size:13px;
+  outline:none;
+}
+.parts-search input:focus{border-color:var(--accent);}
+.parts-search input::placeholder{color:var(--muted);}
+
 </style>
 </head>
 <body>
@@ -685,12 +771,16 @@ body::before{
         <!-- Musobaqa -->
         <div class="card">
           <div class="card-glow-top"></div>
-          <div class="card-title">🏆 Joriy Musobaqa</div>
+          <div class="card-title" style="display:flex;justify-content:space-between;align-items:center;">
+            <span>🏆 Joriy Musobaqa</span>
+            <span id="tour-parts-btn" style="display:none;font-size:11px;color:var(--accent);font-weight:600;cursor:pointer;padding:4px 10px;background:rgba(79,124,255,.1);border-radius:8px;border:1px solid rgba(79,124,255,.25);" onclick="showParticipantsModal()">👥 Ishtirokchilar</span>
+          </div>
           <div id="tour-content">
             <div class="t-row"><span class="t-lbl">Holat</span><span class="t-val" id="tour-status">—</span></div>
             <div class="t-row"><span class="t-lbl">Sana</span><span class="t-val" id="tour-date">—</span></div>
             <div class="t-row"><span class="t-lbl">Vaqt</span><span class="t-val" id="tour-time">—</span></div>
             <div class="t-row"><span class="t-lbl">Savollar</span><span class="t-val" id="tour-count">—</span></div>
+            <div class="t-row"><span class="t-lbl">Ishtirokchilar</span><span class="t-val" id="tour-parts-count" style="color:var(--accent);">—</span></div>
           </div>
         </div>
 
@@ -964,6 +1054,27 @@ body::before{
 
 </div><!-- /screen-app -->
 
+<!-- PARTICIPANTS MODAL -->
+<div class="parts-modal" id="parts-modal" onclick="e=>{if(e.target===this)closePartsModal()}">
+  <div class="parts-sheet">
+    <div class="parts-header">
+      <div>
+        <div class="parts-header-title">👥 Musobaqa Ishtirokchilari</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span class="parts-header-count" id="parts-header-count">0 ta</span>
+        <div class="parts-close" onclick="closePartsModal()">✕</div>
+      </div>
+    </div>
+    <div class="parts-search">
+      <input type="text" id="parts-search-inp" placeholder="🔍 Ism bo'yicha qidirish..." oninput="filterParts(this.value)">
+    </div>
+    <div class="parts-list" id="parts-list">
+      <div class="parts-empty">Yuklanmoqda...</div>
+    </div>
+  </div>
+</div>
+
 <!-- ADMIN AUTH MODAL -->
 <div class="modal-wrap" id="adm-modal">
   <div class="modal">
@@ -1117,6 +1228,19 @@ function navTo(tab) {
   document.getElementById('nav-'+tab)?.classList.add('active');
   document.getElementById('topbar-title').textContent = TAB_TITLES[tab] || tab;
 
+  if (tab === 'dash') {
+    const sess = getSess();
+    if (sess) {
+      if (sess.isAdmin) {
+        const adm = getAdm();
+        loadDashboard(adm.name||null, true);
+      } else {
+        const users = getUsers();
+        const user  = users[sess.username];
+        if (user?.name) loadDashboard(user.name, false);
+      }
+    }
+  }
   if (tab === 'stats')   loadStats();
   if (tab === 'admin')   loadAdminPanel();
   if (tab === 'profile') loadProfileForm();
@@ -1229,7 +1353,8 @@ async function openApp(username, isAdmin) {
     document.getElementById('nav-admin').style.display = 'flex';
     fillTopbarAvatar(photo, adm.name||'Admin');
     navTo('dash');
-    loadDashboard(null, true);
+    // ✅ FIX: Admin uchun ham nomi bilan chaqiramiz — "Mening natijalarim" ishlaydi
+    loadDashboard(adm.name||null, true);
   } else {
     const users = getUsers();
     const user  = users[username];
@@ -1283,7 +1408,7 @@ function fillSidebar(name, username, photo, badgeType) {
 // ════════════════════════════════════════
 // DASHBOARD LOAD
 // ════════════════════════════════════════
-async function loadDashboard(userName, isAdmin) {
+async function loadDashboard(userName, isAdminMode) {
   // Tournament
   try {
     const r = await fetch('/api/tournament');
@@ -1293,14 +1418,27 @@ async function loadDashboard(userName, isAdmin) {
       document.getElementById('tour-date').textContent  = t.date||'—';
       document.getElementById('tour-time').textContent  = t.time||'—';
       document.getElementById('tour-count').textContent = (t.count||'—')+' ta';
+      // ✅ Ishtirokchilar soni
+      const partsCount = t.participants?.length || 0;
+      document.getElementById('tour-parts-count').textContent = partsCount+' kishi';
+      // ✅ Ishtirokchilar tugmasini ko'rsatish (faol musobaqa bo'lsa)
+      if (partsCount > 0) {
+        document.getElementById('tour-parts-btn').style.display = 'flex';
+        document.getElementById('tour-parts-btn').textContent   = `👥 ${partsCount} ishtirokchi`;
+      }
+      // Ishtirokchilar ma'lumotlarini keshga saqlash
+      if (t.participantDetails) window._tourParticipants = t.participantDetails;
     } else {
       document.getElementById('tour-status').innerHTML = `<span class="dot red"></span>Faol emas`;
       ['tour-date','tour-time','tour-count'].forEach(id=>document.getElementById(id).textContent='—');
+      document.getElementById('tour-parts-count').textContent = '—';
+      document.getElementById('tour-parts-btn').style.display = 'none';
+      window._tourParticipants = [];
     }
   } catch {}
 
-  // User stats
-  if (userName) {
+  // ✅ FIX: User stats — userName bo'lsa server dan olish, yo'qsa 0 ko'rsatish
+  if (userName && userName !== 'Admin' && userName !== 'Administrator') {
     try {
       const r = await fetch('/api/user-stats?name='+encodeURIComponent(userName));
       if (r.ok) {
@@ -1311,7 +1449,26 @@ async function loadDashboard(userName, isAdmin) {
         document.getElementById('my-wrong').textContent   = d.totalWrong||'0';
       } else { setMyDefault(); }
     } catch { setMyDefault(); }
-  } else { setMyDefault(); }
+  } else {
+    // Admin yoki nomsiz foydalanuvchi — leaderboard dan o'zini topishga urinish
+    const sess = getSess();
+    if (sess && !sess.isAdmin) {
+      const users = getUsers();
+      const u     = users[sess.username];
+      if (u?.name) {
+        try {
+          const r = await fetch('/api/user-stats?name='+encodeURIComponent(u.name));
+          if (r.ok) {
+            const d = await r.json();
+            document.getElementById('my-score').textContent   = parseFloat(d.score||0).toFixed(1);
+            document.getElementById('my-tests').textContent   = d.totalTests||'0';
+            document.getElementById('my-correct').textContent = d.totalCorrect||'0';
+            document.getElementById('my-wrong').textContent   = d.totalWrong||'0';
+          } else setMyDefault();
+        } catch { setMyDefault(); }
+      } else setMyDefault();
+    } else { setMyDefault(); }
+  }
 
   // Top 3
   try {
@@ -1364,28 +1521,51 @@ async function loadStats() {
     const user  = users[sess.username];
     if (!user) return;
 
+    // ✅ FIX: name bo'yicha, topilmasa username bo'yicha qidirish
+    let statsData = null;
     try {
-      const r = await fetch('/api/user-stats?name='+encodeURIComponent(user.name));
+      let r = await fetch('/api/user-stats?name='+encodeURIComponent(user.name));
       if (r.ok) {
-        const d = await r.json();
-        document.getElementById('st-score').textContent   = parseFloat(d.score||0).toFixed(1);
-        document.getElementById('st-tests').textContent   = d.totalTests||'0';
-        document.getElementById('st-correct').textContent = d.totalCorrect||'0';
-        document.getElementById('st-wrong').textContent   = d.totalWrong||'0';
-        document.getElementById('st-univ').textContent    = d.univ||'—';
-        document.getElementById('st-kurs').textContent    = d.kurs||'—';
-        const totQ = (d.totalCorrect||0) + (d.totalWrong||0);
-        const totW = d.totalWrong||0;
-        const acc  = totQ > 0 ? ((d.totalCorrect||0)/totQ*100).toFixed(1)+'%' : '—';
-        document.getElementById('st-total-q').textContent = totQ || '—';
-        document.getElementById('st-total-w').textContent = totW || '—';
-        document.getElementById('st-accuracy').textContent= acc;
-
-        if (d.subjects && Object.keys(d.subjects).length > 0) {
-          renderSubjects(d.subjects);
-        }
+        statsData = await r.json();
+      } else {
+        // username bo'yicha fallback
+        r = await fetch('/api/user-stats?username='+encodeURIComponent(user.username));
+        if (r.ok) statsData = await r.json();
       }
     } catch {}
+
+    if (statsData) {
+      document.getElementById('st-score').textContent   = parseFloat(statsData.score||0).toFixed(1);
+      document.getElementById('st-tests').textContent   = statsData.totalTests||'0';
+      document.getElementById('st-correct').textContent = statsData.totalCorrect||'0';
+      document.getElementById('st-wrong').textContent   = statsData.totalWrong||'0';
+      document.getElementById('st-univ').textContent    = statsData.univ||'—';
+      document.getElementById('st-kurs').textContent    = statsData.kurs||'—';
+      const totC = statsData.totalCorrect || 0;
+      const totW = statsData.totalWrong   || 0;
+      const totQ = totC + totW;
+      const acc  = totQ > 0 ? (totC/totQ*100).toFixed(1)+'%' : '—';
+      document.getElementById('st-total-q').textContent  = totQ || '—';
+      document.getElementById('st-total-w').textContent  = totW || '—';
+      document.getElementById('st-accuracy').textContent = acc;
+
+      if (statsData.subjects && Object.keys(statsData.subjects).length > 0) {
+        renderSubjects(statsData.subjects);
+      }
+    } else {
+      // Hali test ishlamagan
+      ['st-score','st-tests','st-correct','st-wrong'].forEach(id=>document.getElementById(id).textContent='0');
+      ['st-total-q','st-total-w','st-accuracy'].forEach(id=>document.getElementById(id).textContent='—');
+      document.getElementById('st-univ').textContent = user.name ? '—' : 'Kiritilmagan';
+      document.getElementById('st-kurs').textContent = '—';
+    }
+  } else {
+    // Admin uchun ham stats ko'rsatish
+    ['st-score','st-tests','st-correct','st-wrong'].forEach(id=>document.getElementById(id).textContent='0');
+    ['st-total-q','st-total-w'].forEach(id=>document.getElementById(id).textContent='0');
+    document.getElementById('st-accuracy').textContent = '—';
+    document.getElementById('st-univ').textContent = 'Admin';
+    document.getElementById('st-kurs').textContent  = '—';
   }
 
   // TOP 10 leaderboard — rasmlar bilan
@@ -1781,6 +1961,71 @@ function doLogout() {
   document.getElementById('si-u').value = '';
   document.getElementById('si-p').value = '';
   lTab('in');
+}
+
+// ════════════════════════════════════════
+// PARTICIPANTS MODAL
+// ════════════════════════════════════════
+window._tourParticipants = [];
+
+function showParticipantsModal() {
+  document.getElementById('parts-modal').classList.add('on');
+  document.getElementById('parts-search-inp').value = '';
+  renderParticipantsList(window._tourParticipants || []);
+}
+
+function closePartsModal() {
+  document.getElementById('parts-modal').classList.remove('on');
+}
+
+// Tashqi klik — modalni yopish
+document.addEventListener('click', e => {
+  const modal = document.getElementById('parts-modal');
+  if (e.target === modal) closePartsModal();
+});
+
+function filterParts(query) {
+  const q    = query.trim().toLowerCase();
+  const list = window._tourParticipants || [];
+  if (!q) { renderParticipantsList(list); return; }
+  const filtered = list.filter(p => (p.name||'').toLowerCase().includes(q) || (p.username||'').toLowerCase().includes(q));
+  renderParticipantsList(filtered);
+}
+
+function renderParticipantsList(list) {
+  const el = document.getElementById('parts-list');
+  document.getElementById('parts-header-count').textContent = list.length + ' ta';
+
+  if (!list.length) {
+    el.innerHTML = '<div class="parts-empty">🔍 Hech kim topilmadi</div>';
+    return;
+  }
+
+  // Score bo'yicha tartiblash
+  const sorted = [...list].sort((a,b) => (b.tourScore||0) - (a.tourScore||0));
+
+  let html = '';
+  sorted.forEach((p, i) => {
+    const photo    = getPhotoForName(p.name, p.username);
+    const avatarHtml = photo
+      ? `<img src="${photo}" alt="">`
+      : (p.name||'?').slice(0,2).toUpperCase();
+    const vipBadge = p.isVip ? '<span class="part-vip">VIP</span>' : '';
+    const meta     = [p.univ, p.kurs].filter(Boolean).join(' · ');
+    const score    = p.tourScore > 0 ? `<span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent);font-weight:600;">${p.tourScore} ball</span>` : '';
+
+    html += `<div class="part-item">
+      <div class="part-num">${i+1}</div>
+      <div class="part-av">${avatarHtml}</div>
+      <div class="part-info">
+        <div class="part-name">${p.name||'—'}</div>
+        <div class="part-meta">${p.username ? '@'+p.username+' · ' : ''}${meta||'—'}</div>
+      </div>
+      ${score}
+      ${vipBadge}
+    </div>`;
+  });
+  el.innerHTML = html;
 }
 
 // ════════════════════════════════════════
