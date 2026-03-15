@@ -404,31 +404,88 @@ async function sendQuestion(ctx, isNew = false) {
     }, timeLimit * 1000);
 }
 
+// ============================================================
+// MUSOBAQA GLOBAL TAYMER — har bir foydalanuvchi uchun alohida
+// ============================================================
+const tourGlobalTimers = {}; // userId → globalTimeout
+
+function clearTourTimers(userId) {
+    if (timers[userId])            { clearTimeout(timers[userId]);            delete timers[userId]; }
+    if (tourGlobalTimers[userId])  { clearTimeout(tourGlobalTimers[userId]);  delete tourGlobalTimers[userId]; }
+}
+
+// Musobaqa yakunlash — umumiy vaqt tugaganda chaqiriladi
+async function endTourByTimeout(userId, telegram) {
+    clearTourTimers(userId);
+    const db = getDb();
+    if (!db.users[userId]) return;
+
+    const score = db.users[userId].tourScore || 0;
+    db.users[userId].tourFinished = true;
+    saveDb(db);
+
+    try {
+        await telegram.sendMessage(userId,
+            `⏰ <b>MUSOBAQA VAQTI TUGADI!</b>\n\n` +
+            `👤 Ishtirokchi: <b>${escapeHTML(db.users[userId].name || 'Foydalanuvchi')}</b>\n` +
+            `✅ To'g'ri javoblar: <b>${score} ta</b>\n\n` +
+            `🏆 Natijangiz saqlandi. G'oliblarni kuting!`,
+            { parse_mode: 'HTML' }
+        );
+    } catch {}
+}
+
 async function sendTourQuestion(ctx, isNew = false) {
     const s      = ctx.session;
     const userId = ctx.from.id;
     const db     = getDb();
     const tour   = db.tournament;
-    if (timers[userId]) clearTimeout(timers[userId]);
 
-    const isTimeOut = s.tourEndTime && Date.now() > s.tourEndTime;
+    // Faqat savol timeoutini tozalash (global taymer saqlanadi)
+    if (timers[userId]) { clearTimeout(timers[userId]); delete timers[userId]; }
 
+    // ── Umumiy vaqt tugaganmi? ──
+    const isTimeOut = s.tourEndTime && Date.now() >= s.tourEndTime;
+
+    // ── Musobaqa tugash shartlari ──
     if (!tour || s.tourIndex >= tour.count || isTimeOut) {
-        if (db.users[userId]) { db.users[userId].tourScore = s.tourScore||0; db.users[userId].tourFinished = true; saveDb(db); }
+        clearTourTimers(userId);
+
+        const finalScore = s.tourScore || 0;
+
+        // Bazaga saqlash
+        if (db.users[userId]) {
+            db.users[userId].tourScore    = finalScore;
+            db.users[userId].tourFinished = true;
+            saveDb(db);
+        }
+
         const title = isTimeOut ? '⏰ <b>Vaqtingiz tugadi!</b>' : '🏁 <b>Musobaqa yakunlandi!</b>';
-        const sub   = isTimeOut ? 'Ajratilgan umumiy vaqt yakunlandi.' : 'Barcha savollarga javob berdingiz.';
-        const resultMsg = `${title}\n\n${sub}\n\n👤 Ishtirokchi: <b>${escapeHTML(s.userName)}</b>\n✅ To'g'ri javoblar: <b>${s.tourScore||0} ta</b>\n\n🏆 Natijangiz saqlandi. G'oliblarni kuting!`;
+        const sub   = isTimeOut
+            ? 'Ajratilgan umumiy vaqt yakunlandi.'
+            : 'Barcha savollarga javob berdingiz.';
+
+        const totalQ   = tour?.count || s.tourIndex || 0;
+        const percent  = totalQ > 0 ? ((finalScore / totalQ) * 100).toFixed(1) : '0.0';
+        const resultMsg =
+            `${title}\n\n${sub}\n\n` +
+            `👤 Ishtirokchi: <b>${escapeHTML(s.userName || 'Foydalanuvchi')}</b>\n` +
+            `✅ To'g'ri javoblar: <b>${finalScore} ta</b>\n` +
+            `📊 Natija: <b>${percent}%</b> (${finalScore}/${totalQ})\n\n` +
+            `🏆 Natijangiz saqlandi. G'oliblarni kuting!`;
+
         try { await ctx.deleteMessage(); } catch {}
         await ctx.replyWithHTML(resultMsg);
         return showSubjectMenu(ctx);
     }
 
-    if (!s.tourEndTime) s.tourEndTime = Date.now() + (tour.count * 30 * 1000);
+    // ── Qolgan umumiy vaqtni hisoblash ──
     const remaining = Math.max(0, s.tourEndTime - Date.now());
     const remMin    = Math.floor(remaining / 60000);
     const remSec    = Math.floor((remaining % 60000) / 1000);
     const timerStr  = `${String(remMin).padStart(2,'0')}:${String(remSec).padStart(2,'0')}`;
 
+    // ── Savol tayyorlash ──
     const qData = tour.questions[s.tourIndex];
     if (!qData) { s.tourIndex++; return sendTourQuestion(ctx, false); }
 
@@ -436,7 +493,18 @@ async function sendTourQuestion(ctx, isNew = false) {
     s.currentOptions     = shuffle([...qData.options]);
     const labels         = ['A', 'B', 'C', 'D'];
 
-    let text = `🏆 <b>MUSOBAQA REJIMI</b>\n⏱ <b>Tugashiga: ${timerStr} qoldi</b>\n📊 Progress: [${progress}]\n🔢 Savol: <b>${s.tourIndex+1}/${tour.count}</b>\n⌛️ Bu savol uchun: <b>30s</b>\n_________________________\n\n❓ <b>${escapeHTML(qData.q)}</b>\n\n`;
+    // Har savol uchun vaqt: qolgan vaqt 30s dan kam bo'lsa qolganini ko'rsatish
+    const perQSec    = Math.min(30, Math.max(1, Math.ceil(remaining / 1000)));
+    const perQStr    = perQSec < 30 ? `${perQSec}s (!)` : '30s';
+
+    let text =
+        `🏆 <b>MUSOBAQA REJIMI</b>\n` +
+        `⏱ <b>Umumiy vaqt: ${timerStr} qoldi</b>\n` +
+        `📊 Progress: [${progress}]\n` +
+        `🔢 Savol: <b>${s.tourIndex+1}/${tour.count}</b>\n` +
+        `⌛️ Bu savol uchun: <b>${perQStr}</b>\n` +
+        `_________________________\n\n` +
+        `❓ <b>${escapeHTML(qData.q)}</b>\n\n`;
     s.currentOptions.forEach((opt, i) => { text += `<b>${labels[i]})</b> ${escapeHTML(opt)}\n\n`; });
 
     const inlineBtn = Markup.inlineKeyboard([
@@ -444,12 +512,34 @@ async function sendTourQuestion(ctx, isNew = false) {
         [Markup.button.callback('🛑 Chiqish', 'stop_tour')],
     ]);
 
-    try { isNew ? await ctx.replyWithHTML(text, inlineBtn) : await ctx.editMessageText(text, { parse_mode: 'HTML', ...inlineBtn }); }
-    catch { await ctx.replyWithHTML(text, inlineBtn); }
+    try {
+        isNew
+            ? await ctx.replyWithHTML(text, inlineBtn)
+            : await ctx.editMessageText(text, { parse_mode: 'HTML', ...inlineBtn });
+    } catch {
+        await ctx.replyWithHTML(text, inlineBtn);
+    }
+
+    // ── Savol timeout: 30s yoki qolgan vaqt (kichigi) ──
+    const questionTimeout = Math.min(30000, remaining);
+    if (questionTimeout <= 0) {
+        // Hoziroq tugadi
+        s.tourIndex = tour.count;
+        return sendTourQuestion(ctx, false);
+    }
 
     timers[userId] = setTimeout(async () => {
-        if (ctx.session?.tourIndex === s.tourIndex) { ctx.session.tourIndex++; sendTourQuestion(ctx, false); }
-    }, 30000);
+        // Foydalanuvchi javob bermadi — keyingi savolga o'tish
+        if (ctx.session?.tourIndex === s.tourIndex) {
+            // Umumiy vaqt tugaganmi tekshirish
+            if (ctx.session.tourEndTime && Date.now() >= ctx.session.tourEndTime) {
+                ctx.session.tourIndex = tour.count; // tugat
+            } else {
+                ctx.session.tourIndex++;
+            }
+            sendTourQuestion(ctx, false);
+        }
+    }, questionTimeout);
 }
 
 async function finalizeTournament(ctx) {
@@ -703,10 +793,16 @@ bot.action('confirm_tour', async (ctx) => {
     const db = getDb();
     const s  = ctx.session;
 
+    // Avvalgi deadline taymerini tozalash
+    if (tourDeadlineTimer) { clearTimeout(tourDeadlineTimer); tourDeadlineTimer = null; }
+
     Object.keys(db.users).forEach(id => { db.users[id].tourScore = 0; db.users[id].tourFinished = false; });
 
     db.tournament = {
         isActive:     true,
+        started:      false,       // ✅ Hali boshlanmagan
+        startedAt:    null,
+        deadlineTime: null,        // ✅ Boshlanganida o'rnatiladi
         date:         s.tourDate,
         time:         s.tourTime,
         count:        parseInt(s.tourCount),
@@ -767,29 +863,47 @@ bot.action(/^tourans_(\d+)$/, async (ctx) => {
     const tour   = db.tournament;
     const userId = ctx.from.id;
 
-    if (!s || s.tourIndex === undefined || !tour) return ctx.answerCbQuery('❌ Sessiya topilmadi.');
+    if (!s || s.tourIndex === undefined || !tour) {
+        return ctx.answerCbQuery('❌ Sessiya topilmadi.');
+    }
 
-    if (s.tourEndTime && Date.now() > s.tourEndTime) {
-        if (timers[userId]) clearTimeout(timers[userId]);
+    // ✅ Umumiy vaqt tugaganmi tekshirish
+    if (s.tourEndTime && Date.now() >= s.tourEndTime) {
+        clearTourTimers(userId);
         await ctx.answerCbQuery('⏰ Musobaqa vaqti tugadi!', { show_alert: true });
-        s.tourIndex = tour.count;
+        s.tourIndex = tour.count; // tugash belgisi
         return sendTourQuestion(ctx, false);
     }
+
+    // ✅ Allaqachon bu savoldan o'tib ketganmi (double-click himoyasi)
+    if (db.users[userId]?.tourFinished) {
+        return ctx.answerCbQuery('✅ Musobaqa yakunlangan.');
+    }
+
+    // Savol timeoutini bekor qilish (foydalanuvchi javob berdi)
+    if (timers[userId]) { clearTimeout(timers[userId]); delete timers[userId]; }
 
     const choiceIdx = parseInt(ctx.match[1]);
     const currentQ  = tour.questions[s.tourIndex];
     if (!currentQ || !s.currentOptions) return ctx.answerCbQuery();
 
     const userAnswer = s.currentOptions[choiceIdx];
-    if (userAnswer === currentQ.a) { s.tourScore = (s.tourScore||0)+1; await ctx.answerCbQuery("✅ To'g'ri!"); }
-    else { await ctx.answerCbQuery("❌ Noto'g'ri!"); }
+    if (userAnswer === currentQ.a) {
+        s.tourScore = (s.tourScore || 0) + 1;
+        await ctx.answerCbQuery("✅ To'g'ri!");
+    } else {
+        await ctx.answerCbQuery("❌ Noto'g'ri!");
+    }
 
     s.tourIndex++;
+
+    // Bazaga saqlash
     if (db.users[userId]) {
         db.users[userId].tourScore = s.tourScore;
         if (s.tourIndex >= tour.count) db.users[userId].tourFinished = true;
         saveDb(db);
     }
+
     return sendTourQuestion(ctx, false);
 });
 
@@ -803,18 +917,52 @@ bot.action('start_actual_tour', async (ctx) => {
     if (!tour.participants.includes(userId)) return ctx.answerCbQuery("❌ Siz ro'yxatdan o'tmagansiz!", { show_alert: true });
     if (db.users[userId]?.tourFinished) return ctx.answerCbQuery("✅ Siz bu musobaqani yechib bo'lgansiz!", { show_alert: true });
 
-    s.tourIndex  = 0;
-    s.tourScore  = 0;
-    s.userName   = db.users[userId]?.name || ctx.from.first_name;
-    s.tourEndTime = Date.now() + (tour.count * 30 * 1000);
+    // ✅ ASOSIY FIX: Barcha foydalanuvchilar uchun umumiy deadline DB dan olinadi
+    // (scheduleTourDeadline da saqlangan deadlineTime)
+    const deadlineTime = tour.deadlineTime || (Date.now() + tour.count * 30 * 1000);
+    const remaining    = deadlineTime - Date.now();
+
+    // Vaqt tugab ketgan bo'lsa — boshlatmaymiz
+    if (remaining <= 2000) {
+        return ctx.answerCbQuery('⏰ Musobaqa vaqti tugab ketdi!', { show_alert: true });
+    }
+
+    s.tourIndex   = 0;
+    s.tourScore   = 0;
+    s.userName    = db.users[userId]?.name || ctx.from.first_name;
+    s.tourEndTime = deadlineTime; // ✅ Umumiy shared deadline
+
+    // Foydalanuvchi uchun individual timeout — deadline ga sinxron
+    clearTourTimers(userId);
+    tourGlobalTimers[userId] = setTimeout(async () => {
+        if (!db.users[userId]?.tourFinished) {
+            ctx.session.tourIndex = tour.count;
+            await endTourByTimeout(userId, ctx.telegram);
+        }
+    }, remaining + 1000); // +1s bufer
 
     await ctx.answerCbQuery('🚀 Musobaqa boshlandi! Omad!');
     try { await ctx.deleteMessage(); } catch {}
+
+    const remMin  = Math.floor(remaining / 60000);
+    const remSec  = Math.floor((remaining % 60000) / 1000);
+    const timeStr = remMin > 0
+        ? (remSec > 0 ? `${remMin} daqiqa ${remSec} soniya` : `${remMin} daqiqa`)
+        : `${remSec} soniya`;
+
+    await ctx.replyWithHTML(
+        `🚀 <b>Musobaqa boshlandi!</b>\n\n` +
+        `📝 Jami savollar: <b>${tour.count} ta</b>\n` +
+        `⏱ Qolgan vaqt: <b>${timeStr}</b>\n` +
+        `⌛️ Har bir savol uchun: <b>30 soniya</b>\n\n` +
+        `💡 Vaqt tugaganda musobaqa avtomatik yakunlanadi!`
+    );
+
     return sendTourQuestion(ctx, true);
 });
 
 bot.action('stop_tour', async (ctx) => {
-    if (timers[ctx.from.id]) clearTimeout(timers[ctx.from.id]);
+    clearTourTimers(ctx.from.id);
     try { await ctx.deleteMessage(); } catch {}
     return showSubjectMenu(ctx);
 });
@@ -1568,23 +1716,153 @@ bot.on(['text','photo','video','animation','document'], async (ctx, next) => {
 });
 
 // ============================================================
-// CRON — MUSOBAQA AVTOMATIK BOSHLASH
+// CRON — MUSOBAQA GLOBAL DEADLINE TIZIMI
 // ============================================================
+
+// Xotirada saqlanadigan deadline taymer
+let tourDeadlineTimer = null;
+
+// Deadline taymerini o'rnatish
+function scheduleTourDeadline(deadlineMs) {
+    if (tourDeadlineTimer) { clearTimeout(tourDeadlineTimer); tourDeadlineTimer = null; }
+    const remaining = deadlineMs - Date.now();
+    if (remaining <= 0) {
+        // Vaqt o'tib ketgan — darhol tugatish
+        setImmediate(() => forceFinishAllParticipants());
+        return;
+    }
+    console.log(`⏰ Deadline taymer o'rnatildi: ${Math.round(remaining/1000)}s qoldi`);
+    tourDeadlineTimer = setTimeout(() => forceFinishAllParticipants(), remaining);
+}
+
+// Barcha ishtirokchilarni majburiy tugatish — vaqt tugaganda chaqiriladi
+async function forceFinishAllParticipants() {
+    if (tourDeadlineTimer) { clearTimeout(tourDeadlineTimer); tourDeadlineTimer = null; }
+
+    const db   = getDb();
+    const tour = db.tournament;
+    if (!tour) return;
+
+    console.log(`🏁 GLOBAL DEADLINE: ${tour.participants?.length || 0} ishtirokchi tugatilmoqda...`);
+
+    const parts = tour.participants || [];
+    let finished = 0;
+
+    // Barcha tugatilmagan ishtirokchilarga xabar yuborish
+    const chunkSize = 20;
+    for (let i = 0; i < parts.length; i += chunkSize) {
+        const chunk = parts.slice(i, i + chunkSize);
+        await Promise.allSettled(chunk.map(async (uid) => {
+            if (!db.users[uid]) return;
+            const alreadyDone = db.users[uid].tourFinished;
+            const score       = db.users[uid].tourScore || 0;
+
+            // Tugatilmagan bo'lsa — bazada finish qilamiz
+            if (!alreadyDone) {
+                db.users[uid].tourFinished = true;
+                finished++;
+            }
+
+            // Har kim uchun vaqt tugash xabarini yuborish
+            try {
+                await bot.telegram.sendMessage(uid,
+                    `⏰ <b>MUSOBAQA VAQTI TUGADI!</b>\n\n` +
+                    `📅 Sana: <b>${tour.date || '—'}</b>\n` +
+                    `👤 Sizning natijangiz: <b>${score} ball</b>\n` +
+                    (alreadyDone
+                        ? `✅ Siz testni o'z vaqtida yakunlagansiz.`
+                        : `⚠️ Ajratilgan vaqt tugaganligi sababli test avtomatik yakunlandi.`) +
+                    `\n\n🏆 Natijalar tez orada e'lon qilinadi!`,
+                    { parse_mode: 'HTML' }
+                );
+            } catch {}
+        }));
+        if (i + chunkSize < parts.length) await new Promise(r => setTimeout(r, 600));
+    }
+
+    // Bazani saqlash va musobaqani tugatish
+    db.tournament.isActive = false;
+    saveDb(db);
+    console.log(`✅ Deadline tugadi: ${finished} yangi, ${parts.length - finished} allaqachon yakunlagan`);
+}
+
+// Har daqiqa tekshiruv cron
 cron.schedule('* * * * *', async () => {
     const now         = new Date();
     const currentTime = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
     const db          = getDb();
     const tour        = db.tournament;
-    if (tour?.isActive && tour.time === currentTime) {
-        console.log('🚀 Musobaqa avtomatik boshlanmoqda...');
-        for (const uid of tour.participants) {
-            await bot.telegram.sendMessage(uid,
-                `🔔 <b>MUSOBAQA BOSHLANDI!</b>\n\nSoat <b>${tour.time}</b> bo'ldi. Omad!\nPastdagi tugmani bosing:`,
-                { parse_mode: 'HTML', ...Markup.inlineKeyboard([[Markup.button.callback('🏁 TESTNI BOSHLASH','start_actual_tour')]]) }
-            ).catch(() => {});
+
+    if (!tour?.isActive || !tour.time) return;
+
+    // ── 1. Boshlash vaqti yetdi va hali boshlanmagan ──
+    if (tour.time === currentTime && !tour.started) {
+        const totalMs      = (tour.count || 30) * 30 * 1000;
+        const deadlineTime = Date.now() + totalMs;
+
+        // DB ga saqlaymiz — bot restart bo'lsa ham tiklansin
+        db.tournament.started      = true;
+        db.tournament.startedAt    = Date.now();
+        db.tournament.deadlineTime = deadlineTime;
+        saveDb(db);
+
+        console.log(`🚀 Musobaqa boshlandi! ${tour.participants?.length || 0} ishtirokchi · deadline: ${Math.round(totalMs/60000)} daqiqadan keyin`);
+
+        // Deadline taymer o'rnatish
+        scheduleTourDeadline(deadlineTime);
+
+        // Ishtirokchilarga xabar
+        const parts = tour.participants || [];
+        const chunkSize = 25;
+        for (let i = 0; i < parts.length; i += chunkSize) {
+            const chunk = parts.slice(i, i + chunkSize);
+            await Promise.allSettled(chunk.map(uid =>
+                bot.telegram.sendMessage(uid,
+                    `🔔 <b>MUSOBAQA BOSHLANDI!</b>\n\n` +
+                    `📅 <b>${tour.date}</b> · 🕒 <b>${tour.time}</b>\n` +
+                    `📝 Savollar: <b>${tour.count} ta</b>\n` +
+                    `⏱ Umumiy vaqt: <b>${Math.round(totalMs/60000)} daqiqa</b>\n\n` +
+                    `⚠️ <b>DIQQAT:</b> Vaqt allaqachon boshlandi!\n` +
+                    `Testni boshlamasangiz, vaqt tugaganda <b>0 ball</b> bilan yakunlanadi!\n\n` +
+                    `Quyidagi tugmani bosib testni boshlang 👇`,
+                    {
+                        parse_mode: 'HTML',
+                        ...Markup.inlineKeyboard([[
+                            Markup.button.callback('🏁 TESTNI BOSHLASH', 'start_actual_tour')
+                        ]])
+                    }
+                ).catch(() => {})
+            ));
+            if (i + chunkSize < parts.length) await new Promise(r => setTimeout(r, 500));
         }
+        return;
+    }
+
+    // ── 2. Musobaqa boshlangan va vaqti o'tib ketgan (cron zahira tekshiruvi) ──
+    if (tour.started && tour.deadlineTime && Date.now() >= tour.deadlineTime && tour.isActive) {
+        console.log('🏁 Cron zahira: deadline o\'tib ketgan, tugatmoqda...');
+        await forceFinishAllParticipants();
     }
 });
+
+// ── Bot qayta ishga tushganda deadline ni tiklash ──
+(async () => {
+    await new Promise(r => setTimeout(r, 3000)); // bot to'liq yuklanishini kutish
+    try {
+        const db   = getDb();
+        const tour = db.tournament;
+        if (tour?.isActive && tour.started && tour.deadlineTime) {
+            const remaining = tour.deadlineTime - Date.now();
+            if (remaining > 0) {
+                console.log(`🔄 Bot restart: musobaqa deadline tiklandi (${Math.round(remaining/1000)}s qoldi)`);
+                scheduleTourDeadline(tour.deadlineTime);
+            } else {
+                console.log('⚠️ Bot restart: musobaqa vaqti o\'tib ketgan — darhol tugatilmoqda');
+                await forceFinishAllParticipants();
+            }
+        }
+    } catch (err) { console.error('[Restart recovery]', err.message); }
+})();
 
 // ============================================================
 // EXPRESS API
