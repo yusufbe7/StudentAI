@@ -2122,12 +2122,66 @@ bot.catch((err, ctx) => {
 });
 
 // ============================================================
-// ISHGA TUSHIRISH
+// ISHGA TUSHIRISH — WEBHOOK yoki POLLING avtomatik
 // ============================================================
-app.listen(PORT, '0.0.0.0', () => console.log(`🌐 Express server ${PORT}-portda`));
-bot.launch()
-    .then(() => console.log('✅ Bot muvaffaqiyatli ishga tushdi!'))
-    .catch(err => console.error('❌ Bot ishga tushmadi:', err.message));
 
-process.once('SIGINT',  () => bot.stop('SIGINT'));
-process.once('SIGTERM', () => bot.stop('SIGTERM'));
+app.listen(PORT, '0.0.0.0', () => console.log(`🌐 Express server ${PORT}-portda`));
+
+// Railway/Render da WEBHOOK_URL env bo'lsa — webhook, aks holda polling
+const WEBHOOK_URL = process.env.WEBHOOK_URL || process.env.RAILWAY_STATIC_URL || null;
+
+async function startBot() {
+    // Avvalgi webhook ni tozalash
+    try { await bot.telegram.deleteWebhook(); } catch {}
+
+    if (WEBHOOK_URL) {
+        // ── WEBHOOK REJIMI ──
+        const webhookPath = `/webhook/${BOT_TOKEN}`;
+        const fullUrl     = `${WEBHOOK_URL.replace(/\/$/, '')}${webhookPath}`;
+
+        // Express ga webhook handler qo'shish
+        app.use(bot.webhookCallback(webhookPath));
+
+        // Webhook o'rnatish
+        await bot.telegram.setWebhook(fullUrl, {
+            allowed_updates: ['message','callback_query','inline_query'],
+            drop_pending_updates: true,
+        });
+
+        console.log(`✅ Bot WEBHOOK rejimida ishga tushdi!`);
+        console.log(`🔗 Webhook URL: ${fullUrl}`);
+    } else {
+        // ── POLLING REJIMI (local dev) ──
+        // Ulanishda retry — Railway cold start uchun
+        let attempt = 0;
+        const maxAttempts = 5;
+
+        const tryLaunch = async () => {
+            attempt++;
+            try {
+                await bot.launch({
+                    allowedUpdates: ['message','callback_query','inline_query'],
+                    dropPendingUpdates: true,
+                });
+                console.log('✅ Bot POLLING rejimida ishga tushdi!');
+            } catch (err) {
+                console.error(`❌ Bot ishga tushmadi (urinish ${attempt}/${maxAttempts}):`, err.message);
+                if (attempt < maxAttempts) {
+                    const delay = attempt * 3000;
+                    console.log(`⏳ ${delay/1000}s dan keyin qayta urinish...`);
+                    setTimeout(tryLaunch, delay);
+                } else {
+                    console.error('💀 Bot ishga tushmadi — barcha urinishlar tugadi');
+                    // Ilovani o'chirmaymiz — Express server ishlaydi
+                }
+            }
+        };
+
+        await tryLaunch();
+    }
+}
+
+startBot().catch(err => console.error('❌ startBot xatolik:', err.message));
+
+process.once('SIGINT',  () => { bot.stop('SIGINT');  process.exit(0); });
+process.once('SIGTERM', () => { bot.stop('SIGTERM'); process.exit(0); });
