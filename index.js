@@ -1981,6 +1981,45 @@ app.get('/api/top-user', (req, res) => {
     });
 });
 
+
+
+// ══════════════════════════════════════════════════════════════
+// INDEX.JS GA QO'SHISH KERAK BO'LGAN YANGI ENDPOINT
+// app.get('/api/leaderboard') dan OLDIN qo'shing
+// ══════════════════════════════════════════════════════════════
+
+// Subjects API — web app uchun savollar bazasi
+app.get('/api/subjects', (req, res) => {
+    try {
+        // Faqat savollar ma'lumotini qaytarish (hajmni kamaytirish uchun)
+        const result = {};
+        Object.entries(SUBJECTS).forEach(([key, sub]) => {
+            if (sub && sub.questions && sub.questions.length > 0) {
+                result[key] = {
+                    title:     sub.title || key,
+                    questions: sub.questions.map(q => ({
+                        q:       q.q,
+                        a:       q.a,
+                        options: q.options,
+                        hint:    q.hint || null,
+                        // image ni ham yuboramiz (agar bor bo'lsa)
+                        image:   q.image || null,
+                    }))
+                };
+            }
+        });
+        res.json(result);
+    } catch (err) {
+        console.error('[Subjects API]', err.message);
+        res.status(500).json({ error: 'Xatolik yuz berdi' });
+    }
+});
+
+// ══════════════════════════════════════════════════════════════
+// CHAT API ENDPOINTLARI (ixtiyoriy — server-side chat uchun)
+// Hozircha localStorage ishlatilmoqda, keyinchalik server-ga o'tkazish mumkin
+// ══════════════════════════════════════════════════════════════
+
 // TOP 10 reyting (leaderboard)
 app.get('/api/leaderboard', (req, res) => {
     const db = getDb();
