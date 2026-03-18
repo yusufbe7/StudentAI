@@ -2023,19 +2023,41 @@ app.get('/api/subjects', (req, res) => {
 // TOP 10 reyting (leaderboard)
 app.get('/api/leaderboard', (req, res) => {
     const db = getDb();
-    const sorted = Object.values(db.users)
+    const ws = getWebScores();
+
+    // Telegram bot foydalanuvchilari
+    const tgUsers = Object.values(db.users)
         .filter(u => u && isValidName(u.name) && (u.score || 0) > 0)
-        .sort((a, b) => (b.score || 0) - (a.score || 0))
-        .slice(0, 10)
         .map(u => ({
-            name:       u.name       || '—',
-            tgUsername: (u.username  || '').replace('@', ''),
-            score:      u.score      || 0,
+            name:       u.name,
+            tgUsername: (u.username || '').replace('@', ''),
+            score:      u.score || 0,
             totalTests: u.totalTests || 0,
-            univ:       u.univ       || '',
-            kurs:       u.kurs       || '',
-            yonalish:   u.yonalish   || '',
+            univ:       u.univ || '',
+            kurs:       u.kurs || '',
+            yonalish:   u.yonalish || '',
+            isTg:       true,
         }));
+
+    // Web-only foydalanuvchilar (TG da yo'q)
+    const tgNames = new Set(tgUsers.map(u => u.name.toLowerCase().trim()));
+    const webUsers = Object.values(ws)
+        .filter(u => u && isValidName(u.name) && (u.score || 0) > 0 && !tgNames.has((u.name || '').toLowerCase().trim()))
+        .map(u => ({
+            name:       u.name,
+            tgUsername: u.username || '',
+            score:      u.score || 0,
+            totalTests: u.totalTests || 0,
+            univ:       '—',
+            kurs:       '—',
+            yonalish:   '—',
+            isTg:       false,
+        }));
+
+    const sorted = [...tgUsers, ...webUsers]
+        .sort((a, b) => (b.score || 0) - (a.score || 0))
+        .slice(0, 10);
+
     res.json(sorted);
 });
 
@@ -2163,6 +2185,323 @@ bot.catch((err, ctx) => {
 // ============================================================
 // ISHGA TUSHIRISH — WEBHOOK yoki POLLING avtomatik
 // ============================================================
+// ============================================================
+// BU KODLARNI index.js DA app.listen DAN OLDIN QO'SHING
+// ============================================================
+
+// Chat xabarlar fayli
+const CHAT_MSGS_PATH = path.join(DATA_DIR, 'chat_messages.json');
+const getChatMsgs  = () => readJSON(CHAT_MSGS_PATH, {});
+const saveChatMsgs = (d) => writeJSON(CHAT_MSGS_PATH, d);
+
+// Web test ballari fayli
+const WEB_SCORES_PATH = path.join(DATA_DIR, 'web_scores.json');
+const getWebScores  = () => readJSON(WEB_SCORES_PATH, {});
+const saveWebScores = (d) => writeJSON(WEB_SCORES_PATH, d);
+
+// ─── Chat ID generator ───
+function chatId(n1, n2) { return [n1, n2].sort().join('__CHAT__'); }
+
+// ═══════════════════════════════════════════════
+// CHAT API
+// ═══════════════════════════════════════════════
+
+// Xabar yuborish
+app.post('/api/chat/send', (req, res) => {
+    try {
+        const { fromName, toName, text } = req.body;
+        if (!fromName || !toName || !text?.trim()) return res.status(400).json({ error: 'Parametrlar yetishmayapti' });
+
+        const chats = getChatMsgs();
+        const cid   = chatId(fromName, toName);
+        if (!chats[cid]) chats[cid] = [];
+
+        const msg = {
+            id:   Date.now() + '_' + Math.random().toString(36).slice(2,7),
+            from: fromName,
+            to:   toName,
+            text: text.trim(),
+            ts:   Date.now(),
+            read: false,
+        };
+        chats[cid].push(msg);
+
+        // Faqat oxirgi 500 ta xabarni saqlash (xotira tejash)
+        if (chats[cid].length > 500) chats[cid] = chats[cid].slice(-500);
+
+        saveChatMsgs(chats);
+        res.json({ success: true, msg });
+    } catch (err) {
+        console.error('[Chat send]', err.message);
+        res.status(500).json({ error: 'Xatolik' });
+    }
+});
+
+// Xabarlarni olish (since timestamp dan keyin)
+app.get('/api/chat/messages', (req, res) => {
+    try {
+        const { name1, name2, since = 0 } = req.query;
+        if (!name1 || !name2) return res.status(400).json({ error: 'name1 va name2 kerak' });
+
+        const chats = getChatMsgs();
+        const cid   = chatId(name1, name2);
+        const msgs  = (chats[cid] || []).filter(m => m.ts > parseInt(since));
+
+        res.json({ messages: msgs });
+    } catch (err) {
+        res.status(500).json({ error: 'Xatolik' });
+    }
+});
+
+// Xabarlarni o'qilgan deb belgilash
+app.post('/api/chat/read', (req, res) => {
+    try {
+        const { myName, otherName } = req.body;
+        if (!myName || !otherName) return res.status(400).json({ error: 'Parametrlar kerak' });
+
+        const chats = getChatMsgs();
+        const cid   = chatId(myName, otherName);
+        if (chats[cid]) {
+            chats[cid].forEach(m => { if (m.to === myName) m.read = true; });
+            saveChatMsgs(chats);
+        }
+        res.json({ success: true });
+    } catch (err) {
+        res.status(500).json({ error: 'Xatolik' });
+    }
+});
+
+// O'qilmagan xabarlar soni
+app.get('/api/chat/unread', (req, res) => {
+    try {
+        const { myName } = req.query;
+        if (!myName) return res.status(400).json({ error: 'myName kerak' });
+
+        const chats = getChatMsgs();
+        let total = 0;
+        const byChat = {};
+
+        Object.entries(chats).forEach(([cid, msgs]) => {
+            const unread = msgs.filter(m => m.to === myName && !m.read).length;
+            if (unread > 0) { total += unread; byChat[cid] = unread; }
+        });
+
+        res.json({ total, byChat });
+    } catch (err) {
+        res.status(500).json({ error: 'Xatolik' });
+    }
+});
+
+// Chat ro'yxati (oxirgi xabar preview bilan)
+app.get('/api/chat/list', (req, res) => {
+    try {
+        const { myName } = req.query;
+        if (!myName) return res.status(400).json({ error: 'myName kerak' });
+
+        const chats = getChatMsgs();
+        const list  = [];
+
+        Object.entries(chats).forEach(([cid, msgs]) => {
+            if (!msgs.length) return;
+            const relevant = msgs.some(m => m.from === myName || m.to === myName);
+            if (!relevant) return;
+
+            const last    = msgs[msgs.length - 1];
+            const other   = last.from === myName ? last.to : last.from;
+            const unread  = msgs.filter(m => m.to === myName && !m.read).length;
+
+            list.push({
+                cid,
+                otherName: other,
+                lastMsg:   last.text,
+                lastFrom:  last.from,
+                lastTs:    last.ts,
+                unread,
+            });
+        });
+
+        list.sort((a, b) => b.lastTs - a.lastTs);
+        res.json(list);
+    } catch (err) {
+        res.status(500).json({ error: 'Xatolik' });
+    }
+});
+
+// ═══════════════════════════════════════════════
+// WEB TEST BALLARI — reytingga qo'shish
+// ═══════════════════════════════════════════════
+app.post('/api/web-score', (req, res) => {
+    try {
+        const { name, username, score, totalQ, wrongCount, subjectKey } = req.body;
+        if (!name || score === undefined) return res.status(400).json({ error: 'name va score kerak' });
+
+        // updateGlobalScore funksiyasiga o'xshash logika
+        const db = getDb();
+        const userId = 'web_' + name.toLowerCase().replace(/\s+/g, '_');
+
+        // Telegram botdagi foydalanuvchini ism bo'yicha topish
+        let realUserId = null;
+        for (const [id, u] of Object.entries(db.users || {})) {
+            if ((u.name || '').toLowerCase().trim() === (name || '').toLowerCase().trim()) {
+                realUserId = id; break;
+            }
+        }
+
+        if (realUserId) {
+            // Telegram botdagi haqiqiy foydalanuvchi topildi — unga qo'shamiz
+            const u = db.users[realUserId];
+            u.score        = (u.score        || 0) + score;
+            u.totalTests   = (u.totalTests   || 0) + 1;
+            u.totalCorrect = (u.totalCorrect || 0) + score;
+            u.totalWrong   = (u.totalWrong   || 0) + (wrongCount || 0);
+
+            if (subjectKey) {
+                if (!u.subjects) u.subjects = {};
+                const sk = subjectKey;
+                if (!u.subjects[sk]) u.subjects[sk] = { tests: 0, correct: 0, wrong: 0 };
+                u.subjects[sk].tests++;
+                u.subjects[sk].correct += score;
+                u.subjects[sk].wrong   += (wrongCount || 0);
+            }
+            saveDb(db);
+            return res.json({ success: true, source: 'telegram_user', newScore: u.score });
+        }
+
+        // Telegram botda topilmadi — alohida web_scores da saqlaymiz
+        const ws = getWebScores();
+        const wKey = name.toLowerCase().trim();
+        if (!ws[wKey]) ws[wKey] = { name, username: username || '', score: 0, totalTests: 0, totalCorrect: 0, totalWrong: 0, subjects: {}, createdAt: Date.now() };
+
+        ws[wKey].score        += score;
+        ws[wKey].totalTests   += 1;
+        ws[wKey].totalCorrect += score;
+        ws[wKey].totalWrong   += (wrongCount || 0);
+        ws[wKey].lastActive    = Date.now();
+
+        if (subjectKey) {
+            if (!ws[wKey].subjects[subjectKey]) ws[wKey].subjects[subjectKey] = { tests: 0, correct: 0, wrong: 0 };
+            ws[wKey].subjects[subjectKey].tests++;
+            ws[wKey].subjects[subjectKey].correct += score;
+            ws[wKey].subjects[subjectKey].wrong   += (wrongCount || 0);
+        }
+
+        saveWebScores(ws);
+        res.json({ success: true, source: 'web_only', newScore: ws[wKey].score });
+    } catch (err) {
+        console.error('[Web score]', err.message);
+        res.status(500).json({ error: 'Xatolik' });
+    }
+});
+
+// ═══════════════════════════════════════════════
+// TELEGRAM PROFIL RASMI
+// ═══════════════════════════════════════════════
+app.get('/api/telegram-photo/:userId', async (req, res) => {
+    try {
+        const userId = req.params.userId;
+        // Avval DB dan foydalanuvchini topish
+        const db = getDb();
+        let targetId = null;
+
+        // Raqam bo'lsa — bevosita ID
+        if (/^\d+$/.test(userId)) {
+            targetId = parseInt(userId);
+        } else {
+            // Ism bo'yicha qidirish
+            for (const [id, u] of Object.entries(db.users || {})) {
+                if ((u.name || '').toLowerCase().trim() === userId.toLowerCase().trim()) {
+                    targetId = parseInt(id); break;
+                }
+            }
+        }
+
+        if (!targetId) return res.status(404).json({ error: 'Foydalanuvchi topilmadi' });
+
+        // Telegram API dan rasm olish
+        try {
+            const photos = await bot.telegram.getUserProfilePhotos(targetId, { limit: 1 });
+            if (!photos.total_count || !photos.photos[0]?.length) {
+                return res.status(404).json({ error: 'Rasm yo\'q' });
+            }
+            const fileId  = photos.photos[0][photos.photos[0].length - 1].file_id;
+            const fileInfo = await bot.telegram.getFile(fileId);
+            const fileUrl  = `https://api.telegram.org/file/bot${BOT_TOKEN}/${fileInfo.file_path}`;
+
+            // Rasmni proxy sifatida qaytarish
+            const https = require('https');
+            https.get(fileUrl, (imgRes) => {
+                res.setHeader('Content-Type', imgRes.headers['content-type'] || 'image/jpeg');
+                res.setHeader('Cache-Control', 'public, max-age=3600');
+                imgRes.pipe(res);
+            }).on('error', () => res.status(500).json({ error: 'Rasm yuklanmadi' }));
+        } catch (telegramErr) {
+            console.error('[TG Photo]', telegramErr.message);
+            res.status(404).json({ error: 'Rasm olinmadi' });
+        }
+    } catch (err) {
+        console.error('[Telegram photo]', err.message);
+        res.status(500).json({ error: 'Xatolik' });
+    }
+});
+
+// Barcha foydalanuvchilar Telegram ID map
+app.get('/api/users-map', (req, res) => {
+    try {
+        const db = getDb();
+        const result = {};
+        Object.entries(db.users || {}).forEach(([id, u]) => {
+            if (u.name) result[u.name.toLowerCase().trim()] = { id: parseInt(id), name: u.name, username: u.username || '' };
+        });
+        res.json(result);
+    } catch (err) {
+        res.status(500).json({ error: 'Xatolik' });
+    }
+});
+
+// Leaderboard — web scores ham qo'shilgan holda
+// Mavjud /api/leaderboard ni ALMASHTIRING:
+// (Bu funksiyani index.js da app.get('/api/leaderboard') ni quyidagiga almashtiring)
+/*
+app.get('/api/leaderboard', (req, res) => {
+    const db = getDb();
+    const ws = getWebScores();
+
+    // Telegram bot foydalanuvchilari
+    const tgUsers = Object.values(db.users)
+        .filter(u => u && isValidName(u.name) && (u.score || 0) > 0)
+        .map(u => ({
+            name:       u.name,
+            tgUsername: (u.username || '').replace('@', ''),
+            score:      u.score || 0,
+            totalTests: u.totalTests || 0,
+            univ:       u.univ || '',
+            kurs:       u.kurs || '',
+            yonalish:   u.yonalish || '',
+            isTg:       true,
+        }));
+
+    // Web-only foydalanuvchilar (TG da yo'q)
+    const tgNames = new Set(tgUsers.map(u => u.name.toLowerCase().trim()));
+    const webUsers = Object.values(ws)
+        .filter(u => u && isValidName(u.name) && (u.score || 0) > 0 && !tgNames.has((u.name || '').toLowerCase().trim()))
+        .map(u => ({
+            name:       u.name,
+            tgUsername: u.username || '',
+            score:      u.score || 0,
+            totalTests: u.totalTests || 0,
+            univ:       '—',
+            kurs:       '—',
+            yonalish:   '—',
+            isTg:       false,
+        }));
+
+    const sorted = [...tgUsers, ...webUsers]
+        .sort((a, b) => (b.score || 0) - (a.score || 0))
+        .slice(0, 10);
+
+    res.json(sorted);
+});
+*/
 
 app.listen(PORT, '0.0.0.0', () => console.log(`🌐 Express server ${PORT}-portda`));
 
