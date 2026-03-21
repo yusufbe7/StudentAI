@@ -2209,20 +2209,21 @@ function chatId(n1, n2) { return [n1, n2].sort().join('__CHAT__'); }
 // Xabar yuborish
 app.post('/api/chat/send', (req, res) => {
     try {
-        const { fromName, toName, text } = req.body;
-        if (!fromName || !toName || !text?.trim()) return res.status(400).json({ error: 'Parametrlar yetishmayapti' });
+        const { fromName, toName, text, imageData } = req.body;
+        if (!fromName || !toName || (!text?.trim() && !imageData)) return res.status(400).json({ error: 'Parametrlar yetishmayapti' });
 
         const chats = getChatMsgs();
         const cid   = chatId(fromName, toName);
         if (!chats[cid]) chats[cid] = [];
 
         const msg = {
-            id:   Date.now() + '_' + Math.random().toString(36).slice(2,7),
-            from: fromName,
-            to:   toName,
-            text: text.trim(),
-            ts:   Date.now(),
-            read: false,
+            id:        Date.now() + '_' + Math.random().toString(36).slice(2,7),
+            from:      fromName,
+            to:        toName,
+            text:      text?.trim() || '',
+            imageData: imageData || null,
+            ts:        Date.now(),
+            read:      false,
         };
         chats[cid].push(msg);
 
@@ -2313,7 +2314,7 @@ app.get('/api/chat/list', (req, res) => {
             list.push({
                 cid,
                 otherName: other,
-                lastMsg:   last.text,
+                lastMsg:   last.imageData ? '[Rasm 🖼️]' : last.text,
                 lastFrom:  last.from,
                 lastTs:    last.ts,
                 unread,
@@ -2323,6 +2324,37 @@ app.get('/api/chat/list', (req, res) => {
         list.sort((a, b) => b.lastTs - a.lastTs);
         res.json(list);
     } catch (err) {
+        res.status(500).json({ error: 'Xatolik' });
+    }
+});
+
+// VIP bo'lmagan foydalanuvchiga bot orqali xabar yuborish
+app.post('/api/notify-non-vip', async (req, res) => {
+    try {
+        const { name } = req.body;
+        if (!name) return res.status(400).json({ error: 'name kerak' });
+
+        const db = getDb();
+        let userId = null;
+        for (const [id, u] of Object.entries(db.users || {})) {
+            if ((u.name || '').toLowerCase().trim() === (name || '').toLowerCase().trim()) {
+                userId = id; break;
+            }
+        }
+        if (!userId) return res.status(404).json({ error: 'Foydalanuvchi topilmadi' });
+
+        await bot.telegram.sendMessage(userId,
+            `💎 <b>VIP A'zolik kerak!</b>\n\nWeb orqali test ishlash uchun VIP a'zo bo'lishingiz kerak.\n\n` +
+            `💳 Karta: <code>4073420058363577</code>\n` +
+            `👤 Egasi: M.M\n` +
+            `💰 Summa: <b>6,000 so'm</b>\n\n` +
+            `To'lov qilgandan so'ng chekni yuborib /buy_vip buyrug'ini yuboring.`,
+            { parse_mode: 'HTML' }
+        ).catch(() => {});
+
+        res.json({ success: true });
+    } catch (err) {
+        console.error('[notify-non-vip]', err.message);
         res.status(500).json({ error: 'Xatolik' });
     }
 });

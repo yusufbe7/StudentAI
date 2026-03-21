@@ -229,6 +229,20 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .chat-inp::placeholder{color:var(--muted);}
 .chat-send{width:40px;height:40px;border-radius:11px;background:linear-gradient(135deg,var(--accent),var(--a2));border:none;color:#fff;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:transform .15s;}
 .chat-send:active{transform:scale(.9);}
+.chat-img-btn{width:36px;height:36px;border-radius:10px;background:var(--s2);border:1px solid var(--border);color:var(--muted2);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s;}
+.chat-img-btn:hover{border-color:var(--accent);color:var(--accent);}
+.msg-img{max-width:220px;max-height:220px;border-radius:10px;display:block;cursor:pointer;margin-top:4px;}
+/* NEW CHAT MODAL */
+#new-chat-modal .modal{max-height:80vh;display:flex;flex-direction:column;}
+.new-chat-list{flex:1;overflow-y:auto;max-height:50vh;margin-top:8px;}
+.new-chat-item{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);cursor:pointer;transition:opacity .15s;}
+.new-chat-item:last-child{border-bottom:none;}
+.new-chat-item:hover{opacity:.8;}
+/* FULL IMG VIEWER */
+#img-viewer{position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:999;display:none;align-items:center;justify-content:center;}
+#img-viewer.on{display:flex;}
+#img-viewer img{max-width:95vw;max-height:90vh;border-radius:10px;object-fit:contain;}
+#img-viewer-close{position:fixed;top:16px;right:16px;width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.15);border:none;color:#fff;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
 .chat-list-item{display:flex;align-items:center;gap:12px;padding:12px;background:var(--s1);border:1px solid var(--border);border-radius:13px;margin-bottom:8px;cursor:pointer;transition:border-color .2s;}
 .chat-list-item:hover{border-color:var(--border2);}
 .cli-ava{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--a2));display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;flex-shrink:0;overflow:hidden;}
@@ -449,8 +463,11 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
       <!-- CHATS -->
       <div class="tab-panel" id="tab-chats">
         <div class="card">
-          <div class="card-title">💬 Suhbatlar</div>
-          <div id="chats-list"><div style="color:var(--muted);font-size:13px;text-align:center;padding:20px;">Hozircha suhbat yo'q.<br><span style="font-size:12px;">Reyting bo'limida foydalanuvchi profiliga bosib chat boshlang.</span></div></div>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+            <div class="card-title" style="margin:0;">💬 Suhbatlar</div>
+            <button onclick="openNewChatModal()" style="padding:7px 14px;background:linear-gradient(135deg,var(--accent),var(--a2));border:none;border-radius:10px;color:#fff;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700;cursor:pointer;box-shadow:0 2px 8px rgba(79,124,255,.3);">+ Yangi</button>
+          </div>
+          <div id="chats-list"><div style="color:var(--muted);font-size:13px;text-align:center;padding:20px;">Hozircha suhbat yo'q.<br><span style="font-size:12px;">"+ Yangi" tugmasini bosib chat boshlang.</span></div></div>
         </div>
       </div>
 
@@ -604,8 +621,26 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
   </div>
   <div class="chat-msgs" id="chat-msgs"></div>
   <div class="chat-inp-wrap">
+    <label for="chat-img-inp" class="chat-img-btn" title="Rasm yuborish">📷</label>
+    <input type="file" id="chat-img-inp" accept="image/*" style="display:none" onchange="sendImgMsg(this)">
     <textarea class="chat-inp" id="chat-inp" placeholder="Xabar yozing..." rows="1" onkeydown="chatKeyDown(event)"></textarea>
     <button class="chat-send" onclick="sendMsg()">➤</button>
+  </div>
+</div>
+
+<!-- FULL IMAGE VIEWER -->
+<div id="img-viewer">
+  <button id="img-viewer-close" onclick="document.getElementById('img-viewer').classList.remove('on')">✕</button>
+  <img id="img-viewer-src" src="" alt="">
+</div>
+
+<!-- NEW CHAT MODAL -->
+<div class="modal-wrap" id="new-chat-modal">
+  <div class="modal" style="max-height:80vh;display:flex;flex-direction:column;overflow:hidden;">
+    <button class="modal-close" onclick="document.getElementById('new-chat-modal').classList.remove('on')">✕</button>
+    <div class="modal-title">💬 Yangi Chat Boshlash</div>
+    <div class="field" style="margin-bottom:8px;"><input class="field-inp" id="new-chat-search" type="text" placeholder="Ism yoki username bo'yicha qidirish..." oninput="filterNewChat(this.value)" autocomplete="off"></div>
+    <div id="new-chat-list" class="new-chat-list"><div style="color:var(--muted);font-size:13px;text-align:center;padding:20px;">Yuklanmoqda...</div></div>
   </div>
 </div>
 
@@ -973,10 +1008,15 @@ function showVipModal(){
 }
 
 function openTgBot(){
-  // Telegramda botga o'tib VIP xabar yuborish
-  const botUsername = 'student_aitex_bot'; // o'z bot username ingizni yozing
-  window.open(`https://t.me/${botUsername}?start=vip`, '_blank');
+  const botUsername = 'student_aitex_bot';
+  const botUrl = `https://t.me/${botUsername}?start=vip`;
   document.getElementById('vip-modal').classList.remove('on');
+  if(tg && tg.openTelegramLink){
+    tg.openTelegramLink(botUrl);
+    setTimeout(()=>{ if(tg.close) tg.close(); }, 800);
+  } else {
+    window.open(botUrl, '_blank');
+  }
 }
 
 // ═══════════════════════════════════════════════════════════
@@ -1255,6 +1295,15 @@ async function startTest(mode){
   if(sess && !sess.isAdmin){
     const isVip = await checkMyVip();
     if(!isVip){
+      // Bot orqali xabar yuborish
+      const users = getUsers();
+      const user = users[sess.username];
+      if(user?.name){
+        fetch('/api/notify-non-vip',{
+          method:'POST', headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({name: user.name})
+        }).catch(()=>{});
+      }
       showVipModal();
       return;
     }
@@ -1339,11 +1388,24 @@ async function showResult(){
   // ✅ Server ga natija yuborish — reyting yangilanadi
   await submitScore(s);
 
+  const passed = parseFloat(pct) >= 65;
+  const passBlock = passed
+    ? `<div style="background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.3);border-radius:14px;padding:14px;margin-bottom:14px;text-align:center;">
+        <div style="font-size:28px;margin-bottom:6px;">🎉</div>
+        <div style="font-size:17px;font-weight:700;color:var(--success);">Imtihondan o'tdingiz!</div>
+        <div style="font-size:12px;color:rgba(34,197,94,.7);margin-top:4px;">${pct}% — 65% dan yuqori</div>
+      </div>`
+    : `<div style="background:rgba(244,63,94,.08);border:1px solid rgba(244,63,94,.25);border-radius:14px;padding:14px;margin-bottom:14px;text-align:center;">
+        <div style="font-size:28px;margin-bottom:6px;">📚</div>
+        <div style="font-size:17px;font-weight:700;color:var(--danger);">Imtihondan o'tmadingiz</div>
+        <div style="font-size:12px;color:rgba(244,63,94,.7);margin-top:4px;">O'tish uchun 65% va undan yuqori ball kerak</div>
+      </div>`;
   const html=`<div style="text-align:center;padding:20px 0;">
-    <div style="width:100px;height:100px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--a2));display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 20px;box-shadow:0 0 40px rgba(79,124,255,.4);">
+    <div style="width:100px;height:100px;border-radius:50%;background:linear-gradient(135deg,${passed?'var(--success),#16a34a':'var(--accent),var(--a2)'});display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 20px;box-shadow:0 0 40px ${passed?'rgba(34,197,94,.4)':'rgba(79,124,255,.4)'};">
       <div style="font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:700;color:#fff;">${pct}%</div>
       <div style="font-size:11px;color:rgba(255,255,255,.8);">natija</div>
     </div>
+    ${passBlock}
     <h3 style="font-size:18px;font-weight:700;margin-bottom:8px;">${parseFloat(pct)>=80?'🌟 Ajoyib!':parseFloat(pct)>=60?'👍 Yaxshi!':parseFloat(pct)>=40?'💪 Davom eting!':'📚 Ko\'proq o\'qing!'}</h3>
     <div style="font-size:13px;color:var(--success);font-weight:600;margin-bottom:12px;">+${s.score} ball reytingga qo'shildi!</div>
     <div class="res-grid">
@@ -1605,6 +1667,7 @@ function renderMsgs(myName){
 
   let html='', lastDate='';
   _msgs.forEach(msg=>{
+    if(msg.imageData) _imgCache[msg.id] = msg.imageData;
     const d=new Date(msg.ts);
     const ds=d.toLocaleDateString('uz-UZ',{day:'2-digit',month:'2-digit',year:'numeric'});
     if(ds!==lastDate){ html+=`<div class="msg-date-sep">${ds}</div>`; lastDate=ds; }
@@ -1613,10 +1676,13 @@ function renderMsgs(myName){
     const mi=ini(msg.from);
     const mav=mUrl?`<img src="${mUrl}" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentElement.innerHTML='<span>${mi}</span>'">`:`<span>${mi}</span>`;
     const ts=d.toLocaleTimeString('uz-UZ',{hour:'2-digit',minute:'2-digit'});
+    const msgContent = msg.imageData
+      ? `<img src="${msg.imageData}" class="msg-img" onclick="openFullImg('${msg.id}')" alt="Rasm">`
+      : escH(msg.text);
     html+=`<div class="msg-wrap ${isMine?'mine':'theirs'}">
       <div class="msg-ava">${mav}</div>
       <div>
-        <div class="msg-bubble">${escH(msg.text)}
+        <div class="msg-bubble"${msg.imageData?' style="padding:6px;background:'+(isMine?'linear-gradient(135deg,var(--accent),var(--a2))':'var(--s2)')+';"':''}>${msgContent}
           <div class="msg-time">${ts}${isMine&&msg.read?' ✓✓':''}</div>
         </div>
       </div>
@@ -1659,6 +1725,98 @@ async function sendMsg(){
 
 function chatKeyDown(e){
   if(e.key==='Enter'&&!e.shiftKey){ e.preventDefault(); sendMsg(); }
+}
+
+// Rasm xabarlarini kesh (to'liq ko'rish uchun)
+const _imgCache = {};
+
+function openFullImg(msgId){
+  const src = _imgCache[msgId];
+  if(!src) return;
+  document.getElementById('img-viewer-src').src = src;
+  document.getElementById('img-viewer').classList.add('on');
+}
+
+// Rasmli xabar yuborish
+async function sendImgMsg(input){
+  const file = input.files[0];
+  if(!file || !_chatWith){ input.value=''; return; }
+  if(file.size > 5*1024*1024){ toast('Rasm 5MB dan katta!','bad'); input.value=''; return; }
+  const myName = getMyName(); if(!myName){ input.value=''; return; }
+  toast('Rasm yuborilmoqda...','');
+  const reader = new FileReader();
+  reader.onload = async function(e){
+    const imageData = e.target.result;
+    try{
+      const r = await fetch('/api/chat/send',{
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({fromName:myName, toName:_chatWith.name, text:'', imageData})
+      });
+      if(r.ok){
+        const data = await r.json();
+        if(data.msg){
+          if(data.msg.imageData) _imgCache[data.msg.id] = data.msg.imageData;
+          _msgs.push(data.msg);
+          _lastTs = data.msg.ts;
+          renderMsgs(myName);
+        }
+      } else { toast('Rasm yuborilmadi','bad'); }
+    }catch{ toast('Tarmoq xatosi','bad'); }
+    input.value='';
+  };
+  reader.readAsDataURL(file);
+}
+
+// ═══════════════════════════════════════════════════════════
+// YANGI CHAT — Foydalanuvchi qidirish
+// ═══════════════════════════════════════════════════════════
+let _allLbUsers = [];
+
+async function openNewChatModal(){
+  document.getElementById('new-chat-modal').classList.add('on');
+  document.getElementById('new-chat-search').value = '';
+  try{
+    const r = await fetch('/api/leaderboard');
+    if(r.ok){
+      _allLbUsers = await r.json();
+      renderNewChatList(_allLbUsers);
+    }
+  }catch{
+    document.getElementById('new-chat-list').innerHTML='<div style="color:var(--muted);font-size:13px;text-align:center;padding:20px;">Foydalanuvchilar yuklanmadi</div>';
+  }
+}
+
+function renderNewChatList(users){
+  const myName = getMyName();
+  const el = document.getElementById('new-chat-list');
+  const filtered = users.filter(u => u.name && u.name !== myName);
+  if(!filtered.length){
+    el.innerHTML='<div style="color:var(--muted);font-size:13px;text-align:center;padding:20px;">Foydalanuvchi topilmadi</div>';
+    return;
+  }
+  let html = '';
+  filtered.forEach(u=>{
+    const av = makeAvaHtml(u.name, u.tgUsername||'');
+    html += `<div class="new-chat-item" onclick="startNewChat('${escA(u.name)}','${escA(u.tgUsername||'')}')">
+      <div style="width:40px;height:40px;border-radius:11px;background:linear-gradient(135deg,var(--accent),var(--a2));display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;flex-shrink:0;overflow:hidden;">${av}</div>
+      <div style="flex:1;min-width:0;">
+        <div style="font-size:14px;font-weight:600;">${escH(u.name)}</div>
+        <div style="font-size:12px;color:var(--muted2);">${u.tgUsername?'@'+u.tgUsername+' · ':''}${u.univ||''}</div>
+      </div>
+    </div>`;
+  });
+  el.innerHTML = html;
+}
+
+function filterNewChat(query){
+  const q = query.toLowerCase().trim();
+  const filtered = q ? _allLbUsers.filter(u=>(u.name||'').toLowerCase().includes(q)||(u.tgUsername||'').toLowerCase().includes(q)) : _allLbUsers;
+  renderNewChatList(filtered);
+}
+
+function startNewChat(name, tgUname){
+  document.getElementById('new-chat-modal').classList.remove('on');
+  openChat(name, tgUname);
 }
 
 // O'qilmagan xabarlar soni
@@ -1803,7 +1961,7 @@ async function confirmReject(){
 // ═══════════════════════════════════════════════════════════
 // ADMIN AUTH MODAL
 // ═══════════════════════════════════════════════════════════
-document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ closeAdminModal(); document.getElementById('vip-modal').classList.remove('on'); } });
+document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ closeAdminModal(); document.getElementById('vip-modal').classList.remove('on'); document.getElementById('new-chat-modal').classList.remove('on'); document.getElementById('img-viewer').classList.remove('on'); } });
 function openAdminModal(){ document.getElementById('adm-modal').classList.add('on'); setTimeout(()=>document.getElementById('adm-pass-inp').focus(),100); }
 function closeAdminModal(){ document.getElementById('adm-modal').classList.remove('on'); }
 function checkAdmin(){
