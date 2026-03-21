@@ -42,6 +42,8 @@ const PATHS = {
     subjects:   path.join(__dirname, 'subjects.json'),
     customQ:    path.join(DATA_DIR, 'custom_questions.json'),
     photos:     path.join(DATA_DIR, 'user_photos.json'),   // ✅ YANGI: Foydalanuvchi rasmlari
+    sessions:   path.join(DATA_DIR, 'test_sessions.json'),  // ✅ YANGI: Test sessiyalari (activity feed)
+    follows:    path.join(DATA_DIR, 'follows.json'),         // ✅ YANGI: Follow tizimi
 };
 
 // ============================================================
@@ -78,8 +80,12 @@ const getSettings  = ()  => readJSON(PATHS.settings, { timeLimit: 30 });
 const saveSettings = (s) => writeJSON(PATHS.settings, s);
 
 // ✅ YANGI: Rasm bazasini boshqarish
-const getPhotos  = ()  => readJSON(PATHS.photos, {});
-const savePhotos = (d) => writeJSON(PATHS.photos, d);
+const getPhotos    = ()  => readJSON(PATHS.photos, {});
+const savePhotos   = (d) => writeJSON(PATHS.photos, d);
+const getSessions  = ()  => readJSON(PATHS.sessions, []);
+const saveSessions = (d) => writeJSON(PATHS.sessions, d);
+const getFollows   = ()  => readJSON(PATHS.follows, {});
+const saveFollows  = (d) => writeJSON(PATHS.follows, d);
 
 // ============================================================
 // XOTIRA
@@ -2207,7 +2213,7 @@ function chatId(n1, n2) { return [n1, n2].sort().join('__CHAT__'); }
 // ═══════════════════════════════════════════════
 
 // Xabar yuborish
-app.post('/api/chat/send', (req, res) => {
+app.post('/api/chat/send', async (req, res) => {
     try {
         const { fromName, toName, text, imageData } = req.body;
         if (!fromName || !toName || (!text?.trim() && !imageData)) return res.status(400).json({ error: 'Parametrlar yetishmayapti' });
@@ -2232,6 +2238,28 @@ app.post('/api/chat/send', (req, res) => {
 
         saveChatMsgs(chats);
         res.json({ success: true, msg });
+
+        // ✅ Recipient'ga Telegram orqali xabar yuborish (async, response'ni to'smaymiz)
+        try {
+            const db = getDb();
+            const toLower = (toName || '').toLowerCase().trim();
+            for (const [uid, u] of Object.entries(db.users || {})) {
+                const uNameLower = (u.name || '').toLowerCase().trim();
+                const uUserLower = (u.username || '').replace('@','').toLowerCase().trim();
+                if (uNameLower === toLower || uUserLower === toLower) {
+                    const preview = imageData ? '🖼️ Rasm' : (text || '').slice(0, 100);
+                    await bot.telegram.sendMessage(uid,
+                        `💬 <b>Yangi xabar!</b>\n` +
+                        `👤 <b>Kimdan:</b> ${fromName}\n` +
+                        `📝 <b>Xabar:</b> ${preview}\n\n` +
+                        `<i>Web ilovada javob bering</i>`,
+                        { parse_mode: 'HTML' }
+                    ).catch(() => {});
+                    break;
+                }
+            }
+        } catch {}
+
     } catch (err) {
         console.error('[Chat send]', err.message);
         res.status(500).json({ error: 'Xatolik' });
@@ -2262,8 +2290,11 @@ app.post('/api/chat/read', (req, res) => {
 
         const chats = getChatMsgs();
         const cid   = chatId(myName, otherName);
+        const myLow = myName.toLowerCase().trim();
         if (chats[cid]) {
-            chats[cid].forEach(m => { if (m.to === myName) m.read = true; });
+            chats[cid].forEach(m => {
+                if ((m.to || '').toLowerCase().trim() === myLow) m.read = true;
+            });
             saveChatMsgs(chats);
         }
         res.json({ success: true });
@@ -2279,11 +2310,12 @@ app.get('/api/chat/unread', (req, res) => {
         if (!myName) return res.status(400).json({ error: 'myName kerak' });
 
         const chats = getChatMsgs();
+        const myLow = myName.toLowerCase().trim();
         let total = 0;
         const byChat = {};
 
         Object.entries(chats).forEach(([cid, msgs]) => {
-            const unread = msgs.filter(m => m.to === myName && !m.read).length;
+            const unread = msgs.filter(m => (m.to || '').toLowerCase().trim() === myLow && !m.read).length;
             if (unread > 0) { total += unread; byChat[cid] = unread; }
         });
 
@@ -2299,17 +2331,23 @@ app.get('/api/chat/list', (req, res) => {
         const { myName } = req.query;
         if (!myName) return res.status(400).json({ error: 'myName kerak' });
 
+        // ✅ Case-insensitive taqqoslash uchun
+        const myLow = myName.toLowerCase().trim();
+
         const chats = getChatMsgs();
         const list  = [];
 
         Object.entries(chats).forEach(([cid, msgs]) => {
             if (!msgs.length) return;
-            const relevant = msgs.some(m => m.from === myName || m.to === myName);
+            const relevant = msgs.some(m =>
+                (m.from || '').toLowerCase().trim() === myLow ||
+                (m.to   || '').toLowerCase().trim() === myLow
+            );
             if (!relevant) return;
 
-            const last    = msgs[msgs.length - 1];
-            const other   = last.from === myName ? last.to : last.from;
-            const unread  = msgs.filter(m => m.to === myName && !m.read).length;
+            const last   = msgs[msgs.length - 1];
+            const other  = (last.from || '').toLowerCase().trim() === myLow ? last.to : last.from;
+            const unread = msgs.filter(m => (m.to || '').toLowerCase().trim() === myLow && !m.read).length;
 
             list.push({
                 cid,
@@ -2534,6 +2572,150 @@ app.get('/api/leaderboard', (req, res) => {
     res.json(sorted);
 });
 */
+
+// ═══════════════════════════════════════════════════════════
+// YANGI API: Activity Feed (Home ekrani uchun)
+// ═══════════════════════════════════════════════════════════
+
+// Test sessiyasini saqlash
+app.post('/api/test-session', (req, res) => {
+    try {
+        const { name, tgUsername, subjectKey, subjectName, score, totalQ, wrongCount, durationMin } = req.body;
+        if (!name || score === undefined) return res.status(400).json({ error: 'name va score kerak' });
+
+        const sessions = getSessions();
+        const session = {
+            id: Date.now() + '_' + Math.random().toString(36).slice(2, 7),
+            name: name.trim(),
+            tgUsername: (tgUsername || '').replace('@', ''),
+            subjectKey: subjectKey || '',
+            subjectName: subjectName || subjectKey || 'Test',
+            score: score || 0,
+            totalQ: totalQ || 0,
+            wrongCount: wrongCount || 0,
+            correctCount: (totalQ || 0) - (wrongCount || 0),
+            durationMin: durationMin || 1,
+            ts: Date.now(),
+        };
+        sessions.unshift(session);
+        // Faqat oxirgi 200 ta sessiyani saqlash
+        saveSessions(sessions.slice(0, 200));
+        res.json({ success: true, session });
+    } catch (err) {
+        res.status(500).json({ error: 'Xatolik' });
+    }
+});
+
+// Faollik lentasini olish
+app.get('/api/activity-feed', (req, res) => {
+    try {
+        const sessions = getSessions();
+        const limit = Math.min(parseInt(req.query.limit) || 30, 50);
+        res.json(sessions.slice(0, limit));
+    } catch (err) {
+        res.status(500).json({ error: 'Xatolik' });
+    }
+});
+
+// ═══════════════════════════════════════════════════════════
+// YANGI API: Follow tizimi
+// ═══════════════════════════════════════════════════════════
+
+// Follow / Unfollow
+app.post('/api/follow', (req, res) => {
+    try {
+        const { follower, following } = req.body;
+        if (!follower || !following) return res.status(400).json({ error: 'follower va following kerak' });
+        if (follower.toLowerCase() === following.toLowerCase()) return res.status(400).json({ error: 'O\'zingizni follow qila olmaysiz' });
+
+        const follows = getFollows();
+        const fKey = follower.toLowerCase().trim();
+        if (!follows[fKey]) follows[fKey] = [];
+
+        const targetLower = following.toLowerCase().trim();
+        const idx = follows[fKey].findIndex(n => n.toLowerCase() === targetLower);
+        let action;
+        if (idx === -1) {
+            follows[fKey].push(following.trim());
+            action = 'followed';
+        } else {
+            follows[fKey].splice(idx, 1);
+            action = 'unfollowed';
+        }
+        saveFollows(follows);
+        res.json({ success: true, action });
+    } catch (err) {
+        res.status(500).json({ error: 'Xatolik' });
+    }
+});
+
+// Follow ma'lumotlari (followers, following counts va status)
+app.get('/api/follow-info', (req, res) => {
+    try {
+        const name = (req.query.name || '').toLowerCase().trim();
+        const myName = (req.query.myName || '').toLowerCase().trim();
+        if (!name) return res.status(400).json({ error: 'name kerak' });
+
+        const follows = getFollows();
+
+        // Kim uni follow qiladi (followers)
+        const followers = Object.entries(follows)
+            .filter(([, list]) => list.some(n => n.toLowerCase() === name))
+            .map(([follower]) => follower);
+
+        // U kimlarni follow qiladi (following)
+        const following = follows[name] || [];
+
+        // Menmi follow qilganman?
+        const isFollowing = myName
+            ? (follows[myName.toLowerCase()] || []).some(n => n.toLowerCase() === name)
+            : false;
+
+        res.json({ followers: followers.length, following: following.length, isFollowing });
+    } catch (err) {
+        res.status(500).json({ error: 'Xatolik' });
+    }
+});
+
+// Kengaytirilgan leaderboard (ball va sessiya soni bilan)
+app.get('/api/leaderboard-full', (req, res) => {
+    try {
+        const db = getDb();
+        const sessions = getSessions();
+
+        // Har bir foydalanuvchi uchun sessiya sonini hisoblash
+        const sessionCounts = {};
+        sessions.forEach(s => {
+            const k = (s.name || '').toLowerCase().trim();
+            if (!sessionCounts[k]) sessionCounts[k] = { count: 0, totalMin: 0 };
+            sessionCounts[k].count++;
+            sessionCounts[k].totalMin += (s.durationMin || 1);
+        });
+
+        const users = Object.values(db.users || {})
+            .filter(u => u && isValidName(u.name) && (u.score || 0) > 0)
+            .map(u => {
+                const k = (u.name || '').toLowerCase().trim();
+                const sc = sessionCounts[k] || { count: 0, totalMin: 0 };
+                return {
+                    name:       u.name,
+                    tgUsername: (u.username || '').replace('@', ''),
+                    score:      u.score || 0,
+                    totalTests: u.totalTests || 0,
+                    sessionCount: sc.count,
+                    totalMin:   sc.totalMin,
+                    univ:       u.univ || '',
+                    kurs:       u.kurs || '',
+                    yonalish:   u.yonalish || '',
+                };
+            })
+            .sort((a, b) => (b.score || 0) - (a.score || 0));
+
+        res.json(users);
+    } catch (err) {
+        res.status(500).json({ error: 'Xatolik' });
+    }
+});
 
 app.listen(PORT, '0.0.0.0', () => console.log(`🌐 Express server ${PORT}-portda`));
 

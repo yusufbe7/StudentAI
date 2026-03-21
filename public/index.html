@@ -993,14 +993,38 @@ async function checkMyVip(){
   if(!sess || sess.isAdmin){ _myVipStatus = true; return true; }
   const users = getUsers();
   const user = users[sess.username];
-  if(!user?.name){ _myVipStatus = false; return false; }
+  if(!user?.name){ _myVipStatus = true; return true; } // web-only user — ruxsat
+
   try{
-    const r = await fetch('/api/user-stats?name='+encodeURIComponent(user.name));
-    if(!r.ok){ _myVipStatus = false; return false; }
+    // 1. Ism bo'yicha qidirish
+    let r = await fetch('/api/user-stats?name='+encodeURIComponent(user.name));
+
+    // 2. Topilmasa — username bo'yicha ham qidirish
+    if(r.status === 404){
+      r = await fetch('/api/user-stats?username='+encodeURIComponent(user.username || sess.username));
+    }
+
+    // 3. Hech qaysi usulda topilmasa — web foydalanuvchi, ruxsat
+    if(r.status === 404){ _myVipStatus = true; return true; }
+
+    if(!r.ok){ _myVipStatus = true; return true; } // Xatolik — ruxsat
+
     const d = await r.json();
-    _myVipStatus = d.isVip && d.vipEnd && Date.now() < d.vipEnd;
+    // VIP bo'lsa — ruxsat
+    if(d.isVip && d.vipEnd && Date.now() < d.vipEnd){
+      _myVipStatus = true;
+    } else if(!d.isVip && !d.vipEnd && !d.totalTests){
+      // Bot da hech qanday faollik yo'q — web foydalanuvchi, ruxsat
+      _myVipStatus = true;
+    } else {
+      _myVipStatus = false;
+    }
     return _myVipStatus;
-  }catch{ _myVipStatus = false; return false; }
+  }catch{
+    // Tarmoq xatosi — ruxsat (test o'ta olsin)
+    _myVipStatus = true;
+    return true;
+  }
 }
 
 function showVipModal(){
