@@ -2266,6 +2266,28 @@ app.post('/api/chat/send', async (req, res) => {
     }
 });
 
+app.post('/api/chat/delete', (req, res) => {
+    try {
+        const { myName, otherName } = req.body;
+        if (!myName || !otherName) return res.status(400).json({ error: 'myName va otherName kerak' });
+ 
+        const chats = getChatMsgs();
+        
+        // chatId funksiyasi ikki nomni sort qilib birlashtiradi
+        const cid = [myName, otherName].sort().join('__CHAT__');
+        
+        if (chats[cid]) {
+            delete chats[cid];
+            saveChatMsgs(chats);
+        }
+        
+        res.json({ success: true });
+    } catch (err) {
+        console.error('[Chat delete]', err.message);
+        res.status(500).json({ error: 'Xatolik' });
+    }
+});
+
 // Xabarlarni olish (since timestamp dan keyin)
 app.get('/api/chat/messages', (req, res) => {
     try {
