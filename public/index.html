@@ -21,7 +21,7 @@
 <meta name="apple-mobile-web-app-title" content="YMA">
 <meta name="application-name" content="YMA">
 <meta name="msapplication-TileColor" content="#22c55e">
-<meta name="description" content="AITEX o'quv platformasi — test, reyting, chat">
+<meta name="description" content="AITEX oquv platformasi — test, reyting, chat">
 <!-- iOS ikonkalar -->
 <link rel="apple-touch-icon" sizes="192x192" href="/icon-192.png">
 <link rel="apple-touch-icon" sizes="512x512" href="/icon-512.png">
@@ -454,12 +454,12 @@ body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); 
     <div style="text-align:center;margin-bottom:32px;">
       <div style="width:72px;height:72px;border-radius:22px;background:var(--green);display:flex;align-items:center;justify-content:center;font-size:32px;margin:0 auto 14px;box-shadow:0 12px 32px rgba(34,197,94,0.35);">⚡</div>
       <div style="font-size:22px;font-weight:900;color:var(--text);">Nikname tanlang</div>
-      <div style="font-size:13px;color:var(--text2);margin-top:6px;font-weight:500;">Bu sizning unikal manzilingiz bo'ladi</div>
+      <div style="font-size:13px;color:var(--text2);margin-top:6px;font-weight:500;">Bu sizning unikal manzilingiz boladi</div>
     </div>
 
-    <!-- Bot profil ma'lumotlari (preview) -->
+    <!-- Bot profil malumotlari (preview) -->
     <div id="nick-profile-preview" style="display:none;background:var(--card);border-radius:18px;padding:16px 18px;margin-bottom:16px;box-shadow:0 1px 8px rgba(0,0,0,0.06);">
-      <div style="font-size:11px;font-weight:700;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px;">Bot profil ma'lumotlari</div>
+      <div style="font-size:11px;font-weight:700;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px;">Bot profil malumotlari</div>
       <div style="display:flex;align-items:center;gap:12px;">
         <div id="nick-prev-ava" style="width:44px;height:44px;border-radius:50%;background:var(--green-bg);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;color:var(--green);flex-shrink:0;overflow:hidden;"></div>
         <div>
@@ -485,16 +485,16 @@ body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); 
       <div style="font-size:11px;color:var(--text3);font-weight:500;line-height:1.8;margin-bottom:16px;">
         • 3-30 ta belgi<br>
         • Faqat lotin harflar, raqam, _ va .<br>
-        • Boshqalar bilan chat da @nikname ko'rinadi<br>
-        • Keyin o'zgartirish mumkin
+        • Boshqalar bilan chat da @nikname korinadi<br>
+        • Keyin ozgartirish mumkin
       </div>
       <button id="nick-btn" onclick="submitNickname()" disabled
         style="width:100%;padding:14px;background:#ccc;color:#fff;border:none;border-radius:14px;font-family:'Inter',sans-serif;font-size:15px;font-weight:700;cursor:not-allowed;transition:all .3s;">
         Davom etish →
       </button>
-      <!-- Skip (agar bot profilida ism bo'lsa) -->
+      <!-- Skip (agar bot profilida ism bolsa) -->
       <div id="nick-skip-wrap" style="text-align:center;margin-top:12px;display:none;">
-        <span onclick="skipNickname()" style="font-size:12px;color:var(--text3);cursor:pointer;font-weight:500;">Hozircha o'tkazib yuborish</span>
+        <span onclick="skipNickname()" style="font-size:12px;color:var(--text3);cursor:pointer;font-weight:500;">Hozircha otkazib yuborish</span>
       </div>
     </div>
   </div>
@@ -506,7 +506,7 @@ body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); 
     <div class="login-logo">
       <div class="login-logo-icon">⚡</div>
       <div class="login-logo-text">YMA</div>
-      <div class="login-logo-sub">O'quv platformasi</div>
+      <div class="login-logo-sub">Oquv platformasi</div>
     </div>
     <div class="l-card">
       <div style="text-align:center;margin-bottom:14px;">
@@ -562,7 +562,7 @@ body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); 
           <input class="field-inp" id="si-p" type="password" placeholder="••••••"
             onkeydown="if(event.key==='Enter')doSignIn()">
         </div>
-        <div class="l-err" id="si-err">Parol noto'g'ri</div>
+        <div class="l-err" id="si-err">Parol notogri</div>
         <div id="si-loading" style="display:none;text-align:center;padding:8px;font-size:13px;color:var(--text3);">⏳ Tekshirilmoqda...</div>
         <button class="l-btn" onclick="doSignIn()">Kirish →</button>
         <div style="text-align:center;margin-top:12px;">
@@ -623,16 +623,16 @@ body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); 
           <button class="l-btn" onclick="doResetPass()" style="background:var(--blue);">📨 Telegram orqali tasdiqlash →</button>
         </div>
 
-        <!-- QADAM 2: Telegram tasdig'i kutilmoqda -->
+        <!-- QADAM 2: Telegram tasdigi kutilmoqda -->
         <div id="fp-step2" style="display:none;text-align:center;padding:16px 0;">
           <div style="font-size:48px;margin-bottom:16px;">📱</div>
           <div style="font-size:15px;font-weight:800;color:var(--text);margin-bottom:8px;">Telegram xabarini tasdiqlang</div>
           <div style="font-size:13px;color:var(--text2);font-weight:500;line-height:1.7;margin-bottom:20px;">
             Telegramga <b>✅ Tasdiqlash</b> tugmasi bilan xabar yuborildi.<br>
-            Tasdiqlashingiz bilan parol o'zgartiriladi va avtomatik chiqasiz.
+            Tasdiqlashingiz bilan parol ozgartiriladi va avtomatik chiqasiz.
           </div>
           <div style="background:var(--bg);border-radius:14px;padding:14px;margin-bottom:16px;">
-            <div style="font-size:12px;color:var(--text3);font-weight:600;">So'rov bekor bo'lish vaqti</div>
+            <div style="font-size:12px;color:var(--text3);font-weight:600;">Sorov bekor bolish vaqti</div>
             <div id="fp-countdown" style="font-size:28px;font-weight:900;color:var(--blue);margin-top:4px;">5:00</div>
           </div>
           <button onclick="cancelResetPass()" style="width:100%;padding:12px;background:var(--bg);color:var(--text2);border:1.5px solid var(--border);border-radius:12px;font-family:'Inter',sans-serif;font-size:13px;font-weight:700;cursor:pointer;">✕ Bekor qilish</button>
@@ -658,7 +658,7 @@ body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); 
       <div class="ah-dot"></div>
       <div class="ah-online-cnt" id="ah-online-cnt">0</div>
     </div>
-    <!-- O'ng tomondagi ikonkalar: Qidiruv · Chat · Qo'ng'iroq -->
+    <!-- Ong tomondagi ikonkalar: Qidiruv · Chat · Qongiroq -->
     <div class="ah-btns">
       <!-- Qidiruv -->
       <button class="ah-btn" onclick="openSearch()" title="Qidiruv">
@@ -669,7 +669,7 @@ body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); 
         <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="var(--text2)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
         <div class="ah-badge" id="ah-badge"></div>
       </button>
-      <!-- Qo'ng'iroq (bildirishnoma) -->
+      <!-- Qongiroq (bildirishnoma) -->
       <button class="ah-btn" onclick="openNotifs()" style="position:relative;" title="Bildirishnomalar">
         <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="var(--text2)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
         <div class="ah-badge" id="ah-notif-badge" style="display:none;"></div>
@@ -692,7 +692,7 @@ body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); 
 
       <!-- Activity feed -->
       <div class="sec-hdr" style="padding-top:4px;">
-        <div class="sec-hdr-title">So'nggi natijalar</div>
+        <div class="sec-hdr-title">Songgi natijalar</div>
         <div class="sec-hdr-link" onclick="navTo('stats')">Hammasi →</div>
       </div>
       <div class="act-cards" id="activity-feed">
@@ -738,18 +738,18 @@ body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); 
           <div class="sg2" style="margin-bottom:12px;">
             <div class="s-box2"><div class="s-lbl2">Ball</div><div class="s-val2 green" id="st-score">0</div></div>
             <div class="s-box2"><div class="s-lbl2">Testlar</div><div class="s-val2" id="st-tests">0</div></div>
-            <div class="s-box2"><div class="s-lbl2">✅ To'g'ri</div><div class="s-val2" style="color:var(--green)" id="st-correct">0</div></div>
+            <div class="s-box2"><div class="s-lbl2">✅ Togri</div><div class="s-val2" style="color:var(--green)" id="st-correct">0</div></div>
             <div class="s-box2"><div class="s-lbl2">❌ Xato</div><div class="s-val2 red" id="st-wrong">0</div></div>
             <div class="s-box2"><div class="s-lbl2">OTM</div><div class="s-val2 sm" id="st-univ">—</div></div>
             <div class="s-box2"><div class="s-lbl2">Kurs</div><div class="s-val2 sm" id="st-kurs">—</div></div>
           </div>
           <div class="t-row2"><span class="t-lbl2">Jami savollar</span><span class="t-val2" id="st-total-q">0</span></div>
-          <div class="t-row2"><span class="t-lbl2">To'g'rilik %</span><span class="t-val2" style="color:var(--green)" id="st-acc">—</span></div>
+          <div class="t-row2"><span class="t-lbl2">Togrilik %</span><span class="t-val2" style="color:var(--green)" id="st-acc">—</span></div>
         </div>
       </div>
       <div style="padding:0 16px 24px;" id="subj-stats-card" style="display:none;">
         <div style="background:var(--card);border-radius:16px;padding:16px 18px;box-shadow:0 1px 6px rgba(0,0,0,.05);">
-          <div class="stat-card-title">Fanlar bo'yicha</div>
+          <div class="stat-card-title">Fanlar boyicha</div>
           <div id="subj-stats-list"></div>
         </div>
       </div>
@@ -773,7 +773,7 @@ body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); 
               </div>
               <div class="mode-btn2" onclick="startTest('full')">
                 <div class="mode-icon2">📋</div>
-                <div class="mode-name2">To'liq</div>
+                <div class="mode-name2">Toliq</div>
                 <div class="mode-desc2">Barcha savollar</div>
               </div>
             </div>
@@ -791,7 +791,7 @@ body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); 
           <button onclick="openNewChatModal()" style="padding:8px 16px;background:var(--green);border:none;border-radius:22px;color:#fff;font-family:'Inter',sans-serif;font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 2px 10px rgba(34,197,94,0.3);">+ Yangi</button>
         </div>
         <div id="chats-list">
-          <div style="color:var(--text3);font-size:13px;text-align:center;padding:40px 20px;font-weight:500;">Hozircha suhbat yo'q.<br><span style="font-size:12px;">"+ Yangi" tugmasini bosib chat boshlang.</span></div>
+          <div style="color:var(--text3);font-size:13px;text-align:center;padding:40px 20px;font-weight:500;">Hozircha suhbat yoq.<br><span style="font-size:12px;">"+ Yangi" tugmasini bosib chat boshlang.</span></div>
         </div>
       </div>
     </div>
@@ -952,8 +952,8 @@ body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); 
           <div style="font-size:16px;font-weight:800;">Profilni tahrirlash</div>
         </div>
         <div class="stat-card">
-          <div class="sec-title2">Asosiy ma'lumotlar</div>
-          <div class="field"><label class="field-lbl">Username</label><input class="field-inp" id="p-u" type="text" autocorrect="off" autocapitalize="off"><div class="field-err" id="p-u-e">Noto'g'ri format yoki band</div></div>
+          <div class="sec-title2">Asosiy malumotlar</div>
+          <div class="field"><label class="field-lbl">Username</label><input class="field-inp" id="p-u" type="text" autocorrect="off" autocapitalize="off"><div class="field-err" id="p-u-e">Notogri format yoki band</div></div>
           <div class="field"><label class="field-lbl">Ism Familiya</label><input class="field-inp" id="p-n" type="text"><div class="field-err" id="p-n-e">Kamida 3 harf</div></div>
           <div class="divider2"></div>
           <div class="sec-title2">Nikname</div>
@@ -966,7 +966,7 @@ body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); 
             <div id="nick-change-status" style="font-size:12px;color:var(--text3);margin-top:4px;font-weight:500;"></div>
           </div>
           <div class="divider2"></div>
-          <div class="sec-title2">Parolni o'zgartirish</div>
+          <div class="sec-title2">Parolni ozgartirish</div>
           <div class="field"><input class="field-inp" id="p-pw" type="password" placeholder="Yangi parol (ixtiyoriy)"></div>
           <div class="field"><input class="field-inp" id="p-pw2" type="password" placeholder="Takrorlang"><div class="field-err" id="p-pw-e">Parollar mos kelmadi</div></div>
           <button class="save-btn2" onclick="saveProfile()">💾 Saqlash</button>
@@ -997,7 +997,7 @@ body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); 
         <div class="stat-card" style="text-align:center;padding:22px;margin-bottom:10px;">
           <div style="width:54px;height:54px;border-radius:16px;background:var(--green);display:flex;align-items:center;justify-content:center;font-size:24px;margin:0 auto 12px;box-shadow:0 6px 20px rgba(34,197,94,0.3);">⚡</div>
           <div style="font-size:16px;font-weight:800;">YMA</div>
-          <div style="font-size:12px;color:var(--text2);margin-top:4px;font-weight:500;">O'quv platformasi</div>
+          <div style="font-size:12px;color:var(--text2);margin-top:4px;font-weight:500;">Oquv platformasi</div>
         </div>
         <button onclick="doLogout()" style="width:100%;padding:14px;background:var(--red-bg);color:var(--red);border:none;border-radius:14px;font-family:'Inter',sans-serif;font-size:14px;font-weight:700;cursor:pointer;">🚪 Chiqish</button>
         <div id="admin-panel-card-s" style="display:none;margin-top:10px;">
@@ -1145,7 +1145,7 @@ body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); 
         <div class="sg2">
           <div class="s-box2"><div class="s-lbl2">Ball</div><div class="s-val2 green" id="up-score">—</div></div>
           <div class="s-box2"><div class="s-lbl2">Testlar</div><div class="s-val2" id="up-tests">—</div></div>
-          <div class="s-box2"><div class="s-lbl2">✅ To'g'ri</div><div class="s-val2" style="color:var(--green)" id="up-correct">—</div></div>
+          <div class="s-box2"><div class="s-lbl2">✅ Togri</div><div class="s-val2" style="color:var(--green)" id="up-correct">—</div></div>
           <div class="s-box2"><div class="s-lbl2">❌ Xato</div><div class="s-val2 red" id="up-wrong">—</div></div>
         </div>
         <div style="margin-top:10px;">
@@ -1165,7 +1165,7 @@ body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); 
         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="var(--text3)" stroke-width="2.5" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>
       </div>
       <div id="up-subjects-expanded" style="display:none;background:#fff;border-radius:0 0 14px 14px;padding:14px 18px;margin-top:-8px;box-shadow:0 2px 8px rgba(0,0,0,.05);">
-        <div id="up-subjects-list"><div style="color:var(--text3);font-size:13px;text-align:center;padding:12px;">Ma'lumot yo'q</div></div>
+        <div id="up-subjects-list"><div style="color:var(--text3);font-size:13px;text-align:center;padding:12px;">Malumot yoq</div></div>
       </div>
     </div>
   </div>
@@ -1182,7 +1182,7 @@ body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); 
       <div class="chat-uname2" id="chat-uname">—</div>
       <div class="chat-status2" id="chat-status">offline</div>
     </div>
-    <button class="chat-del-btn2" onclick="confirmDeleteChat()" title="Chatni o'chirish" style="color:var(--red);">
+    <button class="chat-del-btn2" onclick="confirmDeleteChat()" title="Chatni ochirish" style="color:var(--red);">
       <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
     </button>
   </div>
@@ -1226,7 +1226,7 @@ body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); 
       </div>
     </div>
     <div class="parts-search2">
-      <input type="text" id="parts-search" placeholder="🔍 Ism bo'yicha qidirish..." oninput="filterParts(this.value)">
+      <input type="text" id="parts-search" placeholder="🔍 Ism boyicha qidirish..." oninput="filterParts(this.value)">
     </div>
     <div class="parts-list2" id="parts-list"></div>
   </div>
@@ -1249,19 +1249,19 @@ body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); 
     <button class="modal-close2" onclick="document.getElementById('vip-modal').classList.remove('on')">✕</button>
     <div style="text-align:center;margin-bottom:18px;">
       <div style="font-size:44px;margin-bottom:10px;">💎</div>
-      <div class="modal-title2">VIP A'zolik Kerak</div>
-      <div class="modal-sub2">Web test ishlash uchun VIP bo'ling</div>
+      <div class="modal-title2">VIP Azolik Kerak</div>
+      <div class="modal-sub2">Web test ishlash uchun VIP boling</div>
     </div>
     <div style="background:rgba(234,179,8,.08);border:1.5px solid rgba(234,179,8,.25);border-radius:14px;padding:14px;margin-bottom:14px;">
       <div style="font-size:13px;color:#b45309;font-weight:700;margin-bottom:8px;">💎 VIP imkoniyatlari:</div>
-      <div style="font-size:13px;color:#92400e;line-height:1.9;font-weight:500;">✅ Web orqali cheksiz test<br>✅ Tushuntirishlarni ko'rish<br>✅ Musobaqalarda ishtirok<br>✅ 1 oy muddatli a'zolik</div>
+      <div style="font-size:13px;color:#92400e;line-height:1.9;font-weight:500;">✅ Web orqali cheksiz test<br>✅ Tushuntirishlarni korish<br>✅ Musobaqalarda ishtirok<br>✅ 1 oy muddatli azolik</div>
     </div>
     <div style="background:var(--bg);border-radius:14px;padding:14px;margin-bottom:16px;font-size:13px;font-weight:600;">
       <div style="margin-bottom:6px;">💳 Karta: <strong>4073420058363577</strong></div>
       <div style="margin-bottom:6px;">👤 Egasi: M.M</div>
-      <div>💰 Summa: <strong style="color:var(--orange);">6,000 so'm</strong></div>
+      <div>💰 Summa: <strong style="color:var(--orange);">6,000 som</strong></div>
     </div>
-    <button onclick="openTgBot()" style="width:100%;padding:14px;background:#0088cc;color:#fff;border:none;border-radius:14px;font-family:'Inter',sans-serif;font-size:15px;font-weight:700;cursor:pointer;">✈️ Botga o'tib to'lash</button>
+    <button onclick="openTgBot()" style="width:100%;padding:14px;background:#0088cc;color:#fff;border:none;border-radius:14px;font-family:'Inter',sans-serif;font-size:15px;font-weight:700;cursor:pointer;">✈️ Botga otib tolash</button>
   </div>
 </div>
 
@@ -1286,10 +1286,10 @@ body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); 
 <div class="confirm-wrap" id="confirm-wrap">
   <div class="confirm-box2">
     <div style="font-size:36px;margin-bottom:10px;" id="confirm-icon">🗑</div>
-    <div class="confirm-title2" id="confirm-title">Chatni o'chirish</div>
-    <div class="confirm-sub2" id="confirm-sub">Bu chatdagi barcha xabarlar o'chib ketadi</div>
+    <div class="confirm-title2" id="confirm-title">Chatni ochirish</div>
+    <div class="confirm-sub2" id="confirm-sub">Bu chatdagi barcha xabarlar ochib ketadi</div>
     <div class="confirm-btns2">
-      <button class="confirm-yes2" id="confirm-yes-btn">O'chirish</button>
+      <button class="confirm-yes2" id="confirm-yes-btn">Ochirish</button>
       <button class="confirm-no2" onclick="closeConfirm()">Bekor</button>
     </div>
   </div>
@@ -1481,7 +1481,7 @@ function navTo(tab){
   const visibleTab = tab === 'chats' ? 'chats' : tab;
   document.getElementById('tab-'+visibleTab)?.classList.add('active');
   document.getElementById('bn-'+tab)?.classList.add('active');
-  // ah-title endi yo'q — header doimiy "YMA" ko'rsatadi
+  // ah-title endi yoq — header doimiy "YMA" korsatadi
   const s=getSess();
   if(tab==='home'&&s) loadHome(s);
   if(tab==='tests')   loadSubjects();
@@ -1518,22 +1518,22 @@ function backToNick(){ lTab('nick'); setTimeout(()=>document.getElementById('nic
 // YANGI LOGIN TIZIMI — Nikname + TG profil
 // ═══════════════════════════════════════════════════════════
 
-let _loginTgData = null;   // TG dan kelgan ma'lumotlar
-let _loginFoundUser = null; // Nikname bo'yicha topilgan foydalanuvchi
+let _loginTgData = null;   // TG dan kelgan malumotlar
+let _loginFoundUser = null; // Nikname boyicha topilgan foydalanuvchi
 let _nickLoginDebounce = null;
 
-// TG profilni login ekranida ko'rsatish
+// TG profilni login ekranida korsatish
 async function loadTgProfileForLogin(){
   try{
     const tgUser = window.Telegram?.WebApp?.initDataUnsafe?.user;
     _loginTgData = tgUser || null;
 
-    // TG preview ko'rsatish (agar TG dan kelgan bo'lsa)
+    // TG preview korsatish (agar TG dan kelgan bolsa)
     if(tgUser){
       const r = await fetch(`/api/tg-profile?tgId=${tgUser.id}&tgUsername=${encodeURIComponent(tgUser.username||'')}`);
       if(r.ok){
         const d = await r.json();
-        _loginTgData = {...tgUser, ...d}; // TG + bot ma'lumotlari
+        _loginTgData = {...tgUser, ...d}; // TG + bot malumotlari
         const prev=document.getElementById('tg-profile-preview');
         const nameEl=document.getElementById('tg-prev-name');
         const metaEl=document.getElementById('tg-prev-meta');
@@ -1551,18 +1551,18 @@ async function loadTgProfileForLogin(){
       }
     }
 
-    // Web users da shu TG ID bilan bog'liq akkaunt bor-yo'qligini tekshirish
-    // Agar bor bo'lsa — niknameni avtomatik to'ldirish
+    // Web users da shu TG ID bilan bogliq akkaunt bor-yoqligini tekshirish
+    // Agar bor bolsa — niknameni avtomatik toldirish
     const wu=getUsers();
     const tgIdStr=tgUser?String(tgUser.id):null;
     let autoNick=null;
 
-    // 1. tgId bo'yicha topish
+    // 1. tgId boyicha topish
     if(tgIdStr){
       const found=Object.values(wu).find(u=>u.tgId===tgIdStr);
       if(found?.nickname) autoNick=found.nickname;
     }
-    // 2. TG username bo'yicha topish
+    // 2. TG username boyicha topish
     if(!autoNick&&tgUser?.username){
       const r2=await fetch(`/api/user-by-nick?nickname=${encodeURIComponent(tgUser.username)}`);
       if(r2.ok){ const d2=await r2.json(); autoNick=d2.nickname||d2.username; }
@@ -1625,13 +1625,17 @@ function onNickLoginInput(val){
 function doNickLogin(){
   const nick = (document.getElementById('nick-login-inp')?.value||'').replace(/^@/,'').trim().toLowerCase();
   if(!nick) return;
+  // Admin username bilan oddiy kirish taqiqlangan
+  const adm = getAdm();
+  if(nick === (adm.username||'admin').toLowerCase()){
+    toast('Admin uchun yuqoridagi tugmani bosing!', 'bad');
+    return;
+  }
   if(_nickIsNew){
-    // Yangi odam — parol yaratish ekraniga
     document.getElementById('lf-create-nick').textContent = nick;
     lTab('create');
     setTimeout(()=>document.getElementById('su-p')?.focus(),100);
   } else if(_loginFoundUser){
-    // Eski odam — parol kirish ekraniga
     document.getElementById('lf-pass-nick').textContent = '@'+nick;
     document.getElementById('lf-pass-name').textContent = _loginFoundUser.name||'';
     lTab('pass');
@@ -1654,14 +1658,14 @@ async function doCreateAccount(){
   const loading=document.getElementById('su-loading');
   if(loading) loading.style.display='block';
 
-  // TG dan ma'lumotlar
+  // TG dan malumotlar
   const tgUser=window.Telegram?.WebApp?.initDataUnsafe?.user;
   const tgName=_loginTgData?.name||tgUser?.first_name||nick;
   const tgId=tgUser?.id?String(tgUser.id):null;
   const tgUsername=tgUser?.username||'';
 
   try{
-    // 1. Ro'yxatdan o'tish
+    // 1. Royxatdan otish
     const r=await fetch('/api/web-auth/register',{
       method:'POST',headers:{'Content-Type':'application/json'},
       body:JSON.stringify({
@@ -1690,7 +1694,7 @@ async function doCreateAccount(){
     }
   }catch{
     if(loading) loading.style.display='none';
-    if(suErr){suErr.textContent="Server bilan bog'lanib bo'lmadi";suErr.classList.add('on');}
+    if(suErr){suErr.textContent="Server bilan boglanib bolmadi";suErr.classList.add('on');}
   }
 }
 
@@ -1721,7 +1725,7 @@ async function doSignUp(){
     if(r.ok && d.success){
       // Also save locally as backup
       const users=getUsers(); users[u]={username:u,name:n,pass:p,photo:null,createdAt:Date.now()}; saveUsers(users);
-      toast("✅ Muvaffaqiyatli ro'yxatdan o'tildi!");
+      toast("✅ Muvaffaqiyatli royxatdan otildi!");
       setTimeout(()=>{lTab('in');document.getElementById('si-u').value=u;document.getElementById('si-p').focus();},700);
     } else if(d.error==='exists'){
       document.getElementById('su-u-e').textContent="Bu username allaqachon band!";
@@ -1733,7 +1737,7 @@ async function doSignUp(){
         document.getElementById('su-u-e').textContent='Bu username band!';errf('su-u-e','su-u');return;
       }
       users[u]={username:u,name:n,pass:p,photo:null,createdAt:Date.now()}; saveUsers(users);
-      toast("✅ Ro'yxatdan o'tildi (offline rejim)!");
+      toast("✅ Royxatdan otildi (offline rejim)!");
       setTimeout(()=>{lTab('in');document.getElementById('si-u').value=u;document.getElementById('si-p').focus();},700);
     }
   }catch{
@@ -1744,7 +1748,7 @@ async function doSignUp(){
       document.getElementById('su-u-e').textContent='Bu username band!';errf('su-u-e','su-u');return;
     }
     users[u]={username:u,name:n,pass:p,photo:null,createdAt:Date.now()}; saveUsers(users);
-    toast("✅ Ro'yxatdan o'tildi!");
+    toast("✅ Royxatdan otildi!");
     setTimeout(()=>{lTab('in');document.getElementById('si-u').value=u;document.getElementById('si-p').focus();},700);
   }
 }
@@ -1753,6 +1757,12 @@ async function doSignIn(){
   // Yangi tizim: _loginFoundUser dan username olish
   const foundU = _loginFoundUser;
   const u = foundU?.username || (document.getElementById('si-u')?.value||'').trim().toLowerCase();
+  // Admin username bilan oddiy login qilish mumkin emas
+  const adm = getAdm();
+  if(u === (adm.username||'admin').toLowerCase()){
+    toast('Admin sifatida kirish uchun "Admin sifatida kirish" tugmasini bosing', 'bad');
+    return;
+  }
   const p=document.getElementById('si-p').value;
   const errEl=document.getElementById('si-err');
   const loadEl=document.getElementById('si-loading');
@@ -1786,7 +1796,7 @@ async function doSignIn(){
       if(nickInLogin) sessObj.nickname = nickInLogin;
       saveSess(sessObj); openApp(u,false);
       } else {
-        errEl.textContent=d.error==='notfound'?"Bu username topilmadi":"Parol noto'g'ri";
+        errEl.textContent=d.error==='notfound'?"Bu username topilmadi":"Parol notogri";
         errEl.classList.add('on');
       }
     }
@@ -1800,7 +1810,7 @@ async function doSignIn(){
       if(nickInLogin) sessObj.nickname = nickInLogin;
       saveSess(sessObj); openApp(u,false);
     } else {
-      errEl.textContent="Username yoki parol noto'g'ri"; errEl.classList.add('on');
+      errEl.textContent="Username yoki parol notogri"; errEl.classList.add('on');
     }
   }
 }
@@ -1837,7 +1847,7 @@ async function doResetPass(){
     if(loading) loading.style.display='none';
 
     if(r.ok && d.success){
-      // Qadam 2 ga o'tish — Telegram tasdiq kutilmoqda
+      // Qadam 2 ga otish — Telegram tasdiq kutilmoqda
       document.getElementById('fp-step1').style.display='none';
       document.getElementById('fp-step2').style.display='block';
       // Countdown 5 daqiqa
@@ -1854,7 +1864,7 @@ async function doResetPass(){
   }catch{
     if(loading) loading.style.display='none';
     const fpErr=document.getElementById('fp-err');
-    if(fpErr){fpErr.textContent="Server bilan bog'lanib bo'lmadi";fpErr.classList.add('on');}
+    if(fpErr){fpErr.textContent="Server bilan boglanib bolmadi";fpErr.classList.add('on');}
   }
 }
 
@@ -1889,7 +1899,7 @@ function pollResetStatus(token){
         if(_socket){_socket.disconnect();_socket=null;_socketName=null;}
         // Sessiyani tozalash
         clearSess();
-        // Login ekraniga o'tish
+        // Login ekraniga otish
         document.getElementById('screen-login').classList.add('active');
         lTab('in');
         resetFpForm();
@@ -1925,8 +1935,10 @@ function resetFpForm(){
 }
 async function openApp(username,isAdmin){
   document.getElementById('screen-login').classList.remove('active');
+  document.getElementById('screen-nickname').classList.remove('active');
   document.getElementById('screen-app').classList.add('active');
   await loadAllPhotos();
+  const sess = getSess(); // sess ni oldindan olamiz
 
   if(isAdmin){
     const adm=getAdm();
@@ -1949,13 +1961,13 @@ async function openApp(username,isAdmin){
     if(!user){doLogout();return;}
     setAhAvatar(user.name,user.username);
 
-    // ✅ Follow ma'lumotlarini serverdan yuklash (kirish/yangilanganda)
+    // ✅ Follow malumotlarini serverdan yuklash (kirish/yangilanganda)
     await syncFollowsFromServer(user.name);
   }
   // Socket.io ni ishga tushirish
-  const myN = sess.isAdmin ? (getAdm().name||'Admin') : (getUsers()[username]?.name||username);
+  const myN = isAdmin ? (getAdm().name||'Admin') : (getUsers()[username]?.name||username);
   if(myN) initSocket(myN);
-  // Online count oldindan ko'rsatish
+  // Online count oldindan korsatish
   fetchOnlineCount();
   // Eski duplicate chatlarni bir marta tozalash
   fetch('/api/admin/fix-chats',{method:'POST'}).then(r=>r.json()).then(d=>{
@@ -1963,21 +1975,21 @@ async function openApp(username,isAdmin){
   }).catch(()=>{});
 
   // ─── Nikname tekshirish ─────────────────────────────────
-  if (!sess.isAdmin) {
+  if (!isAdmin) {
     const wu = getUsers()[username];
     const hasNick = wu?.nickname || sess.nickname;
     if (!hasNick) {
-      // Server dan ham tekshirish (localStorage yangi bo'lishi uchun)
+      // Server dan ham tekshirish (localStorage yangi bolishi uchun)
       try {
         const mr = await fetch(`/api/web-auth/me?username=${encodeURIComponent(username)}`);
         if (mr.ok) {
           const md = await mr.json();
           if (md.user?.nickname) {
-            // Server da nikname bor — local ga yozib qo'yamiz
+            // Server da nikname bor — local ga yozib qoyamiz
             if (wu) { wu.nickname = md.user.nickname; saveUsers({...getUsers(), [username]:wu}); }
             saveSess({...sess, nickname: md.user.nickname});
           } else {
-            // Server da ham yo'q — setup ekraniga
+            // Server da ham yoq — setup ekraniga
             await loadTgProfile(wu);
             showNicknameSetup();
             return;
@@ -2063,7 +2075,7 @@ function renderStories(list){
   </div>`;
 
   if(followed.length===0){
-    // Follow qilingan odam yo'q — bo'sh holat
+    // Follow qilingan odam yoq — bush holat
     html+=`<div style="display:flex;align-items:center;padding:0 8px;color:var(--text3);font-size:12px;font-weight:500;white-space:nowrap;">
       Hali hech kimni follow qilmagansiz
     </div>`;
@@ -2286,7 +2298,7 @@ async function loadProfileForm(){
       // Subject count & yonalish
       const subjCount=Object.keys(d.subjects||{}).length;
       document.getElementById('prof-subj-num').textContent=subjCount||'0';
-      document.getElementById('prof-subj-name-row').textContent=user.yonalish||d.yonalish||"Yo'nalish";
+      document.getElementById('prof-subj-name-row').textContent=user.yonalish||d.yonalish||"Yonalish";
 
       // Badges row
       let badgesHtml='';
@@ -2323,7 +2335,7 @@ async function loadProfileForm(){
       if(d.isVip&&d.vipEnd&&Date.now()<d.vipEnd){
         const fmt=ts=>new Date(ts).toLocaleDateString('uz-UZ',{day:'2-digit',month:'2-digit',year:'numeric'});
         vDiv.innerHTML=`<div style="background:rgba(234,179,8,.08);border:1.5px solid rgba(234,179,8,.25);border-radius:14px;padding:14px;">
-          <div style="font-size:13px;font-weight:700;color:#b45309;margin-bottom:8px;">💎 VIP A'zo</div>
+          <div style="font-size:13px;font-weight:700;color:#b45309;margin-bottom:8px;">💎 VIP Azo</div>
           <div style="display:flex;justify-content:space-between;padding:5px 0;font-size:12px;font-weight:600;border-bottom:1px solid rgba(234,179,8,.15);">
             <span style="color:#92400e;">Boshlangan</span><span style="color:#b45309;">${fmt(d.vipStart)}</span>
           </div>
@@ -2335,7 +2347,7 @@ async function loadProfileForm(){
     } else {
       // Defaults
       document.getElementById('prof-univ-row').textContent=user.univ||'OTM kiritilmagan';
-      document.getElementById('prof-subj-name-row').textContent=user.yonalish||"Yo'nalish";
+      document.getElementById('prof-subj-name-row').textContent=user.yonalish||"Yonalish";
       document.getElementById('prof-subj-num').textContent='0';
       document.getElementById('pw-tests').textContent='0';
       document.getElementById('pw-score').textContent='0';
@@ -2343,7 +2355,7 @@ async function loadProfileForm(){
     }
   }catch{
     document.getElementById('prof-univ-row').textContent=user.univ||'OTM kiritilmagan';
-    document.getElementById('prof-subj-name-row').textContent=user.yonalish||"Yo'nalish";
+    document.getElementById('prof-subj-name-row').textContent=user.yonalish||"Yonalish";
   }
 
   // Load tournament data for profile card
@@ -2470,7 +2482,7 @@ function renderAdminPanel(){
   content.innerHTML=`
     <div class="field"><label class="field-lbl">Username</label><input class="field-inp" id="adm-u" value="${escH(adm.username||'')}"></div>
     <div class="field"><label class="field-lbl">Ism</label><input class="field-inp" id="adm-n" value="${escH(adm.name||'')}"></div>
-    <div class="field"><label class="field-lbl">Yangi parol</label><input class="field-inp" id="adm-pw" type="password" placeholder="Bo'sh qoldiring"></div>
+    <div class="field"><label class="field-lbl">Yangi parol</label><input class="field-inp" id="adm-pw" type="password" placeholder="Bush qoldiring"></div>
     <div class="field"><input class="field-inp" id="adm-pw2" type="password" placeholder="Tasdiqlang"><div class="field-err" id="adm-pw-e">Parollar mos kelmadi</div></div>
     <button class="save-btn2" onclick="saveAdminProfile()" style="margin-bottom:10px;">💾 Saqlash</button>
     <button onclick="adminRejectTour()" style="width:100%;padding:12px;background:var(--red-bg);color:var(--red);border:none;border-radius:12px;font-family:'Inter',sans-serif;font-size:13px;font-weight:700;cursor:pointer;margin-bottom:8px;">✕ Musobaqani bekor qilish</button>
@@ -2480,7 +2492,7 @@ function renderAdminPanel(){
     <div id="nick-stats-card" style="background:var(--bg);border-radius:14px;padding:16px;margin-bottom:16px;">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
         <div>
-          <div style="font-size:13px;font-weight:800;color:var(--text);">👥 Nikname ro'yxatidan o'tganlar</div>
+          <div style="font-size:13px;font-weight:800;color:var(--text);">👥 Nikname royxatidan otganlar</div>
           <div style="font-size:11px;color:var(--text3);font-weight:500;margin-top:2px;">WebApp da nikname kiritganlar</div>
         </div>
         <button onclick="adminLoadNickStats()" style="padding:6px 12px;background:var(--green-bg);color:var(--green);border:none;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;">🔄</button>
@@ -2488,9 +2500,9 @@ function renderAdminPanel(){
       <div id="nick-stats-content">⏳ Yuklanmoqda...</div>
     </div>
 
-    <!-- Ball qo'shish bo'limi -->
+    <!-- Ball qoshish bolimi -->
     <div style="background:var(--bg);border-radius:14px;padding:16px;margin-top:4px;">
-      <div style="font-size:13px;font-weight:800;color:var(--text);margin-bottom:12px;">⚡ Ball va Test qo'shish</div>
+      <div style="font-size:13px;font-weight:800;color:var(--text);margin-bottom:12px;">⚡ Ball va Test qoshish</div>
 
       <div class="field" style="margin-bottom:10px;">
         <label class="field-lbl">Foydalanuvchi ismi</label>
@@ -2511,7 +2523,7 @@ function renderAdminPanel(){
 
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;">
         <div class="field" style="margin-bottom:0;">
-          <label class="field-lbl">To'g'ri javoblar</label>
+          <label class="field-lbl">Togri javoblar</label>
           <input class="field-inp" id="adm-score-correct" type="number" placeholder="0" min="0">
         </div>
         <div class="field" style="margin-bottom:0;">
@@ -2530,18 +2542,18 @@ function renderAdminPanel(){
 
       <div id="adm-score-preview" style="display:none;background:#fff;border-radius:10px;padding:10px 12px;margin-bottom:10px;font-size:12px;color:var(--text2);font-weight:600;"></div>
 
-      <button onclick="adminAddScore()" style="width:100%;padding:13px;background:var(--green);color:#fff;border:none;border-radius:12px;font-family:'Inter',sans-serif;font-size:14px;font-weight:800;cursor:pointer;box-shadow:0 3px 12px rgba(34,197,94,0.3);">✅ Ball qo'shish</button>
+      <button onclick="adminAddScore()" style="width:100%;padding:13px;background:var(--green);color:#fff;border:none;border-radius:12px;font-family:'Inter',sans-serif;font-size:14px;font-weight:800;cursor:pointer;box-shadow:0 3px 12px rgba(34,197,94,0.3);">✅ Ball qoshish</button>
 
       <div style="margin-top:10px;">
-        <button onclick="adminLoadScoreList()" style="width:100%;padding:10px;background:var(--bg);color:var(--text2);border:1.5px solid var(--border);border-radius:10px;font-family:'Inter',sans-serif;font-size:12px;font-weight:700;cursor:pointer;">📊 Barcha ballarni ko'rish</button>
+        <button onclick="adminLoadScoreList()" style="width:100%;padding:10px;background:var(--bg);color:var(--text2);border:1.5px solid var(--border);border-radius:10px;font-family:'Inter',sans-serif;font-size:12px;font-weight:700;cursor:pointer;">📊 Barcha ballarni korish</button>
       </div>
       <div id="adm-score-list" style="margin-top:8px;"></div>
     </div>
   `;
-  // Nick stats yuklash — DOM tayyor bo'lgandan keyin
+  // Nick stats yuklash — DOM tayyor bolgandan keyin
   requestAnimationFrame(()=>{ requestAnimationFrame(()=>{ adminLoadNickStats(); }); });
 
-  // Subjects dropdown ni to'ldirish
+  // Subjects dropdown ni toldirish
   setTimeout(()=>{
     const sel=document.getElementById('adm-score-subj'); if(!sel) return;
     const fillSel=(data)=>{
@@ -2605,10 +2617,10 @@ async function adminForceLogout(){
 }
 
 async function adminLoadNickStats(){
-  // nick-stats-content ni topish — innerHTML orqali yaratilgan bo'lishi mumkin
+  // nick-stats-content ni topish — innerHTML orqali yaratilgan bolishi mumkin
   let el = document.getElementById('nick-stats-content');
   if(!el){
-    // Hali yaratilmagan — nick-stats-card ichiga qo'shamiz
+    // Hali yaratilmagan — nick-stats-card ichiga qoshamiz
     const card = document.getElementById('nick-stats-card');
     if(card){
       el = document.createElement('div');
@@ -2635,7 +2647,7 @@ async function adminLoadNickStats(){
       </div>
       <div style="background:#fff;border-radius:12px;padding:10px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,0.06);">
         <div style="font-size:22px;font-weight:900;color:var(--red);">${noNick}</div>
-        <div style="font-size:10px;color:var(--text3);font-weight:700;margin-top:2px;">Nikname yo'q</div>
+        <div style="font-size:10px;color:var(--text3);font-weight:700;margin-top:2px;">Nikname yoq</div>
       </div>
       <div style="background:#fff;border-radius:12px;padding:10px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,0.06);">
         <div style="font-size:22px;font-weight:900;color:var(--text);">${jami}</div>
@@ -2663,7 +2675,7 @@ async function adminLoadNickStats(){
       html += `</div>`;
     } else {
       html += `<div style="text-align:center;padding:20px;color:var(--text3);font-size:12px;font-weight:600;">
-        Hali hech kim nikname kiritgani yo'q
+        Hali hech kim nikname kiritgani yoq
       </div>`;
     }
 
@@ -2694,7 +2706,7 @@ async function adminSearchUser(query){
   if(!sug) return;
   if(!query||query.length<2){sug.style.display='none';return;}
 
-  // Leaderboard'dan foydalanuvchilar ro'yxatini olish
+  // Leaderboarddan foydalanuvchilar royxatini olish
   if(!_adminAllUsers.length){
     try{const r=await fetch('/api/leaderboard');if(r.ok)_adminAllUsers=await r.json();}catch{}
   }
@@ -2723,7 +2735,7 @@ function adminSelectUser(name, score, tests, correct, wrong){
     prev.style.display='block';
     prev.innerHTML=`👤 <b>${escH(name)}</b> — Hozirgi: <b>${score} ball</b>, <b>${tests} ta test</b> (✅${correct} / ❌${wrong})`;
   }
-  // Suggest qiymatlarini inputlarga qo'yish
+  // Suggest qiymatlarini inputlarga qoyish
   const scoreEl=document.getElementById('adm-score-val');
   const testsEl=document.getElementById('adm-score-tests');
   const correctEl=document.getElementById('adm-score-correct');
@@ -2763,7 +2775,7 @@ async function adminAddScore(){
     });
     const d=await r.json().catch(()=>({}));
     if(r.ok && d.success){
-      toast(`✅ ${name} ga ${addScore} ball, ${addTests} test qo'shildi!`);
+      toast(`✅ ${name} ga ${addScore} ball, ${addTests} test qoshildi!`);
       // Reset fields
       if(scoreEl) scoreEl.value='';
       if(testsEl) testsEl.value='';
@@ -3010,7 +3022,7 @@ async function startTest(mode){
     }
   }
   const questions=_subjects[_selKey].questions;
-  if(!questions?.length) return toast("Savollar yo'q",'bad');
+  if(!questions?.length) return toast("Savollar yoq",'bad');
   const q=mode==='blitz'?shuffle(questions).slice(0,25):shuffle(questions);
   _ts={questions:q,index:0,score:0,wrong:[],subjectKey:_selKey,timePerQ:30,timerVal:30,answered:false};
   document.getElementById('screen-app').classList.remove('active');
@@ -3086,7 +3098,7 @@ async function showResult(){
       <div style="font-size:12px;color:${passed?'#166534':'#991b1b'};margin-top:4px;font-weight:500;">${passed?pct+'% — 65% dan yuqori':'O\'tish uchun 65% kerak'}</div>
     </div>
     <div class="res-grid2">
-      <div class="res-box2"><div class="res-val2" style="color:var(--green);">${s.score}</div><div class="res-lbl2">To'g'ri</div></div>
+      <div class="res-box2"><div class="res-val2" style="color:var(--green);">${s.score}</div><div class="res-lbl2">Togri</div></div>
       <div class="res-box2"><div class="res-val2" style="color:var(--red);">${s.wrong.length}</div><div class="res-lbl2">Xato</div></div>
       <div class="res-box2"><div class="res-val2" style="color:var(--blue);">${total}</div><div class="res-lbl2">Jami</div></div>
     </div>`;
@@ -3100,7 +3112,7 @@ async function showResult(){
       </div>`;
     });
     html+=`</div>`;
-  } else { html+=`<div style="color:var(--green);font-size:14px;font-weight:700;padding:14px 0;">🎉 Hech qanday xato yo'q!</div>`; }
+  } else { html+=`<div style="color:var(--green);font-size:14px;font-weight:700;padding:14px 0;">🎉 Hech qanday xato yoq!</div>`; }
   html+=`<button onclick="closeTest()" style="width:100%;padding:14px;background:var(--green);color:#fff;border:none;border-radius:14px;font-family:'Inter',sans-serif;font-size:15px;font-weight:700;cursor:pointer;margin-top:12px;box-shadow:0 4px 16px rgba(34,197,94,.3);">← Fanlarga qaytish</button></div>`;
   document.getElementById('t-prog-fill').style.width='100%';
   document.getElementById('q-num').textContent='Natija';
@@ -3132,7 +3144,7 @@ const FOLLOWS_KEY = 'sb_follows_v1';
 function getFollowData(){ try{ return JSON.parse(localStorage.getItem(FOLLOWS_KEY)||'{}'); }catch{return{};} }
 function saveFollowData(d){ localStorage.setItem(FOLLOWS_KEY, JSON.stringify(d)); }
 
-// ✅ Serverdan follow ma'lumotlarini yuklash
+// ✅ Serverdan follow malumotlarini yuklash
 async function syncFollowsFromServer(myName){
   if(!myName) return;
   try{
@@ -3173,7 +3185,7 @@ async function followUser(targetName){
     // Serverdan qayta yuklash — sinxronlash uchun
     await syncFollowsFromServer(myName);
   }catch{}
-  // +1 Follow banner (o'z ekranida ko'rsatish)
+  // +1 Follow banner (oz ekranida korsatish)
   showFollowBanner(targetName, true);
 }
 
@@ -3447,7 +3459,7 @@ function startChatFromProfile(){
   if(!_viewUser) return;
   const sess=getSess(); if(!sess) return;
   const tName=_viewUser.name, tTg=_viewUser.tgU||'', tNick=_viewUser.nick||null;
-  if(!sess.isAdmin){const me=getUsers()[sess.username];if(me?.name===tName){toast("Bu o'z profilingiz!",'bad');return;}}
+  if(!sess.isAdmin){const me=getUsers()[sess.username];if(me?.name===tName){toast("Bu oz profilingiz!",'bad');return;}}
   closeUserProfile();
   openChat(tName,tTg,tNick);
 }
@@ -3492,20 +3504,20 @@ function initSocket(myName){
 
     const fromLow = (msg.from||'').toLowerCase().trim();
 
-    // Agar shu chat ochiq bo'lsa — darhol ko'rsat
+    // Agar shu chat ochiq bolsa — darhol korsat
     const chatOpen = _chatWith && fromLow === (_chatWith.name||'').toLowerCase().trim();
     if(chatOpen){
       if(!_msgs.find(m=>m.id===msg.id)){
         _msgs.push(msg);
         _lastTs = Math.max(_lastTs, msg.ts);
         renderMsgs(me);
-        // O'qilgan deb belgilash
+        // Oqilgan deb belgilash
         if(_socket?.connected) _socket.emit('mark_read',{myName:me, otherName:_chatWith.name});
         else markRead(me, _chatWith.name);
       }
     } else {
-      // Chat yopiq yoki boshqa chat — bildirishnoma ko'rsat
-      const sender = msg.fromNick || msg.from || "Noma'lum";
+      // Chat yopiq yoki boshqa chat — bildirishnoma korsat
+      const sender = msg.fromNick || msg.from || "Nomalum";
       showNotifBanner('💬 @' + sender + ' xabar yozdi', '+1 yangi xabar');
       // Badge yangilash
       _lastUnreadCount++;
@@ -3513,7 +3525,7 @@ function initSocket(myName){
       if(badge){ badge.textContent = _lastUnreadCount>99?'99+':_lastUnreadCount; badge.classList.add('on'); }
       const ahB = document.getElementById('ah-badge');
       if(ahB){ ahB.textContent = _lastUnreadCount>9?'9+':_lastUnreadCount; ahB.classList.add('on'); }
-      // Chats tabida bo'lsa ro'yxatni yangilash
+      // Chats tabida bolsa royxatni yangilash
       if(_curTab==='chats') loadChatsList();
     }
   });
@@ -3532,7 +3544,7 @@ function initSocket(myName){
     }
   });
 
-  // ─── O'qildi signali ─────────────────────────────────
+  // ─── Oqildi signali ─────────────────────────────────
   _socket.on('messages_read', (data)=>{
     if(!_msgs.length||!_chatMyName) return;
     const myLow=(_chatMyName||'').toLowerCase();
@@ -3631,7 +3643,7 @@ function getNicknameOf(name){
 }
 
 function openChat(targetName,targetTg,targetNick){
-  // targetName = real name (server uchun), targetNick = ko'rish uchun
+  // targetName = real name (server uchun), targetNick = korish uchun
   const displayName = targetNick || targetName;
   _chatWith={name:targetName, tg:targetTg||'', displayName};
   _msgs=[]; _lastTs=0;
@@ -3758,7 +3770,7 @@ async function markRead(myName,otherName){
 }
 function confirmDeleteChat(){
   if(!_chatWith) return;
-  showConfirm('🗑',"Chatni o'chirish",`"${_chatWith.name}" bilan barcha xabarlar o'chib ketadi`,async()=>{ await deleteChat(_chatWith.name); });
+  showConfirm('🗑',"Chatni ochirish",`"${_chatWith.name}" bilan barcha xabarlar ochib ketadi`,async()=>{ await deleteChat(_chatWith.name); });
 }
 async function deleteChat(otherName){
   const myName=getMyName(); if(!myName) return;
@@ -3769,9 +3781,9 @@ async function deleteChat(otherName){
       method:'POST', headers:{'Content-Type':'application/json'},
       body:JSON.stringify({myName, otherName})
     });
-    toast("✅ Chat o'chirildi!");
+    toast("✅ Chat ochirildi!");
   }catch{
-    toast("✅ Chat o'chirildi!");
+    toast("✅ Chat ochirildi!");
   }
 }
 async function deleteChatFromList(e,otherName){
@@ -3787,7 +3799,7 @@ async function deleteChatFromList(e,otherName){
       body:JSON.stringify({myName, otherName})
     });
   }catch{}
-  // Ro'yxatni yangilash
+  // Royxatni yangilash
   setTimeout(()=>loadChatsList(), 300);
 }
 let _sending=false;
@@ -3806,7 +3818,7 @@ async function sendMsg(){
   // Typing stop
   if(_socket?.connected) _socket.emit('typing',{fromName:myName,toName:_chatWith.name,isTyping:false});
 
-  // Optimistic message — darhol ekranda ko'rsat
+  // Optimistic message — darhol ekranda korsat
   const tempId='temp_'+Date.now();
   const tempMsg={id:tempId, from:myName, to:_chatWith.name, text, ts:Date.now(), read:false};
   _msgs.push(tempMsg);
@@ -3836,7 +3848,7 @@ async function sendMsg(){
           renderMsgs(myName);
         }
       } else {
-        // Xato — temp xabarni o'chirish
+        // Xato — temp xabarni ochirish
         _msgs=_msgs.filter(m=>m.id!==tempId);
         renderMsgs(myName);
         inp.value=text;
@@ -3930,7 +3942,7 @@ async function checkUnread(){
     if(total>0){badge.textContent=total>99?'99+':total;badge.classList.add('on');}else badge.classList.remove('on');
     const ahB=document.getElementById('ah-badge');
     if(total>0){ahB.textContent=total>9?'9+':total;ahB.classList.add('on');}else ahB.classList.remove('on');
-    // +1 xabar bildirishnomasi — faqat chat ochiq bo'lmasa
+    // +1 xabar bildirishnomasi — faqat chat ochiq bolmasa
     if(total > _lastUnreadCount && _lastUnreadCount >= 0 && !_chatWith){
       const diff = total - _lastUnreadCount;
       // Kimdan kelganini topish
@@ -4102,10 +4114,16 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeAdminModal();d
 function openAdminModal(){document.getElementById('adm-modal').classList.add('on');setTimeout(()=>document.getElementById('adm-pass-inp').focus(),100);}
 function closeAdminModal(){document.getElementById('adm-modal').classList.remove('on');}
 function checkAdmin(){
-  const val=document.getElementById('adm-pass-inp').value; const adm=getAdm();
+  const val=document.getElementById('adm-pass-inp').value;
+  const adm=getAdm();
   if(val===adm.pass||val===ADMIN_SECRET){
-    closeAdminModal(); saveSess({username:adm.username||'admin',isAdmin:true}); openApp(adm.username||'admin',true);
-  } else {document.getElementById('adm-pass-inp').classList.add('err');toast("Parol noto'g'ri!",'bad');}
+    closeAdminModal();
+    saveSess({username:adm.username||'admin',isAdmin:true});
+    openApp(adm.username||'admin',true);
+  } else {
+    document.getElementById('adm-pass-inp').classList.add('err');
+    toast('Parol notogri!','bad');
+  }
 }
 
 // Logout
@@ -4117,17 +4135,17 @@ let _nickValid=false;
 let _tgProfileData=null;
 
 async function loadTgProfile(wu){
-  // Telegram WebApp orqali TG ma'lumotlarini olish
+  // Telegram WebApp orqali TG malumotlarini olish
   try{
     const tgUser=window.Telegram?.WebApp?.initDataUnsafe?.user;
     if(tgUser){
       const tgId=tgUser.id;
       const tgUsername=tgUser.username||'';
-      // Serverdan TG profil ma'lumotlarini olish
+      // Serverdan TG profil malumotlarini olish
       const r=await fetch(`/api/tg-profile?tgId=${tgId}&tgUsername=${encodeURIComponent(tgUsername)}`);
       if(r.ok){
         _tgProfileData=await r.json();
-        // Web user ga TG ma'lumotlarini qo'shish
+        // Web user ga TG malumotlarini qoshish
         if(_tgProfileData.name && wu){
           const sess=getSess();
           if(sess){
@@ -4159,7 +4177,7 @@ function showNicknameSetup(){
   document.getElementById('screen-app').classList.remove('active');
   document.getElementById('screen-nickname').classList.add('active');
 
-  // TG profil preview ko'rsatish
+  // TG profil preview korsatish
   const sess=getSess();
   if(!sess) return;
   const wu=getUsers()[sess.username];
@@ -4255,7 +4273,7 @@ async function submitNickname(){
       saveUsers(users);
       saveSess({...sess,nickname:nick});
 
-      // App ga o'tish
+      // App ga otish
       document.getElementById('screen-nickname').classList.remove('active');
       document.getElementById('screen-app').classList.add('active');
       toast('✅ @'+nick+' — nikname saqlandi!');
@@ -4276,7 +4294,7 @@ async function submitNickname(){
 }
 
 function skipNickname(){
-  // Nikname o'tkazib yuborish — app ga kirish
+  // Nikname otkazib yuborish — app ga kirish
   const sess=getSess();
   document.getElementById('screen-nickname').classList.remove('active');
   document.getElementById('screen-app').classList.add('active');
@@ -4289,7 +4307,7 @@ function skipNickname(){
   fetchOnlineCount();
 }
 
-// Profildan nikname o'zgartirish
+// Profildan nikname ozgartirish
 async function changeNickname(){
   const current=getSess()?.nickname||getUsers()[getSess()?.username]?.nickname||'';
   const inp=document.getElementById('nick-change-inp');
@@ -4336,7 +4354,7 @@ function doSearch(q){
       const all=_lbCache.length?_lbCache:await fetch('/api/leaderboard').then(r=>r.json());
       if(!_lbCache.length) _lbCache=all;
       const qLow=qClean.toLowerCase();
-      // FAQAT nickname bo'yicha qidiruv
+      // FAQAT nickname boyicha qidiruv
       const found=all.filter(u=>{
         const nick=(u.nickname||'').toLowerCase();
         return nick.includes(qLow);
@@ -4350,7 +4368,7 @@ function doSearch(q){
         const url=getPhotoUrl(u.name,u.tgUsername); const i2=ini(u.name);
         const av=url?`<img src="${url}" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentElement.innerHTML='${i2}'">`:`${i2}`;
         const nick=u.nickname||'';
-        // Qidiruv so'zi highlight
+        // Qidiruv sozi highlight
         const nickHighlight=nick.replace(new RegExp('('+escH(qLow)+')','gi'),'<b style="color:var(--green);">$1</b>');
         html+=`<div style="display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--border);cursor:pointer;active:background:var(--bg);" onclick="closeSearch();openUserProfile('${escA(u.name)}','${escA(u.tgUsername||'')}')">
           <div style="width:46px;height:46px;border-radius:50%;background:var(--green-bg);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;color:var(--green);flex-shrink:0;overflow:hidden;">${av}</div>
@@ -4398,7 +4416,7 @@ window.addEventListener('DOMContentLoaded', async () => {
           if (old) {
             try {
               const p = JSON.parse(old);
-              // Admin sessiyasini saqlab qolish (admin logout bo'lmasin)
+              // Admin sessiyasini saqlab qolish (admin logout bolmasin)
               if (!p.isAdmin) localStorage.removeItem(k);
             } catch { localStorage.removeItem(k); }
           }
@@ -4416,8 +4434,8 @@ window.addEventListener('DOMContentLoaded', async () => {
   }
 
   // ─── 3. Login ekranini tayyorlash ───────────────────────
-  lTab('nick'); // Nikname kirish ekranini ko'rsat
-  loadTgProfileForLogin(); // TG dan ma'lumot olish
+  lTab('nick'); // Nikname kirish ekranini korsat
+  loadTgProfileForLogin(); // TG dan malumot olish
 });
 document.addEventListener('input',e=>{
   if(e.target.id==='chat-inp'){e.target.style.height='auto';e.target.style.height=Math.min(e.target.scrollHeight,100)+'px';}
@@ -4454,17 +4472,17 @@ if('serviceWorker' in navigator){
   });
 }
 
-// PWA: "Ekranga qo'shish" promptini saqlash
+// PWA: "Ekranga qoshish" promptini saqlash
 let _installPrompt = null;
 window.addEventListener('beforeinstallprompt', (e) => {
   e.preventDefault();
   _installPrompt = e;
-  // Install button ko'rsatish (agar bor bo'lsa)
+  // Install button korsatish (agar bor bolsa)
   showInstallBtn();
 });
 
 function showInstallBtn(){
-  // Faqat agar hali o'rnatilmagan bo'lsa
+  // Faqat agar hali ornatilmagan bolsa
   if(window.matchMedia('(display-mode: standalone)').matches) return;
   let btn = document.getElementById('pwa-install-btn');
   if(!btn){
@@ -4488,7 +4506,7 @@ async function installPWA(){
   document.getElementById('pwa-install-btn')?.remove();
 }
 
-// O'rnatilgandan keyin
+// Ornatilgandan keyin
 window.addEventListener('appinstalled', () => {
   console.log('[PWA] App installed!');
   _installPrompt = null;
