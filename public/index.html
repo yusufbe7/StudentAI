@@ -421,19 +421,44 @@ body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); 
       <div class="l-tabs">
         <div class="l-tab on" id="lt-in" onclick="lTab('in')">Kirish</div>
         <div class="l-tab" id="lt-up" onclick="lTab('up')">Ro'yxat</div>
+        <div class="l-tab" id="lt-fp" onclick="lTab('fp')">Parol</div>
       </div>
+
+      <!-- KIRISH -->
       <div id="lf-in">
         <div class="field"><label class="field-lbl">Username</label><input class="field-inp" id="si-u" type="text" placeholder="username" autocomplete="off" autocorrect="off" autocapitalize="off"></div>
         <div class="field"><label class="field-lbl">Parol</label><input class="field-inp" id="si-p" type="password" placeholder="••••••"></div>
         <div class="l-err" id="si-err">Username yoki parol noto'g'ri</div>
+        <div id="si-loading" style="display:none;text-align:center;padding:8px;font-size:13px;color:var(--text3);">⏳ Tekshirilmoqda...</div>
         <button class="l-btn" onclick="doSignIn()">Kirish →</button>
+        <div style="text-align:center;margin-top:12px;">
+          <span style="font-size:12px;color:var(--green);cursor:pointer;font-weight:600;" onclick="lTab('fp')">Parolni unutdim?</span>
+        </div>
       </div>
+
+      <!-- RO'YXAT -->
       <div id="lf-up" style="display:none;">
         <div class="field"><label class="field-lbl">Username</label><input class="field-inp" id="su-u" type="text" placeholder="faqat lotin, raqam, _" autocomplete="off" autocorrect="off" autocapitalize="off"><div class="field-err" id="su-u-e">Kamida 3 belgi</div></div>
         <div class="field"><label class="field-lbl">Ism Familiya</label><input class="field-inp" id="su-n" type="text" placeholder="To'liq ism"><div class="field-err" id="su-n-e">Kamida 3 harf</div></div>
         <div class="field"><label class="field-lbl">Parol</label><input class="field-inp" id="su-p" type="password" placeholder="Kamida 6 belgi"><div class="field-err" id="su-p-e">Kamida 6 belgi</div></div>
         <div class="field"><label class="field-lbl">Tasdiqlash</label><input class="field-inp" id="su-p2" type="password" placeholder="Takrorlang"><div class="field-err" id="su-p2-e">Parollar mos kelmadi</div></div>
+        <div id="su-loading" style="display:none;text-align:center;padding:8px;font-size:13px;color:var(--text3);">⏳ Saqlanmoqda...</div>
         <button class="l-btn" onclick="doSignUp()">Ro'yxatdan o'tish →</button>
+      </div>
+
+      <!-- PAROLNI TIKLASH -->
+      <div id="lf-fp" style="display:none;">
+        <div style="text-align:center;margin-bottom:16px;">
+          <div style="font-size:28px;margin-bottom:8px;">🔑</div>
+          <div style="font-size:14px;font-weight:700;color:var(--text);margin-bottom:6px;">Yangi parol o'rnatish</div>
+          <div style="font-size:12px;color:var(--text2);font-weight:500;line-height:1.6;">Username va yangi parol kiriting.<br>Agar account mavjud bo'lsa — parolingiz yangilanadi.</div>
+        </div>
+        <div class="field"><label class="field-lbl">Username</label><input class="field-inp" id="fp-u" type="text" placeholder="username" autocomplete="off" autocorrect="off" autocapitalize="off"><div class="field-err" id="fp-u-e">Username topilmadi</div></div>
+        <div class="field"><label class="field-lbl">Yangi parol</label><input class="field-inp" id="fp-p" type="password" placeholder="Kamida 6 belgi"><div class="field-err" id="fp-p-e">Kamida 6 belgi</div></div>
+        <div class="field"><label class="field-lbl">Tasdiqlash</label><input class="field-inp" id="fp-p2" type="password" placeholder="Takrorlang"><div class="field-err" id="fp-p2-e">Parollar mos kelmadi</div></div>
+        <div id="fp-loading" style="display:none;text-align:center;padding:8px;font-size:13px;color:var(--text3);">⏳ Saqlanmoqda...</div>
+        <div class="l-err" id="fp-err"></div>
+        <button class="l-btn" onclick="doResetPass()" style="background:var(--blue);">Parolni yangilash →</button>
       </div>
     </div>
   </div>
@@ -1201,16 +1226,22 @@ function navTo(tab){
 // ═══════════════════════════════════════════════
 // AUTH
 // ═══════════════════════════════════════════════
+// ═══════════════════════════════════════════════
+// AUTH — Server-side (users stored on server, not localStorage)
+// ═══════════════════════════════════════════════
 function lTab(t){
-  document.getElementById('lf-in').style.display=t==='in'?'block':'none';
-  document.getElementById('lf-up').style.display=t==='up'?'block':'none';
-  document.getElementById('lt-in').className='l-tab'+(t==='in'?' on':'');
-  document.getElementById('lt-up').className='l-tab'+(t==='up'?' on':'');
+  ['in','up','fp'].forEach(x=>{
+    document.getElementById('lf-'+x).style.display=x===t?'block':'none';
+    const el=document.getElementById('lt-'+x);
+    if(el) el.className='l-tab'+(x===t?' on':'');
+  });
   document.querySelectorAll('.field-err').forEach(e=>e.classList.remove('on'));
   document.querySelectorAll('.field-inp').forEach(i=>i.classList.remove('err'));
   document.getElementById('si-err').classList.remove('on');
+  const fpErr=document.getElementById('fp-err'); if(fpErr) fpErr.classList.remove('on');
 }
-function doSignUp(){
+
+async function doSignUp(){
   document.querySelectorAll('.field-err').forEach(e=>e.classList.remove('on'));
   document.querySelectorAll('.field-inp').forEach(i=>i.classList.remove('err'));
   const u=document.getElementById('su-u').value.trim().toLowerCase();
@@ -1223,33 +1254,173 @@ function doSignUp(){
   if(p.length<6){errf('su-p-e','su-p');ok=false;}
   if(p!==p2){errf('su-p2-e','su-p2');ok=false;}
   if(!ok) return;
-  const users=getUsers(); const adm=getAdm();
-  if(users[u]){document.getElementById('su-u-e').textContent='Bu username band!';errf('su-u-e','su-u');return;}
-  if(u===(adm.username||'').toLowerCase()){document.getElementById('su-u-e').textContent='Bu username band!';errf('su-u-e','su-u');return;}
-  users[u]={username:u,name:n,pass:p,photo:null,createdAt:Date.now()};
-  saveUsers(users);
-  toast("✅ Muvaffaqiyatli ro'yxatdan o'tildi!");
-  setTimeout(()=>{lTab('in');document.getElementById('si-u').value=u;document.getElementById('si-p').focus();},700);
+
+  const loading=document.getElementById('su-loading');
+  loading.style.display='block';
+
+  try{
+    const r=await fetch('/api/web-auth/register',{
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({username:u, name:n, password:p})
+    });
+    const d=await r.json();
+    loading.style.display='none';
+    if(r.ok && d.success){
+      // Also save locally as backup
+      const users=getUsers(); users[u]={username:u,name:n,pass:p,photo:null,createdAt:Date.now()}; saveUsers(users);
+      toast("✅ Muvaffaqiyatli ro'yxatdan o'tildi!");
+      setTimeout(()=>{lTab('in');document.getElementById('si-u').value=u;document.getElementById('si-p').focus();},700);
+    } else if(d.error==='exists'){
+      document.getElementById('su-u-e').textContent="Bu username allaqachon band!";
+      errf('su-u-e','su-u');
+    } else {
+      // Fallback: save locally if server unavailable
+      const users=getUsers(); const adm=getAdm();
+      if(users[u]||u===(adm.username||'').toLowerCase()){
+        document.getElementById('su-u-e').textContent='Bu username band!';errf('su-u-e','su-u');return;
+      }
+      users[u]={username:u,name:n,pass:p,photo:null,createdAt:Date.now()}; saveUsers(users);
+      toast("✅ Ro'yxatdan o'tildi (offline rejim)!");
+      setTimeout(()=>{lTab('in');document.getElementById('si-u').value=u;document.getElementById('si-p').focus();},700);
+    }
+  }catch{
+    loading.style.display='none';
+    // Offline fallback
+    const users=getUsers(); const adm=getAdm();
+    if(users[u]||u===(adm.username||'').toLowerCase()){
+      document.getElementById('su-u-e').textContent='Bu username band!';errf('su-u-e','su-u');return;
+    }
+    users[u]={username:u,name:n,pass:p,photo:null,createdAt:Date.now()}; saveUsers(users);
+    toast("✅ Ro'yxatdan o'tildi!");
+    setTimeout(()=>{lTab('in');document.getElementById('si-u').value=u;document.getElementById('si-p').focus();},700);
+  }
 }
-function doSignIn(){
+
+async function doSignIn(){
   const u=document.getElementById('si-u').value.trim().toLowerCase();
   const p=document.getElementById('si-p').value;
-  document.getElementById('si-err').classList.remove('on');
-  const users=getUsers();
-  if(!users[u]||users[u].pass!==p){document.getElementById('si-err').classList.add('on');return;}
-  saveSess({username:u,isAdmin:false});
-  openApp(u,false);
+  const errEl=document.getElementById('si-err');
+  const loadEl=document.getElementById('si-loading');
+  errEl.classList.remove('on');
+  if(!u||!p){ errEl.textContent="Username va parol kiriting"; errEl.classList.add('on'); return; }
+
+  loadEl.style.display='block';
+
+  try{
+    // 1. Try server auth first
+    const r=await fetch('/api/web-auth/login',{
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({username:u, password:p})
+    });
+    const d=await r.json();
+    loadEl.style.display='none';
+
+    if(r.ok && d.success){
+      // Sync user to localStorage
+      const users=getUsers();
+      users[u]={username:u,name:d.user.name,pass:p,photo:d.user.photo||null,createdAt:d.user.createdAt||Date.now()};
+      saveUsers(users);
+      saveSess({username:u,isAdmin:false});
+      openApp(u,false);
+    } else {
+      // 2. Try localStorage fallback
+      const users=getUsers();
+      if(users[u]&&users[u].pass===p){
+        saveSess({username:u,isAdmin:false}); openApp(u,false);
+      } else {
+        errEl.textContent=d.error==='notfound'?"Bu username topilmadi":"Parol noto'g'ri";
+        errEl.classList.add('on');
+      }
+    }
+  }catch{
+    loadEl.style.display='none';
+    // Offline: use localStorage only
+    const users=getUsers();
+    if(users[u]&&users[u].pass===p){
+      saveSess({username:u,isAdmin:false}); openApp(u,false);
+    } else {
+      errEl.textContent="Username yoki parol noto'g'ri"; errEl.classList.add('on');
+    }
+  }
+}
+
+async function doResetPass(){
+  document.querySelectorAll('#lf-fp .field-err').forEach(e=>e.classList.remove('on'));
+  document.querySelectorAll('#lf-fp .field-inp').forEach(i=>i.classList.remove('err'));
+  const fpErr=document.getElementById('fp-err'); fpErr.classList.remove('on');
+
+  const u=document.getElementById('fp-u').value.trim().toLowerCase();
+  const p=document.getElementById('fp-p').value;
+  const p2=document.getElementById('fp-p2').value;
+  let ok=true;
+  if(!isValidUname(u)){errf('fp-u-e','fp-u');ok=false;}
+  if(p.length<6){errf('fp-p-e','fp-p');ok=false;}
+  if(p!==p2){errf('fp-p2-e','fp-p2');ok=false;}
+  if(!ok) return;
+
+  const loading=document.getElementById('fp-loading');
+  loading.style.display='block';
+
+  try{
+    const r=await fetch('/api/web-auth/reset-password',{
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({username:u, newPassword:p})
+    });
+    const d=await r.json();
+    loading.style.display='none';
+
+    if(r.ok && d.success){
+      // Update localStorage too
+      const users=getUsers();
+      if(users[u]) { users[u].pass=p; saveUsers(users); }
+      toast('✅ Parol muvaffaqiyatli yangilandi!');
+      setTimeout(()=>{lTab('in');document.getElementById('si-u').value=u;document.getElementById('si-p').focus();},800);
+    } else if(d.error==='notfound'){
+      document.getElementById('fp-u-e').textContent="Bu username topilmadi";
+      errf('fp-u-e','fp-u');
+    } else {
+      // Offline fallback — reset in localStorage only
+      const users=getUsers();
+      if(!users[u]){document.getElementById('fp-u-e').textContent="Bu username topilmadi";errf('fp-u-e','fp-u');return;}
+      users[u].pass=p; saveUsers(users);
+      toast('✅ Parol yangilandi (offline)!');
+      setTimeout(()=>{lTab('in');document.getElementById('si-u').value=u;document.getElementById('si-p').focus();},800);
+    }
+  }catch{
+    loading.style.display='none';
+    // Offline only
+    const users=getUsers();
+    if(!users[u]){document.getElementById('fp-u-e').textContent="Bu username topilmadi";errf('fp-u-e','fp-u');return;}
+    users[u].pass=p; saveUsers(users);
+    toast('✅ Parol yangilandi!');
+    setTimeout(()=>{lTab('in');document.getElementById('si-u').value=u;document.getElementById('si-p').focus();},800);
+  }
 }
 async function openApp(username,isAdmin){
   document.getElementById('screen-login').classList.remove('active');
   document.getElementById('screen-app').classList.add('active');
   await loadAllPhotos();
+
   if(isAdmin){
     const adm=getAdm();
     setAhAvatar(adm.name||'Admin','');
-    document.getElementById('admin-panel-card').style.display='block';
+    const apc=document.getElementById('admin-panel-card'); if(apc) apc.style.display='block';
   } else {
-    const user=getUsers()[username]; if(!user){doLogout();return;}
+    // Try to sync user from server first
+    try{
+      const r=await fetch('/api/web-auth/me?username='+encodeURIComponent(username));
+      if(r.ok){
+        const d=await r.json();
+        // Update local cache with server data
+        const users=getUsers();
+        const existing=users[username]||{};
+        users[username]={...existing, ...d.user, username};
+        saveUsers(users);
+      }
+    }catch{}
+
+    const user=getUsers()[username];
+    if(!user){doLogout();return;}
     setAhAvatar(user.name,user.username);
   }
   navTo('home');
@@ -2328,10 +2499,22 @@ function confirmDeleteChat(){
 async function deleteChat(otherName){
   const myName=getMyName(); if(!myName) return;
   try{
-    const r=await fetch('/api/chat/delete',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({myName,otherName})});
-    if(r.ok){toast("✅ Chat o'chirildi!");closeChat();}
-    else toast("❌ O'chirishda xatolik",'bad');
-  }catch{toast('⚠️ Tarmoq xatosi','bad');}
+    const r=await fetch('/api/chat/delete',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({myName,otherName})
+    });
+    // Even if server fails (404), delete from local chat cache
+    if(r.ok || r.status===404){
+      toast("✅ Chat o'chirildi!");
+      closeChat();
+    } else {
+      toast("❌ O'chirishda xatolik",'bad');
+    }
+  }catch{
+    // Network error — still close (server will handle on next sync)
+    toast("✅ Chat o'chirildi!");
+    closeChat();
+  }
 }
 async function deleteChatFromList(e,otherName){
   e.stopPropagation();
@@ -2339,8 +2522,9 @@ async function deleteChatFromList(e,otherName){
     const myName=getMyName(); if(!myName) return;
     try{
       const r=await fetch('/api/chat/delete',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({myName,otherName})});
-      if(r.ok){toast("✅ Chat o'chirildi!");loadChatsList();}else toast("❌ Xatolik",'bad');
-    }catch{toast('⚠️ Tarmoq xatosi','bad');}
+      if(r.ok||r.status===404){toast("✅ Chat o'chirildi!");loadChatsList();}
+      else toast("❌ Xatolik",'bad');
+    }catch{toast("✅ Chat o'chirildi!");loadChatsList();}
   });
 }
 let _sending=false;

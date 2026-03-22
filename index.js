@@ -2739,6 +2739,233 @@ app.get('/api/leaderboard-full', (req, res) => {
     }
 });
 
+// ═══════════════════════════════════════════════════════════════════
+// BU KODNI index.js GA QO'SHING
+// app.listen(...) DAN OLDIN JOYLAShTIRING
+// ═══════════════════════════════════════════════════════════════════
+
+// Web foydalanuvchilar fayli
+const WEB_USERS_PATH = path.join(DATA_DIR, 'web_users.json');
+const getWebUsers  = () => readJSON(WEB_USERS_PATH, {});
+const saveWebUsers = (d) => writeJSON(WEB_USERS_PATH, d);
+
+// ─── REGISTER ───────────────────────────────────────────────────────
+app.post('/api/web-auth/register', (req, res) => {
+    try {
+        const { username, name, password } = req.body;
+        if (!username || !name || !password) {
+            return res.status(400).json({ error: 'missing_fields' });
+        }
+        const u = username.toLowerCase().trim();
+        if (!/^[a-z0-9_]{3,}$/.test(u)) {
+            return res.status(400).json({ error: 'invalid_username' });
+        }
+        if (name.trim().length < 3) {
+            return res.status(400).json({ error: 'invalid_name' });
+        }
+        if (password.length < 6) {
+            return res.status(400).json({ error: 'invalid_password' });
+        }
+
+        const webUsers = getWebUsers();
+        const db = getDb();
+        const adm = getAdm ? getAdm() : {};
+
+        // Check duplicate in web users
+        if (webUsers[u]) {
+            return res.status(409).json({ error: 'exists' });
+        }
+        // Check duplicate in Telegram bot users
+        const tgDuplicate = Object.values(db.users || {}).find(
+            usr => (usr.username || '').replace('@','').toLowerCase() === u
+        );
+        if (tgDuplicate) {
+            return res.status(409).json({ error: 'exists' });
+        }
+        // Check admin username
+        if (u === (adm.username || 'admin').toLowerCase()) {
+            return res.status(409).json({ error: 'exists' });
+        }
+
+        webUsers[u] = {
+            username: u,
+            name: name.trim(),
+            password, // plain text (matches existing bot pattern)
+            photo: null,
+            createdAt: Date.now(),
+        };
+        saveWebUsers(webUsers);
+
+        res.json({ success: true, user: { username: u, name: name.trim() } });
+    } catch (err) {
+        console.error('[web-register]', err.message);
+        res.status(500).json({ error: 'server_error' });
+    }
+});
+
+// ─── LOGIN ──────────────────────────────────────────────────────────
+app.post('/api/web-auth/login', (req, res) => {
+    try {
+        const { username, password } = req.body;
+        if (!username || !password) {
+            return res.status(400).json({ error: 'missing_fields' });
+        }
+        const u = username.toLowerCase().trim();
+
+        // 1. Check web users first
+        const webUsers = getWebUsers();
+        if (webUsers[u]) {
+            if (webUsers[u].password !== password) {
+                return res.status(401).json({ error: 'wrong_password' });
+            }
+            return res.json({
+                success: true,
+                user: {
+                    username: u,
+                    name: webUsers[u].name,
+                    photo: webUsers[u].photo || null,
+                    createdAt: webUsers[u].createdAt,
+                }
+            });
+        }
+
+        // 2. Check Telegram bot users (by username field)
+        const db = getDb();
+        const tgUser = Object.values(db.users || {}).find(
+            usr => (usr.username || '').replace('@','').toLowerCase() === u
+        );
+        if (tgUser) {
+            // Bot users don't have web passwords — not allowed via web login
+            return res.status(404).json({ error: 'notfound' });
+        }
+
+        return res.status(404).json({ error: 'notfound' });
+    } catch (err) {
+        console.error('[web-login]', err.message);
+        res.status(500).json({ error: 'server_error' });
+    }
+});
+
+// ─── GET ME (sync on app open) ──────────────────────────────────────
+app.get('/api/web-auth/me', (req, res) => {
+    try {
+        const u = (req.query.username || '').toLowerCase().trim();
+        if (!u) return res.status(400).json({ error: 'missing' });
+
+        const webUsers = getWebUsers();
+        if (!webUsers[u]) return res.status(404).json({ error: 'notfound' });
+
+        res.json({
+            success: true,
+            user: {
+                username: u,
+                name: webUsers[u].name,
+                photo: webUsers[u].photo || null,
+                createdAt: webUsers[u].createdAt,
+            }
+        });
+    } catch (err) {
+        res.status(500).json({ error: 'server_error' });
+    }
+});
+
+// ─── RESET PASSWORD ──────────────────────────────────────────────────
+app.post('/api/web-auth/reset-password', (req, res) => {
+    try {
+        const { username, newPassword } = req.body;
+        if (!username || !newPassword) {
+            return res.status(400).json({ error: 'missing_fields' });
+        }
+        if (newPassword.length < 6) {
+            return res.status(400).json({ error: 'too_short' });
+        }
+
+        const u = username.toLowerCase().trim();
+        const webUsers = getWebUsers();
+
+        if (!webUsers[u]) {
+            return res.status(404).json({ error: 'notfound' });
+        }
+
+        webUsers[u].password = newPassword;
+        webUsers[u].updatedAt = Date.now();
+        saveWebUsers(webUsers);
+
+        res.json({ success: true });
+    } catch (err) {
+        console.error('[reset-password]', err.message);
+        res.status(500).json({ error: 'server_error' });
+    }
+});
+
+// ─── UPDATE WEB USER PROFILE ──────────────────────────────────────────
+app.post('/api/web-auth/update', (req, res) => {
+    try {
+        const { username, newUsername, name, newPassword } = req.body;
+        if (!username) return res.status(400).json({ error: 'missing' });
+
+        const u = username.toLowerCase().trim();
+        const webUsers = getWebUsers();
+        if (!webUsers[u]) return res.status(404).json({ error: 'notfound' });
+
+        // Handle username change
+        if (newUsername && newUsername !== u) {
+            const nu = newUsername.toLowerCase().trim();
+            if (webUsers[nu]) return res.status(409).json({ error: 'username_taken' });
+            webUsers[nu] = { ...webUsers[u], username: nu };
+            if (name) webUsers[nu].name = name;
+            if (newPassword && newPassword.length >= 6) webUsers[nu].password = newPassword;
+            webUsers[nu].updatedAt = Date.now();
+            delete webUsers[u];
+            saveWebUsers(webUsers);
+            return res.json({ success: true, newUsername: nu });
+        }
+
+        if (name) webUsers[u].name = name;
+        if (newPassword && newPassword.length >= 6) webUsers[u].password = newPassword;
+        webUsers[u].updatedAt = Date.now();
+        saveWebUsers(webUsers);
+
+        res.json({ success: true });
+    } catch (err) {
+        console.error('[web-update]', err.message);
+        res.status(500).json({ error: 'server_error' });
+    }
+});
+
+// ─── CHAT DELETE ──────────────────────────────────────────────────────
+// Bu endpoint allaqachon yo'q bo'lsa, qo'shing:
+app.post('/api/chat/delete', (req, res) => {
+    try {
+        const { myName, otherName } = req.body;
+        if (!myName || !otherName) return res.status(400).json({ error: 'Parametrlar kerak' });
+
+        const chats = getChatMsgs();
+
+        // chatId funksiyasi: [n1, n2].sort().join('__CHAT__')
+        const cid = [myName, otherName].sort().join('__CHAT__');
+
+        if (chats[cid]) {
+            delete chats[cid];
+            saveChatMsgs(chats);
+        }
+
+        res.json({ success: true });
+    } catch (err) {
+        console.error('[Chat delete]', err.message);
+        res.status(500).json({ error: 'Xatolik' });
+    }
+});
+
+// ═══════════════════════════════════════════════════════════════════
+// ESLATMA: index.js da getChatMsgs va saveChatMsgs funksiyalari
+// allaqachon mavjud bo'lishi kerak. Agar yo'q bo'lsa:
+//
+// const CHAT_MSGS_PATH = path.join(DATA_DIR, 'chat_messages.json');
+// const getChatMsgs  = () => readJSON(CHAT_MSGS_PATH, {});
+// const saveChatMsgs = (d) => writeJSON(CHAT_MSGS_PATH, d);
+// ═══════════════════════════════════════════════════════════════════
+
 app.listen(PORT, '0.0.0.0', () => console.log(`🌐 Express server ${PORT}-portda`));
 
 // Railway/Render da WEBHOOK_URL env bo'lsa — webhook, aks holda polling
