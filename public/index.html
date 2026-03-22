@@ -180,19 +180,28 @@ body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); 
 .t-lbl2 { color:var(--text2); font-weight:500; }
 .t-val2 { font-weight:700; color:var(--text); }
 
-/* Leaderboard */
-.lb-item2 { display:flex; align-items:center; gap:12px; padding:12px 0; border-bottom:1px solid var(--border); cursor:pointer; }
-.lb-item2:last-child { border-bottom:none; }
-.lb-rank2 { width:28px; height:28px; border-radius:8px; background:var(--bg); display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:800; color:var(--text2); flex-shrink:0; }
-.lb-rank2.gold { background:rgba(234,179,8,.15); color:var(--yellow); }
-.lb-rank2.silver { background:rgba(107,114,128,.12); color:#6b7280; }
-.lb-rank2.bronze { background:rgba(180,120,80,.12); color:#b47850; }
-.lb-ava2 { width:38px; height:38px; border-radius:50%; background:var(--green-bg); display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:800; color:var(--green); flex-shrink:0; overflow:hidden; }
-.lb-ava2 img { width:100%; height:100%; object-fit:cover; }
-.lb-info2 { flex:1; min-width:0; }
-.lb-name2 { font-size:14px; font-weight:700; color:var(--text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-.lb-sub2 { font-size:11px; color:var(--text3); margin-top:1px; }
-.lb-score2 { font-size:16px; font-weight:800; color:var(--text); flex-shrink:0; }
+/* Leaderboard — Lock-in podium style */
+.podium-item { display:flex; flex-direction:column; align-items:center; flex:1; }
+.podium-ava-wrap { position:relative; margin-bottom:8px; }
+.podium-ava { border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:900; overflow:hidden; cursor:pointer; border:3px solid #fff; }
+.podium-ava img { width:100%; height:100%; object-fit:cover; }
+.podium-medal { position:absolute; bottom:-2px; right:-2px; width:22px; height:22px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; border:2px solid #fff; box-shadow:0 2px 6px rgba(0,0,0,0.12); }
+.podium-name { font-size:13px; font-weight:800; color:var(--text); text-align:center; margin-bottom:3px; max-width:82px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.podium-score { font-size:14px; font-weight:800; color:var(--green); }
+.podium-bar { border-radius:10px 10px 0 0; width:90%; margin:10px auto 0; }
+.podium-bar.gold { background:rgba(234,179,8,0.18); }
+.podium-bar.silver { background:rgba(107,114,128,0.12); }
+.podium-bar.bronze { background:rgba(234,127,4,0.12); }
+.lb-row { display:flex; align-items:center; gap:12px; padding:13px 16px; background:var(--card); border-radius:14px; margin-bottom:8px; cursor:pointer; box-shadow:0 1px 4px rgba(0,0,0,0.04); transition:opacity .15s; }
+.lb-row:active { opacity:.7; }
+.lb-num { font-size:14px; font-weight:700; color:var(--text3); width:28px; text-align:center; flex-shrink:0; }
+.lb-ava3 { width:44px; height:44px; border-radius:50%; background:var(--green-bg); display:flex; align-items:center; justify-content:center; font-size:16px; font-weight:900; color:var(--green); flex-shrink:0; overflow:hidden; }
+.lb-ava3 img { width:100%; height:100%; object-fit:cover; }
+.lb-info3 { flex:1; min-width:0; }
+.lb-name3 { font-size:15px; font-weight:700; color:var(--text); }
+.lb-handle3 { font-size:12px; color:var(--text3); font-weight:500; margin-top:2px; }
+.lb-val3 { font-size:16px; font-weight:800; color:var(--green); flex-shrink:0; }
+.lb-row-me { background:var(--green-bg) !important; }
 
 /* Subject stats */
 .sub-row2 { display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid var(--border); font-size:13px; }
@@ -494,10 +503,40 @@ body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); 
 
     <!-- STATS -->
     <div class="tab-panel" id="tab-stats">
-      <div class="stats-pad">
-        <div class="stat-card">
-          <div class="stat-card-title">Mening statistikam</div>
-          <div class="sg2">
+      <!-- Header -->
+      <div style="display:flex;align-items:center;padding:18px 20px 4px;gap:14px;">
+        <div style="flex:1;">
+          <div style="font-size:20px;font-weight:900;color:var(--text);text-align:center;">Weekly Leaderboard</div>
+          <div style="font-size:13px;color:var(--text3);font-weight:600;text-align:center;margin-top:3px;" id="lb-week-label">Mar 16 – Mar 23</div>
+        </div>
+      </div>
+
+      <!-- TOP 3 PODIUM -->
+      <div style="padding:20px 16px 16px;display:flex;align-items:flex-end;justify-content:center;gap:10px;" id="lb-podium">
+        <div style="color:var(--text3);font-size:13px;text-align:center;padding:20px;">Yuklanmoqda...</div>
+      </div>
+
+      <!-- Your Rank banner -->
+      <div style="margin:0 16px 16px;">
+        <div style="background:var(--green-bg);border-radius:14px;padding:14px 18px;display:flex;align-items:center;justify-content:space-between;">
+          <div style="font-size:14px;font-weight:700;color:var(--green);">Your Rank</div>
+          <div style="font-size:15px;font-weight:800;color:var(--green);" id="lb-my-rank">—</div>
+        </div>
+      </div>
+
+      <!-- List from #4 onwards -->
+      <div style="padding:0 16px 24px;" id="lb-list-full">
+        <div style="color:var(--text3);font-size:13px;text-align:center;padding:20px;">Yuklanmoqda...</div>
+      </div>
+
+      <!-- My stats section (collapsible) -->
+      <div style="padding:0 16px 8px;">
+        <div onclick="toggleMyStats()" style="display:flex;align-items:center;justify-content:space-between;background:var(--card);border-radius:16px;padding:14px 18px;box-shadow:0 1px 6px rgba(0,0,0,0.05);cursor:pointer;">
+          <div style="font-size:14px;font-weight:700;color:var(--text);">📊 Mening statistikam</div>
+          <svg id="my-stats-arrow" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="var(--text3)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="transition:transform .2s;"><path d="M6 9l6 6 6-6"/></svg>
+        </div>
+        <div id="my-stats-body" style="display:none;background:var(--card);border-radius:0 0 16px 16px;padding:14px 18px 18px;margin-top:-8px;box-shadow:0 2px 8px rgba(0,0,0,0.05);">
+          <div class="sg2" style="margin-bottom:12px;">
             <div class="s-box2"><div class="s-lbl2">Ball</div><div class="s-val2 green" id="st-score">0</div></div>
             <div class="s-box2"><div class="s-lbl2">Testlar</div><div class="s-val2" id="st-tests">0</div></div>
             <div class="s-box2"><div class="s-lbl2">✅ To'g'ri</div><div class="s-val2" style="color:var(--green)" id="st-correct">0</div></div>
@@ -505,18 +544,14 @@ body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); 
             <div class="s-box2"><div class="s-lbl2">OTM</div><div class="s-val2 sm" id="st-univ">—</div></div>
             <div class="s-box2"><div class="s-lbl2">Kurs</div><div class="s-val2 sm" id="st-kurs">—</div></div>
           </div>
-          <div style="margin-top:12px;">
-            <div class="t-row2"><span class="t-lbl2">Jami savollar</span><span class="t-val2" id="st-total-q">0</span></div>
-            <div class="t-row2"><span class="t-lbl2">To'g'rilik %</span><span class="t-val2" style="color:var(--green)" id="st-acc">—</span></div>
-          </div>
+          <div class="t-row2"><span class="t-lbl2">Jami savollar</span><span class="t-val2" id="st-total-q">0</span></div>
+          <div class="t-row2"><span class="t-lbl2">To'g'rilik %</span><span class="t-val2" style="color:var(--green)" id="st-acc">—</span></div>
         </div>
-        <div class="stat-card" id="subj-stats-card" style="display:none;">
+      </div>
+      <div style="padding:0 16px 24px;" id="subj-stats-card" style="display:none;">
+        <div style="background:var(--card);border-radius:16px;padding:16px 18px;box-shadow:0 1px 6px rgba(0,0,0,.05);">
           <div class="stat-card-title">Fanlar bo'yicha</div>
           <div id="subj-stats-list"></div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-card-title">🏆 TOP 10 reyting</div>
-          <div id="lb-list"><div style="color:var(--text3);font-size:13px;text-align:center;padding:20px;">Yuklanmoqda...</div></div>
         </div>
       </div>
     </div>
@@ -1473,9 +1508,27 @@ async function adminRejectTour(){
 // ═══════════════════════════════════════════════
 // STATS
 // ═══════════════════════════════════════════════
+// My stats toggle
+function toggleMyStats(){
+  const body=document.getElementById('my-stats-body');
+  const arrow=document.getElementById('my-stats-arrow');
+  const open=body.style.display==='block';
+  body.style.display=open?'none':'block';
+  arrow.style.transform=open?'rotate(0deg)':'rotate(180deg)';
+}
+
 async function loadStats(){
   const sess=getSess(); if(!sess) return;
   await loadAllPhotos();
+
+  // Week label
+  const now=new Date();
+  const mon=new Date(now); mon.setDate(now.getDate()-now.getDay()+1);
+  const sun=new Date(mon); sun.setDate(mon.getDate()+6);
+  const mo=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const wlEl=document.getElementById('lb-week-label');
+  if(wlEl) wlEl.textContent=`${mo[mon.getMonth()]} ${mon.getDate()} – ${mo[sun.getMonth()]} ${sun.getDate()}`;
+
   if(!sess.isAdmin){
     const user=getUsers()[sess.username]; if(!user) return;
     try{
@@ -1500,8 +1553,16 @@ async function loadStats(){
     document.getElementById('st-univ').textContent='Admin';
     document.getElementById('st-kurs').textContent='—';
   }
-  try{const r=await fetch('/api/leaderboard');if(r.ok){_lbCache=await r.json();renderLb(_lbCache);}}catch{}
+  try{
+    const r=await fetch('/api/leaderboard');
+    if(r.ok){
+      _lbCache=await r.json();
+      renderPodium(_lbCache);
+      renderLbList(_lbCache, sess);
+    }
+  }catch{}
 }
+
 function renderSubjStats(subjects){
   const card=document.getElementById('subj-stats-card'),list=document.getElementById('subj-stats-list');
   let html='';
@@ -1509,24 +1570,81 @@ function renderSubjStats(subjects){
     const sub=key.split('_').pop(); const sname=SUB_NAMES[sub]||sub;
     html+=`<div class="sub-row2"><span style="color:var(--text2);font-weight:600;font-size:13px;">${escH(sname)}</span><div style="display:flex;gap:5px;"><span class="chip2 chip2-blue">${val.tests||0}</span><span class="chip2 chip2-green">✅${val.correct||0}</span><span class="chip2 chip2-red">❌${val.wrong||0}</span></div></div>`;
   }
-  if(html){list.innerHTML=html;card.style.display='block';}
+  if(html){list.innerHTML=html;if(card)card.style.display='block';}
 }
-function renderLb(list){
-  const medals=['🥇','🥈','🥉'],cls=['gold','silver','bronze'];
-  let html='';
-  list.forEach((u,i)=>{
-    html+=`<div class="lb-item2" onclick="openUserProfile('${escA(u.name)}','${escA(u.tgUsername||'')}')">
-      <div class="lb-rank2 ${cls[i]||''}">${medals[i]||i+1}</div>
-      <div class="lb-ava2">${makeAvaHtml(u.name,u.tgUsername)}</div>
-      <div class="lb-info2">
-        <div class="lb-name2">${escH(u.name||'—')}</div>
-        <div class="lb-sub2">${u.tgUsername?'@'+u.tgUsername+' · ':''}${u.totalTests||0} test${u.univ?' · '+escH(u.univ):''}</div>
+
+function renderPodium(list){
+  const el=document.getElementById('lb-podium'); if(!el) return;
+  if(!list||list.length<1){el.innerHTML='<div style="color:var(--text3);font-size:13px;padding:20px;">Ma\'lumot yo\'q</div>';return;}
+
+  // order: [1]=silver(left), [0]=gold(center), [2]=bronze(right)
+  const order=[1,0,2];
+  const medalBg=['#F6C90E','#C0C0C0','#CD7F32'];
+  const medalSymbol=['1','2','3'];
+  const barHeights=['60px','90px','45px']; // gold taller
+  const avaSize=['76px','92px','70px'];
+  const borderColor=['rgba(198,173,0,0.6)','rgba(192,192,192,0.6)','rgba(205,127,50,0.6)'];
+
+  let html='<div style="display:flex;align-items:flex-end;justify-content:center;gap:10px;width:100%;">';
+  order.forEach((rank,slot)=>{
+    const u=list[rank];
+    if(!u){html+=`<div style="flex:1;"></div>`;return;}
+    const url=getPhotoUrl(u.name,u.tgUsername);
+    const i=ini(u.name);
+    const av=url
+      ?`<img src="${url}" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentElement.innerHTML='<span style=\\'font-size:${slot===1?28:22}px;\\'>${i}</span>'">`
+      :`<span style="font-size:${slot===1?28:22}px;">${i}</span>`;
+    const score=parseFloat(u.score||0).toFixed(0)+'ball';
+    const sz=avaSize[slot]; const bh=barHeights[slot]; const bc=borderColor[slot];
+    html+=`<div style="display:flex;flex-direction:column;align-items:center;flex:1;" onclick="openUserProfile('${escA(u.name)}','${escA(u.tgUsername||'')}')">
+      <div style="position:relative;margin-bottom:8px;">
+        <div style="width:${sz};height:${sz};border-radius:50%;background:var(--green-bg);display:flex;align-items:center;justify-content:center;overflow:hidden;border:3px solid ${bc};cursor:pointer;">${av}</div>
+        <div style="position:absolute;bottom:-2px;right:-2px;width:22px;height:22px;border-radius:50%;background:${medalBg[slot]};display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;color:#fff;border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,0.15);">${medalSymbol[slot]}</div>
       </div>
-      <div class="lb-score2">${parseFloat(u.score||0).toFixed(1)}</div>
+      <div style="font-size:${slot===1?14:13}px;font-weight:800;color:var(--text);text-align:center;max-width:82px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-bottom:3px;">${escH(u.name.split(' ')[0])}</div>
+      <div style="font-size:13px;font-weight:800;color:var(--green);margin-bottom:10px;">${score}</div>
+      <div style="height:${bh};width:100%;background:${slot===1?'rgba(234,179,8,0.15)':slot===0?'rgba(192,192,192,0.12)':'rgba(205,127,50,0.12)'};border-radius:10px 10px 0 0;"></div>
     </div>`;
   });
-  document.getElementById('lb-list').innerHTML=html||'<div style="color:var(--text3);font-size:13px;text-align:center;padding:20px;font-weight:500;">Hali hech kim yo\'q</div>';
+  html+='</div>';
+  el.innerHTML=html;
 }
+
+function renderLbList(list, sess){
+  const myName=getMyName();
+  // Find my rank
+  const myIdx=list.findIndex(u=>u.name===myName);
+  const rankEl=document.getElementById('lb-my-rank');
+  if(rankEl){
+    if(myIdx>=0) rankEl.textContent=`#${myIdx+1} of ${list.length}`;
+    else rankEl.textContent=`#— of ${list.length}`;
+  }
+  // Render from #4 onwards
+  const el=document.getElementById('lb-list-full'); if(!el) return;
+  const rest=list.slice(3);
+  if(!rest.length){el.innerHTML='<div style="color:var(--text3);font-size:13px;text-align:center;padding:20px;font-weight:500;">Hali hech kim yo\'q</div>';return;}
+  let html='';
+  rest.forEach((u,i)=>{
+    const rank=i+4;
+    const url=getPhotoUrl(u.name,u.tgUsername); const ini2=ini(u.name);
+    const av=url?`<img src="${url}" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentElement.innerHTML='${ini2}'">`:`<span>${ini2}</span>`;
+    const isMe=u.name===myName;
+    const score=parseFloat(u.score||0).toFixed(0);
+    html+=`<div class="lb-row${isMe?' lb-row-me':''}" onclick="openUserProfile('${escA(u.name)}','${escA(u.tgUsername||'')}')">
+      <div class="lb-num" style="${isMe?'color:var(--green);font-weight:800;':''}">#${rank}</div>
+      <div class="lb-ava3" style="${isMe?'background:var(--green);color:#fff;':''}">${av}</div>
+      <div class="lb-info3">
+        <div class="lb-name3" style="${isMe?'color:var(--green);':''}">${escH(u.name||'—')}</div>
+        <div class="lb-handle3">${u.tgUsername?'@'+u.tgUsername:u.univ||''}</div>
+      </div>
+      <div class="lb-val3">${score}ball</div>
+    </div>`;
+  });
+  el.innerHTML=html;
+}
+
+// Keep old renderLb alias for home tab stories
+function renderLb(list){ renderLbList(list, getSess()); }
 
 // ═══════════════════════════════════════════════
 // SUBJECTS & TEST
