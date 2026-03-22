@@ -3825,23 +3825,145 @@ app.get('/api/follow-list', (req, res) => {
     } catch (err) { res.status(500).json({ error: 'Xatolik' }); }
 });
  
-// ═══════════════════════════════════════════════════════════════════
-// ESLATMALAR:
-// 1. getFollows() funksiyasi index.js da mavjud bo'lishi kerak:
-//    const getFollows  = () => readJSON(PATHS.follows, {});
-//    const saveFollows = (d) => writeJSON(PATHS.follows, d);
-//
-// 2. bot.telegram mavjud bo'lishi kerak (index.js da bot = new Telegraf(...))
-//
-// 3. Bu faylni index.js da app.listen() DAN OLDIN qo'shing:
-//    require('./server_endpoints_v2')(app, path, DATA_DIR, readJSON, writeJSON, getDb, getFollows, bot);
-//    YOKI to'g'ridan-to'g'ri index.js ichiga paste qiling
-// ═══════════════════════════════════════════════════════════════════
+
+
+
+
+
+// ─── ADMIN: Ball va Test qo'shish ────────────────────────────────────
+app.post('/api/admin/add-score', async (req, res) => {
+    try {
+        const { name, addScore, addTests, addCorrect, addWrong } = req.body;
  
-
-
-
-
+        if (!name || name.trim() === '') {
+            return res.status(400).json({ error: 'Ism kiriting' });
+        }
+ 
+        const nameTrim = name.trim();
+        const scoreToAdd  = parseFloat(addScore)  || 0;
+        const testsToAdd  = parseInt(addTests)     || 0;
+        const correctToAdd = parseInt(addCorrect)  || 0;
+        const wrongToAdd  = parseInt(addWrong)     || 0;
+ 
+        if (scoreToAdd <= 0 && testsToAdd <= 0) {
+            return res.status(400).json({ error: 'Ball yoki test miqdori kiriting' });
+        }
+ 
+        const db = getDb();
+ 
+        // ─── 1. Telegram bot foydalanuvchilarida izlash ───────────────
+        let found = false;
+        for (const [uid, user] of Object.entries(db.users || {})) {
+            const uName = (user.name || '').trim();
+            if (uName.toLowerCase() === nameTrim.toLowerCase()) {
+                // Update Telegram user scores
+                if (!user.scores) user.scores = { score: 0, totalTests: 0, totalCorrect: 0, totalWrong: 0, subjects: {} };
+ 
+                user.scores.score       = (parseFloat(user.scores.score)       || 0) + scoreToAdd;
+                user.scores.totalTests  = (parseInt(user.scores.totalTests)     || 0) + testsToAdd;
+                user.scores.totalCorrect = (parseInt(user.scores.totalCorrect)  || 0) + correctToAdd;
+                user.scores.totalWrong  = (parseInt(user.scores.totalWrong)     || 0) + wrongToAdd;
+ 
+                db.users[uid] = user;
+                found = true;
+ 
+                // Notify user via Telegram
+                try {
+                    await bot.telegram.sendMessage(uid,
+                        `🎉 <b>Tabriklaymiz!</b>\n\n` +
+                        `Admin sizning hisobingizga qo'shdi:\n` +
+                        `⚡ <b>${scoreToAdd} ball</b>${testsToAdd > 0 ? `\n📝 <b>${testsToAdd} ta test</b>` : ''}\n\n` +
+                        `📊 Jami ballingiz: <b>${user.scores.score.toFixed(1)} ball</b>\n` +
+                        `🧪 Jami testlar: <b>${user.scores.totalTests} ta</b>`,
+                        { parse_mode: 'HTML' }
+                    ).catch(() => {});
+                } catch {}
+                break;
+            }
+        }
+ 
+        // ─── 2. Web foydalanuvchilarida izlash ────────────────────────
+        if (!found) {
+            const WEB_USERS_PATH = path.join(DATA_DIR, 'web_users.json');
+            const webUsers = readJSON(WEB_USERS_PATH, {});
+ 
+            for (const [ukey, wUser] of Object.entries(webUsers)) {
+                const wName = (wUser.name || '').trim();
+                if (wName.toLowerCase() === nameTrim.toLowerCase()) {
+                    if (!wUser.scores) wUser.scores = { score: 0, totalTests: 0, totalCorrect: 0, totalWrong: 0 };
+ 
+                    wUser.scores.score        = (parseFloat(wUser.scores.score)        || 0) + scoreToAdd;
+                    wUser.scores.totalTests   = (parseInt(wUser.scores.totalTests)      || 0) + testsToAdd;
+                    wUser.scores.totalCorrect = (parseInt(wUser.scores.totalCorrect)    || 0) + correctToAdd;
+                    wUser.scores.totalWrong   = (parseInt(wUser.scores.totalWrong)      || 0) + wrongToAdd;
+ 
+                    webUsers[ukey] = wUser;
+                    writeJSON(WEB_USERS_PATH, webUsers);
+                    found = true;
+                    break;
+                }
+            }
+        }
+ 
+        // ─── 3. Leaderboard/web_scores da ham izlash ─────────────────
+        if (!found) {
+            // Try web_scores.json (submitted via /api/web-score)
+            const WEB_SCORES_PATH = path.join(DATA_DIR, 'web_scores.json');
+            const webScores = readJSON(WEB_SCORES_PATH, {});
+ 
+            // Find by name in web_scores
+            let foundKey = null;
+            for (const [k, v] of Object.entries(webScores)) {
+                if ((v.name || '').toLowerCase() === nameTrim.toLowerCase()) {
+                    foundKey = k;
+                    break;
+                }
+            }
+ 
+            if (foundKey) {
+                const ws = webScores[foundKey];
+                ws.score        = (parseFloat(ws.score)        || 0) + scoreToAdd;
+                ws.totalTests   = (parseInt(ws.totalTests)      || 0) + testsToAdd;
+                ws.totalCorrect = (parseInt(ws.totalCorrect)    || 0) + correctToAdd;
+                ws.totalWrong   = (parseInt(ws.totalWrong)      || 0) + wrongToAdd;
+                webScores[foundKey] = ws;
+                writeJSON(WEB_SCORES_PATH, webScores);
+                found = true;
+            }
+        }
+ 
+        if (!found) {
+            // Create new record in web_scores for this person
+            const WEB_SCORES_PATH = path.join(DATA_DIR, 'web_scores.json');
+            const webScores = readJSON(WEB_SCORES_PATH, {});
+            const newKey = nameTrim.toLowerCase().replace(/\s+/g, '_') + '_' + Date.now();
+            webScores[newKey] = {
+                name: nameTrim,
+                username: '',
+                score: scoreToAdd,
+                totalTests: testsToAdd,
+                totalCorrect: correctToAdd,
+                totalWrong: wrongToAdd,
+                createdAt: Date.now(),
+                addedByAdmin: true,
+            };
+            writeJSON(WEB_SCORES_PATH, webScores);
+            found = true;
+        }
+ 
+        // Save main db
+        saveDb(db);
+ 
+        res.json({
+            success: true,
+            message: `${nameTrim} ga ${scoreToAdd} ball va ${testsToAdd} test qo'shildi`,
+        });
+ 
+    } catch (err) {
+        console.error('[admin/add-score]', err.message);
+        res.status(500).json({ error: err.message });
+    }
+});
 
 
 

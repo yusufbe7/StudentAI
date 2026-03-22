@@ -1856,7 +1856,49 @@ function renderAdminPanel(){
     <div class="field"><label class="field-lbl">Yangi parol</label><input class="field-inp" id="adm-pw" type="password" placeholder="Bo'sh qoldiring"></div>
     <div class="field"><input class="field-inp" id="adm-pw2" type="password" placeholder="Tasdiqlang"><div class="field-err" id="adm-pw-e">Parollar mos kelmadi</div></div>
     <button class="save-btn2" onclick="saveAdminProfile()" style="margin-bottom:10px;">💾 Saqlash</button>
-    <button onclick="adminRejectTour()" style="width:100%;padding:12px;background:var(--red-bg);color:var(--red);border:none;border-radius:12px;font-family:'Inter',sans-serif;font-size:13px;font-weight:700;cursor:pointer;">✕ Musobaqani bekor qilish</button>
+    <button onclick="adminRejectTour()" style="width:100%;padding:12px;background:var(--red-bg);color:var(--red);border:none;border-radius:12px;font-family:'Inter',sans-serif;font-size:13px;font-weight:700;cursor:pointer;margin-bottom:16px;">✕ Musobaqani bekor qilish</button>
+
+    <!-- Ball qo'shish bo'limi -->
+    <div style="background:var(--bg);border-radius:14px;padding:16px;margin-top:4px;">
+      <div style="font-size:13px;font-weight:800;color:var(--text);margin-bottom:12px;">⚡ Ball va Test qo'shish</div>
+
+      <div class="field" style="margin-bottom:10px;">
+        <label class="field-lbl">Foydalanuvchi ismi</label>
+        <input class="field-inp" id="adm-score-name" type="text" placeholder="Ism Familiya..." autocomplete="off" oninput="adminSearchUser(this.value)">
+        <div id="adm-score-suggest" style="display:none;background:#fff;border-radius:10px;box-shadow:0 4px 16px rgba(0,0,0,0.12);margin-top:4px;overflow:hidden;max-height:160px;overflow-y:auto;"></div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;">
+        <div class="field" style="margin-bottom:0;">
+          <label class="field-lbl">Ball miqdori</label>
+          <input class="field-inp" id="adm-score-val" type="number" placeholder="0.0" step="0.5" min="0">
+        </div>
+        <div class="field" style="margin-bottom:0;">
+          <label class="field-lbl">Test soni</label>
+          <input class="field-inp" id="adm-score-tests" type="number" placeholder="0" min="0">
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;">
+        <div class="field" style="margin-bottom:0;">
+          <label class="field-lbl">To'g'ri javoblar</label>
+          <input class="field-inp" id="adm-score-correct" type="number" placeholder="0" min="0">
+        </div>
+        <div class="field" style="margin-bottom:0;">
+          <label class="field-lbl">Xato javoblar</label>
+          <input class="field-inp" id="adm-score-wrong" type="number" placeholder="0" min="0">
+        </div>
+      </div>
+
+      <div id="adm-score-preview" style="display:none;background:#fff;border-radius:10px;padding:10px 12px;margin-bottom:10px;font-size:12px;color:var(--text2);font-weight:600;"></div>
+
+      <button onclick="adminAddScore()" style="width:100%;padding:13px;background:var(--green);color:#fff;border:none;border-radius:12px;font-family:'Inter',sans-serif;font-size:14px;font-weight:800;cursor:pointer;box-shadow:0 3px 12px rgba(34,197,94,0.3);">✅ Ball qo'shish</button>
+
+      <div style="margin-top:10px;">
+        <button onclick="adminLoadScoreList()" style="width:100%;padding:10px;background:var(--bg);color:var(--text2);border:1.5px solid var(--border);border-radius:10px;font-family:'Inter',sans-serif;font-size:12px;font-weight:700;cursor:pointer;">📊 Barcha ballarni ko'rish</button>
+      </div>
+      <div id="adm-score-list" style="margin-top:8px;"></div>
+    </div>
   `;
 }
 function saveAdminProfile(){
@@ -1879,6 +1921,115 @@ async function adminRejectTour(){
       if(r.ok) toast('✅ Musobaqa bekor qilindi!'); else toast('❌ Xatolik','bad');
     }catch{toast('⚠️ Tarmoq xatosi','bad');}
   });
+}
+
+// ─── Admin: foydalanuvchi qidirish ─────────────────────────────────
+let _adminAllUsers=[];
+async function adminSearchUser(query){
+  const sug=document.getElementById('adm-score-suggest');
+  const prev=document.getElementById('adm-score-preview');
+  if(!sug) return;
+  if(!query||query.length<2){sug.style.display='none';return;}
+
+  // Leaderboard'dan foydalanuvchilar ro'yxatini olish
+  if(!_adminAllUsers.length){
+    try{const r=await fetch('/api/leaderboard');if(r.ok)_adminAllUsers=await r.json();}catch{}
+  }
+  const q=query.toLowerCase();
+  const matches=_adminAllUsers.filter(u=>(u.name||'').toLowerCase().includes(q)).slice(0,6);
+
+  if(!matches.length){sug.style.display='none';return;}
+
+  sug.innerHTML=matches.map(u=>`
+    <div onclick="adminSelectUser('${escA(u.name)}','${parseFloat(u.score||0).toFixed(1)}','${u.totalTests||0}','${u.totalCorrect||0}','${u.totalWrong||0}')"
+      style="padding:10px 14px;cursor:pointer;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;"
+      onmouseover="this.style.background='var(--bg)'" onmouseout="this.style.background='#fff'">
+      <span style="font-size:13px;font-weight:700;">${escH(u.name)}</span>
+      <span style="font-size:11px;color:var(--text3);">${parseFloat(u.score||0).toFixed(0)} ball · ${u.totalTests||0} test</span>
+    </div>`).join('');
+  sug.style.display='block';
+}
+
+function adminSelectUser(name, score, tests, correct, wrong){
+  const inp=document.getElementById('adm-score-name');
+  const sug=document.getElementById('adm-score-suggest');
+  const prev=document.getElementById('adm-score-preview');
+  if(inp) inp.value=name;
+  if(sug) sug.style.display='none';
+  if(prev){
+    prev.style.display='block';
+    prev.innerHTML=`👤 <b>${escH(name)}</b> — Hozirgi: <b>${score} ball</b>, <b>${tests} ta test</b> (✅${correct} / ❌${wrong})`;
+  }
+}
+
+async function adminAddScore(){
+  const nameEl=document.getElementById('adm-score-name');
+  const scoreEl=document.getElementById('adm-score-val');
+  const testsEl=document.getElementById('adm-score-tests');
+  const correctEl=document.getElementById('adm-score-correct');
+  const wrongEl=document.getElementById('adm-score-wrong');
+
+  const name=(nameEl?.value||'').trim();
+  const addScore=parseFloat(scoreEl?.value||0);
+  const addTests=parseInt(testsEl?.value||0);
+  const addCorrect=parseInt(correctEl?.value||0);
+  const addWrong=parseInt(wrongEl?.value||0);
+
+  if(!name){toast('❌ Ism kiriting!','bad');return;}
+  if(addScore<=0&&addTests<=0){toast('❌ Ball yoki test miqdori kiriting!','bad');return;}
+
+  const btn=document.querySelector('button[onclick="adminAddScore()"]');
+  if(btn){btn.textContent='⏳ Yuklanmoqda...';btn.disabled=true;}
+
+  try{
+    const r=await fetch('/api/admin/add-score',{
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({name, addScore, addTests, addCorrect, addWrong})
+    });
+    const d=await r.json().catch(()=>({}));
+    if(r.ok && d.success){
+      toast(`✅ ${name} ga ${addScore} ball, ${addTests} test qo'shildi!`);
+      // Reset fields
+      if(scoreEl) scoreEl.value='';
+      if(testsEl) testsEl.value='';
+      if(correctEl) correctEl.value='';
+      if(wrongEl) wrongEl.value='';
+      const prev=document.getElementById('adm-score-preview');
+      if(prev) prev.style.display='none';
+      // Refresh leaderboard
+      _adminAllUsers=[];
+      const lbR=await fetch('/api/leaderboard');
+      if(lbR.ok){_lbCache=await lbR.json();renderPodium(_lbCache);renderLbList(_lbCache,getSess());}
+    } else {
+      toast(`❌ Xatolik: ${d.error||'Noma\'lum'}`, 'bad');
+    }
+  }catch{
+    toast('⚠️ Server bilan bog\'lanib bo\'lmadi','bad');
+  }finally{
+    if(btn){btn.textContent='✅ Ball qo\'shish';btn.disabled=false;}
+  }
+}
+
+async function adminLoadScoreList(){
+  const el=document.getElementById('adm-score-list'); if(!el) return;
+  el.innerHTML='<div style="color:var(--text3);font-size:12px;text-align:center;padding:12px;">Yuklanmoqda...</div>';
+  try{
+    const r=await fetch('/api/leaderboard');
+    if(!r.ok) throw new Error();
+    const list=await r.json();
+    if(!list.length){el.innerHTML='<div style="color:var(--text3);font-size:12px;text-align:center;padding:12px;">Hali kimdir yo\'q</div>';return;}
+    let html='<div style="margin-top:4px;">';
+    list.slice(0,20).forEach((u,i)=>{
+      html+=`<div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border);">
+        <span style="font-size:11px;font-weight:800;color:var(--text3);min-width:20px;">#${i+1}</span>
+        <span style="flex:1;font-size:12px;font-weight:700;color:var(--text);">${escH(u.name)}</span>
+        <span style="font-size:11px;color:var(--green);font-weight:800;">${parseFloat(u.score||0).toFixed(0)} ball</span>
+        <span style="font-size:11px;color:var(--text3);font-weight:600;">${u.totalTests||0} test</span>
+      </div>`;
+    });
+    html+='</div>';
+    el.innerHTML=html;
+  }catch{el.innerHTML='<div style="color:var(--red);font-size:12px;text-align:center;padding:12px;">Yuklanmadi</div>';}
 }
 
 // ═══════════════════════════════════════════════
@@ -1971,14 +2122,16 @@ function renderPodium(list){
       ?`<img src="${url}" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentElement.innerHTML='<span style=\\'font-size:${slot===1?28:22}px;\\'>${i}</span>'">`
       :`<span style="font-size:${slot===1?28:22}px;">${i}</span>`;
     const score=parseFloat(u.score||0).toFixed(0)+'ball';
+    const tests=u.totalTests||0;
     const sz=avaSize[slot]; const bh=barHeights[slot]; const bc=borderColor[slot];
     html+=`<div style="display:flex;flex-direction:column;align-items:center;flex:1;" onclick="openUserProfile('${escA(u.name)}','${escA(u.tgUsername||'')}')">
       <div style="position:relative;margin-bottom:8px;">
         <div style="width:${sz};height:${sz};border-radius:50%;background:var(--green-bg);display:flex;align-items:center;justify-content:center;overflow:hidden;border:3px solid ${bc};cursor:pointer;">${av}</div>
         <div style="position:absolute;bottom:-2px;right:-2px;width:22px;height:22px;border-radius:50%;background:${medalBg[slot]};display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;color:#fff;border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,0.15);">${medalSymbol[slot]}</div>
       </div>
-      <div style="font-size:${slot===1?14:13}px;font-weight:800;color:var(--text);text-align:center;max-width:82px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-bottom:3px;">${escH(u.name.split(' ')[0])}</div>
-      <div style="font-size:13px;font-weight:800;color:var(--green);margin-bottom:10px;">${score}</div>
+      <div style="font-size:${slot===1?14:13}px;font-weight:800;color:var(--text);text-align:center;max-width:82px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-bottom:2px;">${escH(u.name.split(' ')[0])}</div>
+      <div style="font-size:13px;font-weight:800;color:var(--green);margin-bottom:2px;">${score}</div>
+      <div style="font-size:10px;font-weight:600;color:var(--text3);margin-bottom:8px;">${tests} test</div>
       <div style="height:${bh};width:100%;background:${slot===1?'rgba(234,179,8,0.15)':slot===0?'rgba(192,192,192,0.12)':'rgba(205,127,50,0.12)'};border-radius:10px 10px 0 0;"></div>
     </div>`;
   });
@@ -1988,14 +2141,12 @@ function renderPodium(list){
 
 function renderLbList(list, sess){
   const myName=getMyName();
-  // Find my rank
   const myIdx=list.findIndex(u=>u.name===myName);
   const rankEl=document.getElementById('lb-my-rank');
   if(rankEl){
     if(myIdx>=0) rankEl.textContent=`#${myIdx+1} of ${list.length}`;
     else rankEl.textContent=`#— of ${list.length}`;
   }
-  // Render from #4 onwards
   const el=document.getElementById('lb-list-full'); if(!el) return;
   const rest=list.slice(3);
   if(!rest.length){el.innerHTML='<div style="color:var(--text3);font-size:13px;text-align:center;padding:20px;font-weight:500;">Hali hech kim yo\'q</div>';return;}
@@ -2006,6 +2157,7 @@ function renderLbList(list, sess){
     const av=url?`<img src="${url}" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentElement.innerHTML='${ini2}'">`:`<span>${ini2}</span>`;
     const isMe=u.name===myName;
     const score=parseFloat(u.score||0).toFixed(0);
+    const tests=u.totalTests||0;
     html+=`<div class="lb-row${isMe?' lb-row-me':''}" onclick="openUserProfile('${escA(u.name)}','${escA(u.tgUsername||'')}')">
       <div class="lb-num" style="${isMe?'color:var(--green);font-weight:800;':''}">#${rank}</div>
       <div class="lb-ava3" style="${isMe?'background:var(--green);color:#fff;':''}">${av}</div>
@@ -2013,7 +2165,10 @@ function renderLbList(list, sess){
         <div class="lb-name3" style="${isMe?'color:var(--green);':''}">${escH(u.name||'—')}</div>
         <div class="lb-handle3">${u.tgUsername?'@'+u.tgUsername:u.univ||''}</div>
       </div>
-      <div class="lb-val3">${score}ball</div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px;">
+        <div class="lb-val3" style="font-size:14px;">${score} ball</div>
+        <div style="font-size:11px;color:var(--text3);font-weight:600;">${tests} test</div>
+      </div>
     </div>`;
   });
   el.innerHTML=html;
