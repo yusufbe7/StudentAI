@@ -1234,19 +1234,47 @@ app.get('/api/user-stats', (req, res) => {
 // ─── Web Auth ──────────────────────────────────────────────────────
 app.post('/api/web-auth/register', (req, res) => {
     try {
-        const { username, name, password } = req.body;
-        if (!username||!name||!password) return res.status(400).json({error:'missing_fields'});
+        const { username, name, password, nickname, tgId, tgUsername } = req.body;
+        if (!username||!password) return res.status(400).json({error:'missing_fields'});
         const u = username.toLowerCase().trim();
-        if (!/^[a-z0-9_]{3,}$/.test(u)) return res.status(400).json({error:'invalid_username'});
-        if (name.trim().length < 3) return res.status(400).json({error:'invalid_name'});
+        if (!/^[a-z0-9_.]{3,30}$/.test(u)) return res.status(400).json({error:'invalid_username'});
         if (password.length < 6) return res.status(400).json({error:'invalid_password'});
+
         const webUsers = getWebUsers();
         const db = getDb();
+
+        // Band emasligini tekshirish
         if (webUsers[u]) return res.status(409).json({error:'exists'});
-        if (Object.values(db.users||{}).find(usr => (usr.username||'').replace('@','').toLowerCase()===u)) return res.status(409).json({error:'exists'});
-        webUsers[u] = { username:u, name:name.trim(), password, photo:null, createdAt:Date.now() };
+
+        // TG dan ismni olish
+        let realName = (name||'').trim();
+        if(!realName && tgId){
+            const dbU = db.users[tgId];
+            if(dbU?.name) realName = dbU.name;
+        }
+        if(!realName) realName = u; // fallback
+
+        // TG foydalanuvchi ma'lumotlarini olish
+        let univ='', kurs='', yonalish='';
+        if(tgId && db.users[tgId]){
+            univ     = db.users[tgId].univ||'';
+            kurs     = db.users[tgId].kurs||'';
+            yonalish = db.users[tgId].yonalish||'';
+        }
+
+        webUsers[u] = {
+            username:   u,
+            name:       realName,
+            nickname:   nickname||u,
+            password,
+            tgId:       tgId?String(tgId):null,
+            tgUsername: tgUsername||'',
+            univ, kurs, yonalish,
+            photo:      null,
+            createdAt:  Date.now(),
+        };
         saveWebUsers(webUsers);
-        res.json({ success:true, user:{username:u, name:name.trim()} });
+        res.json({ success:true, user:{ username:u, name:realName, nickname:nickname||u } });
     } catch (err) { console.error('[web-register]', err.message); res.status(500).json({error:'server_error'}); }
 });
 app.post('/api/web-auth/login', (req, res) => {

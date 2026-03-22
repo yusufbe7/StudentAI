@@ -513,22 +513,22 @@ body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); 
         <span style="font-size:12px;color:var(--text3);cursor:pointer;font-weight:600;" onclick="openAdminModal()">🔐 Admin sifatida kirish</span>
       </div>
 
-      <!-- BOT PROFIL PREVIEW — Telegram dan avtomatik yuklanadi -->
+      <!-- BOT PROFIL PREVIEW -->
       <div id="tg-profile-preview" style="display:none;background:var(--bg);border-radius:16px;padding:14px 16px;margin-bottom:16px;">
         <div style="display:flex;align-items:center;gap:12px;">
           <div id="tg-prev-ava" style="width:48px;height:48px;border-radius:50%;background:var(--green-bg);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;color:var(--green);flex-shrink:0;overflow:hidden;"></div>
-          <div>
+          <div style="flex:1;min-width:0;">
             <div style="font-size:15px;font-weight:800;color:var(--text);" id="tg-prev-name">—</div>
             <div style="font-size:12px;color:var(--text3);font-weight:500;margin-top:2px;" id="tg-prev-meta">—</div>
           </div>
         </div>
       </div>
 
-      <!-- NIKNAME KIRISH (yangi tizim) -->
+      <!-- QADAM 1: NIKNAME — topilsa kirish, topilmasa yaratish -->
       <div id="lf-nick">
-        <div style="text-align:center;margin-bottom:16px;">
-          <div style="font-size:13px;font-weight:700;color:var(--text);">Nikname kiriting</div>
-          <div style="font-size:11px;color:var(--text3);margin-top:4px;">Bu sizning unikal manzilingiz</div>
+        <div style="text-align:center;margin-bottom:16px;" id="nick-step-label">
+          <div style="font-size:13px;font-weight:700;color:var(--text);">Niknamengizni kiriting</div>
+          <div style="font-size:11px;color:var(--text3);margin-top:4px;">Unikal @nikname</div>
         </div>
         <div class="field">
           <div style="display:flex;align-items:center;background:var(--bg);border:1.5px solid var(--border);border-radius:12px;padding:0 14px;transition:all .2s;" id="nick-login-wrap">
@@ -537,18 +537,18 @@ body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); 
               style="border:none;background:transparent;padding:13px 6px;flex:1;font-size:16px;font-weight:700;"
               autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
               oninput="onNickLoginInput(this.value)"
-              onkeydown="if(event.key==='Enter')doNickLogin()">
+              onkeydown="if(event.key==='Enter'&&!document.getElementById('nick-login-btn').disabled)doNickLogin()">
           </div>
           <div id="nick-login-status" style="font-size:12px;font-weight:600;margin-top:6px;padding:0 4px;min-height:18px;"></div>
         </div>
-        <div id="nick-login-loading" style="display:none;text-align:center;padding:8px;font-size:13px;color:var(--text3);">⏳ Yuklanmoqda...</div>
-        <button class="l-btn" id="nick-login-btn" onclick="doNickLogin()" disabled style="background:#ccc;cursor:not-allowed;">Kirish →</button>
+        <button class="l-btn" id="nick-login-btn" onclick="doNickLogin()" disabled
+          style="background:#ccc;cursor:not-allowed;transition:all .3s;">Davom etish →</button>
         <div style="text-align:center;margin-top:12px;">
           <span style="font-size:12px;color:var(--green);cursor:pointer;font-weight:600;" onclick="showResetPass()">Parolni unutdim?</span>
         </div>
       </div>
 
-      <!-- PAROL KIRISH — nikname topilgandan keyin -->
+      <!-- QADAM 2A: ESKI ODAM — Parol kirish -->
       <div id="lf-pass" style="display:none;">
         <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;cursor:pointer;" onclick="backToNick()">
           <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="var(--text3)" stroke-width="2.5" stroke-linecap="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
@@ -565,6 +565,35 @@ body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); 
         <div class="l-err" id="si-err">Parol noto'g'ri</div>
         <div id="si-loading" style="display:none;text-align:center;padding:8px;font-size:13px;color:var(--text3);">⏳ Tekshirilmoqda...</div>
         <button class="l-btn" onclick="doSignIn()">Kirish →</button>
+        <div style="text-align:center;margin-top:12px;">
+          <span style="font-size:12px;color:var(--green);cursor:pointer;font-weight:600;" onclick="showResetPass()">Parolni unutdim?</span>
+        </div>
+      </div>
+
+      <!-- QADAM 2B: YANGI ODAM — Parol yaratish -->
+      <div id="lf-create" style="display:none;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;cursor:pointer;" onclick="backToNick()">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="var(--text3)" stroke-width="2.5" stroke-linecap="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+          <div>
+            <div style="font-size:15px;font-weight:800;color:var(--text);">@<span id="lf-create-nick">—</span></div>
+            <div style="font-size:11px;color:var(--text3);">Yangi akkaunt yaratilyapti ✨</div>
+          </div>
+        </div>
+        <div class="field">
+          <label class="field-lbl">Parol yarating</label>
+          <input class="field-inp" id="su-p" type="password" placeholder="Kamida 6 belgi"
+            onkeydown="if(event.key==='Enter')document.getElementById('su-p2').focus()">
+          <div class="field-err" id="su-p-e">Kamida 6 belgi</div>
+        </div>
+        <div class="field">
+          <label class="field-lbl">Tasdiqlash</label>
+          <input class="field-inp" id="su-p2" type="password" placeholder="Takrorlang"
+            onkeydown="if(event.key==='Enter')doCreateAccount()">
+          <div class="field-err" id="su-p2-e">Parollar mos kelmadi</div>
+        </div>
+        <div id="su-loading" style="display:none;text-align:center;padding:8px;font-size:13px;color:var(--text3);">⏳ Saqlanmoqda...</div>
+        <div class="l-err" id="su-err"></div>
+        <button class="l-btn" onclick="doCreateAccount()" style="background:var(--green);">✅ Akkaunt yaratish →</button>
       </div>
 
       <!-- PAROLNI TIKLASH -->
@@ -1472,8 +1501,8 @@ function navTo(tab){
 // AUTH — Server-side (users stored on server, not localStorage)
 // ═══════════════════════════════════════════════
 function lTab(t){
-  // nick=nikname kirish, pass=parol kirish, fp=parol tiklash
-  ['nick','pass','fp'].forEach(x=>{
+  // nick, pass, create, fp
+  ['nick','pass','create','fp'].forEach(x=>{
     const el=document.getElementById('lf-'+x);
     if(el) el.style.display=x===t?'block':'none';
   });
@@ -1497,76 +1526,172 @@ let _nickLoginDebounce = null;
 async function loadTgProfileForLogin(){
   try{
     const tgUser = window.Telegram?.WebApp?.initDataUnsafe?.user;
-    if(!tgUser) return;
-    _loginTgData = tgUser;
-    const r = await fetch(`/api/tg-profile?tgId=${tgUser.id}&tgUsername=${encodeURIComponent(tgUser.username||'')}`);
-    if(!r.ok) return;
-    const d = await r.json();
-    // Preview ko'rsatish
-    const prev = document.getElementById('tg-profile-preview');
-    const nameEl = document.getElementById('tg-prev-name');
-    const metaEl = document.getElementById('tg-prev-meta');
-    const avaEl  = document.getElementById('tg-prev-ava');
-    if(prev&&nameEl&&metaEl){
-      nameEl.textContent = d.name||tgUser.first_name||'';
-      metaEl.textContent = [d.univ,d.kurs].filter(Boolean).join(' · ')||'Bot foydalanuvchisi';
-      if(avaEl){
-        const url = getPhotoUrl(d.name||'', tgUser.username||'');
-        if(url) avaEl.innerHTML=`<img src="${url}" style="width:100%;height:100%;object-fit:cover;">`;
-        else avaEl.textContent = ini(d.name||tgUser.first_name||'?');
+    _loginTgData = tgUser || null;
+
+    // TG preview ko'rsatish (agar TG dan kelgan bo'lsa)
+    if(tgUser){
+      const r = await fetch(`/api/tg-profile?tgId=${tgUser.id}&tgUsername=${encodeURIComponent(tgUser.username||'')}`);
+      if(r.ok){
+        const d = await r.json();
+        _loginTgData = {...tgUser, ...d}; // TG + bot ma'lumotlari
+        const prev=document.getElementById('tg-profile-preview');
+        const nameEl=document.getElementById('tg-prev-name');
+        const metaEl=document.getElementById('tg-prev-meta');
+        const avaEl=document.getElementById('tg-prev-ava');
+        if(prev&&nameEl){
+          nameEl.textContent = d.name||tgUser.first_name||'';
+          metaEl.textContent = [d.univ,d.kurs].filter(Boolean).join(' · ')||'Bot foydalanuvchisi';
+          if(avaEl){
+            const url=getPhotoUrl(d.name||'',tgUser.username||'');
+            if(url) avaEl.innerHTML=`<img src="${url}" style="width:100%;height:100%;object-fit:cover;">`;
+            else avaEl.textContent=ini(d.name||tgUser.first_name||'?');
+          }
+          prev.style.display='block';
+        }
       }
-      prev.style.display = 'block';
     }
-    // Agar shu TG ID ga bog'liq nikname bor bo'lsa — avtomatik to'ldirish
-    const wu = getUsers();
-    const found = Object.values(wu).find(u=>u.tgId===String(tgUser.id));
-    if(found?.nickname){
-      const inp = document.getElementById('nick-login-inp');
-      if(inp){ inp.value = found.nickname; onNickLoginInput(found.nickname); }
+
+    // Web users da shu TG ID bilan bog'liq akkaunt bor-yo'qligini tekshirish
+    // Agar bor bo'lsa — niknameni avtomatik to'ldirish
+    const wu=getUsers();
+    const tgIdStr=tgUser?String(tgUser.id):null;
+    let autoNick=null;
+
+    // 1. tgId bo'yicha topish
+    if(tgIdStr){
+      const found=Object.values(wu).find(u=>u.tgId===tgIdStr);
+      if(found?.nickname) autoNick=found.nickname;
+    }
+    // 2. TG username bo'yicha topish
+    if(!autoNick&&tgUser?.username){
+      const r2=await fetch(`/api/user-by-nick?nickname=${encodeURIComponent(tgUser.username)}`);
+      if(r2.ok){ const d2=await r2.json(); autoNick=d2.nickname||d2.username; }
+    }
+
+    if(autoNick){
+      const inp=document.getElementById('nick-login-inp');
+      if(inp){ inp.value=autoNick; onNickLoginInput(autoNick); }
     }
   }catch(e){ console.log('[TG Login]',e); }
 }
 
-// Nikname input — real-time tekshirish
+// Nikname input — topilsa Kirish, topilmasa Yaratish
+let _nickIsNew = false; // true = yangi odam
+
 function onNickLoginInput(val){
   const nick = val.replace(/^@/,'').trim().toLowerCase();
   const btn = document.getElementById('nick-login-btn');
   const status = document.getElementById('nick-login-status');
   const wrap = document.getElementById('nick-login-wrap');
-  _loginFoundUser = null;
-  if(btn){ btn.disabled=true; btn.style.background='#ccc'; btn.style.cursor='not-allowed'; }
+  _loginFoundUser = null; _nickIsNew = false;
+  if(btn){ btn.disabled=true; btn.style.background='#ccc'; btn.style.cursor='not-allowed'; btn.textContent='Davom etish →'; }
+  if(wrap) wrap.style.borderColor='transparent';
   if(!nick){ if(status) status.textContent=''; return; }
-  if(nick.length<2){ if(status){status.style.color='var(--text3)';status.textContent='Kamida 2 belgi';} return; }
+  if(nick.length<3){ if(status){status.style.color='var(--text3)';status.textContent='Kamida 3 belgi';} return; }
+  if(!/^[a-z0-9_.]+$/.test(nick)){ if(status){status.style.color='var(--red)';status.textContent='❌ Faqat lotin, raqam, _ yoki .';} return; }
   if(status){status.style.color='var(--text3)';status.textContent='⏳ Tekshirilmoqda...';}
   clearTimeout(_nickLoginDebounce);
   _nickLoginDebounce = setTimeout(async()=>{
     try{
       const r = await fetch(`/api/user-by-nick?nickname=${encodeURIComponent(nick)}`);
       if(r.ok){
+        // ESKI ODAM — topildi, parol bilan kiradi
         const d = await r.json();
-        _loginFoundUser = d;
-        if(status){status.style.color='var(--green)';status.textContent='✅ @'+nick+' topildi!';}
+        _loginFoundUser = d; _nickIsNew = false;
+        if(status){status.style.color='var(--green)';status.textContent='✅ @'+nick+' — xush kelibsiz!';}
         if(wrap) wrap.style.borderColor='var(--green)';
-        if(btn){btn.disabled=false;btn.style.background='var(--green)';btn.style.cursor='pointer';}
+        if(btn){btn.disabled=false;btn.style.background='var(--green)';btn.style.cursor='pointer';btn.textContent='Kirish →';}
       } else {
-        if(status){status.style.color='var(--red)';status.textContent='❌ @'+nick+' topilmadi';}
-        if(wrap) wrap.style.borderColor='var(--red)';
+        // YANGI ODAM — nikname band emas, yaratish mumkin
+        const chk = await fetch(`/api/nickname/check?nickname=${encodeURIComponent(nick)}`);
+        const cd = await chk.json();
+        if(cd.available){
+          _nickIsNew = true; _loginFoundUser = null;
+          if(status){status.style.color='var(--blue,#3b82f6)';status.textContent='✨ @'+nick+' — yangi akkaunt yaratilar';}
+          if(wrap) wrap.style.borderColor='var(--blue,#3b82f6)';
+          if(btn){btn.disabled=false;btn.style.background='var(--blue,#3b82f6)';btn.style.cursor='pointer';btn.textContent='Akkaunt yaratish →';}
+        } else {
+          if(status){status.style.color='var(--red)';status.textContent='❌ @'+nick+' band!';}
+          if(wrap) wrap.style.borderColor='var(--red)';
+        }
       }
     }catch{
-      if(status){status.style.color='var(--text3)';status.textContent='';}
+      if(status){status.style.color='var(--text3)';status.textContent='⚠️ Tekshirib bolmadi';}
     }
   }, 500);
 }
 
-// Nikname topildi — parol ekraniga o'tish
+// "Davom etish" bosildi
 function doNickLogin(){
-  if(!_loginFoundUser) return;
-  const nick = (document.getElementById('nick-login-inp')?.value||'').replace(/^@/,'').trim();
-  // Parol ekraniga o'tish
-  document.getElementById('lf-pass-nick').textContent = '@'+nick;
-  document.getElementById('lf-pass-name').textContent = _loginFoundUser.name||'';
-  lTab('pass');
-  setTimeout(()=>document.getElementById('si-p')?.focus(),100);
+  const nick = (document.getElementById('nick-login-inp')?.value||'').replace(/^@/,'').trim().toLowerCase();
+  if(!nick) return;
+  if(_nickIsNew){
+    // Yangi odam — parol yaratish ekraniga
+    document.getElementById('lf-create-nick').textContent = nick;
+    lTab('create');
+    setTimeout(()=>document.getElementById('su-p')?.focus(),100);
+  } else if(_loginFoundUser){
+    // Eski odam — parol kirish ekraniga
+    document.getElementById('lf-pass-nick').textContent = '@'+nick;
+    document.getElementById('lf-pass-name').textContent = _loginFoundUser.name||'';
+    lTab('pass');
+    setTimeout(()=>document.getElementById('si-p')?.focus(),100);
+  }
+}
+
+// Yangi akkaunt yaratish (nikname + parol)
+async function doCreateAccount(){
+  document.querySelectorAll('#lf-create .field-err').forEach(e=>e.classList.remove('on'));
+  const nick=(document.getElementById('nick-login-inp')?.value||'').replace(/^@/,'').trim().toLowerCase();
+  const p=document.getElementById('su-p').value;
+  const p2=document.getElementById('su-p2').value;
+  const suErr=document.getElementById('su-err'); if(suErr) suErr.classList.remove('on');
+  let ok=true;
+  if(p.length<6){document.getElementById('su-p-e').classList.add('on');ok=false;}
+  if(p!==p2){document.getElementById('su-p2-e').classList.add('on');ok=false;}
+  if(!ok) return;
+
+  const loading=document.getElementById('su-loading');
+  if(loading) loading.style.display='block';
+
+  // TG dan ma'lumotlar
+  const tgUser=window.Telegram?.WebApp?.initDataUnsafe?.user;
+  const tgName=_loginTgData?.name||tgUser?.first_name||nick;
+  const tgId=tgUser?.id?String(tgUser.id):null;
+  const tgUsername=tgUser?.username||'';
+
+  try{
+    // 1. Ro'yxatdan o'tish
+    const r=await fetch('/api/web-auth/register',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        username:nick,
+        name:tgName,
+        password:p,
+        nickname:nick,
+        tgId,
+        tgUsername,
+      })
+    });
+    const d=await r.json();
+    if(loading) loading.style.display='none';
+    if(r.ok&&d.success){
+      // Avtomatik kirish
+      const sessObj={username:nick,isAdmin:false,nickname:nick};
+      saveSess(sessObj);
+      // Local ga saqlash
+      const users=getUsers();
+      users[nick]={username:nick,name:tgName,nickname:nick,tgId,tgUsername,pass:p,createdAt:Date.now()};
+      saveUsers(users);
+      toast('✅ Xush kelibsiz, @'+nick+'!');
+      openApp(nick,false);
+    } else {
+      if(suErr){suErr.textContent=d.error==='exists'?'Bu nikname band!':'Xatolik: '+(d.error||'');suErr.classList.add('on');}
+    }
+  }catch{
+    if(loading) loading.style.display='none';
+    if(suErr){suErr.textContent="Server bilan bog'lanib bo'lmadi";suErr.classList.add('on');}
+  }
 }
 
 async function doSignUp(){
