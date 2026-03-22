@@ -90,6 +90,8 @@ body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); 
 .bn-item.active .bn-icon { transform:scale(1.1); }
 .bn-badge { position:absolute; top:6px; right:calc(50% - 20px); background:var(--red); color:#fff; font-size:9px; font-weight:700; min-width:16px; height:16px; border-radius:8px; display:none; align-items:center; justify-content:center; padding:0 3px; border:2px solid #fff; }
 .bn-badge.on { display:flex; }
+.bn-svg { width:24px; height:24px; color:var(--text3); transition:color .2s, transform .2s; }
+.bn-item.active .bn-svg { color:var(--green); transform:scale(1.12); }
 
 /* ═══ CONTENT ═══ */
 .content { flex:1; margin-top:var(--header-h); margin-bottom:var(--nav-h); overflow-y:auto; -webkit-overflow-scrolling:touch; }
@@ -428,8 +430,8 @@ body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); 
       <div class="ah-online-cnt" id="ah-online-cnt">0</div>
     </div>
     <div class="ah-btns">
-      <button class="ah-btn" onclick="navTo('chats')">
-        💬
+      <button class="ah-btn" onclick="navTo('chats')" style="position:relative;">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="var(--text2)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
         <div class="ah-badge" id="ah-badge"></div>
       </button>
       <div class="ah-avatar" id="ah-avatar" onclick="navTo('profile')">A</div>
@@ -562,23 +564,140 @@ body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); 
 
     <!-- PROFILE -->
     <div class="tab-panel" id="tab-profile">
-      <div class="profile-pad">
-        <div class="stat-card">
-          <div class="prof-ava-wrap2">
-            <div class="prof-ava2" id="prof-ava" onclick="document.getElementById('photo-inp').click()">
+      <div id="profile-main-view">
+        <!-- Header row: @username + edit + settings -->
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:18px 20px 10px;">
+          <div style="font-size:17px;font-weight:800;color:var(--text);" id="prof-handle-disp">@—</div>
+          <div style="display:flex;gap:10px;">
+            <button onclick="showProfileEdit()" style="width:36px;height:36px;border-radius:50%;background:none;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#6b6b6b" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            </button>
+            <button onclick="showProfileSettings()" style="width:36px;height:36px;border-radius:50%;background:none;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#6b6b6b" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Avatar + name + badges -->
+        <div style="display:flex;flex-direction:column;align-items:center;padding:4px 20px 20px;">
+          <div style="position:relative;margin-bottom:14px;">
+            <div class="prof-ava2" id="prof-ava" onclick="document.getElementById('photo-inp').click()" style="width:96px;height:96px;font-size:34px;">
               <span id="prof-ava-txt">A</span>
               <div class="prof-ava2-ov"><span>📷</span></div>
             </div>
+            <!-- Online dot -->
+            <div style="position:absolute;bottom:4px;right:4px;width:18px;height:18px;border-radius:50%;background:var(--green);border:3px solid #fff;"></div>
             <input type="file" id="photo-inp" accept="image/*" style="display:none" onchange="handlePhotoUpload(this)">
             <div class="photo-st2" id="photo-st"></div>
-            <div class="change-photo2" onclick="document.getElementById('photo-inp').click()">📷 Rasmni o'zgartirish</div>
-            <div style="font-size:10px;color:var(--text3);margin-top:4px;font-weight:500;">Rasm barcha foydalanuvchilarga ko'rinadi</div>
-            <div style="font-size:19px;font-weight:800;margin-top:8px;" id="prof-name-disp">—</div>
-            <div style="font-size:13px;color:var(--text2);margin-top:2px;font-weight:500;" id="prof-uname-disp">@—</div>
           </div>
-          <div id="prof-vip-block"></div>
-          <div class="divider2"></div>
-          <div class="sec-title2">Ma'lumotlarni tahrirlash</div>
+          <!-- Name -->
+          <div style="font-size:20px;font-weight:800;color:var(--text);margin-bottom:10px;" id="prof-name-disp">—</div>
+          <!-- Badges: university + fan (VIP if exists) -->
+          <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:16px;" id="prof-badges-row">
+            <!-- filled by JS -->
+          </div>
+          <!-- Followers / Following -->
+          <div style="display:flex;gap:0;width:100%;max-width:260px;">
+            <div style="flex:1;text-align:center;padding:12px 0;border-right:1px solid var(--border);">
+              <div style="font-size:20px;font-weight:800;color:var(--text);" id="prof-followers">0</div>
+              <div style="font-size:12px;color:var(--text3);font-weight:500;margin-top:2px;">Followers</div>
+            </div>
+            <div style="flex:1;text-align:center;padding:12px 0;">
+              <div style="font-size:20px;font-weight:800;color:var(--text);" id="prof-following">0</div>
+              <div style="font-size:12px;color:var(--text3);font-weight:500;margin-top:2px;">Following</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Info rows (Lock-in style) -->
+        <div style="padding:0 16px;display:flex;flex-direction:column;gap:8px;">
+          <!-- Daily challenge row -->
+          <div style="background:var(--card);border-radius:16px;padding:15px 18px;box-shadow:0 1px 6px rgba(0,0,0,0.05);display:flex;align-items:center;justify-content:space-between;">
+            <div style="display:flex;align-items:center;gap:10px;">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="var(--orange)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+              <span style="font-size:14px;font-weight:700;color:var(--text);">Daily challenge · <span id="prof-challenge-time" style="color:var(--text2);font-weight:600;">—</span></span>
+            </div>
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="var(--text3)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          </div>
+          <!-- University row -->
+          <div style="background:var(--card);border-radius:16px;padding:15px 18px;box-shadow:0 1px 6px rgba(0,0,0,0.05);display:flex;align-items:center;justify-content:space-between;">
+            <div style="display:flex;align-items:center;gap:10px;">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="var(--text2)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
+              <span style="font-size:14px;font-weight:700;color:var(--text);" id="prof-univ-row">—</span>
+            </div>
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="var(--text3)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          </div>
+          <!-- Subject / Fan row -->
+          <div style="background:var(--card);border-radius:16px;padding:15px 18px;box-shadow:0 1px 6px rgba(0,0,0,0.05);display:flex;align-items:center;justify-content:space-between;" id="prof-subject-row-wrap">
+            <div style="display:flex;align-items:center;gap:10px;">
+              <div style="width:24px;height:24px;border-radius:6px;background:var(--green-bg);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:var(--green);" id="prof-subj-num">0</div>
+              <span style="font-size:14px;font-weight:700;color:var(--text);" id="prof-subj-name-row">—</span>
+            </div>
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="var(--text3)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          </div>
+        </div>
+
+        <!-- Weekly stats -->
+        <div style="padding:20px 16px 0;">
+          <div style="font-size:16px;font-weight:800;color:var(--text);margin-bottom:14px;" id="prof-week-label">Week of —</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;background:var(--card);border-radius:16px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,0.05);">
+            <div style="padding:14px 10px;text-align:center;border-right:1px solid var(--border);">
+              <div style="font-size:11px;color:var(--text3);font-weight:600;margin-bottom:4px;">Testlar</div>
+              <div style="font-size:18px;font-weight:800;color:var(--green);" id="pw-tests">0</div>
+            </div>
+            <div style="padding:14px 10px;text-align:center;border-right:1px solid var(--border);">
+              <div style="font-size:11px;color:var(--text3);font-weight:600;margin-bottom:4px;">Ball</div>
+              <div style="font-size:18px;font-weight:800;color:var(--green);" id="pw-score">0</div>
+            </div>
+            <div style="padding:14px 10px;text-align:center;">
+              <div style="font-size:11px;color:var(--text3);font-weight:600;margin-bottom:4px;">Aniqlik</div>
+              <div style="font-size:18px;font-weight:800;color:var(--green);" id="pw-acc">—</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Daily grind challenge bar -->
+        <div style="padding:16px 16px 6px;">
+          <div style="background:var(--card);border-radius:16px;padding:16px 18px;box-shadow:0 1px 6px rgba(0,0,0,0.05);">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+              <div style="display:flex;align-items:center;gap:8px;">
+                <span style="font-size:16px;">⚡</span>
+                <span style="font-size:14px;font-weight:800;color:var(--text);">Daily grind challenge</span>
+              </div>
+              <div style="font-size:13px;font-weight:700;color:var(--green);" id="grind-time-left">—</div>
+            </div>
+            <!-- Progress bar -->
+            <div style="height:5px;background:var(--bg);border-radius:5px;overflow:hidden;">
+              <div style="height:100%;background:var(--green);border-radius:5px;width:0%;transition:width .5s;" id="grind-bar"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- VIP block -->
+        <div style="padding:0 16px 8px;" id="prof-vip-block"></div>
+
+        <!-- Logout -->
+        <div style="padding:0 16px 24px;">
+          <button onclick="doLogout()" style="width:100%;padding:14px;background:var(--red-bg);color:var(--red);border:none;border-radius:14px;font-family:'Inter',sans-serif;font-size:14px;font-weight:700;cursor:pointer;">🚪 Chiqish</button>
+        </div>
+
+        <!-- Admin panel -->
+        <div style="padding:0 16px 24px;" id="admin-panel-card" style="display:none;">
+          <div class="stat-card">
+            <div class="stat-card-title">⚙️ Admin Panel</div>
+            <div id="admin-panel-content"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Edit profile view (hidden by default) -->
+      <div id="profile-edit-view" style="display:none;padding:16px;">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+          <button onclick="hideProfileEdit()" style="width:36px;height:36px;border-radius:50%;background:var(--bg);border:none;cursor:pointer;font-size:20px;display:flex;align-items:center;justify-content:center;">←</button>
+          <div style="font-size:16px;font-weight:800;">Profilni tahrirlash</div>
+        </div>
+        <div class="stat-card">
+          <div class="sec-title2">Asosiy ma'lumotlar</div>
           <div class="field"><label class="field-lbl">Username</label><input class="field-inp" id="p-u" type="text" autocorrect="off" autocapitalize="off"><div class="field-err" id="p-u-e">Noto'g'ri format yoki band</div></div>
           <div class="field"><label class="field-lbl">Ism Familiya</label><input class="field-inp" id="p-n" type="text"><div class="field-err" id="p-n-e">Kamida 3 harf</div></div>
           <div class="divider2"></div>
@@ -586,63 +705,63 @@ body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); 
           <div class="field"><input class="field-inp" id="p-pw" type="password" placeholder="Yangi parol (ixtiyoriy)"></div>
           <div class="field"><input class="field-inp" id="p-pw2" type="password" placeholder="Takrorlang"><div class="field-err" id="p-pw-e">Parollar mos kelmadi</div></div>
           <button class="save-btn2" onclick="saveProfile()">💾 Saqlash</button>
-          <div class="divider2"></div>
-          <button onclick="doLogout()" style="width:100%;padding:13px;background:var(--red-bg);color:var(--red);border:none;border-radius:14px;font-family:'Inter',sans-serif;font-size:14px;font-weight:700;cursor:pointer;">🚪 Chiqish</button>
         </div>
+      </div>
 
-        <div class="stat-card" style="text-align:center;padding:22px;">
+      <!-- Settings view -->
+      <div id="profile-settings-view" style="display:none;padding:16px;">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+          <button onclick="hideProfileSettings()" style="width:36px;height:36px;border-radius:50%;background:var(--bg);border:none;cursor:pointer;font-size:20px;display:flex;align-items:center;justify-content:center;">←</button>
+          <div style="font-size:16px;font-weight:800;">Sozlamalar</div>
+        </div>
+        <div class="stat-card" style="margin-bottom:10px;">
+          <div class="stat-card-title">Ijtimoiy tarmoqlar</div>
+          <a href="https://github.com/yusufbe7" target="_blank" style="display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--border);text-decoration:none;color:var(--text);">
+            <div style="width:38px;height:38px;border-radius:12px;background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:18px;">🐙</div>
+            <div style="flex:1;"><div style="font-size:14px;font-weight:700;">GitHub</div><div style="font-size:11px;color:var(--text3);">@yusufbe7</div></div><span style="color:var(--text3);">›</span>
+          </a>
+          <a href="https://instagram.com/yusufbee71" target="_blank" style="display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--border);text-decoration:none;color:var(--text);">
+            <div style="width:38px;height:38px;border-radius:12px;background:rgba(225,48,108,.1);display:flex;align-items:center;justify-content:center;font-size:18px;">📸</div>
+            <div style="flex:1;"><div style="font-size:14px;font-weight:700;">Instagram</div><div style="font-size:11px;color:var(--text3);">@yusufbee71</div></div><span style="color:var(--text3);">›</span>
+          </a>
+          <a href="https://t.me/yusufbee71" target="_blank" style="display:flex;align-items:center;gap:12px;padding:11px 0;text-decoration:none;color:var(--text);">
+            <div style="width:38px;height:38px;border-radius:12px;background:rgba(0,136,204,.1);display:flex;align-items:center;justify-content:center;font-size:18px;">✈️</div>
+            <div style="flex:1;"><div style="font-size:14px;font-weight:700;">Telegram</div><div style="font-size:11px;color:var(--text3);">@yusufbee71</div></div><span style="color:var(--text3);">›</span>
+          </a>
+        </div>
+        <div class="stat-card" style="text-align:center;padding:22px;margin-bottom:10px;">
           <div style="width:54px;height:54px;border-radius:16px;background:var(--green);display:flex;align-items:center;justify-content:center;font-size:24px;margin:0 auto 12px;box-shadow:0 6px 20px rgba(34,197,94,0.3);">⚡</div>
           <div style="font-size:16px;font-weight:800;">Student Bot</div>
           <div style="font-size:12px;color:var(--text2);margin-top:4px;font-weight:500;">AITEX · O'quv platformasi</div>
         </div>
-        <div class="stat-card">
-          <div class="stat-card-title">Ijtimoiy tarmoqlar</div>
-          <a href="https://github.com/yusufbe7" target="_blank" style="display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--border);text-decoration:none;color:var(--text);">
-            <div style="width:38px;height:38px;border-radius:12px;background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">🐙</div>
-            <div style="flex:1;"><div style="font-size:14px;font-weight:700;">GitHub</div><div style="font-size:11px;color:var(--text3);font-weight:500;">@yusufbe7</div></div>
-            <span style="color:var(--text3);">›</span>
-          </a>
-          <a href="https://instagram.com/yusufbee71" target="_blank" style="display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--border);text-decoration:none;color:var(--text);">
-            <div style="width:38px;height:38px;border-radius:12px;background:rgba(225,48,108,.1);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">📸</div>
-            <div style="flex:1;"><div style="font-size:14px;font-weight:700;">Instagram</div><div style="font-size:11px;color:var(--text3);font-weight:500;">@yusufbee71</div></div>
-            <span style="color:var(--text3);">›</span>
-          </a>
-          <a href="https://t.me/yusufbee71" target="_blank" style="display:flex;align-items:center;gap:12px;padding:11px 0;text-decoration:none;color:var(--text);">
-            <div style="width:38px;height:38px;border-radius:12px;background:rgba(0,136,204,.1);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">✈️</div>
-            <div style="flex:1;"><div style="font-size:14px;font-weight:700;">Telegram</div><div style="font-size:11px;color:var(--text3);font-weight:500;">@yusufbee71</div></div>
-            <span style="color:var(--text3);">›</span>
-          </a>
-        </div>
-        <div class="stat-card" id="admin-panel-card" style="display:none;">
-          <div class="stat-card-title">⚙️ Admin Panel</div>
-          <div id="admin-panel-content"></div>
+        <button onclick="doLogout()" style="width:100%;padding:14px;background:var(--red-bg);color:var(--red);border:none;border-radius:14px;font-family:'Inter',sans-serif;font-size:14px;font-weight:700;cursor:pointer;">🚪 Chiqish</button>
+        <div id="admin-panel-card-s" style="display:none;margin-top:10px;">
+          <div class="stat-card">
+            <div class="stat-card-title">⚙️ Admin Panel</div>
+            <div id="admin-panel-content"></div>
+          </div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Bottom Nav -->
+  <!-- Bottom Nav — 4 tabs like Lock-in -->
   <div class="bottom-nav">
     <div class="bn-item active" id="bn-home" onclick="navTo('home')">
-      <div class="bn-icon">🏠</div>
+      <svg class="bn-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg>
       <div class="bn-label">Home</div>
     </div>
     <div class="bn-item" id="bn-stats" onclick="navTo('stats')">
-      <div class="bn-icon">📊</div>
-      <div class="bn-label">Statistika</div>
+      <svg class="bn-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>
+      <div class="bn-label">Statistica</div>
     </div>
     <div class="bn-item" id="bn-tests" onclick="navTo('tests')">
-      <div class="bn-icon">📝</div>
-      <div class="bn-label">Testlar</div>
-    </div>
-    <div class="bn-item" id="bn-chats" onclick="navTo('chats')">
-      <div class="bn-icon">💬</div>
-      <div class="bn-label">Xabarlar</div>
-      <div class="bn-badge" id="bn-badge"></div>
+      <svg class="bn-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M8 7h8M8 11h8M8 15h5"/></svg>
+      <div class="bn-label">Test</div>
     </div>
     <div class="bn-item" id="bn-profile" onclick="navTo('profile')">
-      <div class="bn-icon">👤</div>
-      <div class="bn-label">Profil</div>
+      <svg class="bn-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+      <div class="bn-label">Profile</div>
     </div>
   </div>
 </div>
@@ -897,20 +1016,26 @@ function closeConfirm(){ document.getElementById('confirm-wrap').classList.remov
 // NAVIGATION
 // ═══════════════════════════════════════════════
 let _curTab='home';
-const TAB_TITLES={home:'Student Bot',stats:'Statistika',tests:'Testlar',chats:'Xabarlar',profile:'Profil'};
+const TAB_TITLES={home:'Student Bot',stats:'Statistica',tests:'Test',profile:'Profile'};
 
 function navTo(tab){
   _curTab=tab;
   document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.bn-item').forEach(n=>n.classList.remove('active'));
-  document.getElementById('tab-'+tab)?.classList.add('active');
+  // Handle chats as overlay/separate tab
+  const visibleTab = tab === 'chats' ? 'chats' : tab;
+  document.getElementById('tab-'+visibleTab)?.classList.add('active');
   document.getElementById('bn-'+tab)?.classList.add('active');
   document.getElementById('ah-title').textContent=TAB_TITLES[tab]||'Student Bot';
   const s=getSess();
   if(tab==='home'&&s) loadHome(s);
   if(tab==='tests')   loadSubjects();
   if(tab==='stats')   loadStats();
-  if(tab==='chats')   loadChatsList();
+  if(tab==='chats'){
+    document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+    document.getElementById('tab-chats')?.classList.add('active');
+    loadChatsList();
+  }
   if(tab==='profile') loadProfileForm();
 }
 
@@ -1103,18 +1228,52 @@ function renderActivity(list){
   el.innerHTML=html;
 }
 
+// Profile view helpers
+function showProfileEdit(){
+  document.getElementById('profile-main-view').style.display='none';
+  document.getElementById('profile-edit-view').style.display='block';
+  document.getElementById('profile-settings-view').style.display='none';
+}
+function hideProfileEdit(){
+  document.getElementById('profile-main-view').style.display='block';
+  document.getElementById('profile-edit-view').style.display='none';
+}
+function showProfileSettings(){
+  document.getElementById('profile-main-view').style.display='none';
+  document.getElementById('profile-settings-view').style.display='block';
+  // Move admin panel into settings view
+  const adm=document.getElementById('admin-panel-card');
+  const admS=document.getElementById('admin-panel-card-s');
+  if(adm&&admS) admS.innerHTML=adm.innerHTML, admS.style.display=adm.style.display;
+}
+function hideProfileSettings(){
+  document.getElementById('profile-main-view').style.display='block';
+  document.getElementById('profile-settings-view').style.display='none';
+}
+
 // ═══════════════════════════════════════════════
 // PROFILE FORM
 // ═══════════════════════════════════════════════
 async function loadProfileForm(){
   const sess=getSess(); if(!sess) return;
+  // Always show main view on tab open
+  document.getElementById('profile-main-view').style.display='block';
+  document.getElementById('profile-edit-view').style.display='none';
+  document.getElementById('profile-settings-view').style.display='none';
+
   if(sess.isAdmin){renderAdminPanel();return;}
   const users=getUsers(); const user=users[sess.username]; if(!user) return;
+
+  // Fill edit form fields
   document.getElementById('p-u').value=user.username||'';
   document.getElementById('p-n').value=user.name||'';
   document.getElementById('p-pw').value=''; document.getElementById('p-pw2').value='';
+
+  // Fill main profile display
+  document.getElementById('prof-handle-disp').textContent='@'+(user.username||'—');
   document.getElementById('prof-name-disp').textContent=user.name||'—';
-  document.getElementById('prof-uname-disp').textContent='@'+(user.username||'—');
+
+  // Avatar
   const ava=document.getElementById('prof-ava');
   const photoUrl=getPhotoUrl(user.username,'')||getPhotoUrl(user.name,'')||user.photo;
   if(photoUrl){
@@ -1125,25 +1284,98 @@ async function loadProfileForm(){
     const sp=ava.querySelector('#prof-ava-txt')||ava.querySelector('span:not(.prof-ava2-ov *)');
     if(sp) sp.textContent=ini(user.name);
   }
+  // Also update header avatar
+  setAhAvatar(user.name,user.username);
+
+  // Weekly label
+  const now=new Date();
+  const startOfWeek=new Date(now);
+  startOfWeek.setDate(now.getDate()-now.getDay()+1);
+  const endOfWeek=new Date(startOfWeek);
+  endOfWeek.setDate(startOfWeek.getDate()+6);
+  const mo=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  document.getElementById('prof-week-label').textContent=
+    `Week of ${mo[startOfWeek.getMonth()]} ${startOfWeek.getDate()} - ${endOfWeek.getDate()}`;
+
+  // Daily challenge time remaining (show time until midnight)
+  const midnight=new Date(); midnight.setHours(23,59,59,999);
+  const diff=midnight-now;
+  const hh=Math.floor(diff/3600000);
+  const mm=Math.floor((diff%3600000)/60000);
+  document.getElementById('prof-challenge-time').textContent=`${hh}h ${mm}m left`;
+  document.getElementById('grind-time-left').textContent=`${hh}h left / 24h`;
+  // Progress bar: how much of day is left
+  const dayProgress=((now.getHours()*60+now.getMinutes())/(24*60)*100).toFixed(0);
+  document.getElementById('grind-bar').style.width=dayProgress+'%';
+
   try{
     const r=await fetch('/api/user-stats?name='+encodeURIComponent(user.name));
     if(r.ok){
       const d=await r.json();
+
+      // University row
+      document.getElementById('prof-univ-row').textContent=d.univ||user.univ||'OTM kiritilmagan';
+
+      // Subject count & yonalish
+      const subjCount=Object.keys(d.subjects||{}).length;
+      document.getElementById('prof-subj-num').textContent=subjCount||'0';
+      document.getElementById('prof-subj-name-row').textContent=user.yonalish||d.yonalish||"Yo'nalish";
+
+      // Badges row
+      let badgesHtml='';
+      // Fan badge (green)
+      if(subjCount>0){
+        const firstSubj=Object.keys(d.subjects||{})[0];
+        const subName=firstSubj?SUB_NAMES[firstSubj.split('_').pop()]||firstSubj:'';
+        if(subName) badgesHtml+=`<div style="display:flex;align-items:center;gap:5px;background:var(--green-bg);padding:5px 10px;border-radius:20px;"><span style="font-size:11px;font-weight:800;color:var(--green);">${subjCount}</span><span style="font-size:12px;font-weight:700;color:var(--green);">${subName}</span></div>`;
+      }
+      // University badge (gray)
+      if(d.univ||user.univ){
+        badgesHtml+=`<div style="display:flex;align-items:center;gap:5px;background:var(--bg);padding:5px 10px;border-radius:20px;border:1px solid var(--border);"><svg viewBox='0 0 24 24' width='12' height='12' fill='none' stroke='var(--text2)' stroke-width='2.5'><path d='M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z'/><path d='M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z'/></svg><span style="font-size:12px;font-weight:700;color:var(--text2);">${escH(d.univ||user.univ||'')}</span></div>`;
+      }
+      // VIP badge
+      if(d.isVip&&d.vipEnd&&Date.now()<d.vipEnd){
+        badgesHtml+=`<div style="background:rgba(234,179,8,.12);padding:5px 10px;border-radius:20px;"><span style="font-size:12px;font-weight:700;color:#b45309;">💎 VIP</span></div>`;
+      }
+      document.getElementById('prof-badges-row').innerHTML=badgesHtml;
+
+      // Weekly stats (use total as proxy)
+      document.getElementById('pw-tests').textContent=d.totalTests||'0';
+      document.getElementById('pw-score').textContent=parseFloat(d.score||0).toFixed(0);
+      const tq=(d.totalCorrect||0)+(d.totalWrong||0);
+      document.getElementById('pw-acc').textContent=tq>0?(((d.totalCorrect||0)/tq)*100).toFixed(0)+'%':'—';
+
+      // Followers/Following (placeholder — no follow system yet)
+      document.getElementById('prof-followers').textContent='0';
+      document.getElementById('prof-following').textContent='0';
+
+      // VIP block
       const vDiv=document.getElementById('prof-vip-block');
       if(d.isVip&&d.vipEnd&&Date.now()<d.vipEnd){
         const fmt=ts=>new Date(ts).toLocaleDateString('uz-UZ',{day:'2-digit',month:'2-digit',year:'numeric'});
-        vDiv.innerHTML=`<div style="background:rgba(234,179,8,.08);border:1.5px solid rgba(234,179,8,.25);border-radius:14px;padding:14px;margin-top:12px;">
-          <div style="font-size:13px;font-weight:700;color:#b45309;margin-bottom:10px;">💎 VIP A'zo</div>
-          <div style="display:flex;justify-content:space-between;padding:6px 0;font-size:12px;border-bottom:1px solid rgba(234,179,8,.15);font-weight:600;">
+        vDiv.innerHTML=`<div style="background:rgba(234,179,8,.08);border:1.5px solid rgba(234,179,8,.25);border-radius:14px;padding:14px;">
+          <div style="font-size:13px;font-weight:700;color:#b45309;margin-bottom:8px;">💎 VIP A'zo</div>
+          <div style="display:flex;justify-content:space-between;padding:5px 0;font-size:12px;font-weight:600;border-bottom:1px solid rgba(234,179,8,.15);">
             <span style="color:#92400e;">Boshlangan</span><span style="color:#b45309;">${fmt(d.vipStart)}</span>
           </div>
-          <div style="display:flex;justify-content:space-between;padding:6px 0;font-size:12px;font-weight:600;">
+          <div style="display:flex;justify-content:space-between;padding:5px 0;font-size:12px;font-weight:600;">
             <span style="color:#92400e;">Tugaydi</span><span style="color:#b45309;">${fmt(d.vipEnd)}</span>
           </div>
         </div>`;
       } else vDiv.innerHTML='';
+    } else {
+      // Defaults
+      document.getElementById('prof-univ-row').textContent=user.univ||'OTM kiritilmagan';
+      document.getElementById('prof-subj-name-row').textContent=user.yonalish||"Yo'nalish";
+      document.getElementById('prof-subj-num').textContent='0';
+      document.getElementById('pw-tests').textContent='0';
+      document.getElementById('pw-score').textContent='0';
+      document.getElementById('pw-acc').textContent='—';
     }
-  }catch{}
+  }catch{
+    document.getElementById('prof-univ-row').textContent=user.univ||'OTM kiritilmagan';
+    document.getElementById('prof-subj-name-row').textContent=user.yonalish||"Yo'nalish";
+  }
 }
 
 async function handlePhotoUpload(input){
@@ -1193,18 +1425,21 @@ function saveProfile(){
   if(newPw) users[newU].pass=newPw;
   saveUsers(users); saveSess({username:newU,isAdmin:false});
   toast('✅ Profil yangilandi!');
-  document.getElementById('prof-name-disp').textContent=newN;
-  document.getElementById('prof-uname-disp').textContent='@'+newU;
   setAhAvatar(newN,newU);
+  hideProfileEdit();
+  loadProfileForm();
 }
 
 // ═══════════════════════════════════════════════
 // ADMIN
 // ═══════════════════════════════════════════════
 function renderAdminPanel(){
-  document.getElementById('admin-panel-card').style.display='block';
+  const card=document.getElementById('admin-panel-card');
+  if(card) card.style.display='block';
   const adm=getAdm();
-  document.getElementById('admin-panel-content').innerHTML=`
+  const content=document.getElementById('admin-panel-content');
+  if(!content) return;
+  content.innerHTML=`
     <div class="field"><label class="field-lbl">Username</label><input class="field-inp" id="adm-u" value="${escH(adm.username||'')}"></div>
     <div class="field"><label class="field-lbl">Ism</label><input class="field-inp" id="adm-n" value="${escH(adm.name||'')}"></div>
     <div class="field"><label class="field-lbl">Yangi parol</label><input class="field-inp" id="adm-pw" type="password" placeholder="Bo'sh qoldiring"></div>
