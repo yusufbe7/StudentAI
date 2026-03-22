@@ -2476,11 +2476,16 @@ function renderAdminPanel(){
     <button onclick="adminRejectTour()" style="width:100%;padding:12px;background:var(--red-bg);color:var(--red);border:none;border-radius:12px;font-family:'Inter',sans-serif;font-size:13px;font-weight:700;cursor:pointer;margin-bottom:8px;">✕ Musobaqani bekor qilish</button>
     <button onclick="adminForceLogout()" style="width:100%;padding:12px;background:#fff3cd;color:#856404;border:1.5px solid #ffc107;border-radius:12px;font-family:'Inter',sans-serif;font-size:13px;font-weight:700;cursor:pointer;margin-bottom:16px;">🔄 Barcha foydalanuvchilarni logout qilish</button>
 
-    <!-- Nikname statistikasi -->
-    <div style="background:var(--bg);border-radius:14px;padding:16px;margin-bottom:16px;" id="nick-stats-card">
-      <div style="font-size:13px;font-weight:800;color:var(--text);margin-bottom:2px;">👥 Nikname ro'yxatidan o'tganlar</div>
-      <div style="font-size:12px;color:var(--text3);font-weight:500;margin-bottom:12px;">WebApp da nikname kiritgan foydalanuvchilar</div>
-      <div id="nick-stats-content" style="font-size:13px;color:var(--text3);text-align:center;padding:10px;">⏳ Yuklanmoqda...</div>
+    <!-- Nikname statistikasi placeholder -->
+    <div id="nick-stats-card" style="background:var(--bg);border-radius:14px;padding:16px;margin-bottom:16px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+        <div>
+          <div style="font-size:13px;font-weight:800;color:var(--text);">👥 Nikname ro'yxatidan o'tganlar</div>
+          <div style="font-size:11px;color:var(--text3);font-weight:500;margin-top:2px;">WebApp da nikname kiritganlar</div>
+        </div>
+        <button onclick="adminLoadNickStats()" style="padding:6px 12px;background:var(--green-bg);color:var(--green);border:none;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;">🔄</button>
+      </div>
+      <div id="nick-stats-content">⏳ Yuklanmoqda...</div>
     </div>
 
     <!-- Ball qo'shish bo'limi -->
@@ -2533,8 +2538,8 @@ function renderAdminPanel(){
       <div id="adm-score-list" style="margin-top:8px;"></div>
     </div>
   `;
-  // Nick stats yuklash (DOM tayyor bo'lgandan keyin)
-  setTimeout(()=>adminLoadNickStats(), 50);
+  // Nick stats yuklash — DOM tayyor bo'lgandan keyin
+  requestAnimationFrame(()=>{ requestAnimationFrame(()=>{ adminLoadNickStats(); }); });
 
   // Subjects dropdown ni to'ldirish
   setTimeout(()=>{
@@ -2574,70 +2579,101 @@ function saveAdminProfile(){
   toast('✅ Admin profili yangilandi!');
 }
 async function adminForceLogout(){
-  if(!confirm('Barcha foydalanuvchilarni logout qilib, ularning niknamelerini tozalaysizmi?\n\nUlar qaytadan nikname qoyib kirishi kerak boladi.')) return;
+  if(!confirm('Barcha foydalanuvchilarni logout qilib, niknamelerini tozalaysizmi?\nUlar qaytadan nikname qo\'yib kirishi kerak.')) return;
+
+  const btn = document.querySelector('button[onclick="adminForceLogout()"]');
+  if(btn){ btn.textContent='⏳ Bajarilmoqda...'; btn.disabled=true; }
+
   try{
-    const r=await fetch('/api/admin/force-logout',{method:'POST',headers:{'Content-Type':'application/json'}});
-    if(r.ok){
-      const d=await r.json();
-      toast(`✅ ${d.clearedCount||0} ta nikname tozalandi! Versiya: ${d.newVersion}`);
+    const r = await fetch('/api/admin/force-logout', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'}
+    });
+    const d = await r.json();
+    if(r.ok && d.success){
+      toast(`✅ ${d.clearedCount||0} ta nikname tozalandi! Versiya → ${d.newVersion}`);
       // Nick stats yangilash
-      setTimeout(()=>adminLoadNickStats(), 500);
+      setTimeout(()=>adminLoadNickStats(), 300);
     } else {
-      const err=await r.json().catch(()=>({}));
-      toast('❌ Xatolik: '+(err.error||''),'bad');
+      toast('❌ Xatolik: '+(d.error||r.status), 'bad');
     }
-  }catch(e){ toast('⚠️ Server bilan boglanib bolmadi','bad'); }
+  } catch(e) {
+    toast('⚠️ Server bilan bog\'lanib bo\'lmadi: '+e.message, 'bad');
+  } finally {
+    if(btn){ btn.textContent='🔄 Barcha foydalanuvchilarni logout qilish'; btn.disabled=false; }
+  }
 }
 
 async function adminLoadNickStats(){
-  const el=document.getElementById('nick-stats-content');
-  if(!el) return;
-  try{
-    const r=await fetch('/api/admin/nick-stats');
-    if(!r.ok) throw new Error();
-    const d=await r.json();
-    const total=d.total||0;
-    const list=d.users||[];
+  // nick-stats-content ni topish — innerHTML orqali yaratilgan bo'lishi mumkin
+  let el = document.getElementById('nick-stats-content');
+  if(!el){
+    // Hali yaratilmagan — nick-stats-card ichiga qo'shamiz
+    const card = document.getElementById('nick-stats-card');
+    if(card){
+      el = document.createElement('div');
+      el.id = 'nick-stats-content';
+      card.appendChild(el);
+    } else return;
+  }
 
-    let html=`
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:12px;">
-      <div style="background:#fff;border-radius:12px;padding:10px;text-align:center;">
-        <div style="font-size:20px;font-weight:900;color:var(--green);">${total}</div>
-        <div style="font-size:10px;color:var(--text3);font-weight:600;margin-top:2px;">Nikname bor</div>
+  el.innerHTML = '<div style="text-align:center;padding:16px;color:var(--text3);">⏳ Yuklanmoqda...</div>';
+
+  try{
+    const r = await fetch('/api/admin/nick-stats?t='+Date.now());
+    if(!r.ok) throw new Error('Server xatosi: '+r.status);
+    const d = await r.json();
+    const total = d.total || 0;
+    const list  = d.users || [];
+    const noNick= d.noNickname || 0;
+    const jami  = d.totalUsers || 0;
+
+    let html = `<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:12px;">
+      <div style="background:#fff;border-radius:12px;padding:10px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,0.06);">
+        <div style="font-size:22px;font-weight:900;color:var(--green);">${total}</div>
+        <div style="font-size:10px;color:var(--text3);font-weight:700;margin-top:2px;">Nikname bor</div>
       </div>
-      <div style="background:#fff;border-radius:12px;padding:10px;text-align:center;">
-        <div style="font-size:20px;font-weight:900;color:var(--red);">${d.noNickname||0}</div>
-        <div style="font-size:10px;color:var(--text3);font-weight:600;margin-top:2px;">Nikname yo'q</div>
+      <div style="background:#fff;border-radius:12px;padding:10px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,0.06);">
+        <div style="font-size:22px;font-weight:900;color:var(--red);">${noNick}</div>
+        <div style="font-size:10px;color:var(--text3);font-weight:700;margin-top:2px;">Nikname yo'q</div>
       </div>
-      <div style="background:#fff;border-radius:12px;padding:10px;text-align:center;">
-        <div style="font-size:20px;font-weight:900;color:var(--text);">${d.totalUsers||0}</div>
-        <div style="font-size:10px;color:var(--text3);font-weight:600;margin-top:2px;">Jami</div>
+      <div style="background:#fff;border-radius:12px;padding:10px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,0.06);">
+        <div style="font-size:22px;font-weight:900;color:var(--text);">${jami}</div>
+        <div style="font-size:10px;color:var(--text3);font-weight:700;margin-top:2px;">Jami</div>
       </div>
     </div>`;
 
-    if(list.length){
-      html+=`<div style="max-height:220px;overflow-y:auto;border-radius:10px;background:#fff;padding:4px 0;">`;
-      list.forEach((u,i)=>{
-        const url=getPhotoUrl(u.name,'');
-        const av=url
-          ?`<img src="${url}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`
-          :`<span style="font-size:11px;font-weight:800;">${ini(u.name)}</span>`;
-        html+=`<div style="display:flex;align-items:center;gap:8px;padding:8px 12px;border-bottom:1px solid var(--border);cursor:pointer;" onclick="openUserProfile('${escA(u.name)}','')">
-          <div style="width:32px;height:32px;border-radius:50%;background:var(--green-bg);display:flex;align-items:center;justify-content:center;color:var(--green);flex-shrink:0;overflow:hidden;">${av}</div>
+    if(list.length > 0){
+      html += `<div style="border-radius:12px;overflow:hidden;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,0.06);">`;
+      list.forEach(u => {
+        const url = getPhotoUrl(u.name, '');
+        const av  = url
+          ? `<img src="${url}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`
+          : `<span style="font-size:11px;font-weight:800;color:var(--green);">${ini(u.name)}</span>`;
+        const dateStr = new Date(u.createdAt||Date.now()).toLocaleDateString('uz-UZ',{day:'2-digit',month:'2-digit',year:'2-digit'});
+        html += `<div style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-bottom:1px solid var(--border);" onclick="openUserProfile('${escA(u.name)}','')">
+          <div style="width:34px;height:34px;border-radius:50%;background:var(--green-bg);display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;">${av}</div>
           <div style="flex:1;min-width:0;">
             <div style="font-size:13px;font-weight:700;color:var(--text);">@${escH(u.nickname)}</div>
-            <div style="font-size:11px;color:var(--text3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escH(u.name)}</div>
+            <div style="font-size:11px;color:var(--text3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${escH(u.name)}</div>
           </div>
-          <div style="font-size:10px;color:var(--text3);font-weight:500;flex-shrink:0;">${new Date(u.createdAt||Date.now()).toLocaleDateString('uz-UZ',{day:'2-digit',month:'2-digit'})}</div>
+          <div style="font-size:10px;color:var(--text3);flex-shrink:0;">${dateStr}</div>
         </div>`;
       });
-      html+=`</div>`;
+      html += `</div>`;
     } else {
-      html+=`<div style="color:var(--text3);text-align:center;padding:12px;font-size:12px;">Hali hech kim nikname kiritgani yo'q</div>`;
+      html += `<div style="text-align:center;padding:20px;color:var(--text3);font-size:12px;font-weight:600;">
+        Hali hech kim nikname kiritgani yo'q
+      </div>`;
     }
-    el.innerHTML=html;
-  }catch{
-    el.innerHTML='<div style="color:var(--red);text-align:center;padding:10px;font-size:12px;">Yuklanmadi</div>';
+
+    el.innerHTML = html;
+  } catch(err) {
+    console.error('[nick-stats]', err);
+    el.innerHTML = `<div style="color:var(--red);text-align:center;padding:12px;font-size:12px;">
+      ❌ Yuklanmadi: ${err.message||'Xatolik'}<br>
+      <button onclick="adminLoadNickStats()" style="margin-top:8px;padding:6px 14px;background:var(--bg);border:1px solid var(--border);border-radius:8px;font-size:12px;cursor:pointer;">Qayta urinish</button>
+    </div>`;
   }
 }
 

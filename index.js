@@ -1220,15 +1220,60 @@ app.get('/api/users-map', (req, res) => {
     } catch (err) { res.status(500).json({error:'Xatolik'}); }
 });
 app.get('/api/user-stats', (req, res) => {
-    const nameQ = (req.query.name||'').toLowerCase().trim();
+    const nameQ     = (req.query.name||'').toLowerCase().trim();
     const usernameQ = (req.query.username||'').toLowerCase().trim();
     if (!nameQ && !usernameQ) return res.status(400).json({error:'name yoki username kerak'});
+
     const db = getDb();
     let user = null;
+
+    // 1. Bot foydalanuvchilaridan izlash
     if (nameQ) user = Object.values(db.users).find(u => (u.name||'').toLowerCase().trim() === nameQ);
-    if (!user && usernameQ) user = Object.values(db.users).find(u => (u.username||'').toLowerCase().replace('@','').trim() === usernameQ.replace('@',''));
+    if (!user && usernameQ) user = Object.values(db.users).find(u =>
+        (u.username||'').toLowerCase().replace('@','').trim() === usernameQ.replace('@','')
+    );
+
+    // 2. Web-only foydalanuvchilardan izlash (Mercury va boshqalar)
+    if (!user) {
+        const wu = getWebUsers();
+        let webUser = null;
+        if (nameQ) webUser = Object.values(wu).find(u => (u.name||'').toLowerCase().trim() === nameQ);
+        if (!webUser && usernameQ) webUser = wu[usernameQ] || Object.values(wu).find(u =>
+            (u.nickname||'').toLowerCase() === usernameQ ||
+            (u.username||'').toLowerCase()  === usernameQ
+        );
+        if (webUser) {
+            return res.json({
+                score:        webUser.score||0,
+                totalTests:   webUser.totalTests||0,
+                totalCorrect: webUser.totalCorrect||0,
+                totalWrong:   webUser.totalWrong||0,
+                univ:         webUser.univ||'',
+                kurs:         webUser.kurs||'',
+                yonalish:     webUser.yonalish||'',
+                isVip:        false,
+                vipStart:     null,
+                vipEnd:       null,
+                subjects:     webUser.subjects||{},
+                isWebOnly:    webUser.isWebOnly||false,
+            });
+        }
+    }
+
     if (!user) return res.status(404).json({error:'Topilmadi'});
-    res.json({ score:user.score||0, totalTests:user.totalTests||0, totalCorrect:user.totalCorrect||null, totalWrong:user.totalWrong||null, univ:user.univ||'—', kurs:user.kurs||'—', yonalish:user.yonalish||'—', isVip:user.isVip||false, vipStart:user.vipStart||null, vipEnd:user.vipEnd||null, subjects:user.subjects||{} });
+    res.json({
+        score:        user.score||0,
+        totalTests:   user.totalTests||0,
+        totalCorrect: user.totalCorrect||null,
+        totalWrong:   user.totalWrong||null,
+        univ:         user.univ||'—',
+        kurs:         user.kurs||'—',
+        yonalish:     user.yonalish||'—',
+        isVip:        user.isVip||false,
+        vipStart:     user.vipStart||null,
+        vipEnd:       user.vipEnd||null,
+        subjects:     user.subjects||{},
+    });
 });
 
 // ─── Web Auth ──────────────────────────────────────────────────────
@@ -2175,6 +2220,23 @@ app.post('/api/reject', async (req, res) => {
 app.post('/api/web-score', (req, res) => {
     try {
         const { name, username, score, totalQ, wrongCount, subjectKey } = req.body;
+        // Web-only akkaunt uchun web_users da ham yangilash
+        const wu2 = getWebUsers();
+        const uKey2 = (username||'').toLowerCase().trim();
+        if(uKey2 && wu2[uKey2]) {
+            wu2[uKey2].score        = (parseFloat(wu2[uKey2].score)||0) + (parseFloat(score)||0);
+            wu2[uKey2].totalTests   = (parseInt(wu2[uKey2].totalTests)||0) + 1;
+            wu2[uKey2].totalCorrect = (parseInt(wu2[uKey2].totalCorrect)||0) + (parseInt(totalQ)||0) - (parseInt(wrongCount)||0);
+            wu2[uKey2].totalWrong   = (parseInt(wu2[uKey2].totalWrong)||0) + (parseInt(wrongCount)||0);
+            if(subjectKey) {
+                if(!wu2[uKey2].subjects) wu2[uKey2].subjects = {};
+                if(!wu2[uKey2].subjects[subjectKey]) wu2[uKey2].subjects[subjectKey] = {tests:0,correct:0,wrong:0};
+                wu2[uKey2].subjects[subjectKey].tests++;
+                wu2[uKey2].subjects[subjectKey].correct += (parseInt(totalQ)||0)-(parseInt(wrongCount)||0);
+                wu2[uKey2].subjects[subjectKey].wrong   += parseInt(wrongCount)||0;
+            }
+            saveWebUsers(wu2);
+        }
         if (!name||score===undefined) return res.status(400).json({error:'name va score kerak'});
         const db = getDb();
         // Telegram user topish
@@ -2591,6 +2653,41 @@ app.get('/api/online-count', (req, res) => {
 });
 
 const WEBHOOK_URL = process.env.WEBHOOK_URL || process.env.RAILWAY_STATIC_URL || null;
+
+// ─── Boshlang'ich web-only akkauntlarni yaratish ─────────────────
+function ensureDefaultAccounts() {
+    const wu = getWebUsers();
+    
+    const defaults = [
+        {
+            username:    'mercury',
+            name:        'Mercury',
+            nickname:    'mercury',
+            password:    'Yusuf_bro01',
+            tgId:        null,
+            tgUsername:  '',
+            score:       0,
+            totalTests:  0,
+            totalCorrect:0,
+            totalWrong:  0,
+            subjects:    {},
+            isWebOnly:   true,
+            addedByAdmin:true,
+            createdAt:   Date.now(),
+        }
+    ];
+
+    let changed = false;
+    for (const acc of defaults) {
+        if (!wu[acc.username]) {
+            wu[acc.username] = acc;
+            changed = true;
+            console.log(`[Init] Akkaunt yaratildi: @${acc.username}`);
+        }
+    }
+    if (changed) saveWebUsers(wu);
+}
+ensureDefaultAccounts();
 
 async function startBot() {
     try { await bot.telegram.deleteWebhook(); } catch {}
