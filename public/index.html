@@ -492,47 +492,16 @@ body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); 
 
     <!-- HOME -->
     <div class="tab-panel active" id="tab-home">
-      <!-- My stats -->
-      <div class="my-stats" style="padding-top:14px;">
-        <div class="mstat">
-          <div class="mstat-val green" id="hm-score">0</div>
-          <div class="mstat-lbl">Ball</div>
-        </div>
-        <div class="mstat">
-          <div class="mstat-val" id="hm-tests">0</div>
-          <div class="mstat-lbl">Testlar</div>
-        </div>
-        <div class="mstat">
-          <div class="mstat-val blue" id="hm-acc">—</div>
-          <div class="mstat-lbl">Aniqlik</div>
-        </div>
-      </div>
 
-      <!-- Tournament -->
-      <div class="tour-banner" id="home-tour">
-        <div class="tour-hdr">
-          <div class="tour-status">
-            <div class="tour-dot" id="tour-dot"></div>
-            <div class="tour-title" id="tour-title-txt">Musobaqa</div>
-          </div>
-          <div class="tour-parts-btn" id="tour-parts-btn" style="display:none;" onclick="showPartsModal()">👥 Ishtirokchilar</div>
-        </div>
-        <div class="tour-chips">
-          <div class="tour-chip" id="tour-chip-date">📅 —</div>
-          <div class="tour-chip" id="tour-chip-time">🕒 —</div>
-          <div class="tour-chip" id="tour-chip-count">📝 —</div>
-        </div>
-      </div>
-
-      <!-- Stories -->
-      <div class="stories-wrap">
+      <!-- Stories — faqat follow qilinganlar -->
+      <div class="stories-wrap" style="padding-top:14px;">
         <div class="stories-row" id="stories-row">
           <div style="color:var(--text3);font-size:12px;padding:10px;">Yuklanmoqda...</div>
         </div>
       </div>
 
       <!-- Activity feed -->
-      <div class="sec-hdr" style="padding-top:8px;">
+      <div class="sec-hdr" style="padding-top:4px;">
         <div class="sec-hdr-title">So'nggi natijalar</div>
         <div class="sec-hdr-link" onclick="navTo('stats')">Hammasi →</div>
       </div>
@@ -709,6 +678,24 @@ body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); 
               <span style="font-size:14px;font-weight:700;color:var(--text);" id="prof-subj-name-row">—</span>
             </div>
             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="var(--text3)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          </div>
+        </div>
+
+        <!-- Tournament card (moved from Home) -->
+        <div style="padding:0 16px 0;" id="prof-tour-wrap">
+          <div style="background:var(--card);border-radius:16px;padding:15px 18px;box-shadow:0 1px 6px rgba(0,0,0,0.05);">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+              <div style="display:flex;align-items:center;gap:7px;">
+                <div class="tour-dot" id="tour-dot" style="flex-shrink:0;"></div>
+                <span style="font-size:14px;font-weight:700;color:var(--text);" id="tour-title-txt">Musobaqa</span>
+              </div>
+              <div id="tour-parts-btn" style="display:none;font-size:11px;color:var(--green);font-weight:700;cursor:pointer;background:var(--green-bg);padding:5px 10px;border-radius:10px;" onclick="showPartsModal()">👥 Ishtirokchilar</div>
+            </div>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;">
+              <div class="tour-chip" id="tour-chip-date">📅 —</div>
+              <div class="tour-chip" id="tour-chip-time">🕒 —</div>
+              <div class="tour-chip" id="tour-chip-count">📝 —</div>
+            </div>
           </div>
         </div>
 
@@ -1460,74 +1447,54 @@ function openTgBot(){
 // ═══════════════════════════════════════════════
 let _lbCache=[];
 async function loadHome(sess){
-  // My stats
-  if(!sess.isAdmin){
-    const user=getUsers()[sess.username];
-    if(user?.name){
-      try{
-        const r=await fetch('/api/user-stats?name='+encodeURIComponent(user.name));
-        if(r.ok){
-          const d=await r.json();
-          document.getElementById('hm-score').textContent=parseFloat(d.score||0).toFixed(1);
-          document.getElementById('hm-tests').textContent=d.totalTests||'0';
-          const tq=(d.totalCorrect||0)+(d.totalWrong||0);
-          document.getElementById('hm-acc').textContent=tq>0?(((d.totalCorrect||0)/tq)*100).toFixed(0)+'%':'—';
-        }
-      }catch{}
-    }
-  }
-  // Tournament
-  try{
-    const r=await fetch('/api/tournament'); const t=await r.json();
-    const dot=document.getElementById('tour-dot');
-    if(t?.isActive){
-      dot.classList.add('on');
-      document.getElementById('tour-title-txt').textContent='Musobaqa — Faol 🟢';
-      document.getElementById('tour-chip-date').textContent='📅 '+t.date;
-      document.getElementById('tour-chip-time').textContent='🕒 '+t.time;
-      document.getElementById('tour-chip-count').textContent='📝 '+(t.count||0)+' savol';
-      const pc=t.participants?.length||0;
-      if(pc>0){
-        const btn=document.getElementById('tour-parts-btn');
-        btn.style.display='block'; btn.textContent='👥 '+pc+' kishi';
-        if(t.participantDetails) window._partsData=t.participantDetails;
-      }
-    } else {
-      document.getElementById('tour-title-txt').textContent='Musobaqa — Faol emas';
-      document.getElementById('tour-chip-date').textContent='📅 —';
-      document.getElementById('tour-chip-time').textContent='🕒 —';
-      document.getElementById('tour-chip-count').textContent='📝 —';
-      document.getElementById('tour-parts-btn').style.display='none';
-    }
-  }catch{}
-  // Leaderboard
+  // Load leaderboard for stories and activity feed
   try{
     const r=await fetch('/api/leaderboard');
-    if(r.ok){_lbCache=await r.json();renderStories(_lbCache);renderActivity(_lbCache);}
+    if(r.ok){ _lbCache=await r.json(); renderStories(_lbCache); renderActivity(_lbCache); }
   }catch{}
 }
 
 function renderStories(list){
   const myName=getMyName();
   const myFollowing=getMyFollowing();
-  // Followed users first (green ring), then others (gray ring)
-  const followed=list.filter(u=>myFollowing.some(f=>f.toLowerCase()===u.name.toLowerCase())&&u.name!==myName);
-  const notFollowed=list.filter(u=>!myFollowing.some(f=>f.toLowerCase()===u.name.toLowerCase())&&u.name!==myName);
-  const ordered=[...followed,...notFollowed];
+
+  // Faqat follow qilinganlar + "Sizniki"
+  const followed=list.filter(u=>
+    myFollowing.some(f=>f.toLowerCase()===u.name.toLowerCase()) && u.name!==myName
+  );
+
   let html='';
+  // "Sizniki" har doim birinchi
+  const myData=list.find(u=>u.name===myName);
+  const myUrl=myName?getPhotoUrl(myName,''):null;
+  const myI=myName?ini(myName):'👤';
+  const myAv=myUrl
+    ?`<img src="${myUrl}" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentElement.innerHTML='${myI}'">`
+    :(myName?`<span>${myI}</span>`:`<span style="font-size:20px;">👤</span>`);
+
   html+=`<div class="story-item" onclick="navTo('profile')">
-    <div class="story-ring mine"><div class="story-ava" style="background:rgba(99,102,241,0.1);color:#6366f1;font-size:22px;">👤</div></div>
+    <div class="story-ring mine"><div class="story-ava">${myAv}</div></div>
     <div class="story-name">Sizniki</div>
   </div>`;
-  ordered.slice(0,8).forEach(u=>{
-    const url=getPhotoUrl(u.name,u.tgUsername); const i2=ini(u.name);
-    const av=url?`<img src="${url}" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentElement.innerHTML='${i2}'">`:`<span>${i2}</span>`;
-    const isFollowed=followed.includes(u);
-    html+=`<div class="story-item" onclick="openUserProfile('${escA(u.name)}','${escA(u.tgUsername||'')}')">
-      <div class="story-ring${isFollowed?'':' seen'}"><div class="story-ava">${av}</div></div>
-      <div class="story-name">${escH(u.name.split(' ')[0])}</div>
+
+  if(followed.length===0){
+    // Follow qilingan odam yo'q — bo'sh holat
+    html+=`<div style="display:flex;align-items:center;padding:0 8px;color:var(--text3);font-size:12px;font-weight:500;white-space:nowrap;">
+      Hali hech kimni follow qilmagansiz
     </div>`;
-  });
+  } else {
+    followed.forEach(u=>{
+      const url=getPhotoUrl(u.name,u.tgUsername); const i2=ini(u.name);
+      const av=url
+        ?`<img src="${url}" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentElement.innerHTML='${i2}'">`
+        :`<span>${i2}</span>`;
+      html+=`<div class="story-item" onclick="openUserProfile('${escA(u.name)}','${escA(u.tgUsername||'')}')">
+        <div class="story-ring"><div class="story-ava">${av}</div></div>
+        <div class="story-name">${escH(u.name.split(' ')[0])}</div>
+      </div>`;
+    });
+  }
+
   document.getElementById('stories-row').innerHTML=html;
 }
 
@@ -1787,6 +1754,30 @@ async function loadProfileForm(){
     document.getElementById('prof-univ-row').textContent=user.univ||'OTM kiritilmagan';
     document.getElementById('prof-subj-name-row').textContent=user.yonalish||"Yo'nalish";
   }
+
+  // Load tournament data for profile card
+  try{
+    const r=await fetch('/api/tournament'); const t=await r.json();
+    const dot=document.getElementById('tour-dot');
+    if(!dot) return;
+    if(t?.isActive){
+      dot.classList.add('on');
+      document.getElementById('tour-title-txt').textContent='Musobaqa — Faol 🟢';
+      document.getElementById('tour-chip-date').textContent='📅 '+t.date;
+      document.getElementById('tour-chip-time').textContent='🕒 '+t.time;
+      document.getElementById('tour-chip-count').textContent='📝 '+(t.count||0)+' savol';
+      const pc=t.participants?.length||0;
+      const btn=document.getElementById('tour-parts-btn');
+      if(pc>0&&btn){ btn.style.display='block'; btn.textContent='👥 '+pc+' kishi'; if(t.participantDetails) window._partsData=t.participantDetails; }
+    } else {
+      dot.classList.remove('on');
+      document.getElementById('tour-title-txt').textContent='Musobaqa — Faol emas';
+      document.getElementById('tour-chip-date').textContent='📅 —';
+      document.getElementById('tour-chip-time').textContent='🕒 —';
+      document.getElementById('tour-chip-count').textContent='📝 —';
+      const btn=document.getElementById('tour-parts-btn'); if(btn) btn.style.display='none';
+    }
+  }catch{}
 }
 
 async function handlePhotoUpload(input){
