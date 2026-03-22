@@ -444,6 +444,59 @@ body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); 
 </head>
 <body>
 
+<!-- ═══════════════════ NIKNAME SETUP ═══════════════════ -->
+<div class="screen" id="screen-nickname" style="align-items:center;justify-content:center;padding:24px;background:var(--bg);">
+  <div style="width:100%;max-width:360px;">
+    <!-- Header -->
+    <div style="text-align:center;margin-bottom:32px;">
+      <div style="width:72px;height:72px;border-radius:22px;background:var(--green);display:flex;align-items:center;justify-content:center;font-size:32px;margin:0 auto 14px;box-shadow:0 12px 32px rgba(34,197,94,0.35);">⚡</div>
+      <div style="font-size:22px;font-weight:900;color:var(--text);">Nikname tanlang</div>
+      <div style="font-size:13px;color:var(--text2);margin-top:6px;font-weight:500;">Bu sizning unikal manzilingiz bo'ladi</div>
+    </div>
+
+    <!-- Bot profil ma'lumotlari (preview) -->
+    <div id="nick-profile-preview" style="display:none;background:var(--card);border-radius:18px;padding:16px 18px;margin-bottom:16px;box-shadow:0 1px 8px rgba(0,0,0,0.06);">
+      <div style="font-size:11px;font-weight:700;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px;">Bot profil ma'lumotlari</div>
+      <div style="display:flex;align-items:center;gap:12px;">
+        <div id="nick-prev-ava" style="width:44px;height:44px;border-radius:50%;background:var(--green-bg);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;color:var(--green);flex-shrink:0;overflow:hidden;"></div>
+        <div>
+          <div style="font-size:15px;font-weight:800;color:var(--text);" id="nick-prev-name">—</div>
+          <div style="font-size:12px;color:var(--text3);font-weight:500;" id="nick-prev-meta">—</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Nikname input -->
+    <div style="background:var(--card);border-radius:20px;padding:24px;box-shadow:0 2px 20px rgba(0,0,0,0.08);">
+      <div style="display:flex;align-items:center;background:var(--bg);border:1.5px solid transparent;border-radius:12px;padding:0 14px;transition:all .2s;" id="nick-inp-wrap">
+        <span style="font-size:16px;font-weight:700;color:var(--text3);">@</span>
+        <input id="nick-inp" type="text" placeholder="nikname" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+          style="flex:1;padding:13px 6px;background:transparent;border:none;outline:none;font-family:'Inter',sans-serif;font-size:16px;font-weight:700;color:var(--text);"
+          oninput="onNickInput(this.value)" onkeydown="if(event.key==='Enter')submitNickname()">
+      </div>
+      <!-- Status -->
+      <div id="nick-status" style="height:28px;display:flex;align-items:center;gap:6px;padding:0 4px;margin-top:6px;">
+        <span style="font-size:12px;font-weight:600;" id="nick-status-txt"></span>
+      </div>
+      <!-- Qoidalar -->
+      <div style="font-size:11px;color:var(--text3);font-weight:500;line-height:1.8;margin-bottom:16px;">
+        • 3-30 ta belgi<br>
+        • Faqat lotin harflar, raqam, _ va .<br>
+        • Boshqalar bilan chat da @nikname ko'rinadi<br>
+        • Keyin o'zgartirish mumkin
+      </div>
+      <button id="nick-btn" onclick="submitNickname()" disabled
+        style="width:100%;padding:14px;background:#ccc;color:#fff;border:none;border-radius:14px;font-family:'Inter',sans-serif;font-size:15px;font-weight:700;cursor:not-allowed;transition:all .3s;">
+        Davom etish →
+      </button>
+      <!-- Skip (agar bot profilida ism bo'lsa) -->
+      <div id="nick-skip-wrap" style="text-align:center;margin-top:12px;display:none;">
+        <span onclick="skipNickname()" style="font-size:12px;color:var(--text3);cursor:pointer;font-weight:500;">Hozircha o'tkazib yuborish</span>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- ═══════════════════ LOGIN ═══════════════════ -->
 <div class="screen active" id="screen-login">
   <div class="login-box">
@@ -660,7 +713,10 @@ body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); 
       <div id="profile-main-view">
         <!-- Header row: @username + edit + settings -->
         <div style="display:flex;align-items:center;justify-content:space-between;padding:18px 20px 10px;">
-          <div style="font-size:17px;font-weight:800;color:var(--text);" id="prof-handle-disp">@—</div>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div style="font-size:17px;font-weight:800;color:var(--text);" id="prof-handle-disp">@—</div>
+            <div id="prof-nickname-badge" style="display:none;background:var(--green-bg);padding:3px 10px;border-radius:20px;font-size:12px;font-weight:700;color:var(--green);"></div>
+          </div>
           <div style="display:flex;gap:10px;">
             <button onclick="showProfileEdit()" style="width:36px;height:36px;border-radius:50%;background:none;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;">
               <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#6b6b6b" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
@@ -811,6 +867,16 @@ body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); 
           <div class="sec-title2">Asosiy ma'lumotlar</div>
           <div class="field"><label class="field-lbl">Username</label><input class="field-inp" id="p-u" type="text" autocorrect="off" autocapitalize="off"><div class="field-err" id="p-u-e">Noto'g'ri format yoki band</div></div>
           <div class="field"><label class="field-lbl">Ism Familiya</label><input class="field-inp" id="p-n" type="text"><div class="field-err" id="p-n-e">Kamida 3 harf</div></div>
+          <div class="divider2"></div>
+          <div class="sec-title2">Nikname</div>
+          <div class="field" style="margin-bottom:6px;">
+            <label class="field-lbl">@Nikname</label>
+            <div style="display:flex;align-items:center;background:var(--bg);border:1.5px solid transparent;border-radius:12px;padding:0 14px;transition:all .2s;" id="nick-change-wrap">
+              <span style="font-size:14px;font-weight:700;color:var(--text3);">@</span>
+              <input id="nick-change-inp" type="text" placeholder="yangi_nikname" autocomplete="off" autocorrect="off" autocapitalize="off" style="flex:1;padding:11px 6px;background:transparent;border:none;outline:none;font-family:'Inter',sans-serif;font-size:14px;font-weight:600;color:var(--text);" oninput="checkNickChange(this.value)">
+            </div>
+            <div id="nick-change-status" style="font-size:12px;color:var(--text3);margin-top:4px;font-weight:500;"></div>
+          </div>
           <div class="divider2"></div>
           <div class="sec-title2">Parolni o'zgartirish</div>
           <div class="field"><input class="field-inp" id="p-pw" type="password" placeholder="Yangi parol (ixtiyoriy)"></div>
@@ -1191,6 +1257,7 @@ const getUsers  = () => { try{ return JSON.parse(localStorage.getItem(USERS_KEY)
 const saveUsers = d  => localStorage.setItem(USERS_KEY, JSON.stringify(d));
 const getSess   = () => { try{ return JSON.parse(localStorage.getItem(SESS_KEY)) }catch{return null} };
 const saveSess  = d  => localStorage.setItem(SESS_KEY, JSON.stringify(d));
+const getNickname = () => { const s=getSess(); if(!s) return null; return s.nickname||null; };
 const clearSess = () => localStorage.removeItem(SESS_KEY);
 const getAdm    = () => { try{ const r=localStorage.getItem(ADMIN_KEY); return r?JSON.parse(r):{username:'admin',name:'Administrator',pass:ADMIN_SECRET,photo:null}; }catch{return{username:'admin',name:'Administrator',pass:ADMIN_SECRET,photo:null};} };
 const saveAdm   = d => localStorage.setItem(ADMIN_KEY, JSON.stringify(d));
@@ -1506,9 +1573,6 @@ async function openApp(username,isAdmin){
     // ✅ Follow ma'lumotlarini serverdan yuklash (kirish/yangilanganda)
     await syncFollowsFromServer(user.name);
   }
-  navTo('home');
-  checkUnread();
-  setInterval(checkUnread,8000);
   // Socket.io ni ishga tushirish
   const myN = sess.isAdmin ? (getAdm().name||'Admin') : (getUsers()[username]?.name||username);
   if(myN) initSocket(myN);
@@ -1518,6 +1582,20 @@ async function openApp(username,isAdmin){
   fetch('/api/admin/fix-chats',{method:'POST'}).then(r=>r.json()).then(d=>{
     if(d.fixedCount>0) console.log('[Fix] Duplicate chatlar tozalandi:', d.fixedCount);
   }).catch(()=>{});
+
+  // Nikname tekshirish — yo'q bo'lsa setup ekrani ko'rsat
+  if(!sess.isAdmin){
+    const wu=getUsers()[username];
+    if(wu && !wu.nickname && !sess.nickname){
+      // TG dan ma'lumotlarni olishga urinish
+      await loadTgProfile(wu);
+      showNicknameSetup();
+      return; // navTo ni kechiktirish
+    }
+  }
+  navTo('home');
+  checkUnread();
+  setInterval(checkUnread,8000);
 }
 
 // ═══════════════════════════════════════════════
@@ -1750,7 +1828,13 @@ async function loadProfileForm(){
   document.getElementById('p-pw').value=''; document.getElementById('p-pw2').value='';
 
   // Fill main profile display
-  document.getElementById('prof-handle-disp').textContent='@'+(user.username||'—');
+  const nick=user.nickname||getSess()?.nickname||'';
+  document.getElementById('prof-handle-disp').textContent='@'+(nick||user.username||'—');
+  const nbadge=document.getElementById('prof-nickname-badge');
+  if(nbadge){
+    if(nick&&nick!==user.username){ nbadge.textContent='@'+user.username; nbadge.style.display='block'; }
+    else nbadge.style.display='none';
+  }
   document.getElementById('prof-name-disp').textContent=user.name||'—';
 
   // Avatar
@@ -1911,7 +1995,27 @@ async function handlePhotoUpload(input){
   reader.readAsDataURL(file);
 }
 
-function saveProfile(){
+let _nickChangeValid=false;
+function checkNickChange(val){
+  _nickChangeValid=false;
+  const st=document.getElementById('nick-change-status');
+  const nick=val.toLowerCase().trim().replace(/^@/,'');
+  if(!nick){if(st)st.textContent='';return;}
+  if(nick.length<3){if(st){st.style.color='var(--red)';st.textContent='❌ Kamida 3 belgi';}return;}
+  if(!/^[a-z0-9_.]+$/.test(nick)){if(st){st.style.color='var(--red)';st.textContent='❌ Faqat lotin, raqam, _ yoki .';}return;}
+  if(st){st.style.color='var(--text3)';st.textContent='⏳ Tekshirilmoqda...';}
+  clearTimeout(_nickDebounce);
+  _nickDebounce=setTimeout(async()=>{
+    try{
+      const r=await fetch(`/api/nickname/check?nickname=${encodeURIComponent(nick)}`);
+      const d=await r.json();
+      if(d.available){_nickChangeValid=true;if(st){st.style.color='var(--green)';st.textContent='✅ Band emas!';}}
+      else{if(st){st.style.color='var(--red)';st.textContent='❌ @'+nick+' band!';}}
+    }catch{if(st){st.style.color='var(--text3)';st.textContent='';}}
+  },600);
+}
+
+async function saveProfile(){
   document.querySelectorAll('.field-err').forEach(e=>e.classList.remove('on'));
   document.querySelectorAll('.field-inp').forEach(i=>i.classList.remove('err'));
   const sess=getSess(); if(!sess) return;
@@ -1919,9 +2023,13 @@ function saveProfile(){
   const newN=document.getElementById('p-n').value.trim();
   const newPw=document.getElementById('p-pw').value;
   const newPw2=document.getElementById('p-pw2').value;
+  const newNick=(document.getElementById('nick-change-inp')?.value||'').toLowerCase().trim().replace(/^@/,'');
+
   if(!isValidUname(newU)){errf('p-u-e','p-u');return;}
   if(newN.length<3){errf('p-n-e','p-n');return;}
   if(newPw&&newPw!==newPw2){errf('p-pw-e','p-pw2');return;}
+  if(newNick&&!_nickChangeValid){toast('❌ Nikname tekshirilmagan','bad');return;}
+
   const users=getUsers(); const old=users[sess.username]; if(!old) return;
   if(newU!==sess.username){
     if(users[newU]){document.getElementById('p-u-e').textContent='Bu username band!';errf('p-u-e','p-u');return;}
@@ -1929,7 +2037,18 @@ function saveProfile(){
   }
   users[newU]={...old,username:newU,name:newN};
   if(newPw) users[newU].pass=newPw;
-  saveUsers(users); saveSess({username:newU,isAdmin:false});
+  if(newNick) users[newU].nickname=newNick;
+  saveUsers(users);
+  const newSess={...sess,username:newU};
+  if(newNick) newSess.nickname=newNick;
+  saveSess(newSess);
+
+  // Server ga ham yuborish
+  try{
+    await fetch('/api/web-auth/update',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:sess.username,newUsername:newU,name:newN,newPassword:newPw||undefined})});
+    if(newNick) await fetch('/api/nickname/set',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:newU,nickname:newNick})});
+  }catch{}
+
   toast('✅ Profil yangilandi!');
   setAhAvatar(newN,newU);
   hideProfileEdit();
@@ -2952,6 +3071,19 @@ function getMyName(){
   if(sess.isAdmin) return getAdm().name||'Admin';
   return getUsers()[sess.username]?.name||null;
 }
+// Nikname (display uchun)
+function getMyNickname(){
+  const sess=getSess(); if(!sess) return null;
+  if(sess.isAdmin) return getAdm().name||'Admin';
+  const u=getUsers()[sess.username];
+  return u?.nickname||u?.name||null;
+}
+// Boshqa foydalanuvchining niknamesini leaderboard dan olish
+function getNicknameOf(name){
+  // _lbCache dan izlash
+  const found=_lbCache.find(u=>(u.name||'').toLowerCase()===(name||'').toLowerCase());
+  return found?.nickname||name;
+}
 
 function openChat(targetName,targetTg){
   _chatWith={name:targetName,tg:targetTg||''};
@@ -3414,6 +3546,207 @@ function checkAdmin(){
 }
 
 // Logout
+// ═══════════════════════════════════════════════════════════
+// NIKNAME SETUP
+// ═══════════════════════════════════════════════════════════
+let _nickCheckTimer=null;
+let _nickValid=false;
+let _tgProfileData=null;
+
+async function loadTgProfile(wu){
+  // Telegram WebApp orqali TG ma'lumotlarini olish
+  try{
+    const tgUser=window.Telegram?.WebApp?.initDataUnsafe?.user;
+    if(tgUser){
+      const tgId=tgUser.id;
+      const tgUsername=tgUser.username||'';
+      // Serverdan TG profil ma'lumotlarini olish
+      const r=await fetch(`/api/tg-profile?tgId=${tgId}&tgUsername=${encodeURIComponent(tgUsername)}`);
+      if(r.ok){
+        _tgProfileData=await r.json();
+        // Web user ga TG ma'lumotlarini qo'shish
+        if(_tgProfileData.name && wu){
+          const sess=getSess();
+          if(sess){
+            const users=getUsers();
+            const u=users[sess.username];
+            if(u){
+              u.tgName=_tgProfileData.name;
+              u.univ=_tgProfileData.univ||u.univ||'';
+              u.kurs=_tgProfileData.kurs||u.kurs||'';
+              u.yonalish=_tgProfileData.yonalish||u.yonalish||'';
+              u.tgId=String(tgId);
+              u.tgUsername=tgUsername;
+              users[sess.username]=u;
+              saveUsers(users);
+              // Serverga ham yuborish
+              fetch('/api/web-auth/link-tg',{method:'POST',headers:{'Content-Type':'application/json'},
+                body:JSON.stringify({username:sess.username,tgId,tgUsername})}).catch(()=>{});
+            }
+          }
+        }
+      }
+    }
+  }catch(e){ console.log('[TG Profile]',e); }
+}
+
+function showNicknameSetup(){
+  // Login ekranini yashirish
+  document.getElementById('screen-login').classList.remove('active');
+  document.getElementById('screen-app').classList.remove('active');
+  document.getElementById('screen-nickname').classList.add('active');
+
+  // TG profil preview ko'rsatish
+  const sess=getSess();
+  if(!sess) return;
+  const wu=getUsers()[sess.username];
+  const tgName=wu?.tgName||_tgProfileData?.name||wu?.name||'';
+  const univ=wu?.univ||_tgProfileData?.univ||'';
+  const kurs=wu?.kurs||_tgProfileData?.kurs||'';
+
+  if(tgName){
+    const prev=document.getElementById('nick-profile-preview');
+    if(prev) prev.style.display='block';
+    const nameEl=document.getElementById('nick-prev-name');
+    if(nameEl) nameEl.textContent=tgName;
+    const metaEl=document.getElementById('nick-prev-meta');
+    if(metaEl) metaEl.textContent=[univ,kurs].filter(Boolean).join(' · ')||"Bot profilingiz";
+    // Avatar
+    const avaEl=document.getElementById('nick-prev-ava');
+    if(avaEl){
+      const url=getPhotoUrl(tgName,'');
+      if(url) avaEl.innerHTML=`<img src="${url}" style="width:100%;height:100%;object-fit:cover;">`;
+      else avaEl.textContent=ini(tgName);
+    }
+    // Skip tugmasi
+    const skipWrap=document.getElementById('nick-skip-wrap');
+    if(skipWrap) skipWrap.style.display='block';
+  }
+
+  // Input ga focus
+  setTimeout(()=>document.getElementById('nick-inp')?.focus(),300);
+}
+
+let _nickDebounce=null;
+function onNickInput(val){
+  _nickValid=false;
+  const btn=document.getElementById('nick-btn');
+  const statusTxt=document.getElementById('nick-status-txt');
+  const wrap=document.getElementById('nick-inp-wrap');
+  if(btn){btn.disabled=true;btn.style.background='#ccc';btn.style.cursor='not-allowed';}
+
+  const nick=val.toLowerCase().trim().replace(/^@/,'');
+  if(!nick){ if(statusTxt) statusTxt.textContent=''; return; }
+
+  // Format tekshirish
+  if(nick.length<3){ if(statusTxt){statusTxt.style.color='var(--red)';statusTxt.textContent='❌ Kamida 3 belgi';} return; }
+  if(nick.length>30){ if(statusTxt){statusTxt.style.color='var(--red)';statusTxt.textContent='❌ 30 belgidan oshmasin';} return; }
+  if(!/^[a-z0-9_.]+$/.test(nick)){ if(statusTxt){statusTxt.style.color='var(--red)';statusTxt.textContent='❌ Faqat lotin, raqam, _ yoki .';} return; }
+
+  if(statusTxt){statusTxt.style.color='var(--text3)';statusTxt.textContent='⏳ Tekshirilmoqda...';}
+  if(wrap) wrap.style.borderColor='transparent';
+
+  clearTimeout(_nickDebounce);
+  _nickDebounce=setTimeout(async()=>{
+    try{
+      const r=await fetch(`/api/nickname/check?nickname=${encodeURIComponent(nick)}`);
+      const d=await r.json();
+      if(d.available){
+        _nickValid=true;
+        if(statusTxt){statusTxt.style.color='var(--green)';statusTxt.textContent='✅ @'+nick+' band emas!';}
+        if(wrap) wrap.style.borderColor='var(--green)';
+        if(btn){btn.disabled=false;btn.style.background='var(--green)';btn.style.cursor='pointer';}
+      } else {
+        _nickValid=false;
+        if(statusTxt){statusTxt.style.color='var(--red)';statusTxt.textContent='❌ @'+nick+' band!';}
+        if(wrap) wrap.style.borderColor='var(--red)';
+      }
+    }catch{
+      if(statusTxt){statusTxt.style.color='var(--text3)';statusTxt.textContent='⚠️ Tekshirib bolmadi';}
+    }
+  },600);
+}
+
+async function submitNickname(){
+  if(!_nickValid) return;
+  const inp=document.getElementById('nick-inp');
+  const nick=(inp?.value||'').toLowerCase().trim().replace(/^@/,'');
+  if(!nick) return;
+
+  const btn=document.getElementById('nick-btn');
+  if(btn){btn.textContent='⏳ Saqlanmoqda...';btn.disabled=true;}
+
+  const sess=getSess();
+  if(!sess) return;
+
+  try{
+    const r=await fetch('/api/nickname/set',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({username:sess.username,nickname:nick})
+    });
+    const d=await r.json();
+    if(r.ok&&d.success){
+      // Local ga saqlash
+      const users=getUsers();
+      if(users[sess.username]) users[sess.username].nickname=nick;
+      saveUsers(users);
+      saveSess({...sess,nickname:nick});
+
+      // App ga o'tish
+      document.getElementById('screen-nickname').classList.remove('active');
+      document.getElementById('screen-app').classList.add('active');
+      toast('✅ @'+nick+' — nikname saqlandi!');
+      navTo('home');
+      checkUnread();
+      setInterval(checkUnread,8000);
+      const myN=users[sess.username]?.name||sess.username;
+      if(myN) initSocket(myN);
+      fetchOnlineCount();
+    } else {
+      if(btn){btn.textContent='Davom etish →';btn.disabled=false;}
+      toast('❌ '+(d.message||"Xatolik"), 'bad');
+    }
+  }catch{
+    if(btn){btn.textContent='Davom etish →';btn.disabled=false;}
+    toast('⚠️ Server bilan boglanib bolmadi','bad');
+  }
+}
+
+function skipNickname(){
+  // Nikname o'tkazib yuborish — app ga kirish
+  const sess=getSess();
+  document.getElementById('screen-nickname').classList.remove('active');
+  document.getElementById('screen-app').classList.add('active');
+  navTo('home');
+  checkUnread();
+  setInterval(checkUnread,8000);
+  const users=getUsers();
+  const myN=sess?users[sess.username]?.name||sess.username:'';
+  if(myN) initSocket(myN);
+  fetchOnlineCount();
+}
+
+// Profildan nikname o'zgartirish
+async function changeNickname(){
+  const current=getSess()?.nickname||getUsers()[getSess()?.username]?.nickname||'';
+  const inp=document.getElementById('nick-change-inp');
+  if(!inp) return;
+  const nick=inp.value.toLowerCase().trim().replace(/^@/,'');
+  if(!nick||nick.length<3) return toast('❌ Nikname kiriting','bad');
+
+  const sess=getSess();
+  try{
+    const r=await fetch('/api/nickname/set',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:sess.username,nickname:nick})});
+    const d=await r.json();
+    if(r.ok&&d.success){
+      const users=getUsers(); if(users[sess.username]) users[sess.username].nickname=nick; saveUsers(users);
+      saveSess({...sess,nickname:nick});
+      toast('✅ Nikname yangilandi!');
+      loadProfileForm();
+    } else toast('❌ '+(d.message||"Xatolik"),'bad');
+  }catch{ toast('⚠️ Xatolik','bad'); }
+}
+
 // ─── Search ──────────────────────────────────────────────────
 function openSearch(){
   document.getElementById('search-modal').classList.add('on');

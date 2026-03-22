@@ -1257,7 +1257,7 @@ app.post('/api/web-auth/login', (req, res) => {
         const webUsers = getWebUsers();
         if (webUsers[u]) {
             if (webUsers[u].password !== password) return res.status(401).json({error:'wrong_password'});
-            return res.json({ success:true, user:{username:u, name:webUsers[u].name, photo:webUsers[u].photo||null, createdAt:webUsers[u].createdAt} });
+            return res.json({ success:true, user:{username:u, name:webUsers[u].name, nickname:webUsers[u].nickname||null, tgId:webUsers[u].tgId||null, tgUsername:webUsers[u].tgUsername||null, univ:webUsers[u].univ||null, kurs:webUsers[u].kurs||null, yonalish:webUsers[u].yonalish||null, photo:webUsers[u].photo||null, createdAt:webUsers[u].createdAt} });
         }
         return res.status(404).json({error:'notfound'});
     } catch (err) { console.error('[web-login]', err.message); res.status(500).json({error:'server_error'}); }
@@ -1268,9 +1268,104 @@ app.get('/api/web-auth/me', (req, res) => {
         if (!u) return res.status(400).json({error:'missing'});
         const webUsers = getWebUsers();
         if (!webUsers[u]) return res.status(404).json({error:'notfound'});
-        res.json({ success:true, user:{username:u, name:webUsers[u].name, photo:webUsers[u].photo||null, createdAt:webUsers[u].createdAt} });
+        const wu=webUsers[u];
+        res.json({ success:true, user:{username:u, name:wu.name, nickname:wu.nickname||null, tgId:wu.tgId||null, tgUsername:wu.tgUsername||null, univ:wu.univ||null, kurs:wu.kurs||null, yonalish:wu.yonalish||null, photo:wu.photo||null, createdAt:wu.createdAt} });
     } catch (err) { res.status(500).json({error:'server_error'}); }
 });
+// ─── TG bot ma'lumotlarini olish (ismi, OTM, kurs, yonalish) ──────
+app.get('/api/tg-profile', (req, res) => {
+    try {
+        const { tgId, tgUsername } = req.query;
+        const db = getDb();
+        let user = null;
+
+        // TG ID bo'yicha izlash
+        if (tgId) user = db.users[tgId];
+
+        // TG username bo'yicha izlash
+        if (!user && tgUsername) {
+            const uLow = tgUsername.replace('@','').toLowerCase();
+            for (const u of Object.values(db.users||{})) {
+                if ((u.username||'').replace('@','').toLowerCase() === uLow) { user=u; break; }
+            }
+        }
+
+        if (!user || !user.isRegistered) return res.status(404).json({error:'notfound'});
+
+        res.json({
+            name:     user.name     || '',
+            univ:     user.univ     || '',
+            kurs:     user.kurs     || '',
+            yonalish: user.yonalish || '',
+            tgUsername: (user.username||'').replace('@',''),
+            score:    user.score    || 0,
+            totalTests: user.totalTests || 0,
+            isVip:    user.isVip    || false,
+            vipEnd:   user.vipEnd   || null,
+        });
+    } catch(err) { res.status(500).json({error:err.message}); }
+});
+
+// ─── Nikname mavjudligini tekshirish ─────────────────────────────
+app.get('/api/nickname/check', (req, res) => {
+    try {
+        const { nickname } = req.query;
+        if (!nickname) return res.status(400).json({error:'nickname kerak'});
+        const nick = nickname.toLowerCase().trim().replace(/^@/,'');
+        if (!/^[a-z0-9_.]{3,30}$/.test(nick)) return res.status(400).json({error:'invalid', message:"Faqat lotin harflar, raqam, _ va . (3-30 belgi)"});
+
+        const webUsers = getWebUsers();
+        const taken = Object.values(webUsers).some(u => (u.nickname||'').toLowerCase() === nick);
+        if (taken) return res.json({ available: false });
+
+        // DB.users da ham tekshirish (TG username bilan to'qnashuv)
+        const db = getDb();
+        const tgTaken = Object.values(db.users||{}).some(u =>
+            (u.username||'').replace('@','').toLowerCase() === nick
+        );
+        res.json({ available: !tgTaken });
+    } catch(err) { res.status(500).json({error:err.message}); }
+});
+
+// ─── Nikname o'rnatish ────────────────────────────────────────────
+app.post('/api/nickname/set', (req, res) => {
+    try {
+        const { username, nickname } = req.body;
+        if (!username||!nickname) return res.status(400).json({error:'missing'});
+        const nick = nickname.toLowerCase().trim().replace(/^@/,'');
+        if (!/^[a-z0-9_.]{3,30}$/.test(nick)) return res.status(400).json({error:'invalid'});
+
+        const webUsers = getWebUsers();
+        const u = username.toLowerCase().trim();
+        if (!webUsers[u]) return res.status(404).json({error:'notfound'});
+
+        // Band emasligini tekshirish
+        const taken = Object.entries(webUsers).some(([k,v]) => k!==u && (v.nickname||'').toLowerCase()===nick);
+        if (taken) return res.status(409).json({error:'taken', message:'Bu nikname band!'});
+
+        webUsers[u].nickname = nick;
+        webUsers[u].updatedAt = Date.now();
+        saveWebUsers(webUsers);
+        res.json({ success:true, nickname:nick });
+    } catch(err) { res.status(500).json({error:err.message}); }
+});
+
+// ─── TG ID bilan bog'lash (optional) ─────────────────────────────
+app.post('/api/web-auth/link-tg', (req, res) => {
+    try {
+        const { username, tgId, tgUsername } = req.body;
+        if (!username) return res.status(400).json({error:'missing'});
+        const u = username.toLowerCase().trim();
+        const webUsers = getWebUsers();
+        if (!webUsers[u]) return res.status(404).json({error:'notfound'});
+        if (tgId) webUsers[u].tgId = String(tgId);
+        if (tgUsername) webUsers[u].tgUsername = tgUsername.replace('@','');
+        webUsers[u].updatedAt = Date.now();
+        saveWebUsers(webUsers);
+        res.json({ success:true });
+    } catch(err) { res.status(500).json({error:err.message}); }
+});
+
 app.post('/api/web-auth/reset-password', (req, res) => {
     try {
         const { username, newPassword } = req.body;
@@ -1561,13 +1656,18 @@ app.get('/api/leaderboard', (req, res) => {
         const webUsers  = getWebUsers();
         const map = new Map();
 
-        // 1. Telegram foydalanuvchilari (user.score to'g'ridan-to'g'ri)
+        // Web users nickname map (name → nickname)
+        const nickMap = {};
+        Object.values(webUsers).forEach(wu => { if(wu.name&&wu.nickname) nickMap[wu.name.toLowerCase().trim()]=wu.nickname; });
+
+        // 1. Telegram foydalanuvchilari
         for (const [,u] of Object.entries(db.users||{})) {
             const sc = parseFloat(u.score) || 0;
             if (sc <= 0 || !u.name || !u.name.trim()) continue;
             const k = u.name.trim().toLowerCase();
             map.set(k, {
                 name:         u.name.trim(),
+                nickname:     nickMap[k]||null,
                 tgUsername:   (u.username||'').replace('@',''),
                 univ:         u.univ||'',
                 kurs:         u.kurs||'',
@@ -1583,14 +1683,14 @@ app.get('/api/leaderboard', (req, res) => {
             const sc = parseFloat(ws.score) || 0;
             if (sc <= 0 || !ws.name || !ws.name.trim()) continue;
             const k = ws.name.trim().toLowerCase();
-            if (!map.has(k)) map.set(k, { name:ws.name.trim(), tgUsername:ws.username||'', univ:'', kurs:'', yonalish:'', score:sc, totalTests:parseInt(ws.totalTests)||0, totalCorrect:parseInt(ws.totalCorrect)||0, totalWrong:parseInt(ws.totalWrong)||0 });
+            if (!map.has(k)) map.set(k, { name:ws.name.trim(), nickname:nickMap[k]||null, tgUsername:ws.username||'', univ:'', kurs:'', yonalish:'', score:sc, totalTests:parseInt(ws.totalTests)||0, totalCorrect:parseInt(ws.totalCorrect)||0, totalWrong:parseInt(ws.totalWrong)||0 });
         }
         // 3. web_users (score > 0, boshqa joyda yo'qlar)
         for (const [,wu] of Object.entries(webUsers)) {
             const sc = parseFloat(wu.score) || 0;
             if (sc <= 0 || !wu.name || !wu.name.trim()) continue;
             const k = wu.name.trim().toLowerCase();
-            if (!map.has(k)) map.set(k, { name:wu.name.trim(), tgUsername:wu.username||'', univ:'', kurs:'', yonalish:'', score:sc, totalTests:parseInt(wu.totalTests)||0, totalCorrect:parseInt(wu.totalCorrect)||0, totalWrong:parseInt(wu.totalWrong)||0 });
+            if (!map.has(k)) map.set(k, { name:wu.name.trim(), nickname:wu.nickname||null, tgUsername:wu.username||'', univ:'', kurs:'', yonalish:'', score:sc, totalTests:parseInt(wu.totalTests)||0, totalCorrect:parseInt(wu.totalCorrect)||0, totalWrong:parseInt(wu.totalWrong)||0 });
         }
         // ✅ Ball bo'yicha KAMAYISH tartibida
         const sorted = Array.from(map.values()).sort((a,b) => b.score - a.score);
