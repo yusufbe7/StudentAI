@@ -1754,6 +1754,31 @@ app.get('/api/leaderboard-full', (req, res) => {
     } catch (err) { res.status(500).json({ error: 'Xatolik' }); }
 });
 
+// ─── PWA fayllarini serve qilish ──────────────────────────────────
+app.get('/manifest.json', (req, res) => {
+    const p = path.join(__dirname, 'public', 'manifest.json');
+    if (fs.existsSync(p)) res.sendFile(p);
+    else res.status(404).json({error:'manifest.json topilmadi'});
+});
+app.get('/sw.js', (req, res) => {
+    const p = path.join(__dirname, 'public', 'sw.js');
+    if (fs.existsSync(p)) {
+        res.setHeader('Content-Type', 'application/javascript');
+        res.setHeader('Service-Worker-Allowed', '/');
+        res.sendFile(p);
+    } else res.status(404).send('// sw.js topilmadi');
+});
+app.get('/icon-192.png', (req, res) => {
+    const p = path.join(__dirname, 'public', 'icon-192.png');
+    if (fs.existsSync(p)) res.sendFile(p);
+    else res.status(404).send('Not found');
+});
+app.get('/icon-512.png', (req, res) => {
+    const p = path.join(__dirname, 'public', 'icon-512.png');
+    if (fs.existsSync(p)) res.sendFile(p);
+    else res.status(404).send('Not found');
+});
+
 app.get('/', (req, res) => {
     const filePath = path.join(__dirname,'public','index.html');
     fs.readFile(filePath, (err, data) => {
