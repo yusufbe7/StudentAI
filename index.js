@@ -1434,8 +1434,34 @@ app.post('/api/reset-request', async (req, res) => {
         const nick = nickname.toLowerCase().trim().replace(/^@/,'');
         const wu = getWebUsers();
 
-        // Nikname bo'yicha foydalanuvchini topish
-        const found = Object.entries(wu).find(([,u])=>(u.nickname||'').toLowerCase()===nick);
+        // 1. nickname field bo'yicha izlash
+        let found = Object.entries(wu).find(([,u])=>(u.nickname||'').toLowerCase()===nick);
+
+        // 2. username bo'yicha izlash (nickname kiritilmagan eski akkauntlar)
+        if(!found) found = Object.entries(wu).find(([k,])=>k.toLowerCase()===nick);
+
+        // 3. db.users da TG username bo'yicha izlash
+        let tgIdDirect = null;
+        if(!found){
+            const db = getDb();
+            for(const [uid, u] of Object.entries(db.users||{})){
+                const tgU = (u.username||'').replace('@','').toLowerCase();
+                if(tgU === nick || (u.name||'').toLowerCase().trim()===nick){
+                    // Bu TG foydalanuvchi — web_users da topishga urining
+                    const wuEntry = Object.entries(wu).find(([,w])=>
+                        (w.name||'').toLowerCase().trim()===(u.name||'').toLowerCase().trim()
+                    );
+                    if(wuEntry){ found=wuEntry; }
+                    else {
+                        // Web user yo'q — lekin TG ID bor, parol tiklash uchun temp entry
+                        tgIdDirect = uid;
+                        found = [nick, { username:nick, name:u.name||nick, nickname:nick, tgId:uid }];
+                    }
+                    break;
+                }
+            }
+        }
+
         if(!found) return res.status(404).json({error:'notfound',message:'Bu nikname topilmadi'});
 
         const [uKey, uData] = found;
