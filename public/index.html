@@ -7,6 +7,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <title>Student Bot</title>
 
+<!-- ═══ Socket.io ═══ -->
+<script src="/socket.io/socket.io.js"></script>
 <!-- ═══ PWA ═══ -->
 <link rel="manifest" href="/manifest.json">
 <meta name="theme-color" content="#22c55e">
@@ -1003,7 +1005,7 @@ body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); 
   <div class="chat-inp-wrap2">
     <label for="chat-img-inp" class="chat-img-btn2">📷</label>
     <input type="file" id="chat-img-inp" accept="image/*" style="display:none" onchange="sendImgMsg(this)">
-    <textarea class="chat-inp2" id="chat-inp" placeholder="Xabar yozing..." rows="1" onkeydown="chatKeyDown(event)"></textarea>
+    <textarea class="chat-inp2" id="chat-inp" placeholder="Xabar yozing..." rows="1" onkeydown="chatKeyDown(event)" oninput="chatTyping()"></textarea>
     <button class="chat-send2" onclick="sendMsg()">➤</button>
   </div>
 </div>
@@ -1443,7 +1445,12 @@ async function openApp(username,isAdmin){
   }
   navTo('home');
   checkUnread();
-  setInterval(checkUnread,5000);
+  setInterval(checkUnread,8000);
+  // Socket.io ni ishga tushirish
+  const myN = sess.isAdmin ? (getAdm().name||'Admin') : (getUsers()[username]?.name||username);
+  if(myN) initSocket(myN);
+  // Online count oldindan ko'rsatish
+  fetchOnlineCount();
 }
 
 // ═══════════════════════════════════════════════
@@ -2742,6 +2749,123 @@ function startChatFromProfile(){
 // CHAT
 // ═══════════════════════════════════════════════
 let _chatWith=null,_chatPoll=null,_msgs=[],_lastTs=0,_chatMyName=null;
+// ─── Socket.io ──────────────────────────────────────────────
+let _socket=null, _socketName=null;
+
+function initSocket(myName){
+  if(_socket&&_socket.connected&&_socketName===myName) return;
+  if(_socket) _socket.disconnect();
+  _socketName = myName;
+
+  _socket = io({ auth:{ name: myName }, transports:['websocket','polling'] });
+
+  _socket.on('connect', ()=>{
+    console.log('[Socket] Ulandi:', _socket.id);
+    // Online counter yangilash
+    fetchOnlineCount();
+  });
+
+  _socket.on('disconnect', ()=>{
+    console.log('[Socket] Uzildi');
+  });
+
+  // ─── Yangi xabar keldi ────────────────────────────────
+  _socket.on('new_message', (data)=>{
+    const msg = data.msg;
+    if(!msg) return;
+    // Agar bu chat ochiq bo'lsa — darhol ko'rsat
+    if(_chatWith && (
+      (msg.from||'').toLowerCase()===(_chatWith.name||'').toLowerCase() ||
+      (msg.to||'').toLowerCase()===(_chatWith.name||'').toLowerCase()
+    )){
+      if(!_msgs.find(m=>m.id===msg.id)){
+        _msgs.push(msg);
+        _lastTs=Math.max(_lastTs,msg.ts);
+        renderMsgs(_chatMyName||myName);
+        // O'qilgan deb belgilash
+        _socket.emit('mark_read',{myName:_chatMyName||myName, otherName:_chatWith.name});
+      }
+    } else {
+      // Chat yopiq — bildirishnoma
+      const sender=(msg.from||'Nomalum');
+      showNotifBanner('💬 '+sender+' xabar yozdi', '+1 yangi xabar');
+      // Badge yangilash
+      _lastUnreadCount++;
+      const badge=document.getElementById('bn-badge');
+      if(badge){badge.textContent=_lastUnreadCount>99?'99+':_lastUnreadCount;badge.classList.add('on');}
+      const ahB=document.getElementById('ah-badge');
+      if(ahB){ahB.textContent=_lastUnreadCount>9?'9+':_lastUnreadCount;ahB.classList.add('on');}
+      // Chat ro'yxatini yangilash
+      if(_curTab==='chats') loadChatsList();
+    }
+  });
+
+  // ─── Xabar yuborildi confirm ─────────────────────────
+  _socket.on('message_sent', (data)=>{
+    const msg=data.msg;
+    if(!msg||!_chatMyName) return;
+    if(!_msgs.find(m=>m.id===msg.id)){
+      _msgs.push(msg);
+      _lastTs=Math.max(_lastTs,msg.ts);
+      renderMsgs(_chatMyName);
+    }
+  });
+
+  // ─── O'qildi signali ─────────────────────────────────
+  _socket.on('messages_read', (data)=>{
+    if(!_msgs.length||!_chatMyName) return;
+    const myLow=(_chatMyName||'').toLowerCase();
+    let changed=false;
+    _msgs.forEach(m=>{
+      if((m.from||'').toLowerCase()===myLow && !m.read){ m.read=true; changed=true; }
+    });
+    if(changed) renderMsgs(_chatMyName);
+  });
+
+  // ─── Typing indicator ────────────────────────────────
+  _socket.on('user_typing', (data)=>{
+    if(!_chatWith) return;
+    const fromLow=(data.name||'').toLowerCase();
+    const chatWithLow=(_chatWith.name||'').toLowerCase();
+    if(fromLow!==chatWithLow) return;
+    const stEl=document.getElementById('chat-status');
+    if(stEl){
+      stEl.textContent=data.isTyping?'yozmoqda...':'online';
+      stEl.style.color=data.isTyping?'var(--green)':'var(--text3)';
+    }
+  });
+
+  // ─── Online/offline ───────────────────────────────────
+  _socket.on('user_online', (data)=>{
+    if(_chatWith&&(data.name||'').toLowerCase()===(_chatWith.name||'').toLowerCase()){
+      const stEl=document.getElementById('chat-status');
+      if(stEl){stEl.textContent='online';stEl.style.color='var(--green)';}
+    }
+    fetchOnlineCount();
+  });
+  _socket.on('user_offline', (data)=>{
+    if(_chatWith&&(data.name||'').toLowerCase()===(_chatWith.name||'').toLowerCase()){
+      const stEl=document.getElementById('chat-status');
+      if(stEl){stEl.textContent='offline';stEl.style.color='var(--text3)';}
+    }
+    fetchOnlineCount();
+  });
+}
+
+async function fetchOnlineCount(){
+  try{
+    const r=await fetch('/api/online-count');
+    if(r.ok){
+      const d=await r.json();
+      const el=document.getElementById('ah-online-cnt');
+      const wrap=document.getElementById('ah-online-wrap');
+      if(el&&wrap){
+        el.textContent=d.count||0;
+        wrap.style.display=d.count>0?'flex':'none';
+      }
+    }
+  }catch{}
+}
 
 function getMyName(){
   const sess=getSess(); if(!sess) return null;
@@ -2763,17 +2887,27 @@ function openChat(targetName,targetTg){
   document.getElementById('chat-inp').value='';
   document.getElementById('chat-inp').style.height='auto';
   const myName=getMyName();
-  if(_chatMyName) fetchMsgs(_chatMyName,targetName,0,true).then(()=>markRead(_chatMyName,targetName));
+  // Avvalgi xabarlarni HTTP orqali yuklash (tarix)
+  if(_chatMyName) fetchMsgs(_chatMyName,targetName,0,true).then(()=>{
+    if(_socket) _socket.emit('mark_read',{myName:_chatMyName,otherName:targetName});
+    else markRead(_chatMyName,targetName);
+  });
+  // Polling faqat socket ulanmagan holda (fallback)
   if(_chatPoll) clearInterval(_chatPoll);
   _chatPoll=setInterval(async()=>{
+    if(_socket?.connected) return; // Socket ishlasa polling shart emas
     const mn=_chatMyName||getMyName(); if(!mn||!_chatWith) return;
     const got=await fetchMsgs(mn,_chatWith.name,_lastTs,false);
     if(got) markRead(mn,_chatWith.name);
-  },2000);
+  },3000);
 }
 function closeChat(){
   if(_chatPoll) clearInterval(_chatPoll);
   _chatPoll=null;
+  // Typing stop
+  if(_socket?.connected&&_chatWith&&_chatMyName){
+    _socket.emit('typing',{fromName:_chatMyName,toName:_chatWith.name,isTyping:false});
+  }
   document.getElementById('screen-chat').classList.remove('active');
   _chatWith=null; _msgs=[]; _lastTs=0; _chatMyName=null;
   loadChatsList(); checkUnread();
@@ -2890,14 +3024,38 @@ async function sendMsg(){
   if(!text||!_chatWith) return;
   const myName=_chatMyName||getMyName(); if(!myName) return;
   _sending=true; inp.value=''; inp.style.height='auto';
+  // Typing indicator o'chirish
+  if(_socket?.connected) _socket.emit('typing',{fromName:myName,toName:_chatWith.name,isTyping:false});
   try{
-    const r=await fetch('/api/chat/send',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({fromName:myName,toName:_chatWith.name,text})});
-    if(r.ok){const data=await r.json();if(data.msg&&!_msgs.find(m=>m.id===data.msg.id)){_msgs.push(data.msg);_lastTs=Math.max(_lastTs,data.msg.ts);renderMsgs(myName);}}
-    else{toast('Xabar yuborilmadi','bad');inp.value=text;}
+    if(_socket?.connected){
+      // ✅ WebSocket orqali yuborish (tez, real-time)
+      _socket.emit('chat_message',{fromName:myName,toName:_chatWith.name,text});
+      // Optimistic UI — darhol ko'rsat
+      const tempMsg={id:'temp_'+Date.now(),from:myName,to:_chatWith.name,text,ts:Date.now(),read:false};
+      if(!_msgs.find(m=>m.text===text&&m.from===myName&&Date.now()-m.ts<2000)){
+        // server confirm kelguncha kutamiz (message_sent event)
+      }
+    } else {
+      // Fallback: HTTP orqali
+      const r=await fetch('/api/chat/send',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({fromName:myName,toName:_chatWith.name,text})});
+      if(r.ok){const data=await r.json();if(data.msg&&!_msgs.find(m=>m.id===data.msg.id)){_msgs.push(data.msg);_lastTs=Math.max(_lastTs,data.msg.ts);renderMsgs(myName);}}
+      else{toast('Xabar yuborilmadi','bad');inp.value=text;}
+    }
   }catch{toast('Tarmoq xatosi','bad');inp.value=text;}
   finally{_sending=false;}
 }
 function chatKeyDown(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMsg();}}
+
+let _typingTimer=null;
+function chatTyping(){
+  const myName=_chatMyName||getMyName();
+  if(!myName||!_chatWith||!_socket?.connected) return;
+  _socket.emit('typing',{fromName:myName,toName:_chatWith.name,isTyping:true});
+  clearTimeout(_typingTimer);
+  _typingTimer=setTimeout(()=>{
+    _socket.emit('typing',{fromName:myName,toName:_chatWith.name,isTyping:false});
+  },1500);
+}
 const _imgCache={};
 function openFullImg(msgId){const src=_imgCache[msgId];if(!src)return;document.getElementById('img-viewer-src').src=src;document.getElementById('img-viewer').classList.add('on');}
 async function sendImgMsg(input){
@@ -3130,6 +3288,7 @@ function checkAdmin(){
 // Logout
 function doLogout(){
   if(_chatPoll) clearInterval(_chatPoll);
+  if(_socket) { _socket.disconnect(); _socket=null; _socketName=null; }
   clearSess();
   document.getElementById('screen-app').classList.remove('active');
   document.getElementById('screen-login').classList.add('active');

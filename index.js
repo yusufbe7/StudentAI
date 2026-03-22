@@ -49,8 +49,18 @@ const WEB_USERS_PATH  = path.join(DATA_DIR, 'web_users.json');
 // ============================================================
 const bot = new Telegraf(BOT_TOKEN);
 const app = express();
+const http = require('http');
+const { Server } = require('socket.io');
+const server = http.createServer(app);
+const io = new Server(server, {
+    cors: { origin: '*', methods: ['GET','POST'] },
+    transports: ['websocket','polling'],
+});
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json({ limit: '10mb' }));
+
+// ─── Online foydalanuvchilar: name → socket.id ─────────────
+const onlineUsers = new Map(); // name.toLowerCase() → { socketId, name }
 
 // ============================================================
 // MA'LUMOTLAR BAZASI — yagona funksiyalar
@@ -1798,7 +1808,119 @@ bot.catch((err, ctx) => {
 // ============================================================
 // ISHGA TUSHIRISH
 // ============================================================
-app.listen(PORT, '0.0.0.0', () => console.log(`🌐 Express server ${PORT}-portda`));
+server.listen(PORT, '0.0.0.0', () => console.log(`🌐 Express+Socket.io server ${PORT}-portda`));
+
+// ─── Socket.io connection handler ─────────────────────────
+io.on('connection', (socket) => {
+    const userName = socket.handshake.auth?.name;
+    if (!userName) return;
+
+    const key = userName.toLowerCase().trim();
+    onlineUsers.set(key, { socketId: socket.id, name: userName });
+    console.log(`🟢 [Socket] ${userName} ulandi (${onlineUsers.size} online)`);
+
+    // Hamma ga online statusni yuborish
+    io.emit('user_online', { name: userName });
+
+    // ─── Xabar yuborish (WebSocket orqali) ────────────────
+    socket.on('chat_message', async (data) => {
+        try {
+            const { fromName, toName, text, imageData } = data;
+            if (!fromName || !toName || (!text?.trim() && !imageData)) return;
+
+            // Bazaga saqlash
+            const chats = getChatMsgs();
+            const [n1, n2] = [fromName.toLowerCase().trim(), toName.toLowerCase().trim()].sort();
+            const cid = n1 + '__CHAT__' + n2;
+            if (!chats[cid]) chats[cid] = [];
+
+            const msg = {
+                id: Date.now() + '_' + Math.random().toString(36).slice(2,7),
+                from: fromName,
+                to: toName,
+                text: text?.trim() || '',
+                imageData: imageData || null,
+                ts: Date.now(),
+                read: false,
+            };
+            chats[cid].push(msg);
+            if (chats[cid].length > 500) chats[cid] = chats[cid].slice(-500);
+            saveChatMsgs(chats);
+
+            // Yuboruvchiga confirm
+            socket.emit('message_sent', { msg });
+
+            // Qabul qiluvchiga real-time yuborish
+            const toKey = toName.toLowerCase().trim();
+            const toSocket = onlineUsers.get(toKey);
+            if (toSocket) {
+                io.to(toSocket.socketId).emit('new_message', { msg });
+                console.log(`📨 [Socket] ${fromName} → ${toName} (online, realtime)`);
+            } else {
+                // Offline — Telegram orqali xabar
+                console.log(`📭 [Socket] ${toName} offline — TG xabar yuboriladi`);
+                const db = getDb();
+                for (const [uid, u] of Object.entries(db.users || {})) {
+                    if ((u.name||'').toLowerCase().trim() === toKey) {
+                        const preview = imageData ? '🖼️ Rasm' : (text||'').slice(0,100);
+                        bot.telegram.sendMessage(uid,
+                            `💬 <b>Yangi xabar!</b>\n👤 <b>Kimdan:</b> ${fromName}\n📝 ${preview}`,
+                            { parse_mode: 'HTML' }
+                        ).catch(()=>{});
+                        break;
+                    }
+                }
+            }
+        } catch (err) {
+            console.error('[Socket chat_message]', err.message);
+        }
+    });
+
+    // ─── Xabarni o'qilgan deb belgilash ───────────────────
+    socket.on('mark_read', (data) => {
+        try {
+            const { myName, otherName } = data;
+            if (!myName || !otherName) return;
+            const chats = getChatMsgs();
+            const [n1, n2] = [myName.toLowerCase().trim(), otherName.toLowerCase().trim()].sort();
+            const cid = n1 + '__CHAT__' + n2;
+            const myLow = myName.toLowerCase().trim();
+            if (chats[cid]) {
+                chats[cid].forEach(m => { if ((m.to||'').toLowerCase().trim() === myLow) m.read = true; });
+                saveChatMsgs(chats);
+            }
+            // Yuboruvchiga ✓✓ signali
+            const fromKey = otherName.toLowerCase().trim();
+            const fromSocket = onlineUsers.get(fromKey);
+            if (fromSocket) {
+                io.to(fromSocket.socketId).emit('messages_read', { by: myName, chatWith: otherName });
+            }
+        } catch (err) { console.error('[Socket mark_read]', err.message); }
+    });
+
+    // ─── Typing indicator ─────────────────────────────────
+    socket.on('typing', (data) => {
+        const { fromName, toName, isTyping } = data;
+        if (!fromName || !toName) return;
+        const toKey = toName.toLowerCase().trim();
+        const toSocket = onlineUsers.get(toKey);
+        if (toSocket) {
+            io.to(toSocket.socketId).emit('user_typing', { name: fromName, isTyping });
+        }
+    });
+
+    // ─── Disconnect ───────────────────────────────────────
+    socket.on('disconnect', () => {
+        onlineUsers.delete(key);
+        io.emit('user_offline', { name: userName });
+        console.log(`🔴 [Socket] ${userName} uzildi (${onlineUsers.size} online)`);
+    });
+});
+
+// Online foydalanuvchilar soni API
+app.get('/api/online-count', (req, res) => {
+    res.json({ count: onlineUsers.size, users: Array.from(onlineUsers.values()).map(u => u.name) });
+});
 
 const WEBHOOK_URL = process.env.WEBHOOK_URL || process.env.RAILWAY_STATIC_URL || null;
 
