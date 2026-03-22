@@ -1016,32 +1016,150 @@ bot.on(['text','photo','video','animation','document'], async (ctx, next) => {
     }
     // ✅ TO'G'RI: Admin sohta ball — boshqa user TG ID
     if (isAdmin(userId) && s.adminStep === 'wait_fake_score_tgid') {
-        const targetId = parseInt(msgText.trim());
-        if (isNaN(targetId)) return ctx.reply('❌ Noto\'g\'ri ID! Faqat raqam kiriting:');
-        const db = getDb();
+        const rawInput = msgText.trim();
+        const targetId = parseInt(rawInput);
+        if (isNaN(targetId)) return ctx.reply('Notogri ID! Faqat raqam kiriting:');
+
+        const db  = getDb();
+        const wu  = getWebUsers();
+
+        // Virtual ID 7777 = Mercury (web-only)
+        const WEB_VIRTUAL_IDS = { 7777: 'mercury' };
+
+        if (WEB_VIRTUAL_IDS[targetId]) {
+            const wKey = WEB_VIRTUAL_IDS[targetId];
+            const wUser = wu[wKey];
+            if (!wUser) return ctx.replyWithHTML(`ID: ${targetId} - bu foydalanuvchi topilmadi.`);
+            s.fakeScoreUserId  = targetId;
+            s.fakeScoreIsWeb   = true;   // web-only belgisi
+            s.fakeScoreWebKey  = wKey;
+            s.adminStep        = 'wait_fake_score_amount_other';
+            return ctx.replyWithHTML(
+                `Foydalanuvchi topildi!
+
+` +
+                `Ism: <b>${escapeHTML(wUser.name||wKey)}</b>
+` +
+                `Nikname: <b>@${escapeHTML(wUser.nickname||wKey)}</b>
+` +
+                `ID: <code>${targetId}</code> (web-only)
+` +
+                `Joriy ball: <b>${parseFloat(wUser.score||0).toFixed(1)}</b>
+
+` +
+                `Qoshmoqchi bolgan ball miqdorini kiriting:`
+            );
+        }
+
         const user = db.users[targetId];
-        if (!user) return ctx.replyWithHTML(`❌ <b>ID: ${targetId}</b> li foydalanuvchi topilmadi.`);
-        s.fakeScoreUserId = targetId; s.adminStep = 'wait_fake_score_amount_other';
-        return ctx.replyWithHTML(`✅ <b>Foydalanuvchi topildi!</b>\n\n👤 Ism: <b>${escapeHTML(user.name||"Noma'lum")}</b>\n🆔 ID: <code>${targetId}</code>\n🏆 Joriy ball: <b>${parseFloat(user.score||0).toFixed(1)}</b>\n\nQo'shmoqchi bo'lgan ball miqdorini kiriting:`);
+        if (!user) {
+            // web_users dan ham qidirish (nickname yoki username bo'yicha)
+            const wByNick = Object.entries(wu).find(([,u])=>
+                String(u.tgId)===String(targetId) ||
+                (u.nickname||'').toLowerCase()===rawInput.toLowerCase() ||
+                (u.username||'').toLowerCase()===rawInput.toLowerCase()
+            );
+            if(wByNick){
+                const [wKey2, wUser2] = wByNick;
+                s.fakeScoreUserId = targetId;
+                s.fakeScoreIsWeb  = true;
+                s.fakeScoreWebKey = wKey2;
+                s.adminStep       = 'wait_fake_score_amount_other';
+                return ctx.replyWithHTML(
+                    `Foydalanuvchi topildi!
+
+` +
+                    `Ism: <b>${escapeHTML(wUser2.name||wKey2)}</b>
+` +
+                    `Nikname: <b>@${escapeHTML(wUser2.nickname||wKey2)}</b>
+` +
+                    `Joriy ball: <b>${parseFloat(wUser2.score||0).toFixed(1)}</b>
+
+` +
+                    `Qoshmoqchi bolgan ball miqdorini kiriting:`
+                );
+            }
+            return ctx.replyWithHTML(`ID: ${targetId} li foydalanuvchi topilmadi.`);
+        }
+        s.fakeScoreUserId = targetId;
+        s.fakeScoreIsWeb  = false;
+        s.adminStep       = 'wait_fake_score_amount_other';
+        return ctx.replyWithHTML(
+            `Foydalanuvchi topildi!
+
+` +
+            `Ism: <b>${escapeHTML(user.name||'Nomalum')}</b>
+` +
+            `ID: <code>${targetId}</code>
+` +
+            `Joriy ball: <b>${parseFloat(user.score||0).toFixed(1)}</b>
+
+` +
+            `Qoshmoqchi bolgan ball miqdorini kiriting:`
+        );
     }
-    // ✅ TO'G'RI: Admin sohta ball — ball miqdori (user.score ga yozadi!)
     if (isAdmin(userId) && s.adminStep === 'wait_fake_score_amount_other') {
         const amount = parseFloat(msgText);
-        const targetId = s.fakeScoreUserId;
-        if (isNaN(amount) || amount <= 0) return ctx.reply('❌ Noto\'g\'ri miqdor! Musbat raqam kiriting:');
-        if (!targetId) { s.adminStep = null; return ctx.reply('❌ Xatolik. Qaytadan urinib ko\'ring.'); }
-        const db = getDb();
-        const user = db.users[targetId];
-        if (!user) { s.adminStep = null; return ctx.reply('❌ Foydalanuvchi topilmadi.'); }
-        const before = parseFloat(user.score||0).toFixed(1);
-        // ✅ TO'G'RI FIELD: user.score (leaderboard shu fieldni o'qiydi)
-        user.score        = (user.score        || 0) + amount;
-        user.totalTests   = (user.totalTests   || 0) + 1;
-        user.totalCorrect = (user.totalCorrect || 0) + amount;
-        saveDb(db);
-        s.adminStep = null; s.fakeScoreUserId = null; s.fakeScoreTarget = null;
-        await ctx.replyWithHTML(`✅ <b>Ball muvaffaqiyatli qo'shildi!</b>\n\n👤 Foydalanuvchi: <b>${escapeHTML(user.name)}</b>\n🆔 TG ID: <code>${targetId}</code>\n💰 Qo'shildi: <b>+${amount}</b> ball\n📊 Oldingi: <b>${before}</b>\n🏆 Yangi: <b>${parseFloat(user.score).toFixed(1)}</b>`);
-        return ctx.reply('🛠 Admin Panel', adminMainKeyboard(getDb()));
+        const targetId  = s.fakeScoreUserId;
+        const isWebUser = s.fakeScoreIsWeb || false;
+        const webKey    = s.fakeScoreWebKey || null;
+
+        if (isNaN(amount) || amount <= 0) return ctx.reply('Notogri miqdor! Musbat raqam kiriting:');
+        if (!targetId) { s.adminStep=null; return ctx.reply('Xatolik. Qaytadan urinib koring.'); }
+
+        s.adminStep=null; s.fakeScoreUserId=null; s.fakeScoreIsWeb=null; s.fakeScoreWebKey=null;
+
+        if (isWebUser && webKey) {
+            // Web-only foydalanuvchi (Mercury va boshqalar)
+            const wu = getWebUsers();
+            const wUser = wu[webKey];
+            if (!wUser) return ctx.reply('Foydalanuvchi topilmadi.');
+            const before = parseFloat(wUser.score||0).toFixed(1);
+            wUser.score        = (parseFloat(wUser.score)||0)   + amount;
+            wUser.totalTests   = (parseInt(wUser.totalTests)||0) + 1;
+            wUser.totalCorrect = (parseInt(wUser.totalCorrect)||0) + amount;
+            wu[webKey] = wUser;
+            saveWebUsers(wu);
+            await ctx.replyWithHTML(
+                `Ball qoshildi!
+
+` +
+                `Foydalanuvchi: <b>${escapeHTML(wUser.name||webKey)}</b>
+` +
+                `Nikname: <b>@${escapeHTML(wUser.nickname||webKey)}</b>
+` +
+                `Qoshildi: <b>+${amount}</b> ball
+` +
+                `Oldingi: <b>${before}</b>
+` +
+                `Yangi: <b>${parseFloat(wUser.score).toFixed(1)}</b>`
+            );
+        } else {
+            // Oddiy TG foydalanuvchi
+            const db = getDb();
+            const user = db.users[targetId];
+            if (!user) return ctx.reply('Foydalanuvchi topilmadi.');
+            const before = parseFloat(user.score||0).toFixed(1);
+            user.score        = (user.score        || 0) + amount;
+            user.totalTests   = (user.totalTests   || 0) + 1;
+            user.totalCorrect = (user.totalCorrect || 0) + amount;
+            saveDb(db);
+            await ctx.replyWithHTML(
+                `Ball qoshildi!
+
+` +
+                `Foydalanuvchi: <b>${escapeHTML(user.name)}</b>
+` +
+                `TG ID: <code>${targetId}</code>
+` +
+                `Qoshildi: <b>+${amount}</b> ball
+` +
+                `Oldingi: <b>${before}</b>
+` +
+                `Yangi: <b>${parseFloat(user.score).toFixed(1)}</b>`
+            );
+        }
+        return ctx.reply('Admin Panel', adminMainKeyboard(getDb()));
     }
     // Admin — musobaqa steps
     if (isAdmin(userId)) {
