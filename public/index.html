@@ -4197,7 +4197,14 @@ function checkAdmin(){
   const adm=getAdm();
   if(val===adm.pass||val===ADMIN_SECRET){
     closeAdminModal();
+    // Avval mavjud sessionni tozalash
+    if(_socket){_socket.disconnect();_socket=null;_socketName=null;}
+    if(_chatPoll) clearInterval(_chatPoll);
+    // Barcha ekranlarni yopish
+    document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+    // Admin sessiya saqlash
     saveSess({username:adm.username||'admin',isAdmin:true});
+    // Admin panelni ochish
     openApp(adm.username||'admin',true);
   } else {
     document.getElementById('adm-pass-inp').classList.add('err');
@@ -4469,13 +4476,35 @@ function openNotifs(){
 }
 
 function doLogout(){
+  // 1. Barcha intervallarni to'xtatish
   if(_chatPoll) clearInterval(_chatPoll);
-  if(_socket) { _socket.disconnect(); _socket=null; _socketName=null; }
+  if(_resetPollTimer) clearInterval(_resetPollTimer);
+  if(_resetCountdownTimer) clearInterval(_resetCountdownTimer);
+  // 2. Socketni uzish
+  if(_socket){ _socket.disconnect(); _socket=null; _socketName=null; }
+  // 3. Session va state tozalash
   clearSess();
-  document.getElementById('screen-app').classList.remove('active');
+  _loginFoundUser=null; _nickIsNew=false; _loginTgData=null;
+  _lbCache=[]; _adminAllUsers=[];
+  // 4. Barcha ekranlarni yopish
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById('screen-login').classList.add('active');
-  document.getElementById('si-u').value=''; document.getElementById('si-p').value='';
-  lTab('in');
+  // 5. Admin panel yashirish
+  const apc=document.getElementById('admin-panel-card');
+  if(apc) apc.style.display='none';
+  // 6. Input larni tozalash
+  const siP=document.getElementById('si-p'); if(siP) siP.value='';
+  const nickInp=document.getElementById('nick-login-inp'); if(nickInp) nickInp.value='';
+  const nickStatus=document.getElementById('nick-login-status'); if(nickStatus) nickStatus.textContent='';
+  const nickWrap=document.getElementById('nick-login-wrap'); if(nickWrap) nickWrap.style.borderColor='transparent';
+  const nickBtn=document.getElementById('nick-login-btn');
+  if(nickBtn){nickBtn.disabled=true;nickBtn.style.background='#ccc';nickBtn.textContent='Davom etish →';}
+  // 7. TG preview yashirish
+  const tgPrev=document.getElementById('tg-profile-preview'); if(tgPrev) tgPrev.style.display='none';
+  // 8. Nick ekraniga o'tish
+  lTab('nick');
+  // 9. TG profilni qayta yuklash
+  setTimeout(()=>loadTgProfileForLogin(), 200);
 }
 
 // Init
