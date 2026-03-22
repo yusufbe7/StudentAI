@@ -1890,6 +1890,14 @@ function renderAdminPanel(){
         </div>
       </div>
 
+      <!-- Fan tanlash -->
+      <div class="field" style="margin-bottom:10px;">
+        <label class="field-lbl">Fan (ixtiyoriy)</label>
+        <select class="field-inp" id="adm-score-subj" style="background:var(--bg);cursor:pointer;">
+          <option value="">— Fan tanlanmagan —</option>
+        </select>
+      </div>
+
       <div id="adm-score-preview" style="display:none;background:#fff;border-radius:10px;padding:10px 12px;margin-bottom:10px;font-size:12px;color:var(--text2);font-weight:600;"></div>
 
       <button onclick="adminAddScore()" style="width:100%;padding:13px;background:var(--green);color:#fff;border:none;border-radius:12px;font-family:'Inter',sans-serif;font-size:14px;font-weight:800;cursor:pointer;box-shadow:0 3px 12px rgba(34,197,94,0.3);">✅ Ball qo'shish</button>
@@ -1900,6 +1908,29 @@ function renderAdminPanel(){
       <div id="adm-score-list" style="margin-top:8px;"></div>
     </div>
   `;
+  // Subjects dropdown ni to'ldirish
+  setTimeout(()=>{
+    const sel=document.getElementById('adm-score-subj'); if(!sel) return;
+    const fillSel=(data)=>{
+      sel.innerHTML='<option value="">— Fan tanlanmagan —</option>';
+      const seen=new Set();
+      Object.entries(data||{}).forEach(([key,sub])=>{
+        if(!sub||!sub.questions||!sub.questions.length) return;
+        const parts=key.split('_'); const subCode=parts[parts.length-1];
+        if(seen.has(subCode)) return; seen.add(subCode);
+        const name=sub.title||(SUB_NAMES&&SUB_NAMES[subCode]?SUB_NAMES[subCode]:subCode);
+        const icon=SUB_ICONS&&SUB_ICONS[subCode]?SUB_ICONS[subCode]:'📖';
+        const opt=document.createElement('option');
+        opt.value=key; opt.textContent=icon+' '+name;
+        sel.appendChild(opt);
+      });
+    };
+    if(Object.keys(_subjects||{}).length>0){
+      fillSel(_subjects);
+    } else {
+      fetch('/api/subjects').then(r=>r.json()).then(data=>{_subjects=data;fillSel(data);}).catch(()=>{});
+    }
+  },100);
 }
 function saveAdminProfile(){
   const adm=getAdm();
@@ -1960,6 +1991,16 @@ function adminSelectUser(name, score, tests, correct, wrong){
     prev.style.display='block';
     prev.innerHTML=`👤 <b>${escH(name)}</b> — Hozirgi: <b>${score} ball</b>, <b>${tests} ta test</b> (✅${correct} / ❌${wrong})`;
   }
+  // Suggest qiymatlarini inputlarga qo'yish
+  const scoreEl=document.getElementById('adm-score-val');
+  const testsEl=document.getElementById('adm-score-tests');
+  const correctEl=document.getElementById('adm-score-correct');
+  const wrongEl=document.getElementById('adm-score-wrong');
+  // Clear previous values
+  if(scoreEl&&!scoreEl.value) scoreEl.placeholder=`Hozir: ${score}`;
+  if(testsEl&&!testsEl.value) testsEl.placeholder=`Hozir: ${tests}`;
+  if(correctEl&&!correctEl.value) correctEl.placeholder=`Hozir: ${correct}`;
+  if(wrongEl&&!wrongEl.value) wrongEl.placeholder=`Hozir: ${wrong}`;
 }
 
 async function adminAddScore(){
@@ -1974,6 +2015,8 @@ async function adminAddScore(){
   const addTests=parseInt(testsEl?.value||0);
   const addCorrect=parseInt(correctEl?.value||0);
   const addWrong=parseInt(wrongEl?.value||0);
+  const subjEl=document.getElementById('adm-score-subj');
+  const subjectKey=(subjEl?.value||'').trim();
 
   if(!name){toast('❌ Ism kiriting!','bad');return;}
   if(addScore<=0&&addTests<=0){toast('❌ Ball yoki test miqdori kiriting!','bad');return;}
@@ -1984,7 +2027,7 @@ async function adminAddScore(){
   try{
     const r=await fetch('/api/admin/add-score',{
       method:'POST', headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({name, addScore, addTests, addCorrect, addWrong})
+      body:JSON.stringify({name, addScore, addTests, addCorrect, addWrong, subjectKey})
     });
     const d=await r.json().catch(()=>({}));
     if(r.ok && d.success){
@@ -1994,6 +2037,7 @@ async function adminAddScore(){
       if(testsEl) testsEl.value='';
       if(correctEl) correctEl.value='';
       if(wrongEl) wrongEl.value='';
+      if(subjEl) subjEl.value='';
       const prev=document.getElementById('adm-score-preview');
       if(prev) prev.style.display='none';
       // Refresh leaderboard

@@ -1496,17 +1496,28 @@ app.get('/api/leaderboard', (req, res) => {
 // ─── ✅ YAGONA va TO'G'RI Admin add-score ──────────────────────────
 app.post('/api/admin/add-score', async (req, res) => {
     try {
-        const { name, addScore, addTests, addCorrect, addWrong } = req.body;
+        const { name, addScore, addTests, addCorrect, addWrong, subjectKey } = req.body;
         if (!name||!name.trim()) return res.status(400).json({error:'Ism kiriting'});
         const nameTrim     = name.trim();
         const scoreToAdd   = parseFloat(addScore)  || 0;
         const testsToAdd   = parseInt(addTests)     || 0;
         const correctToAdd = parseInt(addCorrect)   || 0;
         const wrongToAdd   = parseInt(addWrong)     || 0;
+        const subjKey      = (subjectKey||'').trim(); // fan kaliti (ixtiyoriy)
         if (scoreToAdd <= 0 && testsToAdd <= 0) return res.status(400).json({error:'Ball yoki test miqdori kiriting'});
 
         const db = getDb();
         let found = false, foundId = null, newScore = 0, newTests = 0;
+
+        // Fan statistikasini yangilash yordamchi funksiyasi
+        function applySubject(u) {
+            if (!subjKey) return;
+            if (!u.subjects) u.subjects = {};
+            if (!u.subjects[subjKey]) u.subjects[subjKey] = { tests:0, correct:0, wrong:0 };
+            u.subjects[subjKey].tests   = (u.subjects[subjKey].tests   || 0) + testsToAdd;
+            u.subjects[subjKey].correct = (u.subjects[subjKey].correct || 0) + correctToAdd;
+            u.subjects[subjKey].wrong   = (u.subjects[subjKey].wrong   || 0) + wrongToAdd;
+        }
 
         // 1. Telegram foydalanuvchilarida — user.score ga yozish ✅
         for (const [uid,user] of Object.entries(db.users||{})) {
@@ -1515,6 +1526,7 @@ app.post('/api/admin/add-score', async (req, res) => {
             user.totalTests   = (parseInt(user.totalTests)      ||0) + testsToAdd;
             user.totalCorrect = (parseInt(user.totalCorrect)    ||0) + correctToAdd;
             user.totalWrong   = (parseInt(user.totalWrong)      ||0) + wrongToAdd;
+            applySubject(user);
             newScore = user.score; newTests = user.totalTests;
             db.users[uid] = user; saveDb(db);
             found = true; foundId = parseInt(uid); break;
@@ -1528,6 +1540,7 @@ app.post('/api/admin/add-score', async (req, res) => {
                 v.totalTests   = (parseInt(v.totalTests)     ||0) + testsToAdd;
                 v.totalCorrect = (parseInt(v.totalCorrect)   ||0) + correctToAdd;
                 v.totalWrong   = (parseInt(v.totalWrong)     ||0) + wrongToAdd;
+                applySubject(v);
                 newScore = v.score; newTests = v.totalTests;
                 ws[k] = v; saveWebScores(ws); found = true; break;
             }
@@ -1541,6 +1554,7 @@ app.post('/api/admin/add-score', async (req, res) => {
                 v.totalTests   = (parseInt(v.totalTests)     ||0) + testsToAdd;
                 v.totalCorrect = (parseInt(v.totalCorrect)   ||0) + correctToAdd;
                 v.totalWrong   = (parseInt(v.totalWrong)     ||0) + wrongToAdd;
+                applySubject(v);
                 newScore = v.score; newTests = v.totalTests;
                 wu[k] = v; saveWebUsers(wu); found = true; break;
             }
@@ -1549,18 +1563,22 @@ app.post('/api/admin/add-score', async (req, res) => {
         if (!found) {
             const ws = getWebScores();
             const key = nameTrim.toLowerCase().replace(/\s+/g,'_')+'_'+Date.now();
-            ws[key] = { name:nameTrim, username:'', score:scoreToAdd, totalTests:testsToAdd, totalCorrect:correctToAdd, totalWrong:wrongToAdd, createdAt:Date.now(), addedByAdmin:true };
+            const newEntry = { name:nameTrim, username:'', score:scoreToAdd, totalTests:testsToAdd, totalCorrect:correctToAdd, totalWrong:wrongToAdd, subjects:{}, createdAt:Date.now(), addedByAdmin:true };
+            applySubject(newEntry);
+            ws[key] = newEntry;
             newScore = scoreToAdd; newTests = testsToAdd;
             saveWebScores(ws);
         }
         // 5. Telegram xabarnoma
         if (foundId) {
+            const subjName = subjKey ? Object.values(SUBJECTS).find(s=>s&&s.title&&subjKey.includes('_')?false:false)||SUBJECTS[subjKey]?.title||subjKey : '';
             bot.telegram.sendMessage(foundId,
                 `🎉 <b>Tabriklaymiz!</b>\n\nAdmin sizga qo'shdi:\n`+
                 (scoreToAdd>0   ? `⚡ <b>+${scoreToAdd} ball</b>\n`       : '')+
                 (testsToAdd>0   ? `📝 <b>+${testsToAdd} ta test</b>\n`    : '')+
                 (correctToAdd>0 ? `✅ <b>+${correctToAdd} to'g'ri</b>\n`  : '')+
                 (wrongToAdd>0   ? `❌ <b>+${wrongToAdd} xato</b>\n`       : '')+
+                (subjKey        ? `📚 <b>Fan: ${subjName||subjKey}</b>\n`  : '')+
                 `\n📊 Jami: <b>${parseFloat(newScore).toFixed(1)} ball</b> · <b>${newTests} test</b>`,
                 {parse_mode:'HTML'}
             ).catch(()=>{});
