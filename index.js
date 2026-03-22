@@ -2869,6 +2869,19 @@ app.get('/api/web-auth/me', (req, res) => {
     }
 });
 
+app.get('/api/follow-list', (req, res) => {
+  const { name, type } = req.query;
+  const follows = getFollows();
+  if(type === 'followers'){
+    const result = Object.entries(follows)
+      .filter(([,list]) => list.some(n=>n.toLowerCase()===name.toLowerCase()))
+      .map(([follower]) => follower);
+    res.json({ followers: result });
+  } else {
+    res.json({ following: follows[name.toLowerCase()]||[] });
+  }
+});
+
 // ─── RESET PASSWORD ──────────────────────────────────────────────────
 app.post('/api/web-auth/reset-password', (req, res) => {
     try {
