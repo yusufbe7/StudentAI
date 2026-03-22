@@ -150,17 +150,26 @@ function isValidName(name) {
 function getLeaderboard(requesterId = null) {
     const db = getDb();
     const wu = getWebUsers();
+    const ws = getWebScores();
 
+    // 1. Bot (Telegram) foydalanuvchilari
     const botUsers = Object.values(db.users)
         .filter(u => u && u.name && isValidName(u.name) && (u.score || 0) > 0)
         .map(u => ({ name: u.name, score: u.score||0, username: u.username||'' }));
 
-    const botNames = new Set(botUsers.map(u => (u.name||'').toLowerCase().trim()));
-    const webOnly = Object.values(wu)
-        .filter(u => u && u.name && (u.score||0) > 0 && !botNames.has((u.name||'').toLowerCase().trim()))
-        .map(u => ({ name: u.name, score: u.score||0, username: u.nickname||u.username||'' }));
+    const seenNames = new Set(botUsers.map(u => (u.name||'').toLowerCase().trim()));
 
-    const all = [...botUsers, ...webOnly]
+    // 2. web_users.json (Mercury va boshqa web-only)
+    const webUsers = Object.values(wu)
+        .filter(u => u && u.name && (u.score||0) > 0 && !seenNames.has((u.name||'').toLowerCase().trim()))
+        .map(u => { seenNames.add((u.name||'').toLowerCase().trim()); return { name: u.name, score: u.score||0, username: u.nickname||u.username||'' }; });
+
+    // 3. web_scores.json (admin qo'shgan, boshqa joyda yo'qlar)
+    const webScores = Object.values(ws)
+        .filter(u => u && u.name && (u.score||0) > 0 && !seenNames.has((u.name||'').toLowerCase().trim()))
+        .map(u => ({ name: u.name, score: u.score||0, username: u.username||'' }));
+
+    const all = [...botUsers, ...webUsers, ...webScores]
         .sort((a, b) => (b.score||0) - (a.score||0))
         .slice(0, 10);
 
@@ -1659,8 +1668,30 @@ app.post('/api/admin/add-score', async (req, res) => {
             u.subjects[subjKey].wrong   = (u.subjects[subjKey].wrong   || 0) + wrongToAdd;
         }
 
-        // 1. Telegram foydalanuvchilarida — user.score ga yozish ✅
-        for (const [uid,user] of Object.entries(db.users||{})) {
+        // 0. AVVAL web_users da tekshirish (Mercury kabi web-only foydalanuvchilar)
+        {
+            const wu0 = getWebUsers();
+            for (const [k,v] of Object.entries(wu0)) {
+                const mn = (v.name||'').trim().toLowerCase() === nameTrim.toLowerCase();
+                const mk = (v.nickname||'').trim().toLowerCase() === nameTrim.toLowerCase();
+                const mu = k.toLowerCase() === nameTrim.toLowerCase();
+                if (!mn && !mk && !mu) continue;
+                // Bu web-only foydalanuvchi (tgId yo'q yoki isWebOnly=true)
+                if (v.isWebOnly || !v.tgId) {
+                    v.score        = (parseFloat(v.score)       ||0) + scoreToAdd;
+                    v.totalTests   = (parseInt(v.totalTests)     ||0) + testsToAdd;
+                    v.totalCorrect = (parseInt(v.totalCorrect)   ||0) + correctToAdd;
+                    v.totalWrong   = (parseInt(v.totalWrong)     ||0) + wrongToAdd;
+                    applySubject(v);
+                    newScore = v.score; newTests = v.totalTests;
+                    wu0[k] = v; saveWebUsers(wu0);
+                    found = true; break;
+                }
+            }
+        }
+
+        // 1. Telegram foydalanuvchilarida — user.score ga yozish
+        if (!found) for (const [uid,user] of Object.entries(db.users||{})) {
             if ((user.name||'').trim().toLowerCase() !== nameTrim.toLowerCase()) continue;
             user.score        = (parseFloat(user.score)        ||0) + scoreToAdd;
             user.totalTests   = (parseInt(user.totalTests)      ||0) + testsToAdd;
@@ -1704,15 +1735,20 @@ app.post('/api/admin/add-score', async (req, res) => {
                 wu[k] = v; saveWebUsers(wu); found = true; break;
             }
         }
-        // 4. Topilmasa — web_scores da yangi
+        // 4. Topilmasa — web_users da yangi yaratish (getLeaderboard uchun)
         if (!found) {
-            const ws = getWebScores();
-            const key = nameTrim.toLowerCase().replace(/\s+/g,'_')+'_'+Date.now();
-            const newEntry = { name:nameTrim, username:'', score:scoreToAdd, totalTests:testsToAdd, totalCorrect:correctToAdd, totalWrong:wrongToAdd, subjects:{}, createdAt:Date.now(), addedByAdmin:true };
+            const wu4 = getWebUsers();
+            const key4 = nameTrim.toLowerCase().replace(/\s+/g,'_');
+            const newEntry = {
+                username: key4, name: nameTrim, nickname: key4,
+                score: scoreToAdd, totalTests: testsToAdd,
+                totalCorrect: correctToAdd, totalWrong: wrongToAdd,
+                subjects: {}, createdAt: Date.now(), addedByAdmin: true
+            };
             applySubject(newEntry);
-            ws[key] = newEntry;
+            wu4[key4] = newEntry;
             newScore = scoreToAdd; newTests = testsToAdd;
-            saveWebScores(ws);
+            saveWebUsers(wu4);
         }
         // 5. Telegram xabarnoma
         if (foundId) {
