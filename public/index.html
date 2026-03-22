@@ -271,12 +271,26 @@ body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); 
 .save-btn2:active { transform:scale(.98); }
 
 /* ═══ USER PROFILE SCREEN ═══ */
-.up-topbar2 { position:fixed; top:0; left:0; right:0; height:54px; display:flex; align-items:center; padding:0 16px; gap:12px; background:rgba(255,255,255,0.95); backdrop-filter:blur(20px); border-bottom:1px solid var(--border); z-index:210; }
+.up-topbar2 { position:fixed; top:0; left:0; right:0; height:54px; display:flex; align-items:center; padding:0 16px; gap:12px; background:rgba(255,255,255,0.97); backdrop-filter:blur(20px); border-bottom:1px solid var(--border); z-index:210; }
 .up-back2 { width:36px; height:36px; border-radius:50%; background:var(--bg); display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:20px; }
 .up-title2 { flex:1; font-size:15px; font-weight:800; color:var(--text); }
-.up-content2 { padding-top:54px; padding-bottom:24px; }
+.up-content2 { padding-top:54px; padding-bottom:24px; overflow-y:auto; height:100%; }
 .up-ava2 { width:80px; height:80px; border-radius:50%; background:var(--green-bg); display:flex; align-items:center; justify-content:center; font-size:26px; font-weight:800; color:var(--green); margin:0 auto 10px; overflow:hidden; border:3px solid var(--green); }
 .up-ava2 img { width:100%; height:100%; object-fit:cover; }
+/* Filter tabs */
+.up-filter-tab { padding:7px 16px; border-radius:22px; font-size:13px; font-weight:700; color:var(--text2); background:#fff; border:1.5px solid var(--border); cursor:pointer; white-space:nowrap; transition:all .2s; flex-shrink:0; }
+.up-filter-tab.active { background:var(--green); color:#fff; border-color:var(--green); box-shadow:0 2px 10px rgba(34,197,94,0.3); }
+/* Follow list modal */
+.follow-modal { position:fixed; inset:0; background:rgba(0,0,0,0.5); backdrop-filter:blur(8px); z-index:600; display:none; align-items:flex-end; justify-content:center; }
+.follow-modal.on { display:flex; }
+.follow-sheet { width:100%; max-width:480px; max-height:70vh; background:#fff; border-top-left-radius:24px; border-top-right-radius:24px; display:flex; flex-direction:column; overflow:hidden; box-shadow:0 -8px 40px rgba(0,0,0,0.15); }
+.follow-sheet-hdr { padding:18px 20px 12px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; }
+.follow-sheet-title { font-size:16px; font-weight:800; color:var(--text); }
+.follow-sheet-list { flex:1; overflow-y:auto; padding:8px 16px; }
+.follow-user-row { display:flex; align-items:center; gap:12px; padding:11px 0; border-bottom:1px solid var(--border); cursor:pointer; }
+.follow-user-row:last-child { border-bottom:none; }
+.fua { width:42px; height:42px; border-radius:50%; background:var(--green-bg); display:flex; align-items:center; justify-content:center; font-size:15px; font-weight:800; color:var(--green); flex-shrink:0; overflow:hidden; }
+.fua img { width:100%; height:100%; object-fit:cover; }
 
 /* ═══ CHATS TAB ═══ */
 .chats-pad { padding:14px 16px; }
@@ -631,13 +645,13 @@ body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); 
           <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:16px;" id="prof-badges-row">
             <!-- filled by JS -->
           </div>
-          <!-- Followers / Following -->
-          <div style="display:flex;gap:0;width:100%;max-width:260px;">
-            <div style="flex:1;text-align:center;padding:12px 0;border-right:1px solid var(--border);">
+      <!-- Followers / Following -->
+          <div style="display:flex;gap:0;width:100%;max-width:260px;" onclick="">
+            <div style="flex:1;text-align:center;padding:12px 0;border-right:1px solid var(--border);cursor:pointer;" onclick="showMyFollowers()">
               <div style="font-size:20px;font-weight:800;color:var(--text);" id="prof-followers">0</div>
               <div style="font-size:12px;color:var(--text3);font-weight:500;margin-top:2px;">Followers</div>
             </div>
-            <div style="flex:1;text-align:center;padding:12px 0;">
+            <div style="flex:1;text-align:center;padding:12px 0;cursor:pointer;" onclick="showMyFollowing()">
               <div style="font-size:20px;font-weight:800;color:var(--text);" id="prof-following">0</div>
               <div style="font-size:12px;color:var(--text3);font-weight:500;margin-top:2px;">Following</div>
             </div>
@@ -818,33 +832,117 @@ body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); 
 
 <!-- ═══ USER PROFILE SCREEN ═══ -->
 <div class="screen" id="screen-user-profile">
+  <!-- Topbar: back + ... -->
   <div class="up-topbar2">
     <div class="up-back2" onclick="closeUserProfile()">←</div>
-    <div class="up-title2" id="up-title">Profil</div>
-    <button id="up-chat-btn" onclick="startChatFromProfile()" style="padding:8px 16px;background:var(--green);border:none;border-radius:22px;color:#fff;font-family:'Inter',sans-serif;font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 2px 8px rgba(34,197,94,0.3);">💬 Xabar</button>
+    <div class="up-title2" id="up-title" style="text-align:center;flex:1;"></div>
+    <button onclick="showUpMenu()" style="width:36px;height:36px;border-radius:50%;background:none;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="var(--text2)" stroke-width="2.5" stroke-linecap="round"><circle cx="5" cy="12" r="1.2"/><circle cx="12" cy="12" r="1.2"/><circle cx="19" cy="12" r="1.2"/></svg>
+    </button>
   </div>
-  <div class="up-content2">
-    <div style="text-align:center;padding:24px 16px 14px;">
-      <div class="up-ava2" id="up-ava"><span id="up-ava-txt">U</span></div>
-      <div style="font-size:19px;font-weight:800;color:var(--text);" id="up-name">—</div>
-      <div style="font-size:13px;color:var(--text2);margin-top:3px;font-weight:500;" id="up-uname"></div>
-      <div style="display:flex;justify-content:center;gap:8px;margin-top:10px;" id="up-badges"></div>
+  <div class="up-content2" id="up-content-scroll">
+
+    <!-- Avatar: half hidden above fold like Lock-in -->
+    <div style="display:flex;flex-direction:column;align-items:center;padding:20px 20px 16px;background:#fff;">
+      <div style="position:relative;margin-bottom:14px;">
+        <div class="up-ava2" id="up-ava" style="width:90px;height:90px;font-size:30px;"><span id="up-ava-txt">U</span></div>
+        <div style="position:absolute;bottom:2px;right:2px;width:18px;height:18px;border-radius:50%;background:var(--green);border:3px solid #fff;" id="up-online-dot" style="display:none;"></div>
+      </div>
+
+      <!-- Name + rank badge -->
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+        <div style="font-size:20px;font-weight:900;color:var(--text);" id="up-name">—</div>
+        <div id="up-rank-badge" style="display:none;background:var(--bg);border-radius:20px;padding:4px 10px;font-size:12px;font-weight:700;color:var(--text2);"></div>
+      </div>
+
+      <!-- Rank line: "2nd this week" etc -->
+      <div id="up-week-rank" style="display:none;background:var(--bg);border-radius:20px;padding:5px 14px;font-size:13px;font-weight:700;color:var(--text2);margin-bottom:10px;"></div>
+
+      <!-- Badges row: subjects + university + VIP -->
+      <div style="display:flex;gap:7px;flex-wrap:wrap;justify-content:center;margin-bottom:16px;" id="up-badges"></div>
+
+      <!-- Followers / Following -->
+      <div style="display:flex;width:100%;max-width:280px;border-top:1px solid var(--border);border-bottom:1px solid var(--border);margin-bottom:16px;">
+        <div onclick="showFollowers()" style="flex:1;text-align:center;padding:13px 0;cursor:pointer;">
+          <div style="font-size:21px;font-weight:900;color:var(--text);" id="up-followers">0</div>
+          <div style="font-size:12px;color:var(--text3);font-weight:500;margin-top:2px;">Followers</div>
+        </div>
+        <div style="width:1px;background:var(--border);"></div>
+        <div onclick="showFollowing()" style="flex:1;text-align:center;padding:13px 0;cursor:pointer;">
+          <div style="font-size:21px;font-weight:900;color:var(--text);" id="up-following">0</div>
+          <div style="font-size:12px;color:var(--text3);font-weight:500;margin-top:2px;">Following</div>
+        </div>
+      </div>
+
+      <!-- Follow + Chat buttons -->
+      <div style="display:flex;gap:10px;width:100%;">
+        <button id="up-follow-btn" onclick="toggleFollow()" style="flex:1;padding:13px;background:var(--green);color:#fff;border:none;border-radius:14px;font-family:'Inter',sans-serif;font-size:15px;font-weight:800;cursor:pointer;box-shadow:0 3px 14px rgba(34,197,94,0.35);transition:all .2s;">Follow</button>
+        <button onclick="startChatFromProfile()" style="width:48px;height:48px;background:var(--bg);border:1.5px solid var(--border);border-radius:14px;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;">💬</button>
+      </div>
     </div>
-    <div style="padding:0 16px;">
-      <div class="stat-card">
-        <div class="stat-card-title">Statistika</div>
+
+    <!-- Filter tabs: All / subjects -->
+    <div style="padding:12px 16px 8px;display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;">
+      <div class="up-filter-tab active" onclick="setUpFilter('all')">🗂 All</div>
+      <div class="up-filter-tab" onclick="setUpFilter('stats')">📊 Statistika</div>
+      <div class="up-filter-tab" onclick="setUpFilter('subjects')">📚 Fanlar</div>
+    </div>
+
+    <!-- Week stats -->
+    <div style="padding:12px 16px 6px;">
+      <div style="font-size:15px;font-weight:800;color:var(--text);margin-bottom:10px;" id="up-week-label">Week of —</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,0.05);">
+        <div style="padding:14px 8px;text-align:center;border-right:1px solid var(--border);">
+          <div style="font-size:11px;color:var(--text3);font-weight:600;margin-bottom:4px;">Testlar</div>
+          <div style="font-size:19px;font-weight:900;color:var(--green);" id="up-w-tests">—</div>
+        </div>
+        <div style="padding:14px 8px;text-align:center;border-right:1px solid var(--border);">
+          <div style="font-size:11px;color:var(--text3);font-weight:600;margin-bottom:4px;">Ball</div>
+          <div style="font-size:19px;font-weight:900;color:var(--green);" id="up-w-score">—</div>
+        </div>
+        <div style="padding:14px 8px;text-align:center;">
+          <div style="font-size:11px;color:var(--text3);font-weight:600;margin-bottom:4px;">Aniqlik</div>
+          <div style="font-size:19px;font-weight:900;color:var(--green);" id="up-w-acc">—</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- See all Statistics row -->
+    <div style="padding:8px 16px;">
+      <div style="background:#fff;border-radius:14px;padding:15px 18px;box-shadow:0 1px 5px rgba(0,0,0,.05);display:flex;align-items:center;justify-content:space-between;cursor:pointer;" onclick="toggleUpStats()">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="var(--text2)" stroke-width="2.2" stroke-linecap="round"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>
+          <span style="font-size:14px;font-weight:700;color:var(--text);">See all Statistics</span>
+        </div>
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="var(--text3)" stroke-width="2.5" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>
+      </div>
+      <!-- Expanded stats -->
+      <div id="up-stats-expanded" style="display:none;background:#fff;border-radius:0 0 14px 14px;padding:14px 18px;margin-top:-8px;box-shadow:0 2px 8px rgba(0,0,0,.05);">
         <div class="sg2">
           <div class="s-box2"><div class="s-lbl2">Ball</div><div class="s-val2 green" id="up-score">—</div></div>
           <div class="s-box2"><div class="s-lbl2">Testlar</div><div class="s-val2" id="up-tests">—</div></div>
           <div class="s-box2"><div class="s-lbl2">✅ To'g'ri</div><div class="s-val2" style="color:var(--green)" id="up-correct">—</div></div>
           <div class="s-box2"><div class="s-lbl2">❌ Xato</div><div class="s-val2 red" id="up-wrong">—</div></div>
         </div>
-        <div style="margin-top:12px;">
+        <div style="margin-top:10px;">
           <div class="t-row2"><span class="t-lbl2">OTM</span><span class="t-val2" id="up-univ">—</span></div>
           <div class="t-row2"><span class="t-lbl2">Kurs</span><span class="t-val2" id="up-kurs">—</span></div>
         </div>
       </div>
-      <button onclick="startChatFromProfile()" style="width:100%;padding:15px;background:var(--green);color:#fff;border:none;border-radius:16px;font-family:'Inter',sans-serif;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 4px 16px rgba(34,197,94,0.3);">💬 Xabar yuborish</button>
+    </div>
+
+    <!-- See all Subjects -->
+    <div style="padding:4px 16px 24px;">
+      <div style="background:#fff;border-radius:14px;padding:15px 18px;box-shadow:0 1px 5px rgba(0,0,0,.05);display:flex;align-items:center;justify-content:space-between;cursor:pointer;" onclick="toggleUpSubjects()">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="var(--text2)" stroke-width="2.2" stroke-linecap="round"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
+          <span style="font-size:14px;font-weight:700;color:var(--text);">See all Subjects</span>
+        </div>
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="var(--text3)" stroke-width="2.5" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>
+      </div>
+      <div id="up-subjects-expanded" style="display:none;background:#fff;border-radius:0 0 14px 14px;padding:14px 18px;margin-top:-8px;box-shadow:0 2px 8px rgba(0,0,0,.05);">
+        <div id="up-subjects-list"><div style="color:var(--text3);font-size:13px;text-align:center;padding:12px;">Ma'lumot yo'q</div></div>
+      </div>
     </div>
   </div>
 </div>
@@ -948,6 +1046,32 @@ body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); 
     <div class="confirm-btns2">
       <button class="confirm-yes2" id="confirm-yes-btn">O'chirish</button>
       <button class="confirm-no2" onclick="closeConfirm()">Bekor</button>
+    </div>
+  </div>
+</div>
+
+<!-- Followers modal -->
+<div class="follow-modal" id="followers-modal">
+  <div class="follow-sheet">
+    <div class="follow-sheet-hdr">
+      <div class="follow-sheet-title">Followers</div>
+      <button onclick="closeFollowModal('followers-modal')" style="width:28px;height:28px;border-radius:50%;background:var(--bg);border:none;cursor:pointer;font-size:16px;">✕</button>
+    </div>
+    <div class="follow-sheet-list" id="followers-list">
+      <div style="color:var(--text3);text-align:center;padding:20px;font-size:13px;">Yuklanmoqda...</div>
+    </div>
+  </div>
+</div>
+
+<!-- Following modal -->
+<div class="follow-modal" id="following-modal">
+  <div class="follow-sheet">
+    <div class="follow-sheet-hdr">
+      <div class="follow-sheet-title">Following</div>
+      <button onclick="closeFollowModal('following-modal')" style="width:28px;height:28px;border-radius:50%;background:var(--bg);border:none;cursor:pointer;font-size:16px;">✕</button>
+    </div>
+    <div class="follow-sheet-list" id="following-list">
+      <div style="color:var(--text3);text-align:center;padding:20px;font-size:13px;">Yuklanmoqda...</div>
     </div>
   </div>
 </div>
@@ -1213,18 +1337,22 @@ async function loadHome(sess){
 
 function renderStories(list){
   const myName=getMyName();
+  const myFollowing=getMyFollowing();
+  // Followed users first (green ring), then others (gray ring)
+  const followed=list.filter(u=>myFollowing.some(f=>f.toLowerCase()===u.name.toLowerCase())&&u.name!==myName);
+  const notFollowed=list.filter(u=>!myFollowing.some(f=>f.toLowerCase()===u.name.toLowerCase())&&u.name!==myName);
+  const ordered=[...followed,...notFollowed];
   let html='';
-  // "Mening story" si
   html+=`<div class="story-item" onclick="navTo('profile')">
-    <div class="story-ring mine"><div class="story-ava" style="background:rgba(99,102,241,0.1);color:#6366f1;">👤</div></div>
+    <div class="story-ring mine"><div class="story-ava" style="background:rgba(99,102,241,0.1);color:#6366f1;font-size:22px;">👤</div></div>
     <div class="story-name">Sizniki</div>
   </div>`;
-  list.slice(0,7).forEach(u=>{
-    const url=getPhotoUrl(u.name,u.tgUsername); const i=ini(u.name);
-    const av=url?`<img src="${url}" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentElement.innerHTML='${i}'">`:`<span>${i}</span>`;
-    const isMine=u.name===myName;
+  ordered.slice(0,8).forEach(u=>{
+    const url=getPhotoUrl(u.name,u.tgUsername); const i2=ini(u.name);
+    const av=url?`<img src="${url}" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentElement.innerHTML='${i2}'">`:`<span>${i2}</span>`;
+    const isFollowed=followed.includes(u);
     html+=`<div class="story-item" onclick="openUserProfile('${escA(u.name)}','${escA(u.tgUsername||'')}')">
-      <div class="story-ring${isMine?' seen':''}"><div class="story-ava">${av}</div></div>
+      <div class="story-ring${isFollowed?'':' seen'}"><div class="story-ava">${av}</div></div>
       <div class="story-name">${escH(u.name.split(' ')[0])}</div>
     </div>`;
   });
@@ -1264,6 +1392,46 @@ function renderActivity(list){
 }
 
 // Profile view helpers
+function showMyFollowers(){
+  const myName=getMyName(); if(!myName) return;
+  const followers=getFollowers(myName);
+  const el=document.getElementById('followers-list');
+  if(!followers.length){el.innerHTML='<div style="color:var(--text3);text-align:center;padding:24px;font-size:13px;font-weight:500;">Hali follower yo\'q</div>';}
+  else{
+    let html='';
+    followers.forEach(fname=>{
+      const url=getPhotoUrl(fname,''); const i=ini(fname);
+      const av=url?`<img src="${url}" style="width:100%;height:100%;object-fit:cover;">`:`<span>${i}</span>`;
+      html+=`<div class="follow-user-row" onclick="closeFollowModal('followers-modal');openUserProfile('${escA(fname)}','')">
+        <div class="fua">${av}</div>
+        <div style="flex:1;"><div style="font-size:14px;font-weight:700;">${escH(fname)}</div></div>
+      </div>`;
+    });
+    el.innerHTML=html;
+  }
+  document.getElementById('followers-modal').classList.add('on');
+}
+function showMyFollowing(){
+  const myName=getMyName(); if(!myName) return;
+  const following=getFollowData()[myName.toLowerCase()]||[];
+  const el=document.getElementById('following-list');
+  if(!following.length){el.innerHTML='<div style="color:var(--text3);text-align:center;padding:24px;font-size:13px;font-weight:500;">Hali hech kimni follow qilmadingiz</div>';}
+  else{
+    let html='';
+    following.forEach(fname=>{
+      const url=getPhotoUrl(fname,''); const i=ini(fname);
+      const av=url?`<img src="${url}" style="width:100%;height:100%;object-fit:cover;">`:`<span>${i}</span>`;
+      html+=`<div class="follow-user-row" onclick="closeFollowModal('following-modal');openUserProfile('${escA(fname)}','')">
+        <div class="fua">${av}</div>
+        <div style="flex:1;"><div style="font-size:14px;font-weight:700;">${escH(fname)}</div></div>
+        <button onclick="event.stopPropagation();unfollowUser('${escA(fname)}');showMyFollowing();loadProfileForm();" style="padding:6px 12px;background:var(--bg);border:1.5px solid var(--border);border-radius:20px;font-size:12px;font-weight:700;cursor:pointer;color:var(--text2);">Unfollow</button>
+      </div>`;
+    });
+    el.innerHTML=html;
+  }
+  document.getElementById('following-modal').classList.add('on');
+}
+
 function showProfileEdit(){
   document.getElementById('profile-main-view').style.display='none';
   document.getElementById('profile-edit-view').style.display='block';
@@ -1380,9 +1548,11 @@ async function loadProfileForm(){
       const tq=(d.totalCorrect||0)+(d.totalWrong||0);
       document.getElementById('pw-acc').textContent=tq>0?(((d.totalCorrect||0)/tq)*100).toFixed(0)+'%':'—';
 
-      // Followers/Following (placeholder — no follow system yet)
-      document.getElementById('prof-followers').textContent='0';
-      document.getElementById('prof-following').textContent='0';
+      // Followers/Following — real data from follow system
+      const myFollowers=getFollowers(user.name);
+      const myFollowingList=(getFollowData()[user.name.toLowerCase()]||[]);
+      document.getElementById('prof-followers').textContent=myFollowers.length;
+      document.getElementById('prof-following').textContent=myFollowingList.length;
 
       // VIP block
       const vDiv=document.getElementById('prof-vip-block');
@@ -1816,36 +1986,252 @@ function closeTest(){
 // ═══════════════════════════════════════════════
 // USER PROFILE
 // ═══════════════════════════════════════════════
+// ═══════════════════════════════════════════════
+// FOLLOW SYSTEM (localStorage-based + server sync)
+// ═══════════════════════════════════════════════
+const FOLLOWS_KEY = 'sb_follows_v1';
+function getFollowData(){ try{ return JSON.parse(localStorage.getItem(FOLLOWS_KEY)||'{}'); }catch{return{};} }
+function saveFollowData(d){ localStorage.setItem(FOLLOWS_KEY, JSON.stringify(d)); }
+
+function getMyFollowing(){
+  const myName=getMyName(); if(!myName) return [];
+  const d=getFollowData();
+  return d[myName.toLowerCase()]||[];
+}
+function isFollowing(targetName){
+  const following=getMyFollowing();
+  return following.some(n=>n.toLowerCase()===targetName.toLowerCase());
+}
+function followUser(targetName){
+  const myName=getMyName(); if(!myName||myName===targetName) return;
+  const d=getFollowData();
+  const key=myName.toLowerCase();
+  if(!d[key]) d[key]=[];
+  if(!d[key].find(n=>n.toLowerCase()===targetName.toLowerCase()))
+    d[key].push(targetName);
+  saveFollowData(d);
+  // Sync to server
+  fetch('/api/follow',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({follower:myName,following:targetName})}).catch(()=>{});
+}
+function unfollowUser(targetName){
+  const myName=getMyName(); if(!myName) return;
+  const d=getFollowData();
+  const key=myName.toLowerCase();
+  if(d[key]) d[key]=d[key].filter(n=>n.toLowerCase()!==targetName.toLowerCase());
+  saveFollowData(d);
+  fetch('/api/follow',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({follower:myName,following:targetName})}).catch(()=>{});
+}
+function getFollowers(targetName){
+  // who follows targetName
+  const d=getFollowData();
+  const tLow=targetName.toLowerCase();
+  const result=[];
+  for(const [follower,list] of Object.entries(d)){
+    if(list.some(n=>n.toLowerCase()===tLow)) result.push(follower);
+  }
+  return result;
+}
+
+// ═══════════════════════════════════════════════
+// USER PROFILE SCREEN
+// ═══════════════════════════════════════════════
 let _viewUser=null;
+
 async function openUserProfile(name,tgU){
   _viewUser={name,tgU};
   const sess=getSess();
   if(sess&&!sess.isAdmin){const me=getUsers()[sess.username];if(me?.name===name){navTo('profile');return;}}
-  document.getElementById('up-title').textContent=name||'Profil';
-  document.getElementById('up-name').textContent=name||'—';
-  document.getElementById('up-uname').textContent=tgU?'@'+tgU:'';
+
+  // Reset expand states
+  document.getElementById('up-stats-expanded').style.display='none';
+  document.getElementById('up-subjects-expanded').style.display='none';
+
+  // Avatar
   const ava=document.getElementById('up-ava');
   const url=getPhotoUrl(name,tgU); const i=ini(name);
   ava.innerHTML=url?`<img src="${url}" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentElement.innerHTML='<span>${i}</span>'">`:`<span>${i}</span>`;
-  ['up-score','up-tests','up-correct','up-wrong','up-univ','up-kurs'].forEach(id=>document.getElementById(id).textContent='...');
+
+  // Name
+  document.getElementById('up-name').textContent=name||'—';
+
+  // Week label
+  const now=new Date();
+  const mon=new Date(now); mon.setDate(now.getDate()-now.getDay()+1);
+  const sun=new Date(mon); sun.setDate(mon.getDate()+6);
+  const mo=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const wlEl=document.getElementById('up-week-label');
+  if(wlEl) wlEl.textContent=`Week of ${mo[mon.getMonth()]} ${mon.getDate()} - ${sun.getDate()}`;
+
+  // Follow button state
+  updateFollowBtn(name);
+
+  // Followers/Following counts
+  updateFollowCounts(name);
+
+  // Load stats
+  ['up-score','up-tests','up-correct','up-wrong','up-univ','up-kurs','up-w-tests','up-w-score','up-w-acc'].forEach(id=>{
+    const el=document.getElementById(id); if(el) el.textContent='...';
+  });
+
   try{
     const r=await fetch('/api/user-stats?name='+encodeURIComponent(name));
     if(r.ok){
       const d=await r.json();
-      document.getElementById('up-score').textContent=parseFloat(d.score||0).toFixed(1);
-      document.getElementById('up-tests').textContent=d.totalTests||'0';
-      document.getElementById('up-correct').textContent=d.totalCorrect||'0';
-      document.getElementById('up-wrong').textContent=d.totalWrong||'0';
-      document.getElementById('up-univ').textContent=d.univ||'—';
-      document.getElementById('up-kurs').textContent=d.kurs||'—';
+      // Stats
+      const elS=document.getElementById('up-score'); if(elS) elS.textContent=parseFloat(d.score||0).toFixed(1);
+      const elT=document.getElementById('up-tests'); if(elT) elT.textContent=d.totalTests||'0';
+      const elC=document.getElementById('up-correct'); if(elC) elC.textContent=d.totalCorrect||'0';
+      const elW=document.getElementById('up-wrong'); if(elW) elW.textContent=d.totalWrong||'0';
+      const elU=document.getElementById('up-univ'); if(elU) elU.textContent=d.univ||'—';
+      const elK=document.getElementById('up-kurs'); if(elK) elK.textContent=d.kurs||'—';
+      // Weekly (use total as proxy)
+      const elWT=document.getElementById('up-w-tests'); if(elWT) elWT.textContent=d.totalTests||'0';
+      const elWS=document.getElementById('up-w-score'); if(elWS) elWS.textContent=parseFloat(d.score||0).toFixed(0);
+      const tq=(d.totalCorrect||0)+(d.totalWrong||0);
+      const elWA=document.getElementById('up-w-acc'); if(elWA) elWA.textContent=tq>0?(((d.totalCorrect||0)/tq)*100).toFixed(0)+'%':'—';
+
+      // Badges
       let badges='';
-      if(d.isVip&&d.vipEnd&&Date.now()<d.vipEnd) badges+=`<span style="font-size:12px;font-weight:700;background:rgba(234,179,8,.12);color:#b45309;padding:4px 10px;border-radius:20px;">💎 VIP</span>`;
-      if((d.totalTests||0)>=50) badges+=`<span style="font-size:12px;font-weight:700;background:var(--green-bg);color:var(--green);padding:4px 10px;border-radius:20px;">🏆 Pro</span>`;
+      const subjCount=Object.keys(d.subjects||{}).length;
+      if(subjCount>0){
+        const firstSubj=Object.keys(d.subjects)[0];
+        const sub=firstSubj.split('_').pop();
+        const sname=SUB_NAMES[sub]||sub;
+        badges+=`<div style="display:flex;align-items:center;gap:5px;background:var(--green-bg);padding:5px 12px;border-radius:20px;"><span style="font-size:11px;font-weight:900;color:var(--green);">${subjCount}</span><span style="font-size:12px;font-weight:700;color:var(--green);">${escH(sname)}</span></div>`;
+      }
+      if(d.univ) badges+=`<div style="display:flex;align-items:center;gap:5px;background:var(--bg);border:1.5px solid var(--border);padding:5px 12px;border-radius:20px;"><span style="font-size:12px;font-weight:700;color:var(--text2);">📖 ${escH(d.univ)}</span></div>`;
+      if(d.isVip&&d.vipEnd&&Date.now()<d.vipEnd) badges+=`<div style="background:rgba(234,179,8,.12);padding:5px 12px;border-radius:20px;"><span style="font-size:12px;font-weight:700;color:#b45309;">💎 VIP</span></div>`;
+      if((d.totalTests||0)>=50) badges+=`<div style="background:var(--green-bg);padding:5px 12px;border-radius:20px;"><span style="font-size:12px;font-weight:700;color:var(--green);">🏆 Pro</span></div>`;
       document.getElementById('up-badges').innerHTML=badges;
-    } else { ['up-score','up-tests','up-correct','up-wrong'].forEach(id=>document.getElementById(id).textContent='0'); document.getElementById('up-univ').textContent='—'; document.getElementById('up-kurs').textContent='—'; }
-  }catch{ ['up-score','up-tests','up-correct','up-wrong'].forEach(id=>document.getElementById(id).textContent='—'); }
+
+      // Subjects list
+      renderUpSubjects(d.subjects||{});
+
+      // Rank badge — find in leaderboard
+      const myRank=_lbCache.findIndex(u=>u.name===name);
+      const weekRankEl=document.getElementById('up-week-rank');
+      if(myRank>=0&&weekRankEl){
+        const suffixes=['st','nd','rd'];
+        const suf=myRank<3?suffixes[myRank]:'th';
+        weekRankEl.textContent=`🥈 ${myRank+1}${suf} this week`;
+        weekRankEl.style.display='inline-flex';
+      } else if(weekRankEl) weekRankEl.style.display='none';
+    }
+  }catch{
+    ['up-score','up-tests','up-correct','up-wrong'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent='—';});
+  }
+
   document.getElementById('screen-user-profile').classList.add('active');
+  // Scroll to top
+  const sc=document.getElementById('up-content-scroll'); if(sc) sc.scrollTop=0;
 }
+
+function renderUpSubjects(subjects){
+  const list=document.getElementById('up-subjects-list'); if(!list) return;
+  if(!Object.keys(subjects).length){list.innerHTML='<div style="color:var(--text3);font-size:13px;text-align:center;padding:10px;">Ma\'lumot yo\'q</div>';return;}
+  let html='';
+  for(const [key,val] of Object.entries(subjects)){
+    const sub=key.split('_').pop(); const sname=SUB_NAMES[sub]||sub;
+    html+=`<div class="sub-row2"><span style="color:var(--text2);font-weight:600;font-size:13px;">${escH(sname)}</span><div style="display:flex;gap:5px;"><span class="chip2 chip2-blue">${val.tests||0}</span><span class="chip2 chip2-green">✅${val.correct||0}</span><span class="chip2 chip2-red">❌${val.wrong||0}</span></div></div>`;
+  }
+  list.innerHTML=html;
+}
+
+function toggleUpStats(){
+  const el=document.getElementById('up-stats-expanded');
+  el.style.display=el.style.display==='block'?'none':'block';
+}
+function toggleUpSubjects(){
+  const el=document.getElementById('up-subjects-expanded');
+  el.style.display=el.style.display==='block'?'none':'block';
+}
+function setUpFilter(f){
+  document.querySelectorAll('.up-filter-tab').forEach(t=>t.classList.remove('active'));
+  event.target.classList.add('active');
+}
+function showUpMenu(){
+  if(!_viewUser) return;
+  showConfirm('💬','Xabar yuborish?',`${_viewUser.name} ga xabar yuborasizmi?`,()=>startChatFromProfile());
+}
+
+function updateFollowBtn(targetName){
+  const btn=document.getElementById('up-follow-btn'); if(!btn) return;
+  const following=isFollowing(targetName);
+  btn.textContent=following?'Following':'Follow';
+  btn.style.background=following?'var(--bg)':'var(--green)';
+  btn.style.color=following?'var(--text2)':'#fff';
+  btn.style.border=following?'1.5px solid var(--border)':'none';
+  btn.style.boxShadow=following?'none':'0 3px 14px rgba(34,197,94,0.35)';
+}
+
+function updateFollowCounts(targetName){
+  const followers=getFollowers(targetName);
+  const following=getFollowData()[targetName.toLowerCase()]||[];
+  const fEl=document.getElementById('up-followers'); if(fEl) fEl.textContent=followers.length;
+  const fgEl=document.getElementById('up-following'); if(fgEl) fgEl.textContent=following.length;
+}
+
+async function toggleFollow(){
+  const myName=getMyName(); if(!myName||!_viewUser) return;
+  const targetName=_viewUser.name;
+  if(isFollowing(targetName)){
+    unfollowUser(targetName);
+    toast('Unfollow qilindi');
+  } else {
+    followUser(targetName);
+    toast(`✅ ${targetName} ga follow qilindi!`);
+    // Refresh home feed stories
+    if(_lbCache.length) renderStories(_lbCache);
+  }
+  updateFollowBtn(targetName);
+  updateFollowCounts(targetName);
+  // Also refresh my profile followers/following counts
+  setTimeout(()=>{
+    const pf=document.getElementById('prof-followers'); if(pf) pf.textContent=getFollowers(myName).length;
+    const pfg=document.getElementById('prof-following'); if(pfg) pfg.textContent=(getFollowData()[myName.toLowerCase()]||[]).length;
+  },100);
+}
+
+function showFollowers(){
+  if(!_viewUser) return;
+  const followers=getFollowers(_viewUser.name);
+  const el=document.getElementById('followers-list');
+  if(!followers.length){el.innerHTML='<div style="color:var(--text3);text-align:center;padding:24px;font-size:13px;font-weight:500;">Hali follower yo\'q</div>';}
+  else {
+    let html='';
+    followers.forEach(fname=>{
+      const url=getPhotoUrl(fname,''); const i=ini(fname);
+      const av=url?`<img src="${url}" style="width:100%;height:100%;object-fit:cover;">`:`<span>${i}</span>`;
+      html+=`<div class="follow-user-row" onclick="closeFollowModal('followers-modal');openUserProfile('${escA(fname)}','')">
+        <div class="fua">${av}</div>
+        <div style="flex:1;"><div style="font-size:14px;font-weight:700;">${escH(fname)}</div></div>
+      </div>`;
+    });
+    el.innerHTML=html;
+  }
+  document.getElementById('followers-modal').classList.add('on');
+}
+function showFollowing(){
+  if(!_viewUser) return;
+  const following=getFollowData()[(_viewUser.name).toLowerCase()]||[];
+  const el=document.getElementById('following-list');
+  if(!following.length){el.innerHTML='<div style="color:var(--text3);text-align:center;padding:24px;font-size:13px;font-weight:500;">Hali hech kimni follow qilmagan</div>';}
+  else {
+    let html='';
+    following.forEach(fname=>{
+      const url=getPhotoUrl(fname,''); const i=ini(fname);
+      const av=url?`<img src="${url}" style="width:100%;height:100%;object-fit:cover;">`:`<span>${i}</span>`;
+      html+=`<div class="follow-user-row" onclick="closeFollowModal('following-modal');openUserProfile('${escA(fname)}','')">
+        <div class="fua">${av}</div>
+        <div style="flex:1;"><div style="font-size:14px;font-weight:700;">${escH(fname)}</div></div>
+      </div>`;
+    });
+    el.innerHTML=html;
+  }
+  document.getElementById('following-modal').classList.add('on');
+}
+function closeFollowModal(id){ document.getElementById(id).classList.remove('on'); }
+
 function closeUserProfile(){document.getElementById('screen-user-profile').classList.remove('active');_viewUser=null;}
 function startChatFromProfile(){
   if(!_viewUser) return;
