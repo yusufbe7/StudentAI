@@ -512,36 +512,63 @@ body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); 
       <div style="text-align:center;margin-bottom:14px;">
         <span style="font-size:12px;color:var(--text3);cursor:pointer;font-weight:600;" onclick="openAdminModal()">🔐 Admin sifatida kirish</span>
       </div>
-      <div class="l-tabs">
-        <div class="l-tab on" id="lt-in" onclick="lTab('in')">Kirish</div>
-        <div class="l-tab" id="lt-up" onclick="lTab('up')">Ro'yxat</div>
-        <div class="l-tab" id="lt-fp" onclick="lTab('fp')">Parol</div>
-      </div>
 
-      <!-- KIRISH -->
-      <div id="lf-in">
-        <div class="field"><label class="field-lbl">Username</label><input class="field-inp" id="si-u" type="text" placeholder="username" autocomplete="off" autocorrect="off" autocapitalize="off"></div>
-        <div class="field"><label class="field-lbl">Parol</label><input class="field-inp" id="si-p" type="password" placeholder="••••••"></div>
-        <div class="l-err" id="si-err">Username yoki parol noto'g'ri</div>
-        <div id="si-loading" style="display:none;text-align:center;padding:8px;font-size:13px;color:var(--text3);">⏳ Tekshirilmoqda...</div>
-        <button class="l-btn" onclick="doSignIn()">Kirish →</button>
-        <div style="text-align:center;margin-top:12px;">
-          <span style="font-size:12px;color:var(--green);cursor:pointer;font-weight:600;" onclick="lTab('fp')">Parolni unutdim?</span>
+      <!-- BOT PROFIL PREVIEW — Telegram dan avtomatik yuklanadi -->
+      <div id="tg-profile-preview" style="display:none;background:var(--bg);border-radius:16px;padding:14px 16px;margin-bottom:16px;">
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div id="tg-prev-ava" style="width:48px;height:48px;border-radius:50%;background:var(--green-bg);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;color:var(--green);flex-shrink:0;overflow:hidden;"></div>
+          <div>
+            <div style="font-size:15px;font-weight:800;color:var(--text);" id="tg-prev-name">—</div>
+            <div style="font-size:12px;color:var(--text3);font-weight:500;margin-top:2px;" id="tg-prev-meta">—</div>
+          </div>
         </div>
       </div>
 
-      <!-- RO'YXAT -->
-      <div id="lf-up" style="display:none;">
-        <div class="field"><label class="field-lbl">Username</label><input class="field-inp" id="su-u" type="text" placeholder="faqat lotin, raqam, _" autocomplete="off" autocorrect="off" autocapitalize="off"><div class="field-err" id="su-u-e">Kamida 3 belgi</div></div>
-        <div class="field"><label class="field-lbl">Ism Familiya</label><input class="field-inp" id="su-n" type="text" placeholder="To'liq ism"><div class="field-err" id="su-n-e">Kamida 3 harf</div></div>
-        <div class="field"><label class="field-lbl">Parol</label><input class="field-inp" id="su-p" type="password" placeholder="Kamida 6 belgi"><div class="field-err" id="su-p-e">Kamida 6 belgi</div></div>
-        <div class="field"><label class="field-lbl">Tasdiqlash</label><input class="field-inp" id="su-p2" type="password" placeholder="Takrorlang"><div class="field-err" id="su-p2-e">Parollar mos kelmadi</div></div>
-        <div id="su-loading" style="display:none;text-align:center;padding:8px;font-size:13px;color:var(--text3);">⏳ Saqlanmoqda...</div>
-        <button class="l-btn" onclick="doSignUp()">Ro'yxatdan o'tish →</button>
+      <!-- NIKNAME KIRISH (yangi tizim) -->
+      <div id="lf-nick">
+        <div style="text-align:center;margin-bottom:16px;">
+          <div style="font-size:13px;font-weight:700;color:var(--text);">Nikname kiriting</div>
+          <div style="font-size:11px;color:var(--text3);margin-top:4px;">Bu sizning unikal manzilingiz</div>
+        </div>
+        <div class="field">
+          <div style="display:flex;align-items:center;background:var(--bg);border:1.5px solid var(--border);border-radius:12px;padding:0 14px;transition:all .2s;" id="nick-login-wrap">
+            <span style="font-size:16px;font-weight:700;color:var(--text3);">@</span>
+            <input class="field-inp" id="nick-login-inp" type="text" placeholder="nikname"
+              style="border:none;background:transparent;padding:13px 6px;flex:1;font-size:16px;font-weight:700;"
+              autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+              oninput="onNickLoginInput(this.value)"
+              onkeydown="if(event.key==='Enter')doNickLogin()">
+          </div>
+          <div id="nick-login-status" style="font-size:12px;font-weight:600;margin-top:6px;padding:0 4px;min-height:18px;"></div>
+        </div>
+        <div id="nick-login-loading" style="display:none;text-align:center;padding:8px;font-size:13px;color:var(--text3);">⏳ Yuklanmoqda...</div>
+        <button class="l-btn" id="nick-login-btn" onclick="doNickLogin()" disabled style="background:#ccc;cursor:not-allowed;">Kirish →</button>
+        <div style="text-align:center;margin-top:12px;">
+          <span style="font-size:12px;color:var(--green);cursor:pointer;font-weight:600;" onclick="showResetPass()">Parolni unutdim?</span>
+        </div>
+      </div>
+
+      <!-- PAROL KIRISH — nikname topilgandan keyin -->
+      <div id="lf-pass" style="display:none;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;cursor:pointer;" onclick="backToNick()">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="var(--text3)" stroke-width="2.5" stroke-linecap="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+          <div>
+            <div style="font-size:15px;font-weight:800;color:var(--text);" id="lf-pass-nick">@—</div>
+            <div style="font-size:11px;color:var(--text3);" id="lf-pass-name">—</div>
+          </div>
+        </div>
+        <div class="field">
+          <label class="field-lbl">Parol</label>
+          <input class="field-inp" id="si-p" type="password" placeholder="••••••"
+            onkeydown="if(event.key==='Enter')doSignIn()">
+        </div>
+        <div class="l-err" id="si-err">Parol noto'g'ri</div>
+        <div id="si-loading" style="display:none;text-align:center;padding:8px;font-size:13px;color:var(--text3);">⏳ Tekshirilmoqda...</div>
+        <button class="l-btn" onclick="doSignIn()">Kirish →</button>
       </div>
 
       <!-- PAROLNI TIKLASH -->
-      <div id="lf-fp" style="display:none;">
+      <div id="lf-fp" style="display:none;padding-top:4px;">
 
         <!-- QADAM 1: Nikname + yangi parol -->
         <div id="fp-step1">
@@ -1445,15 +1472,101 @@ function navTo(tab){
 // AUTH — Server-side (users stored on server, not localStorage)
 // ═══════════════════════════════════════════════
 function lTab(t){
-  ['in','up','fp'].forEach(x=>{
-    document.getElementById('lf-'+x).style.display=x===t?'block':'none';
-    const el=document.getElementById('lt-'+x);
-    if(el) el.className='l-tab'+(x===t?' on':'');
+  // nick=nikname kirish, pass=parol kirish, fp=parol tiklash
+  ['nick','pass','fp'].forEach(x=>{
+    const el=document.getElementById('lf-'+x);
+    if(el) el.style.display=x===t?'block':'none';
   });
   document.querySelectorAll('.field-err').forEach(e=>e.classList.remove('on'));
   document.querySelectorAll('.field-inp').forEach(i=>i.classList.remove('err'));
-  document.getElementById('si-err').classList.remove('on');
+  const siErr=document.getElementById('si-err'); if(siErr) siErr.classList.remove('on');
   const fpErr=document.getElementById('fp-err'); if(fpErr) fpErr.classList.remove('on');
+}
+function showResetPass(){ lTab('fp'); }
+function backToNick(){ lTab('nick'); setTimeout(()=>document.getElementById('nick-login-inp')?.focus(),100); }
+
+// ═══════════════════════════════════════════════════════════
+// YANGI LOGIN TIZIMI — Nikname + TG profil
+// ═══════════════════════════════════════════════════════════
+
+let _loginTgData = null;   // TG dan kelgan ma'lumotlar
+let _loginFoundUser = null; // Nikname bo'yicha topilgan foydalanuvchi
+let _nickLoginDebounce = null;
+
+// TG profilni login ekranida ko'rsatish
+async function loadTgProfileForLogin(){
+  try{
+    const tgUser = window.Telegram?.WebApp?.initDataUnsafe?.user;
+    if(!tgUser) return;
+    _loginTgData = tgUser;
+    const r = await fetch(`/api/tg-profile?tgId=${tgUser.id}&tgUsername=${encodeURIComponent(tgUser.username||'')}`);
+    if(!r.ok) return;
+    const d = await r.json();
+    // Preview ko'rsatish
+    const prev = document.getElementById('tg-profile-preview');
+    const nameEl = document.getElementById('tg-prev-name');
+    const metaEl = document.getElementById('tg-prev-meta');
+    const avaEl  = document.getElementById('tg-prev-ava');
+    if(prev&&nameEl&&metaEl){
+      nameEl.textContent = d.name||tgUser.first_name||'';
+      metaEl.textContent = [d.univ,d.kurs].filter(Boolean).join(' · ')||'Bot foydalanuvchisi';
+      if(avaEl){
+        const url = getPhotoUrl(d.name||'', tgUser.username||'');
+        if(url) avaEl.innerHTML=`<img src="${url}" style="width:100%;height:100%;object-fit:cover;">`;
+        else avaEl.textContent = ini(d.name||tgUser.first_name||'?');
+      }
+      prev.style.display = 'block';
+    }
+    // Agar shu TG ID ga bog'liq nikname bor bo'lsa — avtomatik to'ldirish
+    const wu = getUsers();
+    const found = Object.values(wu).find(u=>u.tgId===String(tgUser.id));
+    if(found?.nickname){
+      const inp = document.getElementById('nick-login-inp');
+      if(inp){ inp.value = found.nickname; onNickLoginInput(found.nickname); }
+    }
+  }catch(e){ console.log('[TG Login]',e); }
+}
+
+// Nikname input — real-time tekshirish
+function onNickLoginInput(val){
+  const nick = val.replace(/^@/,'').trim().toLowerCase();
+  const btn = document.getElementById('nick-login-btn');
+  const status = document.getElementById('nick-login-status');
+  const wrap = document.getElementById('nick-login-wrap');
+  _loginFoundUser = null;
+  if(btn){ btn.disabled=true; btn.style.background='#ccc'; btn.style.cursor='not-allowed'; }
+  if(!nick){ if(status) status.textContent=''; return; }
+  if(nick.length<2){ if(status){status.style.color='var(--text3)';status.textContent='Kamida 2 belgi';} return; }
+  if(status){status.style.color='var(--text3)';status.textContent='⏳ Tekshirilmoqda...';}
+  clearTimeout(_nickLoginDebounce);
+  _nickLoginDebounce = setTimeout(async()=>{
+    try{
+      const r = await fetch(`/api/user-by-nick?nickname=${encodeURIComponent(nick)}`);
+      if(r.ok){
+        const d = await r.json();
+        _loginFoundUser = d;
+        if(status){status.style.color='var(--green)';status.textContent='✅ @'+nick+' topildi!';}
+        if(wrap) wrap.style.borderColor='var(--green)';
+        if(btn){btn.disabled=false;btn.style.background='var(--green)';btn.style.cursor='pointer';}
+      } else {
+        if(status){status.style.color='var(--red)';status.textContent='❌ @'+nick+' topilmadi';}
+        if(wrap) wrap.style.borderColor='var(--red)';
+      }
+    }catch{
+      if(status){status.style.color='var(--text3)';status.textContent='';}
+    }
+  }, 500);
+}
+
+// Nikname topildi — parol ekraniga o'tish
+function doNickLogin(){
+  if(!_loginFoundUser) return;
+  const nick = (document.getElementById('nick-login-inp')?.value||'').replace(/^@/,'').trim();
+  // Parol ekraniga o'tish
+  document.getElementById('lf-pass-nick').textContent = '@'+nick;
+  document.getElementById('lf-pass-name').textContent = _loginFoundUser.name||'';
+  lTab('pass');
+  setTimeout(()=>document.getElementById('si-p')?.focus(),100);
 }
 
 async function doSignUp(){
@@ -1512,7 +1625,9 @@ async function doSignUp(){
 }
 
 async function doSignIn(){
-  const u=document.getElementById('si-u').value.trim().toLowerCase();
+  // Yangi tizim: _loginFoundUser dan username olish
+  const foundU = _loginFoundUser;
+  const u = foundU?.username || (document.getElementById('si-u')?.value||'').trim().toLowerCase();
   const p=document.getElementById('si-p').value;
   const errEl=document.getElementById('si-err');
   const loadEl=document.getElementById('si-loading');
@@ -4131,8 +4246,8 @@ window.addEventListener('DOMContentLoaded', async () => {
   }
 
   // ─── 3. Login ekranini tayyorlash ───────────────────────
-  document.getElementById('si-p')?.addEventListener('keydown', e => { if(e.key==='Enter') doSignIn(); });
-  document.getElementById('su-p2')?.addEventListener('keydown', e => { if(e.key==='Enter') doSignUp(); });
+  lTab('nick'); // Nikname kirish ekranini ko'rsat
+  loadTgProfileForLogin(); // TG dan ma'lumot olish
 });
 document.addEventListener('input',e=>{
   if(e.target.id==='chat-inp'){e.target.style.height='auto';e.target.style.height=Math.min(e.target.scrollHeight,100)+'px';}

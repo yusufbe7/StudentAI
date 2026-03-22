@@ -1356,6 +1356,33 @@ app.get('/api/tg-profile', (req, res) => {
     } catch(err) { res.status(500).json({error:err.message}); }
 });
 
+// ─── Nikname bo'yicha foydalanuvchini topish (login uchun) ──────
+app.get('/api/user-by-nick', (req, res) => {
+    try{
+        const nick = (req.query.nickname||'').toLowerCase().trim().replace(/^@/,'');
+        if(!nick) return res.status(400).json({error:'missing'});
+        const wu = getWebUsers();
+
+        // 1. nickname bo'yicha
+        let found = Object.entries(wu).find(([,u])=>(u.nickname||'').toLowerCase()===nick);
+        // 2. username bo'yicha
+        if(!found) found = Object.entries(wu).find(([k,])=>k.toLowerCase()===nick);
+        // 3. TG username bo'yicha
+        if(!found) found = Object.entries(wu).find(([,u])=>(u.tgUsername||'').toLowerCase()===nick);
+
+        if(!found) return res.status(404).json({error:'notfound'});
+        const [uKey, uData] = found;
+        // Parolni qaytarmaymiz!
+        res.json({
+            username: uKey,
+            name:     uData.name||'',
+            nickname: uData.nickname||uKey,
+            univ:     uData.univ||'',
+            kurs:     uData.kurs||'',
+        });
+    }catch(err){ res.status(500).json({error:err.message}); }
+});
+
 // ─── Nikname mavjudligini tekshirish ─────────────────────────────
 app.get('/api/nickname/check', (req, res) => {
     try {
