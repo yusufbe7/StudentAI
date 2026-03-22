@@ -1338,9 +1338,25 @@ app.get('/api/chat/messages', (req, res) => {
         const { name1, name2, since=0 } = req.query;
         if (!name1||!name2) return res.status(400).json({error:'name1 va name2 kerak'});
         const chats = getChatMsgs();
-        const cid = chatId(name1, name2);
-        const msgs = (chats[cid]||[]).filter(m => m.ts > parseInt(since) && ((m.from===name1&&m.to===name2)||(m.from===name2&&m.to===name1)));
-        res.json({ messages:msgs });
+        const n1Low = name1.toLowerCase().trim();
+        const n2Low = name2.toLowerCase().trim();
+        const sinceTs = parseInt(since)||0;
+        // Barcha cid lardan ikki kishi orasidagi xabarlarni yig'ish
+        let allMsgs = [];
+        Object.values(chats).forEach(msgs => {
+            msgs.forEach(m => {
+                const fLow=(m.from||'').toLowerCase().trim();
+                const tLow=(m.to||'').toLowerCase().trim();
+                if(m.ts > sinceTs && ((fLow===n1Low&&tLow===n2Low)||(fLow===n2Low&&tLow===n1Low))){
+                    allMsgs.push(m);
+                }
+            });
+        });
+        // Deduplicate + sort
+        const seen=new Set();
+        allMsgs=allMsgs.filter(m=>{if(seen.has(m.id))return false;seen.add(m.id);return true;});
+        allMsgs.sort((a,b)=>a.ts-b.ts);
+        res.json({ messages: allMsgs });
     } catch (err) { res.status(500).json({error:'Xatolik'}); }
 });
 app.post('/api/chat/read', (req, res) => {
@@ -1348,9 +1364,22 @@ app.post('/api/chat/read', (req, res) => {
         const { myName, otherName } = req.body;
         if (!myName||!otherName) return res.status(400).json({error:'Parametrlar kerak'});
         const chats = getChatMsgs();
-        const cid = chatId(myName, otherName);
         const myLow = myName.toLowerCase().trim();
-        if (chats[cid]) { chats[cid].forEach(m => { if ((m.to||'').toLowerCase().trim()===myLow) m.read=true; }); saveChatMsgs(chats); }
+        const otherLow = otherName.toLowerCase().trim();
+        let changed = false;
+        // Barcha cid larda (duplicate larni ham) o'qilgan deb belgilash
+        Object.entries(chats).forEach(([cid, msgs]) => {
+            const relevant = msgs.some(m => {
+                const fLow=(m.from||'').toLowerCase().trim();
+                const tLow=(m.to||'').toLowerCase().trim();
+                return (fLow===otherLow&&tLow===myLow)||(fLow===myLow&&tLow===otherLow);
+            });
+            if(!relevant) return;
+            msgs.forEach(m => {
+                if((m.to||'').toLowerCase().trim()===myLow && !m.read){ m.read=true; changed=true; }
+            });
+        });
+        if(changed) saveChatMsgs(chats);
         res.json({ success:true });
     } catch (err) { res.status(500).json({error:'Xatolik'}); }
 });
@@ -1359,8 +1388,17 @@ app.post('/api/chat/delete', (req, res) => {
         const { myName, otherName } = req.body;
         if (!myName||!otherName) return res.status(400).json({error:'Parametrlar kerak'});
         const chats = getChatMsgs();
-        const cid = chatId(myName, otherName);
-        if (chats[cid]) { delete chats[cid]; saveChatMsgs(chats); }
+        const myLow = myName.toLowerCase().trim();
+        const otherLow = otherName.toLowerCase().trim();
+        // Barcha cid larni (duplicate larni ham) o'chirish
+        let deleted = false;
+        Object.keys(chats).forEach(cid => {
+            const parts = cid.split('__CHAT__');
+            if(parts.length===2 && parts.includes(myLow) && parts.includes(otherLow)){
+                delete chats[cid]; deleted=true;
+            }
+        });
+        if(deleted) saveChatMsgs(chats);
         res.json({ success:true });
     } catch (err) { console.error('[Chat delete]', err.message); res.status(500).json({error:'Xatolik'}); }
 });
@@ -1372,12 +1410,23 @@ app.get('/api/chat/unread', (req, res) => {
         const myLow = myName.toLowerCase().trim();
         let total = 0;
         const byChat = {};
+        // byOther — duplicate cid larni birlashtirish
+        const byOther = new Map();
         Object.entries(chats).forEach(([cid,msgs]) => {
             const isParticipant = msgs.some(m => (m.from||'').toLowerCase().trim()===myLow || (m.to||'').toLowerCase().trim()===myLow);
             if (!isParticipant) return;
             const unread = msgs.filter(m => (m.to||'').toLowerCase().trim()===myLow && !m.read).length;
-            if (unread > 0) { total += unread; byChat[cid] = unread; }
+            if (unread <= 0) return;
+            let otherLow='';
+            for(const m of msgs){
+                const fLow=(m.from||'').toLowerCase().trim();
+                if(fLow!==myLow){otherLow=fLow;break;}
+                const tLow=(m.to||'').toLowerCase().trim();
+                if(tLow!==myLow){otherLow=tLow;break;}
+            }
+            if(otherLow) byOther.set(otherLow,(byOther.get(otherLow)||0)+unread);
         });
+        byOther.forEach((cnt,other)=>{ total+=cnt; byChat[other]=cnt; });
         res.json({ total, byChat });
     } catch (err) { res.status(500).json({error:'Xatolik'}); }
 });
@@ -1387,17 +1436,63 @@ app.get('/api/chat/list', (req, res) => {
         if (!myName) return res.status(400).json({error:'myName kerak'});
         const myLow = myName.toLowerCase().trim();
         const chats = getChatMsgs();
-        const list = [];
-        Object.entries(chats).forEach(([cid,msgs]) => {
+
+        // Barcha chatlarni to'plab, otherName ga ko'ra birlashtirish
+        // (duplicate cid larni oldini olish)
+        const byOther = new Map(); // otherLow → { msgs, lastTs, unread, otherName }
+
+        Object.entries(chats).forEach(([cid, msgs]) => {
             if (!msgs.length) return;
-            const isParticipant = msgs.some(m => (m.from||'').toLowerCase().trim()===myLow || (m.to||'').toLowerCase().trim()===myLow);
+            const isParticipant = msgs.some(m =>
+                (m.from||'').toLowerCase().trim()===myLow ||
+                (m.to||'').toLowerCase().trim()===myLow
+            );
             if (!isParticipant) return;
-            const last = msgs[msgs.length-1];
-            const other = (last.from||'').toLowerCase().trim()===myLow ? last.to : last.from;
-            const unread = msgs.filter(m => (m.to||'').toLowerCase().trim()===myLow && !m.read).length;
-            list.push({ cid, otherName:other, lastMsg:last.imageData?'[Rasm 🖼️]':last.text, lastFrom:last.from, lastTs:last.ts, unread });
+
+            // otherName ni topish (original case saqlab)
+            let otherName = '';
+            for (const m of msgs) {
+                const fromLow = (m.from||'').toLowerCase().trim();
+                const toLow   = (m.to||'').toLowerCase().trim();
+                if (fromLow !== myLow) { otherName = m.from; break; }
+                if (toLow   !== myLow) { otherName = m.to;   break; }
+            }
+            if (!otherName) return;
+            const otherLow = otherName.toLowerCase().trim();
+
+            const unread = msgs.filter(m =>
+                (m.to||'').toLowerCase().trim()===myLow && !m.read
+            ).length;
+            const lastMsg = msgs[msgs.length-1];
+
+            // Duplicate: agar bu otherName uchun allaqachon bor bo'lsa — birlashtirish
+            if (byOther.has(otherLow)) {
+                const ex = byOther.get(otherLow);
+                if (lastMsg.ts > ex.lastTs) {
+                    byOther.set(otherLow, {
+                        otherName,
+                        lastMsg: lastMsg.imageData ? '[Rasm 🖼️]' : lastMsg.text,
+                        lastFrom: lastMsg.from,
+                        lastTs: lastMsg.ts,
+                        unread: ex.unread + unread,
+                        cid,
+                    });
+                } else {
+                    ex.unread += unread;
+                }
+            } else {
+                byOther.set(otherLow, {
+                    otherName,
+                    lastMsg: lastMsg.imageData ? '[Rasm 🖼️]' : lastMsg.text,
+                    lastFrom: lastMsg.from,
+                    lastTs: lastMsg.ts,
+                    unread,
+                    cid,
+                });
+            }
         });
-        list.sort((a,b) => b.lastTs - a.lastTs);
+
+        const list = Array.from(byOther.values()).sort((a,b) => b.lastTs - a.lastTs);
         res.json(list);
     } catch (err) { console.error('[Chat list]', err.message); res.status(500).json({error:'Xatolik'}); }
 });
@@ -1828,10 +1923,9 @@ io.on('connection', (socket) => {
             const { fromName, toName, text, imageData } = data;
             if (!fromName || !toName || (!text?.trim() && !imageData)) return;
 
-            // Bazaga saqlash
+            // Bazaga saqlash — chatId funksiyasidan foydalanish
             const chats = getChatMsgs();
-            const [n1, n2] = [fromName.toLowerCase().trim(), toName.toLowerCase().trim()].sort();
-            const cid = n1 + '__CHAT__' + n2;
+            const cid = chatId(fromName, toName);
             if (!chats[cid]) chats[cid] = [];
 
             const msg = {
@@ -1915,6 +2009,33 @@ io.on('connection', (socket) => {
         io.emit('user_offline', { name: userName });
         console.log(`🔴 [Socket] ${userName} uzildi (${onlineUsers.size} online)`);
     });
+});
+
+// Admin: Eski duplicate chat kalitlarini tozalash
+app.post('/api/admin/fix-chats', (req, res) => {
+    try {
+        const chats = getChatMsgs();
+        const merged = {}; // canonical_key → merged msgs array
+        let fixedCount = 0;
+
+        Object.entries(chats).forEach(([cid, msgs]) => {
+            // Barcha kalitlarni lowercase ga normalize qilish
+            const parts = cid.split('__CHAT__');
+            if(parts.length !== 2) { merged[cid] = msgs; return; }
+            const canonical = [parts[0].toLowerCase().trim(), parts[1].toLowerCase().trim()].sort().join('__CHAT__');
+            if(!merged[canonical]) merged[canonical] = [];
+            // Deduplicate by id
+            const existing = new Set(merged[canonical].map(m=>m.id));
+            msgs.forEach(m => { if(!existing.has(m.id)){ merged[canonical].push(m); existing.add(m.id); } });
+            if(canonical !== cid) fixedCount++;
+        });
+        // Sort by ts
+        Object.values(merged).forEach(msgs => msgs.sort((a,b)=>a.ts-b.ts));
+        writeJSON(CHAT_MSGS_PATH, merged);
+        res.json({ success:true, fixedCount, totalChats: Object.keys(merged).length });
+    } catch(err) {
+        res.status(500).json({ error: err.message });
+    }
 });
 
 // Online foydalanuvchilar soni API

@@ -1514,6 +1514,10 @@ async function openApp(username,isAdmin){
   if(myN) initSocket(myN);
   // Online count oldindan ko'rsatish
   fetchOnlineCount();
+  // Eski duplicate chatlarni bir marta tozalash
+  fetch('/api/admin/fix-chats',{method:'POST'}).then(r=>r.json()).then(d=>{
+    if(d.fixedCount>0) console.log('[Fix] Duplicate chatlar tozalandi:', d.fixedCount);
+  }).catch(()=>{});
 }
 
 // ═══════════════════════════════════════════════
@@ -3314,7 +3318,7 @@ async function loadChatsList(){
         >
           <div class="cli-ava2">${av}</div>
           <div class="cli-info2">
-            <div class="cli-name2">${escH(item.otherName)}</div>
+            <div class="cli-name2">${escH(item.otherName||item.cid.split('__CHAT__').find(n=>n.toLowerCase()!==myName.toLowerCase())||'—')}</div>
             <div class="cli-msg2">${escH(preview)}</div>
           </div>
           <div class="cli-meta2">
