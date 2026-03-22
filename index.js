@@ -3966,6 +3966,190 @@ app.post('/api/admin/add-score', async (req, res) => {
 });
 
 
+// ═══════════════════════════════════════════════════════════════════
+// BU KODNI index.js GA QO'SHING — app.listen(...) DAN OLDIN
+// OLDINGI admin_score_endpoint.js NI O'CHIRING VA BUNI ISHLATING
+// ═══════════════════════════════════════════════════════════════════
+
+app.post('/api/admin/add-score', async (req, res) => {
+    try {
+        const { name, addScore, addTests, addCorrect, addWrong } = req.body;
+
+        if (!name || !name.trim()) {
+            return res.status(400).json({ error: 'Ism kiriting' });
+        }
+
+        const nameTrim     = name.trim();
+        const scoreToAdd   = parseFloat(addScore)   || 0;
+        const testsToAdd   = parseInt(addTests)      || 0;
+        const correctToAdd = parseInt(addCorrect)    || 0;
+        const wrongToAdd   = parseInt(addWrong)      || 0;
+
+        if (scoreToAdd <= 0 && testsToAdd <= 0) {
+            return res.status(400).json({ error: 'Ball yoki test miqdori kiriting' });
+        }
+
+        const db    = getDb();
+        let found   = false;
+        let foundId = null;
+        let newScore = 0, newTests = 0;
+
+        // 1. Telegram foydalanuvchilarida izlash — user.score ga yozish
+        for (const [uid, user] of Object.entries(db.users || {})) {
+            if ((user.name || '').trim().toLowerCase() !== nameTrim.toLowerCase()) continue;
+            user.score        = (parseFloat(user.score)        || 0) + scoreToAdd;
+            user.totalTests   = (parseInt(user.totalTests)      || 0) + testsToAdd;
+            user.totalCorrect = (parseInt(user.totalCorrect)    || 0) + correctToAdd;
+            user.totalWrong   = (parseInt(user.totalWrong)      || 0) + wrongToAdd;
+            newScore = user.score; newTests = user.totalTests;
+            db.users[uid] = user; found = true; foundId = uid; break;
+        }
+        if (found) saveDb(db);
+
+        // 2. web_scores.json da izlash
+        if (!found) {
+            const WS_PATH = path.join(DATA_DIR, 'web_scores.json');
+            const ws = readJSON(WS_PATH, {});
+            for (const [k, v] of Object.entries(ws)) {
+                if ((v.name || '').trim().toLowerCase() !== nameTrim.toLowerCase()) continue;
+                v.score        = (parseFloat(v.score)        || 0) + scoreToAdd;
+                v.totalTests   = (parseInt(v.totalTests)      || 0) + testsToAdd;
+                v.totalCorrect = (parseInt(v.totalCorrect)    || 0) + correctToAdd;
+                v.totalWrong   = (parseInt(v.totalWrong)      || 0) + wrongToAdd;
+                newScore = v.score; newTests = v.totalTests;
+                ws[k] = v; writeJSON(WS_PATH, ws); found = true; break;
+            }
+        }
+
+        // 3. web_users.json da izlash
+        if (!found) {
+            const WU_PATH = path.join(DATA_DIR, 'web_users.json');
+            const wu = readJSON(WU_PATH, {});
+            for (const [k, v] of Object.entries(wu)) {
+                if ((v.name || '').trim().toLowerCase() !== nameTrim.toLowerCase()) continue;
+                v.score        = (parseFloat(v.score)        || 0) + scoreToAdd;
+                v.totalTests   = (parseInt(v.totalTests)      || 0) + testsToAdd;
+                v.totalCorrect = (parseInt(v.totalCorrect)    || 0) + correctToAdd;
+                v.totalWrong   = (parseInt(v.totalWrong)      || 0) + wrongToAdd;
+                newScore = v.score; newTests = v.totalTests;
+                wu[k] = v; writeJSON(WU_PATH, wu); found = true; break;
+            }
+        }
+
+        // 4. Topilmasa — web_scores da yangi yozuv
+        if (!found) {
+            const WS_PATH = path.join(DATA_DIR, 'web_scores.json');
+            const ws = readJSON(WS_PATH, {});
+            const key = nameTrim.toLowerCase().replace(/\s+/g, '_') + '_' + Date.now();
+            ws[key] = {
+                name: nameTrim, username: '',
+                score: scoreToAdd, totalTests: testsToAdd,
+                totalCorrect: correctToAdd, totalWrong: wrongToAdd,
+                createdAt: Date.now(), addedByAdmin: true
+            };
+            newScore = scoreToAdd; newTests = testsToAdd;
+            writeJSON(WS_PATH, ws);
+        }
+
+        // 5. Telegram xabarnoma
+        if (foundId) {
+            bot.telegram.sendMessage(foundId,
+                `🎉 <b>Tabriklaymiz!</b>\n\n` +
+                `Admin sizga qo'shdi:\n` +
+                (scoreToAdd > 0   ? `⚡ <b>+${scoreToAdd} ball</b>\n`       : '') +
+                (testsToAdd > 0   ? `📝 <b>+${testsToAdd} ta test</b>\n`    : '') +
+                (correctToAdd > 0 ? `✅ <b>+${correctToAdd} to'g'ri</b>\n`  : '') +
+                (wrongToAdd > 0   ? `❌ <b>+${wrongToAdd} xato</b>\n`       : '') +
+                `\n📊 Jami: <b>${newScore.toFixed(1)} ball</b> · <b>${newTests} test</b>`,
+                { parse_mode: 'HTML' }
+            ).catch(() => {});
+        }
+
+        res.json({ success: true, name: nameTrim, newScore, newTests });
+    } catch (err) {
+        console.error('[admin/add-score]', err.message);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// ═══════════════════════════════════════════════════════════════════
+// LEADERBOARD — barcha manbalardan ball bo'yicha KAMAYISH tartibida
+// index.js dagi MAVJUD /api/leaderboard ni SHU BILAN ALMASHTIRING
+// ═══════════════════════════════════════════════════════════════════
+app.get('/api/leaderboard', (req, res) => {
+    try {
+        const db = getDb();
+        const WS_PATH = path.join(DATA_DIR, 'web_scores.json');
+        const WU_PATH = path.join(DATA_DIR, 'web_users.json');
+        const webScores = readJSON(WS_PATH, {});
+        const webUsers  = readJSON(WU_PATH, {});
+
+        const map = new Map(); // name.toLowerCase() → user obj
+
+        // 1. Telegram foydalanuvchilari (user.score to'g'ridan-to'g'ri)
+        for (const [, user] of Object.entries(db.users || {})) {
+            const sc = parseFloat(user.score) || 0;
+            if (sc <= 0 || !user.name || !user.name.trim()) continue;
+            const k = user.name.trim().toLowerCase();
+            map.set(k, {
+                name:         user.name.trim(),
+                tgUsername:   (user.username || '').replace('@', ''),
+                univ:         user.univ      || '',
+                kurs:         user.kurs      || '',
+                yonalish:     user.yonalish  || '',
+                score:        sc,
+                totalTests:   parseInt(user.totalTests)   || 0,
+                totalCorrect: parseInt(user.totalCorrect) || 0,
+                totalWrong:   parseInt(user.totalWrong)   || 0,
+            });
+        }
+
+        // 2. web_scores.json (faqat TG da yo'q nomlar)
+        for (const [, ws] of Object.entries(webScores)) {
+            const sc = parseFloat(ws.score) || 0;
+            if (sc <= 0 || !ws.name || !ws.name.trim()) continue;
+            const k = ws.name.trim().toLowerCase();
+            if (!map.has(k)) {
+                map.set(k, {
+                    name:         ws.name.trim(),
+                    tgUsername:   ws.username || '',
+                    univ:         '', kurs: '', yonalish: '',
+                    score:        sc,
+                    totalTests:   parseInt(ws.totalTests)   || 0,
+                    totalCorrect: parseInt(ws.totalCorrect) || 0,
+                    totalWrong:   parseInt(ws.totalWrong)   || 0,
+                });
+            }
+        }
+
+        // 3. web_users.json (faqat TG va web_scores da yo'q nomlar)
+        for (const [, wu] of Object.entries(webUsers)) {
+            const sc = parseFloat(wu.score) || 0;
+            if (sc <= 0 || !wu.name || !wu.name.trim()) continue;
+            const k = wu.name.trim().toLowerCase();
+            if (!map.has(k)) {
+                map.set(k, {
+                    name:         wu.name.trim(),
+                    tgUsername:   wu.username || '',
+                    univ:         '', kurs: '', yonalish: '',
+                    score:        sc,
+                    totalTests:   parseInt(wu.totalTests)   || 0,
+                    totalCorrect: parseInt(wu.totalCorrect) || 0,
+                    totalWrong:   parseInt(wu.totalWrong)   || 0,
+                });
+            }
+        }
+
+        // Ball bo'yicha KAMAYISH tartibida (eng yuqori ball = birinchi)
+        const sorted = Array.from(map.values())
+            .sort((a, b) => b.score - a.score);
+
+        res.json(sorted);
+    } catch (err) {
+        console.error('[leaderboard]', err.message);
+        res.status(500).json({ error: 'Xatolik' });
+    }
+});
 
 
 app.listen(PORT, '0.0.0.0', () => console.log(`🌐 Express server ${PORT}-portda`));
