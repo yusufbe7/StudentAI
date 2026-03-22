@@ -2021,15 +2021,36 @@ async function checkMyVip(){
   const sess=getSess();
   if(!sess||sess.isAdmin){_myVipStatus=true;return true;}
   const user=getUsers()[sess.username];
-  if(!user?.name){_myVipStatus=true;return true;}
+
+  // 1. Local da VIP ma'lumot bor bo'lsa - ishlatamiz
+  if(user?.isVip && user?.vipEnd && Date.now()<user.vipEnd){
+    _myVipStatus=true;return true;
+  }
+
   try{
-    let r=await fetch('/api/user-stats?name='+encodeURIComponent(user.name));
-    if(r.status===404) r=await fetch('/api/user-stats?username='+encodeURIComponent(user.username||sess.username));
-    if(r.status===404||!r.ok){_myVipStatus=true;return true;}
-    const d=await r.json();
-    _myVipStatus=(d.isVip&&d.vipEnd&&Date.now()<d.vipEnd);
-    return _myVipStatus;
-  }catch{_myVipStatus=true;return true;}
+    // 2. Server dan tekshirish
+    // /api/web-auth/me - web users da isVip bor
+    const mr = await fetch('/api/web-auth/me?username='+encodeURIComponent(sess.username));
+    if(mr.ok){
+      const md = await mr.json();
+      if(md.user?.isVip && md.user?.vipEnd && Date.now()<md.user.vipEnd){
+        // Local ga saqlash
+        if(user){ user.isVip=true; user.vipEnd=md.user.vipEnd; saveUsers({...getUsers(),[sess.username]:user}); }
+        _myVipStatus=true;return true;
+      }
+    }
+    // 3. user-stats dan tekshirish (bot foydalanuvchilari uchun)
+    if(user?.name){
+      let r=await fetch('/api/user-stats?name='+encodeURIComponent(user.name));
+      if(r.status===404) r=await fetch('/api/user-stats?username='+encodeURIComponent(user.username||sess.username));
+      if(r.ok){
+        const d=await r.json();
+        _myVipStatus=(d.isVip&&d.vipEnd&&Date.now()<d.vipEnd);
+        return _myVipStatus;
+      }
+    }
+    _myVipStatus=false;return false;
+  }catch{_myVipStatus=false;return false;}
 }
 function showVipModal(){document.getElementById('vip-modal').classList.add('on');}
 function openTgBot(){
@@ -2506,7 +2527,7 @@ function renderAdminPanel(){
 
       <div class="field" style="margin-bottom:10px;">
         <label class="field-lbl">Foydalanuvchi ismi</label>
-        <input class="field-inp" id="adm-score-name" type="text" placeholder="Ism Familiya..." autocomplete="off" oninput="adminSearchUser(this.value)">
+        <input class="field-inp" id="adm-score-name" type="text" placeholder="Ism yoki @nikname..." autocomplete="off" oninput="adminSearchUser(this.value)">
         <div id="adm-score-suggest" style="display:none;background:#fff;border-radius:10px;box-shadow:0 4px 16px rgba(0,0,0,0.12);margin-top:4px;overflow:hidden;max-height:160px;overflow-y:auto;"></div>
       </div>
 
@@ -2699,29 +2720,87 @@ async function adminRejectTour(){
 }
 
 // ─── Admin: foydalanuvchi qidirish ─────────────────────────────────
-let _adminAllUsers=[];
+let _adminAllUsers=[], _adminAllLastFetch=0;
 async function adminSearchUser(query){
   const sug=document.getElementById('adm-score-suggest');
-  const prev=document.getElementById('adm-score-preview');
   if(!sug) return;
-  if(!query||query.length<2){sug.style.display='none';return;}
+  const qRaw=(query||'').replace(/^@/,'').trim();
+  if(!qRaw||qRaw.length<1){sug.style.display='none';return;}
 
-  // Leaderboarddan foydalanuvchilar royxatini olish
-  if(!_adminAllUsers.length){
-    try{const r=await fetch('/api/leaderboard');if(r.ok)_adminAllUsers=await r.json();}catch{}
+  // Har 30 soniyada yangilash (yoki bo'sh bo'lsa)
+  const now = Date.now();
+  if(!_adminAllUsers.length || (now - (_adminAllLastFetch||0)) > 30000){
+    _adminAllLastFetch = now;
+    try{
+      const [lbR, wuR] = await Promise.all([
+        fetch('/api/leaderboard'),
+        fetch('/api/admin/all-web-users?t='+now)
+      ]);
+      const lb    = lbR.ok ? await lbR.json() : [];
+      const wuD   = wuR.ok ? await wuR.json() : {users:[]};
+      const wuList = wuD.users || [];
+
+      // Merge: avval web-users (nickname bor), keyin LB
+      const merged = new Map();
+      // 1. Web users — nickname bilan
+      wuList.forEach(u => {
+        const k = (u.name||'').toLowerCase();
+        merged.set(k, {
+          name:        u.name,
+          nickname:    u.nickname||null,
+          score:       parseFloat(u.score)||0,
+          totalTests:  parseInt(u.totalTests)||0,
+          totalCorrect:parseInt(u.totalCorrect)||0,
+          totalWrong:  parseInt(u.totalWrong)||0,
+          isVip:       u.isVip||false,
+          isWebOnly:   u.isWebOnly||false,
+          username:    u.username||'',
+        });
+      });
+      // 2. LB — agar yo'q bo'lsa qo'shamiz, bor bo'lsa merge
+      lb.forEach(u => {
+        const k = (u.name||'').toLowerCase();
+        if(merged.has(k)){
+          const ex = merged.get(k);
+          if(!ex.nickname && u.nickname) ex.nickname = u.nickname;
+          if(u.score > ex.score) ex.score = u.score;
+          merged.set(k, ex);
+        } else {
+          merged.set(k, u);
+        }
+      });
+      _adminAllUsers = Array.from(merged.values());
+      console.log('[AdminSearch] Yuklandi:', _adminAllUsers.length, 'ta');
+    }catch(e){ console.log('[AdminSearch xato]', e.message); }
   }
-  const q=query.toLowerCase();
-  const matches=_adminAllUsers.filter(u=>(u.name||'').toLowerCase().includes(q)).slice(0,6);
 
-  if(!matches.length){sug.style.display='none';return;}
+  const q = qRaw.toLowerCase();
+  const matches = _adminAllUsers.filter(u=>{
+    const name = (u.name||'').toLowerCase();
+    const nick = (u.nickname||'').toLowerCase();
+    const user = (u.username||'').toLowerCase();
+    return name.includes(q) || nick.includes(q) || user.includes(q);
+  }).slice(0,8);
 
-  sug.innerHTML=matches.map(u=>`
-    <div onclick="adminSelectUser('${escA(u.name)}','${parseFloat(u.score||0).toFixed(1)}','${u.totalTests||0}','${u.totalCorrect||0}','${u.totalWrong||0}')"
+  if(!matches.length){
+    sug.innerHTML=`<div style="padding:10px 14px;color:var(--text3);font-size:12px;text-align:center;">Topilmadi</div>`;
+    sug.style.display='block';
+    return;
+  }
+
+  sug.innerHTML = matches.map(u=>{
+    const nick = u.nickname ? ' <span style="color:var(--green);font-size:11px;font-weight:700;">@'+escH(u.nickname)+'</span>' : '';
+    const vip  = u.isVip   ? ' <span style="font-size:10px;">👑</span>' : '';
+    return `<div onclick="adminSelectUser('${escA(u.name)}','${parseFloat(u.score||0).toFixed(1)}','${u.totalTests||0}','${u.totalCorrect||0}','${u.totalWrong||0}')"
       style="padding:10px 14px;cursor:pointer;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;"
       onmouseover="this.style.background='var(--bg)'" onmouseout="this.style.background='#fff'">
-      <span style="font-size:13px;font-weight:700;">${escH(u.name)}</span>
-      <span style="font-size:11px;color:var(--text3);">${parseFloat(u.score||0).toFixed(0)} ball · ${u.totalTests||0} test</span>
-    </div>`).join('');
+      <div>
+        <span style="font-size:13px;font-weight:700;">${escH(u.name)}${vip}</span>
+        ${nick}
+      </div>
+      <span style="font-size:11px;color:var(--text3);">${parseFloat(u.score||0).toFixed(0)} ball</span>
+    </div>`;
+  }).join('');
   sug.style.display='block';
 }
 
@@ -2785,7 +2864,7 @@ async function adminAddScore(){
       const prev=document.getElementById('adm-score-preview');
       if(prev) prev.style.display='none';
       // Refresh leaderboard
-      _adminAllUsers=[];
+      _adminAllUsers=[]; _adminAllLastFetch=0;
       const lbR=await fetch('/api/leaderboard');
       if(lbR.ok){const raw3=await lbR.json();_lbCache=[...raw3].sort((a,b)=>(parseFloat(b.score)||0)-(parseFloat(a.score)||0));renderPodium(_lbCache);renderLbList(_lbCache,getSess());}
     } else {

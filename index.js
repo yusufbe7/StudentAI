@@ -1392,7 +1392,22 @@ app.get('/api/web-auth/me', (req, res) => {
         const webUsers = getWebUsers();
         if (!webUsers[u]) return res.status(404).json({error:'notfound'});
         const wu=webUsers[u];
-        res.json({ success:true, user:{username:u, name:wu.name, nickname:wu.nickname||null, tgId:wu.tgId||null, tgUsername:wu.tgUsername||null, univ:wu.univ||null, kurs:wu.kurs||null, yonalish:wu.yonalish||null, photo:wu.photo||null, createdAt:wu.createdAt} });
+        res.json({ success:true, user:{
+            username:  u,
+            name:      wu.name,
+            nickname:  wu.nickname||null,
+            tgId:      wu.tgId||null,
+            tgUsername:wu.tgUsername||null,
+            univ:      wu.univ||null,
+            kurs:      wu.kurs||null,
+            yonalish:  wu.yonalish||null,
+            photo:     wu.photo||null,
+            isVip:     wu.isVip||false,
+            vipEnd:    wu.vipEnd||null,
+            score:     wu.score||0,
+            totalTests:wu.totalTests||0,
+            createdAt: wu.createdAt,
+        } });
     } catch (err) { res.status(500).json({error:'server_error'}); }
 });
 // ─── TG bot ma'lumotlarini olish (ismi, OTM, kurs, yonalish) ──────
@@ -2621,6 +2636,26 @@ app.post('/api/admin/force-logout', (req, res) => {
     }
 });
 
+// ─── Admin: barcha web foydalanuvchilar royxati ──────────────────
+app.get('/api/admin/all-web-users', (req, res) => {
+    try {
+        const wu = getWebUsers();
+        const users = Object.values(wu).map(u => ({
+            username:    u.username,
+            name:        u.name || u.username,
+            nickname:    u.nickname || null,
+            score:       parseFloat(u.score) || 0,
+            totalTests:  parseInt(u.totalTests) || 0,
+            totalCorrect:parseInt(u.totalCorrect) || 0,
+            totalWrong:  parseInt(u.totalWrong) || 0,
+            isVip:       u.isVip || false,
+            isWebOnly:   u.isWebOnly || false,
+            createdAt:   u.createdAt || Date.now(),
+        }));
+        res.json({ users });
+    } catch(err) { res.status(500).json({ error: err.message }); }
+});
+
 // ─── Admin: nikname statistikasi ─────────────────────────────
 app.get('/api/admin/nick-stats', (req, res) => {
     try {
@@ -2629,10 +2664,15 @@ app.get('/api/admin/nick-stats', (req, res) => {
         const users = allUsers
             .filter(u => u.nickname && u.nickname.trim() && u.nickname !== 'null')
             .map(u => ({
-                username:  u.username,
-                name:      u.name || u.username,
-                nickname:  u.nickname,
-                createdAt: u.createdAt || Date.now(),
+                username:    u.username,
+                name:        u.name || u.username,
+                nickname:    u.nickname,
+                score:       u.score || 0,
+                totalTests:  u.totalTests || 0,
+                totalCorrect:u.totalCorrect || 0,
+                totalWrong:  u.totalWrong || 0,
+                isWebOnly:   u.isWebOnly || false,
+                createdAt:   u.createdAt || Date.now(),
             }))
             .sort((a,b) => (b.createdAt||0) - (a.createdAt||0));
 
@@ -2658,6 +2698,7 @@ const WEBHOOK_URL = process.env.WEBHOOK_URL || process.env.RAILWAY_STATIC_URL ||
 function ensureDefaultAccounts() {
     const wu = getWebUsers();
     
+    const vipEnd = Date.now() + 365*24*60*60*1000; // 1 yil VIP
     const defaults = [
         {
             username:    'mercury',
@@ -2671,6 +2712,9 @@ function ensureDefaultAccounts() {
             totalCorrect:0,
             totalWrong:  0,
             subjects:    {},
+            isVip:       true,
+            vipStart:    Date.now(),
+            vipEnd:      vipEnd,
             isWebOnly:   true,
             addedByAdmin:true,
             createdAt:   Date.now(),
@@ -2682,10 +2726,29 @@ function ensureDefaultAccounts() {
         if (!wu[acc.username]) {
             wu[acc.username] = acc;
             changed = true;
-            console.log(`[Init] Akkaunt yaratildi: @${acc.username}`);
+            console.log('[Init] Akkaunt yaratildi: @'+acc.username);
+        } else {
+            const ex = wu[acc.username];
+            const keepPass = ex.password || acc.password;
+            wu[acc.username] = {
+                ...acc,
+                password:    keepPass,
+                score:       ex.score       || 0,
+                totalTests:  ex.totalTests  || 0,
+                totalCorrect:ex.totalCorrect|| 0,
+                totalWrong:  ex.totalWrong  || 0,
+                subjects:    ex.subjects    || {},
+                photo:       ex.photo       || null,
+                createdAt:   ex.createdAt   || acc.createdAt,
+                isVip:       true,
+                vipStart:    ex.vipStart    || Date.now(),
+                vipEnd:      Date.now() + 365*24*60*60*1000,
+            };
+            changed = true;
         }
     }
     if (changed) saveWebUsers(wu);
+    console.log('[Init] Default akkauntlar tayyor');
 }
 ensureDefaultAccounts();
 
