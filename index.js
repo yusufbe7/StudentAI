@@ -1847,8 +1847,8 @@ io.on('connection', (socket) => {
             if (chats[cid].length > 500) chats[cid] = chats[cid].slice(-500);
             saveChatMsgs(chats);
 
-            // Yuboruvchiga confirm
-            socket.emit('message_sent', { msg });
+            // Yuboruvchiga confirm (tempId bilan)
+            socket.emit('message_sent', { msg, tempId: data.tempId||null });
 
             // Qabul qiluvchiga real-time yuborish
             const toKey = toName.toLowerCase().trim();
