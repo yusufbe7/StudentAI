@@ -2578,37 +2578,40 @@ async function markRead(myName,otherName){
 }
 function confirmDeleteChat(){
   if(!_chatWith) return;
-  showConfirm('🗑',"Chatni o'chirish",`"${_chatWith.name}" bilan barcha xabarlar o'chadi`,async()=>{ await deleteChat(_chatWith.name); });
+  showConfirm('🗑',"Chatni o'chirish",`"${_chatWith.name}" bilan barcha xabarlar o'chib ketadi`,async()=>{ await deleteChat(_chatWith.name); });
 }
 async function deleteChat(otherName){
   const myName=getMyName(); if(!myName) return;
   try{
     const r=await fetch('/api/chat/delete',{
-      method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({myName,otherName})
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({myName, otherName})
     });
-    // Even if server fails (404), delete from local chat cache
-    if(r.ok || r.status===404){
+    const data=await r.json().catch(()=>({}));
+    if(r.ok && data.success){
       toast("✅ Chat o'chirildi!");
       closeChat();
     } else {
-      toast("❌ O'chirishda xatolik",'bad');
+      toast("❌ Server xatosi: endpoint mavjud emas. server_endpoints_v2.js ni qo'shing",'bad');
+      // Force close anyway so user is not stuck
+      closeChat();
     }
-  }catch{
-    // Network error — still close (server will handle on next sync)
-    toast("✅ Chat o'chirildi!");
+  }catch(e){
+    toast("⚠️ Server bilan ulanib bo'lmadi",'bad');
     closeChat();
   }
 }
 async function deleteChatFromList(e,otherName){
   e.stopPropagation();
-  showConfirm('🗑',"Chatni o'chirish",`"${otherName}" bilan barcha xabarlar o'chadi`,async()=>{
+  showConfirm('🗑',"Chatni o'chirish",`"${otherName}" bilan barcha xabarlar o'chib ketadi`,async()=>{
     const myName=getMyName(); if(!myName) return;
     try{
       const r=await fetch('/api/chat/delete',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({myName,otherName})});
-      if(r.ok||r.status===404){toast("✅ Chat o'chirildi!");loadChatsList();}
-      else toast("❌ Xatolik",'bad');
-    }catch{toast("✅ Chat o'chirildi!");loadChatsList();}
+      const data=await r.json().catch(()=>({}));
+      if(r.ok && data.success){ toast("✅ Chat o'chirildi!"); }
+      else { toast("❌ O'chirib bo'lmadi. server_endpoints_v2.js ni qo'shing",'bad'); }
+    }catch{ toast("⚠️ Tarmoq xatosi",'bad'); }
+    loadChatsList();
   });
 }
 let _sending=false;
