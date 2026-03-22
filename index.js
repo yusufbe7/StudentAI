@@ -1,14 +1,11 @@
 'use strict';
 
-// ============================================================
-// MODULLAR
-// ============================================================
 const { Telegraf, Markup } = require('telegraf');
 const LocalSession = require('telegraf-session-local');
-const fs = require('fs');
+const fs   = require('fs');
 const path = require('path');
 const express = require('express');
-const cron = require('node-cron');
+const cron    = require('node-cron');
 
 // ============================================================
 // SOZLAMALAR
@@ -17,12 +14,9 @@ const BOT_TOKEN = process.env.BOT_TOKEN;
 const ADMIN_ID  = parseInt(process.env.ADMIN_ID);
 const PORT      = process.env.PORT || 3000;
 
-// ✅ TUZATILDI: Ikkita kanal — majburiy obunacha
 const REQUIRED_CHANNELS = [
-    // { id: '@Doniyorbeksblog', name: `Doniyorbek's blog`,  link: 'https://t.me/Doniyorbeksblog' },
-    { id: '@yusufbe_dev',   name: 'Yusufbe Dev',    link: 'https://t.me/yusufbe_dev'   },
-    { id: '@student_aitex',   name: 'AI Simulyator News',    link: 'https://t.me/student_aitex'   },
-
+    { id: '@yusufbe_dev',   name: 'Yusufbe Dev',        link: 'https://t.me/yusufbe_dev'   },
+    { id: '@student_aitex', name: 'AI Simulyator News', link: 'https://t.me/student_aitex' },
 ];
 
 if (!BOT_TOKEN) throw new Error("BOT_TOKEN env o'zgaruvchisi topilmadi!");
@@ -35,16 +29,20 @@ const DATA_DIR = fs.existsSync('/data') ? '/data' : path.join(__dirname, 'data')
 if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
 
 const PATHS = {
-    db:         path.join(DATA_DIR, 'ranking_db.json'),
-    settings:   path.join(DATA_DIR, 'settings.json'),
-    vip:        path.join(DATA_DIR, 'vip_users.json'),
-    session:    path.join(DATA_DIR, 'session.json'),
-    subjects:   path.join(__dirname, 'subjects.json'),
-    customQ:    path.join(DATA_DIR, 'custom_questions.json'),
-    photos:     path.join(DATA_DIR, 'user_photos.json'),   // ✅ YANGI: Foydalanuvchi rasmlari
-    sessions:   path.join(DATA_DIR, 'test_sessions.json'),  // ✅ YANGI: Test sessiyalari (activity feed)
-    follows:    path.join(DATA_DIR, 'follows.json'),         // ✅ YANGI: Follow tizimi
+    db:       path.join(DATA_DIR, 'ranking_db.json'),
+    settings: path.join(DATA_DIR, 'settings.json'),
+    vip:      path.join(DATA_DIR, 'vip_users.json'),
+    session:  path.join(DATA_DIR, 'session.json'),
+    subjects: path.join(__dirname, 'subjects.json'),
+    customQ:  path.join(DATA_DIR, 'custom_questions.json'),
+    photos:   path.join(DATA_DIR, 'user_photos.json'),
+    sessions: path.join(DATA_DIR, 'test_sessions.json'),
+    follows:  path.join(DATA_DIR, 'follows.json'),
 };
+
+const CHAT_MSGS_PATH  = path.join(DATA_DIR, 'chat_messages.json');
+const WEB_SCORES_PATH = path.join(DATA_DIR, 'web_scores.json');
+const WEB_USERS_PATH  = path.join(DATA_DIR, 'web_users.json');
 
 // ============================================================
 // BOT VA APP
@@ -52,52 +50,50 @@ const PATHS = {
 const bot = new Telegraf(BOT_TOKEN);
 const app = express();
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.json({ limit: '10mb' })); // ✅ rasm uchun limit oshirildi
+app.use(express.json({ limit: '10mb' }));
 
 // ============================================================
-// MA'LUMOTLAR BAZASI
+// MA'LUMOTLAR BAZASI — yagona funksiyalar
 // ============================================================
 function readJSON(filePath, defaultValue) {
     try {
-        if (!fs.existsSync(filePath)) {
-            fs.writeFileSync(filePath, JSON.stringify(defaultValue, null, 2));
-            return defaultValue;
-        }
+        if (!fs.existsSync(filePath)) { fs.writeFileSync(filePath, JSON.stringify(defaultValue, null, 2)); return defaultValue; }
         return JSON.parse(fs.readFileSync(filePath, 'utf8'));
-    } catch (err) {
-        console.error(`[DB] ${filePath} o'qishda xato:`, err.message);
-        return defaultValue;
-    }
+    } catch (err) { console.error(`[DB] ${filePath}:`, err.message); return defaultValue; }
 }
 function writeJSON(filePath, data) {
     try { fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf8'); }
-    catch (err) { console.error(`[DB] ${filePath} yozishda xato:`, err.message); }
+    catch (err) { console.error(`[DB] write ${filePath}:`, err.message); }
 }
 
-const getDb        = ()  => readJSON(PATHS.db, { users: {}, settings: {} });
+const getDb        = () => readJSON(PATHS.db, { users: {}, settings: {} });
 const saveDb       = (d) => writeJSON(PATHS.db, d);
-const getSettings  = ()  => readJSON(PATHS.settings, { timeLimit: 30 });
+const getSettings  = () => readJSON(PATHS.settings, { timeLimit: 30 });
 const saveSettings = (s) => writeJSON(PATHS.settings, s);
-
-// ✅ YANGI: Rasm bazasini boshqarish
-const getPhotos    = ()  => readJSON(PATHS.photos, {});
+const getPhotos    = () => readJSON(PATHS.photos, {});
 const savePhotos   = (d) => writeJSON(PATHS.photos, d);
-const getSessions  = ()  => readJSON(PATHS.sessions, []);
+const getSessions  = () => readJSON(PATHS.sessions, []);
 const saveSessions = (d) => writeJSON(PATHS.sessions, d);
-const getFollows   = ()  => readJSON(PATHS.follows, {});
+const getFollows   = () => readJSON(PATHS.follows, {});
 const saveFollows  = (d) => writeJSON(PATHS.follows, d);
+const getChatMsgs  = () => readJSON(CHAT_MSGS_PATH, {});
+const saveChatMsgs = (d) => writeJSON(CHAT_MSGS_PATH, d);
+const getWebScores = () => readJSON(WEB_SCORES_PATH, {});
+const saveWebScores = (d) => writeJSON(WEB_SCORES_PATH, d);
+const getWebUsers  = () => readJSON(WEB_USERS_PATH, {});
+const saveWebUsers = (d) => writeJSON(WEB_USERS_PATH, d);
 
 // ============================================================
 // XOTIRA
 // ============================================================
-let SUBJECTS      = readJSON(PATHS.subjects, {});
-const customQ     = readJSON(PATHS.customQ, null);
+let SUBJECTS    = readJSON(PATHS.subjects, {});
+const customQ   = readJSON(PATHS.customQ, null);
 if (customQ) Object.assign(SUBJECTS, customQ);
 
-let vipUsers      = readJSON(PATHS.vip, []);
-let botSettings   = getSettings();
+let vipUsers    = readJSON(PATHS.vip, []);
+let botSettings = getSettings();
 let isBotPaidMode = false;
-const timers      = {};
+const timers    = {};
 
 console.log(`✅ Savollar bazasi: ${Object.keys(SUBJECTS).length} ta fan`);
 
@@ -119,11 +115,15 @@ function getProgressBar(current, total) {
 }
 
 const shuffle = (arr) => [...arr].sort(() => Math.random() - 0.5);
-
 function saveVip() { writeJSON(PATHS.vip, vipUsers); }
 
+// ✅ Yagona chatId funksiyasi
+function chatId(n1, n2) {
+    return [n1.toLowerCase().trim(), n2.toLowerCase().trim()].sort().join('__CHAT__');
+}
+
 const FAKE_NAMES = [
-    'ismsiz','ismsz','ism yoq','ism yo\'q','ism kiritilmagan','nomalum',"noma'lum",
+    'ismsiz','ismsz','ism yoq',"ism yo'q",'ism kiritilmagan','nomalum',"noma'lum",
     'нет имени','без имени','noname','no name','anonymous','anonimus','anonim',
     'name','ism','ismi','фамилия','имя','ismi yoq','unknown','test','testt',
 ];
@@ -132,7 +132,7 @@ function isValidName(name) {
     if (!name || name.trim().length < 3) return false;
     const lower = name.trim().toLowerCase();
     if (/^\d+$/.test(lower)) return false;
-    if (/^[^a-zA-Zа-яА-ЯёЁa-zA-ZÀ-ÿ]+$/.test(lower)) return false;
+    if (/^[^a-zA-Zа-яА-ЯёЁÀ-ÿ]+$/.test(lower)) return false;
     if (FAKE_NAMES.some(fake => lower.includes(fake))) return false;
     return true;
 }
@@ -143,20 +143,15 @@ function getLeaderboard(requesterId = null) {
         .filter(u => u && u.name && isValidName(u.name) && (u.score || 0) > 0)
         .sort((a, b) => (b.score || 0) - (a.score || 0))
         .slice(0, 10);
-
     if (!sorted.length) return '🏆 Hozircha reytingda hech kim yo\'q.';
-
     const isReqAdmin = requesterId === ADMIN_ID;
     let res = '🏆 <b>TOP 10 REYTING</b>\n\n';
-    const medals = ['🥇', '🥈', '🥉'];
-
+    const medals = ['🥇','🥈','🥉'];
     sorted.forEach((u, i) => {
         const medal = medals[i] || '🔹';
-        const name  = escapeHTML(u.name.trim());
-        const score = parseFloat(u.score || 0).toFixed(1);
-        const link  = (isReqAdmin && u.username && u.username !== 'Lichka yopiq')
+        const link = (isReqAdmin && u.username && u.username !== 'Lichka yopiq')
             ? ` (<code>${escapeHTML(u.username)}</code>)` : '';
-        res += `${medal} <b>${name}</b>${link} — <b>${score}</b> ball\n`;
+        res += `${medal} <b>${escapeHTML(u.name.trim())}</b>${link} — <b>${parseFloat(u.score||0).toFixed(1)}</b> ball\n`;
     });
     return res;
 }
@@ -165,10 +160,8 @@ async function checkSubscription(ctx) {
     for (const ch of REQUIRED_CHANNELS) {
         try {
             const m = await ctx.telegram.getChatMember(ch.id, ctx.from.id);
-            if (['left', 'kicked'].includes(m.status)) return false;
-        } catch {
-            return false;
-        }
+            if (['left','kicked'].includes(m.status)) return false;
+        } catch { return false; }
     }
     return true;
 }
@@ -178,22 +171,19 @@ async function getSubKeyboard(ctx) {
     for (const ch of REQUIRED_CHANNELS) {
         try {
             const m = await ctx.telegram.getChatMember(ch.id, ctx.from.id);
-            if (['left', 'kicked'].includes(m.status)) {
-                buttons.push([Markup.button.url(`📢 ${ch.name}`, ch.link)]);
-            }
-        } catch {
-            buttons.push([Markup.button.url(`📢 ${ch.name}`, ch.link)]);
-        }
+            if (['left','kicked'].includes(m.status)) buttons.push([Markup.button.url(`📢 ${ch.name}`, ch.link)]);
+        } catch { buttons.push([Markup.button.url(`📢 ${ch.name}`, ch.link)]); }
     }
-    buttons.push([Markup.button.callback('✅ Tekshirish', 'check_sub')]);
+    buttons.push([Markup.button.callback('✅ Tekshirish','check_sub')]);
     return Markup.inlineKeyboard(buttons);
 }
 
+// ✅ TO'G'RI: user.score ga yozadi (user.scores emas!)
 function updateGlobalScore(userId, name, username, score, totalInTest, wrongCount, subjectKey) {
     try {
         const db = getDb();
         if (!db.users[userId]) {
-            db.users[userId] = { name: name || 'Foydalanuvchi', username: username || 'Lichka yopiq', score: 0, totalTests: 0, totalCorrect: 0, totalWrong: 0, subjects: {} };
+            db.users[userId] = { name: name||'Foydalanuvchi', username: username||'Lichka yopiq', score:0, totalTests:0, totalCorrect:0, totalWrong:0, subjects:{} };
         }
         const u = db.users[userId];
         u.totalTests   = (u.totalTests   || 0) + 1;
@@ -202,15 +192,13 @@ function updateGlobalScore(userId, name, username, score, totalInTest, wrongCoun
         u.totalWrong   = (u.totalWrong   || 0) + (wrongCount || 0);
         if (name && isValidName(name)) u.name = name;
         if (username) u.username = username;
-
         if (subjectKey) {
             if (!u.subjects) u.subjects = {};
-            if (!u.subjects[subjectKey]) u.subjects[subjectKey] = { tests: 0, correct: 0, wrong: 0 };
-            u.subjects[subjectKey].tests   = (u.subjects[subjectKey].tests   || 0) + 1;
-            u.subjects[subjectKey].correct = (u.subjects[subjectKey].correct || 0) + score;
-            u.subjects[subjectKey].wrong   = (u.subjects[subjectKey].wrong   || 0) + (wrongCount || 0);
+            if (!u.subjects[subjectKey]) u.subjects[subjectKey] = { tests:0, correct:0, wrong:0 };
+            u.subjects[subjectKey].tests++;
+            u.subjects[subjectKey].correct += score;
+            u.subjects[subjectKey].wrong   += (wrongCount || 0);
         }
-
         saveDb(db);
     } catch (err) { console.error('[Score]', err.message); }
 }
@@ -222,23 +210,22 @@ function prepareTournamentQuestions(count) {
 }
 
 // ============================================================
-// MENYU FUNKSIYALARI
+// MENYU
 // ============================================================
-
 function adminMainKeyboard(db) {
-    const s         = db.settings || {};
+    const s = db.settings || {};
     const statusBtn = s.isMaintenance ? '🟢 Botni Yoqish' : "🛑 Botni To'xtatish";
-    const turboBtn  = s.turboMode     ? "🚀 Turbo (O'chirish)" : '🚀 Turbo (Yoqish)';
-    const tl        = botSettings?.timeLimit || 30;
+    const turboBtn  = s.turboMode ? "🚀 Turbo (O'chirish)" : '🚀 Turbo (Yoqish)';
+    const tl = botSettings?.timeLimit || 30;
     return Markup.keyboard([
-        ['💰 Pullik versiya', '🆓 Bepul versiya'],
-        ['🏆 Haftalik musobaqa', '🚀 Musobaqani start berish'],
-        ['📢 Musobaqa natijalari', '👥 Musobaqani boshqarish'],
+        ['💰 Pullik versiya','🆓 Bepul versiya'],
+        ['🏆 Haftalik musobaqa','🚀 Musobaqani start berish'],
+        ['📢 Musobaqa natijalari','👥 Musobaqani boshqarish'],
         ['📊 Statistika', statusBtn],
         [turboBtn, `⏱ Vaqt: ${tl}s`],
-        ['➕ Yangi fan qoshish', "🗑 Botni Restart qilish"],
-        ['🧹 Reytingni tozalash', '📣 Xabar tarqatish'],
-        ["🎭 Sohta ball qo'shish", '⬅️ Orqaga (Fanlar)'],
+        ['➕ Yangi fan qoshish',"🗑 Botni Restart qilish"],
+        ['🧹 Reytingni tozalash','📣 Xabar tarqatish'],
+        ["🎭 Sohta ball qo'shish",'⬅️ Orqaga (Fanlar)'],
     ]).resize();
 }
 
@@ -248,45 +235,24 @@ function showSubjectMenu(ctx) {
         const userId = ctx.from.id;
         const user   = db.users[userId];
         const tour   = db.tournament;
-
-        if (!user || !user.isRegistered) {
-            return ctx.reply("⚠️ Iltimos, avval /start bosing va ro'yxatdan o'ting.");
-        }
-
+        if (!user || !user.isRegistered) return ctx.reply("⚠️ Iltimos, avval /start bosing va ro'yxatdan o'ting.");
         const yonalish = user.yonalish || '';
-        let keyboard   = [];
-
+        let keyboard = [];
         if (yonalish === 'Dasturiy Injiniring') {
-            keyboard = [
-                ['📝 Akademik yozuv', '📜 Tarix'],
-                ['➕ Matematika', '🧲 Fizika'],
-                ['💻 Dasturlash 1', '🇬🇧 Perfect English'],
-            ];
-        } else if (['Kiberxavfsizlik', "Sun'iy intelekt"].includes(yonalish)) {
-            keyboard = [
-                ['🧲 Fizika', '📜 Tarix'],
-                ['📝 Akademik yozuv', '➕ Matematika'],
-                ['🇬🇧 Perfect English', '💻 Dasturlash 1'],
-            ];
+            keyboard = [['📝 Akademik yozuv','📜 Tarix'],['➕ Matematika','🧲 Fizika'],['💻 Dasturlash 1','🇬🇧 Perfect English']];
+        } else if (['Kiberxavfsizlik',"Sun'iy intelekt"].includes(yonalish)) {
+            keyboard = [['🧲 Fizika','📜 Tarix'],['📝 Akademik yozuv','➕ Matematika'],['🇬🇧 Perfect English','💻 Dasturlash 1']];
         } else {
-            keyboard = [
-                ['📝 Akademik yozuv', '📜 Tarix'],
-                ['➕ Matematika', '🧲 Fizika'],
-            ];
+            keyboard = [['📝 Akademik yozuv','📜 Tarix'],['➕ Matematika','🧲 Fizika']];
         }
-
-        if (tour?.isActive && !user.tourFinished) {
-            keyboard.unshift(['🏆 Xalqaro test musobaqa']);
-        }
+        if (tour?.isActive && !user.tourFinished) keyboard.unshift(['🏆 Xalqaro test musobaqa']);
         if (db.settings?.turboMode) keyboard.push(['🚀 TURBO YODLASH']);
-        keyboard.push(['📊 Reyting', '👤 Profil']);
+        keyboard.push(['📊 Reyting','👤 Profil']);
         keyboard.push(['⚙️ Sozlamalar']);
-
-        const text = `👤 <b>Foydalanuvchi:</b> ${escapeHTML(user.name || 'Talaba')}\n` +
-                     `🎓 <b>Yo'nalish:</b> ${escapeHTML(yonalish || "Noma'lum")}\n\n` +
-                     `Fanni tanlang:`;
-
-        return ctx.replyWithHTML(text, Markup.keyboard(keyboard).resize());
+        return ctx.replyWithHTML(
+            `👤 <b>Foydalanuvchi:</b> ${escapeHTML(user.name||'Talaba')}\n🎓 <b>Yo'nalish:</b> ${escapeHTML(yonalish||"Noma'lum")}\n\nFanni tanlang:`,
+            Markup.keyboard(keyboard).resize()
+        );
     } catch (err) {
         console.error('[Menu]', err.message);
         return ctx.reply('❌ Menyuni yuklashda xatolik. Qaytadan /start bosing.');
@@ -294,29 +260,15 @@ function showSubjectMenu(ctx) {
 }
 
 async function showProfile(ctx) {
-    const db     = getDb();
+    const db = getDb();
     const userId = ctx.from.id;
-    const user   = db.users[userId];
-
+    const user = db.users[userId];
     if (!user) return ctx.reply('Avval test yechib ko\'ring!');
-
-    const usersArr  = Object.values(db.users).sort((a, b) => (b.score || 0) - (a.score || 0));
-    const rank      = usersArr.findIndex(u => String(u.id) === String(userId)) + 1;
+    const usersArr = Object.values(db.users).sort((a,b) => (b.score||0) - (a.score||0));
+    const rank = usersArr.findIndex(u => String(u.id) === String(userId)) + 1;
     const vipStatus = (user.isVip || vipUsers.includes(userId)) ? '💎 VIP' : '🆓 Oddiy';
-
-    let msg = `👤 <b>SIZNING PROFILINGIZ</b>\n\n` +
-              `🆔 <b>ID:</b> <code>${userId}</code>\n` +
-              `👤 <b>Ism:</b> ${escapeHTML(user.name || 'Kiritilmagan')}\n` +
-              `🎓 <b>OTM:</b> ${escapeHTML(user.univ || '—')}\n` +
-              `📚 <b>Kurs:</b> ${escapeHTML(user.kurs || '—')}\n` +
-              `🏆 <b>Umumiy ball:</b> ${parseFloat(user.score || 0).toFixed(1)}\n` +
-              `📈 <b>Reyting o'rni:</b> ${rank > 0 ? rank + '-o\'rin' : '—'} (${usersArr.length} tadan)\n` +
-              `⭐ <b>Status:</b> ${vipStatus}\n\n`;
-
-    msg += rank <= 3 ? '🌟 Siz TOP-3 talaba siz! Zo\'r!' :
-           rank <= 10 ? '🚀 TOP-10 dasiiz! Davom eting!' :
-           '💪 TOP-10 ga kirish uchun ko\'proq mashq qiling!';
-
+    let msg = `👤 <b>SIZNING PROFILINGIZ</b>\n\n🆔 <b>ID:</b> <code>${userId}</code>\n👤 <b>Ism:</b> ${escapeHTML(user.name||'Kiritilmagan')}\n🎓 <b>OTM:</b> ${escapeHTML(user.univ||'—')}\n📚 <b>Kurs:</b> ${escapeHTML(user.kurs||'—')}\n🏆 <b>Umumiy ball:</b> ${parseFloat(user.score||0).toFixed(1)}\n📈 <b>Reyting o'rni:</b> ${rank>0?rank+'-o\'rin':'—'} (${usersArr.length} tadan)\n⭐ <b>Status:</b> ${vipStatus}\n\n`;
+    msg += rank<=3 ? '🌟 Siz TOP-3 talaba siz! Zo\'r!' : rank<=10 ? '🚀 TOP-10 dasiiz! Davom eting!' : '💪 TOP-10 ga kirish uchun ko\'proq mashq qiling!';
     return ctx.replyWithHTML(msg);
 }
 
@@ -324,266 +276,170 @@ async function showProfile(ctx) {
 // TEST YUBORISH
 // ============================================================
 async function sendQuestion(ctx, isNew = false) {
-    const s      = ctx.session;
+    const s = ctx.session;
     const userId = ctx.from.id;
     if (timers[userId]) clearTimeout(timers[userId]);
 
     if (!s.activeList || s.index >= s.activeList.length) {
         const wrongCount = (s.wrongs || []).length;
-        if (!s.isTurbo) updateGlobalScore(
-            userId, s.userName, ctx.from.username || 'Lichka yopiq',
-            s.score, s.activeList?.length || 0, wrongCount, s.currentSubject || null
-        );
-
-        const total   = s.activeList?.length || 1;
+        if (!s.isTurbo) updateGlobalScore(userId, s.userName, ctx.from.username||'Lichka yopiq', s.score, s.activeList?.length||0, wrongCount, s.currentSubject||null);
+        const total = s.activeList?.length || 1;
         const percent = ((s.score / total) * 100).toFixed(1);
-
         let resultMsg = s.isTurbo
             ? '🏁 <b>Turbo yodlash yakunlandi!</b>'
-            : `🏁 <b>Test yakunlandi, ${escapeHTML(s.userName)}!</b>\n\n` +
-              `✅ To'g'ri javob: <b>${s.score} ta</b>\n` +
-              `❌ Xato javob: <b>${(s.wrongs||[]).length} ta</b>\n` +
-              `📊 Natija: <b>${percent}%</b>\n_________________________\n\n`;
-
+            : `🏁 <b>Test yakunlandi, ${escapeHTML(s.userName)}!</b>\n\n✅ To'g'ri: <b>${s.score} ta</b>\n❌ Xato: <b>${(s.wrongs||[]).length} ta</b>\n📊 Natija: <b>${percent}%</b>\n_________________________\n\n`;
         if (!s.isTurbo && s.wrongs?.length > 0) {
             resultMsg += `⚠️ <b>Xatolar tahlili:</b>\n\n`;
             for (let i = 0; i < s.wrongs.length; i++) {
                 const x = s.wrongs[i];
                 const block = `<b>${i+1}.</b> ${escapeHTML(x.q)}\n❌ Siz: <s>${escapeHTML(x.userAnswer||'Vaqt tugadi')}</s>\n✅ To'g'ri: <u>${escapeHTML(x.a)}</u>\n_________________________\n\n`;
-                if ((resultMsg + block).length > 3900) { resultMsg += '...(qolgan xatolar sig\'madi)'; break; }
+                if ((resultMsg+block).length > 3900) { resultMsg += '...(qolgan xatolar sig\'madi)'; break; }
                 resultMsg += block;
             }
-        } else if (!s.isTurbo) {
-            resultMsg += '🌟 <b>Ajoyib! Hech qanday xato qilmadingiz!</b>';
-        }
-
+        } else if (!s.isTurbo) resultMsg += '🌟 <b>Ajoyib! Hech qanday xato qilmadingiz!</b>';
         s.isTurbo = false;
-        try { await ctx.replyWithHTML(resultMsg, Markup.keyboard([["⚡️ Blitz (25)", "📝 To'liq test"], ['⬅️ Orqaga (Fanlar)']]).resize()); }
-        catch  { await ctx.reply(`Test yakunlandi! To'g'ri: ${s.score}, Xato: ${(s.wrongs||[]).length}`); }
+        try { await ctx.replyWithHTML(resultMsg, Markup.keyboard([["⚡️ Blitz (25)","📝 To'liq test"],['⬅️ Orqaga (Fanlar)']]).resize()); }
+        catch { await ctx.reply(`Test yakunlandi! To'g'ri: ${s.score}, Xato: ${(s.wrongs||[]).length}`); }
         return;
     }
 
     const qData = s.activeList[s.index];
     if (!qData?.q) { s.index++; return sendQuestion(ctx, true); }
 
-    const safe      = escapeHTML(qData.q);
-    const progress  = getProgressBar(s.index + 1, s.activeList.length);
-    const imagePath = qData.image ? path.join(__dirname, 'images', qData.image) : null;
+    const safe = escapeHTML(qData.q);
+    const progress = getProgressBar(s.index+1, s.activeList.length);
+    const imagePath = qData.image ? path.join(__dirname,'images',qData.image) : null;
     const hasImage  = imagePath && fs.existsSync(imagePath);
 
     if (s.isTurbo) {
-        const turboText =
-            `🚀 <b>TURBO YODLASH</b>\n📊 [${progress}]\n🔢 Savol: <b>${s.index+1}/${s.activeList.length}</b>\n_________________________\n\n❓ <b>${safe}</b>\n\n✅ <b>TO'G'RI JAVOB:</b>\n<code>${escapeHTML(qData.a)}</code>\n_________________________\n👇 Keyingi savol:`;
-        const turboBtn = Markup.inlineKeyboard([[Markup.button.callback('Keyingi savol ➡️', 'next_turbo_q')], [Markup.button.callback("🛑 To'xtatish", 'stop_test')]]);
-        if (hasImage) return ctx.replyWithPhoto({ source: imagePath }, { caption: turboText, parse_mode: 'HTML', ...turboBtn });
-        try { return isNew ? ctx.replyWithHTML(turboText, turboBtn) : ctx.editMessageText(turboText, { parse_mode: 'HTML', ...turboBtn }); }
-        catch { return ctx.replyWithHTML(turboText, turboBtn); }
+        const turboText = `🚀 <b>TURBO YODLASH</b>\n📊 [${progress}]\n🔢 Savol: <b>${s.index+1}/${s.activeList.length}</b>\n_________________________\n\n❓ <b>${safe}</b>\n\n✅ <b>TO'G'RI JAVOB:</b>\n<code>${escapeHTML(qData.a)}</code>\n_________________________\n👇 Keyingi savol:`;
+        const turboBtn = Markup.inlineKeyboard([[Markup.button.callback('Keyingi savol ➡️','next_turbo_q')],[Markup.button.callback("🛑 To'xtatish",'stop_test')]]);
+        if (hasImage) return ctx.replyWithPhoto({source:imagePath},{caption:turboText,parse_mode:'HTML',...turboBtn});
+        try { return isNew ? ctx.replyWithHTML(turboText,turboBtn) : ctx.editMessageText(turboText,{parse_mode:'HTML',...turboBtn}); }
+        catch { return ctx.replyWithHTML(turboText,turboBtn); }
     }
 
-    const timeLimit    = s.userTimeLimit || botSettings.timeLimit || 30;
-    s.currentOptions   = shuffle([...qData.options]);
-    const labels       = ['A', 'B', 'C', 'D'];
-
+    const timeLimit = s.userTimeLimit || botSettings.timeLimit || 30;
+    s.currentOptions = shuffle([...qData.options]);
+    const labels = ['A','B','C','D'];
     let text = `📊 Progress: [${progress}]\n🔢 Savol: <b>${s.index+1}/${s.activeList.length}</b>\n⏱ <b>VAQT: ${timeLimit}s</b>\n\n❓ <b>${safe}</b>\n\n`;
     s.currentOptions.forEach((opt, i) => { text += `<b>${labels[i]})</b> ${escapeHTML(opt)}\n\n`; });
-
     const inlineBtn = Markup.inlineKeyboard([
-        s.currentOptions.map((_, i) => Markup.button.callback(labels[i], `ans_${i}`)),
-        [Markup.button.callback('💡 Tushuntirish', 'show_explanation')],
-        [Markup.button.callback("🛑 Testni to'xtatish", 'stop_test')],
+        s.currentOptions.map((_,i) => Markup.button.callback(labels[i],`ans_${i}`)),
+        [Markup.button.callback('💡 Tushuntirish','show_explanation')],
+        [Markup.button.callback("🛑 Testni to'xtatish",'stop_test')],
     ]);
-
-    if (hasImage) {
-        await ctx.replyWithPhoto({ source: imagePath }, { caption: text, parse_mode: 'HTML', ...inlineBtn });
-    } else {
-        try { isNew ? await ctx.replyWithHTML(text, inlineBtn) : await ctx.editMessageText(text, { parse_mode: 'HTML', ...inlineBtn }); }
-        catch { await ctx.replyWithHTML(text, inlineBtn); }
+    if (hasImage) { await ctx.replyWithPhoto({source:imagePath},{caption:text,parse_mode:'HTML',...inlineBtn}); }
+    else {
+        try { isNew ? await ctx.replyWithHTML(text,inlineBtn) : await ctx.editMessageText(text,{parse_mode:'HTML',...inlineBtn}); }
+        catch { await ctx.replyWithHTML(text,inlineBtn); }
     }
-
     timers[userId] = setTimeout(async () => {
         if (ctx.session?.index === s.index && !ctx.session?.isTurbo) {
-            ctx.session.wrongs.push({ ...qData, userAnswer: 'Vaqt tugadi ⏰' });
+            ctx.session.wrongs.push({...qData, userAnswer:'Vaqt tugadi ⏰'});
             ctx.session.index++;
-            await ctx.replyWithHTML('⏰ <b>VAQT TUGADI!</b>').catch(() => {});
+            await ctx.replyWithHTML('⏰ <b>VAQT TUGADI!</b>').catch(()=>{});
             sendQuestion(ctx, true);
         }
     }, timeLimit * 1000);
 }
 
 // ============================================================
-// MUSOBAQA GLOBAL TAYMER — har bir foydalanuvchi uchun alohida
+// MUSOBAQA
 // ============================================================
-const tourGlobalTimers = {}; // userId → globalTimeout
+const tourGlobalTimers = {};
 
 function clearTourTimers(userId) {
-    if (timers[userId])            { clearTimeout(timers[userId]);            delete timers[userId]; }
-    if (tourGlobalTimers[userId])  { clearTimeout(tourGlobalTimers[userId]);  delete tourGlobalTimers[userId]; }
+    if (timers[userId])           { clearTimeout(timers[userId]);           delete timers[userId]; }
+    if (tourGlobalTimers[userId]) { clearTimeout(tourGlobalTimers[userId]); delete tourGlobalTimers[userId]; }
 }
 
-// Musobaqa yakunlash — umumiy vaqt tugaganda chaqiriladi
 async function endTourByTimeout(userId, telegram) {
     clearTourTimers(userId);
     const db = getDb();
     if (!db.users[userId]) return;
-
     const score = db.users[userId].tourScore || 0;
     db.users[userId].tourFinished = true;
     saveDb(db);
-
     try {
         await telegram.sendMessage(userId,
-            `⏰ <b>MUSOBAQA VAQTI TUGADI!</b>\n\n` +
-            `👤 Ishtirokchi: <b>${escapeHTML(db.users[userId].name || 'Foydalanuvchi')}</b>\n` +
-            `✅ To'g'ri javoblar: <b>${score} ta</b>\n\n` +
-            `🏆 Natijangiz saqlandi. G'oliblarni kuting!`,
-            { parse_mode: 'HTML' }
+            `⏰ <b>MUSOBAQA VAQTI TUGADI!</b>\n\n👤 Ishtirokchi: <b>${escapeHTML(db.users[userId].name||'Foydalanuvchi')}</b>\n✅ To'g'ri javoblar: <b>${score} ta</b>\n\n🏆 Natijangiz saqlandi.`,
+            { parse_mode:'HTML' }
         );
     } catch {}
 }
 
 async function sendTourQuestion(ctx, isNew = false) {
-    const s      = ctx.session;
+    const s = ctx.session;
     const userId = ctx.from.id;
-    const db     = getDb();
-    const tour   = db.tournament;
-
-    // Faqat savol timeoutini tozalash (global taymer saqlanadi)
+    const db = getDb();
+    const tour = db.tournament;
     if (timers[userId]) { clearTimeout(timers[userId]); delete timers[userId]; }
-
-    // ── Umumiy vaqt tugaganmi? ──
     const isTimeOut = s.tourEndTime && Date.now() >= s.tourEndTime;
-
-    // ── Musobaqa tugash shartlari ──
     if (!tour || s.tourIndex >= tour.count || isTimeOut) {
         clearTourTimers(userId);
-
         const finalScore = s.tourScore || 0;
-
-        // Bazaga saqlash
-        if (db.users[userId]) {
-            db.users[userId].tourScore    = finalScore;
-            db.users[userId].tourFinished = true;
-            saveDb(db);
-        }
-
+        if (db.users[userId]) { db.users[userId].tourScore = finalScore; db.users[userId].tourFinished = true; saveDb(db); }
         const title = isTimeOut ? '⏰ <b>Vaqtingiz tugadi!</b>' : '🏁 <b>Musobaqa yakunlandi!</b>';
-        const sub   = isTimeOut
-            ? 'Ajratilgan umumiy vaqt yakunlandi.'
-            : 'Barcha savollarga javob berdingiz.';
-
-        const totalQ   = tour?.count || s.tourIndex || 0;
-        const percent  = totalQ > 0 ? ((finalScore / totalQ) * 100).toFixed(1) : '0.0';
-        const resultMsg =
-            `${title}\n\n${sub}\n\n` +
-            `👤 Ishtirokchi: <b>${escapeHTML(s.userName || 'Foydalanuvchi')}</b>\n` +
-            `✅ To'g'ri javoblar: <b>${finalScore} ta</b>\n` +
-            `📊 Natija: <b>${percent}%</b> (${finalScore}/${totalQ})\n\n` +
-            `🏆 Natijangiz saqlandi. G'oliblarni kuting!`;
-
+        const totalQ = tour?.count || s.tourIndex || 0;
+        const percent = totalQ > 0 ? ((finalScore/totalQ)*100).toFixed(1) : '0.0';
+        const resultMsg = `${title}\n\n${isTimeOut?'Ajratilgan umumiy vaqt yakunlandi.':'Barcha savollarga javob berdingiz.'}\n\n👤 Ishtirokchi: <b>${escapeHTML(s.userName||'Foydalanuvchi')}</b>\n✅ To'g'ri: <b>${finalScore} ta</b>\n📊 Natija: <b>${percent}%</b> (${finalScore}/${totalQ})\n\n🏆 Natijangiz saqlandi.`;
         try { await ctx.deleteMessage(); } catch {}
         await ctx.replyWithHTML(resultMsg);
         return showSubjectMenu(ctx);
     }
-
-    // ── Qolgan umumiy vaqtni hisoblash ──
     const remaining = Math.max(0, s.tourEndTime - Date.now());
-    const remMin    = Math.floor(remaining / 60000);
-    const remSec    = Math.floor((remaining % 60000) / 1000);
-    const timerStr  = `${String(remMin).padStart(2,'0')}:${String(remSec).padStart(2,'0')}`;
-
-    // ── Savol tayyorlash ──
+    const remMin = Math.floor(remaining/60000);
+    const remSec = Math.floor((remaining%60000)/1000);
     const qData = tour.questions[s.tourIndex];
     if (!qData) { s.tourIndex++; return sendTourQuestion(ctx, false); }
-
-    const progress       = getProgressBar(s.tourIndex + 1, tour.count);
-    s.currentOptions     = shuffle([...qData.options]);
-    const labels         = ['A', 'B', 'C', 'D'];
-
-    // Har savol uchun vaqt: qolgan vaqt 30s dan kam bo'lsa qolganini ko'rsatish
-    const perQSec    = Math.min(30, Math.max(1, Math.ceil(remaining / 1000)));
-    const perQStr    = perQSec < 30 ? `${perQSec}s (!)` : '30s';
-
-    let text =
-        `🏆 <b>MUSOBAQA REJIMI</b>\n` +
-        `⏱ <b>Umumiy vaqt: ${timerStr} qoldi</b>\n` +
-        `📊 Progress: [${progress}]\n` +
-        `🔢 Savol: <b>${s.tourIndex+1}/${tour.count}</b>\n` +
-        `⌛️ Bu savol uchun: <b>${perQStr}</b>\n` +
-        `_________________________\n\n` +
-        `❓ <b>${escapeHTML(qData.q)}</b>\n\n`;
+    const progress = getProgressBar(s.tourIndex+1, tour.count);
+    s.currentOptions = shuffle([...qData.options]);
+    const labels = ['A','B','C','D'];
+    const perQSec = Math.min(30, Math.max(1, Math.ceil(remaining/1000)));
+    let text = `🏆 <b>MUSOBAQA REJIMI</b>\n⏱ <b>Umumiy vaqt: ${String(remMin).padStart(2,'0')}:${String(remSec).padStart(2,'0')} qoldi</b>\n📊 Progress: [${progress}]\n🔢 Savol: <b>${s.tourIndex+1}/${tour.count}</b>\n⌛️ Bu savol uchun: <b>${perQSec<30?perQSec+'s (!)':'30s'}</b>\n_________________________\n\n❓ <b>${escapeHTML(qData.q)}</b>\n\n`;
     s.currentOptions.forEach((opt, i) => { text += `<b>${labels[i]})</b> ${escapeHTML(opt)}\n\n`; });
-
     const inlineBtn = Markup.inlineKeyboard([
-        s.currentOptions.map((_, i) => Markup.button.callback(labels[i], `tourans_${i}`)),
-        [Markup.button.callback('🛑 Chiqish', 'stop_tour')],
+        s.currentOptions.map((_,i) => Markup.button.callback(labels[i],`tourans_${i}`)),
+        [Markup.button.callback('🛑 Chiqish','stop_tour')],
     ]);
-
-    try {
-        isNew
-            ? await ctx.replyWithHTML(text, inlineBtn)
-            : await ctx.editMessageText(text, { parse_mode: 'HTML', ...inlineBtn });
-    } catch {
-        await ctx.replyWithHTML(text, inlineBtn);
-    }
-
-    // ── Savol timeout: 30s yoki qolgan vaqt (kichigi) ──
+    try { isNew ? await ctx.replyWithHTML(text,inlineBtn) : await ctx.editMessageText(text,{parse_mode:'HTML',...inlineBtn}); }
+    catch { await ctx.replyWithHTML(text,inlineBtn); }
     const questionTimeout = Math.min(30000, remaining);
-    if (questionTimeout <= 0) {
-        // Hoziroq tugadi
-        s.tourIndex = tour.count;
-        return sendTourQuestion(ctx, false);
-    }
-
+    if (questionTimeout <= 0) { s.tourIndex = tour.count; return sendTourQuestion(ctx, false); }
     timers[userId] = setTimeout(async () => {
-        // Foydalanuvchi javob bermadi — keyingi savolga o'tish
         if (ctx.session?.tourIndex === s.tourIndex) {
-            // Umumiy vaqt tugaganmi tekshirish
-            if (ctx.session.tourEndTime && Date.now() >= ctx.session.tourEndTime) {
-                ctx.session.tourIndex = tour.count; // tugat
-            } else {
-                ctx.session.tourIndex++;
-            }
+            if (ctx.session.tourEndTime && Date.now() >= ctx.session.tourEndTime) ctx.session.tourIndex = tour.count;
+            else ctx.session.tourIndex++;
             sendTourQuestion(ctx, false);
         }
     }, questionTimeout);
 }
 
 async function finalizeTournament(ctx) {
-    const db  = getDb();
+    const db = getDb();
     const tour = db.tournament;
     if (!tour?.participants?.length) return ctx.reply("❌ Ishtirokchilar ro'yxati bo'sh.");
-
     const leaderboard = tour.participants
-        .map(id => { const u = db.users[id]; return u ? { id, name: u.name || 'Foydalanuvchi', score: u.tourScore || 0 } : null; })
-        .filter(Boolean).sort((a, b) => b.score - a.score);
-
+        .map(id => { const u = db.users[id]; return u ? {id, name:u.name||'Foydalanuvchi', score:u.tourScore||0} : null; })
+        .filter(Boolean).sort((a,b) => b.score - a.score);
     if (!leaderboard.length) return ctx.reply('❌ Natijalar hisoblanmadi.');
-
     const medals = ['🥇','🥈','🥉'];
     let rankingMsg = `🏆 <b>MUSOBAQA NATIJALARI</b>\n📅 Sana: ${tour.date||'---'}\n_________________________\n\n`;
-    leaderboard.slice(0, 10).forEach((u, i) => {
-        rankingMsg += `${medals[i]||`${i+1}.`} <b>${escapeHTML(u.name)}</b> — ${u.score} ball\n`;
-    });
-
+    leaderboard.slice(0,10).forEach((u,i) => { rankingMsg += `${medals[i]||`${i+1}.`} <b>${escapeHTML(u.name)}</b> — ${u.score} ball\n`; });
     const winner = leaderboard[0];
-    if (winner?.score > 0) {
-        await ctx.telegram.sendMessage(winner.id, "🥳 <b>TABRIKLAYMIZ!</b>\n\nSiz 1-o'rinni egalladingiz! 🏆", { parse_mode: 'HTML' }).catch(() => {});
-    }
-
+    if (winner?.score > 0) await ctx.telegram.sendMessage(winner.id,"🥳 <b>TABRIKLAYMIZ!</b>\n\nSiz 1-o'rinni egalladingiz! 🏆",{parse_mode:'HTML'}).catch(()=>{});
     const chunkSize = 20;
     for (let i = 0; i < tour.participants.length; i += chunkSize) {
-        const chunk = tour.participants.slice(i, i + chunkSize);
-        await Promise.allSettled(chunk.map(async (uid) => {
+        const chunk = tour.participants.slice(i, i+chunkSize);
+        await Promise.allSettled(chunk.map(async uid => {
             try {
-                await ctx.telegram.sendMessage(uid, rankingMsg, { parse_mode: 'HTML' });
-                await ctx.telegram.sendMessage(uid, "🏁 Musobaqa yakunlandi. Asosiy menyudasiz:", {
-                    ...Markup.keyboard([['📝 Akademik yozuv', '📜 Tarix'], ['➕ Matematika', '📊 Reyting'], ['👤 Profil']]).resize()
-                });
+                await ctx.telegram.sendMessage(uid, rankingMsg, {parse_mode:'HTML'});
+                await ctx.telegram.sendMessage(uid,"🏁 Musobaqa yakunlandi. Asosiy menyudasiz:",{...Markup.keyboard([['📝 Akademik yozuv','📜 Tarix'],['➕ Matematika','📊 Reyting'],['👤 Profil']]).resize()});
             } catch {}
         }));
-        if (i + chunkSize < tour.participants.length) await new Promise(r => setTimeout(r, 1000));
+        if (i+chunkSize < tour.participants.length) await new Promise(r => setTimeout(r,1000));
     }
-
     db.tournament.isActive = false;
     saveDb(db);
     return ctx.replyWithHTML(`✅ Natijalar ${tour.participants.length} ta foydalanuvchiga yuborildi!\n\n${rankingMsg}`);
@@ -593,15 +449,11 @@ async function finalizeTournament(ctx) {
 // MIDDLEWARLAR
 // ============================================================
 bot.use((new LocalSession({ database: PATHS.session })).middleware());
-
 bot.use(async (ctx, next) => {
     const db = getDb();
-    if (db.settings?.isMaintenance && ctx.from?.id !== ADMIN_ID) {
-        return ctx.reply('🛠 Botda texnik ishlar olib borilmoqda. Tez orada qaytamiz!');
-    }
+    if (db.settings?.isMaintenance && ctx.from?.id !== ADMIN_ID) return ctx.reply('🛠 Botda texnik ishlar olib borilmoqda. Tez orada qaytamiz!');
     return next();
 });
-
 bot.use(async (ctx, next) => {
     if (ctx.message?.text === '/start') return next();
     if (ctx.callbackQuery) return next();
@@ -609,7 +461,7 @@ bot.use(async (ctx, next) => {
         const subscribed = await checkSubscription(ctx);
         if (!subscribed) {
             const keyboard = await getSubKeyboard(ctx);
-            return ctx.reply('⚠️ Botdan foydalanish uchun quyidagi kanallarga obuna bo\'ling!', keyboard).catch(() => {});
+            return ctx.reply('⚠️ Botdan foydalanish uchun quyidagi kanallarga obuna bo\'ling!', keyboard).catch(()=>{});
         }
     } catch (err) { console.error('[Sub check]', err.message); }
     return next();
@@ -619,52 +471,24 @@ bot.use(async (ctx, next) => {
 // /start
 // ============================================================
 bot.start(async (ctx) => {
-    const db     = getDb();
+    const db = getDb();
     const userId = ctx.from.id;
-    const user   = db.users[userId];
-
-    if (user?.isRegistered) {
-        await ctx.reply(`Xush kelibsiz, ${escapeHTML(user.name)}! 😊`);
-        return showSubjectMenu(ctx);
-    }
-
+    const user = db.users[userId];
+    if (user?.isRegistered) { await ctx.reply(`Xush kelibsiz, ${escapeHTML(user.name)}! 😊`); return showSubjectMenu(ctx); }
     if (!db.users[userId]) {
-        db.users[userId] = {
-            id: userId,
-            username: ctx.from.username || "Noma'lum",
-            name: '', univ: '', kurs: '', yonalish: '',
-            score: 0, totalTests: 0,
-            step: 'wait_name', isRegistered: false
-        };
-    } else {
-        db.users[userId].step = 'wait_name';
-        db.users[userId].isRegistered = false;
-    }
+        db.users[userId] = { id:userId, username:ctx.from.username||"Noma'lum", name:'', univ:'', kurs:'', yonalish:'', score:0, totalTests:0, step:'wait_name', isRegistered:false };
+    } else { db.users[userId].step = 'wait_name'; db.users[userId].isRegistered = false; }
     saveDb(db);
-
     const existingName = db.users[userId].name;
     if (existingName && isValidName(existingName)) {
-        return ctx.replyWithHTML(
-            `✨ <b>Assalomu alaykum!</b>\n\n` +
-            `Avvalgi ismingiz: <b>${escapeHTML(existingName)}</b>\n\n` +
-            `Ism va familiyangizni qayta kiriting (yoki xuddi shuni yozing):`,
-            Markup.removeKeyboard()
-        );
+        return ctx.replyWithHTML(`✨ <b>Assalomu alaykum!</b>\n\nAvvalgi ismingiz: <b>${escapeHTML(existingName)}</b>\n\nIsm va familiyangizni qayta kiriting:`, Markup.removeKeyboard());
     }
-
-    return ctx.replyWithHTML(
-        `✨ <b>Assalomu alaykum! Botga xush kelibsiz.</b>\n\nRo'yxatdan o'tish uchun ism va familiyangizni kiriting:`,
-        Markup.removeKeyboard()
-    );
+    return ctx.replyWithHTML(`✨ <b>Assalomu alaykum! Botga xush kelibsiz.</b>\n\nRo'yxatdan o'tish uchun ism va familiyangizni kiriting:`, Markup.removeKeyboard());
 });
 
-// ============================================================
-// /admin
-// ============================================================
 bot.command('admin', (ctx) => {
     if (!isAdmin(ctx.from.id)) return ctx.reply("❌ Ruxsat yo'q!");
-    const db = getDb();
-    return ctx.reply('🛠 <b>Admin Panel</b>', { parse_mode: 'HTML', ...adminMainKeyboard(db) });
+    return ctx.reply('🛠 <b>Admin Panel</b>', {parse_mode:'HTML', ...adminMainKeyboard(getDb())});
 });
 
 // ============================================================
@@ -672,392 +496,256 @@ bot.command('admin', (ctx) => {
 // ============================================================
 bot.action('check_sub', async (ctx) => {
     const subscribed = await checkSubscription(ctx);
-    if (subscribed) {
-        await ctx.answerCbQuery('✅ Rahmat! Botdan foydalanishingiz mumkin.');
-        await ctx.deleteMessage().catch(() => {});
-        return showSubjectMenu(ctx);
-    }
+    if (subscribed) { await ctx.answerCbQuery('✅ Rahmat!'); await ctx.deleteMessage().catch(()=>{}); return showSubjectMenu(ctx); }
     const keyboard = await getSubKeyboard(ctx);
-    await ctx.answerCbQuery("❌ Hali ham obuna bo'lmadingiz!", { show_alert: true });
-    return ctx.editMessageReplyMarkup(keyboard.reply_markup).catch(() => {});
+    await ctx.answerCbQuery("❌ Hali ham obuna bo'lmadingiz!", {show_alert:true});
+    return ctx.editMessageReplyMarkup(keyboard.reply_markup).catch(()=>{});
 });
 
 bot.action(/^ans_(\d+)$/, async (ctx) => {
-    const s      = ctx.session;
+    const s = ctx.session;
     const userId = ctx.from.id;
     if (!s?.activeList || s.index === undefined || !s.activeList[s.index]) {
         if (timers[userId]) clearTimeout(timers[userId]);
-        await ctx.answerCbQuery('⚠️ Sessiya tugagan.').catch(() => {});
+        await ctx.answerCbQuery('⚠️ Sessiya tugagan.').catch(()=>{});
         return ctx.reply('⚠️ Sessiya tugagan. /start bosing.');
     }
     if (timers[userId]) clearTimeout(timers[userId]);
-
-    const selIdx   = parseInt(ctx.match[1]);
+    const selIdx = parseInt(ctx.match[1]);
     const currentQ = s.activeList[s.index];
-    const labels   = ['A', 'B', 'C', 'D'];
-
+    const labels = ['A','B','C','D'];
     try {
         const userAnswer = s.currentOptions[selIdx];
-        if (userAnswer === currentQ.a) {
-            s.score++;
-            await ctx.answerCbQuery("✅ To'g'ri!");
-        } else {
-            s.wrongs.push({ ...currentQ, userAnswer });
+        if (userAnswer === currentQ.a) { s.score++; await ctx.answerCbQuery("✅ To'g'ri!"); }
+        else {
+            s.wrongs.push({...currentQ, userAnswer});
             const ci = s.currentOptions.indexOf(currentQ.a);
-            await ctx.answerCbQuery(`❌ Noto'g'ri!\nTo'g'ri: ${labels[ci]||'?'}) ${currentQ.a}`, { show_alert: true });
+            await ctx.answerCbQuery(`❌ Noto'g'ri!\nTo'g'ri: ${labels[ci]||'?'}) ${currentQ.a}`, {show_alert:true});
         }
         s.index++;
         return sendQuestion(ctx, false);
-    } catch (err) {
-        console.error('[ans]', err.message);
-        await ctx.answerCbQuery('Xatolik.').catch(() => {});
-    }
+    } catch (err) { console.error('[ans]', err.message); await ctx.answerCbQuery('Xatolik.').catch(()=>{}); }
 });
 
-bot.action('next_turbo_q', async (ctx) => {
-    if (ctx.session?.isTurbo) { ctx.session.index++; return sendQuestion(ctx, true); }
-    await ctx.answerCbQuery();
-});
-
-bot.action('stop_test', (ctx) => {
-    if (timers[ctx.from.id]) clearTimeout(timers[ctx.from.id]);
-    ctx.session.index = 999;
-    return showSubjectMenu(ctx);
-});
+bot.action('next_turbo_q', async (ctx) => { if (ctx.session?.isTurbo) { ctx.session.index++; return sendQuestion(ctx, true); } await ctx.answerCbQuery(); });
+bot.action('stop_test', (ctx) => { if (timers[ctx.from.id]) clearTimeout(timers[ctx.from.id]); ctx.session.index = 999; return showSubjectMenu(ctx); });
 
 bot.action('show_explanation', async (ctx) => {
-    const s      = ctx.session;
+    const s = ctx.session;
     const userId = ctx.from.id;
-    const db     = getDb();
-    const user   = db.users[userId] || {};
-
+    const db = getDb();
+    const user = db.users[userId] || {};
     if (!user.isVip && !vipUsers.includes(userId) && !isAdmin(userId)) {
-        await ctx.answerCbQuery("🔒 Faqat VIP a'zolar uchun!", { show_alert: true });
-        return ctx.replyWithHTML("⭐ <b>Tushuntirishlar faqat VIP a'zolar uchun!</b>", Markup.inlineKeyboard([[Markup.button.callback('💎 VIP sotib olish', 'buy_vip')]]));
+        await ctx.answerCbQuery("🔒 Faqat VIP a'zolar uchun!", {show_alert:true});
+        return ctx.replyWithHTML("⭐ <b>Tushuntirishlar faqat VIP a'zolar uchun!</b>", Markup.inlineKeyboard([[Markup.button.callback('💎 VIP sotib olish','buy_vip')]]));
     }
     const qData = s.activeList?.[s.index];
     if (!qData) return ctx.answerCbQuery('Xatolik: savol topilmadi.');
-    if (!qData.hint?.trim()) return ctx.answerCbQuery("⚠️ Bu savolga tushuntirish qo'shilmagan.", { show_alert: true });
-
+    if (!qData.hint?.trim()) return ctx.answerCbQuery("⚠️ Bu savolga tushuntirish qo'shilmagan.", {show_alert:true});
     await ctx.answerCbQuery('🔍 Tushuntirish');
-    const progress = getProgressBar(s.index + 1, s.activeList.length);
-    const labels   = ['A', 'B', 'C', 'D'];
+    const progress = getProgressBar(s.index+1, s.activeList.length);
+    const labels = ['A','B','C','D'];
     let updText = `📊 [${progress}]\n🔢 <b>${s.index+1}/${s.activeList.length}</b>\n\n❓ <b>${escapeHTML(qData.q)}</b>\n\n━━━━━━━━━━\n💡 <b>TUSHUNTIRISH:</b>\n${escapeHTML(qData.hint)}\n━━━━━━━━━━\n\n`;
-    if (!s.isTurbo) (s.currentOptions||[]).forEach((opt, i) => { updText += `<b>${labels[i]})</b> ${escapeHTML(opt)}\n\n`; });
+    if (!s.isTurbo) (s.currentOptions||[]).forEach((opt,i) => { updText += `<b>${labels[i]})</b> ${escapeHTML(opt)}\n\n`; });
     else updText += `✅ <b>TO'G'RI JAVOB:</b>\n<code>${escapeHTML(qData.a)}</code>`;
-
     const keyboard = ctx.callbackQuery.message.reply_markup;
     try {
         ctx.callbackQuery.message.photo
-            ? await ctx.editMessageCaption(updText, { parse_mode: 'HTML', reply_markup: keyboard })
-            : await ctx.editMessageText(updText, { parse_mode: 'HTML', reply_markup: keyboard });
+            ? await ctx.editMessageCaption(updText,{parse_mode:'HTML',reply_markup:keyboard})
+            : await ctx.editMessageText(updText,{parse_mode:'HTML',reply_markup:keyboard});
     } catch {}
 });
 
-bot.action('buy_vip', (ctx) => {
-    ctx.session.waitingForReceipt = true;
-    return ctx.replyWithHTML(`💎 <b>VIP STATUS SOTIB OLISH</b>\n\n💳 Karta: <code>4073420058363577</code>\n👤 Egasi: M.M\n💰 Summa: 6,000 so'm\n\n📸 To'lovni amalga oshirgach, <b>chekni (rasm)</b> yuboring.`);
-});
+bot.action('buy_vip', (ctx) => { ctx.session.waitingForReceipt = true; return ctx.replyWithHTML(`💎 <b>VIP STATUS SOTIB OLISH</b>\n\n💳 Karta: <code>4073420058363577</code>\n👤 Egasi: M.M\n💰 Summa: 6,000 so'm\n\n📸 To'lovni amalga oshirgach, <b>chekni (rasm)</b> yuboring.`); });
 
 bot.action(/^approve_(\d+)$/, async (ctx) => {
     const targetId = parseInt(ctx.match[1]);
-    const db       = getDb();
-    const now      = Date.now();
-    const oneMonth = 30 * 24 * 60 * 60 * 1000;
-    const vipStart = now;
-    const vipEnd   = now + oneMonth;
-
-    if (db.users[targetId]) {
-        db.users[targetId].isVip    = true;
-        db.users[targetId].vipStart = vipStart;
-        db.users[targetId].vipEnd   = vipEnd;
-        saveDb(db);
-    }
+    const db = getDb();
+    const now = Date.now();
+    const vipEnd = now + 30*24*60*60*1000;
+    if (db.users[targetId]) { db.users[targetId].isVip = true; db.users[targetId].vipStart = now; db.users[targetId].vipEnd = vipEnd; saveDb(db); }
     if (!vipUsers.includes(targetId)) { vipUsers.push(targetId); saveVip(); }
-
-    const fmt = ts => new Date(ts).toLocaleDateString('ru-RU', { day:'2-digit', month:'2-digit', year:'numeric' });
-
-    await ctx.telegram.sendMessage(targetId,
-        `\u{1F389} <b>Xushxabar! VIP a'zolik tasdiqlandi!</b>\n\n` +
-        `\u{1F4C5} To'lov sanasi: <b>${fmt(vipStart)}</b>\n` +
-        `\u{23F3} Mudati tugash sanasi: <b>${fmt(vipEnd)}</b>\n\n` +
-        `\u{1F48E} Siz endi barcha testlarning tushuntirishlarini va musobaqani ko'rishingiz mumkin.\n\n` +
-        `\u26A0\uFE0F 1 oy o'tgach VIP mudati avtomatik tugaydi.`,
-        { parse_mode: 'HTML' }
-    ).catch(() => {});
-    return ctx.editMessageCaption(`\u2705 <b>Tasdiqlandi:</b> VIP — ${fmt(vipStart)} dan ${fmt(vipEnd)} gacha.`, { parse_mode: 'HTML' });
+    const fmt = ts => new Date(ts).toLocaleDateString('ru-RU',{day:'2-digit',month:'2-digit',year:'numeric'});
+    await ctx.telegram.sendMessage(targetId,`🎉 <b>VIP a'zolik tasdiqlandi!</b>\n\n📅 To'lov: <b>${fmt(now)}</b>\n⏳ Tugaydi: <b>${fmt(vipEnd)}</b>`,{parse_mode:'HTML'}).catch(()=>{});
+    return ctx.editMessageCaption(`✅ <b>Tasdiqlandi:</b> ${fmt(now)} dan ${fmt(vipEnd)} gacha.`,{parse_mode:'HTML'});
 });
-
-bot.action(/^reject_vip_(\d+)$/, async (ctx) => {
-    const targetId = parseInt(ctx.match[1]);
-    await ctx.telegram.sendMessage(targetId, "❌ Chek tasdiqlanmadi. Muammo bo'lsa adminga yozing.").catch(() => {});
-    return ctx.editMessageCaption("❌ To'lov rad etildi.");
-});
+bot.action(/^reject_vip_(\d+)$/, async (ctx) => { await ctx.telegram.sendMessage(parseInt(ctx.match[1]),"❌ Chek tasdiqlanmadi.").catch(()=>{}); return ctx.editMessageCaption("❌ To'lov rad etildi."); });
 
 bot.action('confirm_tour', async (ctx) => {
     if (!isAdmin(ctx.from.id)) return ctx.answerCbQuery("Ruxsat yo'q!");
     const db = getDb();
-    const s  = ctx.session;
-
-    // Avvalgi deadline taymerini tozalash
+    const s = ctx.session;
     if (tourDeadlineTimer) { clearTimeout(tourDeadlineTimer); tourDeadlineTimer = null; }
-
     Object.keys(db.users).forEach(id => { db.users[id].tourScore = 0; db.users[id].tourFinished = false; });
-
-    db.tournament = {
-        isActive:     true,
-        started:      false,       // ✅ Hali boshlanmagan
-        startedAt:    null,
-        deadlineTime: null,        // ✅ Boshlanganida o'rnatiladi
-        date:         s.tourDate,
-        time:         s.tourTime,
-        count:        parseInt(s.tourCount),
-        participants: [],
-        questions:    prepareTournamentQuestions(parseInt(s.tourCount)),
-    };
+    db.tournament = { isActive:true, started:false, startedAt:null, deadlineTime:null, date:s.tourDate, time:s.tourTime, count:parseInt(s.tourCount), participants:[], questions:prepareTournamentQuestions(parseInt(s.tourCount)) };
     saveDb(db);
-
     await ctx.answerCbQuery("✅ Musobaqa e'lon qilindi!");
-    await ctx.editMessageText(
-        `✅ <b>Musobaqa e'lon qilindi!</b>\n\n📅 ${s.tourDate}\n🕒 ${s.tourTime}\n📝 ${s.tourCount} ta savol\n\nFoydalanuvchilarga xabar yuborilmoqda...`,
-        { parse_mode: 'HTML' }
-    );
-
-    const announceText = `📣 <b>YANGI MUSOBAQA!</b>\n\n📅 Sana: <b>${s.tourDate}</b>\n🕒 Vaqt: <b>${s.tourTime}</b>\n📝 Savollar: <b>${s.tourCount} ta</b>\n\nQatnashish uchun tugmani bosing:`;
-
+    await ctx.editMessageText(`✅ <b>Musobaqa e'lon qilindi!</b>\n\n📅 ${s.tourDate}\n🕒 ${s.tourTime}\n📝 ${s.tourCount} ta savol\n\nFoydalanuvchilarga xabar yuborilmoqda...`,{parse_mode:'HTML'});
     for (const uid of Object.keys(db.users)) {
-        await ctx.telegram.sendMessage(uid, announceText, {
-            parse_mode: 'HTML',
-            ...Markup.keyboard([["🏆 Musobaqaga o'tish"]]).resize()
-        }).catch(() => {});
+        await ctx.telegram.sendMessage(uid,`📣 <b>YANGI MUSOBAQA!</b>\n\n📅 Sana: <b>${s.tourDate}</b>\n🕒 Vaqt: <b>${s.tourTime}</b>\n📝 Savollar: <b>${s.tourCount} ta</b>\n\nQatnashish uchun tugmani bosing:`,{parse_mode:'HTML',...Markup.keyboard([["🏆 Musobaqaga o'tish"]]).resize()}).catch(()=>{});
     }
-
     s.adminStep = null;
     await ctx.reply('🛠 Admin Panel', adminMainKeyboard(getDb()));
 });
-
 bot.action('reject_tour', async (ctx) => {
     if (!isAdmin(ctx.from.id)) return ctx.answerCbQuery("Ruxsat yo'q!");
     const db = getDb();
     if (db.tournament) { db.tournament.isActive = false; db.tournament.participants = []; saveDb(db); }
     ctx.session.adminStep = null;
     await ctx.answerCbQuery('Musobaqa bekor qilindi');
-    await ctx.editMessageText("❌ <b>Musobaqa yaratish bekor qilindi.</b>", { parse_mode: 'HTML' });
+    await ctx.editMessageText("❌ <b>Musobaqa yaratish bekor qilindi.</b>",{parse_mode:'HTML'});
     return ctx.reply('🛠 Admin Panel', adminMainKeyboard(getDb()));
 });
-
 bot.action('join_tour', async (ctx) => {
-    const db     = getDb();
+    const db = getDb();
     const userId = ctx.from.id;
-    const tour   = db.tournament;
+    const tour = db.tournament;
     if (!tour?.isActive) return ctx.answerCbQuery('❌ Musobaqa yakunlangan yoki faol emas.');
     if (tour.participants.includes(userId)) return ctx.answerCbQuery("✅ Siz allaqachon ro'yxatdan o'tgansiz!");
     db.tournament.participants.push(userId);
     saveDb(db);
-    return ctx.editMessageText(
-        `🎉 <b>Muvaffaqiyatli ro'yxatdan o'tdingiz!</b>\n\nMusobaqa boshlanish vaqti: <b>${tour.time}</b>.\n🚀 Tayyor turing!`,
-        { parse_mode: 'HTML' }
-    );
+    return ctx.editMessageText(`🎉 <b>Muvaffaqiyatli ro'yxatdan o'tdingiz!</b>\n\nMusobaqa boshlanish vaqti: <b>${tour.time}</b>.\n🚀 Tayyor turing!`,{parse_mode:'HTML'});
 });
-
 bot.action('cancel_join', async (ctx) => ctx.editMessageText("❌ Musobaqada qatnashish rad etildi."));
 bot.action('back_to_main', async (ctx) => { try { await ctx.deleteMessage(); } catch {} return showSubjectMenu(ctx); });
 
 bot.action(/^tourans_(\d+)$/, async (ctx) => {
-    const s      = ctx.session;
-    const db     = getDb();
-    const tour   = db.tournament;
+    const s = ctx.session;
+    const db = getDb();
+    const tour = db.tournament;
     const userId = ctx.from.id;
-
-    if (!s || s.tourIndex === undefined || !tour) {
-        return ctx.answerCbQuery('❌ Sessiya topilmadi.');
-    }
-
-    // ✅ Umumiy vaqt tugaganmi tekshirish
+    if (!s || s.tourIndex === undefined || !tour) return ctx.answerCbQuery('❌ Sessiya topilmadi.');
     if (s.tourEndTime && Date.now() >= s.tourEndTime) {
         clearTourTimers(userId);
-        await ctx.answerCbQuery('⏰ Musobaqa vaqti tugadi!', { show_alert: true });
-        s.tourIndex = tour.count; // tugash belgisi
+        await ctx.answerCbQuery('⏰ Musobaqa vaqti tugadi!', {show_alert:true});
+        s.tourIndex = tour.count;
         return sendTourQuestion(ctx, false);
     }
-
-    // ✅ Allaqachon bu savoldan o'tib ketganmi (double-click himoyasi)
-    if (db.users[userId]?.tourFinished) {
-        return ctx.answerCbQuery('✅ Musobaqa yakunlangan.');
-    }
-
-    // Savol timeoutini bekor qilish (foydalanuvchi javob berdi)
+    if (db.users[userId]?.tourFinished) return ctx.answerCbQuery('✅ Musobaqa yakunlangan.');
     if (timers[userId]) { clearTimeout(timers[userId]); delete timers[userId]; }
-
     const choiceIdx = parseInt(ctx.match[1]);
-    const currentQ  = tour.questions[s.tourIndex];
+    const currentQ = tour.questions[s.tourIndex];
     if (!currentQ || !s.currentOptions) return ctx.answerCbQuery();
-
     const userAnswer = s.currentOptions[choiceIdx];
-    if (userAnswer === currentQ.a) {
-        s.tourScore = (s.tourScore || 0) + 1;
-        await ctx.answerCbQuery("✅ To'g'ri!");
-    } else {
-        await ctx.answerCbQuery("❌ Noto'g'ri!");
-    }
-
+    if (userAnswer === currentQ.a) { s.tourScore = (s.tourScore||0)+1; await ctx.answerCbQuery("✅ To'g'ri!"); }
+    else await ctx.answerCbQuery("❌ Noto'g'ri!");
     s.tourIndex++;
-
-    // Bazaga saqlash
-    if (db.users[userId]) {
-        db.users[userId].tourScore = s.tourScore;
-        if (s.tourIndex >= tour.count) db.users[userId].tourFinished = true;
-        saveDb(db);
-    }
-
+    if (db.users[userId]) { db.users[userId].tourScore = s.tourScore; if (s.tourIndex >= tour.count) db.users[userId].tourFinished = true; saveDb(db); }
     return sendTourQuestion(ctx, false);
 });
 
 bot.action('start_actual_tour', async (ctx) => {
-    const s      = ctx.session;
-    const db     = getDb();
-    const tour   = db.tournament;
+    const s = ctx.session;
+    const db = getDb();
+    const tour = db.tournament;
     const userId = ctx.from.id;
-
-    if (!tour?.isActive) return ctx.answerCbQuery('❌ Musobaqa yakunlangan.', { show_alert: true });
-    if (!tour.participants.includes(userId)) return ctx.answerCbQuery("❌ Siz ro'yxatdan o'tmagansiz!", { show_alert: true });
-    if (db.users[userId]?.tourFinished) return ctx.answerCbQuery("✅ Siz bu musobaqani yechib bo'lgansiz!", { show_alert: true });
-
-    // ✅ ASOSIY FIX: Barcha foydalanuvchilar uchun umumiy deadline DB dan olinadi
-    // (scheduleTourDeadline da saqlangan deadlineTime)
+    if (!tour?.isActive) return ctx.answerCbQuery('❌ Musobaqa yakunlangan.',{show_alert:true});
+    if (!tour.participants.includes(userId)) return ctx.answerCbQuery("❌ Siz ro'yxatdan o'tmagansiz!",{show_alert:true});
+    if (db.users[userId]?.tourFinished) return ctx.answerCbQuery("✅ Siz bu musobaqani yechib bo'lgansiz!",{show_alert:true});
     const deadlineTime = tour.deadlineTime || (Date.now() + tour.count * 30 * 1000);
-    const remaining    = deadlineTime - Date.now();
-
-    // Vaqt tugab ketgan bo'lsa — boshlatmaymiz
-    if (remaining <= 2000) {
-        return ctx.answerCbQuery('⏰ Musobaqa vaqti tugab ketdi!', { show_alert: true });
-    }
-
-    s.tourIndex   = 0;
-    s.tourScore   = 0;
-    s.userName    = db.users[userId]?.name || ctx.from.first_name;
-    s.tourEndTime = deadlineTime; // ✅ Umumiy shared deadline
-
-    // Foydalanuvchi uchun individual timeout — deadline ga sinxron
+    const remaining = deadlineTime - Date.now();
+    if (remaining <= 2000) return ctx.answerCbQuery('⏰ Musobaqa vaqti tugab ketdi!',{show_alert:true});
+    s.tourIndex = 0; s.tourScore = 0;
+    s.userName = db.users[userId]?.name || ctx.from.first_name;
+    s.tourEndTime = deadlineTime;
     clearTourTimers(userId);
     tourGlobalTimers[userId] = setTimeout(async () => {
-        if (!db.users[userId]?.tourFinished) {
-            ctx.session.tourIndex = tour.count;
-            await endTourByTimeout(userId, ctx.telegram);
-        }
-    }, remaining + 1000); // +1s bufer
-
+        if (!db.users[userId]?.tourFinished) { ctx.session.tourIndex = tour.count; await endTourByTimeout(userId, ctx.telegram); }
+    }, remaining + 1000);
     await ctx.answerCbQuery('🚀 Musobaqa boshlandi! Omad!');
     try { await ctx.deleteMessage(); } catch {}
-
-    const remMin  = Math.floor(remaining / 60000);
-    const remSec  = Math.floor((remaining % 60000) / 1000);
-    const timeStr = remMin > 0
-        ? (remSec > 0 ? `${remMin} daqiqa ${remSec} soniya` : `${remMin} daqiqa`)
-        : `${remSec} soniya`;
-
-    await ctx.replyWithHTML(
-        `🚀 <b>Musobaqa boshlandi!</b>\n\n` +
-        `📝 Jami savollar: <b>${tour.count} ta</b>\n` +
-        `⏱ Qolgan vaqt: <b>${timeStr}</b>\n` +
-        `⌛️ Har bir savol uchun: <b>30 soniya</b>\n\n` +
-        `💡 Vaqt tugaganda musobaqa avtomatik yakunlanadi!`
-    );
-
+    const remMin = Math.floor(remaining/60000);
+    const remSec = Math.floor((remaining%60000)/1000);
+    const timeStr = remMin > 0 ? (remSec > 0 ? `${remMin} daqiqa ${remSec} soniya` : `${remMin} daqiqa`) : `${remSec} soniya`;
+    await ctx.replyWithHTML(`🚀 <b>Musobaqa boshlandi!</b>\n\n📝 Jami savollar: <b>${tour.count} ta</b>\n⏱ Qolgan vaqt: <b>${timeStr}</b>\n⌛️ Har bir savol uchun: <b>30 soniya</b>\n\n💡 Vaqt tugaganda musobaqa avtomatik yakunlanadi!`);
     return sendTourQuestion(ctx, true);
 });
-
-bot.action('stop_tour', async (ctx) => {
-    clearTourTimers(ctx.from.id);
-    try { await ctx.deleteMessage(); } catch {}
-    return showSubjectMenu(ctx);
-});
-
+bot.action('stop_tour', async (ctx) => { clearTourTimers(ctx.from.id); try { await ctx.deleteMessage(); } catch {} return showSubjectMenu(ctx); });
 bot.action('confirm_clear_rank', async (ctx) => {
     if (!isAdmin(ctx.from.id)) return ctx.answerCbQuery("Ruxsat yo'q!");
     const db = getDb();
-    Object.keys(db.users).forEach(id => { db.users[id].score = 0; });
-    if (db.scores) db.scores = [];
+    Object.keys(db.users).forEach(id => { db.users[id].score = 0; db.users[id].totalTests = 0; db.users[id].totalCorrect = 0; db.users[id].totalWrong = 0; });
     saveDb(db);
     await ctx.editMessageText('✅ Reyting tozalandi.');
     return ctx.answerCbQuery();
 });
-
-bot.action('cancel_clear', (ctx) => ctx.deleteMessage().catch(() => {}));
-
+bot.action('cancel_clear', (ctx) => ctx.deleteMessage().catch(()=>{}));
 bot.action('confirm_full_restart', async (ctx) => {
     if (!isAdmin(ctx.from.id)) return ctx.answerCbQuery("Ruxsat yo'q!");
     try {
         const db = getDb();
-        Object.keys(db.users).forEach(id => {
-            db.users[id].score       = 0;
-            db.users[id].totalTests  = 0;
-            db.users[id].tourScore   = 0;
-            db.users[id].tourFinished = false;
-        });
+        Object.keys(db.users).forEach(id => { db.users[id].score = 0; db.users[id].totalTests = 0; db.users[id].tourScore = 0; db.users[id].tourFinished = false; });
         if (!db.settings) db.settings = {};
-        db.settings.isMaintenance = false;
-        db.settings.turboMode     = false;
+        db.settings.isMaintenance = false; db.settings.turboMode = false;
         saveDb(db);
-
-        await ctx.editMessageText('✅ Ballar va statistika tozalandi! Foydalanuvchilar saqlanib qoldi.');
+        await ctx.editMessageText('✅ Ballar va statistika tozalandi!');
         await ctx.reply('✅ Tizim yangilandi.', adminMainKeyboard(getDb()));
-    } catch (err) {
-        console.error('[Restart]', err.message);
-        await ctx.reply('❌ Xatolik yuz berdi.');
-    }
+    } catch (err) { console.error('[Restart]', err.message); await ctx.reply('❌ Xatolik yuz berdi.'); }
 });
-
-bot.action('cancel_restart', (ctx) => { ctx.deleteMessage().catch(() => {}); ctx.reply('Bekor qilindi.'); });
-
+bot.action('cancel_restart', (ctx) => { ctx.deleteMessage().catch(()=>{}); ctx.reply('Bekor qilindi.'); });
 bot.action('announce_results', async (ctx) => {
     if (!isAdmin(ctx.from.id)) return ctx.answerCbQuery("Ruxsat yo'q!");
-    try {
-        await ctx.editMessageText('🔄 Natijalar hisoblanmoqda...');
-        await finalizeTournament(ctx);
-        await ctx.answerCbQuery('✅ Jarayon yakunlandi!');
-    } catch (err) {
-        console.error('[Results]', err.message);
-        await ctx.reply('❌ Natijalarni yuborishda xatolik.');
-    }
+    try { await ctx.editMessageText('🔄 Natijalar hisoblanmoqda...'); await finalizeTournament(ctx); await ctx.answerCbQuery('✅ Jarayon yakunlandi!'); }
+    catch (err) { console.error('[Results]', err.message); await ctx.reply('❌ Natijalarni yuborishda xatolik.'); }
 });
-
-bot.action('cancel_action', (ctx) => ctx.deleteMessage().catch(() => {}));
-
-// ✅ YANGI: Sohta ball — o'zimga yoki boshqasiga callback handlerlari
+bot.action('cancel_action', (ctx) => ctx.deleteMessage().catch(()=>{}));
 bot.action('fake_score_self', async (ctx) => {
     if (!isAdmin(ctx.from.id)) return ctx.answerCbQuery("Ruxsat yo'q!");
-    ctx.session.fakeScoreTarget = 'self';
-    ctx.session.adminStep       = 'wait_fake_score_amount_self';
+    ctx.session.adminStep = 'wait_fake_score_amount_self';
     await ctx.answerCbQuery();
-    await ctx.editMessageText(
-        `🎭 <b>O'ZINGIZGA BALL QO'SHISH</b>\n\n` +
-        `Qo'shmoqchi bo'lgan ball miqdorini kiriting:\n` +
-        `(Masalan: <code>50</code> yoki <code>100</code>)`,
-        { parse_mode: 'HTML' }
-    );
+    await ctx.editMessageText(`🎭 <b>O'ZINGIZGA BALL QO'SHISH</b>\n\nQo'shmoqchi bo'lgan ball miqdorini kiriting:`,{parse_mode:'HTML'});
 });
-
 bot.action('fake_score_other', async (ctx) => {
     if (!isAdmin(ctx.from.id)) return ctx.answerCbQuery("Ruxsat yo'q!");
-    ctx.session.fakeScoreTarget = 'other';
-    ctx.session.adminStep       = 'wait_fake_score_tgid';
+    ctx.session.adminStep = 'wait_fake_score_tgid';
     await ctx.answerCbQuery();
-    await ctx.editMessageText(
-        `🎭 <b>BOSHQA FOYDALANUVCHIGA BALL QO'SHISH</b>\n\n` +
-        `Foydalanuvchining Telegram ID sini kiriting:`,
-        { parse_mode: 'HTML' }
-    );
+    await ctx.editMessageText(`🎭 <b>BOSHQA FOYDALANUVCHIGA BALL QO'SHISH</b>\n\nFoydalanuvchining Telegram ID sini kiriting:`,{parse_mode:'HTML'});
 });
-
 bot.action('cancel_fake_score', async (ctx) => {
     if (!isAdmin(ctx.from.id)) return ctx.answerCbQuery("Ruxsat yo'q!");
-    ctx.session.adminStep       = null;
-    ctx.session.fakeScoreTarget = null;
-    ctx.session.fakeScoreUserId = null;
+    ctx.session.adminStep = null; ctx.session.fakeScoreTarget = null; ctx.session.fakeScoreUserId = null;
     await ctx.answerCbQuery('Bekor qilindi');
-    await ctx.editMessageText('❌ Sohta ball qo\'shish bekor qilindi.');
+    await ctx.editMessageText("❌ Sohta ball qo'shish bekor qilindi.");
     return ctx.reply('🛠 Admin Panel', adminMainKeyboard(getDb()));
+});
+bot.action('tour_add_all', async (ctx) => {
+    if (!isAdmin(ctx.from.id)) return ctx.answerCbQuery("Ruxsat yo'q!");
+    const db = getDb();
+    const tour = db.tournament;
+    if (!tour?.isActive) return ctx.answerCbQuery('❌ Musobaqa faol emas!', {show_alert:true});
+    await ctx.answerCbQuery('⏳ Qo\'shilmoqda...');
+    const allIds = Object.keys(db.users).map(id => parseInt(id)).filter(id => !isNaN(id));
+    let added = 0, notified = 0;
+    for (const uid of allIds) {
+        if (!tour.participants.includes(uid)) { tour.participants.push(uid); added++; }
+        try { await bot.telegram.sendMessage(uid,`🏆 <b>MUSOBAQAGA QO'SHILDINGIZ!</b>\n\n📅 ${tour.date||'—'}\n🕒 ${tour.time||'—'}\n📝 ${tour.count||'—'} ta savol\n\n✅ Boshlanish vaqtida xabar keladi!`,{parse_mode:'HTML'}); notified++; } catch {}
+    }
+    db.tournament = tour; saveDb(db);
+    await ctx.editMessageText(`✅ <b>Muvaffaqiyatli!</b>\n\n👥 Jami: ${allIds.length} ta\n➕ Yangi qo'shildi: ${added} ta\n📨 Xabar oldi: ${notified} ta`,{parse_mode:'HTML'});
+    return ctx.reply('🛠 Admin Panel', adminMainKeyboard(getDb()));
+});
+bot.action('tour_add_vip', async (ctx) => {
+    if (!isAdmin(ctx.from.id)) return ctx.answerCbQuery("Ruxsat yo'q!");
+    const db = getDb();
+    const tour = db.tournament;
+    if (!tour?.isActive) return ctx.answerCbQuery('❌ Musobaqa faol emas!', {show_alert:true});
+    await ctx.answerCbQuery('⏳ VIP foydalanuvchilar qo\'shilmoqda...');
+    const vipIds = Object.entries(db.users).filter(([id,u]) => u.isVip||vipUsers.includes(parseInt(id))).map(([id]) => parseInt(id));
+    if (!vipIds.length) return ctx.editMessageText('❌ VIP foydalanuvchilar topilmadi.',{parse_mode:'HTML'});
+    let added = 0, notified = 0;
+    for (const uid of vipIds) {
+        if (!tour.participants.includes(uid)) { tour.participants.push(uid); added++; }
+        try { await bot.telegram.sendMessage(uid,`💎 <b>VIP SIFATIDA MUSOBAQAGA QO'SHILDINGIZ!</b>\n\n📅 ${tour.date||'—'} · 🕒 ${tour.time||'—'}\n📝 ${tour.count||'—'} ta savol`,{parse_mode:'HTML'}); notified++; } catch {}
+    }
+    db.tournament = tour; saveDb(db);
+    await ctx.editMessageText(`✅ <b>VIP foydalanuvchilar qo'shildi!</b>\n\n💎 VIP soni: ${vipIds.length}\n➕ Yangi: ${added}\n📨 Xabar: ${notified}`,{parse_mode:'HTML'});
+    return ctx.reply('🛠 Admin Panel', adminMainKeyboard(getDb()));
+});
+bot.action('tour_add_one', async (ctx) => {
+    if (!isAdmin(ctx.from.id)) return ctx.answerCbQuery("Ruxsat yo'q!");
+    ctx.session.adminStep = 'wait_tour_add_id';
+    await ctx.answerCbQuery();
+    await ctx.editMessageText("🔍 Musobaqaga qo'shmoqchi bo'lgan foydalanuvchining Telegram ID sini kiriting:",{parse_mode:'HTML'});
 });
 
 // ============================================================
@@ -1065,23 +753,18 @@ bot.action('cancel_fake_score', async (ctx) => {
 // ============================================================
 bot.hears(['📝 Akademik yozuv','📜 Tarix','➕ Matematika','💻 Dasturlash 1','🧲 Fizika','🇬🇧 Perfect English'], async (ctx) => {
     const text = ctx.message.text;
-    const s    = ctx.session;
-    const db   = getDb();
+    const s = ctx.session;
+    const db = getDb();
     const user = db.users[ctx.from.id];
-
     if (!user?.isRegistered) return ctx.reply("⚠️ Avval ro'yxatdan o'ting.");
-
     const yonalishKey = user.yonalish.toLowerCase().trim().replace(/'/g,'').replace(/ /g,'_');
-    const subjectMap  = { 'Akademik':'academic','Tarix':'history','Matematika':'math','Dasturlash':'dasturlash','Fizika':'physics','English':'english' };
+    const subjectMap = {'Akademik':'academic','Tarix':'history','Matematika':'math','Dasturlash':'dasturlash','Fizika':'physics','English':'english'};
     const subjectPart = Object.entries(subjectMap).find(([k]) => text.includes(k))?.[1];
-    const finalKey    = `${yonalishKey}_${subjectPart}`;
-
+    const finalKey = `${yonalishKey}_${subjectPart}`;
     if (SUBJECTS[finalKey]?.questions) {
         s.currentSubject = finalKey;
-        const dbU  = getDb();
-        const userU = dbU.users[ctx.from.id];
+        const userU = getDb().users[ctx.from.id];
         s.userName = (userU?.name && isValidName(userU.name)) ? userU.name : (ctx.from.first_name || 'Talaba');
-
         if (s.isTurbo) {
             const questions = SUBJECTS[finalKey].questions;
             if (!questions.length) return ctx.reply("Bu fanda savollar yo'q.");
@@ -1089,29 +772,20 @@ bot.hears(['📝 Akademik yozuv','📜 Tarix','➕ Matematika','💻 Dasturlash 
             return sendQuestion(ctx, true);
         }
         return ctx.reply(`Tayyormisiz? (${text})`, Markup.keyboard([["⚡️ Blitz (25)","📝 To'liq test"],['⬅️ Orqaga (Fanlar)']]).resize());
-    } else {
-        return ctx.reply(`⚠️ ${user.yonalish} uchun "${text}" savollari hali yuklanmagan.`);
-    }
+    } else return ctx.reply(`⚠️ ${user.yonalish} uchun "${text}" savollari hali yuklanmagan.`);
 });
 
 bot.hears(["⚡️ Blitz (25)","📝 To'liq test"], async (ctx) => {
-    const s      = ctx.session;
+    const s = ctx.session;
     const userId = ctx.from.id;
     s.isTurbo = false;
-
-    if (isBotPaidMode && !vipUsers.includes(userId) && !isAdmin(userId)) {
-        return ctx.reply("⚠️ Bot hozirda pullik rejimda. Test topshirish uchun VIP kerak.", Markup.inlineKeyboard([[Markup.button.callback('💎 VIP sotib olish','buy_vip')]]));
-    }
+    if (isBotPaidMode && !vipUsers.includes(userId) && !isAdmin(userId)) return ctx.reply("⚠️ Bot hozirda pullik rejimda.", Markup.inlineKeyboard([[Markup.button.callback('💎 VIP sotib olish','buy_vip')]]));
     if (!s.currentSubject || !SUBJECTS[s.currentSubject]) return showSubjectMenu(ctx);
-
     const questions = SUBJECTS[s.currentSubject].questions;
     if (!questions?.length) return ctx.reply("Bu fanda savollar yo'q.");
-
-    const db = getDb();
-    const user = db.users[userId];
+    const user = getDb().users[userId];
     s.userName = (user?.name && isValidName(user.name)) ? user.name : (ctx.from.first_name || 'Talaba');
-
-    s.activeList = ctx.message.text.includes('25') ? shuffle(questions).slice(0, 25) : shuffle(questions);
+    s.activeList = ctx.message.text.includes('25') ? shuffle(questions).slice(0,25) : shuffle(questions);
     s.index = 0; s.score = 0; s.wrongs = [];
     return sendQuestion(ctx, true);
 });
@@ -1119,324 +793,129 @@ bot.hears(["⚡️ Blitz (25)","📝 To'liq test"], async (ctx) => {
 bot.hears('📊 Reyting', async (ctx) => ctx.replyWithHTML(getLeaderboard(ctx.from.id)));
 bot.hears(['👤 Profil','👤 Profilim'], async (ctx) => showProfile(ctx));
 bot.hears(['⬅️ Orqaga (Fanlar)'], (ctx) => showSubjectMenu(ctx));
-
 bot.hears('⚙️ Sozlamalar', (ctx) => ctx.reply('Sozlamalar:', Markup.keyboard([["📝 Ismni o'zgartirish"],["🎓 Yo'nalishni qayta tanlash"],['⬅️ Orqaga (Fanlar)']]).resize()));
 bot.hears("📝 Ismni o'zgartirish", (ctx) => { const db=getDb(); if(!db.users[ctx.from.id])return; db.users[ctx.from.id].step='edit_name'; saveDb(db); return ctx.reply('Yangi ismingizni kiriting:'); });
 bot.hears("🎓 Yo'nalishni qayta tanlash", (ctx) => {
-    const db = getDb(); const user = db.users[ctx.from.id]; if(!user)return;
-    user.isRegistered = false; user.step = 'wait_univ'; saveDb(db);
+    const db=getDb(); const user=db.users[ctx.from.id]; if(!user)return;
+    user.isRegistered=false; user.step='wait_univ'; saveDb(db);
     return ctx.reply("OTMni qayta tanlang:", Markup.keyboard([['Alfraganus Universiteti','Perfect Universiteti'],['TATU','TDPU']]).oneTime().resize());
 });
 
 // ─── ADMIN HANDLERLARI ─────────────────────────────────────
 bot.hears('📊 Statistika', async (ctx) => {
     if (!isAdmin(ctx.from.id)) return;
-    const db      = getDb();
+    const db = getDb();
     const entries = Object.entries(db.users||{});
     await ctx.replyWithHTML(`📊 <b>BOT STATISTIKASI</b>\n\n👥 Jami foydalanuvchilar: <b>${entries.length} ta</b>`);
-
     let report = '🆔 <b>Foydalanuvchilar:</b>\n';
     for (let i = 0; i < entries.length; i++) {
         const [id, data] = entries[i];
         const displayName = (data.name && isValidName(data.name)) ? escapeHTML(data.name) : '❓ Ismsiz';
         const line = `${i+1}. 👤 ${displayName} | ID: <code>${id}</code>\n`;
-        if ((report + line).length > 4000) { await ctx.replyWithHTML(report); report = ''; }
+        if ((report+line).length > 4000) { await ctx.replyWithHTML(report); report = ''; }
         report += line;
     }
     if (report) await ctx.replyWithHTML(report, Markup.keyboard([["🗑 Foydalanuvchini o'chirish"],['⬅️ Orqaga']]).resize());
 });
-
 bot.hears('💰 Pullik versiya', (ctx) => { if(!isAdmin(ctx.from.id))return; isBotPaidMode=true; return ctx.reply("✅ Bot PULLIK REJIMGA o'tkazildi."); });
 bot.hears('🆓 Bepul versiya',   (ctx) => { if(!isAdmin(ctx.from.id))return; isBotPaidMode=false; return ctx.reply("✅ Bot BEPUL REJIMGA o'tkazildi."); });
-
 bot.hears(["🛑 Botni To'xtatish",'🟢 Botni Yoqish'], async (ctx) => {
     if (!isAdmin(ctx.from.id)) return;
     const db = getDb(); if(!db.settings) db.settings={};
-    db.settings.isMaintenance = ctx.message.text.includes("To'xtatish");
-    saveDb(db);
-    const text = db.settings.isMaintenance ? "🔴 Bot hamma uchun to'xtatildi!" : '🟢 Bot qayta yoqildi!';
-    return ctx.reply(text, adminMainKeyboard(db));
+    db.settings.isMaintenance = ctx.message.text.includes("To'xtatish"); saveDb(db);
+    return ctx.reply(db.settings.isMaintenance ? "🔴 Bot hamma uchun to'xtatildi!" : '🟢 Bot qayta yoqildi!', adminMainKeyboard(db));
 });
-
 bot.hears(['🚀 Turbo (Yoqish)',"🚀 Turbo (O'chirish)"], async (ctx) => {
     if (!isAdmin(ctx.from.id)) return;
     const db = getDb(); if(!db.settings) db.settings={};
-    db.settings.turboMode = ctx.message.text.includes('Yoqish');
-    saveDb(db);
+    db.settings.turboMode = ctx.message.text.includes('Yoqish'); saveDb(db);
     await ctx.reply(db.settings.turboMode ? '🚀 TURBO REJIM YOQILDI!' : "🚀 Turbo rejim o'chirildi.");
     return ctx.reply('🛠 Admin Panel', adminMainKeyboard(db));
 });
-
-// ✅ YANGI: Sohta ball qo'shish handler
 bot.hears("🎭 Sohta ball qo'shish", async (ctx) => {
     if (!isAdmin(ctx.from.id)) return;
-    return ctx.replyWithHTML(
-        `🎭 <b>SOHTA BALL QO'SHISH</b>\n\nKimga ball qo'shmoqchisiz?`,
-        Markup.inlineKeyboard([
-            [Markup.button.callback("👤 O'zimga", 'fake_score_self')],
-            [Markup.button.callback("👥 Boshqa foydalanuvchiga", 'fake_score_other')],
-            [Markup.button.callback("❌ Bekor qilish", 'cancel_fake_score')],
-        ])
-    );
-});
-
-// ✅ YANGI: Musobaqani boshqarish — barcha foydalanuvchilarni qo'shish imkoniyati
-bot.hears('👥 Musobaqani boshqarish', async (ctx) => {
-    if (!isAdmin(ctx.from.id)) return;
-    const db   = getDb();
-    const tour = db.tournament;
-
-    if (!tour?.isActive) {
-        return ctx.replyWithHTML(
-            `👥 <b>MUSOBAQANI BOSHQARISH</b>\n\n❌ Hozircha faol musobaqa yo'q.\n\nAvval "🏆 Haftalik musobaqa" tugmasi orqali musobaqa yarating.`,
-            adminMainKeyboard(db)
-        );
-    }
-
-    const totalUsers = Object.keys(db.users).length;
-    const joined     = tour.participants?.length || 0;
-    const vipCount   = Object.values(db.users).filter(u => u.isVip || vipUsers.includes(parseInt(u.id || 0))).length;
-
-    return ctx.replyWithHTML(
-        `👥 <b>MUSOBAQANI BOSHQARISH</b>\n\n` +
-        `📅 Sana: <b>${tour.date || '—'}</b>\n` +
-        `🕒 Vaqt: <b>${tour.time || '—'}</b>\n` +
-        `📝 Savollar: <b>${tour.count || '—'} ta</b>\n` +
-        `_________________________\n\n` +
-        `👥 Jami foydalanuvchilar: <b>${totalUsers} ta</b>\n` +
-        `✅ Musobaqaga qo'shilganlar: <b>${joined} ta</b>\n` +
-        `💎 VIP foydalanuvchilar: <b>${vipCount} ta</b>\n\n` +
-        `Kimni qo'shmoqchisiz?`,
-        Markup.inlineKeyboard([
-            [Markup.button.callback(`👥 Barcha foydalanuvchilarni qo'shish (${totalUsers} ta)`, 'tour_add_all')],
-            [Markup.button.callback(`💎 Faqat VIP foydalanuvchilarni qo'shish (${vipCount} ta)`, 'tour_add_vip')],
-            [Markup.button.callback('🔍 Bitta ID bo\'yicha qo\'shish', 'tour_add_one')],
-            [Markup.button.callback('❌ Bekor qilish', 'cancel_action')],
-        ])
-    );
-});
-
-// ✅ Barcha foydalanuvchilarni musobaqaga qo'shish callback
-bot.action('tour_add_all', async (ctx) => {
-    if (!isAdmin(ctx.from.id)) return ctx.answerCbQuery("Ruxsat yo'q!");
-    const db   = getDb();
-    const tour = db.tournament;
-    if (!tour?.isActive) return ctx.answerCbQuery('❌ Musobaqa faol emas!', { show_alert: true });
-
-    await ctx.answerCbQuery('⏳ Qo\'shilmoqda...');
-    const allIds = Object.keys(db.users).map(id => parseInt(id)).filter(id => !isNaN(id));
-    let added = 0, notified = 0;
-
-    for (const uid of allIds) {
-        if (!tour.participants.includes(uid)) {
-            tour.participants.push(uid);
-            added++;
-        }
-        // Xabar yuborish (qo'shilganmi yoki yo'qmi baribir bildirish)
-        try {
-            await bot.telegram.sendMessage(uid,
-                `🏆 <b>MUSOBAQAGA QO'SHILDINGIZ!</b>\n\n` +
-                `📅 Sana: <b>${tour.date || '—'}</b>\n` +
-                `🕒 Vaqt: <b>${tour.time || '—'}</b>\n` +
-                `📝 Savollar: <b>${tour.count || '—'} ta</b>\n\n` +
-                `✅ Admin tomonidan musobaqaga qo'shildingiz.\nBoshlanish vaqtida xabar keladi!`,
-                { parse_mode: 'HTML' }
-            );
-            notified++;
-        } catch {}
-    }
-
-    db.tournament = tour;
-    saveDb(db);
-
-    await ctx.editMessageText(
-        `✅ <b>Muvaffaqiyatli!</b>\n\n` +
-        `👥 Jami: ${allIds.length} ta\n` +
-        `➕ Yangi qo'shildi: ${added} ta\n` +
-        `📨 Xabar oldi: ${notified} ta`,
-        { parse_mode: 'HTML' }
-    );
-    return ctx.reply('🛠 Admin Panel', adminMainKeyboard(getDb()));
-});
-
-// ✅ Faqat VIP foydalanuvchilarni qo'shish
-bot.action('tour_add_vip', async (ctx) => {
-    if (!isAdmin(ctx.from.id)) return ctx.answerCbQuery("Ruxsat yo'q!");
-    const db   = getDb();
-    const tour = db.tournament;
-    if (!tour?.isActive) return ctx.answerCbQuery('❌ Musobaqa faol emas!', { show_alert: true });
-
-    await ctx.answerCbQuery('⏳ VIP foydalanuvchilar qo\'shilmoqda...');
-    const vipIds = Object.entries(db.users)
-        .filter(([id, u]) => u.isVip || vipUsers.includes(parseInt(id)))
-        .map(([id]) => parseInt(id));
-
-    if (!vipIds.length) {
-        return ctx.editMessageText('❌ VIP foydalanuvchilar topilmadi.', { parse_mode: 'HTML' });
-    }
-
-    let added = 0, notified = 0;
-    for (const uid of vipIds) {
-        if (!tour.participants.includes(uid)) { tour.participants.push(uid); added++; }
-        try {
-            await bot.telegram.sendMessage(uid,
-                `💎 <b>VIP SIFATIDA MUSOBAQAGA QO'SHILDINGIZ!</b>\n\n` +
-                `📅 ${tour.date || '—'} · 🕒 ${tour.time || '—'}\n` +
-                `📝 ${tour.count || '—'} ta savol`,
-                { parse_mode: 'HTML' }
-            );
-            notified++;
-        } catch {}
-    }
-
-    db.tournament = tour;
-    saveDb(db);
-
-    await ctx.editMessageText(
-        `✅ <b>VIP foydalanuvchilar qo'shildi!</b>\n\n💎 VIP soni: ${vipIds.length}\n➕ Yangi: ${added}\n📨 Xabar: ${notified}`,
-        { parse_mode: 'HTML' }
-    );
-    return ctx.reply('🛠 Admin Panel', adminMainKeyboard(getDb()));
-});
-
-// ✅ Bitta ID bo'yicha qo'shish
-bot.action('tour_add_one', async (ctx) => {
-    if (!isAdmin(ctx.from.id)) return ctx.answerCbQuery("Ruxsat yo'q!");
-    ctx.session.adminStep = 'wait_tour_add_id';
-    await ctx.answerCbQuery();
-    await ctx.editMessageText('🔍 Musobaqaga qo\'shmoqchi bo\'lgan foydalanuvchining Telegram ID sini kiriting:',
-        { parse_mode: 'HTML' }
-    );
-});
-
-bot.hears('🟢 Yoqish', (ctx) => {
-    if (!isAdmin(ctx.from.id)) return;
-    const db = getDb(); if(!db.tournament) db.tournament={isActive:false,participants:[],results:{}};
-    db.tournament.isActive = true; db.tournament.results = {}; saveDb(db);
-    return ctx.reply("✅ Musobaqa rejimi yoqildi!");
-});
-
-bot.hears("🔴 O'chirish", (ctx) => {
-    if (!isAdmin(ctx.from.id)) return;
-    const db = getDb(); if(db.tournament){db.tournament.isActive=false;saveDb(db);}
-    return ctx.reply("🛑 Musobaqa o'chirildi.");
-});
-
-bot.hears('📢 Musobaqa natijalari', async (ctx) => {
-    if (!isAdmin(ctx.from.id)) return;
-    return ctx.reply("Natijalarni hisoblab e'lon qilishni tasdiqlaysizmi?", Markup.inlineKeyboard([
-        [Markup.button.callback("✅ Tasdiqlash va e'lon qilish",'announce_results')],
-        [Markup.button.callback('❌ Bekor qilish','cancel_action')],
+    return ctx.replyWithHTML(`🎭 <b>SOHTA BALL QO'SHISH</b>\n\nKimga ball qo'shmoqchisiz?`, Markup.inlineKeyboard([
+        [Markup.button.callback("👤 O'zimga",'fake_score_self')],
+        [Markup.button.callback("👥 Boshqa foydalanuvchiga",'fake_score_other')],
+        [Markup.button.callback("❌ Bekor qilish",'cancel_fake_score')],
     ]));
 });
-
+bot.hears('👥 Musobaqani boshqarish', async (ctx) => {
+    if (!isAdmin(ctx.from.id)) return;
+    const db = getDb();
+    const tour = db.tournament;
+    if (!tour?.isActive) return ctx.replyWithHTML(`👥 <b>MUSOBAQANI BOSHQARISH</b>\n\n❌ Hozircha faol musobaqa yo'q.`, adminMainKeyboard(db));
+    const totalUsers = Object.keys(db.users).length;
+    const joined = tour.participants?.length || 0;
+    const vipCount = Object.values(db.users).filter(u => u.isVip || vipUsers.includes(parseInt(u.id||0))).length;
+    return ctx.replyWithHTML(`👥 <b>MUSOBAQANI BOSHQARISH</b>\n\n📅 ${tour.date||'—'}\n🕒 ${tour.time||'—'}\n📝 ${tour.count||'—'} ta savol\n_________________________\n\n👥 Jami: <b>${totalUsers} ta</b>\n✅ Qo'shilganlar: <b>${joined} ta</b>\n💎 VIP: <b>${vipCount} ta</b>\n\nKimni qo'shmoqchisiz?`,
+        Markup.inlineKeyboard([
+            [Markup.button.callback(`👥 Barcha foydalanuvchilar (${totalUsers} ta)`,'tour_add_all')],
+            [Markup.button.callback(`💎 Faqat VIP (${vipCount} ta)`,'tour_add_vip')],
+            [Markup.button.callback("🔍 Bitta ID bo'yicha",'tour_add_one')],
+            [Markup.button.callback('❌ Bekor qilish','cancel_action')],
+        ])
+    );
+});
+bot.hears('🟢 Yoqish', (ctx) => { if(!isAdmin(ctx.from.id))return; const db=getDb(); if(!db.tournament) db.tournament={isActive:false,participants:[],results:{}}; db.tournament.isActive=true; db.tournament.results={}; saveDb(db); return ctx.reply("✅ Musobaqa rejimi yoqildi!"); });
+bot.hears("🔴 O'chirish", (ctx) => { if(!isAdmin(ctx.from.id))return; const db=getDb(); if(db.tournament){db.tournament.isActive=false;saveDb(db);} return ctx.reply("🛑 Musobaqa o'chirildi."); });
+bot.hears('📢 Musobaqa natijalari', async (ctx) => {
+    if (!isAdmin(ctx.from.id)) return;
+    return ctx.reply("Natijalarni hisoblab e'lon qilishni tasdiqlaysizmi?", Markup.inlineKeyboard([[Markup.button.callback("✅ Tasdiqlash va e'lon qilish",'announce_results')],[Markup.button.callback('❌ Bekor qilish','cancel_action')]]));
+});
 bot.hears('🚀 Musobaqani start berish', async (ctx) => {
     if (!isAdmin(ctx.from.id)) return;
-    const db   = getDb();
+    const db = getDb();
     const tour = db.tournament;
-    if (!tour?.isActive)            return ctx.reply("❌ Faol musobaqa belgilanmagan. Avval yangi musobaqa yarating!");
-    if (!tour.participants.length)  return ctx.reply("❌ Musobaqada hech kim ro'yxatdan o'tmagan.");
-
+    if (!tour?.isActive) return ctx.reply("❌ Faol musobaqa belgilanmagan!");
+    if (!tour.participants.length) return ctx.reply("❌ Musobaqada hech kim ro'yxatdan o'tmagan.");
     let sent = 0;
     for (const uid of tour.participants) {
-        try {
-            await ctx.telegram.sendMessage(uid,
-                '🔔 <b>MUSOBAQA BOSHLANDI!</b>\n\nAdmin tomonidan start berildi. Pastdagi tugmani bosing:',
-                { parse_mode: 'HTML', ...Markup.inlineKeyboard([[Markup.button.callback('🏁 TESTNI BOSHLASH','start_actual_tour')]]) }
-            );
-            sent++;
-        } catch {}
+        try { await ctx.telegram.sendMessage(uid,'🔔 <b>MUSOBAQA BOSHLANDI!</b>\n\nAdmin tomonidan start berildi. Pastdagi tugmani bosing:',{parse_mode:'HTML',...Markup.inlineKeyboard([[Markup.button.callback('🏁 TESTNI BOSHLASH','start_actual_tour')]])}); sent++; } catch {}
     }
     return ctx.reply(`🚀 Musobaqa ${sent} ta ishtirokchiga yuborildi!`);
 });
-
 bot.hears('🏆 Xalqaro test musobaqa', async (ctx) => {
-    const db     = getDb();
-    const tour   = db.tournament;
+    const db = getDb();
+    const tour = db.tournament;
     const userId = ctx.from.id;
     if (!tour?.isActive) return ctx.reply("❌ Hozircha faol musobaqa yo'q. Admin e'lonini kuting.");
-
     const totalSec = tour.count * 30;
-    const [sh, sm] = tour.time.split(':').map(Number);
-    let endMin = sm + Math.floor(totalSec / 60);
-    const endHour = (sh + Math.floor(endMin / 60)) % 24;
-    endMin = endMin % 60;
-    const endTimeStr  = `${String(endHour).padStart(2,'0')}:${String(endMin).padStart(2,'0')}`;
+    const [sh,sm] = tour.time.split(':').map(Number);
+    let endMin = sm + Math.floor(totalSec/60);
+    const endHour = (sh + Math.floor(endMin/60)) % 24; endMin = endMin % 60;
+    const endTimeStr = `${String(endHour).padStart(2,'0')}:${String(endMin).padStart(2,'0')}`;
     const durationStr = totalSec >= 60 ? `${Math.floor(totalSec/60)} daqiqa` : `${totalSec} soniya`;
-    const isJoined    = tour.participants.includes(userId);
-
+    const isJoined = tour.participants.includes(userId);
     const info = `🏆 <b>XALQARO TEST MUSOBAQA</b>\n\n📅 <b>Sana:</b> ${tour.date}\n🕒 <b>Boshlanish:</b> ${tour.time}\n🏁 <b>Tugash (taxm.):</b> ${endTimeStr}\n⏱ <b>Davomiylik:</b> ${durationStr}\n📝 <b>Savollar:</b> ${tour.count} ta\n_________________________\n`;
-
     if (isJoined) return ctx.replyWithHTML(`${info}\n✅ <b>Siz ro'yxatdansiz!</b>\n🚀 Musobaqa vaqtida xabar keladi.`);
-    return ctx.replyWithHTML(`${info}\nMusobaqada qatnashishni tasdiqlaysizmi?`, Markup.inlineKeyboard([
-        [Markup.button.callback("✅ Qo'shilish",'join_tour'), Markup.button.callback('❌ Rad etish','cancel_join')]
-    ]));
+    return ctx.replyWithHTML(`${info}\nMusobaqada qatnashishni tasdiqlaysizmi?`, Markup.inlineKeyboard([[Markup.button.callback("✅ Qo'shilish",'join_tour'),Markup.button.callback('❌ Rad etish','cancel_join')]]));
 });
-
 bot.hears("🏆 Musobaqaga o'tish", async (ctx) => {
-    const db   = getDb();
+    const db = getDb();
     const tour = db.tournament;
     if (!tour?.isActive) return showSubjectMenu(ctx);
-    return ctx.replyWithHTML(
-        `🏆 <b>Musobaqa rejasi</b>\n\n📅 Sana: ${tour.date}\n🕒 Vaqt: ${tour.time}\n📝 Savollar: ${tour.count} ta\n\nRo'yxatdan o'tish uchun:`,
-        Markup.inlineKeyboard([[Markup.button.callback("✅ Ro'yxatdan o'tish",'join_tour')],[Markup.button.callback('⬅️ Fanlarga qaytish','back_to_main')]])
-    );
+    return ctx.replyWithHTML(`🏆 <b>Musobaqa rejasi</b>\n\n📅 Sana: ${tour.date}\n🕒 Vaqt: ${tour.time}\n📝 Savollar: ${tour.count} ta\n\nRo'yxatdan o'tish uchun:`, Markup.inlineKeyboard([[Markup.button.callback("✅ Ro'yxatdan o'tish",'join_tour')],[Markup.button.callback('⬅️ Fanlarga qaytish','back_to_main')]]));
 });
-
 bot.hears('🧹 Reytingni tozalash', (ctx) => {
     if (!isAdmin(ctx.from.id)) return;
-    return ctx.reply('⚠️ Barcha ballarni tozalashni tasdiqlaysizmi?', Markup.inlineKeyboard([
-        [Markup.button.callback('✅ Ha, tozalash','confirm_clear_rank')],
-        [Markup.button.callback("❌ Yo'q",'cancel_clear')],
-    ]));
+    return ctx.reply('⚠️ Barcha ballarni tozalashni tasdiqlaysizmi?', Markup.inlineKeyboard([[Markup.button.callback('✅ Ha, tozalash','confirm_clear_rank')],[Markup.button.callback("❌ Yo'q",'cancel_clear')]]));
 });
-
 bot.hears("🗑 Botni Restart qilish", (ctx) => {
     if (!isAdmin(ctx.from.id)) return;
-    return ctx.reply("⚠️ Barcha foydalanuvchilar ballari nolga tushiriladi (foydalanuvchilar o'CHIRILMAYDI).\n\nDavom etasizmi?", Markup.inlineKeyboard([
-        [Markup.button.callback('✅ Ha, tozalash','confirm_full_restart')],
-        [Markup.button.callback("❌ Yo'q",'cancel_restart')],
-    ]));
+    return ctx.reply("⚠️ Barcha foydalanuvchilar ballari nolga tushiriladi.\n\nDavom etasizmi?", Markup.inlineKeyboard([[Markup.button.callback('✅ Ha, tozalash','confirm_full_restart')],[Markup.button.callback("❌ Yo'q",'cancel_restart')]]));
 });
-
-bot.hears('📣 Xabar tarqatish', (ctx) => {
-    if (!isAdmin(ctx.from.id)) return;
-    ctx.session.waitingForForward = true;
-    return ctx.reply("Yubormoqchi bo'lgan xabaringizni yuboring:", Markup.keyboard([['🚫 Bekor qilish']]).resize());
-});
-
+bot.hears('📣 Xabar tarqatish', (ctx) => { if(!isAdmin(ctx.from.id))return; ctx.session.waitingForForward=true; return ctx.reply("Yubormoqchi bo'lgan xabaringizni yuboring:", Markup.keyboard([['🚫 Bekor qilish']]).resize()); });
 bot.hears(/^⏱ Vaqt: \d+s$/, (ctx) => {
     if (!isAdmin(ctx.from.id)) return;
     ctx.session.waitingForTime = true;
     const cur = botSettings?.timeLimit || 30;
-    return ctx.reply(
-        `⏱ Hozirgi vaqt: <b>${cur} sekund</b>\n\nYangi vaqtni <b>soniyalarda</b> kiriting:\n(Masalan: 150 → 2.5 daqiqa)`,
-        { parse_mode: 'HTML', ...Markup.keyboard([['🚫 Bekor qilish']]).resize() }
-    );
+    return ctx.reply(`⏱ Hozirgi vaqt: <b>${cur} sekund</b>\n\nYangi vaqtni <b>soniyalarda</b> kiriting:`,{parse_mode:'HTML',...Markup.keyboard([['🚫 Bekor qilish']]).resize()});
 });
-
-bot.hears('➕ Yangi fan qoshish', (ctx) => {
-    if (!isAdmin(ctx.from.id)) return;
-    ctx.session.waitingForSubjectName = true;
-    return ctx.reply("Yangi fan nomini kiriting (Masalan: Fizika):", Markup.keyboard([['🚫 Bekor qilish']]).resize());
-});
-
-bot.hears(["🗑 Foydalanuvchini o'chirish"], (ctx) => {
-    if (!isAdmin(ctx.from.id)) return;
-    ctx.session.adminStep = 'wait_delete_id';
-    return ctx.reply("🗑 O'chirmoqchi bo'lgan foydalanuvchining ID raqamini kiriting:");
-});
-
-bot.hears(['⬅️ Orqaga (Admin)','⬅️ Orqaga'], (ctx) => {
-    if (!isAdmin(ctx.from.id)) return;
-    return ctx.reply('Admin paneli:', adminMainKeyboard(getDb()));
-});
-
-bot.hears('🏆 Haftalik musobaqa', (ctx) => {
-    if (!isAdmin(ctx.from.id)) return;
-    ctx.session.adminStep = 'wait_tour_date';
-    return ctx.reply("📅 Musobaqa sanasini kiriting (masalan: 09.03.2026):", Markup.keyboard([['🚫 Bekor qilish']]).resize());
-});
+bot.hears('➕ Yangi fan qoshish', (ctx) => { if(!isAdmin(ctx.from.id))return; ctx.session.waitingForSubjectName=true; return ctx.reply("Yangi fan nomini kiriting:", Markup.keyboard([['🚫 Bekor qilish']]).resize()); });
+bot.hears(["🗑 Foydalanuvchini o'chirish"], (ctx) => { if(!isAdmin(ctx.from.id))return; ctx.session.adminStep='wait_delete_id'; return ctx.reply("🗑 O'chirmoqchi bo'lgan foydalanuvchining ID raqamini kiriting:"); });
+bot.hears(['⬅️ Orqaga (Admin)','⬅️ Orqaga'], (ctx) => { if(!isAdmin(ctx.from.id))return; return ctx.reply('Admin paneli:', adminMainKeyboard(getDb())); });
+bot.hears('🏆 Haftalik musobaqa', (ctx) => { if(!isAdmin(ctx.from.id))return; ctx.session.adminStep='wait_tour_date'; return ctx.reply("📅 Musobaqa sanasini kiriting (masalan: 09.03.2026):", Markup.keyboard([['🚫 Bekor qilish']]).resize()); });
 
 // ============================================================
 // ASOSIY MATN / MEDIA HANDLER
@@ -1444,39 +923,29 @@ bot.hears('🏆 Haftalik musobaqa', (ctx) => {
 bot.on(['text','photo','video','animation','document'], async (ctx, next) => {
     const msgText = ctx.message.text || ctx.message.caption || '';
     const userId  = ctx.from.id;
-    const username= ctx.from.username || 'Lichka yopiq';
-    const s       = ctx.session;
-
+    const username = ctx.from.username || 'Lichka yopiq';
+    const s = ctx.session;
     if (msgText.startsWith('/')) return next();
-
-    // Bekor qilish
     if (msgText === '🚫 Bekor qilish') {
         s.waitingForForward = s.waitingForTime = s.waitingForSubjectName = s.waitingForSubjectQuestions = s.waitingForName = false;
-        s.adminStep = null;
-        s.fakeScoreTarget = null;
-        s.fakeScoreUserId = null;
+        s.adminStep = null; s.fakeScoreTarget = null; s.fakeScoreUserId = null;
         return showSubjectMenu(ctx);
     }
-
-    // VIP chek qabul qilish
+    // VIP chek
     if (s.waitingForReceipt && ctx.message.photo) {
         s.waitingForReceipt = false;
-        const fileId = ctx.message.photo[ctx.message.photo.length - 1].file_id;
+        const fileId = ctx.message.photo[ctx.message.photo.length-1].file_id;
         await ctx.telegram.sendPhoto(ADMIN_ID, fileId, {
-            caption: `🔔 <b>Yangi to'lov!</b>\n👤 ${escapeHTML(ctx.from.first_name)}\n🆔 <code>${userId}</code>`,
-            parse_mode: 'HTML',
-            ...Markup.inlineKeyboard([
-                [Markup.button.callback('✅ Tasdiqlash', `approve_${userId}`)],
-                [Markup.button.callback('❌ Rad etish', `reject_vip_${userId}`)],
-            ])
+            caption:`🔔 <b>Yangi to'lov!</b>\n👤 ${escapeHTML(ctx.from.first_name)}\n🆔 <code>${userId}</code>`,
+            parse_mode:'HTML',
+            ...Markup.inlineKeyboard([[Markup.button.callback('✅ Tasdiqlash',`approve_${userId}`)],[Markup.button.callback('❌ Rad etish',`reject_vip_${userId}`)]])
         });
-        return ctx.reply('✅ Chekingiz adminga yuborildi. Tasdiqlangach xabar boradi.');
+        return ctx.reply("✅ Chekingiz adminga yuborildi. Tasdiqlangach xabar boradi.");
     }
-
     // Admin — xabar tarqatish
     if (isAdmin(userId) && s.waitingForForward) {
         s.waitingForForward = false;
-        const db    = getDb();
+        const db = getDb();
         const users = Object.keys(db.users||{});
         await ctx.reply(`📣 ${users.length} kishiga yuborilmoqda...`);
         let success = 0;
@@ -1486,386 +955,195 @@ bot.on(['text','photo','video','animation','document'], async (ctx, next) => {
         await ctx.reply(`✅ Xabar yuborildi!\nJami: ${users.length} | Muvaffaqiyatli: ${success}`);
         return showSubjectMenu(ctx);
     }
-
     // Admin — vaqt
     if (isAdmin(userId) && s.waitingForTime) {
         const val = parseInt(msgText);
         if (isNaN(val) || val < 5) return ctx.reply('❌ Xato raqam! Kamida 5 kiriting:');
         botSettings.timeLimit = val; saveSettings(botSettings); s.waitingForTime = false;
-        await ctx.reply(`✅ Savol vaqti <b>${val} sekund</b>ga yangilandi.`, { parse_mode: 'HTML' });
+        await ctx.reply(`✅ Savol vaqti <b>${val} sekund</b>ga yangilandi.`,{parse_mode:'HTML'});
         return ctx.reply('🛠 Admin Panel:', adminMainKeyboard(getDb()));
     }
-
-    // Admin — yangi fan nomi
-    if (isAdmin(userId) && s.waitingForSubjectName) {
-        s.newSubName = msgText; s.waitingForSubjectName = false; s.waitingForSubjectQuestions = true;
-        return ctx.reply(`"${msgText}" fani uchun savollarni JSON formatida yuboring:`, Markup.keyboard([['🚫 Bekor qilish']]).resize());
-    }
-
-    // Admin — fan savollari JSON
+    // Admin — yangi fan
+    if (isAdmin(userId) && s.waitingForSubjectName) { s.newSubName=msgText; s.waitingForSubjectName=false; s.waitingForSubjectQuestions=true; return ctx.reply(`"${msgText}" fani uchun savollarni JSON formatida yuboring:`, Markup.keyboard([['🚫 Bekor qilish']]).resize()); }
     if (isAdmin(userId) && s.waitingForSubjectQuestions) {
         try {
-            const qs  = JSON.parse(msgText);
+            const qs = JSON.parse(msgText);
             const key = s.newSubName.toLowerCase().replace(/ /g,'_');
-            SUBJECTS[key] = { title: s.newSubName, questions: qs };
-            writeJSON(PATHS.customQ, SUBJECTS); s.waitingForSubjectQuestions = false;
+            SUBJECTS[key] = { title:s.newSubName, questions:qs };
+            writeJSON(PATHS.customQ, SUBJECTS); s.waitingForSubjectQuestions=false;
             await ctx.reply("✅ Yangi fan muvaffaqiyatli qo'shildi!");
             return showSubjectMenu(ctx);
         } catch { return ctx.reply("❌ JSON formati noto'g'ri! Tekshirib qaytadan yuboring:"); }
     }
 
-    // ✅ YANGI: Sohta ball — o'zimga (ball miqdorini kiritish)
+    // ✅ TO'G'RI: Admin sohta ball — o'ziga (user.score ga yozadi!)
     if (isAdmin(userId) && s.adminStep === 'wait_fake_score_amount_self') {
         const amount = parseFloat(msgText);
-        if (isNaN(amount) || amount <= 0) {
-            return ctx.reply('❌ Noto\'g\'ri miqdor! Musbat raqam kiriting:');
-        }
-        // Adminga ball qo'shish
+        if (isNaN(amount) || amount <= 0) return ctx.reply('❌ Noto\'g\'ri miqdor! Musbat raqam kiriting:');
         const db = getDb();
-        if (!db.users[userId]) {
-            db.users[userId] = {
-                id: userId,
-                name: 'Admin',
-                username: ctx.from.username || 'admin',
-                score: 0, totalTests: 0, totalCorrect: 0, totalWrong: 0
-            };
-        }
-        const before = parseFloat(db.users[userId].score || 0).toFixed(1);
-        db.users[userId].score        = (db.users[userId].score || 0) + amount;
-        db.users[userId].totalTests   = (db.users[userId].totalTests || 0) + 1;
-        db.users[userId].totalCorrect = (db.users[userId].totalCorrect || 0) + amount;
+        if (!db.users[userId]) db.users[userId] = { id:userId, name:'Admin', username:ctx.from.username||'admin', score:0, totalTests:0, totalCorrect:0, totalWrong:0 };
+        const u = db.users[userId];
+        const before = parseFloat(u.score||0).toFixed(1);
+        u.score        = (u.score        || 0) + amount;
+        u.totalTests   = (u.totalTests   || 0) + 1;
+        u.totalCorrect = (u.totalCorrect || 0) + amount;
         saveDb(db);
-        s.adminStep = null;
-        s.fakeScoreTarget = null;
-
-        await ctx.replyWithHTML(
-            `✅ <b>Ball muvaffaqiyatli qo'shildi!</b>\n\n` +
-            `👤 Foydalanuvchi: <b>Admin (o'zingiz)</b>\n` +
-            `💰 Qo'shildi: <b>+${amount}</b> ball\n` +
-            `📊 Oldingi ball: <b>${before}</b>\n` +
-            `🏆 Yangi ball: <b>${parseFloat(db.users[userId].score).toFixed(1)}</b>`
-        );
+        s.adminStep = null; s.fakeScoreTarget = null;
+        await ctx.replyWithHTML(`✅ <b>Ball muvaffaqiyatli qo'shildi!</b>\n\n👤 Admin (o'zingiz)\n💰 Qo'shildi: <b>+${amount}</b> ball\n📊 Oldingi: <b>${before}</b>\n🏆 Yangi: <b>${parseFloat(u.score).toFixed(1)}</b>`);
         return ctx.reply('🛠 Admin Panel', adminMainKeyboard(getDb()));
     }
-
-    // ✅ YANGI: Sohta ball — boshqa user TG ID kiritish
+    // ✅ TO'G'RI: Admin sohta ball — boshqa user TG ID
     if (isAdmin(userId) && s.adminStep === 'wait_fake_score_tgid') {
         const targetId = parseInt(msgText.trim());
-        if (isNaN(targetId)) {
-            return ctx.reply('❌ Noto\'g\'ri ID! Faqat raqam kiriting:');
-        }
-        const db   = getDb();
+        if (isNaN(targetId)) return ctx.reply('❌ Noto\'g\'ri ID! Faqat raqam kiriting:');
+        const db = getDb();
         const user = db.users[targetId];
-        if (!user) {
-            return ctx.replyWithHTML(
-                `❌ <b>ID: ${targetId}</b> li foydalanuvchi topilmadi.\n\n` +
-                `Foydalanuvchi botda ro'yxatdan o'tgan bo'lishi kerak.`
-            );
-        }
-        // ID topildi — ball miqdorini so'rash
-        s.fakeScoreUserId = targetId;
-        s.adminStep = 'wait_fake_score_amount_other';
-        return ctx.replyWithHTML(
-            `✅ <b>Foydalanuvchi topildi!</b>\n\n` +
-            `👤 Ism: <b>${escapeHTML(user.name || 'Noma\'lum')}</b>\n` +
-            `🆔 ID: <code>${targetId}</code>\n` +
-            `🏆 Joriy ball: <b>${parseFloat(user.score || 0).toFixed(1)}</b>\n\n` +
-            `Qo'shmoqchi bo'lgan ball miqdorini kiriting:`
-        );
+        if (!user) return ctx.replyWithHTML(`❌ <b>ID: ${targetId}</b> li foydalanuvchi topilmadi.`);
+        s.fakeScoreUserId = targetId; s.adminStep = 'wait_fake_score_amount_other';
+        return ctx.replyWithHTML(`✅ <b>Foydalanuvchi topildi!</b>\n\n👤 Ism: <b>${escapeHTML(user.name||"Noma'lum")}</b>\n🆔 ID: <code>${targetId}</code>\n🏆 Joriy ball: <b>${parseFloat(user.score||0).toFixed(1)}</b>\n\nQo'shmoqchi bo'lgan ball miqdorini kiriting:`);
     }
-
-    // ✅ YANGI: Sohta ball — boshqa user uchun ball miqdori
+    // ✅ TO'G'RI: Admin sohta ball — ball miqdori (user.score ga yozadi!)
     if (isAdmin(userId) && s.adminStep === 'wait_fake_score_amount_other') {
-        const amount   = parseFloat(msgText);
+        const amount = parseFloat(msgText);
         const targetId = s.fakeScoreUserId;
-        if (isNaN(amount) || amount <= 0) {
-            return ctx.reply('❌ Noto\'g\'ri miqdor! Musbat raqam kiriting:');
-        }
-        if (!targetId) {
-            s.adminStep = null;
-            return ctx.reply('❌ Xatolik. Qaytadan urinib ko\'ring.');
-        }
-        const db   = getDb();
+        if (isNaN(amount) || amount <= 0) return ctx.reply('❌ Noto\'g\'ri miqdor! Musbat raqam kiriting:');
+        if (!targetId) { s.adminStep = null; return ctx.reply('❌ Xatolik. Qaytadan urinib ko\'ring.'); }
+        const db = getDb();
         const user = db.users[targetId];
-        if (!user) {
-            s.adminStep = null;
-            return ctx.reply('❌ Foydalanuvchi topilmadi.');
-        }
-        const before = parseFloat(user.score || 0).toFixed(1);
-        db.users[targetId].score        = (user.score || 0) + amount;
-        db.users[targetId].totalTests   = (user.totalTests || 0) + 1;
-        db.users[targetId].totalCorrect = (user.totalCorrect || 0) + amount;
+        if (!user) { s.adminStep = null; return ctx.reply('❌ Foydalanuvchi topilmadi.'); }
+        const before = parseFloat(user.score||0).toFixed(1);
+        // ✅ TO'G'RI FIELD: user.score (leaderboard shu fieldni o'qiydi)
+        user.score        = (user.score        || 0) + amount;
+        user.totalTests   = (user.totalTests   || 0) + 1;
+        user.totalCorrect = (user.totalCorrect || 0) + amount;
         saveDb(db);
-
-        s.adminStep       = null;
-        s.fakeScoreUserId = null;
-        s.fakeScoreTarget = null;
-
-        await ctx.replyWithHTML(
-            `✅ <b>Ball muvaffaqiyatli qo'shildi!</b>\n\n` +
-            `👤 Foydalanuvchi: <b>${escapeHTML(user.name)}</b>\n` +
-            `🆔 TG ID: <code>${targetId}</code>\n` +
-            `💰 Qo'shildi: <b>+${amount}</b> ball\n` +
-            `📊 Oldingi ball: <b>${before}</b>\n` +
-            `🏆 Yangi ball: <b>${parseFloat(db.users[targetId].score).toFixed(1)}</b>`
-        );
+        s.adminStep = null; s.fakeScoreUserId = null; s.fakeScoreTarget = null;
+        await ctx.replyWithHTML(`✅ <b>Ball muvaffaqiyatli qo'shildi!</b>\n\n👤 Foydalanuvchi: <b>${escapeHTML(user.name)}</b>\n🆔 TG ID: <code>${targetId}</code>\n💰 Qo'shildi: <b>+${amount}</b> ball\n📊 Oldingi: <b>${before}</b>\n🏆 Yangi: <b>${parseFloat(user.score).toFixed(1)}</b>`);
         return ctx.reply('🛠 Admin Panel', adminMainKeyboard(getDb()));
     }
-
-    // Admin — musobaqa step-by-step
+    // Admin — musobaqa steps
     if (isAdmin(userId)) {
-        if (s.adminStep === 'wait_tour_date') {
-            if (msgText === '🚫 Bekor qilish') { s.adminStep=null; return ctx.reply('Bekor qilindi.'); }
-            s.tourDate = msgText; s.adminStep = 'wait_tour_time';
-            return ctx.reply('🕒 Musobaqa boshlanish soatini kiriting (masalan: 15:00):');
-        }
-        if (s.adminStep === 'wait_tour_time') {
-            s.tourTime = msgText; s.adminStep = 'wait_tour_count';
-            return ctx.reply('📝 Jami testlar sonini kiriting (masalan: 50):');
-        }
-        if (s.adminStep === 'wait_tour_count') {
-            if (isNaN(msgText)) return ctx.reply('❌ Faqat raqam kiriting:');
-            s.tourCount = msgText; s.adminStep = null;
-            return ctx.replyWithHTML(
-                `🏆 <b>Yangi musobaqa tafsilotlari:</b>\n\n📅 ${s.tourDate}\n🕒 ${s.tourTime}\n📝 ${s.tourCount} ta\n\nTasdiqlaysizmi?`,
-                Markup.inlineKeyboard([[Markup.button.callback('✅ Tasdiqlash','confirm_tour'),Markup.button.callback('❌ Rad etish','reject_tour')]])
-            );
-        }
+        if (s.adminStep === 'wait_tour_date') { if(msgText==='🚫 Bekor qilish'){s.adminStep=null;return ctx.reply('Bekor qilindi.');} s.tourDate=msgText; s.adminStep='wait_tour_time'; return ctx.reply('🕒 Musobaqa boshlanish soatini kiriting (masalan: 15:00):'); }
+        if (s.adminStep === 'wait_tour_time') { s.tourTime=msgText; s.adminStep='wait_tour_count'; return ctx.reply('📝 Jami testlar sonini kiriting (masalan: 50):'); }
+        if (s.adminStep === 'wait_tour_count') { if(isNaN(msgText))return ctx.reply('❌ Faqat raqam kiriting:'); s.tourCount=msgText; s.adminStep=null; return ctx.replyWithHTML(`🏆 <b>Yangi musobaqa tafsilotlari:</b>\n\n📅 ${s.tourDate}\n🕒 ${s.tourTime}\n📝 ${s.tourCount} ta\n\nTasdiqlaysizmi?`, Markup.inlineKeyboard([[Markup.button.callback('✅ Tasdiqlash','confirm_tour'),Markup.button.callback('❌ Rad etish','reject_tour')]])); }
         if (s.adminStep === 'wait_delete_id') {
             const delId = parseInt(msgText); s.adminStep = null;
             const db = getDb();
-            if (db.users[delId]) {
-                const userName = db.users[delId].name || 'Foydalanuvchi';
-                delete db.users[delId]; saveDb(db);
-                return ctx.reply(`✅ Foydalanuvchi (${escapeHTML(userName)}, ID: ${delId}) bazadan o'chirildi.\n\nDiqqat: Bu foydalanuvchi botga qayta /start bosib ro'yxatdan o'tishi mumkin.`);
-            }
+            if (db.users[delId]) { const userName=db.users[delId].name||'Foydalanuvchi'; delete db.users[delId]; saveDb(db); return ctx.reply(`✅ Foydalanuvchi (${escapeHTML(userName)}, ID: ${delId}) o'chirildi.`); }
             return ctx.reply("❌ Bunday ID li foydalanuvchi topilmadi.");
         }
     }
-
     // Ro'yxatdan o'tish
-    const db   = getDb();
+    const db = getDb();
     const user = db.users[userId];
-
     if (!user || !user.isRegistered) {
-        if (!db.users[userId]) {
-            db.users[userId] = { id: userId, step: 'wait_name', isRegistered: false, score: 0, username };
-            saveDb(db);
-        }
+        if (!db.users[userId]) { db.users[userId]={id:userId,step:'wait_name',isRegistered:false,score:0,username}; saveDb(db); }
         const cu = db.users[userId];
-
         if (cu.step === 'wait_name') {
             const forbidden = ['📝 Akademik yozuv','📜 Tarix','➕ Matematika','💻 Dasturlash 1','🧲 Fizika','🇬🇧 Perfect English','📊 Reyting','👤 Profil','⚙️ Sozlamalar'];
-            if (forbidden.includes(msgText)) {
-                return ctx.reply("❌ Menyu tugmalarini bosmang! Ism va familiyangizni yozing:", Markup.removeKeyboard());
-            }
-            if (!isValidName(msgText)) {
-                return ctx.replyWithHTML(
-                    `❌ <b>Bu ism sifatida qabul qilinmadi!</b>\n\nIltimos, <b>haqiqiy ism va familiyangizni</b> kiriting.\nMasalan: <i>Abdullayev Jasur</i>`,
-                    Markup.removeKeyboard()
-                );
-            }
-            cu.name = msgText.trim(); cu.step = 'wait_univ'; saveDb(db);
+            if (forbidden.includes(msgText)) return ctx.reply("❌ Menyu tugmalarini bosmang! Ism va familiyangizni yozing:", Markup.removeKeyboard());
+            if (!isValidName(msgText)) return ctx.replyWithHTML(`❌ <b>Bu ism sifatida qabul qilinmadi!</b>\n\nHaqiqiy ism va familiyangizni kiriting.\nMasalan: <i>Abdullayev Jasur</i>`, Markup.removeKeyboard());
+            cu.name=msgText.trim(); cu.step='wait_univ'; saveDb(db);
             return ctx.reply(`Rahmat, ${escapeHTML(msgText.trim())}!\n\nO'qish joyingizni tanlang:`, Markup.keyboard([['Alfraganus Universiteti','Perfect Universiteti'],['TATU','TDPU']]).oneTime().resize());
         }
-
-        if (cu.step === 'wait_univ') {
-            if (!['Alfraganus Universiteti','Perfect Universiteti','TATU','TDPU'].includes(msgText)) return ctx.reply('⚠️ Universitetni tanlang:');
-            cu.univ = msgText; cu.step = 'wait_kurs'; saveDb(db);
-            return ctx.reply('Nechanchi kurs?', Markup.keyboard([['1-kurs','2-kurs'],['3-kurs','4-kurs']]).oneTime().resize());
-        }
-
-        if (cu.step === 'wait_kurs') {
-            if (!['1-kurs','2-kurs','3-kurs','4-kurs'].includes(msgText)) return ctx.reply('⚠️ Kursni tanlang:');
-            cu.kurs = msgText; cu.step = 'wait_yonalish'; saveDb(db);
-            const buttons = msgText === '1-kurs' ? [["Dasturiy Injiniring","Kiberxavfsizlik"],["Sun'iy intelekt"]] : [['Magistratura','Boshqa']];
-            return ctx.reply("Yo'nalishingizni tanlang:", Markup.keyboard(buttons).oneTime().resize());
-        }
-
-        if (cu.step === 'wait_yonalish') {
-            cu.yonalish = msgText; cu.step = 'wait_semester'; saveDb(db);
-            return ctx.reply('Semestrni tanlang:', Markup.keyboard([['1-semestr','2-semestr']]).oneTime().resize());
-        }
-
+        if (cu.step === 'wait_univ') { if(!['Alfraganus Universiteti','Perfect Universiteti','TATU','TDPU'].includes(msgText))return ctx.reply('⚠️ Universitetni tanlang:'); cu.univ=msgText; cu.step='wait_kurs'; saveDb(db); return ctx.reply('Nechanchi kurs?', Markup.keyboard([['1-kurs','2-kurs'],['3-kurs','4-kurs']]).oneTime().resize()); }
+        if (cu.step === 'wait_kurs') { if(!['1-kurs','2-kurs','3-kurs','4-kurs'].includes(msgText))return ctx.reply('⚠️ Kursni tanlang:'); cu.kurs=msgText; cu.step='wait_yonalish'; saveDb(db); const buttons=msgText==='1-kurs'?[["Dasturiy Injiniring","Kiberxavfsizlik"],["Sun'iy intelekt"]]:[['Magistratura','Boshqa']]; return ctx.reply("Yo'nalishingizni tanlang:", Markup.keyboard(buttons).oneTime().resize()); }
+        if (cu.step === 'wait_yonalish') { cu.yonalish=msgText; cu.step='wait_semester'; saveDb(db); return ctx.reply('Semestrni tanlang:', Markup.keyboard([['1-semestr','2-semestr']]).oneTime().resize()); }
         if (cu.step === 'wait_semester') {
             if (msgText === '2-semestr') return ctx.reply("❌ Hozircha faqat 1-semestr mavjud.");
-            if (msgText === '1-semestr') {
-                cu.semester = msgText; cu.isRegistered = true; cu.step = 'completed'; saveDb(db);
-                await ctx.reply("✅ Ro'yxatdan o'tildi!");
-                return showSubjectMenu(ctx);
-            }
+            if (msgText === '1-semestr') { cu.semester=msgText; cu.isRegistered=true; cu.step='completed'; saveDb(db); await ctx.reply("✅ Ro'yxatdan o'tildi!"); return showSubjectMenu(ctx); }
             return ctx.reply('⚠️ Semestrni tanlang:');
         }
         return ctx.reply("⚠️ Davom etish uchun ismingizni kiriting!");
     }
-
-    // Ism tahrirlash
     if (user.step === 'edit_name') {
-        if (!isValidName(msgText)) {
-            return ctx.replyWithHTML("❌ <b>Bu ism sifatida qabul qilinmadi!</b>\n\nHaqiqiy ism va familiyangizni kiriting:");
-        }
-        user.name = msgText.trim(); user.step = 'completed'; saveDb(db);
+        if (!isValidName(msgText)) return ctx.replyWithHTML("❌ <b>Bu ism sifatida qabul qilinmadi!</b>\n\nHaqiqiy ism va familiyangizni kiriting:");
+        user.name=msgText.trim(); user.step='completed'; saveDb(db);
         await ctx.reply(`✅ Ism o'zgartirildi: ${escapeHTML(msgText.trim())}`);
         return showSubjectMenu(ctx);
     }
-
-    if (s.waitingForName) {
-        if (!isValidName(msgText)) return ctx.reply("❌ Haqiqiy ismingizni kiriting:");
-        s.userName = msgText.trim(); s.waitingForName = false;
-        const dbU = getDb(); if(!dbU.users[userId]) dbU.users[userId]={};
-        dbU.users[userId] = { ...dbU.users[userId], name: msgText.trim(), username: `@${username}` }; saveDb(dbU);
-        await ctx.reply(`✅ Rahmat, ${escapeHTML(msgText.trim())}!`);
-        return showSubjectMenu(ctx);
-    }
-
     return next();
 });
 
 // ============================================================
-// CRON — MUSOBAQA GLOBAL DEADLINE TIZIMI
+// CRON — MUSOBAQA GLOBAL DEADLINE
 // ============================================================
-
-// Xotirada saqlanadigan deadline taymer
 let tourDeadlineTimer = null;
-
-// Deadline taymerini o'rnatish
 function scheduleTourDeadline(deadlineMs) {
     if (tourDeadlineTimer) { clearTimeout(tourDeadlineTimer); tourDeadlineTimer = null; }
     const remaining = deadlineMs - Date.now();
-    if (remaining <= 0) {
-        // Vaqt o'tib ketgan — darhol tugatish
-        setImmediate(() => forceFinishAllParticipants());
-        return;
-    }
-    console.log(`⏰ Deadline taymer o'rnatildi: ${Math.round(remaining/1000)}s qoldi`);
+    if (remaining <= 0) { setImmediate(() => forceFinishAllParticipants()); return; }
+    console.log(`⏰ Deadline taymer: ${Math.round(remaining/1000)}s qoldi`);
     tourDeadlineTimer = setTimeout(() => forceFinishAllParticipants(), remaining);
 }
-
-// Barcha ishtirokchilarni majburiy tugatish — vaqt tugaganda chaqiriladi
 async function forceFinishAllParticipants() {
     if (tourDeadlineTimer) { clearTimeout(tourDeadlineTimer); tourDeadlineTimer = null; }
-
-    const db   = getDb();
+    const db = getDb();
     const tour = db.tournament;
     if (!tour) return;
-
-    console.log(`🏁 GLOBAL DEADLINE: ${tour.participants?.length || 0} ishtirokchi tugatilmoqda...`);
-
     const parts = tour.participants || [];
     let finished = 0;
-
-    // Barcha tugatilmagan ishtirokchilarga xabar yuborish
     const chunkSize = 20;
     for (let i = 0; i < parts.length; i += chunkSize) {
-        const chunk = parts.slice(i, i + chunkSize);
+        const chunk = parts.slice(i, i+chunkSize);
         await Promise.allSettled(chunk.map(async (uid) => {
             if (!db.users[uid]) return;
             const alreadyDone = db.users[uid].tourFinished;
-            const score       = db.users[uid].tourScore || 0;
-
-            // Tugatilmagan bo'lsa — bazada finish qilamiz
-            if (!alreadyDone) {
-                db.users[uid].tourFinished = true;
-                finished++;
-            }
-
-            // Har kim uchun vaqt tugash xabarini yuborish
+            const score = db.users[uid].tourScore || 0;
+            if (!alreadyDone) { db.users[uid].tourFinished = true; finished++; }
             try {
                 await bot.telegram.sendMessage(uid,
-                    `⏰ <b>MUSOBAQA VAQTI TUGADI!</b>\n\n` +
-                    `📅 Sana: <b>${tour.date || '—'}</b>\n` +
-                    `👤 Sizning natijangiz: <b>${score} ball</b>\n` +
-                    (alreadyDone
-                        ? `✅ Siz testni o'z vaqtida yakunlagansiz.`
-                        : `⚠️ Ajratilgan vaqt tugaganligi sababli test avtomatik yakunlandi.`) +
-                    `\n\n🏆 Natijalar tez orada e'lon qilinadi!`,
-                    { parse_mode: 'HTML' }
+                    `⏰ <b>MUSOBAQA VAQTI TUGADI!</b>\n\n📅 ${tour.date||'—'}\n👤 Sizning natijangiz: <b>${score} ball</b>\n${alreadyDone?'✅ Siz testni o\'z vaqtida yakunlagansiz.':'⚠️ Vaqt tugaganligi sababli test avtomatik yakunlandi.'}\n\n🏆 Natijalar tez orada e'lon qilinadi!`,
+                    {parse_mode:'HTML'}
                 );
             } catch {}
         }));
-        if (i + chunkSize < parts.length) await new Promise(r => setTimeout(r, 600));
+        if (i+chunkSize < parts.length) await new Promise(r => setTimeout(r,600));
     }
-
-    // Bazani saqlash va musobaqani tugatish
     db.tournament.isActive = false;
     saveDb(db);
-    console.log(`✅ Deadline tugadi: ${finished} yangi, ${parts.length - finished} allaqachon yakunlagan`);
+    console.log(`✅ Deadline: ${finished} yangi yakunladi`);
 }
-
-// Har daqiqa tekshiruv cron
 cron.schedule('* * * * *', async () => {
-    const now         = new Date();
+    const now = new Date();
     const currentTime = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
-    const db          = getDb();
-    const tour        = db.tournament;
-
+    const db = getDb();
+    const tour = db.tournament;
     if (!tour?.isActive || !tour.time) return;
-
-    // ── 1. Boshlash vaqti yetdi va hali boshlanmagan ──
     if (tour.time === currentTime && !tour.started) {
-        const totalMs      = (tour.count || 30) * 30 * 1000;
+        const totalMs = (tour.count||30) * 30 * 1000;
         const deadlineTime = Date.now() + totalMs;
-
-        // DB ga saqlaymiz — bot restart bo'lsa ham tiklansin
-        db.tournament.started      = true;
-        db.tournament.startedAt    = Date.now();
-        db.tournament.deadlineTime = deadlineTime;
+        db.tournament.started = true; db.tournament.startedAt = Date.now(); db.tournament.deadlineTime = deadlineTime;
         saveDb(db);
-
-        console.log(`🚀 Musobaqa boshlandi! ${tour.participants?.length || 0} ishtirokchi · deadline: ${Math.round(totalMs/60000)} daqiqadan keyin`);
-
-        // Deadline taymer o'rnatish
         scheduleTourDeadline(deadlineTime);
-
-        // Ishtirokchilarga xabar
         const parts = tour.participants || [];
         const chunkSize = 25;
         for (let i = 0; i < parts.length; i += chunkSize) {
-            const chunk = parts.slice(i, i + chunkSize);
+            const chunk = parts.slice(i, i+chunkSize);
             await Promise.allSettled(chunk.map(uid =>
                 bot.telegram.sendMessage(uid,
-                    `🔔 <b>MUSOBAQA BOSHLANDI!</b>\n\n` +
-                    `📅 <b>${tour.date}</b> · 🕒 <b>${tour.time}</b>\n` +
-                    `📝 Savollar: <b>${tour.count} ta</b>\n` +
-                    `⏱ Umumiy vaqt: <b>${Math.round(totalMs/60000)} daqiqa</b>\n\n` +
-                    `⚠️ <b>DIQQAT:</b> Vaqt allaqachon boshlandi!\n` +
-                    `Testni boshlamasangiz, vaqt tugaganda <b>0 ball</b> bilan yakunlanadi!\n\n` +
-                    `Quyidagi tugmani bosib testni boshlang 👇`,
-                    {
-                        parse_mode: 'HTML',
-                        ...Markup.inlineKeyboard([[
-                            Markup.button.callback('🏁 TESTNI BOSHLASH', 'start_actual_tour')
-                        ]])
-                    }
-                ).catch(() => {})
+                    `🔔 <b>MUSOBAQA BOSHLANDI!</b>\n\n📅 <b>${tour.date}</b> · 🕒 <b>${tour.time}</b>\n📝 Savollar: <b>${tour.count} ta</b>\n⏱ Umumiy vaqt: <b>${Math.round(totalMs/60000)} daqiqa</b>\n\n⚠️ Testni boshlamasangiz, <b>0 ball</b> bilan yakunlanadi!\n\n👇 Testni boshlang:`,
+                    {parse_mode:'HTML',...Markup.inlineKeyboard([[Markup.button.callback('🏁 TESTNI BOSHLASH','start_actual_tour')]])}
+                ).catch(()=>{})
             ));
-            if (i + chunkSize < parts.length) await new Promise(r => setTimeout(r, 500));
+            if (i+chunkSize < parts.length) await new Promise(r => setTimeout(r,500));
         }
         return;
     }
-
-    // ── 2. Musobaqa boshlangan va vaqti o'tib ketgan (cron zahira tekshiruvi) ──
     if (tour.started && tour.deadlineTime && Date.now() >= tour.deadlineTime && tour.isActive) {
         console.log('🏁 Cron zahira: deadline o\'tib ketgan, tugatmoqda...');
         await forceFinishAllParticipants();
     }
 });
-
-// ── Bot qayta ishga tushganda deadline ni tiklash ──
 (async () => {
-    await new Promise(r => setTimeout(r, 3000)); // bot to'liq yuklanishini kutish
+    await new Promise(r => setTimeout(r,3000));
     try {
-        const db   = getDb();
+        const db = getDb();
         const tour = db.tournament;
         if (tour?.isActive && tour.started && tour.deadlineTime) {
             const remaining = tour.deadlineTime - Date.now();
-            if (remaining > 0) {
-                console.log(`🔄 Bot restart: musobaqa deadline tiklandi (${Math.round(remaining/1000)}s qoldi)`);
-                scheduleTourDeadline(tour.deadlineTime);
-            } else {
-                console.log('⚠️ Bot restart: musobaqa vaqti o\'tib ketgan — darhol tugatilmoqda');
-                await forceFinishAllParticipants();
-            }
+            if (remaining > 0) { console.log(`🔄 Bot restart: deadline tiklandi (${Math.round(remaining/1000)}s)`); scheduleTourDeadline(tour.deadlineTime); }
+            else { console.log('⚠️ Bot restart: deadline o\'tib ketgan'); await forceFinishAllParticipants(); }
         }
     } catch (err) { console.error('[Restart recovery]', err.message); }
 })();
@@ -1874,309 +1152,595 @@ cron.schedule('* * * * *', async () => {
 // EXPRESS API
 // ============================================================
 
-// ✅ YANGI: Foydalanuvchi rasmini saqlash API
+// ─── Foto ─────────────────────────────────────────────────────────
 app.post('/api/save-photo', (req, res) => {
     try {
         const { username, photoData, isAdmin: isAdminUser } = req.body;
-        if (!photoData) return res.status(400).json({ error: 'photoData kerak' });
-
+        if (!photoData) return res.status(400).json({error:'photoData kerak'});
         const photos = getPhotos();
-        const key    = isAdminUser ? '__admin__' : username;
-        if (!key)    return res.status(400).json({ error: 'username kerak' });
-
-        photos[key] = {
-            data:      photoData,
-            updatedAt: Date.now(),
-        };
+        const key = isAdminUser ? '__admin__' : username;
+        if (!key) return res.status(400).json({error:'username kerak'});
+        photos[key] = { data:photoData, updatedAt:Date.now() };
         savePhotos(photos);
-        res.json({ success: true });
-    } catch (err) {
-        console.error('[Photo save]', err.message);
-        res.status(500).json({ error: 'Saqlashda xatolik' });
-    }
+        res.json({ success:true });
+    } catch (err) { console.error('[Photo save]', err.message); res.status(500).json({error:'Xatolik'}); }
 });
-
-// ✅ YANGI: Foydalanuvchi rasmini olish API
-app.get('/api/get-photo', (req, res) => {
-    try {
-        const { username, isAdmin: isAdminUser } = req.query;
-        const photos = getPhotos();
-        const key    = isAdminUser === 'true' ? '__admin__' : username;
-        if (!key || !photos[key]) return res.status(404).json({ error: 'Rasm topilmadi' });
-        res.json({ photoData: photos[key].data });
-    } catch (err) {
-        res.status(500).json({ error: 'Olishda xatolik' });
-    }
-});
-
-// ✅ YANGI: Barcha foydalanuvchi rasmlari (leaderboard uchun)
 app.get('/api/photos', (req, res) => {
     try {
-        const photos  = getPhotos();
-        const result  = {};
-        const db      = getDb();
-        // username → photoData mapping qaytarish
-        Object.keys(photos).forEach(key => {
-            result[key] = photos[key].data;
-        });
-        // tgUsername bo'yicha ham map qilish
+        const photos = getPhotos();
+        const result = {};
+        const db = getDb();
+        Object.keys(photos).forEach(key => { result[key] = photos[key].data; });
         Object.values(db.users).forEach(u => {
             if (u.username && u.name) {
-                const clean = (u.username || '').replace('@', '').toLowerCase();
+                const clean = (u.username||'').replace('@','').toLowerCase();
                 if (photos[clean]) result[u.name] = photos[clean].data;
             }
         });
         res.json(result);
-    } catch (err) {
-        res.status(500).json({ error: 'Xatolik' });
-    }
+    } catch (err) { res.status(500).json({error:'Xatolik'}); }
+});
+app.get('/api/telegram-photo/:userId', async (req, res) => {
+    try {
+        const userId = req.params.userId;
+        const db = getDb();
+        let targetId = null;
+        if (/^\d+$/.test(userId)) { targetId = parseInt(userId); }
+        else { for (const [id,u] of Object.entries(db.users||{})) { if ((u.name||'').toLowerCase().trim()===userId.toLowerCase().trim()) { targetId=parseInt(id); break; } } }
+        if (!targetId) return res.status(404).json({error:'Foydalanuvchi topilmadi'});
+        try {
+            const photos = await bot.telegram.getUserProfilePhotos(targetId, {limit:1});
+            if (!photos.total_count || !photos.photos[0]?.length) return res.status(404).json({error:"Rasm yo'q"});
+            const fileId = photos.photos[0][photos.photos[0].length-1].file_id;
+            const fileInfo = await bot.telegram.getFile(fileId);
+            const fileUrl = `https://api.telegram.org/file/bot${BOT_TOKEN}/${fileInfo.file_path}`;
+            const https = require('https');
+            https.get(fileUrl, (imgRes) => { res.setHeader('Content-Type', imgRes.headers['content-type']||'image/jpeg'); res.setHeader('Cache-Control','public, max-age=3600'); imgRes.pipe(res); }).on('error', () => res.status(500).json({error:'Rasm yuklanmadi'}));
+        } catch { res.status(404).json({error:'Rasm olinmadi'}); }
+    } catch (err) { res.status(500).json({error:'Xatolik'}); }
 });
 
-// Foydalanuvchi statistikasi
+// ─── Foydalanuvchilar ──────────────────────────────────────────────
+app.get('/api/users-map', (req, res) => {
+    try {
+        const db = getDb();
+        const result = {};
+        Object.entries(db.users||{}).forEach(([id,u]) => { if (u.name) result[u.name.toLowerCase().trim()] = {id:parseInt(id), name:u.name, username:u.username||''}; });
+        res.json(result);
+    } catch (err) { res.status(500).json({error:'Xatolik'}); }
+});
 app.get('/api/user-stats', (req, res) => {
-    const nameQ     = (req.query.name     || '').toLowerCase().trim();
-    const usernameQ = (req.query.username || '').toLowerCase().trim();
-    if (!nameQ && !usernameQ) return res.status(400).json({ error: 'name yoki username kerak' });
-
-    const db   = getDb();
-    let user   = null;
-
-    if (nameQ) {
-        user = Object.values(db.users).find(u => (u.name || '').toLowerCase().trim() === nameQ);
-    }
-    if (!user && usernameQ) {
-        user = Object.values(db.users).find(u =>
-            (u.username || '').toLowerCase().replace('@','').trim() === usernameQ.replace('@','')
-        );
-    }
-    if (!user) return res.status(404).json({ error: 'Topilmadi' });
-
-    res.json({
-        score:        user.score        || 0,
-        totalTests:   user.totalTests   || 0,
-        totalCorrect: user.totalCorrect || null,
-        totalWrong:   user.totalWrong   || null,
-        univ:         user.univ         || '—',
-        kurs:         user.kurs         || '—',
-        yonalish:     user.yonalish     || '—',
-        isVip:        user.isVip        || false,
-        vipStart:     user.vipStart     || null,
-        vipEnd:       user.vipEnd       || null,
-        subjects:     user.subjects     || {},
-    });
+    const nameQ = (req.query.name||'').toLowerCase().trim();
+    const usernameQ = (req.query.username||'').toLowerCase().trim();
+    if (!nameQ && !usernameQ) return res.status(400).json({error:'name yoki username kerak'});
+    const db = getDb();
+    let user = null;
+    if (nameQ) user = Object.values(db.users).find(u => (u.name||'').toLowerCase().trim() === nameQ);
+    if (!user && usernameQ) user = Object.values(db.users).find(u => (u.username||'').toLowerCase().replace('@','').trim() === usernameQ.replace('@',''));
+    if (!user) return res.status(404).json({error:'Topilmadi'});
+    res.json({ score:user.score||0, totalTests:user.totalTests||0, totalCorrect:user.totalCorrect||null, totalWrong:user.totalWrong||null, univ:user.univ||'—', kurs:user.kurs||'—', yonalish:user.yonalish||'—', isVip:user.isVip||false, vipStart:user.vipStart||null, vipEnd:user.vipEnd||null, subjects:user.subjects||{} });
 });
 
-// Eng ko'p test ishlagan foydalanuvchi
+// ─── Web Auth ──────────────────────────────────────────────────────
+app.post('/api/web-auth/register', (req, res) => {
+    try {
+        const { username, name, password } = req.body;
+        if (!username||!name||!password) return res.status(400).json({error:'missing_fields'});
+        const u = username.toLowerCase().trim();
+        if (!/^[a-z0-9_]{3,}$/.test(u)) return res.status(400).json({error:'invalid_username'});
+        if (name.trim().length < 3) return res.status(400).json({error:'invalid_name'});
+        if (password.length < 6) return res.status(400).json({error:'invalid_password'});
+        const webUsers = getWebUsers();
+        const db = getDb();
+        if (webUsers[u]) return res.status(409).json({error:'exists'});
+        if (Object.values(db.users||{}).find(usr => (usr.username||'').replace('@','').toLowerCase()===u)) return res.status(409).json({error:'exists'});
+        webUsers[u] = { username:u, name:name.trim(), password, photo:null, createdAt:Date.now() };
+        saveWebUsers(webUsers);
+        res.json({ success:true, user:{username:u, name:name.trim()} });
+    } catch (err) { console.error('[web-register]', err.message); res.status(500).json({error:'server_error'}); }
+});
+app.post('/api/web-auth/login', (req, res) => {
+    try {
+        const { username, password } = req.body;
+        if (!username||!password) return res.status(400).json({error:'missing_fields'});
+        const u = username.toLowerCase().trim();
+        const webUsers = getWebUsers();
+        if (webUsers[u]) {
+            if (webUsers[u].password !== password) return res.status(401).json({error:'wrong_password'});
+            return res.json({ success:true, user:{username:u, name:webUsers[u].name, photo:webUsers[u].photo||null, createdAt:webUsers[u].createdAt} });
+        }
+        return res.status(404).json({error:'notfound'});
+    } catch (err) { console.error('[web-login]', err.message); res.status(500).json({error:'server_error'}); }
+});
+app.get('/api/web-auth/me', (req, res) => {
+    try {
+        const u = (req.query.username||'').toLowerCase().trim();
+        if (!u) return res.status(400).json({error:'missing'});
+        const webUsers = getWebUsers();
+        if (!webUsers[u]) return res.status(404).json({error:'notfound'});
+        res.json({ success:true, user:{username:u, name:webUsers[u].name, photo:webUsers[u].photo||null, createdAt:webUsers[u].createdAt} });
+    } catch (err) { res.status(500).json({error:'server_error'}); }
+});
+app.post('/api/web-auth/reset-password', (req, res) => {
+    try {
+        const { username, newPassword } = req.body;
+        if (!username||!newPassword) return res.status(400).json({error:'missing_fields'});
+        if (newPassword.length < 6) return res.status(400).json({error:'too_short'});
+        const u = username.toLowerCase().trim();
+        const webUsers = getWebUsers();
+        if (!webUsers[u]) return res.status(404).json({error:'notfound'});
+        webUsers[u].password = newPassword; webUsers[u].updatedAt = Date.now();
+        saveWebUsers(webUsers);
+        res.json({ success:true });
+    } catch (err) { res.status(500).json({error:'server_error'}); }
+});
+app.post('/api/web-auth/update', (req, res) => {
+    try {
+        const { username, newUsername, name, newPassword } = req.body;
+        if (!username) return res.status(400).json({error:'missing'});
+        const u = username.toLowerCase().trim();
+        const webUsers = getWebUsers();
+        if (!webUsers[u]) return res.status(404).json({error:'notfound'});
+        if (newUsername && newUsername !== u) {
+            const nu = newUsername.toLowerCase().trim();
+            if (webUsers[nu]) return res.status(409).json({error:'username_taken'});
+            webUsers[nu] = {...webUsers[u], username:nu};
+            if (name) webUsers[nu].name = name;
+            if (newPassword && newPassword.length >= 6) webUsers[nu].password = newPassword;
+            webUsers[nu].updatedAt = Date.now();
+            delete webUsers[u]; saveWebUsers(webUsers);
+            return res.json({ success:true, newUsername:nu });
+        }
+        if (name) webUsers[u].name = name;
+        if (newPassword && newPassword.length >= 6) webUsers[u].password = newPassword;
+        webUsers[u].updatedAt = Date.now(); saveWebUsers(webUsers);
+        res.json({ success:true });
+    } catch (err) { res.status(500).json({error:'server_error'}); }
+});
+
+// ─── Chat ──────────────────────────────────────────────────────────
+app.post('/api/chat/send', async (req, res) => {
+    try {
+        const { fromName, toName, text, imageData } = req.body;
+        if (!fromName||!toName||(!text?.trim()&&!imageData)) return res.status(400).json({error:'Parametrlar yetishmayapti'});
+        const chats = getChatMsgs();
+        const cid = chatId(fromName, toName);
+        if (!chats[cid]) chats[cid] = [];
+        const msg = { id:Date.now()+'_'+Math.random().toString(36).slice(2,7), from:fromName, to:toName, text:text?.trim()||'', imageData:imageData||null, ts:Date.now(), read:false };
+        chats[cid].push(msg);
+        if (chats[cid].length > 500) chats[cid] = chats[cid].slice(-500);
+        saveChatMsgs(chats);
+        res.json({ success:true, msg });
+        try {
+            const db = getDb();
+            const toLow = (toName||'').toLowerCase().trim();
+            for (const [uid,u] of Object.entries(db.users||{})) {
+                if ((u.name||'').toLowerCase().trim()===toLow || (u.username||'').replace('@','').toLowerCase()===toLow) {
+                    await bot.telegram.sendMessage(uid,`💬 <b>Yangi xabar!</b>\n👤 <b>Kimdan:</b> ${fromName}\n📝 ${imageData?'🖼️ Rasm':(text||'').slice(0,100)}`,{parse_mode:'HTML'}).catch(()=>{});
+                    break;
+                }
+            }
+        } catch {}
+    } catch (err) { console.error('[Chat send]', err.message); res.status(500).json({error:'Xatolik'}); }
+});
+app.get('/api/chat/messages', (req, res) => {
+    try {
+        const { name1, name2, since=0 } = req.query;
+        if (!name1||!name2) return res.status(400).json({error:'name1 va name2 kerak'});
+        const chats = getChatMsgs();
+        const cid = chatId(name1, name2);
+        const msgs = (chats[cid]||[]).filter(m => m.ts > parseInt(since) && ((m.from===name1&&m.to===name2)||(m.from===name2&&m.to===name1)));
+        res.json({ messages:msgs });
+    } catch (err) { res.status(500).json({error:'Xatolik'}); }
+});
+app.post('/api/chat/read', (req, res) => {
+    try {
+        const { myName, otherName } = req.body;
+        if (!myName||!otherName) return res.status(400).json({error:'Parametrlar kerak'});
+        const chats = getChatMsgs();
+        const cid = chatId(myName, otherName);
+        const myLow = myName.toLowerCase().trim();
+        if (chats[cid]) { chats[cid].forEach(m => { if ((m.to||'').toLowerCase().trim()===myLow) m.read=true; }); saveChatMsgs(chats); }
+        res.json({ success:true });
+    } catch (err) { res.status(500).json({error:'Xatolik'}); }
+});
+app.post('/api/chat/delete', (req, res) => {
+    try {
+        const { myName, otherName } = req.body;
+        if (!myName||!otherName) return res.status(400).json({error:'Parametrlar kerak'});
+        const chats = getChatMsgs();
+        const cid = chatId(myName, otherName);
+        if (chats[cid]) { delete chats[cid]; saveChatMsgs(chats); }
+        res.json({ success:true });
+    } catch (err) { console.error('[Chat delete]', err.message); res.status(500).json({error:'Xatolik'}); }
+});
+app.get('/api/chat/unread', (req, res) => {
+    try {
+        const { myName } = req.query;
+        if (!myName) return res.status(400).json({error:'myName kerak'});
+        const chats = getChatMsgs();
+        const myLow = myName.toLowerCase().trim();
+        let total = 0;
+        const byChat = {};
+        Object.entries(chats).forEach(([cid,msgs]) => {
+            const isParticipant = msgs.some(m => (m.from||'').toLowerCase().trim()===myLow || (m.to||'').toLowerCase().trim()===myLow);
+            if (!isParticipant) return;
+            const unread = msgs.filter(m => (m.to||'').toLowerCase().trim()===myLow && !m.read).length;
+            if (unread > 0) { total += unread; byChat[cid] = unread; }
+        });
+        res.json({ total, byChat });
+    } catch (err) { res.status(500).json({error:'Xatolik'}); }
+});
+app.get('/api/chat/list', (req, res) => {
+    try {
+        const { myName } = req.query;
+        if (!myName) return res.status(400).json({error:'myName kerak'});
+        const myLow = myName.toLowerCase().trim();
+        const chats = getChatMsgs();
+        const list = [];
+        Object.entries(chats).forEach(([cid,msgs]) => {
+            if (!msgs.length) return;
+            const isParticipant = msgs.some(m => (m.from||'').toLowerCase().trim()===myLow || (m.to||'').toLowerCase().trim()===myLow);
+            if (!isParticipant) return;
+            const last = msgs[msgs.length-1];
+            const other = (last.from||'').toLowerCase().trim()===myLow ? last.to : last.from;
+            const unread = msgs.filter(m => (m.to||'').toLowerCase().trim()===myLow && !m.read).length;
+            list.push({ cid, otherName:other, lastMsg:last.imageData?'[Rasm 🖼️]':last.text, lastFrom:last.from, lastTs:last.ts, unread });
+        });
+        list.sort((a,b) => b.lastTs - a.lastTs);
+        res.json(list);
+    } catch (err) { console.error('[Chat list]', err.message); res.status(500).json({error:'Xatolik'}); }
+});
+
+// ─── Follow ────────────────────────────────────────────────────────
+app.post('/api/follow', (req, res) => {
+    try {
+        const { follower, following } = req.body;
+        if (!follower||!following) return res.status(400).json({error:'follower va following kerak'});
+        if (follower.toLowerCase()===following.toLowerCase()) return res.status(400).json({error:"O'zingizni follow qila olmaysiz"});
+        const follows = getFollows();
+        const fKey = follower.toLowerCase().trim();
+        if (!follows[fKey]) follows[fKey] = [];
+        const targetLower = following.toLowerCase().trim();
+        const idx = follows[fKey].findIndex(n => n.toLowerCase()===targetLower);
+        let action;
+        if (idx === -1) { follows[fKey].push(following.trim()); action='followed'; }
+        else { follows[fKey].splice(idx,1); action='unfollowed'; }
+        saveFollows(follows);
+        res.json({ success:true, action });
+    } catch (err) { res.status(500).json({error:'Xatolik'}); }
+});
+app.get('/api/follow-info', (req, res) => {
+    try {
+        const name = (req.query.name||'').toLowerCase().trim();
+        const myName = (req.query.myName||'').toLowerCase().trim();
+        if (!name) return res.status(400).json({error:'name kerak'});
+        const follows = getFollows();
+        const followers = Object.entries(follows).filter(([,list]) => list.some(n => n.toLowerCase()===name)).map(([follower]) => follower);
+        const following = follows[name] || [];
+        const isFollowing = myName ? (follows[myName]||[]).some(n => n.toLowerCase()===name) : false;
+        res.json({ followers:followers.length, following:following.length, isFollowing });
+    } catch (err) { res.status(500).json({error:'Xatolik'}); }
+});
+app.get('/api/follow-list', (req, res) => {
+    try {
+        const { name, type } = req.query;
+        if (!name) return res.status(400).json({error:'name kerak'});
+        const follows = getFollows();
+        const nameLow = name.toLowerCase().trim();
+        if (type === 'followers') {
+            const result = Object.entries(follows).filter(([,list]) => list.some(n => n.toLowerCase()===nameLow)).map(([follower]) => follower);
+            res.json({ followers:result });
+        } else res.json({ following:follows[nameLow]||[] });
+    } catch (err) { res.status(500).json({error:'Xatolik'}); }
+});
+
+// ─── Subjects ──────────────────────────────────────────────────────
+app.get('/api/subjects', (req, res) => {
+    try {
+        const result = {};
+        Object.entries(SUBJECTS).forEach(([key,sub]) => {
+            if (sub && sub.questions && sub.questions.length > 0) {
+                result[key] = { title:sub.title||key, questions:sub.questions.map(q => ({q:q.q, a:q.a, options:q.options, hint:q.hint||null, image:q.image||null})) };
+            }
+        });
+        res.json(result);
+    } catch (err) { console.error('[Subjects API]', err.message); res.status(500).json({error:'Xatolik'}); }
+});
+
+// ─── ✅ YAGONA va TO'G'RI Leaderboard — ball bo'yicha kamayish ──────
+app.get('/api/leaderboard', (req, res) => {
+    try {
+        const db = getDb();
+        const webScores = getWebScores();
+        const webUsers  = getWebUsers();
+        const map = new Map();
+
+        // 1. Telegram foydalanuvchilari (user.score to'g'ridan-to'g'ri)
+        for (const [,u] of Object.entries(db.users||{})) {
+            const sc = parseFloat(u.score) || 0;
+            if (sc <= 0 || !u.name || !u.name.trim()) continue;
+            const k = u.name.trim().toLowerCase();
+            map.set(k, {
+                name:         u.name.trim(),
+                tgUsername:   (u.username||'').replace('@',''),
+                univ:         u.univ||'',
+                kurs:         u.kurs||'',
+                yonalish:     u.yonalish||'',
+                score:        sc,
+                totalTests:   parseInt(u.totalTests)  ||0,
+                totalCorrect: parseInt(u.totalCorrect)||0,
+                totalWrong:   parseInt(u.totalWrong)  ||0,
+            });
+        }
+        // 2. web_scores (TG da yo'q nomlar)
+        for (const [,ws] of Object.entries(webScores)) {
+            const sc = parseFloat(ws.score) || 0;
+            if (sc <= 0 || !ws.name || !ws.name.trim()) continue;
+            const k = ws.name.trim().toLowerCase();
+            if (!map.has(k)) map.set(k, { name:ws.name.trim(), tgUsername:ws.username||'', univ:'', kurs:'', yonalish:'', score:sc, totalTests:parseInt(ws.totalTests)||0, totalCorrect:parseInt(ws.totalCorrect)||0, totalWrong:parseInt(ws.totalWrong)||0 });
+        }
+        // 3. web_users (score > 0, boshqa joyda yo'qlar)
+        for (const [,wu] of Object.entries(webUsers)) {
+            const sc = parseFloat(wu.score) || 0;
+            if (sc <= 0 || !wu.name || !wu.name.trim()) continue;
+            const k = wu.name.trim().toLowerCase();
+            if (!map.has(k)) map.set(k, { name:wu.name.trim(), tgUsername:wu.username||'', univ:'', kurs:'', yonalish:'', score:sc, totalTests:parseInt(wu.totalTests)||0, totalCorrect:parseInt(wu.totalCorrect)||0, totalWrong:parseInt(wu.totalWrong)||0 });
+        }
+        // ✅ Ball bo'yicha KAMAYISH tartibida
+        const sorted = Array.from(map.values()).sort((a,b) => b.score - a.score);
+        res.json(sorted);
+    } catch (err) { console.error('[leaderboard]', err.message); res.status(500).json({error:'Xatolik'}); }
+});
+
+// ─── ✅ YAGONA va TO'G'RI Admin add-score ──────────────────────────
+app.post('/api/admin/add-score', async (req, res) => {
+    try {
+        const { name, addScore, addTests, addCorrect, addWrong } = req.body;
+        if (!name||!name.trim()) return res.status(400).json({error:'Ism kiriting'});
+        const nameTrim     = name.trim();
+        const scoreToAdd   = parseFloat(addScore)  || 0;
+        const testsToAdd   = parseInt(addTests)     || 0;
+        const correctToAdd = parseInt(addCorrect)   || 0;
+        const wrongToAdd   = parseInt(addWrong)     || 0;
+        if (scoreToAdd <= 0 && testsToAdd <= 0) return res.status(400).json({error:'Ball yoki test miqdori kiriting'});
+
+        const db = getDb();
+        let found = false, foundId = null, newScore = 0, newTests = 0;
+
+        // 1. Telegram foydalanuvchilarida — user.score ga yozish ✅
+        for (const [uid,user] of Object.entries(db.users||{})) {
+            if ((user.name||'').trim().toLowerCase() !== nameTrim.toLowerCase()) continue;
+            user.score        = (parseFloat(user.score)        ||0) + scoreToAdd;
+            user.totalTests   = (parseInt(user.totalTests)      ||0) + testsToAdd;
+            user.totalCorrect = (parseInt(user.totalCorrect)    ||0) + correctToAdd;
+            user.totalWrong   = (parseInt(user.totalWrong)      ||0) + wrongToAdd;
+            newScore = user.score; newTests = user.totalTests;
+            db.users[uid] = user; saveDb(db);
+            found = true; foundId = parseInt(uid); break;
+        }
+        // 2. web_scores.json
+        if (!found) {
+            const ws = getWebScores();
+            for (const [k,v] of Object.entries(ws)) {
+                if ((v.name||'').trim().toLowerCase() !== nameTrim.toLowerCase()) continue;
+                v.score        = (parseFloat(v.score)       ||0) + scoreToAdd;
+                v.totalTests   = (parseInt(v.totalTests)     ||0) + testsToAdd;
+                v.totalCorrect = (parseInt(v.totalCorrect)   ||0) + correctToAdd;
+                v.totalWrong   = (parseInt(v.totalWrong)     ||0) + wrongToAdd;
+                newScore = v.score; newTests = v.totalTests;
+                ws[k] = v; saveWebScores(ws); found = true; break;
+            }
+        }
+        // 3. web_users.json
+        if (!found) {
+            const wu = getWebUsers();
+            for (const [k,v] of Object.entries(wu)) {
+                if ((v.name||'').trim().toLowerCase() !== nameTrim.toLowerCase()) continue;
+                v.score        = (parseFloat(v.score)       ||0) + scoreToAdd;
+                v.totalTests   = (parseInt(v.totalTests)     ||0) + testsToAdd;
+                v.totalCorrect = (parseInt(v.totalCorrect)   ||0) + correctToAdd;
+                v.totalWrong   = (parseInt(v.totalWrong)     ||0) + wrongToAdd;
+                newScore = v.score; newTests = v.totalTests;
+                wu[k] = v; saveWebUsers(wu); found = true; break;
+            }
+        }
+        // 4. Topilmasa — web_scores da yangi
+        if (!found) {
+            const ws = getWebScores();
+            const key = nameTrim.toLowerCase().replace(/\s+/g,'_')+'_'+Date.now();
+            ws[key] = { name:nameTrim, username:'', score:scoreToAdd, totalTests:testsToAdd, totalCorrect:correctToAdd, totalWrong:wrongToAdd, createdAt:Date.now(), addedByAdmin:true };
+            newScore = scoreToAdd; newTests = testsToAdd;
+            saveWebScores(ws);
+        }
+        // 5. Telegram xabarnoma
+        if (foundId) {
+            bot.telegram.sendMessage(foundId,
+                `🎉 <b>Tabriklaymiz!</b>\n\nAdmin sizga qo'shdi:\n`+
+                (scoreToAdd>0   ? `⚡ <b>+${scoreToAdd} ball</b>\n`       : '')+
+                (testsToAdd>0   ? `📝 <b>+${testsToAdd} ta test</b>\n`    : '')+
+                (correctToAdd>0 ? `✅ <b>+${correctToAdd} to'g'ri</b>\n`  : '')+
+                (wrongToAdd>0   ? `❌ <b>+${wrongToAdd} xato</b>\n`       : '')+
+                `\n📊 Jami: <b>${parseFloat(newScore).toFixed(1)} ball</b> · <b>${newTests} test</b>`,
+                {parse_mode:'HTML'}
+            ).catch(()=>{});
+        }
+        res.json({ success:true, name:nameTrim, newScore, newTests });
+    } catch (err) { console.error('[admin/add-score]', err.message); res.status(500).json({error:err.message}); }
+});
+
+// ─── Tournament ────────────────────────────────────────────────────
+app.get('/api/tournament', (req, res) => {
+    const db = getDb();
+    const tour = db.tournament || {isActive:false};
+    if (tour.participants?.length) {
+        tour.participantDetails = tour.participants.map(id => {
+            const u = db.users[id];
+            return u ? {id, name:u.name||'Foydalanuvchi', username:(u.username||'').replace('@',''), univ:u.univ||'—', kurs:u.kurs||'—', tourScore:u.tourScore||0, isVip:u.isVip||false} : {id, name:"Noma'lum", username:''};
+        });
+    }
+    res.json(tour);
+});
+app.post('/api/tournament/add-all', async (req, res) => {
+    try {
+        const db = getDb();
+        const tour = db.tournament;
+        if (!tour?.isActive) return res.status(400).json({error:'Musobaqa faol emas'});
+        const allUserIds = Object.keys(db.users).map(id => parseInt(id)).filter(id => !isNaN(id));
+        let added = 0;
+        for (const uid of allUserIds) { if (!tour.participants.includes(uid)) { tour.participants.push(uid); added++; } }
+        db.tournament = tour; saveDb(db);
+        let notified = 0;
+        for (const uid of allUserIds) { try { await bot.telegram.sendMessage(uid,`🏆 <b>Musobaqaga qo'shildingiz!</b>\n\n📅 ${tour.date||'—'}\n🕒 ${tour.time||'—'}\n📝 ${tour.count||'—'} ta savol`,{parse_mode:'HTML'}); notified++; } catch {} }
+        res.json({ success:true, total:allUserIds.length, added, notified });
+    } catch (err) { res.status(500).json({error:'Xatolik'}); }
+});
+app.post('/api/tournament/add-user', async (req, res) => {
+    try {
+        const { userId } = req.body;
+        const db = getDb();
+        const tour = db.tournament;
+        if (!tour?.isActive) return res.status(400).json({error:'Musobaqa faol emas'});
+        const uid = parseInt(userId);
+        if (isNaN(uid)||!db.users[uid]) return res.status(404).json({error:'Foydalanuvchi topilmadi'});
+        if (!tour.participants.includes(uid)) { tour.participants.push(uid); db.tournament=tour; saveDb(db); await bot.telegram.sendMessage(uid,`🏆 <b>Musobaqaga qo'shildingiz!</b>\n\n📅 ${tour.date||'—'} · 🕒 ${tour.time||'—'}`,{parse_mode:'HTML'}).catch(()=>{}); }
+        res.json({ success:true, name:db.users[uid].name||'Foydalanuvchi' });
+    } catch (err) { res.status(500).json({error:'Xatolik'}); }
+});
+app.post('/api/reject', async (req, res) => {
+    const db = getDb();
+    db.tournament = {isActive:false, date:null, time:null, participants:[]};
+    saveDb(db);
+    for (const id of Object.keys(db.users||{})) {
+        await bot.telegram.sendMessage(id,"🚫 <b>E'lon:</b> Rejalashtirilgan musobaqa bekor qilindi.",{parse_mode:'HTML',...Markup.keyboard([['📝 Akademik yozuv','📜 Tarix'],['➕ Matematika','📊 Reyting'],['👤 Profil']]).resize()}).catch(()=>{});
+    }
+    res.json({ success:true });
+});
+
+// ─── Web score ─────────────────────────────────────────────────────
+app.post('/api/web-score', (req, res) => {
+    try {
+        const { name, username, score, totalQ, wrongCount, subjectKey } = req.body;
+        if (!name||score===undefined) return res.status(400).json({error:'name va score kerak'});
+        const db = getDb();
+        // Telegram user topish
+        let realUserId = null;
+        for (const [id,u] of Object.entries(db.users||{})) {
+            if ((u.name||'').toLowerCase().trim() === (name||'').toLowerCase().trim()) { realUserId=id; break; }
+        }
+        if (realUserId) {
+            const u = db.users[realUserId];
+            u.score        = (u.score        ||0) + score;
+            u.totalTests   = (u.totalTests   ||0) + 1;
+            u.totalCorrect = (u.totalCorrect ||0) + score;
+            u.totalWrong   = (u.totalWrong   ||0) + (wrongCount||0);
+            if (subjectKey) {
+                if (!u.subjects) u.subjects = {};
+                if (!u.subjects[subjectKey]) u.subjects[subjectKey] = {tests:0,correct:0,wrong:0};
+                u.subjects[subjectKey].tests++;
+                u.subjects[subjectKey].correct += score;
+                u.subjects[subjectKey].wrong   += (wrongCount||0);
+            }
+            saveDb(db);
+            return res.json({ success:true, source:'telegram_user', newScore:u.score });
+        }
+        const ws = getWebScores();
+        const wKey = name.toLowerCase().trim();
+        if (!ws[wKey]) ws[wKey] = { name, username:username||'', score:0, totalTests:0, totalCorrect:0, totalWrong:0, subjects:{}, createdAt:Date.now() };
+        ws[wKey].score        += score;
+        ws[wKey].totalTests   += 1;
+        ws[wKey].totalCorrect += score;
+        ws[wKey].totalWrong   += (wrongCount||0);
+        ws[wKey].lastActive    = Date.now();
+        if (subjectKey) {
+            if (!ws[wKey].subjects[subjectKey]) ws[wKey].subjects[subjectKey] = {tests:0,correct:0,wrong:0};
+            ws[wKey].subjects[subjectKey].tests++;
+            ws[wKey].subjects[subjectKey].correct += score;
+            ws[wKey].subjects[subjectKey].wrong   += (wrongCount||0);
+        }
+        saveWebScores(ws);
+        res.json({ success:true, source:'web_only', newScore:ws[wKey].score });
+    } catch (err) { console.error('[Web score]', err.message); res.status(500).json({error:'Xatolik'}); }
+});
+app.post('/api/notify-non-vip', async (req, res) => {
+    try {
+        const { name } = req.body;
+        if (!name) return res.status(400).json({error:'name kerak'});
+        const db = getDb();
+        let userId = null;
+        for (const [id,u] of Object.entries(db.users||{})) { if ((u.name||'').toLowerCase().trim()===(name||'').toLowerCase().trim()) { userId=id; break; } }
+        if (!userId) return res.status(404).json({error:'Foydalanuvchi topilmadi'});
+        await bot.telegram.sendMessage(userId,`💎 <b>VIP A'zolik kerak!</b>\n\nWeb orqali test ishlash uchun VIP a'zo bo'lishingiz kerak.\n\n💳 Karta: <code>4073420058363577</code>\n👤 Egasi: M.M\n💰 Summa: <b>6,000 so'm</b>`,{parse_mode:'HTML'}).catch(()=>{});
+        res.json({ success:true });
+    } catch (err) { res.status(500).json({error:'Xatolik'}); }
+});
+
+// ─── Activity Feed & Sessions ──────────────────────────────────────
+app.post('/api/test-session', (req, res) => {
+    try {
+        const { name, tgUsername, subjectKey, subjectName, score, totalQ, wrongCount, durationMin } = req.body;
+        if (!name||score===undefined) return res.status(400).json({error:'name va score kerak'});
+        const sessions = getSessions();
+        const session = { id:Date.now()+'_'+Math.random().toString(36).slice(2,7), name:name.trim(), tgUsername:(tgUsername||'').replace('@',''), subjectKey:subjectKey||'', subjectName:subjectName||subjectKey||'Test', score:score||0, totalQ:totalQ||0, wrongCount:wrongCount||0, correctCount:(totalQ||0)-(wrongCount||0), durationMin:durationMin||1, ts:Date.now() };
+        sessions.unshift(session);
+        saveSessions(sessions.slice(0,200));
+        res.json({ success:true, session });
+    } catch (err) { res.status(500).json({error:'Xatolik'}); }
+});
+app.get('/api/activity-feed', (req, res) => {
+    try { const sessions = getSessions(); res.json(sessions.slice(0, Math.min(parseInt(req.query.limit)||30, 50))); }
+    catch (err) { res.status(500).json({error:'Xatolik'}); }
+});
+
+// ─── Qo'shimcha endpointlar ───────────────────────────────────────
+app.get('/api/get-photo', (req, res) => {
+    try {
+        const { username, isAdmin: isAdminUser } = req.query;
+        const photos = getPhotos();
+        const key = isAdminUser === 'true' ? '__admin__' : username;
+        if (!key || !photos[key]) return res.status(404).json({ error: 'Rasm topilmadi' });
+        res.json({ photoData: photos[key].data });
+    } catch (err) { res.status(500).json({ error: 'Olishda xatolik' }); }
+});
+
 app.get('/api/top-user', (req, res) => {
     const db = getDb();
     const sorted = Object.values(db.users)
         .filter(u => u && isValidName(u.name) && (u.totalTests || 0) > 0)
         .sort((a, b) => (b.totalTests || 0) - (a.totalTests || 0));
-
-    if (!sorted.length) return res.status(404).json({ error: 'Hech kim yo\'q' });
-
+    if (!sorted.length) return res.status(404).json({ error: "Hech kim yo'q" });
     const top = sorted[0];
-    res.json({
-        name:       top.name       || '—',
-        tgUsername: (top.username || '').replace('@',''),
-        score:      top.score      || 0,
-        totalTests: top.totalTests || 0,
-        univ:       top.univ       || '—',
-        kurs:       top.kurs       || '—',
-        yonalish:   top.yonalish   || '—',
-    });
+    res.json({ name: top.name||'—', tgUsername: (top.username||'').replace('@',''), score: top.score||0, totalTests: top.totalTests||0, univ: top.univ||'—', kurs: top.kurs||'—', yonalish: top.yonalish||'—' });
 });
 
-
-
-// ══════════════════════════════════════════════════════════════
-// INDEX.JS GA QO'SHISH KERAK BO'LGAN YANGI ENDPOINT
-// app.get('/api/leaderboard') dan OLDIN qo'shing
-// ══════════════════════════════════════════════════════════════
-
-// Subjects API — web app uchun savollar bazasi
-app.get('/api/subjects', (req, res) => {
+app.get('/api/leaderboard-full', (req, res) => {
     try {
-        // Faqat savollar ma'lumotini qaytarish (hajmni kamaytirish uchun)
-        const result = {};
-        Object.entries(SUBJECTS).forEach(([key, sub]) => {
-            if (sub && sub.questions && sub.questions.length > 0) {
-                result[key] = {
-                    title:     sub.title || key,
-                    questions: sub.questions.map(q => ({
-                        q:       q.q,
-                        a:       q.a,
-                        options: q.options,
-                        hint:    q.hint || null,
-                        // image ni ham yuboramiz (agar bor bo'lsa)
-                        image:   q.image || null,
-                    }))
-                };
-            }
+        const db = getDb();
+        const sessions = getSessions();
+        const sessionCounts = {};
+        sessions.forEach(s => {
+            const k = (s.name||'').toLowerCase().trim();
+            if (!sessionCounts[k]) sessionCounts[k] = { count:0, totalMin:0 };
+            sessionCounts[k].count++;
+            sessionCounts[k].totalMin += (s.durationMin||1);
         });
-        res.json(result);
-    } catch (err) {
-        console.error('[Subjects API]', err.message);
-        res.status(500).json({ error: 'Xatolik yuz berdi' });
-    }
-});
-
-// ══════════════════════════════════════════════════════════════
-// CHAT API ENDPOINTLARI (ixtiyoriy — server-side chat uchun)
-// Hozircha localStorage ishlatilmoqda, keyinchalik server-ga o'tkazish mumkin
-// ══════════════════════════════════════════════════════════════
-
-// TOP 10 reyting (leaderboard)
-app.get('/api/leaderboard', (req, res) => {
-    const db = getDb();
-    const ws = getWebScores();
-
-    // Telegram bot foydalanuvchilari
-    const tgUsers = Object.values(db.users)
-        .filter(u => u && isValidName(u.name) && (u.score || 0) > 0)
-        .map(u => ({
-            name:       u.name,
-            tgUsername: (u.username || '').replace('@', ''),
-            score:      u.score || 0,
-            totalTests: u.totalTests || 0,
-            univ:       u.univ || '',
-            kurs:       u.kurs || '',
-            yonalish:   u.yonalish || '',
-            isTg:       true,
-        }));
-
-    // Web-only foydalanuvchilar (TG da yo'q)
-    const tgNames = new Set(tgUsers.map(u => u.name.toLowerCase().trim()));
-    const webUsers = Object.values(ws)
-        .filter(u => u && isValidName(u.name) && (u.score || 0) > 0 && !tgNames.has((u.name || '').toLowerCase().trim()))
-        .map(u => ({
-            name:       u.name,
-            tgUsername: u.username || '',
-            score:      u.score || 0,
-            totalTests: u.totalTests || 0,
-            univ:       '—',
-            kurs:       '—',
-            yonalish:   '—',
-            isTg:       false,
-        }));
-
-    const sorted = [...tgUsers, ...webUsers]
-        .sort((a, b) => (b.score || 0) - (a.score || 0))
-        .slice(0, 10);
-
-    res.json(sorted);
-});
-
-
-app.get('/api/tournament', (req, res) => {
-    const db   = getDb();
-    const tour = db.tournament || { isActive: false };
-    // ✅ YANGI: Ishtirokchilar ma'lumotlarini ham qaytarish
-    if (tour.participants?.length) {
-        tour.participantDetails = tour.participants.map(id => {
-            const u = db.users[id];
-            return u ? {
-                id,
-                name:       u.name       || 'Foydalanuvchi',
-                username:   (u.username  || '').replace('@', ''),
-                univ:       u.univ       || '—',
-                kurs:       u.kurs       || '—',
-                tourScore:  u.tourScore  || 0,
-                isVip:      u.isVip      || false,
-            } : { id, name: 'Noma\'lum', username: '' };
-        });
-    }
-    res.json(tour);
-});
-
-// ✅ YANGI: Barcha foydalanuvchilarni musobaqaga qo'shish
-app.post('/api/tournament/add-all', async (req, res) => {
-    try {
-        const db   = getDb();
-        const tour = db.tournament;
-        if (!tour?.isActive) return res.status(400).json({ error: 'Musobaqa faol emas' });
-
-        const allUserIds = Object.keys(db.users).map(id => parseInt(id)).filter(id => !isNaN(id));
-        let added = 0;
-        for (const uid of allUserIds) {
-            if (!tour.participants.includes(uid)) {
-                tour.participants.push(uid);
-                added++;
-            }
-        }
-        db.tournament = tour;
-        saveDb(db);
-
-        // Foydalanuvchilarga xabar yuborish
-        let notified = 0;
-        for (const uid of allUserIds) {
-            try {
-                await bot.telegram.sendMessage(uid,
-                    `🏆 <b>Musobaqaga qo'shildingiz!</b>\n\n` +
-                    `📅 Sana: <b>${tour.date||'—'}</b>\n` +
-                    `🕒 Vaqt: <b>${tour.time||'—'}</b>\n` +
-                    `📝 Savollar: <b>${tour.count||'—'} ta</b>\n\n` +
-                    `✅ Siz musobaqaga avtomatik qo'shildingiz. Boshlanish vaqtida xabar keladi!`,
-                    { parse_mode: 'HTML' }
-                );
-                notified++;
-            } catch {}
-        }
-
-        res.json({ success: true, total: allUserIds.length, added, notified });
-    } catch (err) {
-        console.error('[add-all]', err.message);
-        res.status(500).json({ error: 'Xatolik yuz berdi' });
-    }
-});
-
-// ✅ YANGI: Musobaqaga bitta foydalanuvchi qo'shish (vip yoki ID bo'yicha)
-app.post('/api/tournament/add-user', async (req, res) => {
-    try {
-        const { userId } = req.body;
-        const db   = getDb();
-        const tour = db.tournament;
-        if (!tour?.isActive) return res.status(400).json({ error: 'Musobaqa faol emas' });
-
-        const uid = parseInt(userId);
-        if (isNaN(uid) || !db.users[uid]) return res.status(404).json({ error: 'Foydalanuvchi topilmadi' });
-
-        if (!tour.participants.includes(uid)) {
-            tour.participants.push(uid);
-            db.tournament = tour;
-            saveDb(db);
-            // Xabar yuborish
-            await bot.telegram.sendMessage(uid,
-                `🏆 <b>Musobaqaga qo'shildingiz!</b>\n\n📅 ${tour.date||'—'} · 🕒 ${tour.time||'—'}`,
-                { parse_mode: 'HTML' }
-            ).catch(() => {});
-        }
-
-        res.json({ success: true, name: db.users[uid].name || 'Foydalanuvchi' });
-    } catch (err) {
-        res.status(500).json({ error: 'Xatolik' });
-    }
-});
-
-app.post('/api/reject', async (req, res) => {
-    const db = getDb();
-    db.tournament = { isActive: false, date: null, time: null, participants: [] };
-    saveDb(db);
-    for (const id of Object.keys(db.users||{})) {
-        await bot.telegram.sendMessage(id, "🚫 <b>E'lon:</b> Rejalashtirilgan musobaqa bekor qilindi.", {
-            parse_mode: 'HTML',
-            ...Markup.keyboard([['📝 Akademik yozuv','📜 Tarix'],['➕ Matematika','📊 Reyting'],['👤 Profil']]).resize()
-        }).catch(() => {});
-    }
-    res.json({ success: true });
+        const users = Object.values(db.users||{})
+            .filter(u => u && isValidName(u.name) && (u.score||0) > 0)
+            .map(u => {
+                const k = (u.name||'').toLowerCase().trim();
+                const sc = sessionCounts[k] || { count:0, totalMin:0 };
+                return { name:u.name, tgUsername:(u.username||'').replace('@',''), score:u.score||0, totalTests:u.totalTests||0, sessionCount:sc.count, totalMin:sc.totalMin, univ:u.univ||'', kurs:u.kurs||'', yonalish:u.yonalish||'' };
+            })
+            .sort((a,b) => (b.score||0) - (a.score||0));
+        res.json(users);
+    } catch (err) { res.status(500).json({ error: 'Xatolik' }); }
 });
 
 app.get('/', (req, res) => {
-    const filePath = path.join(__dirname, 'public', 'index.html');
+    const filePath = path.join(__dirname,'public','index.html');
     fs.readFile(filePath, (err, data) => {
         if (err) return res.status(404).send('HTML fayl topilmadi.');
-        res.setHeader('Content-Type', 'text/html');
-        res.send(data);
+        res.setHeader('Content-Type','text/html'); res.send(data);
     });
 });
 
@@ -2189,2026 +1753,37 @@ bot.catch((err, ctx) => {
 });
 
 // ============================================================
-// ISHGA TUSHIRISH — WEBHOOK yoki POLLING avtomatik
+// ISHGA TUSHIRISH
 // ============================================================
-// ============================================================
-// BU KODLARNI index.js DA app.listen DAN OLDIN QO'SHING
-// ============================================================
-
-// Chat xabarlar fayli
-const CHAT_MSGS_PATH = path.join(DATA_DIR, 'chat_messages.json');
-const getChatMsgs  = () => readJSON(CHAT_MSGS_PATH, {});
-const saveChatMsgs = (d) => writeJSON(CHAT_MSGS_PATH, d);
-
-// Web test ballari fayli
-const WEB_SCORES_PATH = path.join(DATA_DIR, 'web_scores.json');
-const getWebScores  = () => readJSON(WEB_SCORES_PATH, {});
-const saveWebScores = (d) => writeJSON(WEB_SCORES_PATH, d);
-
-// ─── Chat ID generator ───
-function chatId(n1, n2) { return [n1, n2].sort().join('__CHAT__'); }
-
-// ═══════════════════════════════════════════════
-// CHAT API
-// ═══════════════════════════════════════════════
-
-// Xabar yuborish
-app.post('/api/chat/send', async (req, res) => {
-    try {
-        const { fromName, toName, text, imageData } = req.body;
-        if (!fromName || !toName || (!text?.trim() && !imageData)) return res.status(400).json({ error: 'Parametrlar yetishmayapti' });
-
-        const chats = getChatMsgs();
-        const cid   = chatId(fromName, toName);
-        if (!chats[cid]) chats[cid] = [];
-
-        const msg = {
-            id:        Date.now() + '_' + Math.random().toString(36).slice(2,7),
-            from:      fromName,
-            to:        toName,
-            text:      text?.trim() || '',
-            imageData: imageData || null,
-            ts:        Date.now(),
-            read:      false,
-        };
-        chats[cid].push(msg);
-
-        // Faqat oxirgi 500 ta xabarni saqlash (xotira tejash)
-        if (chats[cid].length > 500) chats[cid] = chats[cid].slice(-500);
-
-        saveChatMsgs(chats);
-        res.json({ success: true, msg });
-
-        // ✅ Recipient'ga Telegram orqali xabar yuborish (async, response'ni to'smaymiz)
-        try {
-            const db = getDb();
-            const toLower = (toName || '').toLowerCase().trim();
-            for (const [uid, u] of Object.entries(db.users || {})) {
-                const uNameLower = (u.name || '').toLowerCase().trim();
-                const uUserLower = (u.username || '').replace('@','').toLowerCase().trim();
-                if (uNameLower === toLower || uUserLower === toLower) {
-                    const preview = imageData ? '🖼️ Rasm' : (text || '').slice(0, 100);
-                    await bot.telegram.sendMessage(uid,
-                        `💬 <b>Yangi xabar!</b>\n` +
-                        `👤 <b>Kimdan:</b> ${fromName}\n` +
-                        `📝 <b>Xabar:</b> ${preview}\n\n` +
-                        `<i>Web ilovada javob bering</i>`,
-                        { parse_mode: 'HTML' }
-                    ).catch(() => {});
-                    break;
-                }
-            }
-        } catch {}
-
-    } catch (err) {
-        console.error('[Chat send]', err.message);
-        res.status(500).json({ error: 'Xatolik' });
-    }
-});
-
-app.post('/api/chat/delete', (req, res) => {
-    try {
-        const { myName, otherName } = req.body;
-        if (!myName || !otherName) return res.status(400).json({ error: 'myName va otherName kerak' });
- 
-        const chats = getChatMsgs();
-        
-        // chatId funksiyasi ikki nomni sort qilib birlashtiradi
-        const cid = [myName, otherName].sort().join('__CHAT__');
-        
-        if (chats[cid]) {
-            delete chats[cid];
-            saveChatMsgs(chats);
-        }
-        
-        res.json({ success: true });
-    } catch (err) {
-        console.error('[Chat delete]', err.message);
-        res.status(500).json({ error: 'Xatolik' });
-    }
-});
-
-// Xabarlarni olish (since timestamp dan keyin)
-app.get('/api/chat/messages', (req, res) => {
-    try {
-        const { name1, name2, since = 0 } = req.query;
-        if (!name1 || !name2) return res.status(400).json({ error: 'name1 va name2 kerak' });
-
-        const chats = getChatMsgs();
-        const cid   = chatId(name1, name2);
-        const msgs  = (chats[cid] || []).filter(m => m.ts > parseInt(since));
-
-        res.json({ messages: msgs });
-    } catch (err) {
-        res.status(500).json({ error: 'Xatolik' });
-    }
-});
-
-// Xabarlarni o'qilgan deb belgilash
-app.post('/api/chat/read', (req, res) => {
-    try {
-        const { myName, otherName } = req.body;
-        if (!myName || !otherName) return res.status(400).json({ error: 'Parametrlar kerak' });
-
-        const chats = getChatMsgs();
-        const cid   = chatId(myName, otherName);
-        const myLow = myName.toLowerCase().trim();
-        if (chats[cid]) {
-            chats[cid].forEach(m => {
-                if ((m.to || '').toLowerCase().trim() === myLow) m.read = true;
-            });
-            saveChatMsgs(chats);
-        }
-        res.json({ success: true });
-    } catch (err) {
-        res.status(500).json({ error: 'Xatolik' });
-    }
-});
-
-// O'qilmagan xabarlar soni
-app.get('/api/chat/unread', (req, res) => {
-    try {
-        const { myName } = req.query;
-        if (!myName) return res.status(400).json({ error: 'myName kerak' });
-
-        const chats = getChatMsgs();
-        const myLow = myName.toLowerCase().trim();
-        let total = 0;
-        const byChat = {};
-
-        Object.entries(chats).forEach(([cid, msgs]) => {
-            const unread = msgs.filter(m => (m.to || '').toLowerCase().trim() === myLow && !m.read).length;
-            if (unread > 0) { total += unread; byChat[cid] = unread; }
-        });
-
-        res.json({ total, byChat });
-    } catch (err) {
-        res.status(500).json({ error: 'Xatolik' });
-    }
-});
-
-// Chat ro'yxati (oxirgi xabar preview bilan)
-app.get('/api/chat/list', (req, res) => {
-    try {
-        const { myName } = req.query;
-        if (!myName) return res.status(400).json({ error: 'myName kerak' });
-
-        // ✅ Case-insensitive taqqoslash uchun
-        const myLow = myName.toLowerCase().trim();
-
-        const chats = getChatMsgs();
-        const list  = [];
-
-        Object.entries(chats).forEach(([cid, msgs]) => {
-            if (!msgs.length) return;
-            const relevant = msgs.some(m =>
-                (m.from || '').toLowerCase().trim() === myLow ||
-                (m.to   || '').toLowerCase().trim() === myLow
-            );
-            if (!relevant) return;
-
-            const last   = msgs[msgs.length - 1];
-            const other  = (last.from || '').toLowerCase().trim() === myLow ? last.to : last.from;
-            const unread = msgs.filter(m => (m.to || '').toLowerCase().trim() === myLow && !m.read).length;
-
-            list.push({
-                cid,
-                otherName: other,
-                lastMsg:   last.imageData ? '[Rasm 🖼️]' : last.text,
-                lastFrom:  last.from,
-                lastTs:    last.ts,
-                unread,
-            });
-        });
-
-        list.sort((a, b) => b.lastTs - a.lastTs);
-        res.json(list);
-    } catch (err) {
-        res.status(500).json({ error: 'Xatolik' });
-    }
-});
-
-// VIP bo'lmagan foydalanuvchiga bot orqali xabar yuborish
-app.post('/api/notify-non-vip', async (req, res) => {
-    try {
-        const { name } = req.body;
-        if (!name) return res.status(400).json({ error: 'name kerak' });
-
-        const db = getDb();
-        let userId = null;
-        for (const [id, u] of Object.entries(db.users || {})) {
-            if ((u.name || '').toLowerCase().trim() === (name || '').toLowerCase().trim()) {
-                userId = id; break;
-            }
-        }
-        if (!userId) return res.status(404).json({ error: 'Foydalanuvchi topilmadi' });
-
-        await bot.telegram.sendMessage(userId,
-            `💎 <b>VIP A'zolik kerak!</b>\n\nWeb orqali test ishlash uchun VIP a'zo bo'lishingiz kerak.\n\n` +
-            `💳 Karta: <code>4073420058363577</code>\n` +
-            `👤 Egasi: M.M\n` +
-            `💰 Summa: <b>6,000 so'm</b>\n\n` +
-            `To'lov qilgandan so'ng chekni yuborib /buy_vip buyrug'ini yuboring.`,
-            { parse_mode: 'HTML' }
-        ).catch(() => {});
-
-        res.json({ success: true });
-    } catch (err) {
-        console.error('[notify-non-vip]', err.message);
-        res.status(500).json({ error: 'Xatolik' });
-    }
-});
-
-// ═══════════════════════════════════════════════
-// WEB TEST BALLARI — reytingga qo'shish
-// ═══════════════════════════════════════════════
-app.post('/api/web-score', (req, res) => {
-    try {
-        const { name, username, score, totalQ, wrongCount, subjectKey } = req.body;
-        if (!name || score === undefined) return res.status(400).json({ error: 'name va score kerak' });
-
-        // updateGlobalScore funksiyasiga o'xshash logika
-        const db = getDb();
-        const userId = 'web_' + name.toLowerCase().replace(/\s+/g, '_');
-
-        // Telegram botdagi foydalanuvchini ism bo'yicha topish
-        let realUserId = null;
-        for (const [id, u] of Object.entries(db.users || {})) {
-            if ((u.name || '').toLowerCase().trim() === (name || '').toLowerCase().trim()) {
-                realUserId = id; break;
-            }
-        }
-
-        if (realUserId) {
-            // Telegram botdagi haqiqiy foydalanuvchi topildi — unga qo'shamiz
-            const u = db.users[realUserId];
-            u.score        = (u.score        || 0) + score;
-            u.totalTests   = (u.totalTests   || 0) + 1;
-            u.totalCorrect = (u.totalCorrect || 0) + score;
-            u.totalWrong   = (u.totalWrong   || 0) + (wrongCount || 0);
-
-            if (subjectKey) {
-                if (!u.subjects) u.subjects = {};
-                const sk = subjectKey;
-                if (!u.subjects[sk]) u.subjects[sk] = { tests: 0, correct: 0, wrong: 0 };
-                u.subjects[sk].tests++;
-                u.subjects[sk].correct += score;
-                u.subjects[sk].wrong   += (wrongCount || 0);
-            }
-            saveDb(db);
-            return res.json({ success: true, source: 'telegram_user', newScore: u.score });
-        }
-
-        // Telegram botda topilmadi — alohida web_scores da saqlaymiz
-        const ws = getWebScores();
-        const wKey = name.toLowerCase().trim();
-        if (!ws[wKey]) ws[wKey] = { name, username: username || '', score: 0, totalTests: 0, totalCorrect: 0, totalWrong: 0, subjects: {}, createdAt: Date.now() };
-
-        ws[wKey].score        += score;
-        ws[wKey].totalTests   += 1;
-        ws[wKey].totalCorrect += score;
-        ws[wKey].totalWrong   += (wrongCount || 0);
-        ws[wKey].lastActive    = Date.now();
-
-        if (subjectKey) {
-            if (!ws[wKey].subjects[subjectKey]) ws[wKey].subjects[subjectKey] = { tests: 0, correct: 0, wrong: 0 };
-            ws[wKey].subjects[subjectKey].tests++;
-            ws[wKey].subjects[subjectKey].correct += score;
-            ws[wKey].subjects[subjectKey].wrong   += (wrongCount || 0);
-        }
-
-        saveWebScores(ws);
-        res.json({ success: true, source: 'web_only', newScore: ws[wKey].score });
-    } catch (err) {
-        console.error('[Web score]', err.message);
-        res.status(500).json({ error: 'Xatolik' });
-    }
-});
-
-// ═══════════════════════════════════════════════
-// TELEGRAM PROFIL RASMI
-// ═══════════════════════════════════════════════
-app.get('/api/telegram-photo/:userId', async (req, res) => {
-    try {
-        const userId = req.params.userId;
-        // Avval DB dan foydalanuvchini topish
-        const db = getDb();
-        let targetId = null;
-
-        // Raqam bo'lsa — bevosita ID
-        if (/^\d+$/.test(userId)) {
-            targetId = parseInt(userId);
-        } else {
-            // Ism bo'yicha qidirish
-            for (const [id, u] of Object.entries(db.users || {})) {
-                if ((u.name || '').toLowerCase().trim() === userId.toLowerCase().trim()) {
-                    targetId = parseInt(id); break;
-                }
-            }
-        }
-
-        if (!targetId) return res.status(404).json({ error: 'Foydalanuvchi topilmadi' });
-
-        // Telegram API dan rasm olish
-        try {
-            const photos = await bot.telegram.getUserProfilePhotos(targetId, { limit: 1 });
-            if (!photos.total_count || !photos.photos[0]?.length) {
-                return res.status(404).json({ error: 'Rasm yo\'q' });
-            }
-            const fileId  = photos.photos[0][photos.photos[0].length - 1].file_id;
-            const fileInfo = await bot.telegram.getFile(fileId);
-            const fileUrl  = `https://api.telegram.org/file/bot${BOT_TOKEN}/${fileInfo.file_path}`;
-
-            // Rasmni proxy sifatida qaytarish
-            const https = require('https');
-            https.get(fileUrl, (imgRes) => {
-                res.setHeader('Content-Type', imgRes.headers['content-type'] || 'image/jpeg');
-                res.setHeader('Cache-Control', 'public, max-age=3600');
-                imgRes.pipe(res);
-            }).on('error', () => res.status(500).json({ error: 'Rasm yuklanmadi' }));
-        } catch (telegramErr) {
-            console.error('[TG Photo]', telegramErr.message);
-            res.status(404).json({ error: 'Rasm olinmadi' });
-        }
-    } catch (err) {
-        console.error('[Telegram photo]', err.message);
-        res.status(500).json({ error: 'Xatolik' });
-    }
-});
-
-// Barcha foydalanuvchilar Telegram ID map
-app.get('/api/users-map', (req, res) => {
-    try {
-        const db = getDb();
-        const result = {};
-        Object.entries(db.users || {}).forEach(([id, u]) => {
-            if (u.name) result[u.name.toLowerCase().trim()] = { id: parseInt(id), name: u.name, username: u.username || '' };
-        });
-        res.json(result);
-    } catch (err) {
-        res.status(500).json({ error: 'Xatolik' });
-    }
-});
-
-// Leaderboard — web scores ham qo'shilgan holda
-// Mavjud /api/leaderboard ni ALMASHTIRING:
-// (Bu funksiyani index.js da app.get('/api/leaderboard') ni quyidagiga almashtiring)
-/*
-app.get('/api/leaderboard', (req, res) => {
-    const db = getDb();
-    const ws = getWebScores();
-
-    // Telegram bot foydalanuvchilari
-    const tgUsers = Object.values(db.users)
-        .filter(u => u && isValidName(u.name) && (u.score || 0) > 0)
-        .map(u => ({
-            name:       u.name,
-            tgUsername: (u.username || '').replace('@', ''),
-            score:      u.score || 0,
-            totalTests: u.totalTests || 0,
-            univ:       u.univ || '',
-            kurs:       u.kurs || '',
-            yonalish:   u.yonalish || '',
-            isTg:       true,
-        }));
-
-    // Web-only foydalanuvchilar (TG da yo'q)
-    const tgNames = new Set(tgUsers.map(u => u.name.toLowerCase().trim()));
-    const webUsers = Object.values(ws)
-        .filter(u => u && isValidName(u.name) && (u.score || 0) > 0 && !tgNames.has((u.name || '').toLowerCase().trim()))
-        .map(u => ({
-            name:       u.name,
-            tgUsername: u.username || '',
-            score:      u.score || 0,
-            totalTests: u.totalTests || 0,
-            univ:       '—',
-            kurs:       '—',
-            yonalish:   '—',
-            isTg:       false,
-        }));
-
-    const sorted = [...tgUsers, ...webUsers]
-        .sort((a, b) => (b.score || 0) - (a.score || 0))
-        .slice(0, 10);
-
-    res.json(sorted);
-});
-*/
-
-// ═══════════════════════════════════════════════════════════
-// YANGI API: Activity Feed (Home ekrani uchun)
-// ═══════════════════════════════════════════════════════════
-
-// Test sessiyasini saqlash
-app.post('/api/test-session', (req, res) => {
-    try {
-        const { name, tgUsername, subjectKey, subjectName, score, totalQ, wrongCount, durationMin } = req.body;
-        if (!name || score === undefined) return res.status(400).json({ error: 'name va score kerak' });
-
-        const sessions = getSessions();
-        const session = {
-            id: Date.now() + '_' + Math.random().toString(36).slice(2, 7),
-            name: name.trim(),
-            tgUsername: (tgUsername || '').replace('@', ''),
-            subjectKey: subjectKey || '',
-            subjectName: subjectName || subjectKey || 'Test',
-            score: score || 0,
-            totalQ: totalQ || 0,
-            wrongCount: wrongCount || 0,
-            correctCount: (totalQ || 0) - (wrongCount || 0),
-            durationMin: durationMin || 1,
-            ts: Date.now(),
-        };
-        sessions.unshift(session);
-        // Faqat oxirgi 200 ta sessiyani saqlash
-        saveSessions(sessions.slice(0, 200));
-        res.json({ success: true, session });
-    } catch (err) {
-        res.status(500).json({ error: 'Xatolik' });
-    }
-});
-
-// Faollik lentasini olish
-app.get('/api/activity-feed', (req, res) => {
-    try {
-        const sessions = getSessions();
-        const limit = Math.min(parseInt(req.query.limit) || 30, 50);
-        res.json(sessions.slice(0, limit));
-    } catch (err) {
-        res.status(500).json({ error: 'Xatolik' });
-    }
-});
-
-// ═══════════════════════════════════════════════════════════
-// YANGI API: Follow tizimi
-// ═══════════════════════════════════════════════════════════
-
-// Follow / Unfollow
-app.post('/api/follow', (req, res) => {
-    try {
-        const { follower, following } = req.body;
-        if (!follower || !following) return res.status(400).json({ error: 'follower va following kerak' });
-        if (follower.toLowerCase() === following.toLowerCase()) return res.status(400).json({ error: 'O\'zingizni follow qila olmaysiz' });
-
-        const follows = getFollows();
-        const fKey = follower.toLowerCase().trim();
-        if (!follows[fKey]) follows[fKey] = [];
-
-        const targetLower = following.toLowerCase().trim();
-        const idx = follows[fKey].findIndex(n => n.toLowerCase() === targetLower);
-        let action;
-        if (idx === -1) {
-            follows[fKey].push(following.trim());
-            action = 'followed';
-        } else {
-            follows[fKey].splice(idx, 1);
-            action = 'unfollowed';
-        }
-        saveFollows(follows);
-        res.json({ success: true, action });
-    } catch (err) {
-        res.status(500).json({ error: 'Xatolik' });
-    }
-});
-
-// Follow ma'lumotlari (followers, following counts va status)
-app.get('/api/follow-info', (req, res) => {
-    try {
-        const name = (req.query.name || '').toLowerCase().trim();
-        const myName = (req.query.myName || '').toLowerCase().trim();
-        if (!name) return res.status(400).json({ error: 'name kerak' });
-
-        const follows = getFollows();
-
-        // Kim uni follow qiladi (followers)
-        const followers = Object.entries(follows)
-            .filter(([, list]) => list.some(n => n.toLowerCase() === name))
-            .map(([follower]) => follower);
-
-        // U kimlarni follow qiladi (following)
-        const following = follows[name] || [];
-
-        // Menmi follow qilganman?
-        const isFollowing = myName
-            ? (follows[myName.toLowerCase()] || []).some(n => n.toLowerCase() === name)
-            : false;
-
-        res.json({ followers: followers.length, following: following.length, isFollowing });
-    } catch (err) {
-        res.status(500).json({ error: 'Xatolik' });
-    }
-});
-
-// Kengaytirilgan leaderboard (ball va sessiya soni bilan)
-app.get('/api/leaderboard-full', (req, res) => {
-    try {
-        const db = getDb();
-        const sessions = getSessions();
-
-        // Har bir foydalanuvchi uchun sessiya sonini hisoblash
-        const sessionCounts = {};
-        sessions.forEach(s => {
-            const k = (s.name || '').toLowerCase().trim();
-            if (!sessionCounts[k]) sessionCounts[k] = { count: 0, totalMin: 0 };
-            sessionCounts[k].count++;
-            sessionCounts[k].totalMin += (s.durationMin || 1);
-        });
-
-        const users = Object.values(db.users || {})
-            .filter(u => u && isValidName(u.name) && (u.score || 0) > 0)
-            .map(u => {
-                const k = (u.name || '').toLowerCase().trim();
-                const sc = sessionCounts[k] || { count: 0, totalMin: 0 };
-                return {
-                    name:       u.name,
-                    tgUsername: (u.username || '').replace('@', ''),
-                    score:      u.score || 0,
-                    totalTests: u.totalTests || 0,
-                    sessionCount: sc.count,
-                    totalMin:   sc.totalMin,
-                    univ:       u.univ || '',
-                    kurs:       u.kurs || '',
-                    yonalish:   u.yonalish || '',
-                };
-            })
-            .sort((a, b) => (b.score || 0) - (a.score || 0));
-
-        res.json(users);
-    } catch (err) {
-        res.status(500).json({ error: 'Xatolik' });
-    }
-});
-
-// ═══════════════════════════════════════════════════════════════════
-// BU KODNI index.js GA QO'SHING
-// app.listen(...) DAN OLDIN JOYLAShTIRING
-// ═══════════════════════════════════════════════════════════════════
-
-// Web foydalanuvchilar fayli
-const WEB_USERS_PATH = path.join(DATA_DIR, 'web_users.json');
-const getWebUsers  = () => readJSON(WEB_USERS_PATH, {});
-const saveWebUsers = (d) => writeJSON(WEB_USERS_PATH, d);
-
-// ─── REGISTER ───────────────────────────────────────────────────────
-app.post('/api/web-auth/register', (req, res) => {
-    try {
-        const { username, name, password } = req.body;
-        if (!username || !name || !password) {
-            return res.status(400).json({ error: 'missing_fields' });
-        }
-        const u = username.toLowerCase().trim();
-        if (!/^[a-z0-9_]{3,}$/.test(u)) {
-            return res.status(400).json({ error: 'invalid_username' });
-        }
-        if (name.trim().length < 3) {
-            return res.status(400).json({ error: 'invalid_name' });
-        }
-        if (password.length < 6) {
-            return res.status(400).json({ error: 'invalid_password' });
-        }
-
-        const webUsers = getWebUsers();
-        const db = getDb();
-        const adm = getAdm ? getAdm() : {};
-
-        // Check duplicate in web users
-        if (webUsers[u]) {
-            return res.status(409).json({ error: 'exists' });
-        }
-        // Check duplicate in Telegram bot users
-        const tgDuplicate = Object.values(db.users || {}).find(
-            usr => (usr.username || '').replace('@','').toLowerCase() === u
-        );
-        if (tgDuplicate) {
-            return res.status(409).json({ error: 'exists' });
-        }
-        // Check admin username
-        if (u === (adm.username || 'admin').toLowerCase()) {
-            return res.status(409).json({ error: 'exists' });
-        }
-
-        webUsers[u] = {
-            username: u,
-            name: name.trim(),
-            password, // plain text (matches existing bot pattern)
-            photo: null,
-            createdAt: Date.now(),
-        };
-        saveWebUsers(webUsers);
-
-        res.json({ success: true, user: { username: u, name: name.trim() } });
-    } catch (err) {
-        console.error('[web-register]', err.message);
-        res.status(500).json({ error: 'server_error' });
-    }
-});
-
-// ─── LOGIN ──────────────────────────────────────────────────────────
-app.post('/api/web-auth/login', (req, res) => {
-    try {
-        const { username, password } = req.body;
-        if (!username || !password) {
-            return res.status(400).json({ error: 'missing_fields' });
-        }
-        const u = username.toLowerCase().trim();
-
-        // 1. Check web users first
-        const webUsers = getWebUsers();
-        if (webUsers[u]) {
-            if (webUsers[u].password !== password) {
-                return res.status(401).json({ error: 'wrong_password' });
-            }
-            return res.json({
-                success: true,
-                user: {
-                    username: u,
-                    name: webUsers[u].name,
-                    photo: webUsers[u].photo || null,
-                    createdAt: webUsers[u].createdAt,
-                }
-            });
-        }
-
-        // 2. Check Telegram bot users (by username field)
-        const db = getDb();
-        const tgUser = Object.values(db.users || {}).find(
-            usr => (usr.username || '').replace('@','').toLowerCase() === u
-        );
-        if (tgUser) {
-            // Bot users don't have web passwords — not allowed via web login
-            return res.status(404).json({ error: 'notfound' });
-        }
-
-        return res.status(404).json({ error: 'notfound' });
-    } catch (err) {
-        console.error('[web-login]', err.message);
-        res.status(500).json({ error: 'server_error' });
-    }
-});
-
-// ─── GET ME (sync on app open) ──────────────────────────────────────
-app.get('/api/web-auth/me', (req, res) => {
-    try {
-        const u = (req.query.username || '').toLowerCase().trim();
-        if (!u) return res.status(400).json({ error: 'missing' });
-
-        const webUsers = getWebUsers();
-        if (!webUsers[u]) return res.status(404).json({ error: 'notfound' });
-
-        res.json({
-            success: true,
-            user: {
-                username: u,
-                name: webUsers[u].name,
-                photo: webUsers[u].photo || null,
-                createdAt: webUsers[u].createdAt,
-            }
-        });
-    } catch (err) {
-        res.status(500).json({ error: 'server_error' });
-    }
-});
-
-app.get('/api/follow-list', (req, res) => {
-  const { name, type } = req.query;
-  const follows = getFollows();
-  if(type === 'followers'){
-    const result = Object.entries(follows)
-      .filter(([,list]) => list.some(n=>n.toLowerCase()===name.toLowerCase()))
-      .map(([follower]) => follower);
-    res.json({ followers: result });
-  } else {
-    res.json({ following: follows[name.toLowerCase()]||[] });
-  }
-});
-
-// ─── RESET PASSWORD ──────────────────────────────────────────────────
-app.post('/api/web-auth/reset-password', (req, res) => {
-    try {
-        const { username, newPassword } = req.body;
-        if (!username || !newPassword) {
-            return res.status(400).json({ error: 'missing_fields' });
-        }
-        if (newPassword.length < 6) {
-            return res.status(400).json({ error: 'too_short' });
-        }
-
-        const u = username.toLowerCase().trim();
-        const webUsers = getWebUsers();
-
-        if (!webUsers[u]) {
-            return res.status(404).json({ error: 'notfound' });
-        }
-
-        webUsers[u].password = newPassword;
-        webUsers[u].updatedAt = Date.now();
-        saveWebUsers(webUsers);
-
-        res.json({ success: true });
-    } catch (err) {
-        console.error('[reset-password]', err.message);
-        res.status(500).json({ error: 'server_error' });
-    }
-});
-
-// ─── UPDATE WEB USER PROFILE ──────────────────────────────────────────
-app.post('/api/web-auth/update', (req, res) => {
-    try {
-        const { username, newUsername, name, newPassword } = req.body;
-        if (!username) return res.status(400).json({ error: 'missing' });
-
-        const u = username.toLowerCase().trim();
-        const webUsers = getWebUsers();
-        if (!webUsers[u]) return res.status(404).json({ error: 'notfound' });
-
-        // Handle username change
-        if (newUsername && newUsername !== u) {
-            const nu = newUsername.toLowerCase().trim();
-            if (webUsers[nu]) return res.status(409).json({ error: 'username_taken' });
-            webUsers[nu] = { ...webUsers[u], username: nu };
-            if (name) webUsers[nu].name = name;
-            if (newPassword && newPassword.length >= 6) webUsers[nu].password = newPassword;
-            webUsers[nu].updatedAt = Date.now();
-            delete webUsers[u];
-            saveWebUsers(webUsers);
-            return res.json({ success: true, newUsername: nu });
-        }
-
-        if (name) webUsers[u].name = name;
-        if (newPassword && newPassword.length >= 6) webUsers[u].password = newPassword;
-        webUsers[u].updatedAt = Date.now();
-        saveWebUsers(webUsers);
-
-        res.json({ success: true });
-    } catch (err) {
-        console.error('[web-update]', err.message);
-        res.status(500).json({ error: 'server_error' });
-    }
-});
-
-// ─── CHAT DELETE ──────────────────────────────────────────────────────
-// Bu endpoint allaqachon yo'q bo'lsa, qo'shing:
-app.post('/api/chat/delete', (req, res) => {
-    try {
-        const { myName, otherName } = req.body;
-        if (!myName || !otherName) return res.status(400).json({ error: 'Parametrlar kerak' });
-
-        const chats = getChatMsgs();
-
-        // chatId funksiyasi: [n1, n2].sort().join('__CHAT__')
-        const cid = [myName, otherName].sort().join('__CHAT__');
-
-        if (chats[cid]) {
-            delete chats[cid];
-            saveChatMsgs(chats);
-        }
-
-        res.json({ success: true });
-    } catch (err) {
-        console.error('[Chat delete]', err.message);
-        res.status(500).json({ error: 'Xatolik' });
-    }
-});
-
-// ═══════════════════════════════════════════════════════════════════
-// ESLATMA: index.js da getChatMsgs va saveChatMsgs funksiyalari
-// allaqachon mavjud bo'lishi kerak. Agar yo'q bo'lsa:
-//
-// const CHAT_MSGS_PATH = path.join(DATA_DIR, 'chat_messages.json');
-// const getChatMsgs  = () => readJSON(CHAT_MSGS_PATH, {});
-// const saveChatMsgs = (d) => writeJSON(CHAT_MSGS_PATH, d);
-// ═══════════════════════════════════════════════════════════════════
-
-// ═══════════════════════════════════════════════════════════════════
-// BU KODNI index.js GA QO'SHING
-// app.listen(...) DAN OLDIN JOYLAShTIRING
-// ═══════════════════════════════════════════════════════════════════
-
-// Web foydalanuvchilar fayli
-// const WEB_USERS_PATH = path.join(DATA_DIR, 'web_users.json');
-// const getWebUsers  = () => readJSON(WEB_USERS_PATH, {});
-// const saveWebUsers = (d) => writeJSON(WEB_USERS_PATH, d);
-
-// ─── REGISTER ───────────────────────────────────────────────────────
-app.post('/api/web-auth/register', (req, res) => {
-    try {
-        const { username, name, password } = req.body;
-        if (!username || !name || !password) {
-            return res.status(400).json({ error: 'missing_fields' });
-        }
-        const u = username.toLowerCase().trim();
-        if (!/^[a-z0-9_]{3,}$/.test(u)) {
-            return res.status(400).json({ error: 'invalid_username' });
-        }
-        if (name.trim().length < 3) {
-            return res.status(400).json({ error: 'invalid_name' });
-        }
-        if (password.length < 6) {
-            return res.status(400).json({ error: 'invalid_password' });
-        }
-
-        const webUsers = getWebUsers();
-        const db = getDb();
-        const adm = getAdm ? getAdm() : {};
-
-        // Check duplicate in web users
-        if (webUsers[u]) {
-            return res.status(409).json({ error: 'exists' });
-        }
-        // Check duplicate in Telegram bot users
-        const tgDuplicate = Object.values(db.users || {}).find(
-            usr => (usr.username || '').replace('@','').toLowerCase() === u
-        );
-        if (tgDuplicate) {
-            return res.status(409).json({ error: 'exists' });
-        }
-        // Check admin username
-        if (u === (adm.username || 'admin').toLowerCase()) {
-            return res.status(409).json({ error: 'exists' });
-        }
-
-        webUsers[u] = {
-            username: u,
-            name: name.trim(),
-            password, // plain text (matches existing bot pattern)
-            photo: null,
-            createdAt: Date.now(),
-        };
-        saveWebUsers(webUsers);
-
-        res.json({ success: true, user: { username: u, name: name.trim() } });
-    } catch (err) {
-        console.error('[web-register]', err.message);
-        res.status(500).json({ error: 'server_error' });
-    }
-});
-
-// ─── LOGIN ──────────────────────────────────────────────────────────
-app.post('/api/web-auth/login', (req, res) => {
-    try {
-        const { username, password } = req.body;
-        if (!username || !password) {
-            return res.status(400).json({ error: 'missing_fields' });
-        }
-        const u = username.toLowerCase().trim();
-
-        // 1. Check web users first
-        const webUsers = getWebUsers();
-        if (webUsers[u]) {
-            if (webUsers[u].password !== password) {
-                return res.status(401).json({ error: 'wrong_password' });
-            }
-            return res.json({
-                success: true,
-                user: {
-                    username: u,
-                    name: webUsers[u].name,
-                    photo: webUsers[u].photo || null,
-                    createdAt: webUsers[u].createdAt,
-                }
-            });
-        }
-
-        // 2. Check Telegram bot users (by username field)
-        const db = getDb();
-        const tgUser = Object.values(db.users || {}).find(
-            usr => (usr.username || '').replace('@','').toLowerCase() === u
-        );
-        if (tgUser) {
-            // Bot users don't have web passwords — not allowed via web login
-            return res.status(404).json({ error: 'notfound' });
-        }
-
-        return res.status(404).json({ error: 'notfound' });
-    } catch (err) {
-        console.error('[web-login]', err.message);
-        res.status(500).json({ error: 'server_error' });
-    }
-});
-
-// ─── GET ME (sync on app open) ──────────────────────────────────────
-app.get('/api/web-auth/me', (req, res) => {
-    try {
-        const u = (req.query.username || '').toLowerCase().trim();
-        if (!u) return res.status(400).json({ error: 'missing' });
-
-        const webUsers = getWebUsers();
-        if (!webUsers[u]) return res.status(404).json({ error: 'notfound' });
-
-        res.json({
-            success: true,
-            user: {
-                username: u,
-                name: webUsers[u].name,
-                photo: webUsers[u].photo || null,
-                createdAt: webUsers[u].createdAt,
-            }
-        });
-    } catch (err) {
-        res.status(500).json({ error: 'server_error' });
-    }
-});
-
-// ─── RESET PASSWORD ──────────────────────────────────────────────────
-app.post('/api/web-auth/reset-password', (req, res) => {
-    try {
-        const { username, newPassword } = req.body;
-        if (!username || !newPassword) {
-            return res.status(400).json({ error: 'missing_fields' });
-        }
-        if (newPassword.length < 6) {
-            return res.status(400).json({ error: 'too_short' });
-        }
-
-        const u = username.toLowerCase().trim();
-        const webUsers = getWebUsers();
-
-        if (!webUsers[u]) {
-            return res.status(404).json({ error: 'notfound' });
-        }
-
-        webUsers[u].password = newPassword;
-        webUsers[u].updatedAt = Date.now();
-        saveWebUsers(webUsers);
-
-        res.json({ success: true });
-    } catch (err) {
-        console.error('[reset-password]', err.message);
-        res.status(500).json({ error: 'server_error' });
-    }
-});
-
-// ─── UPDATE WEB USER PROFILE ──────────────────────────────────────────
-app.post('/api/web-auth/update', (req, res) => {
-    try {
-        const { username, newUsername, name, newPassword } = req.body;
-        if (!username) return res.status(400).json({ error: 'missing' });
-
-        const u = username.toLowerCase().trim();
-        const webUsers = getWebUsers();
-        if (!webUsers[u]) return res.status(404).json({ error: 'notfound' });
-
-        // Handle username change
-        if (newUsername && newUsername !== u) {
-            const nu = newUsername.toLowerCase().trim();
-            if (webUsers[nu]) return res.status(409).json({ error: 'username_taken' });
-            webUsers[nu] = { ...webUsers[u], username: nu };
-            if (name) webUsers[nu].name = name;
-            if (newPassword && newPassword.length >= 6) webUsers[nu].password = newPassword;
-            webUsers[nu].updatedAt = Date.now();
-            delete webUsers[u];
-            saveWebUsers(webUsers);
-            return res.json({ success: true, newUsername: nu });
-        }
-
-        if (name) webUsers[u].name = name;
-        if (newPassword && newPassword.length >= 6) webUsers[u].password = newPassword;
-        webUsers[u].updatedAt = Date.now();
-        saveWebUsers(webUsers);
-
-        res.json({ success: true });
-    } catch (err) {
-        console.error('[web-update]', err.message);
-        res.status(500).json({ error: 'server_error' });
-    }
-});
-
-// ─── CHAT DELETE ──────────────────────────────────────────────────────
-// Bu endpoint allaqachon yo'q bo'lsa, qo'shing:
-app.post('/api/chat/delete', (req, res) => {
-    try {
-        const { myName, otherName } = req.body;
-        if (!myName || !otherName) return res.status(400).json({ error: 'Parametrlar kerak' });
-
-        const chats = getChatMsgs();
-
-        // chatId funksiyasi: [n1, n2].sort().join('__CHAT__')
-        const cid = [myName, otherName].sort().join('__CHAT__');
-
-        if (chats[cid]) {
-            delete chats[cid];
-            saveChatMsgs(chats);
-        }
-
-        res.json({ success: true });
-    } catch (err) {
-        console.error('[Chat delete]', err.message);
-        res.status(500).json({ error: 'Xatolik' });
-    }
-});
-
-// ═══════════════════════════════════════════════════════════════════
-// ESLATMA: index.js da getChatMsgs va saveChatMsgs funksiyalari
-// allaqachon mavjud bo'lishi kerak. Agar yo'q bo'lsa:
-//
-// const CHAT_MSGS_PATH = path.join(DATA_DIR, 'chat_messages.json');
-// const getChatMsgs  = () => readJSON(CHAT_MSGS_PATH, {});
-// const saveChatMsgs = (d) => writeJSON(CHAT_MSGS_PATH, d);
-// ═══════════════════════════════════════════════════════════════════
-
-// ─── FOLLOW LIST ────────────────────────────────────────────────────
-app.get("/api/follow-list", (req, res) => {
-    try {
-        const { name, type } = req.query;
-        if (!name) return res.status(400).json({ error: "name kerak" });
-        const follows = getFollows();
-        const nameLow = name.toLowerCase().trim();
-        if (type === "followers") {
-            const result = Object.entries(follows)
-                .filter(([, list]) => list.some(n => n.toLowerCase() === nameLow))
-                .map(([follower]) => follower);
-            res.json({ followers: result });
-        } else {
-            res.json({ following: follows[nameLow] || [] });
-        }
-    } catch (err) { res.status(500).json({ error: "Xatolik" }); }
-});
-
-// ═══════════════════════════════════════════════════════════════════
-// BU FAYLNI index.js GA QO'SHING — app.listen(...) DAN OLDIN
-// Avvalgi server_endpoints.js o'rniga bu faylni ishlating
-// ═══════════════════════════════════════════════════════════════════
-
-// ─── FAYL YO'LLARI ───────────────────────────────────────────────────
-
-// Chat ID generator — har ikki foydalanuvchi uchun unikal
-function chatId(n1, n2) {
-    return [n1.toLowerCase().trim(), n2.toLowerCase().trim()].sort().join('__CHAT__');
-}
-
-// ═══════════════════════════════════════════════════════════════════
-// WEB AUTH
-// ═══════════════════════════════════════════════════════════════════
-
-// REGISTER
-app.post('/api/web-auth/register', (req, res) => {
-    try {
-        const { username, name, password } = req.body;
-        if (!username || !name || !password) return res.status(400).json({ error: 'missing_fields' });
-        const u = username.toLowerCase().trim();
-        if (!/^[a-z0-9_]{3,}$/.test(u)) return res.status(400).json({ error: 'invalid_username' });
-        if (name.trim().length < 3) return res.status(400).json({ error: 'invalid_name' });
-        if (password.length < 6) return res.status(400).json({ error: 'invalid_password' });
-
-        const webUsers = getWebUsers();
-        const db = getDb();
-
-        if (webUsers[u]) return res.status(409).json({ error: 'exists' });
-
-        const tgDup = Object.values(db.users || {}).find(
-            usr => (usr.username || '').replace('@', '').toLowerCase() === u
-        );
-        if (tgDup) return res.status(409).json({ error: 'exists' });
-
-        webUsers[u] = { username: u, name: name.trim(), password, photo: null, createdAt: Date.now() };
-        saveWebUsers(webUsers);
-        res.json({ success: true, user: { username: u, name: name.trim() } });
-    } catch (err) {
-        console.error('[web-register]', err.message);
-        res.status(500).json({ error: 'server_error' });
-    }
-});
-
-// LOGIN
-app.post('/api/web-auth/login', (req, res) => {
-    try {
-        const { username, password } = req.body;
-        if (!username || !password) return res.status(400).json({ error: 'missing_fields' });
-        const u = username.toLowerCase().trim();
-        const webUsers = getWebUsers();
-
-        if (webUsers[u]) {
-            if (webUsers[u].password !== password) return res.status(401).json({ error: 'wrong_password' });
-            return res.json({ success: true, user: { username: u, name: webUsers[u].name, photo: webUsers[u].photo || null, createdAt: webUsers[u].createdAt } });
-        }
-        return res.status(404).json({ error: 'notfound' });
-    } catch (err) {
-        console.error('[web-login]', err.message);
-        res.status(500).json({ error: 'server_error' });
-    }
-});
-
-// GET ME
-app.get('/api/web-auth/me', (req, res) => {
-    try {
-        const u = (req.query.username || '').toLowerCase().trim();
-        if (!u) return res.status(400).json({ error: 'missing' });
-        const webUsers = getWebUsers();
-        if (!webUsers[u]) return res.status(404).json({ error: 'notfound' });
-        res.json({ success: true, user: { username: u, name: webUsers[u].name, photo: webUsers[u].photo || null, createdAt: webUsers[u].createdAt } });
-    } catch (err) { res.status(500).json({ error: 'server_error' }); }
-});
-
-// RESET PASSWORD
-app.post('/api/web-auth/reset-password', (req, res) => {
-    try {
-        const { username, newPassword } = req.body;
-        if (!username || !newPassword) return res.status(400).json({ error: 'missing_fields' });
-        if (newPassword.length < 6) return res.status(400).json({ error: 'too_short' });
-        const u = username.toLowerCase().trim();
-        const webUsers = getWebUsers();
-        if (!webUsers[u]) return res.status(404).json({ error: 'notfound' });
-        webUsers[u].password = newPassword;
-        webUsers[u].updatedAt = Date.now();
-        saveWebUsers(webUsers);
-        res.json({ success: true });
-    } catch (err) {
-        console.error('[reset-password]', err.message);
-        res.status(500).json({ error: 'server_error' });
-    }
-});
-
-// ═══════════════════════════════════════════════════════════════════
-// CHAT API — TO'LIQ TO'G'RILANGAN
-// ═══════════════════════════════════════════════════════════════════
-
-// Xabar yuborish
-app.post('/api/chat/send', async (req, res) => {
-    try {
-        const { fromName, toName, text, imageData } = req.body;
-        if (!fromName || !toName || (!text?.trim() && !imageData)) return res.status(400).json({ error: 'Parametrlar yetishmayapti' });
-
-        const chats = getChatMsgs();
-        const cid = chatId(fromName, toName);
-        if (!chats[cid]) chats[cid] = [];
-
-        const msg = {
-            id: Date.now() + '_' + Math.random().toString(36).slice(2, 7),
-            from: fromName,
-            to: toName,
-            text: text?.trim() || '',
-            imageData: imageData || null,
-            ts: Date.now(),
-            read: false,
-        };
-        chats[cid].push(msg);
-        if (chats[cid].length > 500) chats[cid] = chats[cid].slice(-500);
-        saveChatMsgs(chats);
-        res.json({ success: true, msg });
-
-        // Telegram notification (async)
-        try {
-            const db = getDb();
-            const toLow = (toName || '').toLowerCase().trim();
-            for (const [uid, u] of Object.entries(db.users || {})) {
-                if ((u.name || '').toLowerCase().trim() === toLow || (u.username || '').replace('@', '').toLowerCase() === toLow) {
-                    const preview = imageData ? '🖼️ Rasm' : (text || '').slice(0, 100);
-                    await bot.telegram.sendMessage(uid,
-                        `💬 <b>Yangi xabar!</b>\n👤 <b>Kimdan:</b> ${fromName}\n📝 ${preview}`,
-                        { parse_mode: 'HTML' }
-                    ).catch(() => {});
-                    break;
-                }
-            }
-        } catch {}
-    } catch (err) {
-        console.error('[Chat send]', err.message);
-        res.status(500).json({ error: 'Xatolik' });
-    }
-});
-
-// Xabarlarni olish — faqat 2 kishi orasidagi
-app.get('/api/chat/messages', (req, res) => {
-    try {
-        const { name1, name2, since = 0 } = req.query;
-        if (!name1 || !name2) return res.status(400).json({ error: 'name1 va name2 kerak' });
-
-        const chats = getChatMsgs();
-        const cid = chatId(name1, name2);
-        // Faqat shu ikki kishi orasidagi xabarlar
-        const msgs = (chats[cid] || []).filter(m =>
-            m.ts > parseInt(since) &&
-            ((m.from === name1 && m.to === name2) || (m.from === name2 && m.to === name1))
-        );
-        res.json({ messages: msgs });
-    } catch (err) { res.status(500).json({ error: 'Xatolik' }); }
-});
-
-// O'qilgan deb belgilash
-app.post('/api/chat/read', (req, res) => {
-    try {
-        const { myName, otherName } = req.body;
-        if (!myName || !otherName) return res.status(400).json({ error: 'Parametrlar kerak' });
-
-        const chats = getChatMsgs();
-        const cid = chatId(myName, otherName);
-        const myLow = myName.toLowerCase().trim();
-        if (chats[cid]) {
-            chats[cid].forEach(m => {
-                if ((m.to || '').toLowerCase().trim() === myLow) m.read = true;
-            });
-            saveChatMsgs(chats);
-        }
-        res.json({ success: true });
-    } catch (err) { res.status(500).json({ error: 'Xatolik' }); }
-});
-
-// ─── CHAT O'CHIRISH — TO'G'RILANGAN ────────────────────────────────
-// Faqat o'sha foydalanuvchi uchun o'chiradi (ikkinchi kishi ko'ra oladi)
-// Lekin odatda chat ikki tomon uchun ham o'chadi — bu biznes logika
-app.post('/api/chat/delete', (req, res) => {
-    try {
-        const { myName, otherName } = req.body;
-        if (!myName || !otherName) return res.status(400).json({ error: 'myName va otherName kerak' });
-
-        const chats = getChatMsgs();
-        const cid = chatId(myName, otherName);
-
-        if (chats[cid]) {
-            delete chats[cid];
-            saveChatMsgs(chats);
-        }
-        res.json({ success: true });
-    } catch (err) {
-        console.error('[Chat delete]', err.message);
-        res.status(500).json({ error: 'Xatolik' });
-    }
-});
-
-// O'qilmagan xabarlar soni
-app.get('/api/chat/unread', (req, res) => {
-    try {
-        const { myName } = req.query;
-        if (!myName) return res.status(400).json({ error: 'myName kerak' });
-
-        const chats = getChatMsgs();
-        const myLow = myName.toLowerCase().trim();
-        let total = 0;
-        const byChat = {};
-
-        Object.entries(chats).forEach(([cid, msgs]) => {
-            // Faqat o'sha foydalanuvchi ishtirok etgan chatlar
-            const isParticipant = msgs.some(m =>
-                (m.from || '').toLowerCase().trim() === myLow ||
-                (m.to || '').toLowerCase().trim() === myLow
-            );
-            if (!isParticipant) return;
-
-            const unread = msgs.filter(m =>
-                (m.to || '').toLowerCase().trim() === myLow && !m.read
-            ).length;
-            if (unread > 0) { total += unread; byChat[cid] = unread; }
-        });
-
-        res.json({ total, byChat });
-    } catch (err) { res.status(500).json({ error: 'Xatolik' }); }
-});
-
-// ─── CHAT RO'YXATI — TO'G'RILANGAN ─────────────────────────────────
-// Faqat o'sha foydalanuvchi ishtirok etgan chatlar
-app.get('/api/chat/list', (req, res) => {
-    try {
-        const { myName } = req.query;
-        if (!myName) return res.status(400).json({ error: 'myName kerak' });
-
-        const myLow = myName.toLowerCase().trim();
-        const chats = getChatMsgs();
-        const list = [];
-
-        Object.entries(chats).forEach(([cid, msgs]) => {
-            if (!msgs.length) return;
-
-            // Faqat myName ishtirok etgan chatlar
-            const isParticipant = msgs.some(m =>
-                (m.from || '').toLowerCase().trim() === myLow ||
-                (m.to || '').toLowerCase().trim() === myLow
-            );
-            if (!isParticipant) return;
-
-            const last = msgs[msgs.length - 1];
-
-            // Boshqa foydalanuvchi nomini aniqlash
-            let other;
-            if ((last.from || '').toLowerCase().trim() === myLow) {
-                other = last.to;
-            } else {
-                other = last.from;
-            }
-
-            // O'qilmagan xabarlar — faqat menga yuborilganlar
-            const unread = msgs.filter(m =>
-                (m.to || '').toLowerCase().trim() === myLow && !m.read
-            ).length;
-
-            list.push({
-                cid,
-                otherName: other,
-                lastMsg: last.imageData ? '[Rasm 🖼️]' : last.text,
-                lastFrom: last.from,
-                lastTs: last.ts,
-                unread,
-            });
-        });
-
-        list.sort((a, b) => b.lastTs - a.lastTs);
-        res.json(list);
-    } catch (err) {
-        console.error('[Chat list]', err.message);
-        res.status(500).json({ error: 'Xatolik' });
-    }
-});
-
-// ═══════════════════════════════════════════════════════════════════
-// FOLLOW LIST
-// ═══════════════════════════════════════════════════════════════════
-app.get('/api/follow-list', (req, res) => {
-    try {
-        const { name, type } = req.query;
-        if (!name) return res.status(400).json({ error: 'name kerak' });
-        const follows = getFollows();
-        const nameLow = name.toLowerCase().trim();
-        if (type === 'followers') {
-            const result = Object.entries(follows)
-                .filter(([, list]) => list.some(n => n.toLowerCase() === nameLow))
-                .map(([follower]) => follower);
-            res.json({ followers: result });
-        } else {
-            res.json({ following: follows[nameLow] || [] });
-        }
-    } catch (err) { res.status(500).json({ error: 'Xatolik' }); }
-});
-
-
-function chatId(n1, n2) {
-    return [n1.toLowerCase().trim(), n2.toLowerCase().trim()].sort().join('__CHAT__');
-}
- 
-// ═══════════════════════════════════════════════════════════════════
-// WEB AUTH
-// ═══════════════════════════════════════════════════════════════════
- 
-// REGISTER
-app.post('/api/web-auth/register', (req, res) => {
-    try {
-        const { username, name, password } = req.body;
-        if (!username || !name || !password) return res.status(400).json({ error: 'missing_fields' });
-        const u = username.toLowerCase().trim();
-        if (!/^[a-z0-9_]{3,}$/.test(u)) return res.status(400).json({ error: 'invalid_username' });
-        if (name.trim().length < 3) return res.status(400).json({ error: 'invalid_name' });
-        if (password.length < 6) return res.status(400).json({ error: 'invalid_password' });
- 
-        const webUsers = getWebUsers();
-        const db = getDb();
- 
-        if (webUsers[u]) return res.status(409).json({ error: 'exists' });
- 
-        const tgDup = Object.values(db.users || {}).find(
-            usr => (usr.username || '').replace('@', '').toLowerCase() === u
-        );
-        if (tgDup) return res.status(409).json({ error: 'exists' });
- 
-        webUsers[u] = { username: u, name: name.trim(), password, photo: null, createdAt: Date.now() };
-        saveWebUsers(webUsers);
-        res.json({ success: true, user: { username: u, name: name.trim() } });
-    } catch (err) {
-        console.error('[web-register]', err.message);
-        res.status(500).json({ error: 'server_error' });
-    }
-});
- 
-// LOGIN
-app.post('/api/web-auth/login', (req, res) => {
-    try {
-        const { username, password } = req.body;
-        if (!username || !password) return res.status(400).json({ error: 'missing_fields' });
-        const u = username.toLowerCase().trim();
-        const webUsers = getWebUsers();
- 
-        if (webUsers[u]) {
-            if (webUsers[u].password !== password) return res.status(401).json({ error: 'wrong_password' });
-            return res.json({ success: true, user: { username: u, name: webUsers[u].name, photo: webUsers[u].photo || null, createdAt: webUsers[u].createdAt } });
-        }
-        return res.status(404).json({ error: 'notfound' });
-    } catch (err) {
-        console.error('[web-login]', err.message);
-        res.status(500).json({ error: 'server_error' });
-    }
-});
- 
-// GET ME
-app.get('/api/web-auth/me', (req, res) => {
-    try {
-        const u = (req.query.username || '').toLowerCase().trim();
-        if (!u) return res.status(400).json({ error: 'missing' });
-        const webUsers = getWebUsers();
-        if (!webUsers[u]) return res.status(404).json({ error: 'notfound' });
-        res.json({ success: true, user: { username: u, name: webUsers[u].name, photo: webUsers[u].photo || null, createdAt: webUsers[u].createdAt } });
-    } catch (err) { res.status(500).json({ error: 'server_error' }); }
-});
- 
-// RESET PASSWORD
-app.post('/api/web-auth/reset-password', (req, res) => {
-    try {
-        const { username, newPassword } = req.body;
-        if (!username || !newPassword) return res.status(400).json({ error: 'missing_fields' });
-        if (newPassword.length < 6) return res.status(400).json({ error: 'too_short' });
-        const u = username.toLowerCase().trim();
-        const webUsers = getWebUsers();
-        if (!webUsers[u]) return res.status(404).json({ error: 'notfound' });
-        webUsers[u].password = newPassword;
-        webUsers[u].updatedAt = Date.now();
-        saveWebUsers(webUsers);
-        res.json({ success: true });
-    } catch (err) {
-        console.error('[reset-password]', err.message);
-        res.status(500).json({ error: 'server_error' });
-    }
-});
- 
-// ═══════════════════════════════════════════════════════════════════
-// CHAT API — TO'LIQ TO'G'RILANGAN
-// ═══════════════════════════════════════════════════════════════════
- 
-// Xabar yuborish
-app.post('/api/chat/send', async (req, res) => {
-    try {
-        const { fromName, toName, text, imageData } = req.body;
-        if (!fromName || !toName || (!text?.trim() && !imageData)) return res.status(400).json({ error: 'Parametrlar yetishmayapti' });
- 
-        const chats = getChatMsgs();
-        const cid = chatId(fromName, toName);
-        if (!chats[cid]) chats[cid] = [];
- 
-        const msg = {
-            id: Date.now() + '_' + Math.random().toString(36).slice(2, 7),
-            from: fromName,
-            to: toName,
-            text: text?.trim() || '',
-            imageData: imageData || null,
-            ts: Date.now(),
-            read: false,
-        };
-        chats[cid].push(msg);
-        if (chats[cid].length > 500) chats[cid] = chats[cid].slice(-500);
-        saveChatMsgs(chats);
-        res.json({ success: true, msg });
- 
-        // Telegram notification (async)
-        try {
-            const db = getDb();
-            const toLow = (toName || '').toLowerCase().trim();
-            for (const [uid, u] of Object.entries(db.users || {})) {
-                if ((u.name || '').toLowerCase().trim() === toLow || (u.username || '').replace('@', '').toLowerCase() === toLow) {
-                    const preview = imageData ? '🖼️ Rasm' : (text || '').slice(0, 100);
-                    await bot.telegram.sendMessage(uid,
-                        `💬 <b>Yangi xabar!</b>\n👤 <b>Kimdan:</b> ${fromName}\n📝 ${preview}`,
-                        { parse_mode: 'HTML' }
-                    ).catch(() => {});
-                    break;
-                }
-            }
-        } catch {}
-    } catch (err) {
-        console.error('[Chat send]', err.message);
-        res.status(500).json({ error: 'Xatolik' });
-    }
-});
- 
-// Xabarlarni olish — faqat 2 kishi orasidagi
-app.get('/api/chat/messages', (req, res) => {
-    try {
-        const { name1, name2, since = 0 } = req.query;
-        if (!name1 || !name2) return res.status(400).json({ error: 'name1 va name2 kerak' });
- 
-        const chats = getChatMsgs();
-        const cid = chatId(name1, name2);
-        // Faqat shu ikki kishi orasidagi xabarlar
-        const msgs = (chats[cid] || []).filter(m =>
-            m.ts > parseInt(since) &&
-            ((m.from === name1 && m.to === name2) || (m.from === name2 && m.to === name1))
-        );
-        res.json({ messages: msgs });
-    } catch (err) { res.status(500).json({ error: 'Xatolik' }); }
-});
- 
-// O'qilgan deb belgilash
-app.post('/api/chat/read', (req, res) => {
-    try {
-        const { myName, otherName } = req.body;
-        if (!myName || !otherName) return res.status(400).json({ error: 'Parametrlar kerak' });
- 
-        const chats = getChatMsgs();
-        const cid = chatId(myName, otherName);
-        const myLow = myName.toLowerCase().trim();
-        if (chats[cid]) {
-            chats[cid].forEach(m => {
-                if ((m.to || '').toLowerCase().trim() === myLow) m.read = true;
-            });
-            saveChatMsgs(chats);
-        }
-        res.json({ success: true });
-    } catch (err) { res.status(500).json({ error: 'Xatolik' }); }
-});
- 
-// ─── CHAT O'CHIRISH — TO'G'RILANGAN ────────────────────────────────
-// Faqat o'sha foydalanuvchi uchun o'chiradi (ikkinchi kishi ko'ra oladi)
-// Lekin odatda chat ikki tomon uchun ham o'chadi — bu biznes logika
-app.post('/api/chat/delete', (req, res) => {
-    try {
-        const { myName, otherName } = req.body;
-        if (!myName || !otherName) return res.status(400).json({ error: 'myName va otherName kerak' });
- 
-        const chats = getChatMsgs();
-        const cid = chatId(myName, otherName);
- 
-        if (chats[cid]) {
-            delete chats[cid];
-            saveChatMsgs(chats);
-        }
-        res.json({ success: true });
-    } catch (err) {
-        console.error('[Chat delete]', err.message);
-        res.status(500).json({ error: 'Xatolik' });
-    }
-});
- 
-// O'qilmagan xabarlar soni
-app.get('/api/chat/unread', (req, res) => {
-    try {
-        const { myName } = req.query;
-        if (!myName) return res.status(400).json({ error: 'myName kerak' });
- 
-        const chats = getChatMsgs();
-        const myLow = myName.toLowerCase().trim();
-        let total = 0;
-        const byChat = {};
- 
-        Object.entries(chats).forEach(([cid, msgs]) => {
-            // Faqat o'sha foydalanuvchi ishtirok etgan chatlar
-            const isParticipant = msgs.some(m =>
-                (m.from || '').toLowerCase().trim() === myLow ||
-                (m.to || '').toLowerCase().trim() === myLow
-            );
-            if (!isParticipant) return;
- 
-            const unread = msgs.filter(m =>
-                (m.to || '').toLowerCase().trim() === myLow && !m.read
-            ).length;
-            if (unread > 0) { total += unread; byChat[cid] = unread; }
-        });
- 
-        res.json({ total, byChat });
-    } catch (err) { res.status(500).json({ error: 'Xatolik' }); }
-});
- 
-// ─── CHAT RO'YXATI — TO'G'RILANGAN ─────────────────────────────────
-// Faqat o'sha foydalanuvchi ishtirok etgan chatlar
-app.get('/api/chat/list', (req, res) => {
-    try {
-        const { myName } = req.query;
-        if (!myName) return res.status(400).json({ error: 'myName kerak' });
- 
-        const myLow = myName.toLowerCase().trim();
-        const chats = getChatMsgs();
-        const list = [];
- 
-        Object.entries(chats).forEach(([cid, msgs]) => {
-            if (!msgs.length) return;
- 
-            // Faqat myName ishtirok etgan chatlar
-            const isParticipant = msgs.some(m =>
-                (m.from || '').toLowerCase().trim() === myLow ||
-                (m.to || '').toLowerCase().trim() === myLow
-            );
-            if (!isParticipant) return;
- 
-            const last = msgs[msgs.length - 1];
- 
-            // Boshqa foydalanuvchi nomini aniqlash
-            let other;
-            if ((last.from || '').toLowerCase().trim() === myLow) {
-                other = last.to;
-            } else {
-                other = last.from;
-            }
- 
-            // O'qilmagan xabarlar — faqat menga yuborilganlar
-            const unread = msgs.filter(m =>
-                (m.to || '').toLowerCase().trim() === myLow && !m.read
-            ).length;
- 
-            list.push({
-                cid,
-                otherName: other,
-                lastMsg: last.imageData ? '[Rasm 🖼️]' : last.text,
-                lastFrom: last.from,
-                lastTs: last.ts,
-                unread,
-            });
-        });
- 
-        list.sort((a, b) => b.lastTs - a.lastTs);
-        res.json(list);
-    } catch (err) {
-        console.error('[Chat list]', err.message);
-        res.status(500).json({ error: 'Xatolik' });
-    }
-});
- 
-// ═══════════════════════════════════════════════════════════════════
-// FOLLOW LIST
-// ═══════════════════════════════════════════════════════════════════
-app.get('/api/follow-list', (req, res) => {
-    try {
-        const { name, type } = req.query;
-        if (!name) return res.status(400).json({ error: 'name kerak' });
-        const follows = getFollows();
-        const nameLow = name.toLowerCase().trim();
-        if (type === 'followers') {
-            const result = Object.entries(follows)
-                .filter(([, list]) => list.some(n => n.toLowerCase() === nameLow))
-                .map(([follower]) => follower);
-            res.json({ followers: result });
-        } else {
-            res.json({ following: follows[nameLow] || [] });
-        }
-    } catch (err) { res.status(500).json({ error: 'Xatolik' }); }
-});
- 
-
-
-
-
-
-// ─── ADMIN: Ball va Test qo'shish ────────────────────────────────────
-app.post('/api/admin/add-score', async (req, res) => {
-    try {
-        const { name, addScore, addTests, addCorrect, addWrong } = req.body;
- 
-        if (!name || name.trim() === '') {
-            return res.status(400).json({ error: 'Ism kiriting' });
-        }
- 
-        const nameTrim = name.trim();
-        const scoreToAdd  = parseFloat(addScore)  || 0;
-        const testsToAdd  = parseInt(addTests)     || 0;
-        const correctToAdd = parseInt(addCorrect)  || 0;
-        const wrongToAdd  = parseInt(addWrong)     || 0;
- 
-        if (scoreToAdd <= 0 && testsToAdd <= 0) {
-            return res.status(400).json({ error: 'Ball yoki test miqdori kiriting' });
-        }
- 
-        const db = getDb();
- 
-        // ─── 1. Telegram bot foydalanuvchilarida izlash ───────────────
-        let found = false;
-        for (const [uid, user] of Object.entries(db.users || {})) {
-            const uName = (user.name || '').trim();
-            if (uName.toLowerCase() === nameTrim.toLowerCase()) {
-                // Update Telegram user scores
-                if (!user.scores) user.scores = { score: 0, totalTests: 0, totalCorrect: 0, totalWrong: 0, subjects: {} };
- 
-                user.scores.score       = (parseFloat(user.scores.score)       || 0) + scoreToAdd;
-                user.scores.totalTests  = (parseInt(user.scores.totalTests)     || 0) + testsToAdd;
-                user.scores.totalCorrect = (parseInt(user.scores.totalCorrect)  || 0) + correctToAdd;
-                user.scores.totalWrong  = (parseInt(user.scores.totalWrong)     || 0) + wrongToAdd;
- 
-                db.users[uid] = user;
-                found = true;
- 
-                // Notify user via Telegram
-                try {
-                    await bot.telegram.sendMessage(uid,
-                        `🎉 <b>Tabriklaymiz!</b>\n\n` +
-                        `Admin sizning hisobingizga qo'shdi:\n` +
-                        `⚡ <b>${scoreToAdd} ball</b>${testsToAdd > 0 ? `\n📝 <b>${testsToAdd} ta test</b>` : ''}\n\n` +
-                        `📊 Jami ballingiz: <b>${user.scores.score.toFixed(1)} ball</b>\n` +
-                        `🧪 Jami testlar: <b>${user.scores.totalTests} ta</b>`,
-                        { parse_mode: 'HTML' }
-                    ).catch(() => {});
-                } catch {}
-                break;
-            }
-        }
- 
-        // ─── 2. Web foydalanuvchilarida izlash ────────────────────────
-        if (!found) {
-            const WEB_USERS_PATH = path.join(DATA_DIR, 'web_users.json');
-            const webUsers = readJSON(WEB_USERS_PATH, {});
- 
-            for (const [ukey, wUser] of Object.entries(webUsers)) {
-                const wName = (wUser.name || '').trim();
-                if (wName.toLowerCase() === nameTrim.toLowerCase()) {
-                    if (!wUser.scores) wUser.scores = { score: 0, totalTests: 0, totalCorrect: 0, totalWrong: 0 };
- 
-                    wUser.scores.score        = (parseFloat(wUser.scores.score)        || 0) + scoreToAdd;
-                    wUser.scores.totalTests   = (parseInt(wUser.scores.totalTests)      || 0) + testsToAdd;
-                    wUser.scores.totalCorrect = (parseInt(wUser.scores.totalCorrect)    || 0) + correctToAdd;
-                    wUser.scores.totalWrong   = (parseInt(wUser.scores.totalWrong)      || 0) + wrongToAdd;
- 
-                    webUsers[ukey] = wUser;
-                    writeJSON(WEB_USERS_PATH, webUsers);
-                    found = true;
-                    break;
-                }
-            }
-        }
- 
-        // ─── 3. Leaderboard/web_scores da ham izlash ─────────────────
-        if (!found) {
-            // Try web_scores.json (submitted via /api/web-score)
-            const WEB_SCORES_PATH = path.join(DATA_DIR, 'web_scores.json');
-            const webScores = readJSON(WEB_SCORES_PATH, {});
- 
-            // Find by name in web_scores
-            let foundKey = null;
-            for (const [k, v] of Object.entries(webScores)) {
-                if ((v.name || '').toLowerCase() === nameTrim.toLowerCase()) {
-                    foundKey = k;
-                    break;
-                }
-            }
- 
-            if (foundKey) {
-                const ws = webScores[foundKey];
-                ws.score        = (parseFloat(ws.score)        || 0) + scoreToAdd;
-                ws.totalTests   = (parseInt(ws.totalTests)      || 0) + testsToAdd;
-                ws.totalCorrect = (parseInt(ws.totalCorrect)    || 0) + correctToAdd;
-                ws.totalWrong   = (parseInt(ws.totalWrong)      || 0) + wrongToAdd;
-                webScores[foundKey] = ws;
-                writeJSON(WEB_SCORES_PATH, webScores);
-                found = true;
-            }
-        }
- 
-        if (!found) {
-            // Create new record in web_scores for this person
-            const WEB_SCORES_PATH = path.join(DATA_DIR, 'web_scores.json');
-            const webScores = readJSON(WEB_SCORES_PATH, {});
-            const newKey = nameTrim.toLowerCase().replace(/\s+/g, '_') + '_' + Date.now();
-            webScores[newKey] = {
-                name: nameTrim,
-                username: '',
-                score: scoreToAdd,
-                totalTests: testsToAdd,
-                totalCorrect: correctToAdd,
-                totalWrong: wrongToAdd,
-                createdAt: Date.now(),
-                addedByAdmin: true,
-            };
-            writeJSON(WEB_SCORES_PATH, webScores);
-            found = true;
-        }
- 
-        // Save main db
-        saveDb(db);
- 
-        res.json({
-            success: true,
-            message: `${nameTrim} ga ${scoreToAdd} ball va ${testsToAdd} test qo'shildi`,
-        });
- 
-    } catch (err) {
-        console.error('[admin/add-score]', err.message);
-        res.status(500).json({ error: err.message });
-    }
-});
-
-
-// ═══════════════════════════════════════════════════════════════════
-// BU KODNI index.js GA QO'SHING — app.listen(...) DAN OLDIN
-// OLDINGI admin_score_endpoint.js NI O'CHIRING VA BUNI ISHLATING
-// ═══════════════════════════════════════════════════════════════════
-
-app.post('/api/admin/add-score', async (req, res) => {
-    try {
-        const { name, addScore, addTests, addCorrect, addWrong } = req.body;
-
-        if (!name || !name.trim()) {
-            return res.status(400).json({ error: 'Ism kiriting' });
-        }
-
-        const nameTrim     = name.trim();
-        const scoreToAdd   = parseFloat(addScore)   || 0;
-        const testsToAdd   = parseInt(addTests)      || 0;
-        const correctToAdd = parseInt(addCorrect)    || 0;
-        const wrongToAdd   = parseInt(addWrong)      || 0;
-
-        if (scoreToAdd <= 0 && testsToAdd <= 0) {
-            return res.status(400).json({ error: 'Ball yoki test miqdori kiriting' });
-        }
-
-        const db    = getDb();
-        let found   = false;
-        let foundId = null;
-        let newScore = 0, newTests = 0;
-
-        // 1. Telegram foydalanuvchilarida izlash — user.score ga yozish
-        for (const [uid, user] of Object.entries(db.users || {})) {
-            if ((user.name || '').trim().toLowerCase() !== nameTrim.toLowerCase()) continue;
-            user.score        = (parseFloat(user.score)        || 0) + scoreToAdd;
-            user.totalTests   = (parseInt(user.totalTests)      || 0) + testsToAdd;
-            user.totalCorrect = (parseInt(user.totalCorrect)    || 0) + correctToAdd;
-            user.totalWrong   = (parseInt(user.totalWrong)      || 0) + wrongToAdd;
-            newScore = user.score; newTests = user.totalTests;
-            db.users[uid] = user; found = true; foundId = uid; break;
-        }
-        if (found) saveDb(db);
-
-        // 2. web_scores.json da izlash
-        if (!found) {
-            const WS_PATH = path.join(DATA_DIR, 'web_scores.json');
-            const ws = readJSON(WS_PATH, {});
-            for (const [k, v] of Object.entries(ws)) {
-                if ((v.name || '').trim().toLowerCase() !== nameTrim.toLowerCase()) continue;
-                v.score        = (parseFloat(v.score)        || 0) + scoreToAdd;
-                v.totalTests   = (parseInt(v.totalTests)      || 0) + testsToAdd;
-                v.totalCorrect = (parseInt(v.totalCorrect)    || 0) + correctToAdd;
-                v.totalWrong   = (parseInt(v.totalWrong)      || 0) + wrongToAdd;
-                newScore = v.score; newTests = v.totalTests;
-                ws[k] = v; writeJSON(WS_PATH, ws); found = true; break;
-            }
-        }
-
-        // 3. web_users.json da izlash
-        if (!found) {
-            const WU_PATH = path.join(DATA_DIR, 'web_users.json');
-            const wu = readJSON(WU_PATH, {});
-            for (const [k, v] of Object.entries(wu)) {
-                if ((v.name || '').trim().toLowerCase() !== nameTrim.toLowerCase()) continue;
-                v.score        = (parseFloat(v.score)        || 0) + scoreToAdd;
-                v.totalTests   = (parseInt(v.totalTests)      || 0) + testsToAdd;
-                v.totalCorrect = (parseInt(v.totalCorrect)    || 0) + correctToAdd;
-                v.totalWrong   = (parseInt(v.totalWrong)      || 0) + wrongToAdd;
-                newScore = v.score; newTests = v.totalTests;
-                wu[k] = v; writeJSON(WU_PATH, wu); found = true; break;
-            }
-        }
-
-        // 4. Topilmasa — web_scores da yangi yozuv
-        if (!found) {
-            const WS_PATH = path.join(DATA_DIR, 'web_scores.json');
-            const ws = readJSON(WS_PATH, {});
-            const key = nameTrim.toLowerCase().replace(/\s+/g, '_') + '_' + Date.now();
-            ws[key] = {
-                name: nameTrim, username: '',
-                score: scoreToAdd, totalTests: testsToAdd,
-                totalCorrect: correctToAdd, totalWrong: wrongToAdd,
-                createdAt: Date.now(), addedByAdmin: true
-            };
-            newScore = scoreToAdd; newTests = testsToAdd;
-            writeJSON(WS_PATH, ws);
-        }
-
-        // 5. Telegram xabarnoma
-        if (foundId) {
-            bot.telegram.sendMessage(foundId,
-                `🎉 <b>Tabriklaymiz!</b>\n\n` +
-                `Admin sizga qo'shdi:\n` +
-                (scoreToAdd > 0   ? `⚡ <b>+${scoreToAdd} ball</b>\n`       : '') +
-                (testsToAdd > 0   ? `📝 <b>+${testsToAdd} ta test</b>\n`    : '') +
-                (correctToAdd > 0 ? `✅ <b>+${correctToAdd} to'g'ri</b>\n`  : '') +
-                (wrongToAdd > 0   ? `❌ <b>+${wrongToAdd} xato</b>\n`       : '') +
-                `\n📊 Jami: <b>${newScore.toFixed(1)} ball</b> · <b>${newTests} test</b>`,
-                { parse_mode: 'HTML' }
-            ).catch(() => {});
-        }
-
-        res.json({ success: true, name: nameTrim, newScore, newTests });
-    } catch (err) {
-        console.error('[admin/add-score]', err.message);
-        res.status(500).json({ error: err.message });
-    }
-});
-
-// ═══════════════════════════════════════════════════════════════════
-// LEADERBOARD — barcha manbalardan ball bo'yicha KAMAYISH tartibida
-// index.js dagi MAVJUD /api/leaderboard ni SHU BILAN ALMASHTIRING
-// ═══════════════════════════════════════════════════════════════════
-app.get('/api/leaderboard', (req, res) => {
-    try {
-        const db = getDb();
-        const WS_PATH = path.join(DATA_DIR, 'web_scores.json');
-        const WU_PATH = path.join(DATA_DIR, 'web_users.json');
-        const webScores = readJSON(WS_PATH, {});
-        const webUsers  = readJSON(WU_PATH, {});
-
-        const map = new Map(); // name.toLowerCase() → user obj
-
-        // 1. Telegram foydalanuvchilari (user.score to'g'ridan-to'g'ri)
-        for (const [, user] of Object.entries(db.users || {})) {
-            const sc = parseFloat(user.score) || 0;
-            if (sc <= 0 || !user.name || !user.name.trim()) continue;
-            const k = user.name.trim().toLowerCase();
-            map.set(k, {
-                name:         user.name.trim(),
-                tgUsername:   (user.username || '').replace('@', ''),
-                univ:         user.univ      || '',
-                kurs:         user.kurs      || '',
-                yonalish:     user.yonalish  || '',
-                score:        sc,
-                totalTests:   parseInt(user.totalTests)   || 0,
-                totalCorrect: parseInt(user.totalCorrect) || 0,
-                totalWrong:   parseInt(user.totalWrong)   || 0,
-            });
-        }
-
-        // 2. web_scores.json (faqat TG da yo'q nomlar)
-        for (const [, ws] of Object.entries(webScores)) {
-            const sc = parseFloat(ws.score) || 0;
-            if (sc <= 0 || !ws.name || !ws.name.trim()) continue;
-            const k = ws.name.trim().toLowerCase();
-            if (!map.has(k)) {
-                map.set(k, {
-                    name:         ws.name.trim(),
-                    tgUsername:   ws.username || '',
-                    univ:         '', kurs: '', yonalish: '',
-                    score:        sc,
-                    totalTests:   parseInt(ws.totalTests)   || 0,
-                    totalCorrect: parseInt(ws.totalCorrect) || 0,
-                    totalWrong:   parseInt(ws.totalWrong)   || 0,
-                });
-            }
-        }
-
-        // 3. web_users.json (faqat TG va web_scores da yo'q nomlar)
-        for (const [, wu] of Object.entries(webUsers)) {
-            const sc = parseFloat(wu.score) || 0;
-            if (sc <= 0 || !wu.name || !wu.name.trim()) continue;
-            const k = wu.name.trim().toLowerCase();
-            if (!map.has(k)) {
-                map.set(k, {
-                    name:         wu.name.trim(),
-                    tgUsername:   wu.username || '',
-                    univ:         '', kurs: '', yonalish: '',
-                    score:        sc,
-                    totalTests:   parseInt(wu.totalTests)   || 0,
-                    totalCorrect: parseInt(wu.totalCorrect) || 0,
-                    totalWrong:   parseInt(wu.totalWrong)   || 0,
-                });
-            }
-        }
-
-        // Ball bo'yicha KAMAYISH tartibida (eng yuqori ball = birinchi)
-        const sorted = Array.from(map.values())
-            .sort((a, b) => b.score - a.score);
-
-        res.json(sorted);
-    } catch (err) {
-        console.error('[leaderboard]', err.message);
-        res.status(500).json({ error: 'Xatolik' });
-    }
-});
-
-
 app.listen(PORT, '0.0.0.0', () => console.log(`🌐 Express server ${PORT}-portda`));
 
-// Railway/Render da WEBHOOK_URL env bo'lsa — webhook, aks holda polling
 const WEBHOOK_URL = process.env.WEBHOOK_URL || process.env.RAILWAY_STATIC_URL || null;
 
 async function startBot() {
-    // Avvalgi webhook ni tozalash
     try { await bot.telegram.deleteWebhook(); } catch {}
-
     if (WEBHOOK_URL) {
-        // ── WEBHOOK REJIMI ──
         const webhookPath = `/webhook/${BOT_TOKEN}`;
-        const fullUrl     = `${WEBHOOK_URL.replace(/\/$/, '')}${webhookPath}`;
-
-        // Express ga webhook handler qo'shish
+        const fullUrl = `${WEBHOOK_URL.replace(/\/$/,'')}${webhookPath}`;
         app.use(bot.webhookCallback(webhookPath));
-
-        // Webhook o'rnatish
-        await bot.telegram.setWebhook(fullUrl, {
-            allowed_updates: ['message','callback_query','inline_query'],
-            drop_pending_updates: true,
-        });
-
+        await bot.telegram.setWebhook(fullUrl, { allowed_updates:['message','callback_query','inline_query'], drop_pending_updates:true });
         console.log(`✅ Bot WEBHOOK rejimida ishga tushdi!`);
         console.log(`🔗 Webhook URL: ${fullUrl}`);
     } else {
-        // ── POLLING REJIMI (local dev) ──
-        // Ulanishda retry — Railway cold start uchun
         let attempt = 0;
         const maxAttempts = 5;
-
         const tryLaunch = async () => {
             attempt++;
-            try {
-                await bot.launch({
-                    allowedUpdates: ['message','callback_query','inline_query'],
-                    dropPendingUpdates: true,
-                });
-                console.log('✅ Bot POLLING rejimida ishga tushdi!');
-            } catch (err) {
-                console.error(`❌ Bot ishga tushmadi (urinish ${attempt}/${maxAttempts}):`, err.message);
-                if (attempt < maxAttempts) {
-                    const delay = attempt * 3000;
-                    console.log(`⏳ ${delay/1000}s dan keyin qayta urinish...`);
-                    setTimeout(tryLaunch, delay);
-                } else {
-                    console.error('💀 Bot ishga tushmadi — barcha urinishlar tugadi');
-                    // Ilovani o'chirmaymiz — Express server ishlaydi
-                }
+            try { await bot.launch({ allowedUpdates:['message','callback_query','inline_query'], dropPendingUpdates:true }); console.log('✅ Bot POLLING rejimida ishga tushdi!'); }
+            catch (err) {
+                console.error(`❌ Bot ishga tushmadi (${attempt}/${maxAttempts}):`, err.message);
+                if (attempt < maxAttempts) { const delay=attempt*3000; console.log(`⏳ ${delay/1000}s dan keyin qayta urinish...`); setTimeout(tryLaunch, delay); }
+                else console.error('💀 Bot ishga tushmadi — barcha urinishlar tugadi');
             }
         };
-
         await tryLaunch();
     }
 }
 
 startBot().catch(err => console.error('❌ startBot xatolik:', err.message));
-
 process.once('SIGINT',  () => { bot.stop('SIGINT');  process.exit(0); });
 process.once('SIGTERM', () => { bot.stop('SIGTERM'); process.exit(0); });
