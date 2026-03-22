@@ -2725,7 +2725,10 @@ function getFollowers(targetName){
 let _viewUser=null;
 
 async function openUserProfile(name,tgU){
-  _viewUser={name,tgU};
+  // Nickname topish — leaderboard dan
+  const lbEntry=_lbCache.find(u=>(u.name||'').toLowerCase()===name.toLowerCase());
+  const nick=lbEntry?.nickname||null;
+  _viewUser={name,tgU,nick};
   const sess=getSess();
   if(sess&&!sess.isAdmin){const me=getUsers()[sess.username];if(me?.name===name){navTo('profile');return;}}
 
@@ -2925,10 +2928,10 @@ function closeUserProfile(){document.getElementById('screen-user-profile').class
 function startChatFromProfile(){
   if(!_viewUser) return;
   const sess=getSess(); if(!sess) return;
-  const tName=_viewUser.name, tTg=_viewUser.tgU||'';
+  const tName=_viewUser.name, tTg=_viewUser.tgU||'', tNick=_viewUser.nick||null;
   if(!sess.isAdmin){const me=getUsers()[sess.username];if(me?.name===tName){toast("Bu o'z profilingiz!",'bad');return;}}
   closeUserProfile();
-  openChat(tName,tTg);
+  openChat(tName,tTg,tNick);
 }
 
 // ═══════════════════════════════════════════════
@@ -2942,8 +2945,9 @@ function initSocket(myName){
   if(_socket&&_socket.connected&&_socketName===myName) return;
   if(_socket) _socket.disconnect();
   _socketName = myName;
+  const myNick = getMyNickname();
 
-  _socket = io({ auth:{ name: myName }, transports:['websocket','polling'] });
+  _socket = io({ auth:{ name: myName, nickname: myNick||'' }, transports:['websocket','polling'] });
 
   _socket.on('connect', ()=>{
     console.log('[Socket] Ulandi:', _socket.id);
@@ -2983,8 +2987,8 @@ function initSocket(myName){
       }
     } else {
       // Chat yopiq yoki boshqa chat — bildirishnoma ko'rsat
-      const sender = msg.from || "Noma'lum";
-      showNotifBanner('💬 ' + sender + ' xabar yozdi', '+1 yangi xabar');
+      const sender = msg.fromNick || msg.from || "Noma'lum";
+      showNotifBanner('💬 @' + sender + ' xabar yozdi', '+1 yangi xabar');
       // Badge yangilash
       _lastUnreadCount++;
       const badge = document.getElementById('bn-badge');
@@ -3085,18 +3089,20 @@ function getNicknameOf(name){
   return found?.nickname||name;
 }
 
-function openChat(targetName,targetTg){
-  _chatWith={name:targetName,tg:targetTg||''};
+function openChat(targetName,targetTg,targetNick){
+  // targetName = real name (server uchun), targetNick = ko'rish uchun
+  const displayName = targetNick || targetName;
+  _chatWith={name:targetName, tg:targetTg||'', displayName};
   _msgs=[]; _lastTs=0;
   // myName ni aniq olish
   const sess=getSess();
   if(sess?.isAdmin) _chatMyName=getAdm().name||'Admin';
   else _chatMyName=getUsers()[sess?.username]?.name||getMyName()||null;
-  console.log('[Chat] opened as:', _chatMyName, '→', targetName);
+  console.log('[Chat] opened as:', _chatMyName, '→', targetName, '(display:', displayName+')');
   const url=getPhotoUrl(targetName,targetTg); const i=ini(targetName);
   const ava=document.getElementById('chat-ava');
   ava.innerHTML=url?`<img src="${url}" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentElement.innerHTML='<span>${i}</span>'">`:`<span>${i}</span>`;
-  document.getElementById('chat-uname').textContent=targetName||'—';
+  document.getElementById('chat-uname').textContent=displayName||targetName||'—';
   // Online status tekshirish
   const isOnline=_socketName&&[...(_socket?._nsp?.sockets?.keys()||[])].length>0;
   const stEl=document.getElementById('chat-status');
@@ -3181,7 +3187,7 @@ function renderMsgs(myName){
       html+=`<div class="msg-wrap2 ${isMine?'mine':'theirs'}" style="${isTemp?'opacity:.7':''}">
         ${!isMine?`<div class="msg-ava2" style="${showSender?'':'visibility:hidden;'}">${mav}</div>`:''}
         <div style="max-width:80%;">
-          ${showSender&&!isMine?`<div style="font-size:12px;font-weight:700;color:var(--green);padding:0 4px 4px;">${escH(msg.from)}</div>`:''}
+          ${showSender&&!isMine?`<div style="font-size:12px;font-weight:700;color:var(--green);padding:0 4px 4px;">@${escH(msg.fromNick||msg.from)}</div>`:''}
           <div class="msg-bubble2" style="padding:4px;background:${isMine?'#25D366':'#fff'};">
             <img src="${msg.imageData}" class="msg-img2" onclick="openFullImg('${msg.id}')" alt="📷">
             <div class="msg-time2" style="padding:2px 6px;">${ts}${statusIcon}</div>
@@ -3193,7 +3199,7 @@ function renderMsgs(myName){
       html+=`<div class="msg-wrap2 ${isMine?'mine':'theirs'}" style="${isTemp?'opacity:.7':''}">
         ${!isMine?`<div class="msg-ava2" style="${showSender?'':'visibility:hidden;'}">${mav}</div>`:''}
         <div style="max-width:80%;">
-          ${showSender&&!isMine?`<div style="font-size:12px;font-weight:700;color:var(--green);padding:0 4px 4px;">${escH(msg.from)}</div>`:''}
+          ${showSender&&!isMine?`<div style="font-size:12px;font-weight:700;color:var(--green);padding:0 4px 4px;">@${escH(msg.fromNick||msg.from)}</div>`:''}
           <div class="msg-bubble2">
             ${escH(msg.text)}
             <span class="msg-time2" style="display:inline-block;margin-left:8px;float:right;margin-top:2px;">${ts}${statusIcon}</span>
@@ -3269,13 +3275,14 @@ async function sendMsg(){
   try{
     if(_socket?.connected){
       // ✅ WebSocket orqali (real-time)
+      // fromName = real name, toName = real name (server real name ishlatadi)
       _socket.emit('chat_message',{fromName:myName,toName:_chatWith.name,text,tempId});
       // message_sent eventda tempId ni real id bilan almashtiramiz
     } else {
       // Fallback: HTTP
       const r=await fetch('/api/chat/send',{
         method:'POST',headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({fromName:myName,toName:_chatWith.name,text})
+        body:JSON.stringify({fromName:myName,toName:_chatWith.name,text,fromNick:getMyNickname()||myName})
       });
       if(r.ok){
         const data=await r.json();
@@ -3351,18 +3358,19 @@ function renderNewChatList(users){
   let html='';
   filtered.forEach(u=>{
     const av=makeAvaHtml(u.name,u.tgUsername||'');
-    html+=`<div class="new-chat-item2" onclick="startNewChat('${escA(u.name)}','${escA(u.tgUsername||'')}')">
+    const displayN = u.nickname ? '@'+u.nickname : u.name;
+    html+=`<div class="new-chat-item2" onclick="startNewChat('${escA(u.name)}','${escA(u.tgUsername||'')}','${escA(u.nickname||'')}')">
       <div style="width:42px;height:42px;border-radius:50%;background:var(--green-bg);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;color:var(--green);flex-shrink:0;overflow:hidden;">${av}</div>
       <div style="flex:1;min-width:0;">
-        <div style="font-size:14px;font-weight:700;color:var(--text);">${escH(u.name)}</div>
-        <div style="font-size:12px;color:var(--text3);font-weight:500;">${u.tgUsername?'@'+u.tgUsername+' · ':''}${u.univ||''}</div>
+        <div style="font-size:14px;font-weight:700;color:var(--text);">${escH(displayN)}</div>
+        <div style="font-size:12px;color:var(--text3);font-weight:500;">${u.nickname?escH(u.name)+' · ':''}${u.univ||''}</div>
       </div>
     </div>`;
   });
   el.innerHTML=html;
 }
 function filterNewChat(q){const f=q.toLowerCase().trim();renderNewChatList(f?_allLbUsers.filter(u=>(u.name||'').toLowerCase().includes(f)||(u.tgUsername||'').toLowerCase().includes(f)):_allLbUsers);}
-function startNewChat(name,tg){document.getElementById('new-chat-modal').classList.remove('on');openChat(name,tg);}
+function startNewChat(name,tg,nick){document.getElementById('new-chat-modal').classList.remove('on');openChat(name,tg,nick);}
 
 let _lastUnreadCount=0;
 async function checkUnread(){
@@ -3450,7 +3458,10 @@ async function loadChatsList(){
         >
           <div class="cli-ava2">${av}</div>
           <div class="cli-info2">
-            <div class="cli-name2">${escH(item.otherName||item.cid.split('__CHAT__').find(n=>n.toLowerCase()!==myName.toLowerCase())||'—')}</div>
+            <div class="cli-name2">${(()=>{
+            const lb=_lbCache.find(u=>(u.name||'').toLowerCase()===(item.otherName||'').toLowerCase());
+            return lb?.nickname ? escH('@'+lb.nickname) : escH(item.otherName||'—');
+          })()}</div>
             <div class="cli-msg2">${escH(preview)}</div>
           </div>
           <div class="cli-meta2">
@@ -3504,7 +3515,11 @@ function resetAllSwipes(){
 
 function openChatFromList(targetName){
   resetAllSwipes();
-  _msgs=[];_lastTs=0;openChat(targetName,'');
+  _msgs=[];_lastTs=0;
+  // Nickname topish
+  const lb=_lbCache.find(u=>(u.name||'').toLowerCase()===targetName.toLowerCase());
+  const nick=lb?.nickname||null;
+  openChat(targetName,'',nick);
 }
 
 // Participants
