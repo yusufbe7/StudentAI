@@ -2538,8 +2538,22 @@ app.post('/api/admin/force-logout', (req, res) => {
         const cur = parseInt(getAppVer()) || 2;
         const next = String(cur + 1);
         setAppVer(next);
-        console.log(`[Force Logout] Versiya ${cur} → ${next}`);
-        res.json({ success:true, oldVersion:String(cur), newVersion:next });
+
+        // Barcha web_users nikname va parollarini TOZALASH
+        // Foydalanuvchilar qaytadan nikname qo'yishi kerak
+        const wu = getWebUsers();
+        let count = 0;
+        Object.keys(wu).forEach(k => {
+            if(!wu[k].isAdmin) {
+                wu[k].nickname = null;
+                wu[k].updatedAt = Date.now();
+                count++;
+            }
+        });
+        saveWebUsers(wu);
+
+        console.log(`[Force Logout] Versiya ${cur} → ${next}, ${count} ta foydalanuvchi niknamesi tozalandi`);
+        res.json({ success:true, oldVersion:String(cur), newVersion:next, clearedCount:count });
     } catch(err) {
         res.status(500).json({ error: err.message });
     }
@@ -2549,8 +2563,9 @@ app.post('/api/admin/force-logout', (req, res) => {
 app.get('/api/admin/nick-stats', (req, res) => {
     try {
         const wu = getWebUsers();
-        const users = Object.values(wu)
-            .filter(u => u.nickname && u.nickname.trim())
+        const allUsers = Object.values(wu);
+        const users = allUsers
+            .filter(u => u.nickname && u.nickname.trim() && u.nickname !== 'null')
             .map(u => ({
                 username:  u.username,
                 name:      u.name || u.username,
@@ -2561,7 +2576,8 @@ app.get('/api/admin/nick-stats', (req, res) => {
 
         res.json({
             total:      users.length,
-            totalUsers: Object.keys(wu).length,
+            totalUsers: allUsers.length,
+            noNickname: allUsers.length - users.length, // nikname yo'qlar
             users,
         });
     } catch(err) {

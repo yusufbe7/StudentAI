@@ -2467,9 +2467,6 @@ function renderAdminPanel(){
   const adm=getAdm();
   const content=document.getElementById('admin-panel-content');
   if(!content) return;
-  // Nikname statistikasini yuklash
-  adminLoadNickStats();
-
   content.innerHTML=`
     <div class="field"><label class="field-lbl">Username</label><input class="field-inp" id="adm-u" value="${escH(adm.username||'')}"></div>
     <div class="field"><label class="field-lbl">Ism</label><input class="field-inp" id="adm-n" value="${escH(adm.name||'')}"></div>
@@ -2536,6 +2533,9 @@ function renderAdminPanel(){
       <div id="adm-score-list" style="margin-top:8px;"></div>
     </div>
   `;
+  // Nick stats yuklash (DOM tayyor bo'lgandan keyin)
+  setTimeout(()=>adminLoadNickStats(), 50);
+
   // Subjects dropdown ni to'ldirish
   setTimeout(()=>{
     const sel=document.getElementById('adm-score-subj'); if(!sel) return;
@@ -2574,14 +2574,19 @@ function saveAdminProfile(){
   toast('✅ Admin profili yangilandi!');
 }
 async function adminForceLogout(){
-  if(!confirm('Hamma foydalanuvchilarni logout qilasizmi? (Admin sessiyasi saqlanadi)')) return;
+  if(!confirm('Barcha foydalanuvchilarni logout qilib, ularning niknamelerini tozalaysizmi?\n\nUlar qaytadan nikname qoyib kirishi kerak boladi.')) return;
   try{
     const r=await fetch('/api/admin/force-logout',{method:'POST',headers:{'Content-Type':'application/json'}});
     if(r.ok){
       const d=await r.json();
-      toast(`✅ Versiya ${d.newVersion} — foydalanuvchilar logout bo'ladi!`);
-    } else toast('❌ Xatolik','bad');
-  }catch{ toast('⚠️ Server bilan boglanib bolmadi','bad'); }
+      toast(`✅ ${d.clearedCount||0} ta nikname tozalandi! Versiya: ${d.newVersion}`);
+      // Nick stats yangilash
+      setTimeout(()=>adminLoadNickStats(), 500);
+    } else {
+      const err=await r.json().catch(()=>({}));
+      toast('❌ Xatolik: '+(err.error||''),'bad');
+    }
+  }catch(e){ toast('⚠️ Server bilan boglanib bolmadi','bad'); }
 }
 
 async function adminLoadNickStats(){
@@ -2595,14 +2600,18 @@ async function adminLoadNickStats(){
     const list=d.users||[];
 
     let html=`
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
-      <div style="background:#fff;border-radius:12px;padding:12px;text-align:center;">
-        <div style="font-size:22px;font-weight:900;color:var(--green);">${total}</div>
-        <div style="font-size:11px;color:var(--text3);font-weight:600;margin-top:2px;">Nikname bor</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:12px;">
+      <div style="background:#fff;border-radius:12px;padding:10px;text-align:center;">
+        <div style="font-size:20px;font-weight:900;color:var(--green);">${total}</div>
+        <div style="font-size:10px;color:var(--text3);font-weight:600;margin-top:2px;">Nikname bor</div>
       </div>
-      <div style="background:#fff;border-radius:12px;padding:12px;text-align:center;">
-        <div style="font-size:22px;font-weight:900;color:var(--blue);">${d.totalUsers||0}</div>
-        <div style="font-size:11px;color:var(--text3);font-weight:600;margin-top:2px;">Jami foydalanuvchi</div>
+      <div style="background:#fff;border-radius:12px;padding:10px;text-align:center;">
+        <div style="font-size:20px;font-weight:900;color:var(--red);">${d.noNickname||0}</div>
+        <div style="font-size:10px;color:var(--text3);font-weight:600;margin-top:2px;">Nikname yo'q</div>
+      </div>
+      <div style="background:#fff;border-radius:12px;padding:10px;text-align:center;">
+        <div style="font-size:20px;font-weight:900;color:var(--text);">${d.totalUsers||0}</div>
+        <div style="font-size:10px;color:var(--text3);font-weight:600;margin-top:2px;">Jami</div>
       </div>
     </div>`;
 
