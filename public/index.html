@@ -1439,7 +1439,7 @@ async function checkMyVip(){
     if(r.status===404) r=await fetch('/api/user-stats?username='+encodeURIComponent(user.username||sess.username));
     if(r.status===404||!r.ok){_myVipStatus=true;return true;}
     const d=await r.json();
-    _myVipStatus=(d.isVip&&d.vipEnd&&Date.now()<d.vipEnd)||(!d.isVip&&!d.vipEnd&&!d.totalTests);
+    _myVipStatus=(d.isVip&&d.vipEnd&&Date.now()<d.vipEnd);
     return _myVipStatus;
   }catch{_myVipStatus=true;return true;}
 }
@@ -1459,7 +1459,7 @@ async function loadHome(sess){
   // Load leaderboard for stories and activity feed
   try{
     const r=await fetch('/api/leaderboard');
-    if(r.ok){ _lbCache=await r.json(); renderStories(_lbCache); renderActivity(_lbCache); }
+    if(r.ok){ const raw=await r.json(); _lbCache=[...raw].sort((a,b)=>(parseFloat(b.score)||0)-(parseFloat(a.score)||0)); renderStories(_lbCache); renderActivity(_lbCache); }
   }catch{}
 }
 
@@ -1999,7 +1999,7 @@ async function adminAddScore(){
       // Refresh leaderboard
       _adminAllUsers=[];
       const lbR=await fetch('/api/leaderboard');
-      if(lbR.ok){_lbCache=await lbR.json();renderPodium(_lbCache);renderLbList(_lbCache,getSess());}
+      if(lbR.ok){const raw3=await lbR.json();_lbCache=[...raw3].sort((a,b)=>(parseFloat(b.score)||0)-(parseFloat(a.score)||0));renderPodium(_lbCache);renderLbList(_lbCache,getSess());}
     } else {
       toast(`❌ Xatolik: ${d.error||'Noma\'lum'}`, 'bad');
     }
@@ -2083,7 +2083,8 @@ async function loadStats(){
   try{
     const r=await fetch('/api/leaderboard');
     if(r.ok){
-      _lbCache=await r.json();
+      const raw2=await r.json();
+      _lbCache=[...raw2].sort((a,b)=>(parseFloat(b.score)||0)-(parseFloat(a.score)||0));
       renderPodium(_lbCache);
       renderLbList(_lbCache, sess);
     }
@@ -2104,13 +2105,14 @@ function renderPodium(list){
   const el=document.getElementById('lb-podium'); if(!el) return;
   if(!list||list.length<1){el.innerHTML='<div style="color:var(--text3);font-size:13px;padding:20px;">Ma\'lumot yo\'q</div>';return;}
 
-  // order: [1]=silver(left), [0]=gold(center), [2]=bronze(right)
-  const order=[1,0,2];
-  const medalBg=['#F6C90E','#C0C0C0','#CD7F32'];
-  const medalSymbol=['1','2','3'];
-  const barHeights=['60px','90px','45px']; // gold taller
-  const avaSize=['76px','92px','70px'];
-  const borderColor=['rgba(198,173,0,0.6)','rgba(192,192,192,0.6)','rgba(205,127,50,0.6)'];
+  // order: slot0=silver(left,list[1]), slot1=gold(center,list[0]), slot2=bronze(right,list[2])
+  const order=[1,0,2]; // rank indices shown in each slot
+  // Per-SLOT: slot0=left(silver), slot1=center(gold), slot2=right(bronze)
+  const medalBg    =['#C0C0C0','#F6C90E','#CD7F32'];
+  const medalSymbol=['2','1','3'];
+  const barHeights =['60px','90px','45px'];
+  const avaSize    =['76px','92px','70px'];
+  const borderColor=['rgba(192,192,192,0.6)','rgba(198,173,0,0.6)','rgba(205,127,50,0.6)'];
 
   let html='<div style="display:flex;align-items:flex-end;justify-content:center;gap:10px;width:100%;">';
   order.forEach((rank,slot)=>{
