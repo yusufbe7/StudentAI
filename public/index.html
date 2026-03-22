@@ -1244,7 +1244,8 @@ if(tg){ tg.expand(); tg.enableClosingConfirmation(); }
 
 const ADMIN_SECRET = "AD4863403";
 const USERS_KEY    = "sb_users_v4";
-const SESS_KEY     = "sb_sess_v4";
+const SESS_KEY     = "sb_sess_v5"; // v5: nickname tizimi — yangi sessiya
+const APP_VER_KEY  = "sb_app_ver";
 const ADMIN_KEY    = "sb_admin_v4";
 
 const SUB_NAMES = { academic:'Akademik yozuv', history:'Tarix', math:'Matematika', dasturlash:'Dasturlash 1', physics:'Fizika', english:'Perfect English' };
@@ -1474,7 +1475,10 @@ async function doSignIn(){
       // 2. Try localStorage fallback
       const users=getUsers();
       if(users[u]&&users[u].pass===p){
-        saveSess({username:u,isAdmin:false}); openApp(u,false);
+        const nickInLogin = d.user?.nickname||null;
+      const sessObj = {username:u, isAdmin:false};
+      if(nickInLogin) sessObj.nickname = nickInLogin;
+      saveSess(sessObj); openApp(u,false);
       } else {
         errEl.textContent=d.error==='notfound'?"Bu username topilmadi":"Parol noto'g'ri";
         errEl.classList.add('on');
@@ -1485,7 +1489,10 @@ async function doSignIn(){
     // Offline: use localStorage only
     const users=getUsers();
     if(users[u]&&users[u].pass===p){
-      saveSess({username:u,isAdmin:false}); openApp(u,false);
+      const nickInLogin = d.user?.nickname||null;
+      const sessObj = {username:u, isAdmin:false};
+      if(nickInLogin) sessObj.nickname = nickInLogin;
+      saveSess(sessObj); openApp(u,false);
     } else {
       errEl.textContent="Username yoki parol noto'g'ri"; errEl.classList.add('on');
     }
@@ -1583,19 +1590,43 @@ async function openApp(username,isAdmin){
     if(d.fixedCount>0) console.log('[Fix] Duplicate chatlar tozalandi:', d.fixedCount);
   }).catch(()=>{});
 
-  // Nikname tekshirish — yo'q bo'lsa setup ekrani ko'rsat
-  if(!sess.isAdmin){
-    const wu=getUsers()[username];
-    if(wu && !wu.nickname && !sess.nickname){
-      // TG dan ma'lumotlarni olishga urinish
-      await loadTgProfile(wu);
-      showNicknameSetup();
-      return; // navTo ni kechiktirish
+  // ─── Nikname tekshirish ─────────────────────────────────
+  if (!sess.isAdmin) {
+    const wu = getUsers()[username];
+    const hasNick = wu?.nickname || sess.nickname;
+    if (!hasNick) {
+      // Server dan ham tekshirish (localStorage yangi bo'lishi uchun)
+      try {
+        const mr = await fetch(`/api/web-auth/me?username=${encodeURIComponent(username)}`);
+        if (mr.ok) {
+          const md = await mr.json();
+          if (md.user?.nickname) {
+            // Server da nikname bor — local ga yozib qo'yamiz
+            if (wu) { wu.nickname = md.user.nickname; saveUsers({...getUsers(), [username]:wu}); }
+            saveSess({...sess, nickname: md.user.nickname});
+          } else {
+            // Server da ham yo'q — setup ekraniga
+            await loadTgProfile(wu);
+            showNicknameSetup();
+            return;
+          }
+        } else {
+          // Server dan javob kelmadi — setup ekraniga
+          await loadTgProfile(wu);
+          showNicknameSetup();
+          return;
+        }
+      } catch {
+        // Xato — setup ekraniga
+        await loadTgProfile(wu);
+        showNicknameSetup();
+        return;
+      }
     }
   }
   navTo('home');
   checkUnread();
-  setInterval(checkUnread,8000);
+  setInterval(checkUnread, 8000);
 }
 
 // ═══════════════════════════════════════════════
@@ -2064,13 +2095,24 @@ function renderAdminPanel(){
   const adm=getAdm();
   const content=document.getElementById('admin-panel-content');
   if(!content) return;
+  // Nikname statistikasini yuklash
+  adminLoadNickStats();
+
   content.innerHTML=`
     <div class="field"><label class="field-lbl">Username</label><input class="field-inp" id="adm-u" value="${escH(adm.username||'')}"></div>
     <div class="field"><label class="field-lbl">Ism</label><input class="field-inp" id="adm-n" value="${escH(adm.name||'')}"></div>
     <div class="field"><label class="field-lbl">Yangi parol</label><input class="field-inp" id="adm-pw" type="password" placeholder="Bo'sh qoldiring"></div>
     <div class="field"><input class="field-inp" id="adm-pw2" type="password" placeholder="Tasdiqlang"><div class="field-err" id="adm-pw-e">Parollar mos kelmadi</div></div>
     <button class="save-btn2" onclick="saveAdminProfile()" style="margin-bottom:10px;">💾 Saqlash</button>
-    <button onclick="adminRejectTour()" style="width:100%;padding:12px;background:var(--red-bg);color:var(--red);border:none;border-radius:12px;font-family:'Inter',sans-serif;font-size:13px;font-weight:700;cursor:pointer;margin-bottom:16px;">✕ Musobaqani bekor qilish</button>
+    <button onclick="adminRejectTour()" style="width:100%;padding:12px;background:var(--red-bg);color:var(--red);border:none;border-radius:12px;font-family:'Inter',sans-serif;font-size:13px;font-weight:700;cursor:pointer;margin-bottom:8px;">✕ Musobaqani bekor qilish</button>
+    <button onclick="adminForceLogout()" style="width:100%;padding:12px;background:#fff3cd;color:#856404;border:1.5px solid #ffc107;border-radius:12px;font-family:'Inter',sans-serif;font-size:13px;font-weight:700;cursor:pointer;margin-bottom:16px;">🔄 Barcha foydalanuvchilarni logout qilish</button>
+
+    <!-- Nikname statistikasi -->
+    <div style="background:var(--bg);border-radius:14px;padding:16px;margin-bottom:16px;" id="nick-stats-card">
+      <div style="font-size:13px;font-weight:800;color:var(--text);margin-bottom:2px;">👥 Nikname ro'yxatidan o'tganlar</div>
+      <div style="font-size:12px;color:var(--text3);font-weight:500;margin-bottom:12px;">WebApp da nikname kiritgan foydalanuvchilar</div>
+      <div id="nick-stats-content" style="font-size:13px;color:var(--text3);text-align:center;padding:10px;">⏳ Yuklanmoqda...</div>
+    </div>
 
     <!-- Ball qo'shish bo'limi -->
     <div style="background:var(--bg);border-radius:14px;padding:16px;margin-top:4px;">
@@ -2159,6 +2201,65 @@ function saveAdminProfile(){
   saveAdm(adm); saveSess({username:adm.username,isAdmin:true});
   toast('✅ Admin profili yangilandi!');
 }
+async function adminForceLogout(){
+  if(!confirm('Hamma foydalanuvchilarni logout qilasizmi? (Admin sessiyasi saqlanadi)')) return;
+  try{
+    const r=await fetch('/api/admin/force-logout',{method:'POST',headers:{'Content-Type':'application/json'}});
+    if(r.ok){
+      const d=await r.json();
+      toast(`✅ Versiya ${d.newVersion} — foydalanuvchilar logout bo'ladi!`);
+    } else toast('❌ Xatolik','bad');
+  }catch{ toast('⚠️ Server bilan boglanib bolmadi','bad'); }
+}
+
+async function adminLoadNickStats(){
+  const el=document.getElementById('nick-stats-content');
+  if(!el) return;
+  try{
+    const r=await fetch('/api/admin/nick-stats');
+    if(!r.ok) throw new Error();
+    const d=await r.json();
+    const total=d.total||0;
+    const list=d.users||[];
+
+    let html=`
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
+      <div style="background:#fff;border-radius:12px;padding:12px;text-align:center;">
+        <div style="font-size:22px;font-weight:900;color:var(--green);">${total}</div>
+        <div style="font-size:11px;color:var(--text3);font-weight:600;margin-top:2px;">Nikname bor</div>
+      </div>
+      <div style="background:#fff;border-radius:12px;padding:12px;text-align:center;">
+        <div style="font-size:22px;font-weight:900;color:var(--blue);">${d.totalUsers||0}</div>
+        <div style="font-size:11px;color:var(--text3);font-weight:600;margin-top:2px;">Jami foydalanuvchi</div>
+      </div>
+    </div>`;
+
+    if(list.length){
+      html+=`<div style="max-height:220px;overflow-y:auto;border-radius:10px;background:#fff;padding:4px 0;">`;
+      list.forEach((u,i)=>{
+        const url=getPhotoUrl(u.name,'');
+        const av=url
+          ?`<img src="${url}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`
+          :`<span style="font-size:11px;font-weight:800;">${ini(u.name)}</span>`;
+        html+=`<div style="display:flex;align-items:center;gap:8px;padding:8px 12px;border-bottom:1px solid var(--border);cursor:pointer;" onclick="openUserProfile('${escA(u.name)}','')">
+          <div style="width:32px;height:32px;border-radius:50%;background:var(--green-bg);display:flex;align-items:center;justify-content:center;color:var(--green);flex-shrink:0;overflow:hidden;">${av}</div>
+          <div style="flex:1;min-width:0;">
+            <div style="font-size:13px;font-weight:700;color:var(--text);">@${escH(u.nickname)}</div>
+            <div style="font-size:11px;color:var(--text3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escH(u.name)}</div>
+          </div>
+          <div style="font-size:10px;color:var(--text3);font-weight:500;flex-shrink:0;">${new Date(u.createdAt||Date.now()).toLocaleDateString('uz-UZ',{day:'2-digit',month:'2-digit'})}</div>
+        </div>`;
+      });
+      html+=`</div>`;
+    } else {
+      html+=`<div style="color:var(--text3);text-align:center;padding:12px;font-size:12px;">Hali hech kim nikname kiritgani yo'q</div>`;
+    }
+    el.innerHTML=html;
+  }catch{
+    el.innerHTML='<div style="color:var(--red);text-align:center;padding:10px;font-size:12px;">Yuklanmadi</div>';
+  }
+}
+
 async function adminRejectTour(){
   showConfirm('🚫','Musobaqani bekor qilish','Barcha ishtirokchilarga xabar yuboriladi',async()=>{
     try{
@@ -3824,11 +3925,42 @@ function doLogout(){
 }
 
 // Init
-window.addEventListener('DOMContentLoaded',async()=>{
-  const sess=getSess();
-  if(sess){openApp(sess.username,sess.isAdmin);return;}
-  document.getElementById('si-p').addEventListener('keydown',e=>{if(e.key==='Enter')doSignIn();});
-  document.getElementById('su-p2').addEventListener('keydown',e=>{if(e.key==='Enter')doSignUp();});
+window.addEventListener('DOMContentLoaded', async () => {
+  // ─── 1. FORCE LOGOUT — server versiyasi bilan tekshirish ───
+  try {
+    const vr = await fetch('/api/app-version');
+    if (vr.ok) {
+      const vd = await vr.json();
+      const serverVer = vd.version || '1';
+      const localVer  = localStorage.getItem(APP_VER_KEY) || '0';
+      if (serverVer !== localVer) {
+        console.log('[Version]', localVer, '→', serverVer, '— force logout');
+        // Barcha eski sessiyalarni tozalash (v1-v4 ham)
+        ['sb_sess_v1','sb_sess_v2','sb_sess_v3','sb_sess_v4','sb_sess_v5',SESS_KEY].forEach(k => {
+          const old = localStorage.getItem(k);
+          if (old) {
+            try {
+              const p = JSON.parse(old);
+              // Admin sessiyasini saqlab qolish (admin logout bo'lmasin)
+              if (!p.isAdmin) localStorage.removeItem(k);
+            } catch { localStorage.removeItem(k); }
+          }
+        });
+        localStorage.setItem(APP_VER_KEY, serverVer);
+      }
+    }
+  } catch(e) { console.log('[Version check failed]', e); }
+
+  // ─── 2. Sessiya tekshirish ───────────────────────────────
+  const sess = getSess();
+  if (sess) {
+    openApp(sess.username, sess.isAdmin);
+    return;
+  }
+
+  // ─── 3. Login ekranini tayyorlash ───────────────────────
+  document.getElementById('si-p')?.addEventListener('keydown', e => { if(e.key==='Enter') doSignIn(); });
+  document.getElementById('su-p2')?.addEventListener('keydown', e => { if(e.key==='Enter') doSignUp(); });
 });
 document.addEventListener('input',e=>{
   if(e.target.id==='chat-inp'){e.target.style.height='auto';e.target.style.height=Math.min(e.target.scrollHeight,100)+'px';}

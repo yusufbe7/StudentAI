@@ -1411,7 +1411,10 @@ app.post('/api/chat/send', async (req, res) => {
         const chats = getChatMsgs();
         const cid = chatId(fromName, toName);
         if (!chats[cid]) chats[cid] = [];
-        const msg = { id:Date.now()+'_'+Math.random().toString(36).slice(2,7), from:fromName, to:toName, text:text?.trim()||'', imageData:imageData||null, ts:Date.now(), read:false };
+        const wu2=getWebUsers();
+        const fromNickH=Object.values(wu2).find(u=>(u.name||'').toLowerCase().trim()===(fromName||'').toLowerCase().trim())?.nickname||null;
+        const toNickH=Object.values(wu2).find(u=>(u.name||'').toLowerCase().trim()===(toName||'').toLowerCase().trim())?.nickname||null;
+        const msg = { id:Date.now()+'_'+Math.random().toString(36).slice(2,7), from:fromName, to:toName, fromNick:fromNickH||fromName, toNick:toNickH||toName, text:text?.trim()||'', imageData:imageData||null, ts:Date.now(), read:false };
         chats[cid].push(msg);
         if (chats[cid].length > 500) chats[cid] = chats[cid].slice(-500);
         saveChatMsgs(chats);
@@ -2005,6 +2008,42 @@ bot.catch((err, ctx) => {
 // ============================================================
 server.listen(PORT, '0.0.0.0', () => console.log(`🌐 Express+Socket.io server ${PORT}-portda`));
 
+// ─── Yordamchi: name yoki nickname bo'yicha socket topish ──
+function findSocket(nameOrNick) {
+    const low = (nameOrNick||'').toLowerCase().trim();
+    // 1. To'g'ridan name bo'yicha
+    if (onlineUsers.has(low)) return onlineUsers.get(low);
+    // 2. Nickname bo'yicha
+    const wu = getWebUsers();
+    for (const [,u] of Object.entries(wu)) {
+        if ((u.nickname||'').toLowerCase() === low) {
+            const nameKey = (u.name||'').toLowerCase().trim();
+            if (onlineUsers.has(nameKey)) return onlineUsers.get(nameKey);
+        }
+    }
+    return null;
+}
+
+// ─── Yordamchi: nickname dan real name olish ────────────────
+function realNameFromNick(nick) {
+    const low = (nick||'').toLowerCase().trim();
+    const wu = getWebUsers();
+    for (const [,u] of Object.entries(wu)) {
+        if ((u.nickname||'').toLowerCase() === low) return u.name||low;
+    }
+    return nick; // nickname yo'q bo'lsa o'zini qaytarish
+}
+
+// ─── Yordamchi: name dan nickname olish ────────────────────
+function nickFromName(name) {
+    const low = (name||'').toLowerCase().trim();
+    const wu = getWebUsers();
+    for (const [,u] of Object.entries(wu)) {
+        if ((u.name||'').toLowerCase().trim() === low) return u.nickname||null;
+    }
+    return null;
+}
+
 // ─── Socket.io connection handler ─────────────────────────
 io.on('connection', (socket) => {
     const userName = socket.handshake.auth?.name;
@@ -2020,54 +2059,57 @@ io.on('connection', (socket) => {
     // ─── Xabar yuborish (WebSocket orqali) ────────────────
     socket.on('chat_message', async (data) => {
         try {
-            const { fromName, toName, text, imageData } = data;
+            let { fromName, toName, text, imageData } = data;
             if (!fromName || !toName || (!text?.trim() && !imageData)) return;
 
-            // Bazaga saqlash — chatId funksiyasidan foydalanish
+            // Agar nickname berilgan bo'lsa — real name ga o'girish
+            const fromReal = realNameFromNick(fromName) || fromName;
+            const toReal   = realNameFromNick(toName)   || toName;
+
+            // Bazaga saqlash
             const chats = getChatMsgs();
-            const cid = chatId(fromName, toName);
+            const cid = chatId(fromReal, toReal);
             if (!chats[cid]) chats[cid] = [];
 
             const msg = {
-                id: Date.now() + '_' + Math.random().toString(36).slice(2,7),
-                from: fromName,
-                to: toName,
-                text: text?.trim() || '',
+                id:        Date.now() + '_' + Math.random().toString(36).slice(2,7),
+                from:      fromReal,
+                to:        toReal,
+                fromNick:  nickFromName(fromReal) || fromReal,
+                toNick:    nickFromName(toReal)   || toReal,
+                text:      text?.trim() || '',
                 imageData: imageData || null,
-                ts: Date.now(),
-                read: false,
+                ts:        Date.now(),
+                read:      false,
             };
             chats[cid].push(msg);
             if (chats[cid].length > 500) chats[cid] = chats[cid].slice(-500);
             saveChatMsgs(chats);
 
-            // Yuboruvchiga confirm (tempId bilan)
+            // Yuboruvchiga confirm
             socket.emit('message_sent', { msg, tempId: data.tempId||null });
 
-            // Qabul qiluvchiga real-time yuborish
-            const toKey = toName.toLowerCase().trim();
-            const toSocket = onlineUsers.get(toKey);
+            // Qabul qiluvchiga yuborish — name va nickname ikkalasida ham izlash
+            const toSocket = findSocket(toReal);
             if (toSocket) {
                 io.to(toSocket.socketId).emit('new_message', { msg });
-                console.log(`📨 [Socket] ${fromName} → ${toName} (online, realtime)`);
+                console.log(`📨 [Socket] ${fromReal} → ${toReal} (online)`);
             } else {
-                // Offline — Telegram orqali xabar
-                console.log(`📭 [Socket] ${toName} offline — TG xabar yuboriladi`);
+                // Offline — Telegram xabar
                 const db = getDb();
-                for (const [uid, u] of Object.entries(db.users || {})) {
-                    if ((u.name||'').toLowerCase().trim() === toKey) {
+                for (const [uid, u] of Object.entries(db.users||{})) {
+                    if ((u.name||'').toLowerCase().trim() === toReal.toLowerCase().trim()) {
                         const preview = imageData ? '🖼️ Rasm' : (text||'').slice(0,100);
+                        const fromDisplay = nickFromName(fromReal)||fromReal;
                         bot.telegram.sendMessage(uid,
-                            `💬 <b>Yangi xabar!</b>\n👤 <b>Kimdan:</b> ${fromName}\n📝 ${preview}`,
-                            { parse_mode: 'HTML' }
+                            `💬 <b>Yangi xabar!</b>\n👤 <b>${fromDisplay}</b>\n📝 ${preview}`,
+                            { parse_mode:'HTML' }
                         ).catch(()=>{});
                         break;
                     }
                 }
             }
-        } catch (err) {
-            console.error('[Socket chat_message]', err.message);
-        }
+        } catch(err) { console.error('[Socket chat_message]', err.message); }
     });
 
     // ─── Xabarni o'qilgan deb belgilash ───────────────────
@@ -2075,19 +2117,25 @@ io.on('connection', (socket) => {
         try {
             const { myName, otherName } = data;
             if (!myName || !otherName) return;
+            const myReal    = realNameFromNick(myName)    || myName;
+            const otherReal = realNameFromNick(otherName) || otherName;
             const chats = getChatMsgs();
-            const [n1, n2] = [myName.toLowerCase().trim(), otherName.toLowerCase().trim()].sort();
-            const cid = n1 + '__CHAT__' + n2;
-            const myLow = myName.toLowerCase().trim();
-            if (chats[cid]) {
-                chats[cid].forEach(m => { if ((m.to||'').toLowerCase().trim() === myLow) m.read = true; });
-                saveChatMsgs(chats);
-            }
+            const myLow = myReal.toLowerCase().trim();
+            const otherLow = otherReal.toLowerCase().trim();
+            // Barcha cid lardan o'qilgan deb belgilash
+            let changed = false;
+            Object.values(chats).forEach(msgs => {
+                msgs.forEach(m => {
+                    const fLow=(m.from||'').toLowerCase().trim();
+                    const tLow=(m.to||'').toLowerCase().trim();
+                    if(tLow===myLow && fLow===otherLow && !m.read){ m.read=true; changed=true; }
+                });
+            });
+            if(changed) saveChatMsgs(chats);
             // Yuboruvchiga ✓✓ signali
-            const fromKey = otherName.toLowerCase().trim();
-            const fromSocket = onlineUsers.get(fromKey);
+            const fromSocket = findSocket(otherReal);
             if (fromSocket) {
-                io.to(fromSocket.socketId).emit('messages_read', { by: myName, chatWith: otherName });
+                io.to(fromSocket.socketId).emit('messages_read', { by: myReal, chatWith: otherReal });
             }
         } catch (err) { console.error('[Socket mark_read]', err.message); }
     });
@@ -2096,8 +2144,7 @@ io.on('connection', (socket) => {
     socket.on('typing', (data) => {
         const { fromName, toName, isTyping } = data;
         if (!fromName || !toName) return;
-        const toKey = toName.toLowerCase().trim();
-        const toSocket = onlineUsers.get(toKey);
+        const toSocket = findSocket(toName);
         if (toSocket) {
             io.to(toSocket.socketId).emit('user_typing', { name: fromName, isTyping });
         }
@@ -2133,6 +2180,59 @@ app.post('/api/admin/fix-chats', (req, res) => {
         Object.values(merged).forEach(msgs => msgs.sort((a,b)=>a.ts-b.ts));
         writeJSON(CHAT_MSGS_PATH, merged);
         res.json({ success:true, fixedCount, totalChats: Object.keys(merged).length });
+    } catch(err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// ─── App versiyasi — force logout uchun ──────────────────────
+// Bu qiymatni o'zgartirsangiz barcha foydalanuvchilar logout bo'ladi
+const VER_PATH = path.join(DATA_DIR, 'app_version.json');
+function getAppVer() {
+    try { return JSON.parse(fs.readFileSync(VER_PATH,'utf8')).version || '2'; } catch { return '2'; }
+}
+function setAppVer(v) {
+    fs.writeFileSync(VER_PATH, JSON.stringify({version:String(v), updatedAt:Date.now()}));
+}
+// Agar fayl yo'q bo'lsa — yaratish
+if (!fs.existsSync(VER_PATH)) setAppVer('2');
+
+app.get('/api/app-version', (req, res) => {
+    res.json({ version: getAppVer() });
+});
+
+// Admin: barcha foydalanuvchilarni logout qilish
+app.post('/api/admin/force-logout', (req, res) => {
+    try {
+        const cur = parseInt(getAppVer()) || 2;
+        const next = String(cur + 1);
+        setAppVer(next);
+        console.log(`[Force Logout] Versiya ${cur} → ${next}`);
+        res.json({ success:true, oldVersion:String(cur), newVersion:next });
+    } catch(err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// ─── Admin: nikname statistikasi ─────────────────────────────
+app.get('/api/admin/nick-stats', (req, res) => {
+    try {
+        const wu = getWebUsers();
+        const users = Object.values(wu)
+            .filter(u => u.nickname && u.nickname.trim())
+            .map(u => ({
+                username:  u.username,
+                name:      u.name || u.username,
+                nickname:  u.nickname,
+                createdAt: u.createdAt || Date.now(),
+            }))
+            .sort((a,b) => (b.createdAt||0) - (a.createdAt||0));
+
+        res.json({
+            total:      users.length,
+            totalUsers: Object.keys(wu).length,
+            users,
+        });
     } catch(err) {
         res.status(500).json({ error: err.message });
     }
