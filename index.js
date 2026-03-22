@@ -1251,13 +1251,63 @@ app.post('/api/web-auth/register', (req, res) => {
 });
 app.post('/api/web-auth/login', (req, res) => {
     try {
-        const { username, password } = req.body;
+        const { username, password, fingerprint } = req.body;
         if (!username||!password) return res.status(400).json({error:'missing_fields'});
         const u = username.toLowerCase().trim();
         const webUsers = getWebUsers();
         if (webUsers[u]) {
             if (webUsers[u].password !== password) return res.status(401).json({error:'wrong_password'});
-            return res.json({ success:true, user:{username:u, name:webUsers[u].name, nickname:webUsers[u].nickname||null, tgId:webUsers[u].tgId||null, tgUsername:webUsers[u].tgUsername||null, univ:webUsers[u].univ||null, kurs:webUsers[u].kurs||null, yonalish:webUsers[u].yonalish||null, photo:webUsers[u].photo||null, createdAt:webUsers[u].createdAt} });
+
+            // ─── Suspicious fingerprint tekshirish ──────────────
+            if(fingerprint){
+                try{
+                    const SUSP_PATH = path.join(DATA_DIR, 'suspicious.json');
+                    let susp = [];
+                    try{ susp = JSON.parse(fs.readFileSync(SUSP_PATH,'utf8')); }catch{}
+                    // Bu fingerprint bilan hujum bo'lganmi?
+                    const suspIdx = susp.findIndex(s =>
+                        s.fingerprint === fingerprint &&
+                        s.penaltyPending &&
+                        (Date.now() - s.ts) < 7*24*60*60*1000 // 7 kun ichida
+                    );
+                    if(suspIdx !== -1){
+                        // Jazo berish
+                        const wu = webUsers;
+                        wu[u].score = (parseFloat(wu[u].score)||0) - 100;
+                        wu[u].updatedAt = Date.now();
+                        saveWebUsers(wu);
+                        // DB da ham
+                        const db = getDb();
+                        for(const [uid,dbU] of Object.entries(db.users||{})){
+                            if((dbU.name||'').toLowerCase().trim()===(wu[u].name||'').toLowerCase().trim()){
+                                db.users[uid].score=(parseFloat(db.users[uid].score)||0)-100;
+                                saveDb(db); break;
+                            }
+                        }
+                        // Flagni o'chirish
+                        susp[suspIdx].penaltyPending = false;
+                        susp[suspIdx].penaltyApplied = u;
+                        susp[suspIdx].penaltyAt = Date.now();
+                        fs.writeFileSync(SUSP_PATH, JSON.stringify(susp));
+
+                        console.log(`[Security] Delayed penalty applied: ${u} -100 ball (fingerprint match)`);
+
+                        // Telegram orqali xabar berish
+                        if(webUsers[u].tgId){
+                            bot.telegram.sendMessage(webUsers[u].tgId,
+                                `⚠️ <b>Ogohlantirish!</b>
+
+Siz ilgari <b>@${susp[suspIdx].targetNick}</b> akkauntiga buzib kirishga urinib ko'rdingiz.
+
+📉 Jarima: <b>-100 ball</b> ayirildi.`,
+                                {parse_mode:'HTML'}
+                            ).catch(()=>{});
+                        }
+                    }
+                }catch(e){ console.error('[Suspicious check]', e.message); }
+            }
+
+            return res.json({ success:true, user:{username:u, name:webUsers[u].name, nickname:webUsers[u].nickname||null, tgId:webUsers[u].tgId||null, tgUsername:webUsers[u].tgUsername||null, univ:webUsers[u].univ||null, kurs:webUsers[u].kurs||null, yonalish:webUsers[u].yonalish||null, photo:webUsers[u].photo||null, createdAt:webUsers[u].createdAt, score:webUsers[u].score||0} });
         }
         return res.status(404).json({error:'notfound'});
     } catch (err) { console.error('[web-login]', err.message); res.status(500).json({error:'server_error'}); }
@@ -1364,6 +1414,203 @@ app.post('/api/web-auth/link-tg', (req, res) => {
         saveWebUsers(webUsers);
         res.json({ success:true });
     } catch(err) { res.status(500).json({error:err.message}); }
+});
+
+
+// ─── Parol tiklash — Telegram orqali ─────────────────────────────
+const resetTokens = new Map(); // token → { username, newPassword, tgId, status, expiresAt }
+
+function genToken(){
+    return Math.random().toString(36).slice(2,9)+Date.now().toString(36);
+}
+
+// 1. So'rov yuborish — nikname + yangi parol
+app.post('/api/reset-request', async (req, res) => {
+    try{
+        const { nickname, newPassword } = req.body;
+        if(!nickname||!newPassword) return res.status(400).json({error:'missing'});
+        if(newPassword.length<6) return res.status(400).json({error:'short_pass',message:'Parol kamida 6 belgi'});
+
+        const nick = nickname.toLowerCase().trim().replace(/^@/,'');
+        const wu = getWebUsers();
+
+        // Nikname bo'yicha foydalanuvchini topish
+        const found = Object.entries(wu).find(([,u])=>(u.nickname||'').toLowerCase()===nick);
+        if(!found) return res.status(404).json({error:'notfound',message:'Bu nikname topilmadi'});
+
+        const [uKey, uData] = found;
+
+        // TG ID topish
+        let tgId = uData.tgId || null;
+        if(!tgId){
+            // db.users dan izlash
+            const db = getDb();
+            for(const [uid, u] of Object.entries(db.users||{})){
+                if((u.name||'').toLowerCase().trim()===(uData.name||'').toLowerCase().trim()){
+                    tgId = uid; break;
+                }
+            }
+        }
+        if(!tgId) return res.status(400).json({error:'no_tg',message:'Akkaunt Telegram ga boglanmagan'});
+
+        // Eski tokenni o'chirish
+        for(const [t,v] of resetTokens.entries()){
+            if(v.username===uKey) resetTokens.delete(t);
+        }
+
+        const token = genToken();
+        const expiresAt = Date.now() + 5*60*1000; // 5 daqiqa
+        // So'rovchi web user ni aniqlash — kim so'rov yubordi?
+        // Bu vaqtda so'rovchi logged in bo'lmaydi, lekin IP yoki
+        // boshqa usul orqali aniqlab bo'lmaydi.
+        // Shuning uchun so'rov yuborgan vaqtda cookie/header orqali
+        // logged-in username ni olish mumkin emas.
+        // Yechim: so'rovchi username ni body dan olish
+        const requesterUsername = (req.body.requesterUsername||'').toLowerCase().trim()||null;
+        const fingerprint = req.body.fingerprint||null;
+        const ip = req.headers['x-forwarded-for']?.split(',')[0]?.trim() || req.socket?.remoteAddress || null;
+
+        resetTokens.set(token, {
+            username: uKey,
+            nickname: nick,
+            newPassword,
+            tgId: String(tgId),
+            status: 'pending',
+            expiresAt,
+            requesterUsername,
+            fingerprint,
+            ip,
+        });
+
+        // Telegram ga xabar yuborish
+        const btnApprove = `✅ Tasdiqlash`;
+        const btnReject  = `❌ Bekor qilish`;
+        await bot.telegram.sendMessage(
+            tgId,
+            `🔐 <b>Parol o'zgartirish so'rovi</b>\n\n` +
+            `👤 Akkaunt: <b>@${nick}</b>\n` +
+            `⚠️ Agar siz so'ramagan bo'lsangiz — <b>Bekor qilish</b> ni bosing!\n\n` +
+            `⏰ So'rov 5 daqiqadan keyin bekor bo'ladi.`,
+            {
+                parse_mode: 'HTML',
+                reply_markup: {
+                    inline_keyboard: [[
+                        { text: btnApprove, callback_data: `reset_ok_${token}` },
+                        { text: btnReject,  callback_data: `reset_no_${token}` },
+                    ]]
+                }
+            }
+        );
+
+        res.json({ success:true, token, expiresIn:300 });
+    }catch(err){
+        console.error('[reset-request]', err.message);
+        res.status(500).json({error:'server_error', message:'Server xatosi'});
+    }
+});
+
+// 2. Status tekshirish (polling)
+app.get('/api/reset-status', (req, res) => {
+    const { token } = req.query;
+    if(!token) return res.status(400).json({error:'missing'});
+    const data = resetTokens.get(token);
+    if(!data) return res.json({ status:'expired' });
+    if(Date.now() > data.expiresAt){
+        resetTokens.delete(token);
+        return res.json({ status:'expired' });
+    }
+    res.json({ status: data.status });
+});
+
+// 3. Bot callback — ✅ yoki ❌ bosilganda
+bot.action(/^reset_ok_(.+)$/, async (ctx) => {
+    const token = ctx.match[1];
+    const data  = resetTokens.get(token);
+    if(!data){ return ctx.answerCbQuery("⚠️ Sorov topilmadi yoki eskirgan"); }
+    if(Date.now() > data.expiresAt){
+        resetTokens.delete(token);
+        return ctx.answerCbQuery("⏰ Sorov vaqti tugagan");
+    }
+
+    // Parolni yangilash
+    const wu = getWebUsers();
+    if(wu[data.username]){
+        wu[data.username].password = data.newPassword;
+        wu[data.username].updatedAt = Date.now();
+        saveWebUsers(wu);
+    }
+
+    resetTokens.set(token, {...data, status:'approved'});
+    setTimeout(()=>resetTokens.delete(token), 30000);
+
+    await ctx.editMessageText(
+        `✅ <b>Parol muvaffaqiyatli o'zgartirildi!</b>\n\n👤 Akkaunt: <b>@${data.nickname}</b>\nEndi yangi parol bilan kiring.`,
+        { parse_mode:'HTML' }
+    ).catch(()=>{});
+    ctx.answerCbQuery('✅ Parol yangilandi!');
+});
+
+bot.action(/^reset_no_(.+)$/, async (ctx) => {
+    const token = ctx.match[1];
+    const data  = resetTokens.get(token);
+    if(!data){ return ctx.answerCbQuery("⚠️ Sorov topilmadi"); }
+
+    resetTokens.set(token, {...data, status:'rejected'});
+    setTimeout(()=>resetTokens.delete(token), 10000);
+
+    // ─── Jazo berish ─────────────────────────────────────────────
+    let penaltyMsg = '';
+    try {
+        const wu = getWebUsers();
+
+        // 1. Login qilgan holda hujum qilgan bo'lsa
+        if(data.requesterUsername){
+            const requester = wu[data.requesterUsername];
+            if(requester){
+                requester.score = (parseFloat(requester.score)||0) - 100;
+                requester.updatedAt = Date.now();
+                wu[data.requesterUsername] = requester;
+                saveWebUsers(wu);
+                // DB.users da ham
+                const db = getDb();
+                for(const [uid,u] of Object.entries(db.users||{})){
+                    if((u.name||'').toLowerCase().trim()===(requester.name||'').toLowerCase().trim()){
+                        db.users[uid].score=(parseFloat(db.users[uid].score)||0)-100;
+                        saveDb(db); break;
+                    }
+                }
+                penaltyMsg = `\n\n⚠️ <b>@${requester.nickname||data.requesterUsername}</b> dan <b>100 ball ayirildi!</b>`;
+                console.log(`[Security] Penalty: ${data.requesterUsername} -100 ball`);
+            }
+        }
+
+        // 2. Login qilmagan holda — fingerprint bo'yicha keyinchalik jazo
+        if(!data.requesterUsername && data.fingerprint){
+            // Suspicious log ga yozish
+            const SUSP_PATH = path.join(DATA_DIR, 'suspicious.json');
+            let susp = [];
+            try{ susp = JSON.parse(fs.readFileSync(SUSP_PATH,'utf8')); }catch{}
+            susp.push({
+                fingerprint: data.fingerprint,
+                targetNick:  data.nickname,
+                ts:          Date.now(),
+                penaltyPending: true,
+            });
+            // Oxirgi 500 ta yozuv
+            if(susp.length > 500) susp = susp.slice(-500);
+            fs.writeFileSync(SUSP_PATH, JSON.stringify(susp));
+            penaltyMsg = `\n\n⚠️ <b>Noma'lum qurilma</b> dan hujum bo'ldi. Keyingi kirishda jazo beriladi.`;
+            console.log(`[Security] Suspicious fingerprint saved: ${data.fingerprint}`);
+        }
+    } catch(e) {
+        console.error('[Penalty error]', e.message);
+    }
+
+    await ctx.editMessageText(
+        `❌ <b>Parol o'zgartirish rad etildi.</b>\n\nKimdir sizning <b>@${data.nickname}</b> akkauntingizga kirmoqchi bo'ldi.${penaltyMsg}\n\n🔒 Xavfsizligingiz uchun parolingizni o'zgartirishni tavsiya qilamiz.`,
+        { parse_mode:'HTML' }
+    ).catch(()=>{});
+    ctx.answerCbQuery('❌ Rad etildi — +jazo berildi');
 });
 
 app.post('/api/web-auth/reset-password', (req, res) => {
@@ -2203,6 +2450,7 @@ app.get('/api/app-version', (req, res) => {
     res.json({ version: getAppVer() });
 });
 
+// ─── Parol tiklash token lari (xotirada) ──────────────────────
 // Admin: barcha foydalanuvchilarni logout qilish
 app.post('/api/admin/force-logout', (req, res) => {
     try {

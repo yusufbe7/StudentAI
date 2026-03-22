@@ -542,17 +542,46 @@ body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); 
 
       <!-- PAROLNI TIKLASH -->
       <div id="lf-fp" style="display:none;">
-        <div style="text-align:center;margin-bottom:16px;">
-          <div style="font-size:28px;margin-bottom:8px;">🔑</div>
-          <div style="font-size:14px;font-weight:700;color:var(--text);margin-bottom:6px;">Yangi parol o'rnatish</div>
-          <div style="font-size:12px;color:var(--text2);font-weight:500;line-height:1.6;">Username va yangi parol kiriting.<br>Agar account mavjud bo'lsa — parolingiz yangilanadi.</div>
+
+        <!-- QADAM 1: Nikname + yangi parol -->
+        <div id="fp-step1">
+          <div style="text-align:center;margin-bottom:16px;">
+            <div style="font-size:28px;margin-bottom:8px;">🔑</div>
+            <div style="font-size:14px;font-weight:700;color:var(--text);margin-bottom:6px;">Parolni tiklash</div>
+            <div style="font-size:12px;color:var(--text2);font-weight:500;line-height:1.6;">Niknamengizni va yangi parolni kiriting.<br>Telegramga tasdiqlash xabari yuboriladi.</div>
+          </div>
+          <div class="field">
+            <label class="field-lbl">Nikname</label>
+            <div style="display:flex;align-items:center;background:var(--bg);border:1.5px solid var(--border);border-radius:12px;padding:0 12px;">
+              <span style="color:var(--text3);font-weight:700;font-size:14px;">@</span>
+              <input class="field-inp" id="fp-nick" type="text" placeholder="niknamengiz"
+                style="border:none;background:transparent;padding:13px 6px;flex:1;"
+                autocomplete="off" autocorrect="off" autocapitalize="off">
+            </div>
+            <div class="field-err" id="fp-nick-e">Nikname topilmadi</div>
+          </div>
+          <div class="field"><label class="field-lbl">Yangi parol</label><input class="field-inp" id="fp-p" type="password" placeholder="Kamida 6 belgi"><div class="field-err" id="fp-p-e">Kamida 6 belgi</div></div>
+          <div class="field"><label class="field-lbl">Tasdiqlash</label><input class="field-inp" id="fp-p2" type="password" placeholder="Takrorlang"><div class="field-err" id="fp-p2-e">Parollar mos kelmadi</div></div>
+          <div id="fp-loading" style="display:none;text-align:center;padding:8px;font-size:13px;color:var(--text3);">⏳ Telegram ga yuborilmoqda...</div>
+          <div class="l-err" id="fp-err"></div>
+          <button class="l-btn" onclick="doResetPass()" style="background:var(--blue);">📨 Telegram orqali tasdiqlash →</button>
         </div>
-        <div class="field"><label class="field-lbl">Username</label><input class="field-inp" id="fp-u" type="text" placeholder="username" autocomplete="off" autocorrect="off" autocapitalize="off"><div class="field-err" id="fp-u-e">Username topilmadi</div></div>
-        <div class="field"><label class="field-lbl">Yangi parol</label><input class="field-inp" id="fp-p" type="password" placeholder="Kamida 6 belgi"><div class="field-err" id="fp-p-e">Kamida 6 belgi</div></div>
-        <div class="field"><label class="field-lbl">Tasdiqlash</label><input class="field-inp" id="fp-p2" type="password" placeholder="Takrorlang"><div class="field-err" id="fp-p2-e">Parollar mos kelmadi</div></div>
-        <div id="fp-loading" style="display:none;text-align:center;padding:8px;font-size:13px;color:var(--text3);">⏳ Saqlanmoqda...</div>
-        <div class="l-err" id="fp-err"></div>
-        <button class="l-btn" onclick="doResetPass()" style="background:var(--blue);">Parolni yangilash →</button>
+
+        <!-- QADAM 2: Telegram tasdig'i kutilmoqda -->
+        <div id="fp-step2" style="display:none;text-align:center;padding:16px 0;">
+          <div style="font-size:48px;margin-bottom:16px;">📱</div>
+          <div style="font-size:15px;font-weight:800;color:var(--text);margin-bottom:8px;">Telegram xabarini tasdiqlang</div>
+          <div style="font-size:13px;color:var(--text2);font-weight:500;line-height:1.7;margin-bottom:20px;">
+            Telegramga <b>✅ Tasdiqlash</b> tugmasi bilan xabar yuborildi.<br>
+            Tasdiqlashingiz bilan parol o'zgartiriladi va avtomatik chiqasiz.
+          </div>
+          <div style="background:var(--bg);border-radius:14px;padding:14px;margin-bottom:16px;">
+            <div style="font-size:12px;color:var(--text3);font-weight:600;">So'rov bekor bo'lish vaqti</div>
+            <div id="fp-countdown" style="font-size:28px;font-weight:900;color:var(--blue);margin-top:4px;">5:00</div>
+          </div>
+          <button onclick="cancelResetPass()" style="width:100%;padding:12px;background:var(--bg);color:var(--text2);border:1.5px solid var(--border);border-radius:12px;font-family:'Inter',sans-serif;font-size:13px;font-weight:700;cursor:pointer;">✕ Bekor qilish</button>
+        </div>
+
       </div>
     </div>
   </div>
@@ -1185,7 +1214,7 @@ body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); 
   <div class="search-top">
     <div class="search-inp-wrap">
       <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="var(--text3)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-      <input class="search-inp" id="search-inp" placeholder="Foydalanuvchi qidirish..." oninput="doSearch(this.value)" autocomplete="off" autocorrect="off" autocapitalize="off">
+      <input class="search-inp" id="search-inp" placeholder="@nikname qidirish..." oninput="doSearch(this.value)" autocomplete="off" autocorrect="off" autocapitalize="off">
     </div>
     <button onclick="closeSearch()" style="padding:8px 14px;background:none;border:none;font-family:'Inter',sans-serif;font-size:14px;font-weight:600;color:var(--text2);cursor:pointer;">Bekor</button>
   </div>
@@ -1496,7 +1525,7 @@ async function doSignIn(){
     // 1. Try server auth first
     const r=await fetch('/api/web-auth/login',{
       method:'POST', headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({username:u, password:p})
+      body:JSON.stringify({username:u, password:p, fingerprint:getFingerprint()})
     });
     const d=await r.json();
     loadEl.style.display='none';
@@ -1536,57 +1565,123 @@ async function doSignIn(){
   }
 }
 
+let _resetCountdownTimer=null;
+
 async function doResetPass(){
   document.querySelectorAll('#lf-fp .field-err').forEach(e=>e.classList.remove('on'));
-  document.querySelectorAll('#lf-fp .field-inp').forEach(i=>i.classList.remove('err'));
-  const fpErr=document.getElementById('fp-err'); fpErr.classList.remove('on');
+  const fpErr=document.getElementById('fp-err'); if(fpErr) fpErr.classList.remove('on');
 
-  const u=document.getElementById('fp-u').value.trim().toLowerCase();
+  const nick=(document.getElementById('fp-nick')?.value||'').replace(/^@/,'').trim().toLowerCase();
   const p=document.getElementById('fp-p').value;
   const p2=document.getElementById('fp-p2').value;
   let ok=true;
-  if(!isValidUname(u)){errf('fp-u-e','fp-u');ok=false;}
+  if(!nick||nick.length<3){errf('fp-nick-e','fp-nick');ok=false;}
   if(p.length<6){errf('fp-p-e','fp-p');ok=false;}
   if(p!==p2){errf('fp-p2-e','fp-p2');ok=false;}
   if(!ok) return;
 
   const loading=document.getElementById('fp-loading');
-  loading.style.display='block';
+  if(loading) loading.style.display='block';
 
   try{
-    const r=await fetch('/api/web-auth/reset-password',{
+    const r=await fetch('/api/reset-request',{
       method:'POST', headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({username:u, newPassword:p})
+      body:JSON.stringify({
+        nickname:nick,
+        newPassword:p,
+        requesterUsername: getSess()?.username||null,
+        fingerprint: getFingerprint()
+      })
     });
     const d=await r.json();
-    loading.style.display='none';
+    if(loading) loading.style.display='none';
 
     if(r.ok && d.success){
-      // Update localStorage too
-      const users=getUsers();
-      if(users[u]) { users[u].pass=p; saveUsers(users); }
-      toast('✅ Parol muvaffaqiyatli yangilandi!');
-      setTimeout(()=>{lTab('in');document.getElementById('si-u').value=u;document.getElementById('si-p').focus();},800);
-    } else if(d.error==='notfound'){
-      document.getElementById('fp-u-e').textContent="Bu username topilmadi";
-      errf('fp-u-e','fp-u');
+      // Qadam 2 ga o'tish — Telegram tasdiq kutilmoqda
+      document.getElementById('fp-step1').style.display='none';
+      document.getElementById('fp-step2').style.display='block';
+      // Countdown 5 daqiqa
+      startResetCountdown(d.expiresIn||300);
+      // Tasdiqlashni polling orqali tekshirish
+      pollResetStatus(d.token);
     } else {
-      // Offline fallback — reset in localStorage only
-      const users=getUsers();
-      if(!users[u]){document.getElementById('fp-u-e').textContent="Bu username topilmadi";errf('fp-u-e','fp-u');return;}
-      users[u].pass=p; saveUsers(users);
-      toast('✅ Parol yangilandi (offline)!');
-      setTimeout(()=>{lTab('in');document.getElementById('si-u').value=u;document.getElementById('si-p').focus();},800);
+      const nickE=document.getElementById('fp-nick-e');
+      if(nickE){
+        nickE.textContent=d.message||"Bu nikname topilmadi";
+        errf('fp-nick-e','fp-nick');
+      }
     }
   }catch{
-    loading.style.display='none';
-    // Offline only
-    const users=getUsers();
-    if(!users[u]){document.getElementById('fp-u-e').textContent="Bu username topilmadi";errf('fp-u-e','fp-u');return;}
-    users[u].pass=p; saveUsers(users);
-    toast('✅ Parol yangilandi!');
-    setTimeout(()=>{lTab('in');document.getElementById('si-u').value=u;document.getElementById('si-p').focus();},800);
+    if(loading) loading.style.display='none';
+    const fpErr=document.getElementById('fp-err');
+    if(fpErr){fpErr.textContent="Server bilan bog'lanib bo'lmadi";fpErr.classList.add('on');}
   }
+}
+
+function startResetCountdown(secs){
+  clearInterval(_resetCountdownTimer);
+  let left=secs;
+  const el=document.getElementById('fp-countdown');
+  function tick(){
+    if(!el) return;
+    const m=Math.floor(left/60), s=left%60;
+    el.textContent=m+':'+(s<10?'0':'')+s;
+    if(left<=0){clearInterval(_resetCountdownTimer);cancelResetPass();return;}
+    left--;
+  }
+  tick();
+  _resetCountdownTimer=setInterval(tick,1000);
+}
+
+let _resetPollTimer=null;
+function pollResetStatus(token){
+  clearInterval(_resetPollTimer);
+  _resetPollTimer=setInterval(async()=>{
+    try{
+      const r=await fetch(`/api/reset-status?token=${token}`);
+      const d=await r.json();
+      if(d.status==='approved'){
+        clearInterval(_resetPollTimer);
+        clearInterval(_resetCountdownTimer);
+        // Barcha screenlarni yopish
+        document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+        // Socket uzish
+        if(_socket){_socket.disconnect();_socket=null;_socketName=null;}
+        // Sessiyani tozalash
+        clearSess();
+        // Login ekraniga o'tish
+        document.getElementById('screen-login').classList.add('active');
+        lTab('in');
+        resetFpForm();
+        // Toast
+        setTimeout(()=>toast('✅ Parol yangilandi! Endi yangi parol bilan kiring.'),300);
+      } else if(d.status==='rejected'||d.status==='expired'){
+        clearInterval(_resetPollTimer);
+        clearInterval(_resetCountdownTimer);
+        toast('❌ Sorov bekor qilindi','bad');
+        cancelResetPass();
+      }
+    }catch{}
+  },3000);
+}
+
+function cancelResetPass(){
+  clearInterval(_resetPollTimer);
+  clearInterval(_resetCountdownTimer);
+  document.getElementById('fp-step1').style.display='block';
+  document.getElementById('fp-step2').style.display='none';
+  resetFpForm();
+}
+
+function resetFpForm(){
+  const nick=document.getElementById('fp-nick');
+  const p=document.getElementById('fp-p');
+  const p2=document.getElementById('fp-p2');
+  if(nick) nick.value='';
+  if(p) p.value='';
+  if(p2) p2.value='';
+  document.getElementById('fp-step1').style.display='block';
+  document.getElementById('fp-step2').style.display='none';
 }
 async function openApp(username,isAdmin){
   document.getElementById('screen-login').classList.remove('active');
@@ -3208,6 +3303,29 @@ async function fetchOnlineCount(){
   }catch{}
 }
 
+// ─── Brauzer fingerprint (qurilma izi) ──────────────────────────
+function getFingerprint(){
+  try{
+    const parts=[
+      navigator.userAgent||'',
+      navigator.language||'',
+      screen.width+'x'+screen.height,
+      screen.colorDepth||'',
+      new Date().getTimezoneOffset(),
+      navigator.hardwareConcurrency||'',
+      navigator.platform||'',
+    ];
+    // Oddiy hash
+    const str=parts.join('|');
+    let hash=0;
+    for(let i=0;i<str.length;i++){
+      hash=((hash<<5)-hash)+str.charCodeAt(i);
+      hash|=0;
+    }
+    return Math.abs(hash).toString(36);
+  }catch{ return 'unknown'; }
+}
+
 function getMyName(){
   const sess=getSess(); if(!sess) return null;
   if(sess.isAdmin) return getAdm().name||'Admin';
@@ -3507,7 +3625,14 @@ function renderNewChatList(users){
   });
   el.innerHTML=html;
 }
-function filterNewChat(q){const f=q.toLowerCase().trim();renderNewChatList(f?_allLbUsers.filter(u=>(u.name||'').toLowerCase().includes(f)||(u.tgUsername||'').toLowerCase().includes(f)):_allLbUsers);}
+function filterNewChat(q){
+  const f=q.replace(/^@/,'').toLowerCase().trim();
+  if(!f){renderNewChatList(_allLbUsers);return;}
+  renderNewChatList(_allLbUsers.filter(u=>{
+    const nick=(u.nickname||'').toLowerCase();
+    return nick.includes(f);
+  }));
+}
 function startNewChat(name,tg,nick){document.getElementById('new-chat-modal').classList.remove('on');openChat(name,tg,nick);}
 
 let _lastUnreadCount=0;
@@ -3916,34 +4041,44 @@ let _searchTimer=null;
 function doSearch(q){
   clearTimeout(_searchTimer);
   const el=document.getElementById('search-results');
-  if(!q.trim()){closeSearch();return;}
-  if(q.length<2){ if(el) el.innerHTML='<div style="color:var(--text3);font-size:13px;text-align:center;padding:30px;">Kamida 2 harf kiriting</div>'; return; }
+  // @ belgisini olib tashlash
+  const qClean=q.replace(/^@/,'').trim();
+  if(!qClean){closeSearch();return;}
+  if(qClean.length<2){ if(el) el.innerHTML='<div style="color:var(--text3);font-size:13px;text-align:center;padding:30px;">Kamida 2 belgi kiriting</div>'; return; }
   if(el) el.innerHTML='<div style="color:var(--text3);font-size:13px;text-align:center;padding:20px;">🔍 Qidirilmoqda...</div>';
   _searchTimer=setTimeout(async()=>{
     try{
       const all=_lbCache.length?_lbCache:await fetch('/api/leaderboard').then(r=>r.json());
-      const qLow=q.toLowerCase();
-      const found=all.filter(u=>(u.name||'').toLowerCase().includes(qLow)||(u.tgUsername||'').toLowerCase().includes(qLow));
+      if(!_lbCache.length) _lbCache=all;
+      const qLow=qClean.toLowerCase();
+      // FAQAT nickname bo'yicha qidiruv
+      const found=all.filter(u=>{
+        const nick=(u.nickname||'').toLowerCase();
+        return nick.includes(qLow);
+      });
       if(!found.length){
-        if(el) el.innerHTML='<div style="color:var(--text3);font-size:13px;text-align:center;padding:40px 20px;font-weight:500;"><div style="font-size:32px;margin-bottom:10px;">😕</div>Topilmadi</div>';
+        if(el) el.innerHTML=`<div style="color:var(--text3);font-size:13px;text-align:center;padding:40px 20px;font-weight:500;"><div style="font-size:32px;margin-bottom:10px;">😕</div><b>@${escH(qClean)}</b> topilmadi<br><span style="font-size:11px;">Faqat nikname orqali qidirish mumkin</span></div>`;
         return;
       }
       let html='';
       found.slice(0,20).forEach(u=>{
         const url=getPhotoUrl(u.name,u.tgUsername); const i2=ini(u.name);
         const av=url?`<img src="${url}" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentElement.innerHTML='${i2}'">`:`${i2}`;
-        html+=`<div style="display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--border);cursor:pointer;" onclick="closeSearch();openUserProfile('${escA(u.name)}','${escA(u.tgUsername||'')}')">
+        const nick=u.nickname||'';
+        // Qidiruv so'zi highlight
+        const nickHighlight=nick.replace(new RegExp('('+escH(qLow)+')','gi'),'<b style="color:var(--green);">$1</b>');
+        html+=`<div style="display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--border);cursor:pointer;active:background:var(--bg);" onclick="closeSearch();openUserProfile('${escA(u.name)}','${escA(u.tgUsername||'')}')">
           <div style="width:46px;height:46px;border-radius:50%;background:var(--green-bg);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;color:var(--green);flex-shrink:0;overflow:hidden;">${av}</div>
           <div style="flex:1;min-width:0;">
-            <div style="font-size:15px;font-weight:700;color:var(--text);">${escH(u.name)}</div>
-            <div style="font-size:12px;color:var(--text3);margin-top:2px;">${u.tgUsername?'@'+u.tgUsername+' · ':''}<span style="color:var(--green);font-weight:600;">${parseFloat(u.score||0).toFixed(0)} ball</span></div>
+            <div style="font-size:15px;font-weight:700;color:var(--text);">@${nickHighlight}</div>
+            <div style="font-size:12px;color:var(--text3);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;"><span style="color:var(--green);font-weight:600;">${parseFloat(u.score||0).toFixed(0)} ball</span></div>
           </div>
           <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="var(--text3)" stroke-width="2.5" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>
         </div>`;
       });
       if(el) el.innerHTML=`<div style="font-size:11px;font-weight:700;color:var(--text3);letter-spacing:.06em;text-transform:uppercase;margin-bottom:8px;padding-top:4px;">${found.length} ta topildi</div>`+html;
     }catch{ if(el) el.innerHTML='<div style="color:var(--red);font-size:13px;text-align:center;padding:20px;">Xatolik yuz berdi</div>'; }
-  },400);
+  },350);
 }
 
 // ─── Bildirishnomalar (placeholder) ──────────────────────────
