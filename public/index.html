@@ -2836,29 +2836,39 @@ function initSocket(myName){
   _socket.on('new_message', (data)=>{
     const msg = data.msg;
     if(!msg) return;
-    // Agar bu chat ochiq bo'lsa — darhol ko'rsat
-    if(_chatWith && (
-      (msg.from||'').toLowerCase()===(_chatWith.name||'').toLowerCase() ||
-      (msg.to||'').toLowerCase()===(_chatWith.name||'').toLowerCase()
-    )){
+
+    // myName — initSocket ga berilgan nom (closure)
+    // _chatMyName — hozirgi ochiq chat egasi nomi
+    const me = _chatMyName || myName;
+
+    // Bu xabar menga tegishli ekanligini tekshirish
+    const toMe = (msg.to||'').toLowerCase().trim() === (me||'').toLowerCase().trim();
+    if(!toMe) return; // Men uchun emas
+
+    const fromLow = (msg.from||'').toLowerCase().trim();
+
+    // Agar shu chat ochiq bo'lsa — darhol ko'rsat
+    const chatOpen = _chatWith && fromLow === (_chatWith.name||'').toLowerCase().trim();
+    if(chatOpen){
       if(!_msgs.find(m=>m.id===msg.id)){
         _msgs.push(msg);
-        _lastTs=Math.max(_lastTs,msg.ts);
-        renderMsgs(_chatMyName||myName);
+        _lastTs = Math.max(_lastTs, msg.ts);
+        renderMsgs(me);
         // O'qilgan deb belgilash
-        _socket.emit('mark_read',{myName:_chatMyName||myName, otherName:_chatWith.name});
+        if(_socket?.connected) _socket.emit('mark_read',{myName:me, otherName:_chatWith.name});
+        else markRead(me, _chatWith.name);
       }
     } else {
-      // Chat yopiq — bildirishnoma
-      const sender=(msg.from||'Nomalum');
-      showNotifBanner('💬 '+sender+' xabar yozdi', '+1 yangi xabar');
+      // Chat yopiq yoki boshqa chat — bildirishnoma ko'rsat
+      const sender = msg.from || "Noma'lum";
+      showNotifBanner('💬 ' + sender + ' xabar yozdi', '+1 yangi xabar');
       // Badge yangilash
       _lastUnreadCount++;
-      const badge=document.getElementById('bn-badge');
-      if(badge){badge.textContent=_lastUnreadCount>99?'99+':_lastUnreadCount;badge.classList.add('on');}
-      const ahB=document.getElementById('ah-badge');
-      if(ahB){ahB.textContent=_lastUnreadCount>9?'9+':_lastUnreadCount;ahB.classList.add('on');}
-      // Chat ro'yxatini yangilash
+      const badge = document.getElementById('bn-badge');
+      if(badge){ badge.textContent = _lastUnreadCount>99?'99+':_lastUnreadCount; badge.classList.add('on'); }
+      const ahB = document.getElementById('ah-badge');
+      if(ahB){ ahB.textContent = _lastUnreadCount>9?'9+':_lastUnreadCount; ahB.classList.add('on'); }
+      // Chats tabida bo'lsa ro'yxatni yangilash
       if(_curTab==='chats') loadChatsList();
     }
   });
@@ -2942,13 +2952,24 @@ function getMyName(){
 function openChat(targetName,targetTg){
   _chatWith={name:targetName,tg:targetTg||''};
   _msgs=[]; _lastTs=0;
-  // myName ni cache qilib qo'yamiz — chat davomida o'zgarmaydi
-  _chatMyName=getMyName();
+  // myName ni aniq olish
+  const sess=getSess();
+  if(sess?.isAdmin) _chatMyName=getAdm().name||'Admin';
+  else _chatMyName=getUsers()[sess?.username]?.name||getMyName()||null;
+  console.log('[Chat] opened as:', _chatMyName, '→', targetName);
   const url=getPhotoUrl(targetName,targetTg); const i=ini(targetName);
   const ava=document.getElementById('chat-ava');
   ava.innerHTML=url?`<img src="${url}" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentElement.innerHTML='<span>${i}</span>'">`:`<span>${i}</span>`;
   document.getElementById('chat-uname').textContent=targetName||'—';
-  document.getElementById('chat-status').textContent='offline';
+  // Online status tekshirish
+  const isOnline=_socketName&&[...(_socket?._nsp?.sockets?.keys()||[])].length>0;
+  const stEl=document.getElementById('chat-status');
+  if(stEl){ stEl.textContent='...'; stEl.style.color='var(--text3)'; }
+  // Server dan online status olish
+  fetch('/api/online-count').then(r=>r.json()).then(d=>{
+    const online=(d.users||[]).some(n=>n.toLowerCase()===targetName.toLowerCase());
+    if(stEl){ stEl.textContent=online?'online':'offline'; stEl.style.color=online?'var(--green)':'var(--text3)'; }
+  }).catch(()=>{ if(stEl) stEl.textContent='offline'; });
   document.getElementById('screen-chat').classList.add('active');
   document.getElementById('chat-inp').value='';
   document.getElementById('chat-inp').style.height='auto';
@@ -3017,26 +3038,29 @@ function renderMsgs(myName){
       ?`<img src="${mUrl}" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none';this.parentElement.textContent='${mi}'">`
       :`${mi}`;
 
+    const isTemp = msg.id && msg.id.startsWith('temp_');
+    const statusIcon = isMine ? (isTemp ? ' <span style="opacity:.6;font-size:9px;">⏳</span>' : msg.read ? ' ✓✓' : ' ✓') : '';
+
     if(msg.imageData){
-      html+=`<div class="msg-wrap2 ${isMine?'mine':'theirs'}">
+      html+=`<div class="msg-wrap2 ${isMine?'mine':'theirs'}" style="${isTemp?'opacity:.7':''}">
         ${!isMine?`<div class="msg-ava2" style="${showSender?'':'visibility:hidden;'}">${mav}</div>`:''}
         <div style="max-width:80%;">
           ${showSender&&!isMine?`<div style="font-size:12px;font-weight:700;color:var(--green);padding:0 4px 4px;">${escH(msg.from)}</div>`:''}
-          <div class="msg-bubble2" style="padding:4px;background:${isMine?'var(--green)':'#fff'};">
+          <div class="msg-bubble2" style="padding:4px;background:${isMine?'#25D366':'#fff'};">
             <img src="${msg.imageData}" class="msg-img2" onclick="openFullImg('${msg.id}')" alt="📷">
-            <div class="msg-time2" style="padding:2px 6px;">${ts}${isMine&&msg.read?' ✓✓':isMine?' ✓':''}</div>
+            <div class="msg-time2" style="padding:2px 6px;">${ts}${statusIcon}</div>
           </div>
         </div>
         ${isMine?`<div class="msg-ava2" style="background:var(--green);color:#fff;">${mav}</div>`:''}
       </div>`;
     } else {
-      html+=`<div class="msg-wrap2 ${isMine?'mine':'theirs'}">
+      html+=`<div class="msg-wrap2 ${isMine?'mine':'theirs'}" style="${isTemp?'opacity:.7':''}">
         ${!isMine?`<div class="msg-ava2" style="${showSender?'':'visibility:hidden;'}">${mav}</div>`:''}
         <div style="max-width:80%;">
           ${showSender&&!isMine?`<div style="font-size:12px;font-weight:700;color:var(--green);padding:0 4px 4px;">${escH(msg.from)}</div>`:''}
           <div class="msg-bubble2">
             ${escH(msg.text)}
-            <span class="msg-time2" style="display:inline-block;margin-left:8px;float:right;margin-top:2px;">${ts}${isMine&&msg.read?' ✓✓':isMine?' ✓':''}</span>
+            <span class="msg-time2" style="display:inline-block;margin-left:8px;float:right;margin-top:2px;">${ts}${statusIcon}</span>
           </div>
         </div>
         ${isMine?`<div class="msg-ava2" style="background:var(--green);color:#fff;">${mav}</div>`:''}
