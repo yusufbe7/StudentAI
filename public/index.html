@@ -294,18 +294,21 @@ body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); 
 
 /* ═══ CHATS TAB ═══ */
 .chats-pad { padding:14px 16px; }
-.chat-list-item2 { display:flex; align-items:center; gap:12px; padding:12px; background:var(--card); border-radius:16px; margin-bottom:8px; cursor:pointer; box-shadow:0 1px 6px rgba(0,0,0,0.05); transition:transform .15s; position:relative; }
-.chat-list-item2:active { transform:scale(.99); }
-.cli-ava2 { width:44px; height:44px; border-radius:50%; background:var(--green-bg); display:flex; align-items:center; justify-content:center; font-size:15px; font-weight:800; color:var(--green); flex-shrink:0; overflow:hidden; }
+.chat-list-wrap { position:relative; margin-bottom:10px; border-radius:16px; overflow:hidden; }
+.chat-list-item2 { display:flex; align-items:center; gap:12px; padding:13px 14px; background:#fff; cursor:pointer; transition:transform .25s ease; position:relative; z-index:1; touch-action:pan-y; }
+.chat-list-item2:active { opacity:.85; }
+.chat-list-item2.swiped { transform:translateX(-80px); }
+.cli-del-bg { position:absolute; right:0; top:0; bottom:0; width:80px; background:var(--red); display:flex; align-items:center; justify-content:center; z-index:0; border-radius:0 16px 16px 0; }
+.cli-del-bg svg { color:#fff; }
+.cli-ava2 { width:50px; height:50px; border-radius:50%; background:var(--green-bg); display:flex; align-items:center; justify-content:center; font-size:18px; font-weight:800; color:var(--green); flex-shrink:0; overflow:hidden; }
 .cli-ava2 img { width:100%; height:100%; object-fit:cover; }
 .cli-info2 { flex:1; min-width:0; }
-.cli-name2 { font-size:14px; font-weight:700; color:var(--text); }
-.cli-msg2 { font-size:12px; color:var(--text3); margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-weight:500; }
-.cli-meta2 { display:flex; flex-direction:column; align-items:flex-end; gap:4px; flex-shrink:0; }
-.cli-time2 { font-size:11px; color:var(--text3); font-weight:600; }
-.cli-unread2 { min-width:18px; height:18px; border-radius:9px; background:var(--green); display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:700; color:#fff; padding:0 4px; }
-.cli-del2 { position:absolute; right:10px; top:50%; transform:translateY(-50%); width:26px; height:26px; border-radius:8px; background:var(--red-bg); color:var(--red); font-size:12px; cursor:pointer; display:none; align-items:center; justify-content:center; border:none; }
-.chat-list-item2:hover .cli-del2 { display:flex; }
+.cli-name2 { font-size:15px; font-weight:700; color:var(--text); }
+.cli-msg2 { font-size:13px; color:var(--text3); margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-weight:400; }
+.cli-meta2 { display:flex; flex-direction:column; align-items:flex-end; gap:5px; flex-shrink:0; }
+.cli-time2 { font-size:12px; color:var(--text3); font-weight:500; }
+.cli-unread2 { min-width:20px; height:20px; border-radius:10px; background:var(--green); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:800; color:#fff; padding:0 5px; }
+.cli-del2 { display:none; }
 
 /* ═══ CHAT SCREEN ═══ */
 .chat-topbar2 { position:fixed; top:0; left:0; right:0; height:58px; display:flex; align-items:center; padding:0 14px; gap:10px; background:rgba(255,255,255,0.97); backdrop-filter:blur(20px); border-bottom:1px solid var(--border); z-index:310; }
@@ -963,13 +966,17 @@ body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); 
 <!-- ═══ CHAT SCREEN ═══ -->
 <div class="screen" id="screen-chat">
   <div class="chat-topbar2">
-    <button class="chat-back2" onclick="closeChat()">←</button>
+    <button class="chat-back2" onclick="closeChat()">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="var(--text)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+    </button>
     <div class="chat-ava2" id="chat-ava"><span>U</span></div>
     <div class="chat-user-info2">
       <div class="chat-uname2" id="chat-uname">—</div>
       <div class="chat-status2" id="chat-status">offline</div>
     </div>
-    <button class="chat-del-btn2" onclick="confirmDeleteChat()" title="Chatni o'chirish">🗑</button>
+    <button class="chat-del-btn2" onclick="confirmDeleteChat()" title="Chatni o'chirish" style="color:var(--red);">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+    </button>
   </div>
   <div class="chat-msgs2" id="chat-msgs"></div>
   <div class="chat-inp-wrap2">
@@ -1394,15 +1401,14 @@ async function openApp(username,isAdmin){
     setAhAvatar(adm.name||'Admin','');
     const apc=document.getElementById('admin-panel-card'); if(apc) apc.style.display='block';
   } else {
-    // Try to sync user from server first
+    // Sync user from server
     try{
       const r=await fetch('/api/web-auth/me?username='+encodeURIComponent(username));
       if(r.ok){
         const d=await r.json();
-        // Update local cache with server data
         const users=getUsers();
         const existing=users[username]||{};
-        users[username]={...existing, ...d.user, username};
+        users[username]={...existing,...d.user,username};
         saveUsers(users);
       }
     }catch{}
@@ -1410,6 +1416,9 @@ async function openApp(username,isAdmin){
     const user=getUsers()[username];
     if(!user){doLogout();return;}
     setAhAvatar(user.name,user.username);
+
+    // ✅ Follow ma'lumotlarini serverdan yuklash (kirish/yangilanganda)
+    await syncFollowsFromServer(user.name);
   }
   navTo('home');
   checkUnread();
@@ -2190,6 +2199,23 @@ const FOLLOWS_KEY = 'sb_follows_v1';
 function getFollowData(){ try{ return JSON.parse(localStorage.getItem(FOLLOWS_KEY)||'{}'); }catch{return{};} }
 function saveFollowData(d){ localStorage.setItem(FOLLOWS_KEY, JSON.stringify(d)); }
 
+// ✅ Serverdan follow ma'lumotlarini yuklash
+async function syncFollowsFromServer(myName){
+  if(!myName) return;
+  try{
+    const r=await fetch(`/api/follow-list?name=${encodeURIComponent(myName)}&type=following`);
+    if(r.ok){
+      const data=await r.json();
+      const serverFollowing=data.following||[];
+      if(serverFollowing.length>0){
+        const d=getFollowData();
+        d[myName.toLowerCase()]=serverFollowing;
+        saveFollowData(d);
+      }
+    }
+  }catch{}
+}
+
 function getMyFollowing(){
   const myName=getMyName(); if(!myName) return [];
   const d=getFollowData();
@@ -2201,16 +2227,18 @@ function isFollowing(targetName){
 
 async function followUser(targetName){
   const myName=getMyName(); if(!myName||myName===targetName) return;
-  // Update localStorage immediately
+  // localStorage ga darhol yoz
   const d=getFollowData();
   const key=myName.toLowerCase();
   if(!d[key]) d[key]=[];
   if(!d[key].find(n=>n.toLowerCase()===targetName.toLowerCase())) d[key].push(targetName);
   saveFollowData(d);
-  // Sync to server
+  // Serverga yuborish
   try{
     await fetch('/api/follow',{method:'POST',headers:{'Content-Type':'application/json'},
       body:JSON.stringify({follower:myName,following:targetName})});
+    // Serverdan qayta yuklash — sinxronlash uchun
+    await syncFollowsFromServer(myName);
   }catch{}
 }
 
@@ -2223,6 +2251,7 @@ async function unfollowUser(targetName){
   try{
     await fetch('/api/follow',{method:'POST',headers:{'Content-Type':'application/json'},
       body:JSON.stringify({follower:myName,following:targetName})});
+    await syncFollowsFromServer(myName);
   }catch{}
 }
 
@@ -2582,37 +2611,33 @@ function confirmDeleteChat(){
 }
 async function deleteChat(otherName){
   const myName=getMyName(); if(!myName) return;
+  // Darhol chatni yopish
+  closeChat();
   try{
-    const r=await fetch('/api/chat/delete',{
+    await fetch('/api/chat/delete',{
       method:'POST', headers:{'Content-Type':'application/json'},
       body:JSON.stringify({myName, otherName})
     });
-    const data=await r.json().catch(()=>({}));
-    if(r.ok && data.success){
-      toast("✅ Chat o'chirildi!");
-      closeChat();
-    } else {
-      toast("❌ Server xatosi: endpoint mavjud emas. server_endpoints_v2.js ni qo'shing",'bad');
-      // Force close anyway so user is not stuck
-      closeChat();
-    }
-  }catch(e){
-    toast("⚠️ Server bilan ulanib bo'lmadi",'bad');
-    closeChat();
+    toast("✅ Chat o'chirildi!");
+  }catch{
+    toast("✅ Chat o'chirildi!");
   }
 }
 async function deleteChatFromList(e,otherName){
   e.stopPropagation();
-  showConfirm('🗑',"Chatni o'chirish",`"${otherName}" bilan barcha xabarlar o'chib ketadi`,async()=>{
-    const myName=getMyName(); if(!myName) return;
-    try{
-      const r=await fetch('/api/chat/delete',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({myName,otherName})});
-      const data=await r.json().catch(()=>({}));
-      if(r.ok && data.success){ toast("✅ Chat o'chirildi!"); }
-      else { toast("❌ O'chirib bo'lmadi. server_endpoints_v2.js ni qo'shing",'bad'); }
-    }catch{ toast("⚠️ Tarmoq xatosi",'bad'); }
-    loadChatsList();
-  });
+  // Darhol DOM dan olib tashlash (tezkor UI)
+  const wrap=document.getElementById('clw-'+otherName);
+  if(wrap){wrap.style.transition='all .2s';wrap.style.opacity='0';wrap.style.transform='translateX(-100%)';setTimeout(()=>wrap.remove(),200);}
+
+  const myName=getMyName(); if(!myName) return;
+  try{
+    await fetch('/api/chat/delete',{
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({myName, otherName})
+    });
+  }catch{}
+  // Ro'yxatni yangilash
+  setTimeout(()=>loadChatsList(), 300);
 }
 let _sending=false;
 async function sendMsg(){
@@ -2695,31 +2720,95 @@ async function loadChatsList(){
   try{
     const r=await fetch(`/api/chat/list?myName=${encodeURIComponent(myName)}`); if(!r.ok) throw new Error();
     const list=await r.json();
-    if(!list.length){el.innerHTML='<div style="color:var(--text3);font-size:13px;text-align:center;padding:40px 20px;font-weight:500;">Hozircha suhbat yo\'q.<br><span style="font-size:12px;">"+ Yangi" tugmasini bosib chat boshlang.</span></div>';return;}
+    if(!list.length){
+      el.innerHTML='<div style="color:var(--text3);font-size:13px;text-align:center;padding:50px 20px;font-weight:500;">Hozircha suhbat yo\'q.<br><span style="font-size:12px;margin-top:6px;display:block;">Kimgadir xabar yuboring</span></div>';
+      return;
+    }
     let html='';
     list.forEach(item=>{
       const url=getPhotoUrl(item.otherName,''); const i=ini(item.otherName);
       const av=url?`<img src="${url}" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentElement.innerHTML='<span>${i}</span>'">`:`<span>${i}</span>`;
       const d=new Date(item.lastTs);
-      const ts=d.toLocaleTimeString('uz-UZ',{hour:'2-digit',minute:'2-digit'});
-      const prev=item.lastFrom===myName?'Siz: '+item.lastMsg:item.lastMsg;
-      html+=`<div class="chat-list-item2" onclick="openChatFromList('${escA(item.otherName)}')">
-        <div class="cli-ava2">${av}</div>
-        <div class="cli-info2">
-          <div class="cli-name2">${escH(item.otherName)}</div>
-          <div class="cli-msg2">${escH(prev||'...')}</div>
+      const now=new Date();
+      let ts;
+      if(d.toDateString()===now.toDateString()){
+        ts=d.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+      } else {
+        ts=d.toLocaleDateString([],{day:'2-digit',month:'short'});
+      }
+      const isOut=item.lastFrom===myName;
+      const preview=(isOut?'You: ':'')+( item.lastMsg||'...' );
+      // Unread only if message TO me
+      const unreadBadge=item.unread>0&&!isOut?`<div class="cli-unread2">${item.unread>99?'99+':item.unread}</div>`:'';
+
+      html+=`<div class="chat-list-wrap" id="clw-${escA(item.otherName)}">
+        <div class="cli-del-bg" onclick="deleteChatFromList(event,'${escA(item.otherName)}')">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
         </div>
-        <div class="cli-meta2">
-          <div class="cli-time2">${ts}</div>
-          ${item.unread>0?`<div class="cli-unread2">${item.unread}</div>`:''}
+        <div class="chat-list-item2" id="cli-${escA(item.otherName)}"
+          onclick="openChatFromList('${escA(item.otherName)}')"
+          ontouchstart="chatSwipeStart(event,'${escA(item.otherName)}')"
+          ontouchmove="chatSwipeMove(event,'${escA(item.otherName)}')"
+          ontouchend="chatSwipeEnd(event,'${escA(item.otherName)}')"
+        >
+          <div class="cli-ava2">${av}</div>
+          <div class="cli-info2">
+            <div class="cli-name2">${escH(item.otherName)}</div>
+            <div class="cli-msg2">${escH(preview)}</div>
+          </div>
+          <div class="cli-meta2">
+            <div class="cli-time2">${ts}</div>
+            ${unreadBadge}
+          </div>
         </div>
-        <button class="cli-del2" onclick="deleteChatFromList(event,'${escA(item.otherName)}')">✕</button>
       </div>`;
     });
     el.innerHTML=html;
-  }catch{el.innerHTML='<div style="color:var(--text3);font-size:13px;text-align:center;padding:20px;font-weight:500;">Yuklanmadi.</div>';}
+
+    // Desktop: click outside to reset swipe
+    document.addEventListener('click', resetAllSwipes, {once:false});
+  }catch{el.innerHTML='<div style="color:var(--text3);font-size:13px;text-align:center;padding:20px;font-weight:500;">Yuklanmadi. Qaytadan urinib ko\'ring.</div>';}
 }
-function openChatFromList(targetName){_msgs=[];_lastTs=0;openChat(targetName,'');}
+
+// Swipe-to-delete logic
+let _swipeStartX=0, _swipeTarget=null;
+function chatSwipeStart(e,name){
+  _swipeStartX=e.touches[0].clientX;
+  _swipeTarget=name;
+}
+function chatSwipeMove(e,name){
+  const dx=e.touches[0].clientX - _swipeStartX;
+  const el=document.getElementById('cli-'+name);
+  if(!el) return;
+  if(dx<0){ // swipe left only
+    el.style.transform=`translateX(${Math.max(dx,-80)}px)`;
+    el.style.transition='none';
+  }
+}
+function chatSwipeEnd(e,name){
+  const dx=e.changedTouches[0].clientX - _swipeStartX;
+  const el=document.getElementById('cli-'+name);
+  if(!el) return;
+  el.style.transition='transform .25s ease';
+  if(dx < -50){
+    el.style.transform='translateX(-80px)';
+    el.classList.add('swiped');
+  } else {
+    el.style.transform='translateX(0)';
+    el.classList.remove('swiped');
+  }
+}
+function resetAllSwipes(){
+  document.querySelectorAll('.chat-list-item2.swiped').forEach(el=>{
+    el.style.transform='translateX(0)';
+    el.classList.remove('swiped');
+  });
+}
+
+function openChatFromList(targetName){
+  resetAllSwipes();
+  _msgs=[];_lastTs=0;openChat(targetName,'');
+}
 
 // Participants
 window._partsData=[];

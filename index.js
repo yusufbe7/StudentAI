@@ -3528,6 +3528,303 @@ app.get('/api/follow-list', (req, res) => {
     } catch (err) { res.status(500).json({ error: 'Xatolik' }); }
 });
 
+
+function chatId(n1, n2) {
+    return [n1.toLowerCase().trim(), n2.toLowerCase().trim()].sort().join('__CHAT__');
+}
+ 
+// ═══════════════════════════════════════════════════════════════════
+// WEB AUTH
+// ═══════════════════════════════════════════════════════════════════
+ 
+// REGISTER
+app.post('/api/web-auth/register', (req, res) => {
+    try {
+        const { username, name, password } = req.body;
+        if (!username || !name || !password) return res.status(400).json({ error: 'missing_fields' });
+        const u = username.toLowerCase().trim();
+        if (!/^[a-z0-9_]{3,}$/.test(u)) return res.status(400).json({ error: 'invalid_username' });
+        if (name.trim().length < 3) return res.status(400).json({ error: 'invalid_name' });
+        if (password.length < 6) return res.status(400).json({ error: 'invalid_password' });
+ 
+        const webUsers = getWebUsers();
+        const db = getDb();
+ 
+        if (webUsers[u]) return res.status(409).json({ error: 'exists' });
+ 
+        const tgDup = Object.values(db.users || {}).find(
+            usr => (usr.username || '').replace('@', '').toLowerCase() === u
+        );
+        if (tgDup) return res.status(409).json({ error: 'exists' });
+ 
+        webUsers[u] = { username: u, name: name.trim(), password, photo: null, createdAt: Date.now() };
+        saveWebUsers(webUsers);
+        res.json({ success: true, user: { username: u, name: name.trim() } });
+    } catch (err) {
+        console.error('[web-register]', err.message);
+        res.status(500).json({ error: 'server_error' });
+    }
+});
+ 
+// LOGIN
+app.post('/api/web-auth/login', (req, res) => {
+    try {
+        const { username, password } = req.body;
+        if (!username || !password) return res.status(400).json({ error: 'missing_fields' });
+        const u = username.toLowerCase().trim();
+        const webUsers = getWebUsers();
+ 
+        if (webUsers[u]) {
+            if (webUsers[u].password !== password) return res.status(401).json({ error: 'wrong_password' });
+            return res.json({ success: true, user: { username: u, name: webUsers[u].name, photo: webUsers[u].photo || null, createdAt: webUsers[u].createdAt } });
+        }
+        return res.status(404).json({ error: 'notfound' });
+    } catch (err) {
+        console.error('[web-login]', err.message);
+        res.status(500).json({ error: 'server_error' });
+    }
+});
+ 
+// GET ME
+app.get('/api/web-auth/me', (req, res) => {
+    try {
+        const u = (req.query.username || '').toLowerCase().trim();
+        if (!u) return res.status(400).json({ error: 'missing' });
+        const webUsers = getWebUsers();
+        if (!webUsers[u]) return res.status(404).json({ error: 'notfound' });
+        res.json({ success: true, user: { username: u, name: webUsers[u].name, photo: webUsers[u].photo || null, createdAt: webUsers[u].createdAt } });
+    } catch (err) { res.status(500).json({ error: 'server_error' }); }
+});
+ 
+// RESET PASSWORD
+app.post('/api/web-auth/reset-password', (req, res) => {
+    try {
+        const { username, newPassword } = req.body;
+        if (!username || !newPassword) return res.status(400).json({ error: 'missing_fields' });
+        if (newPassword.length < 6) return res.status(400).json({ error: 'too_short' });
+        const u = username.toLowerCase().trim();
+        const webUsers = getWebUsers();
+        if (!webUsers[u]) return res.status(404).json({ error: 'notfound' });
+        webUsers[u].password = newPassword;
+        webUsers[u].updatedAt = Date.now();
+        saveWebUsers(webUsers);
+        res.json({ success: true });
+    } catch (err) {
+        console.error('[reset-password]', err.message);
+        res.status(500).json({ error: 'server_error' });
+    }
+});
+ 
+// ═══════════════════════════════════════════════════════════════════
+// CHAT API — TO'LIQ TO'G'RILANGAN
+// ═══════════════════════════════════════════════════════════════════
+ 
+// Xabar yuborish
+app.post('/api/chat/send', async (req, res) => {
+    try {
+        const { fromName, toName, text, imageData } = req.body;
+        if (!fromName || !toName || (!text?.trim() && !imageData)) return res.status(400).json({ error: 'Parametrlar yetishmayapti' });
+ 
+        const chats = getChatMsgs();
+        const cid = chatId(fromName, toName);
+        if (!chats[cid]) chats[cid] = [];
+ 
+        const msg = {
+            id: Date.now() + '_' + Math.random().toString(36).slice(2, 7),
+            from: fromName,
+            to: toName,
+            text: text?.trim() || '',
+            imageData: imageData || null,
+            ts: Date.now(),
+            read: false,
+        };
+        chats[cid].push(msg);
+        if (chats[cid].length > 500) chats[cid] = chats[cid].slice(-500);
+        saveChatMsgs(chats);
+        res.json({ success: true, msg });
+ 
+        // Telegram notification (async)
+        try {
+            const db = getDb();
+            const toLow = (toName || '').toLowerCase().trim();
+            for (const [uid, u] of Object.entries(db.users || {})) {
+                if ((u.name || '').toLowerCase().trim() === toLow || (u.username || '').replace('@', '').toLowerCase() === toLow) {
+                    const preview = imageData ? '🖼️ Rasm' : (text || '').slice(0, 100);
+                    await bot.telegram.sendMessage(uid,
+                        `💬 <b>Yangi xabar!</b>\n👤 <b>Kimdan:</b> ${fromName}\n📝 ${preview}`,
+                        { parse_mode: 'HTML' }
+                    ).catch(() => {});
+                    break;
+                }
+            }
+        } catch {}
+    } catch (err) {
+        console.error('[Chat send]', err.message);
+        res.status(500).json({ error: 'Xatolik' });
+    }
+});
+ 
+// Xabarlarni olish — faqat 2 kishi orasidagi
+app.get('/api/chat/messages', (req, res) => {
+    try {
+        const { name1, name2, since = 0 } = req.query;
+        if (!name1 || !name2) return res.status(400).json({ error: 'name1 va name2 kerak' });
+ 
+        const chats = getChatMsgs();
+        const cid = chatId(name1, name2);
+        // Faqat shu ikki kishi orasidagi xabarlar
+        const msgs = (chats[cid] || []).filter(m =>
+            m.ts > parseInt(since) &&
+            ((m.from === name1 && m.to === name2) || (m.from === name2 && m.to === name1))
+        );
+        res.json({ messages: msgs });
+    } catch (err) { res.status(500).json({ error: 'Xatolik' }); }
+});
+ 
+// O'qilgan deb belgilash
+app.post('/api/chat/read', (req, res) => {
+    try {
+        const { myName, otherName } = req.body;
+        if (!myName || !otherName) return res.status(400).json({ error: 'Parametrlar kerak' });
+ 
+        const chats = getChatMsgs();
+        const cid = chatId(myName, otherName);
+        const myLow = myName.toLowerCase().trim();
+        if (chats[cid]) {
+            chats[cid].forEach(m => {
+                if ((m.to || '').toLowerCase().trim() === myLow) m.read = true;
+            });
+            saveChatMsgs(chats);
+        }
+        res.json({ success: true });
+    } catch (err) { res.status(500).json({ error: 'Xatolik' }); }
+});
+ 
+// ─── CHAT O'CHIRISH — TO'G'RILANGAN ────────────────────────────────
+// Faqat o'sha foydalanuvchi uchun o'chiradi (ikkinchi kishi ko'ra oladi)
+// Lekin odatda chat ikki tomon uchun ham o'chadi — bu biznes logika
+app.post('/api/chat/delete', (req, res) => {
+    try {
+        const { myName, otherName } = req.body;
+        if (!myName || !otherName) return res.status(400).json({ error: 'myName va otherName kerak' });
+ 
+        const chats = getChatMsgs();
+        const cid = chatId(myName, otherName);
+ 
+        if (chats[cid]) {
+            delete chats[cid];
+            saveChatMsgs(chats);
+        }
+        res.json({ success: true });
+    } catch (err) {
+        console.error('[Chat delete]', err.message);
+        res.status(500).json({ error: 'Xatolik' });
+    }
+});
+ 
+// O'qilmagan xabarlar soni
+app.get('/api/chat/unread', (req, res) => {
+    try {
+        const { myName } = req.query;
+        if (!myName) return res.status(400).json({ error: 'myName kerak' });
+ 
+        const chats = getChatMsgs();
+        const myLow = myName.toLowerCase().trim();
+        let total = 0;
+        const byChat = {};
+ 
+        Object.entries(chats).forEach(([cid, msgs]) => {
+            // Faqat o'sha foydalanuvchi ishtirok etgan chatlar
+            const isParticipant = msgs.some(m =>
+                (m.from || '').toLowerCase().trim() === myLow ||
+                (m.to || '').toLowerCase().trim() === myLow
+            );
+            if (!isParticipant) return;
+ 
+            const unread = msgs.filter(m =>
+                (m.to || '').toLowerCase().trim() === myLow && !m.read
+            ).length;
+            if (unread > 0) { total += unread; byChat[cid] = unread; }
+        });
+ 
+        res.json({ total, byChat });
+    } catch (err) { res.status(500).json({ error: 'Xatolik' }); }
+});
+ 
+// ─── CHAT RO'YXATI — TO'G'RILANGAN ─────────────────────────────────
+// Faqat o'sha foydalanuvchi ishtirok etgan chatlar
+app.get('/api/chat/list', (req, res) => {
+    try {
+        const { myName } = req.query;
+        if (!myName) return res.status(400).json({ error: 'myName kerak' });
+ 
+        const myLow = myName.toLowerCase().trim();
+        const chats = getChatMsgs();
+        const list = [];
+ 
+        Object.entries(chats).forEach(([cid, msgs]) => {
+            if (!msgs.length) return;
+ 
+            // Faqat myName ishtirok etgan chatlar
+            const isParticipant = msgs.some(m =>
+                (m.from || '').toLowerCase().trim() === myLow ||
+                (m.to || '').toLowerCase().trim() === myLow
+            );
+            if (!isParticipant) return;
+ 
+            const last = msgs[msgs.length - 1];
+ 
+            // Boshqa foydalanuvchi nomini aniqlash
+            let other;
+            if ((last.from || '').toLowerCase().trim() === myLow) {
+                other = last.to;
+            } else {
+                other = last.from;
+            }
+ 
+            // O'qilmagan xabarlar — faqat menga yuborilganlar
+            const unread = msgs.filter(m =>
+                (m.to || '').toLowerCase().trim() === myLow && !m.read
+            ).length;
+ 
+            list.push({
+                cid,
+                otherName: other,
+                lastMsg: last.imageData ? '[Rasm 🖼️]' : last.text,
+                lastFrom: last.from,
+                lastTs: last.ts,
+                unread,
+            });
+        });
+ 
+        list.sort((a, b) => b.lastTs - a.lastTs);
+        res.json(list);
+    } catch (err) {
+        console.error('[Chat list]', err.message);
+        res.status(500).json({ error: 'Xatolik' });
+    }
+});
+ 
+// ═══════════════════════════════════════════════════════════════════
+// FOLLOW LIST
+// ═══════════════════════════════════════════════════════════════════
+app.get('/api/follow-list', (req, res) => {
+    try {
+        const { name, type } = req.query;
+        if (!name) return res.status(400).json({ error: 'name kerak' });
+        const follows = getFollows();
+        const nameLow = name.toLowerCase().trim();
+        if (type === 'followers') {
+            const result = Object.entries(follows)
+                .filter(([, list]) => list.some(n => n.toLowerCase() === nameLow))
+                .map(([follower]) => follower);
+            res.json({ followers: result });
+        } else {
+            res.json({ following: follows[nameLow] || [] });
+        }
+    } catch (err) { res.status(500).json({ error: 'Xatolik' }); }
+});
+ 
 // ═══════════════════════════════════════════════════════════════════
 // ESLATMALAR:
 // 1. getFollows() funksiyasi index.js da mavjud bo'lishi kerak:
@@ -3540,6 +3837,14 @@ app.get('/api/follow-list', (req, res) => {
 //    require('./server_endpoints_v2')(app, path, DATA_DIR, readJSON, writeJSON, getDb, getFollows, bot);
 //    YOKI to'g'ridan-to'g'ri index.js ichiga paste qiling
 // ═══════════════════════════════════════════════════════════════════
+ 
+
+
+
+
+
+
+
 
 app.listen(PORT, '0.0.0.0', () => console.log(`🌐 Express server ${PORT}-portda`));
 
