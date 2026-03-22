@@ -1,7 +1,8 @@
 // ═══════════════════════════════════════════
 // Student Bot — PWA Service Worker
 // ═══════════════════════════════════════════
-const CACHE_NAME = 'studentbot-v1';
+// Cache versiyasini o'zgartirish uchun bu raqamni oshiring
+const CACHE_NAME = 'studentbot-v3';
 
 // Offline da ishlashi uchun saqlanadigan fayllar
 const STATIC_CACHE = [
@@ -61,25 +62,28 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
+  // HTML fayllar — HECH QACHON cache qilmaslik (force logout ishlashi uchun)
+  if (event.request.headers.get('accept')?.includes('text/html')) {
+    event.respondWith(
+      fetch(event.request, { cache: 'no-store' })
+        .catch(() => caches.match('/index.html'))
+    );
+    return;
+  }
+
   // Statik fayllar — cache first, network fallback
   event.respondWith(
     caches.match(event.request).then((cached) => {
       if (cached) return cached;
       return fetch(event.request)
         .then((response) => {
-          // Yangi statik faylni cache ga qo'shish
           if (response.status === 200 && event.request.method === 'GET') {
             const cloned = response.clone();
             caches.open(CACHE_NAME).then((cache) => cache.put(event.request, cloned));
           }
           return response;
         })
-        .catch(() => {
-          // HTML so'rovlari uchun offline sahifa
-          if (event.request.headers.get('accept')?.includes('text/html')) {
-            return caches.match('/index.html');
-          }
-        });
+        .catch(() => null);
     })
   );
 });

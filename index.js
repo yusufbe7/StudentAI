@@ -2198,6 +2198,8 @@ function setAppVer(v) {
 if (!fs.existsSync(VER_PATH)) setAppVer('2');
 
 app.get('/api/app-version', (req, res) => {
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    res.setHeader('Pragma', 'no-cache');
     res.json({ version: getAppVer() });
 });
 

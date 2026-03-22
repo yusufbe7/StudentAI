@@ -3,6 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <title>YMA</title>
@@ -1234,6 +1237,40 @@ body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); 
 </div>
 
 <div class="toast" id="toast"></div>
+
+<!-- Force logout: sahifa yuklanishidan OLDIN ishlaydi -->
+<script>
+(function(){
+  var APP_VER_KEY='sb_app_ver';
+  var OLD_KEYS=['sb_sess_v1','sb_sess_v2','sb_sess_v3','sb_sess_v4','sb_sess_v5'];
+  // Service Worker cache ni tozalash
+  if('caches' in window){
+    caches.keys().then(function(keys){
+      keys.forEach(function(k){ if(k.startsWith('studentbot-')) caches.delete(k); });
+    });
+  }
+  // Server versiyasini tekshirish
+  fetch('/api/app-version?_='+Date.now())
+    .then(function(r){return r.json();})
+    .then(function(d){
+      var sv=String(d.version||'1');
+      var lv=localStorage.getItem(APP_VER_KEY)||'0';
+      if(sv!==lv){
+        console.log('[BOOT] v'+lv+' -> v'+sv+' force logout');
+        OLD_KEYS.forEach(function(k){
+          var raw=localStorage.getItem(k);
+          if(!raw) return;
+          try{ var p=JSON.parse(raw); if(!p.isAdmin) localStorage.removeItem(k); }
+          catch(e){ localStorage.removeItem(k); }
+        });
+        localStorage.setItem(APP_VER_KEY,sv);
+        // Sahifani yangilab qayta yuklash
+        setTimeout(function(){ window.location.reload(true); }, 50);
+      }
+    })
+    .catch(function(){});
+})();
+</script>
 
 <script>
 // ═══════════════════════════════════════════════
