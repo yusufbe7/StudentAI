@@ -718,9 +718,13 @@ body.dark .screen-login { background:#0f0f0f; }
         <div class="ah-badge" id="ah-badge"></div>
       </button>
       <!-- Qongiroq (bildirishnoma) -->
-      <button class="ah-btn" onclick="openNotifs()" style="position:relative;" title="Bildirishnomalar">
+      <button class="ah-btn" onclick="openNotifsPanel()" style="position:relative;" title="Bildirishnomalar">
         <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="var(--text2)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
-        <div class="ah-badge" id="ah-notif-badge" style="display:none;"></div>
+        <div class="notif-dot" id="ah-notif-dot" style="display:none;background:var(--red);position:absolute;top:4px;right:4px;width:8px;height:8px;border-radius:50%;border:2px solid #fff;"></div>
+      </button>
+      <!-- Dark mode -->
+      <button class="ah-btn" onclick="toggleDarkMode()" id="dark-btn" title="Dark mode">
+        <svg id="dark-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="var(--text2)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
       </button>
     </div>
   </div>
@@ -913,6 +917,16 @@ body.dark .screen-login { background:#0f0f0f; }
             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="var(--text3)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
           </div>
           <!-- Subject / Fan row -->
+          <!-- Streak va Badges -->
+          <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px;flex-wrap:wrap;" id="streak-area">
+            <span id="streak-badge" class="streak-badge" style="display:none;">🔥 0</span>
+            <span id="streak-max" style="font-size:11px;color:var(--text3);font-weight:600;display:none;"></span>
+          </div>
+          <div style="background:var(--card);border-radius:16px;padding:14px 16px;box-shadow:0 1px 6px rgba(0,0,0,0.05);margin-bottom:8px;">
+            <div style="font-size:13px;font-weight:800;color:var(--text);margin-bottom:10px;">🏆 Yutuqlar</div>
+            <div id="prof-badges-list"><div style="color:var(--text3);font-size:12px;text-align:center;padding:8px 0;">Yuklanmoqda...</div></div>
+          </div>
+
           <div style="background:var(--card);border-radius:16px;padding:15px 18px;box-shadow:0 1px 6px rgba(0,0,0,0.05);display:flex;align-items:center;justify-content:space-between;" id="prof-subject-row-wrap">
             <div style="display:flex;align-items:center;gap:10px;">
               <div style="width:24px;height:24px;border-radius:6px;background:var(--green-bg);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:var(--green);" id="prof-subj-num">0</div>
@@ -2141,7 +2155,16 @@ async function loadHome(sess){
   // Load leaderboard for stories and activity feed
   try{
     const r=await fetch('/api/leaderboard?_='+Date.now());
-    if(r.ok){ const raw=await r.json(); _lbCache=[...raw].sort((a,b)=>(parseFloat(b.score)||0)-(parseFloat(a.score)||0)); renderStories(_lbCache); renderActivity(_lbCache); }
+    if(r.ok){
+      const raw=await r.json();
+      _lbCache=[...raw].sort((a,b)=>(parseFloat(b.score)||0)-(parseFloat(a.score)||0));
+      renderStories(_lbCache);
+      renderActivity(_lbCache);
+      // Real 24h stories API dan
+      loadRealStories();
+      // Challenges
+      loadAndShowChallenges();
+    }
   }catch{}
 }
 
@@ -2209,33 +2232,36 @@ function renderActivity(list){
     // time-ago style: use score as "minutes"
     const timeAgo=tests>0?tests+'h ago':'yangi';
 
+    const itemId='act_'+k.replace(/\s/g,'_');
+    const myNameA=getMyName()||'';
     html+=`
-    <div style="background:#fff;border-radius:16px;padding:16px 18px 14px;box-shadow:0 1px 6px rgba(0,0,0,0.06);cursor:pointer;transition:transform .15s;" onclick="openUserProfile('${escA(u.name)}','${escA(u.tgUsername||'')}')" onactive="this.style.transform='scale(.99)'">
+    <div style="background:var(--card);border-radius:16px;padding:16px 18px 14px;box-shadow:0 1px 6px rgba(0,0,0,0.06);margin-bottom:12px;">
       <div style="display:flex;align-items:baseline;gap:6px;margin-bottom:2px;">
-        <span style="font-size:28px;font-weight:900;color:#111;line-height:1;">${score}</span>
-        <span style="font-size:15px;font-weight:500;color:#888;">ball</span>
+        <span style="font-size:28px;font-weight:900;color:var(--text);line-height:1;">${score}</span>
+        <span style="font-size:15px;font-weight:500;color:var(--text3);">ball</span>
       </div>
-      <div style="font-size:13px;font-weight:600;color:#888;margin-bottom:12px;">Test Sessiyasi</div>
+      <div style="font-size:13px;font-weight:600;color:var(--text3);margin-bottom:12px;">Test Sessiyasi</div>
       <div style="display:flex;align-items:center;gap:10px;">
-        <div style="width:36px;height:36px;border-radius:50%;background:var(--green-bg);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:var(--green);flex-shrink:0;overflow:hidden;">${av}</div>
-        <div style="flex:1;min-width:0;">
-          <div style="font-size:14px;font-weight:700;color:#111;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escH(handle||u.name)}</div>
-          <div style="font-size:11px;color:#aaa;font-weight:500;margin-top:1px;">${timeAgo}</div>
+        <div style="width:36px;height:36px;border-radius:50%;background:var(--green-bg);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:var(--green);flex-shrink:0;overflow:hidden;cursor:pointer;" onclick="openUserProfile('${escA(u.name)}','${escA(u.tgUsername||'')}')">${av}</div>
+        <div style="flex:1;min-width:0;cursor:pointer;" onclick="openUserProfile('${escA(u.name)}','${escA(u.tgUsername||'')}')">
+          <div style="font-size:14px;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escH(u.nickname?'@'+u.nickname:handle||u.name)}</div>
+          <div style="font-size:11px;color:var(--text3);font-weight:500;margin-top:1px;">${timeAgo}</div>
         </div>
-        <div style="display:flex;gap:12px;align-items:center;flex-shrink:0;">
-          <div style="display:flex;align-items:center;gap:5px;">
-            <div style="width:26px;height:26px;border-radius:50%;background:#fff3e0;display:flex;align-items:center;justify-content:center;font-size:13px;">⚡</div>
-            <span style="font-size:13px;font-weight:700;color:#555;">${tests}</span>
+        <div style="display:flex;gap:8px;align-items:center;flex-shrink:0;">
+          <div style="display:flex;align-items:center;gap:4px;">
+            <span style="font-size:13px;">⚡</span>
+            <span style="font-size:13px;font-weight:700;color:var(--text2);">${tests}</span>
           </div>
-          <div style="display:flex;align-items:center;gap:5px;">
-            <div style="width:26px;height:26px;border-radius:50%;background:#f5f5f5;display:flex;align-items:center;justify-content:center;font-size:13px;">💬</div>
-            <span style="font-size:13px;font-weight:700;color:#555;">0</span>
-          </div>
+          <button class="like-btn" id="like-${escA(itemId)}" onclick="handleActivityLike('${escA(itemId)}','${escA(u.name)}',this)" style="padding:5px 10px;font-size:12px;">
+            ❤️ <span class="like-cnt">0</span>
+          </button>
         </div>
       </div>
     </div>`;
   });
   el.innerHTML=html;
+  // Like count larni async yuklash
+  setTimeout(()=>loadActivityLikes(list),100);
 }
 
 // Profile view helpers
@@ -4811,12 +4837,22 @@ async function loadStreak(){
 }
 function renderStreakBadge(){
   const el=document.getElementById('streak-badge');
-  if(!el) return;
-  if(_streak.current>=1){
-    el.style.display='inline-flex';
-    el.textContent='🔥 '+_streak.current;
-  } else {
-    el.style.display='none';
+  const maxEl=document.getElementById('streak-max');
+  if(el){
+    if(_streak.current>=1){
+      el.style.display='inline-flex';
+      el.textContent='🔥 '+_streak.current+' kun';
+    } else {
+      el.style.display='none';
+    }
+  }
+  if(maxEl){
+    if(_streak.max>0){
+      maxEl.style.display='inline';
+      maxEl.textContent='Max: '+_streak.max+' kun';
+    } else {
+      maxEl.style.display='none';
+    }
   }
 }
 async function updateStreakOnTest(){
@@ -4916,6 +4952,46 @@ async function toggleLike(itemId, targetName, btnEl){
 // BILDIRISHNOMALAR
 // ═══════════════════════════════════════════════════════════
 let _notifCount=0;
+// Activity like handler
+async function handleActivityLike(itemId, targetName, btnEl){
+  const myName=getMyName();
+  if(!myName){ toast('Avval kiring','bad'); return; }
+  try{
+    const r=await fetch('/api/like',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({likerName:myName,targetName,itemId,itemType:'activity'})
+    });
+    const d=await r.json();
+    if(r.ok){
+      const liked=d.action==='liked';
+      btnEl.classList.toggle('liked',liked);
+      const cnt=btnEl.querySelector('.like-cnt');
+      if(cnt) cnt.textContent=d.count;
+      btnEl.animate([{transform:'scale(1.3)'},{transform:'scale(1)'}],{duration:200,easing:'ease-out'});
+    }
+  }catch{}
+}
+
+// Like count larni yuklash (activity feed ochilganda)
+async function loadActivityLikes(list){
+  const myName=getMyName()||'';
+  for(const u of (list||[]).slice(0,8)){
+    const k=(u.name||'').toLowerCase();
+    const itemId='act_'+k.replace(/[^a-z0-9]/g,'_');
+    try{
+      const r=await fetch(`/api/likes?itemId=${encodeURIComponent(itemId)}&userName=${encodeURIComponent(myName)}`);
+      if(!r.ok) continue;
+      const d=await r.json();
+      const btn=document.getElementById('like-'+itemId);
+      if(btn){
+        const cnt=btn.querySelector('.like-cnt');
+        if(cnt) cnt.textContent=d.count||0;
+        btn.classList.toggle('liked',d.liked||false);
+      }
+    }catch{}
+  }
+}
+
 async function loadNotifsCount(){
   const name=getMyName(); if(!name) return;
   try{
