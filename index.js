@@ -1712,6 +1712,75 @@ app.get('/api/leaderboard', (req, res) => {
 });
 
 // ─── ✅ YAGONA va TO'G'RI Admin add-score ──────────────────────────
+// ─── Admin: Ball AYIRISH ────────────────────────────────────
+app.post('/api/admin/sub-score', async (req, res) => {
+    try{
+        const { name, amount, fromWebapp, fromTg } = req.body;
+        if(!name||!name.trim()) return res.status(400).json({error:'Ism kiriting'});
+        if(!amount || amount <= 0) return res.status(400).json({error:'Miqdor kiriting'});
+        if(!fromWebapp && !fromTg) return res.status(400).json({error:'WebApp yoki TG tanlang'});
+
+        const nameTrim = name.trim();
+        const db  = getDb();
+        const wu  = getWebUsers();
+        const ws  = getWebScores();
+        let newWebScore = null;
+        let newTgScore  = null;
+
+        // ─── WebApp dan ayirish ──────────────────────────────
+        if(fromWebapp){
+            // 1. web_users (Mercury, nikname bilan kirgan foydalanuvchilar)
+            let foundWu = false;
+            for(const [k,v] of Object.entries(wu)){
+                const mn = (v.name||'').toLowerCase().trim() === nameTrim.toLowerCase();
+                const mk = (v.nickname||'').toLowerCase() === nameTrim.toLowerCase();
+                const mu = k.toLowerCase() === nameTrim.toLowerCase();
+                if(!mn && !mk && !mu) continue;
+                v.score = Math.max(0, (parseFloat(v.score)||0) - amount);
+                wu[k] = v; saveWebUsers(wu);
+                newWebScore = v.score;
+                foundWu = true; break;
+            }
+            // 2. web_scores
+            if(!foundWu){
+                for(const [k,v] of Object.entries(ws)){
+                    const mn = (v.name||'').toLowerCase().trim() === nameTrim.toLowerCase();
+                    const mk = (v.nickname||'').toLowerCase() === nameTrim.toLowerCase();
+                    if(!mn && !mk) continue;
+                    v.score = Math.max(0, (parseFloat(v.score)||0) - amount);
+                    ws[k] = v; saveWebScores(ws);
+                    newWebScore = v.score;
+                    break;
+                }
+            }
+            if(newWebScore === null) newWebScore = 0;
+        }
+
+        // ─── Telegram dan ayirish ────────────────────────────
+        if(fromTg){
+            for(const [uid,u] of Object.entries(db.users||{})){
+                if((u.name||'').toLowerCase().trim() !== nameTrim.toLowerCase()) continue;
+                u.score = Math.max(0, (parseFloat(u.score)||0) - amount);
+                db.users[uid] = u; saveDb(db);
+                newTgScore = u.score;
+                // TG xabar yuborish
+                bot.telegram.sendMessage(uid,
+                    `📉 <b>Ball ayirildi</b>\n\nAdmin tomonidan <b>-${amount}</b> ball ayirildi.\n🏆 Yangi ball: <b>${newTgScore.toFixed(1)}</b>`,
+                    {parse_mode:'HTML'}
+                ).catch(()=>{});
+                break;
+            }
+            if(newTgScore === null) newTgScore = 0;
+        }
+
+        console.log(`[sub-score] ${nameTrim}: -${amount} | webapp=${fromWebapp} tg=${fromTg}`);
+        res.json({success:true, name:nameTrim, amount, newWebScore, newTgScore});
+    }catch(err){
+        console.error('[sub-score]', err.message);
+        res.status(500).json({error:err.message});
+    }
+});
+
 app.post('/api/admin/add-score', async (req, res) => {
     try {
         const { name, addScore, addTests, addCorrect, addWrong, subjectKey } = req.body;

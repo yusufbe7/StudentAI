@@ -2594,7 +2594,48 @@ function renderAdminPanel(){
       <div id="nick-stats-content">⏳ Yuklanmoqda...</div>
     </div>
 
-    <!-- Ball qoshish bolimi -->
+    <!-- Ball AYIRISH bolimi -->
+    <div style="background:var(--bg);border-radius:14px;padding:16px;margin-top:4px;margin-bottom:12px;">
+      <div style="font-size:13px;font-weight:800;color:var(--text);margin-bottom:12px;">➖ Ball ayirish</div>
+
+      <div class="field" style="margin-bottom:10px;">
+        <label class="field-lbl">Foydalanuvchi</label>
+        <input class="field-inp" id="adm-sub-name" type="text" placeholder="Ism yoki @nikname..." autocomplete="off" oninput="adminSearchUserSub(this.value)">
+        <div id="adm-sub-suggest" style="display:none;background:#fff;border-radius:10px;box-shadow:0 4px 16px rgba(0,0,0,0.12);margin-top:4px;overflow:hidden;max-height:160px;overflow-y:auto;"></div>
+      </div>
+
+      <div class="field" style="margin-bottom:10px;">
+        <label class="field-lbl">Ayirish miqdori</label>
+        <input class="field-inp" id="adm-sub-val" type="number" placeholder="0.0" step="0.5" min="0">
+      </div>
+
+      <!-- Qayerdan ayirish -->
+      <div style="margin-bottom:12px;">
+        <label class="field-lbl">Qayerdan ayirish</label>
+        <div style="display:flex;gap:8px;margin-top:6px;">
+          <label style="display:flex;align-items:center;gap:6px;cursor:pointer;flex:1;background:#fff;border-radius:10px;padding:10px 12px;border:1.5px solid var(--border);transition:all .2s;" id="sub-webapp-lbl">
+            <input type="checkbox" id="adm-sub-webapp" onchange="updateSubLabel()" style="width:16px;height:16px;accent-color:var(--green);cursor:pointer;">
+            <div>
+              <div style="font-size:12px;font-weight:700;color:var(--text);">📱 WebApp</div>
+              <div style="font-size:10px;color:var(--text3);">web_users</div>
+            </div>
+          </label>
+          <label style="display:flex;align-items:center;gap:6px;cursor:pointer;flex:1;background:#fff;border-radius:10px;padding:10px 12px;border:1.5px solid var(--border);transition:all .2s;" id="sub-tg-lbl">
+            <input type="checkbox" id="adm-sub-tg" onchange="updateSubLabel()" style="width:16px;height:16px;accent-color:var(--green);cursor:pointer;">
+            <div>
+              <div style="font-size:12px;font-weight:700;color:var(--text);">✈️ Telegram</div>
+              <div style="font-size:10px;color:var(--text3);">db.users</div>
+            </div>
+          </label>
+        </div>
+      </div>
+
+      <div id="adm-sub-preview" style="display:none;background:#fff;border-radius:10px;padding:10px 12px;margin-bottom:10px;font-size:12px;color:var(--red);font-weight:600;border-left:3px solid var(--red);"></div>
+
+      <button onclick="adminSubScore()" style="width:100%;padding:13px;background:var(--red);color:#fff;border:none;border-radius:12px;font-family:'Inter',sans-serif;font-size:14px;font-weight:800;cursor:pointer;box-shadow:0 3px 12px rgba(239,68,68,0.3);">➖ Ball ayirish</button>
+    </div>
+
+    <!-- Ball QOSHISH bolimi -->
     <div style="background:var(--bg);border-radius:14px;padding:16px;margin-top:4px;">
       <div style="font-size:13px;font-weight:800;color:var(--text);margin-bottom:12px;">⚡ Ball va Test qoshish</div>
 
@@ -2794,6 +2835,124 @@ async function adminRejectTour(){
 
 // ─── Admin: foydalanuvchi qidirish ─────────────────────────────────
 let _adminAllUsers=[], _adminAllLastFetch=0;
+// ─── Ball ayirish uchun qidiruv ──────────────────────────────
+let _subSelectedUser = null;
+
+function updateSubLabel(){
+  const webapp = document.getElementById('adm-sub-webapp')?.checked;
+  const tg     = document.getElementById('adm-sub-tg')?.checked;
+  const wLbl   = document.getElementById('sub-webapp-lbl');
+  const tLbl   = document.getElementById('sub-tg-lbl');
+  if(wLbl) wLbl.style.borderColor = webapp ? 'var(--red)' : 'var(--border)';
+  if(tLbl) tLbl.style.borderColor = tg     ? 'var(--red)' : 'var(--border)';
+}
+
+async function adminSearchUserSub(query){
+  const sug  = document.getElementById('adm-sub-suggest');
+  const prev = document.getElementById('adm-sub-preview');
+  if(!sug) return;
+  const qRaw = (query||'').replace(/^@/,'').trim();
+  if(!qRaw || qRaw.length < 2){ sug.style.display='none'; return; }
+
+  if(!_adminAllUsers.length){
+    try{
+      const [lbR,wuR] = await Promise.all([fetch('/api/leaderboard?_='+Date.now()), fetch('/api/admin/nick-stats')]);
+      let lb = lbR.ok ? await lbR.json() : [];
+      if(wuR.ok){
+        const wuD = await wuR.json();
+        const wuList = (wuD.users||[]).map(u=>({name:u.name,nickname:u.nickname,score:u.score||0,totalTests:u.totalTests||0,totalCorrect:u.totalCorrect||0,totalWrong:u.totalWrong||0}));
+        const lbNames = new Set(lb.map(u=>(u.name||'').toLowerCase()));
+        wuList.forEach(u=>{ if(!lbNames.has((u.name||'').toLowerCase())) lb.push(u); });
+      }
+      _adminAllUsers = lb;
+    }catch{}
+  }
+
+  const q = qRaw.toLowerCase();
+  const matches = _adminAllUsers.filter(u => {
+    return (u.name||'').toLowerCase().includes(q) || (u.nickname||'').toLowerCase().includes(q);
+  }).slice(0, 8);
+
+  if(!matches.length){ sug.style.display='none'; return; }
+
+  sug.innerHTML = matches.map(u => {
+    const dispName = u.nickname
+      ? escH(u.name)+' <span style="color:var(--green);">@'+escH(u.nickname)+'</span>'
+      : escH(u.name);
+    return `<div onclick="selectSubUser('${escA(u.name)}','${parseFloat(u.score||0).toFixed(1)}')"
+      style="padding:10px 14px;cursor:pointer;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;"
+      onmouseover="this.style.background='var(--bg)'" onmouseout="this.style.background='#fff'">
+      <span style="font-size:13px;font-weight:700;">${dispName}</span>
+      <span style="font-size:11px;color:var(--red);font-weight:600;">${parseFloat(u.score||0).toFixed(0)} ball</span>
+    </div>`;
+  }).join('');
+  sug.style.display = 'block';
+}
+
+function selectSubUser(name, score){
+  _subSelectedUser = {name, score: parseFloat(score)};
+  const inp  = document.getElementById('adm-sub-name');
+  const sug  = document.getElementById('adm-sub-suggest');
+  const prev = document.getElementById('adm-sub-preview');
+  if(inp) inp.value = name;
+  if(sug) sug.style.display = 'none';
+  if(prev){
+    prev.style.display = 'block';
+    prev.textContent = `${name} — hozirgi ball: ${parseFloat(score).toFixed(1)}`;
+  }
+  // Qayerdan ayirish checkboxlarini avtomatik belgilash
+  document.getElementById('adm-sub-webapp').checked = true;
+  document.getElementById('adm-sub-tg').checked     = true;
+  updateSubLabel();
+}
+
+async function adminSubScore(){
+  const name   = (document.getElementById('adm-sub-name')?.value||'').trim();
+  const amount = parseFloat(document.getElementById('adm-sub-val')?.value||0);
+  const webapp = document.getElementById('adm-sub-webapp')?.checked;
+  const tg     = document.getElementById('adm-sub-tg')?.checked;
+
+  if(!name)   { toast('Foydalanuvchi tanlang!','bad'); return; }
+  if(amount <= 0){ toast('Ayirish miqdorini kiriting!','bad'); return; }
+  if(!webapp && !tg){ toast('WebApp yoki TG ni tanlang!','bad'); return; }
+
+  const btn = document.querySelector('button[onclick="adminSubScore()"]');
+  if(btn){ btn.textContent='Ayirilmoqda...'; btn.disabled=true; }
+
+  try{
+    const r = await fetch('/api/admin/sub-score',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({name, amount, fromWebapp: webapp, fromTg: tg})
+    });
+    const d = await r.json();
+    if(r.ok && d.success){
+      const parts=[];
+      if(webapp) parts.push('WebApp: '+d.newWebScore?.toFixed(1)+' ball');
+      if(tg)     parts.push('TG: '+d.newTgScore?.toFixed(1)+' ball');
+      toast('Ayirildi! '+parts.join(' | '));
+      // Reset
+      document.getElementById('adm-sub-name').value='';
+      document.getElementById('adm-sub-val').value='';
+      document.getElementById('adm-sub-preview').style.display='none';
+      document.getElementById('adm-sub-webapp').checked=false;
+      document.getElementById('adm-sub-tg').checked=false;
+      updateSubLabel();
+      _subSelectedUser=null;
+      _adminAllUsers=[];
+      // Leaderboard yangilash
+      _lbCache=[];
+      try{const lbR=await fetch('/api/leaderboard?_='+Date.now());if(lbR.ok){const raw=await lbR.json();_lbCache=[...raw].sort((a,b)=>(parseFloat(b.score)||0)-(parseFloat(a.score)||0));renderPodium(_lbCache);renderLbList(_lbCache,getSess());}}catch{}
+    } else {
+      toast('Xatolik: '+(d.error||r.status),'bad');
+    }
+  }catch(e){
+    toast('Server bilan boglanib bolmadi','bad');
+  }finally{
+    if(btn){ btn.textContent='➖ Ball ayirish'; btn.disabled=false; }
+  }
+}
+
 async function adminSearchUser(query){
   const sug=document.getElementById('adm-score-suggest');
   if(!sug) return;
