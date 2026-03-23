@@ -1728,11 +1728,12 @@ app.post('/api/admin/sub-score', async (req, res) => {
         let newTgScore  = null;
 
         // ─── WebApp (web_users + web_scores) dan ayirish ────
+        // MUHIM: IKKALASINI HAM tekshirish, chunki ball ikki joyda saqlanishi mumkin
         if (fromWebapp) {
             const wu = getWebUsers();
             const ws = getWebScores();
-            let foundWu = false;
 
+            // 1. web_users dan (Mercury, nikname bilan kirgan)
             for (const [k,v] of Object.entries(wu)) {
                 const mn = (v.name||'').toLowerCase().trim() === nameLow;
                 const mk = (v.nickname||'').toLowerCase() === nameLow;
@@ -1744,26 +1745,31 @@ app.post('/api/admin/sub-score', async (req, res) => {
                 v.totalCorrect = clearAll ? 0 : (parseInt(v.totalCorrect)||0);
                 v.totalWrong   = clearAll ? 0 : (parseInt(v.totalWrong)||0);
                 if (clearAll) v.subjects = {};
-                wu[k] = v; saveWebUsers(wu);
+                wu[k] = v;
                 newWebScore = v.score;
-                foundWu = true;
                 break;
             }
+            saveWebUsers(wu);
 
-            if (!foundWu) {
-                for (const [k,v] of Object.entries(ws)) {
-                    const mn = (v.name||'').toLowerCase().trim() === nameLow;
-                    const mk = (v.nickname||'').toLowerCase() === nameLow;
-                    if (!mn && !mk) continue;
-                    v.score        = clearAll ? 0 : Math.max(0, (parseFloat(v.score)||0) - amount);
-                    v.totalTests   = clearAll ? 0 : (parseInt(v.totalTests)||0);
-                    v.totalCorrect = clearAll ? 0 : (parseInt(v.totalCorrect)||0);
-                    v.totalWrong   = clearAll ? 0 : (parseInt(v.totalWrong)||0);
-                    ws[k] = v; saveWebScores(ws);
-                    newWebScore = v.score;
-                    break;
-                }
+            // 2. web_scores dan HAM (admin qo'shgan yozuvlar)
+            // DOIM tekshirish — foundWu dan qat'iy nazar
+            let wsChanged = false;
+            for (const [k,v] of Object.entries(ws)) {
+                const mn = (v.name||'').toLowerCase().trim() === nameLow;
+                const mk = (v.nickname||'').toLowerCase() === nameLow;
+                if (!mn && !mk) continue;
+                const before = parseFloat(v.score) || 0;
+                v.score        = clearAll ? 0 : Math.max(0, before - amount);
+                v.totalTests   = clearAll ? 0 : (parseInt(v.totalTests)||0);
+                v.totalCorrect = clearAll ? 0 : (parseInt(v.totalCorrect)||0);
+                v.totalWrong   = clearAll ? 0 : (parseInt(v.totalWrong)||0);
+                ws[k] = v;
+                wsChanged = true;
+                // newWebScore ni web_scores dan ham yangilash
+                if (newWebScore === null) newWebScore = v.score;
             }
+            if (wsChanged) saveWebScores(ws);
+
             if (newWebScore === null) newWebScore = 0;
         }
 
