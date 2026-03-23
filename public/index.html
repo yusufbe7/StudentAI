@@ -2632,7 +2632,10 @@ function renderAdminPanel(){
 
       <div id="adm-sub-preview" style="display:none;background:#fff;border-radius:10px;padding:10px 12px;margin-bottom:10px;font-size:12px;color:var(--red);font-weight:600;border-left:3px solid var(--red);"></div>
 
-      <button onclick="adminSubScore()" style="width:100%;padding:13px;background:var(--red);color:#fff;border:none;border-radius:12px;font-family:'Inter',sans-serif;font-size:14px;font-weight:800;cursor:pointer;box-shadow:0 3px 12px rgba(239,68,68,0.3);">➖ Ball ayirish</button>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+        <button onclick="adminSubScore(false)" style="padding:13px;background:var(--red);color:#fff;border:none;border-radius:12px;font-family:'Inter',sans-serif;font-size:13px;font-weight:800;cursor:pointer;box-shadow:0 3px 12px rgba(239,68,68,0.3);">➖ Ball ayirish</button>
+        <button onclick="adminSubScore(true)" style="padding:13px;background:#1a1a1a;color:#fff;border:none;border-radius:12px;font-family:'Inter',sans-serif;font-size:13px;font-weight:800;cursor:pointer;" title="Barcha balllarni nolga tushirish">🗑 Tozalash</button>
+      </div>
     </div>
 
     <!-- Ball QOSHISH bolimi -->
@@ -2936,50 +2939,72 @@ function selectSubUser(name, score){
   updateSubLabel();
 }
 
-async function adminSubScore(){
+async function adminSubScore(clearAll=false){
   const name   = (document.getElementById('adm-sub-name')?.value||'').trim();
   const amount = parseFloat(document.getElementById('adm-sub-val')?.value||0);
   const webapp = document.getElementById('adm-sub-webapp')?.checked;
   const tg     = document.getElementById('adm-sub-tg')?.checked;
 
-  if(!name)   { toast('Foydalanuvchi tanlang!','bad'); return; }
-  if(amount <= 0){ toast('Ayirish miqdorini kiriting!','bad'); return; }
+  if(!name){ toast('Foydalanuvchi tanlang!','bad'); return; }
   if(!webapp && !tg){ toast('WebApp yoki TG ni tanlang!','bad'); return; }
 
-  const btn = document.querySelector('button[onclick="adminSubScore()"]');
-  if(btn){ btn.textContent='Ayirilmoqda...'; btn.disabled=true; }
+  if(clearAll){
+    if(!confirm(name+' - barcha ballarini tozalaysizmi?\nBu amal qaytarib bolmaydi!')) return;
+  } else {
+    if(amount<=0){ toast('Ayirish miqdorini kiriting!','bad'); return; }
+  }
+
+  const btns = document.querySelectorAll('button[onclick^="adminSubScore"]');
+  btns.forEach(b=>{b.disabled=true; b.style.opacity='0.6';});
 
   try{
     const r = await fetch('/api/admin/sub-score',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({name, amount, fromWebapp: webapp, fromTg: tg})
+      body: JSON.stringify({
+        name, amount, clearAll,
+        fromWebapp: webapp,
+        fromTg: tg
+      })
     });
     const d = await r.json();
     if(r.ok && d.success){
-      const parts=[];
-      if(webapp) parts.push('WebApp: '+d.newWebScore?.toFixed(1)+' ball');
-      if(tg)     parts.push('TG: '+d.newTgScore?.toFixed(1)+' ball');
-      toast('Ayirildi! '+parts.join(' | '));
-      // Reset
+      if(clearAll){
+        toast(name+' - barcha ballar tozalandi!');
+      } else {
+        const parts=[];
+        if(webapp && d.newWebScore!==null) parts.push('WebApp: '+parseFloat(d.newWebScore).toFixed(1)+' ball');
+        if(tg && d.newTgScore!==null)     parts.push('TG: '+parseFloat(d.newTgScore).toFixed(1)+' ball');
+        toast('Ayirildi! '+parts.join(' | '));
+      }
+      // Reset form
       document.getElementById('adm-sub-name').value='';
       document.getElementById('adm-sub-val').value='';
-      document.getElementById('adm-sub-preview').style.display='none';
+      const prev=document.getElementById('adm-sub-preview');
+      if(prev) prev.style.display='none';
       document.getElementById('adm-sub-webapp').checked=false;
       document.getElementById('adm-sub-tg').checked=false;
       updateSubLabel();
       _subSelectedUser=null;
       _adminAllUsers=[];
-      // Leaderboard yangilash
       _lbCache=[];
-      try{const lbR=await fetch('/api/leaderboard?_='+Date.now());if(lbR.ok){const raw=await lbR.json();_lbCache=[...raw].sort((a,b)=>(parseFloat(b.score)||0)-(parseFloat(a.score)||0));renderPodium(_lbCache);renderLbList(_lbCache,getSess());}}catch{}
+      // Leaderboard yangilash
+      try{
+        const lbR=await fetch('/api/leaderboard?_='+Date.now());
+        if(lbR.ok){
+          const raw=await lbR.json();
+          _lbCache=[...raw].sort((a,b)=>(parseFloat(b.score)||0)-(parseFloat(a.score)||0));
+          renderPodium(_lbCache);
+          renderLbList(_lbCache,getSess());
+        }
+      }catch{}
     } else {
       toast('Xatolik: '+(d.error||r.status),'bad');
     }
   }catch(e){
     toast('Server bilan boglanib bolmadi','bad');
   }finally{
-    if(btn){ btn.textContent='➖ Ball ayirish'; btn.disabled=false; }
+    btns.forEach(b=>{b.disabled=false; b.style.opacity='1';});
   }
 }
 

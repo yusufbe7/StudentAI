@@ -1714,70 +1714,86 @@ app.get('/api/leaderboard', (req, res) => {
 // ─── ✅ YAGONA va TO'G'RI Admin add-score ──────────────────────────
 // ─── Admin: Ball AYIRISH ────────────────────────────────────
 app.post('/api/admin/sub-score', async (req, res) => {
-    try{
-        const { name, amount, fromWebapp, fromTg } = req.body;
-        if(!name||!name.trim()) return res.status(400).json({error:'Ism kiriting'});
-        if(!amount || amount <= 0) return res.status(400).json({error:'Miqdor kiriting'});
-        if(!fromWebapp && !fromTg) return res.status(400).json({error:'WebApp yoki TG tanlang'});
+    try {
+        const { name, amount, fromWebapp, fromTg, clearAll } = req.body;
+        if (!name || !name.trim()) return res.status(400).json({error:'Ism kiriting'});
+        if (!fromWebapp && !fromTg) return res.status(400).json({error:'WebApp yoki TG tanlang'});
+        // clearAll=true bo'lsa to'liq nolga tushirish, aks holda amount kerak
+        if (!clearAll && (!amount || amount <= 0)) return res.status(400).json({error:'Miqdor kiriting'});
 
         const nameTrim = name.trim();
+        const nameLow  = nameTrim.toLowerCase();
         const db  = getDb();
-        const wu  = getWebUsers();
-        const ws  = getWebScores();
         let newWebScore = null;
         let newTgScore  = null;
 
-        // ─── WebApp dan ayirish ──────────────────────────────
-        if(fromWebapp){
-            // 1. web_users (Mercury, nikname bilan kirgan foydalanuvchilar)
+        // ─── WebApp (web_users + web_scores) dan ayirish ────
+        if (fromWebapp) {
+            const wu = getWebUsers();
+            const ws = getWebScores();
             let foundWu = false;
-            for(const [k,v] of Object.entries(wu)){
-                const mn = (v.name||'').toLowerCase().trim() === nameTrim.toLowerCase();
-                const mk = (v.nickname||'').toLowerCase() === nameTrim.toLowerCase();
-                const mu = k.toLowerCase() === nameTrim.toLowerCase();
-                if(!mn && !mk && !mu) continue;
-                v.score = Math.max(0, (parseFloat(v.score)||0) - amount);
+
+            for (const [k,v] of Object.entries(wu)) {
+                const mn = (v.name||'').toLowerCase().trim() === nameLow;
+                const mk = (v.nickname||'').toLowerCase() === nameLow;
+                const mu = k.toLowerCase() === nameLow;
+                if (!mn && !mk && !mu) continue;
+                const before = parseFloat(v.score) || 0;
+                v.score        = clearAll ? 0 : Math.max(0, before - amount);
+                v.totalTests   = clearAll ? 0 : (parseInt(v.totalTests)||0);
+                v.totalCorrect = clearAll ? 0 : (parseInt(v.totalCorrect)||0);
+                v.totalWrong   = clearAll ? 0 : (parseInt(v.totalWrong)||0);
+                if (clearAll) v.subjects = {};
                 wu[k] = v; saveWebUsers(wu);
                 newWebScore = v.score;
-                foundWu = true; break;
+                foundWu = true;
+                break;
             }
-            // 2. web_scores
-            if(!foundWu){
-                for(const [k,v] of Object.entries(ws)){
-                    const mn = (v.name||'').toLowerCase().trim() === nameTrim.toLowerCase();
-                    const mk = (v.nickname||'').toLowerCase() === nameTrim.toLowerCase();
-                    if(!mn && !mk) continue;
-                    v.score = Math.max(0, (parseFloat(v.score)||0) - amount);
+
+            if (!foundWu) {
+                for (const [k,v] of Object.entries(ws)) {
+                    const mn = (v.name||'').toLowerCase().trim() === nameLow;
+                    const mk = (v.nickname||'').toLowerCase() === nameLow;
+                    if (!mn && !mk) continue;
+                    v.score        = clearAll ? 0 : Math.max(0, (parseFloat(v.score)||0) - amount);
+                    v.totalTests   = clearAll ? 0 : (parseInt(v.totalTests)||0);
+                    v.totalCorrect = clearAll ? 0 : (parseInt(v.totalCorrect)||0);
+                    v.totalWrong   = clearAll ? 0 : (parseInt(v.totalWrong)||0);
                     ws[k] = v; saveWebScores(ws);
                     newWebScore = v.score;
                     break;
                 }
             }
-            if(newWebScore === null) newWebScore = 0;
+            if (newWebScore === null) newWebScore = 0;
         }
 
-        // ─── Telegram dan ayirish ────────────────────────────
-        if(fromTg){
-            for(const [uid,u] of Object.entries(db.users||{})){
-                if((u.name||'').toLowerCase().trim() !== nameTrim.toLowerCase()) continue;
-                u.score = Math.max(0, (parseFloat(u.score)||0) - amount);
+        // ─── Telegram (db.users) dan ayirish ────────────────
+        if (fromTg) {
+            for (const [uid, u] of Object.entries(db.users||{})) {
+                if ((u.name||'').toLowerCase().trim() !== nameLow) continue;
+                const before = parseFloat(u.score) || 0;
+                u.score        = clearAll ? 0 : Math.max(0, before - amount);
+                u.totalTests   = clearAll ? 0 : (parseInt(u.totalTests)||0);
+                u.totalCorrect = clearAll ? 0 : (parseInt(u.totalCorrect)||0);
+                u.totalWrong   = clearAll ? 0 : (parseInt(u.totalWrong)||0);
+                if (clearAll) u.subjects = {};
                 db.users[uid] = u; saveDb(db);
                 newTgScore = u.score;
-                // TG xabar yuborish
-                bot.telegram.sendMessage(uid,
-                    `📉 <b>Ball ayirildi</b>\n\nAdmin tomonidan <b>-${amount}</b> ball ayirildi.\n🏆 Yangi ball: <b>${newTgScore.toFixed(1)}</b>`,
-                    {parse_mode:'HTML'}
-                ).catch(()=>{});
+                // TG xabar
+                const msg = clearAll
+                    ? `Sizning barcha ballaringiz admin tomonidan tozalandi.`
+                    : `Admin tomonidan -${amount} ball ayirildi. Yangi ball: ${u.score.toFixed(1)}`;
+                bot.telegram.sendMessage(uid, msg).catch(()=>{});
                 break;
             }
-            if(newTgScore === null) newTgScore = 0;
+            if (newTgScore === null) newTgScore = 0;
         }
 
-        console.log(`[sub-score] ${nameTrim}: -${amount} | webapp=${fromWebapp} tg=${fromTg}`);
-        res.json({success:true, name:nameTrim, amount, newWebScore, newTgScore});
-    }catch(err){
+        console.log(`[sub-score] ${nameTrim}: ${clearAll?'CLEAR':'-'+amount} | webapp=${fromWebapp} tg=${fromTg}`);
+        res.json({ success:true, name:nameTrim, amount, clearAll, newWebScore, newTgScore });
+    } catch(err) {
         console.error('[sub-score]', err.message);
-        res.status(500).json({error:err.message});
+        res.status(500).json({error: err.message});
     }
 });
 
