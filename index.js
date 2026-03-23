@@ -2050,7 +2050,13 @@ app.get('/', (req, res) => {
     const filePath = path.join(__dirname,'public','index.html');
     fs.readFile(filePath, (err, data) => {
         if (err) return res.status(404).send('HTML fayl topilmadi.');
-        res.setHeader('Content-Type','text/html'); res.send(data);
+        // Telegram WebApp cache ni o'chirish
+        res.setHeader('Content-Type','text/html');
+        res.setHeader('Cache-Control','no-cache, no-store, must-revalidate');
+        res.setHeader('Pragma','no-cache');
+        res.setHeader('Expires','0');
+        res.setHeader('Surrogate-Control','no-store');
+        res.send(data);
     });
 });
 
@@ -2074,7 +2080,7 @@ bot.catch((err, ctx) => {
 const VER_PATH = path.join(DATA_DIR, 'app_version.json');
 function getAppVer(){ try{ return JSON.parse(fs.readFileSync(VER_PATH,'utf8')).version||'2'; }catch{ return '2'; } }
 function setAppVer(v){ try{ fs.writeFileSync(VER_PATH,JSON.stringify({version:String(v),updatedAt:Date.now()})); }catch{} }
-if(!fs.existsSync(VER_PATH)) setAppVer('2');
+if(!fs.existsSync(VER_PATH)) setAppVer('4'); else { const cur=parseInt(getAppVer()||'0'); if(cur<4) setAppVer('4'); }
 
 app.get('/api/app-version',(req,res)=>{
     res.setHeader('Cache-Control','no-cache,no-store,must-revalidate');
