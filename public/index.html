@@ -433,6 +433,54 @@ body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); 
 
 /* Toast */
 .toast { position:fixed; bottom:82px; left:50%; transform:translateX(-50%) translateY(10px); background:#fff; border-radius:14px; padding:12px 20px; font-size:13px; font-weight:600; opacity:0; transition:all .3s; z-index:9999; pointer-events:none; white-space:nowrap; box-shadow:0 4px 20px rgba(0,0,0,0.15); color:var(--text); }
+
+/* DARK MODE */
+body.dark { --bg:#0f0f0f; --card:#1a1a1a; --border:#2a2a2a; --text:#f0f0f0; --text2:#a0a0a0; --text3:#666; --green-bg:rgba(34,197,94,0.15); }
+body.dark .app-header { background:rgba(15,15,15,0.95); }
+body.dark .bottom-nav { background:rgba(15,15,15,0.95); }
+body.dark .msg-bubble2 { background:#2a2a2a; color:#f0f0f0; }
+body.dark .l-card { background:#1a1a1a; }
+body.dark .field-inp { background:#2a2a2a; color:#f0f0f0; border-color:#333; }
+body.dark .screen-login { background:#0f0f0f; }
+
+/* STREAK */
+.streak-badge { display:inline-flex; align-items:center; gap:4px; background:linear-gradient(135deg,#ff6b35,#f7c948); color:#fff; border-radius:20px; padding:4px 10px; font-size:12px; font-weight:800; }
+
+/* BADGES */
+.badge-item { display:flex; align-items:center; gap:8px; padding:10px 12px; background:var(--card); border-radius:12px; margin-bottom:8px; }
+.badge-emoji { font-size:24px; }
+.badge-locked { opacity:.35; filter:grayscale(1); }
+
+/* LIKE button */
+.like-btn { display:inline-flex; align-items:center; gap:5px; padding:6px 12px; border-radius:20px; border:1.5px solid var(--border); background:transparent; cursor:pointer; font-size:13px; font-weight:600; color:var(--text2); transition:all .2s; }
+.like-btn.liked { background:rgba(255,59,59,0.1); border-color:#ff3b3b; color:#ff3b3b; }
+.like-btn:active { transform:scale(.95); }
+
+/* NOTIF dot */
+.notif-dot { position:absolute; top:-2px; right:-2px; width:8px; height:8px; border-radius:50%; background:var(--red); border:2px solid #fff; }
+
+/* CHALLENGE card */
+.challenge-card { background:var(--card); border-radius:16px; padding:14px 16px; margin-bottom:12px; border:1.5px solid var(--border); }
+.challenge-prog { height:6px; background:var(--bg); border-radius:3px; margin-top:8px; overflow:hidden; }
+.challenge-prog-fill { height:100%; background:var(--green); border-radius:3px; transition:width .5s; }
+
+/* STORY ring - viewed */
+.story-ring.viewed { background:var(--border); }
+.story-ring.unseen { background:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888); }
+
+/* GROUP card */
+.group-card { background:var(--card); border-radius:14px; padding:14px; margin-bottom:10px; cursor:pointer; }
+
+/* NOTIF panel */
+#notif-panel { position:fixed; top:0; right:-100%; width:100%; max-width:400px; height:100%; background:var(--card); z-index:500; transition:right .3s; box-shadow:-4px 0 20px rgba(0,0,0,0.15); overflow-y:auto; }
+#notif-panel.open { right:0; }
+.notif-item { display:flex; align-items:center; gap:10px; padding:12px 16px; border-bottom:1px solid var(--border); }
+.notif-item.unread { background:var(--green-bg); }
+
+/* BADGE popup */
+#badge-popup { position:fixed; top:50%; left:50%; transform:translate(-50%,-50%) scale(.8); background:var(--card); border-radius:24px; padding:32px 24px; text-align:center; z-index:9999; opacity:0; pointer-events:none; transition:all .4s; box-shadow:0 20px 60px rgba(0,0,0,0.3); min-width:260px; }
+#badge-popup.show { opacity:1; transform:translate(-50%,-50%) scale(1); pointer-events:auto; }
+
 .toast.on { opacity:1; transform:translateX(-50%) translateY(0); }
 .toast.ok { color:var(--green); }
 .toast.bad { color:var(--red); }
@@ -1265,6 +1313,31 @@ body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); 
   </div>
 </div>
 
+<!-- Bildirishnomalar paneli -->
+<div id="notif-panel">
+  <div style="display:flex;align-items:center;justify-content:space-between;padding:16px;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--card);z-index:1;">
+    <div style="font-size:16px;font-weight:800;color:var(--text);">Bildirishnomalar</div>
+    <button onclick="closeNotifsPanel()" style="padding:6px 12px;background:var(--bg);border:none;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;color:var(--text2);">✕</button>
+  </div>
+  <div id="notif-list" style="padding:8px 0;">
+    <div style="text-align:center;padding:40px;color:var(--text3);">
+      <div style="font-size:32px;margin-bottom:8px;">🔔</div>
+      Yuklanmoqda...
+    </div>
+  </div>
+</div>
+<div id="notif-overlay" onclick="closeNotifsPanel()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:499;"></div>
+
+<!-- Badge popup -->
+<div id="badge-popup">
+  <div id="badge-popup-emoji" style="font-size:64px;margin-bottom:12px;">🏆</div>
+  <div style="font-size:11px;font-weight:700;color:var(--green);letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;">Yangi yutuq!</div>
+  <div id="badge-popup-name" style="font-size:20px;font-weight:900;color:var(--text);margin-bottom:6px;">—</div>
+  <div id="badge-popup-desc" style="font-size:13px;color:var(--text2);font-weight:500;margin-bottom:20px;">—</div>
+  <button onclick="closeBadgePopup()" style="padding:12px 28px;background:var(--green);color:#fff;border:none;border-radius:14px;font-size:14px;font-weight:700;cursor:pointer;">Rahmat!</button>
+</div>
+<div id="badge-overlay" onclick="closeBadgePopup()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:9998;"></div>
+
 <!-- Search modal -->
 <div id="search-modal">
   <div class="search-top">
@@ -2067,7 +2140,7 @@ let _lbCache=[];
 async function loadHome(sess){
   // Load leaderboard for stories and activity feed
   try{
-    const r=await fetch('/api/leaderboard');
+    const r=await fetch('/api/leaderboard?_='+Date.now());
     if(r.ok){ const raw=await r.json(); _lbCache=[...raw].sort((a,b)=>(parseFloat(b.score)||0)-(parseFloat(a.score)||0)); renderStories(_lbCache); renderActivity(_lbCache); }
   }catch{}
 }
@@ -2865,7 +2938,7 @@ async function adminAddScore(){
       if(prev) prev.style.display='none';
       // Refresh leaderboard
       _adminAllUsers=[]; _adminAllLastFetch=0;
-      const lbR=await fetch('/api/leaderboard');
+      const lbR=await fetch('/api/leaderboard?_='+Date.now());
       if(lbR.ok){const raw3=await lbR.json();_lbCache=[...raw3].sort((a,b)=>(parseFloat(b.score)||0)-(parseFloat(a.score)||0));renderPodium(_lbCache);renderLbList(_lbCache,getSess());}
     } else {
       toast(`❌ Xatolik: ${d.error||'Noma\'lum'}`, 'bad');
@@ -2881,7 +2954,7 @@ async function adminLoadScoreList(){
   const el=document.getElementById('adm-score-list'); if(!el) return;
   el.innerHTML='<div style="color:var(--text3);font-size:12px;text-align:center;padding:12px;">Yuklanmoqda...</div>';
   try{
-    const r=await fetch('/api/leaderboard');
+    const r=await fetch('/api/leaderboard?_='+Date.now());
     if(!r.ok) throw new Error();
     const list=await r.json();
     if(!list.length){el.innerHTML='<div style="color:var(--text3);font-size:12px;text-align:center;padding:12px;">Hali kimdir yo\'q</div>';return;}
@@ -2948,7 +3021,7 @@ async function loadStats(){
     document.getElementById('st-kurs').textContent='—';
   }
   try{
-    const r=await fetch('/api/leaderboard');
+    const r=await fetch('/api/leaderboard?_='+Date.now());
     if(r.ok){
       const raw2=await r.json();
       _lbCache=[...raw2].sort((a,b)=>(parseFloat(b.score)||0)-(parseFloat(a.score)||0));
@@ -3202,7 +3275,15 @@ async function showResult(){
 async function submitScore(s){
   const sess=getSess(); if(!sess||sess.isAdmin) return;
   const user=getUsers()[sess.username]; if(!user?.name) return;
-  try{ await fetch('/api/web-score',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:user.name,username:user.username||'',score:s.score,totalQ:s.questions.length,wrongCount:s.wrong.length,subjectKey:s.subjectKey||null})}); }catch{}
+  try{
+    await fetch('/api/web-score',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({name:user.name,username:user.username||'',score:s.score,totalQ:s.questions.length,wrongCount:s.wrong.length,subjectKey:s.subjectKey||null})});
+    // Streak yangilash va badge tekshirish
+    await updateStreakOnTest();
+    // Confetti agar yaxshi natija
+    const pct=s.questions.length>0?Math.round((s.score/s.questions.length)*100):0;
+    if(pct>=80) launchConfetti();
+  }catch{}
 }
 function closeTest(){
   if(_testTimer) clearInterval(_testTimer);
@@ -3980,7 +4061,7 @@ let _allLbUsers=[];
 async function openNewChatModal(){
   document.getElementById('new-chat-modal').classList.add('on');
   document.getElementById('new-chat-search').value='';
-  try{const r=await fetch('/api/leaderboard');if(r.ok){_allLbUsers=await r.json();renderNewChatList(_allLbUsers);}}
+  try{const r=await fetch('/api/leaderboard?_='+Date.now());if(r.ok){_allLbUsers=await r.json();renderNewChatList(_allLbUsers);}}
   catch{document.getElementById('new-chat-list').innerHTML='<div style="color:var(--text3);font-size:13px;text-align:center;padding:20px;">Yuklanmadi</div>';}
 }
 function renderNewChatList(users){
@@ -4437,7 +4518,7 @@ function doSearch(q){
   if(el) el.innerHTML='<div style="color:var(--text3);font-size:13px;text-align:center;padding:20px;">🔍 Qidirilmoqda...</div>';
   _searchTimer=setTimeout(async()=>{
     try{
-      const all=_lbCache.length?_lbCache:await fetch('/api/leaderboard').then(r=>r.json());
+      const all=_lbCache.length?_lbCache:await fetch('/api/leaderboard?_='+Date.now()).then(r=>r.json());
       if(!_lbCache.length) _lbCache=all;
       const qLow=qClean.toLowerCase();
       // FAQAT nickname boyicha qidiruv
@@ -4474,6 +4555,332 @@ function doSearch(q){
 function openNotifs(){
   toast('🔔 Bildirishnomalar tez orada!');
 }
+
+// ═══════════════════════════════════════════════════════════
+// DARK MODE
+// ═══════════════════════════════════════════════════════════
+function initDarkMode(){
+  const saved = localStorage.getItem('yma_dark');
+  if(saved==='1') applyDark(true);
+}
+function applyDark(on){
+  document.body.classList.toggle('dark',on);
+  localStorage.setItem('yma_dark', on?'1':'0');
+  const icon=document.getElementById('dark-icon');
+  if(icon){
+    if(on) icon.innerHTML='<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>';
+    else icon.innerHTML='<path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>';
+  }
+}
+function toggleDarkMode(){
+  const isDark=document.body.classList.contains('dark');
+  applyDark(!isDark);
+  // Serverga saqlash
+  const sess=getSess();
+  if(sess&&!sess.isAdmin){
+    const name=getMyName();
+    if(name) fetch('/api/dark-mode',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({name,dark:!isDark})}).catch(()=>{});
+  }
+}
+
+// ═══════════════════════════════════════════════════════════
+// STREAK
+// ═══════════════════════════════════════════════════════════
+let _streak={current:0,max:0};
+async function loadStreak(){
+  const name=getMyName(); if(!name) return;
+  try{
+    const r=await fetch(`/api/streak?name=${encodeURIComponent(name)}`);
+    if(r.ok){ _streak=await r.json(); renderStreakBadge(); }
+  }catch{}
+}
+function renderStreakBadge(){
+  const el=document.getElementById('streak-badge');
+  if(!el) return;
+  if(_streak.current>=1){
+    el.style.display='inline-flex';
+    el.textContent='🔥 '+_streak.current;
+  } else {
+    el.style.display='none';
+  }
+}
+async function updateStreakOnTest(){
+  const name=getMyName(); if(!name) return;
+  try{
+    const r=await fetch('/api/streak/update',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({name})});
+    if(r.ok){
+      const d=await r.json();
+      _streak=d;
+      renderStreakBadge();
+      if(d.newBadges&&d.newBadges.length>0){
+        showBadgePopup(d.newBadges[0]);
+      }
+    }
+  }catch{}
+}
+
+// ═══════════════════════════════════════════════════════════
+// BADGES
+// ═══════════════════════════════════════════════════════════
+function showBadgePopup(badge){
+  document.getElementById('badge-popup-emoji').textContent=badge.emoji||'🏆';
+  document.getElementById('badge-popup-name').textContent=badge.name||'Yutuq';
+  document.getElementById('badge-popup-desc').textContent=badge.desc||'';
+  document.getElementById('badge-popup').classList.add('show');
+  document.getElementById('badge-overlay').style.display='block';
+  // Confetti
+  launchConfetti();
+}
+function closeBadgePopup(){
+  document.getElementById('badge-popup').classList.remove('show');
+  document.getElementById('badge-overlay').style.display='none';
+}
+
+async function loadBadges(userName){
+  const el=document.getElementById('prof-badges-list'); if(!el) return;
+  try{
+    const name=userName||getMyName(); if(!name) return;
+    const r=await fetch(`/api/badges?name=${encodeURIComponent(name)}`);
+    if(!r.ok) return;
+    const d=await r.json();
+    const earned=new Set((d.badges||[]).map(b=>b.id));
+    let html='<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">';
+    (d.all||[]).forEach(b=>{
+      const got=earned.has(b.id);
+      html+=`<div class="badge-item ${got?'':'badge-locked'}" title="${b.desc}">
+        <span class="badge-emoji">${b.emoji}</span>
+        <div>
+          <div style="font-size:12px;font-weight:700;color:var(--text);">${b.name}</div>
+          <div style="font-size:10px;color:var(--text3);">${got?'Olindi':'Hali emas'}</div>
+        </div>
+      </div>`;
+    });
+    html+='</div>';
+    el.innerHTML=html;
+  }catch{}
+}
+
+// ═══════════════════════════════════════════════════════════
+// CONFETTI
+// ═══════════════════════════════════════════════════════════
+function launchConfetti(){
+  const colors=['#22c55e','#f7c948','#ff6b35','#3b82f6','#a855f7'];
+  for(let i=0;i<60;i++){
+    const el=document.createElement('div');
+    el.style.cssText=`position:fixed;top:-10px;left:${Math.random()*100}%;width:8px;height:8px;border-radius:2px;background:${colors[Math.floor(Math.random()*colors.length)]};z-index:99999;pointer-events:none;`;
+    document.body.appendChild(el);
+    const endY=window.innerHeight+20;
+    const duration=1500+Math.random()*1000;
+    el.animate([
+      {transform:'translateY(0) rotate(0deg)',opacity:1},
+      {transform:`translateY(${endY}px) rotate(${720*Math.random()}deg)`,opacity:0}
+    ],{duration,easing:'ease-in'}).onfinish=()=>el.remove();
+  }
+}
+
+// ═══════════════════════════════════════════════════════════
+// LIKE
+// ═══════════════════════════════════════════════════════════
+async function toggleLike(itemId, targetName, btnEl){
+  const myName=getMyName(); if(!myName) return toast('Avval kiring','bad');
+  try{
+    const r=await fetch('/api/like',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({likerName:myName,targetName,itemId,itemType:'activity'})});
+    const d=await r.json();
+    if(r.ok&&btnEl){
+      btnEl.classList.toggle('liked',d.action==='liked');
+      const cnt=btnEl.querySelector('.like-cnt');
+      if(cnt) cnt.textContent=d.count;
+      if(d.action==='liked') btnEl.animate([{transform:'scale(1.3)'},{transform:'scale(1)'}],{duration:200});
+    }
+  }catch{}
+}
+
+// ═══════════════════════════════════════════════════════════
+// BILDIRISHNOMALAR
+// ═══════════════════════════════════════════════════════════
+let _notifCount=0;
+async function loadNotifsCount(){
+  const name=getMyName(); if(!name) return;
+  try{
+    const r=await fetch(`/api/notifs?name=${encodeURIComponent(name)}`);
+    if(r.ok){
+      const d=await r.json();
+      _notifCount=d.unread||0;
+      const dot=document.getElementById('ah-notif-dot');
+      if(dot) dot.style.display=_notifCount>0?'block':'none';
+    }
+  }catch{}
+}
+async function openNotifsPanel(){
+  const panel=document.getElementById('notif-panel');
+  const overlay=document.getElementById('notif-overlay');
+  if(panel) panel.classList.add('open');
+  if(overlay) overlay.style.display='block';
+  await renderNotifs();
+  // O'qilgan deb belgilash
+  const name=getMyName();
+  if(name) fetch('/api/notifs/read',{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({name})}).then(()=>{
+      _notifCount=0;
+      const dot=document.getElementById('ah-notif-dot');
+      if(dot) dot.style.display='none';
+    }).catch(()=>{});
+}
+function closeNotifsPanel(){
+  document.getElementById('notif-panel')?.classList.remove('open');
+  const ov=document.getElementById('notif-overlay');
+  if(ov) ov.style.display='none';
+}
+async function renderNotifs(){
+  const el=document.getElementById('notif-list'); if(!el) return;
+  const name=getMyName(); if(!name) return;
+  try{
+    const r=await fetch(`/api/notifs?name=${encodeURIComponent(name)}`);
+    const d=await r.json();
+    const list=d.notifs||[];
+    if(!list.length){
+      el.innerHTML='<div style="text-align:center;padding:40px;color:var(--text3);"><div style="font-size:40px;margin-bottom:10px;">🔔</div>Hali bildirishnoma yoq</div>';
+      return;
+    }
+    const icons={like:'❤️',follow:'👤',badge:'🏆',message:'💬',challenge:'🎯'};
+    const texts={
+      like:'sizning postingizni yoqtirdi',
+      follow:'sizni follow qildi',
+      badge:'yangi yutuq oldingiz',
+      message:'xabar yozdi',
+      challenge:'challengega taklif qildi',
+    };
+    el.innerHTML=list.map(n=>`
+      <div class="notif-item ${n.read?'':'unread'}">
+        <div style="width:36px;height:36px;border-radius:50%;background:var(--green-bg);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">${icons[n.type]||'📢'}</div>
+        <div style="flex:1;min-width:0;">
+          <div style="font-size:13px;font-weight:700;color:var(--text);"><b>${escH(n.fromUser||'')}</b> ${texts[n.type]||''}</div>
+          <div style="font-size:11px;color:var(--text3);margin-top:2px;">${timeAgo(n.ts)}</div>
+        </div>
+      </div>`).join('');
+  }catch{
+    el.innerHTML='<div style="text-align:center;padding:20px;color:var(--red);">Yuklanmadi</div>';
+  }
+}
+async function loadAndShowChallenges(){
+  try{
+    const r=await fetch('/api/challenges');
+    if(!r.ok) return;
+    const d=await r.json();
+    const list=d.challenges||[];
+    if(!list.length) return;
+    const myName=getMyName();
+    const panel=document.getElementById('home-challenges');
+    const el=document.getElementById('challenges-list');
+    if(!panel||!el) return;
+    panel.style.display='block';
+    el.innerHTML=list.slice(0,3).map(ch=>{
+      const isJoined=myName&&(ch.participants||[]).includes(myName);
+      const prog=myName?(ch.progress||{})[myName]||0:0;
+      const pct=Math.min(100,Math.round((prog/ch.goal)*100));
+      const daysLeft=Math.max(0,Math.ceil((ch.endsAt-Date.now())/86400000));
+      return `<div class="challenge-card">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;">
+          <div>
+            <div style="font-size:13px;font-weight:800;color:var(--text);">🎯 ${escH(ch.title)}</div>
+            <div style="font-size:11px;color:var(--text3);margin-top:3px;">${escH(ch.description||'')} · ${daysLeft}k qoldi</div>
+          </div>
+          ${isJoined?'<span style="font-size:10px;font-weight:700;color:var(--green);background:var(--green-bg);padding:3px 8px;border-radius:20px;">Qatnashmoqda</span>':
+            `<button onclick="joinChallenge('${ch.id}')" style="padding:5px 10px;background:var(--green);color:#fff;border:none;border-radius:20px;font-size:11px;font-weight:700;cursor:pointer;">Qoshilish</button>`}
+        </div>
+        <div style="font-size:11px;color:var(--text3);margin-top:8px;">${prog}/${ch.goal} • ${pct}%</div>
+        <div class="challenge-prog"><div class="challenge-prog-fill" style="width:${pct}%"></div></div>
+      </div>`;
+    }).join('');
+  }catch{}
+}
+
+function timeAgo(ts){
+  const diff=Date.now()-ts;
+  if(diff<60000) return 'Hozir';
+  if(diff<3600000) return Math.floor(diff/60000)+'d oldin';
+  if(diff<86400000) return Math.floor(diff/3600000)+'s oldin';
+  return Math.floor(diff/86400000)+'k oldin';
+}
+
+// ═══════════════════════════════════════════════════════════
+// CHALLENGE
+// ═══════════════════════════════════════════════════════════
+let _challenges=[];
+async function loadChallenges(){
+  try{
+    const r=await fetch('/api/challenges');
+    if(r.ok){ const d=await r.json(); _challenges=d.challenges||[]; }
+  }catch{}
+}
+async function joinChallenge(id){
+  const name=getMyName(); if(!name) return toast('Avval kiring','bad');
+  try{
+    await fetch('/api/challenge/join',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({name,challengeId:id})});
+    toast('Challenge ga qoshildingiz!');
+    loadChallenges();
+  }catch{}
+}
+
+// ═══════════════════════════════════════════════════════════
+// STORY LIKE
+// ═══════════════════════════════════════════════════════════
+async function likeStory(storyId, btnEl){
+  const name=getMyName(); if(!name) return;
+  try{
+    const r=await fetch('/api/story/like',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({storyId,likerName:name})});
+    const d=await r.json();
+    if(r.ok&&btnEl){
+      btnEl.classList.toggle('liked',d.liked);
+      const cnt=btnEl.querySelector('.like-cnt');
+      if(cnt) cnt.textContent=d.count;
+    }
+  }catch{}
+}
+
+// ═══════════════════════════════════════════════════════════
+// GROUPS
+// ═══════════════════════════════════════════════════════════
+async function loadGroups(){
+  const name=getMyName(); if(!name) return;
+  const el=document.getElementById('groups-list'); if(!el) return;
+  try{
+    const r=await fetch(`/api/groups?name=${encodeURIComponent(name)}`);
+    if(!r.ok) return;
+    const d=await r.json();
+    const myG=d.myGroups||[];
+    const otherG=d.otherGroups||[];
+    let html='';
+    if(myG.length){
+      html+='<div style="font-size:11px;font-weight:700;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px;">Mening guruhlarim</div>';
+      html+=myG.map(g=>`<div class="group-card" onclick="openGroup('${g.id}')">
+        <div style="font-size:14px;font-weight:800;color:var(--text);">👥 ${escH(g.name)}</div>
+        <div style="font-size:12px;color:var(--text3);margin-top:4px;">${g.members.length} azola · ${escH(g.creator)} tomonidan yaratilgan</div>
+      </div>`).join('');
+    }
+    if(otherG.length){
+      html+='<div style="font-size:11px;font-weight:700;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin:12px 0 8px;">Boshqa guruhlar</div>';
+      html+=otherG.slice(0,5).map(g=>`<div class="group-card" style="opacity:.7;" onclick="joinAndOpenGroup('${g.id}','${escA(g.name)}')">
+        <div style="font-size:14px;font-weight:800;color:var(--text);">👥 ${escH(g.name)}</div>
+        <div style="font-size:12px;color:var(--text3);margin-top:4px;">${g.members.length} azola · Qoshilish uchun bosing</div>
+      </div>`).join('');
+    }
+    if(!myG.length&&!otherG.length) html='<div style="text-align:center;padding:30px;color:var(--text3);">Guruhlar yoq. Yangi guruh yarating!</div>';
+    el.innerHTML=html;
+  }catch{}
+}
+async function joinAndOpenGroup(id,name){
+  const myName=getMyName(); if(!myName) return;
+  await fetch('/api/group/join',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:myName,groupId:id})}).catch(()=>{});
+  toast('Guruhga qoshildingiz!');
+  loadGroups();
+}
+function openGroup(id){ toast('Guruh: '+id+' (tez orada)'); }
 
 function doLogout(){
   // 1. Barcha intervallarni to'xtatish
@@ -4544,6 +4951,7 @@ window.addEventListener('DOMContentLoaded', async () => {
   // ─── 3. Login ekranini tayyorlash ───────────────────────
   lTab('nick'); // Nikname kirish ekranini korsat
   loadTgProfileForLogin(); // TG dan malumot olish
+  initDarkMode(); // Dark mode
 });
 document.addEventListener('input',e=>{
   if(e.target.id==='chat-inp'){e.target.style.height='auto';e.target.style.height=Math.min(e.target.scrollHeight,100)+'px';}

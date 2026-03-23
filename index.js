@@ -1610,43 +1610,102 @@ app.get('/api/subjects', (req, res) => {
 // ─── ✅ YAGONA va TO'G'RI Leaderboard — ball bo'yicha kamayish ──────
 app.get('/api/leaderboard', (req, res) => {
     try {
-        const db = getDb();
+        const db        = getDb();
         const webScores = getWebScores();
         const webUsers  = getWebUsers();
-        const map = new Map();
 
-        // 1. Telegram foydalanuvchilari (user.score to'g'ridan-to'g'ri)
-        for (const [,u] of Object.entries(db.users||{})) {
-            const sc = parseFloat(u.score) || 0;
-            if (sc <= 0 || !u.name || !u.name.trim()) continue;
-            const k = u.name.trim().toLowerCase();
+        // nickname map: name.lower -> nickname (web_users dan)
+        const nickMap = {};
+        Object.values(webUsers).forEach(wu => {
+            if(wu.name && wu.nickname) nickMap[wu.name.toLowerCase().trim()] = wu.nickname;
+        });
+
+        const map = new Map(); // name.lower -> entry
+
+        // 1. web_users — BIRINCHI (eng ishonchli manba, admin shu yerga yozadi)
+        for (const [,wu] of Object.entries(webUsers)) {
+            if(!wu.name || !wu.name.trim()) continue;
+            const sc = parseFloat(wu.score) || 0;
+            const k  = wu.name.trim().toLowerCase();
+            // web-only har doim qo'shiladi (score=0 bo'lsa ham)
+            // Odatiy web user - faqat score>0
+            if(!wu.isWebOnly && sc <= 0) continue;
             map.set(k, {
-                name:         u.name.trim(),
-                tgUsername:   (u.username||'').replace('@',''),
-                univ:         u.univ||'',
-                kurs:         u.kurs||'',
-                yonalish:     u.yonalish||'',
+                name:         wu.name.trim(),
+                nickname:     wu.nickname || null,
+                tgUsername:   wu.tgUsername || wu.username || '',
+                univ:         wu.univ || '',
+                kurs:         wu.kurs || '',
+                yonalish:     wu.yonalish || '',
                 score:        sc,
-                totalTests:   parseInt(u.totalTests)  ||0,
-                totalCorrect: parseInt(u.totalCorrect)||0,
-                totalWrong:   parseInt(u.totalWrong)  ||0,
+                totalTests:   parseInt(wu.totalTests)   || 0,
+                totalCorrect: parseInt(wu.totalCorrect) || 0,
+                totalWrong:   parseInt(wu.totalWrong)   || 0,
+                isWebOnly:    wu.isWebOnly || false,
             });
         }
-        // 2. web_scores (TG da yo'q nomlar)
+
+        // 2. Telegram (bot) foydalanuvchilari
+        for (const [,u] of Object.entries(db.users||{})) {
+            const sc = parseFloat(u.score) || 0;
+            if(sc <= 0 || !u.name || !u.name.trim()) continue;
+            const k = u.name.trim().toLowerCase();
+            if(map.has(k)){
+                // web_users da bor — scoreni KATTASINI olish
+                const ex = map.get(k);
+                const merged = Math.max(ex.score, sc);
+                // Ikkalasini qo'shish (bot test + web test)
+                const totalScore = sc + (ex.isWebOnly ? ex.score : 0);
+                map.set(k, {...ex,
+                    score:        totalScore || sc,
+                    tgUsername:   (u.username||'').replace('@','') || ex.tgUsername,
+                    univ:         u.univ || ex.univ,
+                    kurs:         u.kurs || ex.kurs,
+                    totalTests:   (parseInt(u.totalTests)||0) + (ex.isWebOnly ? parseInt(ex.totalTests)||0 : 0),
+                    isWebOnly:    false,
+                });
+            } else {
+                map.set(k, {
+                    name:         u.name.trim(),
+                    nickname:     nickMap[k] || null,
+                    tgUsername:   (u.username||'').replace('@',''),
+                    univ:         u.univ || '',
+                    kurs:         u.kurs || '',
+                    yonalish:     u.yonalish || '',
+                    score:        sc,
+                    totalTests:   parseInt(u.totalTests)   || 0,
+                    totalCorrect: parseInt(u.totalCorrect) || 0,
+                    totalWrong:   parseInt(u.totalWrong)   || 0,
+                    isWebOnly:    false,
+                });
+            }
+        }
+
+        // 3. web_scores (admin qo'lda qo'shgan, boshqa joyda yo'qlar)
         for (const [,ws] of Object.entries(webScores)) {
             const sc = parseFloat(ws.score) || 0;
-            if (sc <= 0 || !ws.name || !ws.name.trim()) continue;
+            if(sc <= 0 || !ws.name || !ws.name.trim()) continue;
             const k = ws.name.trim().toLowerCase();
-            if (!map.has(k)) map.set(k, { name:ws.name.trim(), tgUsername:ws.username||'', univ:'', kurs:'', yonalish:'', score:sc, totalTests:parseInt(ws.totalTests)||0, totalCorrect:parseInt(ws.totalCorrect)||0, totalWrong:parseInt(ws.totalWrong)||0 });
+            if(map.has(k)){
+                // Allaqachon bor — scoreni yangilash (qo'shish)
+                const ex = map.get(k);
+                map.set(k, {...ex, score: ex.score + sc,
+                    totalTests: ex.totalTests + (parseInt(ws.totalTests)||0)});
+            } else {
+                map.set(k, {
+                    name:         ws.name.trim(),
+                    nickname:     nickMap[k] || null,
+                    tgUsername:   ws.username || '',
+                    univ:'', kurs:'', yonalish:'',
+                    score:        sc,
+                    totalTests:   parseInt(ws.totalTests)   || 0,
+                    totalCorrect: parseInt(ws.totalCorrect) || 0,
+                    totalWrong:   parseInt(ws.totalWrong)   || 0,
+                    isWebOnly:    false,
+                });
+            }
         }
-        // 3. web_users (score > 0, boshqa joyda yo'qlar)
-        for (const [,wu] of Object.entries(webUsers)) {
-            const sc = parseFloat(wu.score) || 0;
-            if (sc <= 0 || !wu.name || !wu.name.trim()) continue;
-            const k = wu.name.trim().toLowerCase();
-            if (!map.has(k)) map.set(k, { name:wu.name.trim(), tgUsername:wu.username||'', univ:'', kurs:'', yonalish:'', score:sc, totalTests:parseInt(wu.totalTests)||0, totalCorrect:parseInt(wu.totalCorrect)||0, totalWrong:parseInt(wu.totalWrong)||0 });
-        }
-        // ✅ Ball bo'yicha KAMAYISH tartibida
+
         const sorted = Array.from(map.values()).sort((a,b) => b.score - a.score);
         res.json(sorted);
     } catch (err) { console.error('[leaderboard]', err.message); res.status(500).json({error:'Xatolik'}); }
@@ -2245,6 +2304,414 @@ bot.action(/^reset_no_(.+)$/,async(ctx)=>{
 });
 
 
+
+// ═══════════════════════════════════════════════════════════
+// YANGI FEATURE ENDPOINTLAR
+// ═══════════════════════════════════════════════════════════
+
+// ─── File paths ──────────────────────────────────────────
+const STREAKS_PATH    = path.join(DATA_DIR, 'streaks.json');
+const LIKES_PATH      = path.join(DATA_DIR, 'likes.json');
+const BADGES_PATH     = path.join(DATA_DIR, 'badges.json');
+const NOTIFS_PATH     = path.join(DATA_DIR, 'notifs.json');
+const CHALLENGES_PATH = path.join(DATA_DIR, 'challenges.json');
+const STORIES_PATH    = path.join(DATA_DIR, 'stories.json');
+const GROUPS_PATH     = path.join(DATA_DIR, 'groups.json');
+const DARK_PATH       = path.join(DATA_DIR, 'dark_prefs.json');
+
+const getStreaks    = () => readJSON(STREAKS_PATH, {});
+const saveStreaks   = (d) => writeJSON(STREAKS_PATH, d);
+const getLikes      = () => readJSON(LIKES_PATH, {});
+const saveLikes     = (d) => writeJSON(LIKES_PATH, d);
+const getBadges     = () => readJSON(BADGES_PATH, {});
+const saveBadges    = (d) => writeJSON(BADGES_PATH, d);
+const getNotifs     = () => readJSON(NOTIFS_PATH, {});
+const saveNotifs    = (d) => writeJSON(NOTIFS_PATH, d);
+const getChallenges = () => readJSON(CHALLENGES_PATH, {});
+const saveChallenges= (d) => writeJSON(CHALLENGES_PATH, d);
+const getStories    = () => readJSON(STORIES_PATH, []);
+const saveStories   = (d) => writeJSON(STORIES_PATH, d);
+const getGroups     = () => readJSON(GROUPS_PATH, {});
+const saveGroups    = (d) => writeJSON(GROUPS_PATH, d);
+
+// ─── Badge tariflar ───────────────────────────────────────
+const BADGE_DEFS = {
+  first_test:   { id:'first_test',   emoji:'🎯', name:'Birinchi test',    desc:'Birinchi testni ishladi' },
+  tests_10:     { id:'tests_10',     emoji:'📝', name:'10 ta test',       desc:'10 ta test ishladi' },
+  tests_50:     { id:'tests_50',     emoji:'📚', name:'50 ta test',       desc:'50 ta test ishladi' },
+  tests_100:    { id:'tests_100',    emoji:'🏆', name:'100 ta test',      desc:'100 ta test ishladi' },
+  streak_3:     { id:'streak_3',     emoji:'🔥', name:'3 kun streak',     desc:'3 kun ketma-ket test' },
+  streak_7:     { id:'streak_7',     emoji:'⚡', name:'Haftalik streak',  desc:'7 kun ketma-ket test' },
+  streak_30:    { id:'streak_30',    emoji:'💎', name:'Oylik streak',     desc:'30 kun ketma-ket test' },
+  accuracy_90:  { id:'accuracy_90',  emoji:'🎯', name:'Aniq nishot',      desc:'90%+ aniqlik' },
+  top_10:       { id:'top_10',       emoji:'🥇', name:'Top 10',           desc:'Reytingda Top 10 ga kirdi' },
+  social_10:    { id:'social_10',    emoji:'👥', name:'Mashhur',          desc:'10 ta follower' },
+};
+
+function checkAndAwardBadges(userName) {
+    const wu  = getWebUsers();
+    const db  = getDb();
+    const badges = getBadges();
+    if (!badges[userName]) badges[userName] = [];
+    const userBadges = new Set(badges[userName]);
+    const newBadges  = [];
+
+    // Foydalanuvchi ma'lumotlarini topish
+    let userData = Object.values(wu).find(u=>(u.nickname||u.username||'').toLowerCase()===userName.toLowerCase()||
+        (u.name||'').toLowerCase()===userName.toLowerCase());
+    if(!userData){
+        for(const u of Object.values(db.users||{})){
+            if((u.name||'').toLowerCase()===userName.toLowerCase()){userData=u;break;}
+        }
+    }
+    if(!userData) return [];
+
+    const tests   = parseInt(userData.totalTests)||0;
+    const correct = parseInt(userData.totalCorrect)||0;
+    const accuracy = tests>0 ? (correct/tests*100) : 0;
+
+    // Streak
+    const streaks = getStreaks();
+    const streak  = (streaks[userName]||{}).current||0;
+
+    // Followers
+    const follows = getFollows();
+    let followerCount = 0;
+    Object.values(follows).forEach(list=>{
+        if((list||[]).some(n=>n.toLowerCase()===userName.toLowerCase())) followerCount++;
+    });
+
+    // Badge tekshirish
+    const checks = [
+        ['first_test',  tests>=1],
+        ['tests_10',    tests>=10],
+        ['tests_50',    tests>=50],
+        ['tests_100',   tests>=100],
+        ['streak_3',    streak>=3],
+        ['streak_7',    streak>=7],
+        ['streak_30',   streak>=30],
+        ['accuracy_90', accuracy>=90 && tests>=10],
+        ['social_10',   followerCount>=10],
+    ];
+
+    checks.forEach(([id, cond])=>{
+        if(cond && !userBadges.has(id)){
+            userBadges.add(id);
+            newBadges.push(BADGE_DEFS[id]);
+        }
+    });
+
+    if(newBadges.length>0){
+        badges[userName]=[...userBadges];
+        saveBadges(badges);
+    }
+    return newBadges;
+}
+
+function addNotif(toUser, type, fromUser, data={}) {
+    const notifs = getNotifs();
+    if(!notifs[toUser]) notifs[toUser]=[];
+    notifs[toUser].unshift({
+        id: Date.now()+'_'+Math.random().toString(36).slice(2,5),
+        type, fromUser, data,
+        ts: Date.now(),
+        read: false,
+    });
+    // Max 100 ta
+    if(notifs[toUser].length>100) notifs[toUser]=notifs[toUser].slice(0,100);
+    saveNotifs(notifs);
+}
+
+function updateStreak(userName) {
+    const streaks = getStreaks();
+    if(!streaks[userName]) streaks[userName]={current:0,max:0,lastDate:null};
+    const s = streaks[userName];
+    const today = new Date().toDateString();
+    const yesterday = new Date(Date.now()-86400000).toDateString();
+    if(s.lastDate===today) return s; // bugun allaqachon
+    if(s.lastDate===yesterday) s.current++;
+    else s.current=1;
+    s.max = Math.max(s.max||0, s.current);
+    s.lastDate=today;
+    streaks[userName]=s;
+    saveStreaks(streaks);
+    return s;
+}
+
+// ─── STREAK ───────────────────────────────────────────────
+app.get('/api/streak', (req,res)=>{
+    const name=(req.query.name||'').trim();
+    if(!name) return res.status(400).json({error:'name kerak'});
+    const streaks=getStreaks();
+    const s=streaks[name]||{current:0,max:0,lastDate:null};
+    res.json(s);
+});
+
+app.post('/api/streak/update', (req,res)=>{
+    const {name}=req.body;
+    if(!name) return res.status(400).json({error:'name kerak'});
+    const s=updateStreak(name);
+    const newBadges=checkAndAwardBadges(name);
+    res.json({...s, newBadges});
+});
+
+// ─── LIKE ─────────────────────────────────────────────────
+app.post('/api/like', (req,res)=>{
+    try{
+        const {likerName, targetName, itemId, itemType}=req.body;
+        if(!likerName||!targetName||!itemId) return res.status(400).json({error:'missing'});
+        const likes=getLikes();
+        if(!likes[itemId]) likes[itemId]={count:0,users:[]};
+        const idx=likes[itemId].users.indexOf(likerName);
+        let action;
+        if(idx===-1){
+            likes[itemId].users.push(likerName);
+            likes[itemId].count++;
+            action='liked';
+            if(likerName!==targetName){
+                addNotif(targetName,'like',likerName,{itemId,itemType});
+            }
+        } else {
+            likes[itemId].users.splice(idx,1);
+            likes[itemId].count--;
+            action='unliked';
+        }
+        saveLikes(likes);
+        res.json({success:true,action,count:likes[itemId].count});
+    }catch(err){res.status(500).json({error:err.message});}
+});
+
+app.get('/api/likes', (req,res)=>{
+    const {itemId,userName}=req.query;
+    if(!itemId) return res.status(400).json({error:'itemId kerak'});
+    const likes=getLikes();
+    const item=likes[itemId]||{count:0,users:[]};
+    res.json({count:item.count, liked:userName?item.users.includes(userName):false});
+});
+
+// ─── BADGES ───────────────────────────────────────────────
+app.get('/api/badges', (req,res)=>{
+    const name=(req.query.name||'').trim();
+    if(!name) return res.status(400).json({error:'name kerak'});
+    const badges=getBadges();
+    const userBadges=(badges[name]||[]).map(id=>BADGE_DEFS[id]).filter(Boolean);
+    res.json({badges:userBadges, all:Object.values(BADGE_DEFS)});
+});
+
+app.post('/api/badges/check', (req,res)=>{
+    const {name}=req.body;
+    if(!name) return res.status(400).json({error:'name kerak'});
+    const newBadges=checkAndAwardBadges(name);
+    res.json({newBadges});
+});
+
+// ─── BILDIRISHNOMALAR ─────────────────────────────────────
+app.get('/api/notifs', (req,res)=>{
+    const name=(req.query.name||'').trim();
+    if(!name) return res.status(400).json({error:'name kerak'});
+    const notifs=getNotifs();
+    const list=notifs[name]||[];
+    const unread=list.filter(n=>!n.read).length;
+    res.json({notifs:list.slice(0,50), unread});
+});
+
+app.post('/api/notifs/read', (req,res)=>{
+    const {name}=req.body;
+    if(!name) return res.status(400).json({error:'name kerak'});
+    const notifs=getNotifs();
+    if(notifs[name]) notifs[name].forEach(n=>n.read=true);
+    saveNotifs(notifs);
+    res.json({success:true});
+});
+
+// ─── CHALLENGE ────────────────────────────────────────────
+app.get('/api/challenges', (req,res)=>{
+    const challenges=getChallenges();
+    const active=Object.values(challenges.active||{});
+    res.json({challenges:active});
+});
+
+app.post('/api/challenge/join', (req,res)=>{
+    try{
+        const {name,challengeId}=req.body;
+        if(!name||!challengeId) return res.status(400).json({error:'missing'});
+        const ch=getChallenges();
+        if(!ch.active) ch.active={};
+        if(!ch.active[challengeId]) return res.status(404).json({error:'topilmadi'});
+        if(!ch.active[challengeId].participants) ch.active[challengeId].participants=[];
+        if(!ch.active[challengeId].participants.includes(name)){
+            ch.active[challengeId].participants.push(name);
+        }
+        saveChallenges(ch);
+        res.json({success:true});
+    }catch(err){res.status(500).json({error:err.message});}
+});
+
+app.post('/api/challenge/create', (req,res)=>{
+    try{
+        const{title,description,goal,type,endsAt,createdBy}=req.body;
+        if(!title||!goal||!type) return res.status(400).json({error:'missing'});
+        const ch=getChallenges();
+        if(!ch.active) ch.active={};
+        const id='ch_'+Date.now();
+        ch.active[id]={id,title,description:description||'',goal,type,
+            endsAt:endsAt||Date.now()+7*24*60*60*1000,
+            createdBy:createdBy||'Admin',
+            participants:[],progress:{},
+            createdAt:Date.now()};
+        saveChallenges(ch);
+        res.json({success:true,id});
+    }catch(err){res.status(500).json({error:err.message});}
+});
+
+app.get('/api/challenge/progress', (req,res)=>{
+    const{challengeId,name}=req.query;
+    const ch=getChallenges();
+    const c=(ch.active||{})[challengeId];
+    if(!c) return res.status(404).json({error:'topilmadi'});
+    res.json({challenge:c, myProgress:(c.progress||{})[name]||0});
+});
+
+// ─── STORIES (24 soat) ────────────────────────────────────
+app.post('/api/story/add', (req,res)=>{
+    try{
+        const{name,text,score,subject,imageData}=req.body;
+        if(!name) return res.status(400).json({error:'name kerak'});
+        let stories=getStories();
+        // 24 soatdan eski storylarni o'chirish
+        const now=Date.now();
+        stories=stories.filter(s=>now-s.ts<24*60*60*1000);
+        stories.unshift({
+            id:'s_'+Date.now(),
+            name,text:text||'',score:score||0,
+            subject:subject||'',
+            imageData:imageData||null,
+            ts:now, views:[], likes:[]
+        });
+        if(stories.length>200) stories=stories.slice(0,200);
+        saveStories(stories);
+        res.json({success:true});
+    }catch(err){res.status(500).json({error:err.message});}
+});
+
+app.get('/api/stories', (req,res)=>{
+    const {viewerName}=req.query;
+    let stories=getStories();
+    const now=Date.now();
+    stories=stories.filter(s=>now-s.ts<24*60*60*1000);
+    saveStories(stories); // Eski larni tozalash
+    // Viewer ni qo'shish
+    if(viewerName){
+        const name=viewerName.trim();
+        const myIdx=stories.findIndex(s=>s.name===name);
+        // Mening story larimi boshiga
+        const mine=myIdx>=0?stories.splice(myIdx,1):[];
+        stories=[...mine,...stories];
+    }
+    res.json(stories.map(s=>({
+        id:s.id, name:s.name, text:s.text,
+        score:s.score, subject:s.subject,
+        ts:s.ts, viewCount:s.views.length,
+        likeCount:s.likes.length,
+        viewed:viewerName?s.views.includes(viewerName):false,
+        liked:viewerName?s.likes.includes(viewerName):false,
+        imageData:s.imageData||null,
+    })));
+});
+
+app.post('/api/story/view', (req,res)=>{
+    const{storyId,viewerName}=req.body;
+    let stories=getStories();
+    const s=stories.find(s=>s.id===storyId);
+    if(s&&viewerName&&!s.views.includes(viewerName)){
+        s.views.push(viewerName);
+        saveStories(stories);
+    }
+    res.json({success:true});
+});
+
+app.post('/api/story/like', (req,res)=>{
+    const{storyId,likerName}=req.body;
+    let stories=getStories();
+    const s=stories.find(s=>s.id===storyId);
+    if(!s) return res.status(404).json({error:'topilmadi'});
+    const idx=s.likes.indexOf(likerName);
+    if(idx===-1){s.likes.push(likerName);}
+    else{s.likes.splice(idx,1);}
+    saveStories(stories);
+    res.json({success:true,liked:idx===-1,count:s.likes.length});
+});
+
+// ─── STUDY GROUPS ─────────────────────────────────────────
+app.post('/api/group/create', (req,res)=>{
+    try{
+        const{name,groupName,description}=req.body;
+        if(!name||!groupName) return res.status(400).json({error:'missing'});
+        const groups=getGroups();
+        const id='g_'+Date.now();
+        groups[id]={id,name:groupName,description:description||'',
+            creator:name,members:[name],
+            createdAt:Date.now()};
+        saveGroups(groups);
+        res.json({success:true,id});
+    }catch(err){res.status(500).json({error:err.message});}
+});
+
+app.get('/api/groups', (req,res)=>{
+    const{name}=req.query;
+    const groups=getGroups();
+    const list=Object.values(groups);
+    if(name) {
+        const myGroups=list.filter(g=>g.members.includes(name));
+        const otherGroups=list.filter(g=>!g.members.includes(name));
+        return res.json({myGroups,otherGroups});
+    }
+    res.json({groups:list});
+});
+
+app.post('/api/group/join', (req,res)=>{
+    const{name,groupId}=req.body;
+    const groups=getGroups();
+    if(!groups[groupId]) return res.status(404).json({error:'topilmadi'});
+    if(!groups[groupId].members.includes(name)) groups[groupId].members.push(name);
+    saveGroups(groups);
+    res.json({success:true});
+});
+
+app.get('/api/group/leaderboard', (req,res)=>{
+    const{groupId}=req.query;
+    const groups=getGroups();
+    const g=groups[groupId];
+    if(!g) return res.status(404).json({error:'topilmadi'});
+    const wu=getWebUsers();
+    const db=getDb();
+    const members=g.members.map(mName=>{
+        let score=0,tests=0;
+        const wUser=Object.values(wu).find(u=>(u.nickname||u.username||'').toLowerCase()===mName.toLowerCase()||(u.name||'').toLowerCase()===mName.toLowerCase());
+        if(wUser){score=wUser.score||0;tests=wUser.totalTests||0;}
+        else{
+            for(const u of Object.values(db.users||{})){
+                if((u.name||'').toLowerCase()===mName.toLowerCase()){score=u.score||0;tests=u.totalTests||0;break;}
+            }
+        }
+        return{name:mName,score,tests};
+    }).sort((a,b)=>b.score-a.score);
+    res.json({group:g,leaderboard:members});
+});
+
+// ─── Dark mode preference ─────────────────────────────────
+app.post('/api/dark-mode', (req,res)=>{
+    const{name,dark}=req.body;
+    if(!name) return res.status(400).json({error:'missing'});
+    const prefs=readJSON(DARK_PATH,{});
+    prefs[name]=!!dark;
+    writeJSON(DARK_PATH,prefs);
+    res.json({success:true});
+});
+
+// ─── Test tugagandan so'ng streak va badge yangilash ──────
+// /api/web-score ga hook
+
 server.listen(PORT, '0.0.0.0', () => console.log(`🌐 Express+Socket.io server ${PORT}-portda`));
 
 // ─── Socket.io connection handler ─────────────────────────
@@ -2362,6 +2829,41 @@ app.get('/api/online-count', (req, res) => {
 const WEBHOOK_URL = process.env.WEBHOOK_URL || process.env.RAILWAY_STATIC_URL || null;
 
 // Mercury va boshqa default akkauntlarni yaratish
+function ensureDefaultChallenges(){
+    const ch = getChallenges();
+    if(!ch.active || Object.keys(ch.active).length === 0){
+        ch.active = {
+            'ch_daily': {
+                id:'ch_daily', title:'Kunlik 20 ta savol',
+                description:'Bugun 20 ta savol ishlang',
+                goal:20, type:'tests_today',
+                endsAt: Date.now()+24*60*60*1000,
+                createdBy:'Admin', participants:[], progress:{},
+                createdAt: Date.now()
+            },
+            'ch_weekly': {
+                id:'ch_weekly', title:'Haftalik 100 ball',
+                description:'Bu hafta 100 ball topling',
+                goal:100, type:'score_week',
+                endsAt: Date.now()+7*24*60*60*1000,
+                createdBy:'Admin', participants:[], progress:{},
+                createdAt: Date.now()
+            },
+            'ch_accuracy': {
+                id:'ch_accuracy', title:'Aniqlik ustasi',
+                description:'80%+ aniqlik bilan 10 ta test ishlang',
+                goal:10, type:'accuracy_tests',
+                endsAt: Date.now()+7*24*60*60*1000,
+                createdBy:'Admin', participants:[], progress:{},
+                createdAt: Date.now()
+            },
+        };
+        saveChallenges(ch);
+        console.log('[Init] Default challengelar yaratildi');
+    }
+}
+ensureDefaultChallenges();
+
 function ensureDefaultAccounts() {
     const wu = getWebUsers();
     const defaults = [{
