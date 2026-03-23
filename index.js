@@ -148,26 +148,36 @@ function isValidName(name) {
 }
 
 function getLeaderboard(requesterId = null) {
-    const db = getDb();
-    const wu = getWebUsers();
-    const ws = getWebScores();
+    const db  = getDb();
+    const wu  = getWebUsers();
+    const ws  = getWebScores();
 
-    // 1. Bot (Telegram) foydalanuvchilari
+    // 1. Bot (Telegram) foydalanuvchilari — score > 0
     const botUsers = Object.values(db.users)
-        .filter(u => u && u.name && isValidName(u.name) && (u.score || 0) > 0)
+        .filter(u => u && u.name && isValidName(u.name) && (u.score||0) > 0)
         .map(u => ({ name: u.name, score: u.score||0, username: u.username||'' }));
 
     const seenNames = new Set(botUsers.map(u => (u.name||'').toLowerCase().trim()));
 
-    // 2. web_users.json (Mercury va boshqa web-only)
+    // 2. web_users.json — score > 0 YOKI web-only (Mercury kabi)
     const webUsers = Object.values(wu)
-        .filter(u => u && u.name && (u.score||0) > 0 && !seenNames.has((u.name||'').toLowerCase().trim()))
-        .map(u => { seenNames.add((u.name||'').toLowerCase().trim()); return { name: u.name, score: u.score||0, username: u.nickname||u.username||'' }; });
+        .filter(u => {
+            if (!u || !u.name) return false;
+            if (seenNames.has((u.name||'').toLowerCase().trim())) return false;
+            // Web-only har doim ko'rinadi (score = 0 bo'lsa ham)
+            if (u.isWebOnly) return true;
+            // Odatiy web user — faqat score > 0 bo'lsa
+            return (u.score||0) > 0;
+        })
+        .map(u => {
+            seenNames.add((u.name||'').toLowerCase().trim());
+            return { name: u.name, score: u.score||0, username: u.nickname||u.username||'' };
+        });
 
-    // 3. web_scores.json (admin qo'shgan, boshqa joyda yo'qlar)
+    // 3. web_scores.json — admin qo'shgan, boshqa joyda yo'qlar
     const webScores = Object.values(ws)
         .filter(u => u && u.name && (u.score||0) > 0 && !seenNames.has((u.name||'').toLowerCase().trim()))
-        .map(u => ({ name: u.name, score: u.score||0, username: u.username||'' }));
+        .map(u => ({ name: u.name, score: u.score||0, username: u.nickname||u.username||'' }));
 
     const all = [...botUsers, ...webUsers, ...webScores]
         .sort((a, b) => (b.score||0) - (a.score||0))
@@ -1996,6 +2006,245 @@ bot.catch((err, ctx) => {
 // ============================================================
 // ISHGA TUSHIRISH
 // ============================================================
+
+// ═══════════════════════════════════════════════════════════
+// YO'QOLGAN ENDPOINTLAR — QAYTA QO'SHILDI
+// ═══════════════════════════════════════════════════════════
+
+// ─── App versiyasi (force logout uchun) ──────────────────
+const VER_PATH = path.join(DATA_DIR, 'app_version.json');
+function getAppVer(){ try{ return JSON.parse(fs.readFileSync(VER_PATH,'utf8')).version||'2'; }catch{ return '2'; } }
+function setAppVer(v){ try{ fs.writeFileSync(VER_PATH,JSON.stringify({version:String(v),updatedAt:Date.now()})); }catch{} }
+if(!fs.existsSync(VER_PATH)) setAppVer('2');
+
+app.get('/api/app-version',(req,res)=>{
+    res.setHeader('Cache-Control','no-cache,no-store,must-revalidate');
+    res.json({version:getAppVer()});
+});
+
+// ─── Force logout ─────────────────────────────────────────
+app.post('/api/admin/force-logout',(req,res)=>{
+    try{
+        const cur=parseInt(getAppVer())||2;
+        const next=String(cur+1);
+        setAppVer(next);
+        const wu=getWebUsers();
+        let count=0;
+        Object.keys(wu).forEach(k=>{ if(!wu[k].isAdmin){wu[k].nickname=null;wu[k].updatedAt=Date.now();count++;} });
+        saveWebUsers(wu);
+        console.log(`[Force Logout] v${cur}->v${next}, ${count} nickname tozalandi`);
+        res.json({success:true,oldVersion:String(cur),newVersion:next,clearedCount:count});
+    }catch(err){res.status(500).json({error:err.message});}
+});
+
+// ─── Nikname mavjudligini tekshirish ─────────────────────
+app.get('/api/nickname/check',(req,res)=>{
+    try{
+        const nick=(req.query.nickname||'').toLowerCase().trim().replace(/^@/,'');
+        if(!nick||nick.length<3) return res.status(400).json({error:'invalid'});
+        if(!/^[a-z0-9_.]{3,30}$/.test(nick)) return res.status(400).json({error:'invalid',message:'Faqat lotin, raqam, _ va . (3-30 belgi)'});
+        const wu=getWebUsers();
+        const taken=Object.values(wu).some(u=>(u.nickname||'').toLowerCase()===nick);
+        if(taken) return res.json({available:false});
+        const db=getDb();
+        const tgTaken=Object.values(db.users||{}).some(u=>(u.username||'').replace('@','').toLowerCase()===nick);
+        res.json({available:!tgTaken});
+    }catch(err){res.status(500).json({error:err.message});}
+});
+
+// ─── Nikname o'rnatish ────────────────────────────────────
+app.post('/api/nickname/set',(req,res)=>{
+    try{
+        const {username,nickname}=req.body;
+        if(!username||!nickname) return res.status(400).json({error:'missing'});
+        const nick=nickname.toLowerCase().trim().replace(/^@/,'');
+        if(!/^[a-z0-9_.]{3,30}$/.test(nick)) return res.status(400).json({error:'invalid'});
+        const wu=getWebUsers();
+        const u=username.toLowerCase().trim();
+        if(!wu[u]) return res.status(404).json({error:'notfound'});
+        const taken=Object.entries(wu).some(([k,v])=>k!==u&&(v.nickname||'').toLowerCase()===nick);
+        if(taken) return res.status(409).json({error:'taken',message:'Bu nikname band!'});
+        wu[u].nickname=nick; wu[u].updatedAt=Date.now();
+        saveWebUsers(wu);
+        res.json({success:true,nickname:nick});
+    }catch(err){res.status(500).json({error:err.message});}
+});
+
+// ─── Login uchun nikname bo'yicha user topish ─────────────
+app.get('/api/user-by-nick',(req,res)=>{
+    try{
+        const nick=(req.query.nickname||'').toLowerCase().trim().replace(/^@/,'');
+        if(!nick) return res.status(400).json({error:'missing'});
+        const wu=getWebUsers();
+        // 1. nickname bo'yicha
+        let found=Object.entries(wu).find(([,u])=>(u.nickname||'').toLowerCase()===nick);
+        // 2. username bo'yicha
+        if(!found) found=Object.entries(wu).find(([k,])=>k.toLowerCase()===nick);
+        // 3. TG username bo'yicha
+        if(!found) found=Object.entries(wu).find(([,u])=>(u.tgUsername||'').toLowerCase()===nick);
+        if(!found) return res.status(404).json({error:'notfound'});
+        const [uKey,uData]=found;
+        res.json({username:uKey,name:uData.name||'',nickname:uData.nickname||uKey,univ:uData.univ||'',kurs:uData.kurs||''});
+    }catch(err){res.status(500).json({error:err.message});}
+});
+
+// ─── TG profil ma'lumotlari ───────────────────────────────
+app.get('/api/tg-profile',(req,res)=>{
+    try{
+        const {tgId,tgUsername}=req.query;
+        const db=getDb();
+        let user=null;
+        if(tgId) user=db.users[tgId];
+        if(!user&&tgUsername){
+            const uLow=tgUsername.replace('@','').toLowerCase();
+            for(const u of Object.values(db.users||{})){
+                if((u.username||'').replace('@','').toLowerCase()===uLow){user=u;break;}
+            }
+        }
+        if(!user||!user.isRegistered) return res.status(404).json({error:'notfound'});
+        res.json({name:user.name||'',univ:user.univ||'',kurs:user.kurs||'',yonalish:user.yonalish||'',tgUsername:(user.username||'').replace('@',''),score:user.score||0,totalTests:user.totalTests||0,isVip:user.isVip||false,vipEnd:user.vipEnd||null});
+    }catch(err){res.status(500).json({error:err.message});}
+});
+
+// ─── TG ID bilan bog'lash ─────────────────────────────────
+app.post('/api/web-auth/link-tg',(req,res)=>{
+    try{
+        const {username,tgId,tgUsername}=req.body;
+        if(!username) return res.status(400).json({error:'missing'});
+        const u=username.toLowerCase().trim();
+        const wu=getWebUsers();
+        if(!wu[u]) return res.status(404).json({error:'notfound'});
+        if(tgId) wu[u].tgId=String(tgId);
+        if(tgUsername) wu[u].tgUsername=tgUsername.replace('@','');
+        wu[u].updatedAt=Date.now();
+        saveWebUsers(wu);
+        res.json({success:true});
+    }catch(err){res.status(500).json({error:err.message});}
+});
+
+// ─── Admin: nikname statistikasi ─────────────────────────
+app.get('/api/admin/nick-stats',(req,res)=>{
+    try{
+        const wu=getWebUsers();
+        const all=Object.values(wu);
+        const users=all
+            .filter(u=>u.nickname&&u.nickname.trim()&&u.nickname!=='null')
+            .map(u=>({username:u.username,name:u.name||u.username,nickname:u.nickname,score:u.score||0,totalTests:u.totalTests||0,totalCorrect:u.totalCorrect||0,totalWrong:u.totalWrong||0,isWebOnly:u.isWebOnly||false,createdAt:u.createdAt||Date.now()}))
+            .sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
+        res.json({total:users.length,totalUsers:all.length,noNickname:all.length-users.length,users});
+    }catch(err){res.status(500).json({error:err.message});}
+});
+
+// ─── Admin: duplicate chatlarni tozalash ─────────────────
+app.post('/api/admin/fix-chats',(req,res)=>{
+    try{
+        const chats=getChatMsgs();
+        const merged={};
+        let fixedCount=0;
+        Object.entries(chats).forEach(([cid,msgs])=>{
+            const parts=cid.split('__CHAT__');
+            if(parts.length!==2){merged[cid]=msgs;return;}
+            const canonical=[parts[0].toLowerCase().trim(),parts[1].toLowerCase().trim()].sort().join('__CHAT__');
+            if(!merged[canonical]) merged[canonical]=[];
+            const existing=new Set(merged[canonical].map(m=>m.id));
+            msgs.forEach(m=>{if(!existing.has(m.id)){merged[canonical].push(m);existing.add(m.id);}});
+            if(canonical!==cid) fixedCount++;
+        });
+        Object.values(merged).forEach(msgs=>msgs.sort((a,b)=>a.ts-b.ts));
+        saveChatMsgs(merged);
+        res.json({success:true,fixedCount,totalChats:Object.keys(merged).length});
+    }catch(err){res.status(500).json({error:err.message});}
+});
+
+// ─── Parol tiklash — Telegram orqali ─────────────────────
+const resetTokens=new Map();
+function genToken(){return Math.random().toString(36).slice(2,9)+Date.now().toString(36);}
+
+app.post('/api/reset-request',async(req,res)=>{
+    try{
+        const{nickname,newPassword,requesterUsername,fingerprint}=req.body;
+        if(!nickname||!newPassword) return res.status(400).json({error:'missing'});
+        if(newPassword.length<6) return res.status(400).json({error:'short_pass',message:'Parol kamida 6 belgi'});
+        const nick=nickname.toLowerCase().trim().replace(/^@/,'');
+        const wu=getWebUsers();
+        let found=Object.entries(wu).find(([,u])=>(u.nickname||'').toLowerCase()===nick);
+        if(!found) found=Object.entries(wu).find(([k,])=>k.toLowerCase()===nick);
+        if(!found){
+            const db=getDb();
+            for(const[uid,u]of Object.entries(db.users||{})){
+                const tgU=(u.username||'').replace('@','').toLowerCase();
+                if(tgU===nick||(u.name||'').toLowerCase().trim()===nick){
+                    const wuEntry=Object.entries(wu).find(([,w])=>(w.name||'').toLowerCase().trim()===(u.name||'').toLowerCase().trim());
+                    if(wuEntry){found=wuEntry;}
+                    break;
+                }
+            }
+        }
+        if(!found) return res.status(404).json({error:'notfound',message:'Bu nikname topilmadi'});
+        const[uKey,uData]=found;
+        let tgId=uData.tgId||null;
+        if(!tgId){
+            const db=getDb();
+            for(const[uid,u]of Object.entries(db.users||{})){
+                if((u.name||'').toLowerCase().trim()===(uData.name||'').toLowerCase().trim()){tgId=uid;break;}
+            }
+        }
+        if(!tgId) return res.status(400).json({error:'no_tg',message:'Akkaunt Telegram ga boglanmagan'});
+        for(const[t,v]of resetTokens.entries()){if(v.username===uKey)resetTokens.delete(t);}
+        const token=genToken();
+        const expiresAt=Date.now()+5*60*1000;
+        resetTokens.set(token,{username:uKey,nickname:nick,newPassword,tgId:String(tgId),status:'pending',expiresAt,requesterUsername:(requesterUsername||'').toLowerCase().trim()||null,fingerprint:fingerprint||null,ip:req.headers['x-forwarded-for']?.split(',')[0]?.trim()||req.socket?.remoteAddress||null});
+        await bot.telegram.sendMessage(tgId,
+            `Parol ozgartirish sorovi\n\nAkkaunt: @${nick}\nAgar siz soramagan bolsangiz — Bekor qilish ni bosing!\n\nSorov 5 daqiqadan keyin bekor boladi.`,
+            {reply_markup:{inline_keyboard:[[{text:'Tasdiqlash',callback_data:`reset_ok_${token}`},{text:'Bekor qilish',callback_data:`reset_no_${token}`}]]}}
+        );
+        res.json({success:true,token,expiresIn:300});
+    }catch(err){console.error('[reset-request]',err.message);res.status(500).json({error:'server_error',message:'Server xatosi'});}
+});
+
+app.get('/api/reset-status',(req,res)=>{
+    const{token}=req.query;
+    if(!token) return res.status(400).json({error:'missing'});
+    const data=resetTokens.get(token);
+    if(!data) return res.json({status:'expired'});
+    if(Date.now()>data.expiresAt){resetTokens.delete(token);return res.json({status:'expired'});}
+    res.json({status:data.status});
+});
+
+bot.action(/^reset_ok_(.+)$/,async(ctx)=>{
+    const token=ctx.match[1];
+    const data=resetTokens.get(token);
+    if(!data){return ctx.answerCbQuery("Sorov topilmadi yoki eskirgan");}
+    if(Date.now()>data.expiresAt){resetTokens.delete(token);return ctx.answerCbQuery("Sorov vaqti tugagan");}
+    const wu=getWebUsers();
+    if(wu[data.username]){wu[data.username].password=data.newPassword;wu[data.username].updatedAt=Date.now();saveWebUsers(wu);}
+    resetTokens.set(token,{...data,status:'approved'});
+    setTimeout(()=>resetTokens.delete(token),30000);
+    await ctx.editMessageText(`Parol muvaffaqiyatli ozgartirildi!\n\nAkkaunt: @${data.nickname}\nEndi yangi parol bilan kiring.`).catch(()=>{});
+    ctx.answerCbQuery('Parol yangilandi!');
+});
+
+bot.action(/^reset_no_(.+)$/,async(ctx)=>{
+    const token=ctx.match[1];
+    const data=resetTokens.get(token);
+    if(!data){return ctx.answerCbQuery("Sorov topilmadi");}
+    let penaltyMsg='';
+    try{
+        const wu=getWebUsers();
+        if(data.requesterUsername){
+            const req2=wu[data.requesterUsername];
+            if(req2){req2.score=(parseFloat(req2.score)||0)-100;req2.updatedAt=Date.now();wu[data.requesterUsername]=req2;saveWebUsers(wu);
+            const db=getDb();for(const[uid,u]of Object.entries(db.users||{})){if((u.name||'').toLowerCase().trim()===(req2.name||'').toLowerCase().trim()){db.users[uid].score=(parseFloat(db.users[uid].score)||0)-100;saveDb(db);break;}}
+            penaltyMsg=`\n\n@${req2.nickname||data.requesterUsername} dan 100 ball ayirildi!`;}
+        }
+    }catch(e){console.error('[Penalty]',e.message);}
+    resetTokens.set(token,{...data,status:'rejected'});
+    setTimeout(()=>resetTokens.delete(token),10000);
+    await ctx.editMessageText(`Parol ozgartirish rad etildi.\nKimdir @${data.nickname} akkauntingizga kirmoqchi boldi.${penaltyMsg}`).catch(()=>{});
+    ctx.answerCbQuery('Rad etildi');
+});
+
+
 server.listen(PORT, '0.0.0.0', () => console.log(`🌐 Express+Socket.io server ${PORT}-portda`));
 
 // ─── Socket.io connection handler ─────────────────────────
