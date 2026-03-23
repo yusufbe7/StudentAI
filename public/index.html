@@ -2675,6 +2675,27 @@ function renderAdminPanel(){
         </select>
       </div>
 
+      <!-- Qayerga qo'shish -->
+      <div style="margin-bottom:12px;">
+        <label class="field-lbl">Qayerga qo'shish</label>
+        <div style="display:flex;gap:8px;margin-top:6px;">
+          <label style="display:flex;align-items:center;gap:6px;cursor:pointer;flex:1;background:#fff;border-radius:10px;padding:10px 12px;border:1.5px solid var(--green);transition:all .2s;" id="add-webapp-lbl">
+            <input type="checkbox" id="adm-add-webapp" checked onchange="updateAddLabel()" style="width:16px;height:16px;accent-color:var(--green);cursor:pointer;">
+            <div>
+              <div style="font-size:12px;font-weight:700;color:var(--text);">📱 WebApp</div>
+              <div style="font-size:10px;color:var(--text3);">web_users</div>
+            </div>
+          </label>
+          <label style="display:flex;align-items:center;gap:6px;cursor:pointer;flex:1;background:#fff;border-radius:10px;padding:10px 12px;border:1.5px solid var(--border);transition:all .2s;" id="add-tg-lbl">
+            <input type="checkbox" id="adm-add-tg" onchange="updateAddLabel()" style="width:16px;height:16px;accent-color:var(--green);cursor:pointer;">
+            <div>
+              <div style="font-size:12px;font-weight:700;color:var(--text);">✈️ Telegram</div>
+              <div style="font-size:10px;color:var(--text3);">db.users</div>
+            </div>
+          </label>
+        </div>
+      </div>
+
       <div id="adm-score-preview" style="display:none;background:#fff;border-radius:10px;padding:10px 12px;margin-bottom:10px;font-size:12px;color:var(--text2);font-weight:600;"></div>
 
       <button onclick="adminAddScore()" style="width:100%;padding:13px;background:var(--green);color:#fff;border:none;border-radius:12px;font-family:'Inter',sans-serif;font-size:14px;font-weight:800;cursor:pointer;box-shadow:0 3px 12px rgba(34,197,94,0.3);">✅ Ball qoshish</button>
@@ -2838,6 +2859,15 @@ let _adminAllUsers=[], _adminAllLastFetch=0;
 // ─── Ball ayirish uchun qidiruv ──────────────────────────────
 let _subSelectedUser = null;
 
+function updateAddLabel(){
+  const webapp=document.getElementById('adm-add-webapp')?.checked;
+  const tg=document.getElementById('adm-add-tg')?.checked;
+  const wLbl=document.getElementById('add-webapp-lbl');
+  const tLbl=document.getElementById('add-tg-lbl');
+  if(wLbl) wLbl.style.borderColor=webapp?'var(--green)':'var(--border)';
+  if(tLbl) tLbl.style.borderColor=tg?'var(--green)':'var(--border)';
+}
+
 function updateSubLabel(){
   const webapp = document.getElementById('adm-sub-webapp')?.checked;
   const tg     = document.getElementById('adm-sub-tg')?.checked;
@@ -2989,7 +3019,7 @@ async function adminSearchUser(query){
           username:    u.username||'',
         });
       });
-      // 2. LB — agar yo'q bo'lsa qo'shamiz, bor bo'lsa merge
+      // 2. LB — agar yo'q bo'lsa qoshamiz, bor bo'lsa merge
       lb.forEach(u => {
         const k = (u.name||'').toLowerCase();
         if(merged.has(k)){
@@ -3059,55 +3089,55 @@ function adminSelectUser(name, score, tests, correct, wrong){
 }
 
 async function adminAddScore(){
-  const nameEl=document.getElementById('adm-score-name');
-  const scoreEl=document.getElementById('adm-score-val');
-  const testsEl=document.getElementById('adm-score-tests');
-  const correctEl=document.getElementById('adm-score-correct');
-  const wrongEl=document.getElementById('adm-score-wrong');
+  const name     = (document.getElementById('adm-score-name')?.value||'').trim();
+  const addScore = parseFloat(document.getElementById('adm-score-val')?.value||0);
+  const addTests = parseInt(document.getElementById('adm-score-tests')?.value||0);
+  const addCorrect=parseInt(document.getElementById('adm-score-correct')?.value||0);
+  const addWrong = parseInt(document.getElementById('adm-score-wrong')?.value||0);
+  const subjectKey=(document.getElementById('adm-score-subj')?.value||'').trim();
+  const toWebapp = document.getElementById('adm-add-webapp')?.checked !== false;
+  const toTg     = document.getElementById('adm-add-tg')?.checked === true;
 
-  const name=(nameEl?.value||'').trim();
-  const addScore=parseFloat(scoreEl?.value||0);
-  const addTests=parseInt(testsEl?.value||0);
-  const addCorrect=parseInt(correctEl?.value||0);
-  const addWrong=parseInt(wrongEl?.value||0);
-  const subjEl=document.getElementById('adm-score-subj');
-  const subjectKey=(subjEl?.value||'').trim();
-
-  if(!name){toast('❌ Ism kiriting!','bad');return;}
-  if(addScore<=0&&addTests<=0){toast('❌ Ball yoki test miqdori kiriting!','bad');return;}
+  if(!name){ toast('Ism kiriting!','bad'); return; }
+  if(addScore<=0 && addTests<=0){ toast('Ball yoki test miqdori kiriting!','bad'); return; }
+  if(!toWebapp && !toTg){ toast('WebApp yoki TG ni tanlang!','bad'); return; }
 
   const btn=document.querySelector('button[onclick="adminAddScore()"]');
-  if(btn){btn.textContent='⏳ Yuklanmoqda...';btn.disabled=true;}
+  if(btn){ btn.textContent='Yuklanmoqda...'; btn.disabled=true; }
 
   try{
     const r=await fetch('/api/admin/add-score',{
       method:'POST', headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({name, addScore, addTests, addCorrect, addWrong, subjectKey})
+      body:JSON.stringify({name, addScore, addTests, addCorrect, addWrong, subjectKey, toWebapp, toTg})
     });
     const d=await r.json().catch(()=>({}));
     if(r.ok && d.success){
-      toast(`✅ ${name} ga ${addScore} ball, ${addTests} test qoshildi!`);
-      // Reset fields
-      if(scoreEl) scoreEl.value='';
-      if(testsEl) testsEl.value='';
-      if(correctEl) correctEl.value='';
-      if(wrongEl) wrongEl.value='';
-      if(subjEl) subjEl.value='';
+      const parts=[];
+      if(toWebapp) parts.push('WebApp: +'+addScore+' ball');
+      if(toTg)     parts.push('TG: +'+addScore+' ball');
+      toast(name+' ga qoshildi! '+parts.join(' | '));
+      document.getElementById('adm-score-val').value='';
+      document.getElementById('adm-score-tests').value='';
+      document.getElementById('adm-score-correct').value='';
+      document.getElementById('adm-score-wrong').value='';
+      document.getElementById('adm-score-subj').value='';
       const prev=document.getElementById('adm-score-preview');
       if(prev) prev.style.display='none';
-      // Refresh leaderboard
-      _adminAllUsers=[]; _adminAllLastFetch=0;
-      const lbR=await fetch('/api/leaderboard?_='+Date.now());
-      if(lbR.ok){const raw3=await lbR.json();_lbCache=[...raw3].sort((a,b)=>(parseFloat(b.score)||0)-(parseFloat(a.score)||0));renderPodium(_lbCache);renderLbList(_lbCache,getSess());}
+      _adminAllUsers=[]; _lbCache=[];
+      try{
+        const lbR=await fetch('/api/leaderboard?_='+Date.now());
+        if(lbR.ok){const raw3=await lbR.json();_lbCache=[...raw3].sort((a,b)=>(parseFloat(b.score)||0)-(parseFloat(a.score)||0));renderPodium(_lbCache);renderLbList(_lbCache,getSess());}
+      }catch{}
     } else {
-      toast(`❌ Xatolik: ${d.error||'Noma\'lum'}`, 'bad');
+      toast('Xatolik: '+(d.error||r.status),'bad');
     }
-  }catch{
-    toast('⚠️ Server bilan bog\'lanib bo\'lmadi','bad');
+  }catch(e){
+    toast('Server bilan boglanib bolmadi','bad');
   }finally{
-    if(btn){btn.textContent='✅ Ball qo\'shish';btn.disabled=false;}
+    if(btn){ btn.textContent='Ball qoshish'; btn.disabled=false; }
   }
 }
+
 
 async function adminLoadScoreList(){
   const el=document.getElementById('adm-score-list'); if(!el) return;

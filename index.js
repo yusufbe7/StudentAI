@@ -1783,14 +1783,17 @@ app.post('/api/admin/sub-score', async (req, res) => {
 
 app.post('/api/admin/add-score', async (req, res) => {
     try {
-        const { name, addScore, addTests, addCorrect, addWrong, subjectKey } = req.body;
+        const { name, addScore, addTests, addCorrect, addWrong, subjectKey, toWebapp, toTg } = req.body;
         if (!name||!name.trim()) return res.status(400).json({error:'Ism kiriting'});
         const nameTrim     = name.trim();
         const scoreToAdd   = parseFloat(addScore)  || 0;
         const testsToAdd   = parseInt(addTests)     || 0;
         const correctToAdd = parseInt(addCorrect)   || 0;
         const wrongToAdd   = parseInt(addWrong)     || 0;
-        const subjKey      = (subjectKey||'').trim(); // fan kaliti (ixtiyoriy)
+        const subjKey      = (subjectKey||'').trim();
+        // Qayerga qo'shish (default: WebApp)
+        const addToWebapp  = toWebapp !== false; // default true
+        const addToTg      = toTg === true;       // default false
         if (scoreToAdd <= 0 && testsToAdd <= 0) return res.status(400).json({error:'Ball yoki test miqdori kiriting'});
 
         const db = getDb();
@@ -1807,7 +1810,7 @@ app.post('/api/admin/add-score', async (req, res) => {
         }
 
         // 0. AVVAL web_users da tekshirish (Mercury kabi web-only foydalanuvchilar)
-        {
+        if (addToWebapp) {
             const wu0 = getWebUsers();
             for (const [k,v] of Object.entries(wu0)) {
                 const mn = (v.name||'').trim().toLowerCase() === nameTrim.toLowerCase();
@@ -1828,7 +1831,7 @@ app.post('/api/admin/add-score', async (req, res) => {
             }
         }
 
-        // 1. Telegram foydalanuvchilarida — user.score ga yozish
+        // 1. Telegram foydalanuvchilarida — addToTg yoki addToWebapp
         if (!found) for (const [uid,user] of Object.entries(db.users||{})) {
             if ((user.name||'').trim().toLowerCase() !== nameTrim.toLowerCase()) continue;
             user.score        = (parseFloat(user.score)        ||0) + scoreToAdd;
@@ -1888,6 +1891,23 @@ app.post('/api/admin/add-score', async (req, res) => {
             newScore = scoreToAdd; newTests = testsToAdd;
             saveWebUsers(wu4);
         }
+        // 4b. Agar TG ga ham qo'shish kerak bo'lsa (addToTg=true)
+        if (addToTg && !foundId) {
+            // db.users dan nom bo'yicha topish va qo'shish
+            const db2 = getDb();
+            for (const [uid,u] of Object.entries(db2.users||{})) {
+                if ((u.name||'').toLowerCase().trim() !== nameTrim.toLowerCase()) continue;
+                u.score        = (parseFloat(u.score)||0) + scoreToAdd;
+                u.totalTests   = (parseInt(u.totalTests)||0) + testsToAdd;
+                u.totalCorrect = (parseInt(u.totalCorrect)||0) + correctToAdd;
+                u.totalWrong   = (parseInt(u.totalWrong)||0) + wrongToAdd;
+                db2.users[uid]=u; saveDb(db2);
+                foundId=parseInt(uid);
+                console.log(`[add-score] TG ga ham qoshildi: ${nameTrim} (${uid})`);
+                break;
+            }
+        }
+
         // 5. Telegram xabarnoma
         if (foundId) {
             const subjName = subjKey ? Object.values(SUBJECTS).find(s=>s&&s.title&&subjKey.includes('_')?false:false)||SUBJECTS[subjKey]?.title||subjKey : '';
