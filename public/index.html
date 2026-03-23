@@ -2152,20 +2152,32 @@ function openTgBot(){
 // ═══════════════════════════════════════════════
 let _lbCache=[];
 async function loadHome(sess){
-  // Load leaderboard for stories and activity feed
+  // Darhol bo'sh holat ko'rsat (Yuklanmoqda o'rniga)
+  const feedEl = document.getElementById('activity-feed');
+  if(feedEl && feedEl.innerHTML.includes('Yuklanmoqda')) {
+    feedEl.innerHTML = '';
+  }
+
+  // Leaderboard yukla
   try{
-    const r=await fetch('/api/leaderboard?_='+Date.now());
+    const r = await fetch('/api/leaderboard?_='+Date.now());
     if(r.ok){
-      const raw=await r.json();
-      _lbCache=[...raw].sort((a,b)=>(parseFloat(b.score)||0)-(parseFloat(a.score)||0));
-      renderStories(_lbCache);
-      renderActivity(_lbCache);
-      // Real 24h stories API dan
-      loadRealStories();
-      // Challenges
-      loadAndShowChallenges();
+      const raw = await r.json();
+      _lbCache = [...raw].sort((a,b)=>(parseFloat(b.score)||0)-(parseFloat(a.score)||0));
     }
-  }catch{}
+  }catch(e){
+    console.log('[loadHome] leaderboard error:', e.message);
+  }
+
+  // Cache bo'sh bo'lsa ham render qil
+  renderStories(_lbCache);
+  renderActivity(_lbCache);
+
+  // Real stories (24h) - parallel
+  loadRealStories().catch(()=>{});
+
+  // Challenges - parallel
+  loadAndShowChallenges().catch(()=>{});
 }
 
 function renderStories(list){
@@ -2215,7 +2227,7 @@ function renderStories(list){
 function renderActivity(list){
   const el=document.getElementById('activity-feed');
   if(!list?.length){
-    el.innerHTML='<div style="color:var(--text3);font-size:13px;text-align:center;padding:40px 0;font-weight:500;">Hali faoliyat yo\'q</div>';
+    el.innerHTML='<div style="text-align:center;padding:40px 20px;"><div style="font-size:36px;margin-bottom:12px;">🏃</div><div style="color:var(--text3);font-size:14px;font-weight:600;">Test ishlang va reytingga kiring!</div></div>';
     return;
   }
   // Show top users as "Focus Session" cards — exact Lock-in style

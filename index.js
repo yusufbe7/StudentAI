@@ -1043,7 +1043,7 @@ bot.on(['text','photo','video','animation','document'], async (ctx, next) => {
         const wu  = getWebUsers();
 
         // Virtual ID 7777 = Mercury (web-only)
-        const WEB_VIRTUAL_IDS = { 7777: 'mercury' };
+        const WEB_VIRTUAL_IDS = { 7777: 'mercury', 3333: 'cmbk' };
 
         if (WEB_VIRTUAL_IDS[targetId]) {
             const wKey = WEB_VIRTUAL_IDS[targetId];
@@ -2983,12 +2983,20 @@ ensureDefaultChallenges();
 
 function ensureDefaultAccounts() {
     const wu = getWebUsers();
-    const defaults = [{
-        username:'mercury', name:'Mercury', nickname:'mercury',
-        password:'Yusuf_bro01', tgId:null, tgUsername:'',
-        score:0, totalTests:0, totalCorrect:0, totalWrong:0,
-        subjects:{}, isWebOnly:true, addedByAdmin:true, createdAt:Date.now(),
-    }];
+    const defaults = [
+        {
+            username:'mercury', name:'Mercury', nickname:'mercury',
+            password:'Yusuf_bro01', tgId:'7777', tgUsername:'',
+            score:0, totalTests:0, totalCorrect:0, totalWrong:0,
+            subjects:{}, isWebOnly:true, addedByAdmin:true, createdAt:Date.now(),
+        },
+        {
+            username:'cmbk', name:'CMBK', nickname:'cmbk',
+            password:'Yusuf_bro01', tgId:'3333', tgUsername:'',
+            score:0, totalTests:0, totalCorrect:0, totalWrong:0,
+            subjects:{}, isWebOnly:true, addedByAdmin:true, createdAt:Date.now(),
+        },
+    ];
     let changed = false;
     for (const acc of defaults) {
         if (!wu[acc.username]) { wu[acc.username]=acc; changed=true; }
