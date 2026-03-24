@@ -1609,6 +1609,62 @@ let _loginTgData = null;   // TG dan kelgan malumotlar
 let _loginFoundUser = null; // Nikname boyicha topilgan foydalanuvchi
 let _nickLoginDebounce = null;
 
+// ═══════════════════════════════════════════════
+// TG AVTOMATIK LOGIN
+// ═══════════════════════════════════════════════
+async function tryTgAutoLogin(tgUser) {
+  const loginScreen = document.getElementById('screen-login');
+  try {
+    // Loading animatsiya
+    if (loginScreen) loginScreen.innerHTML = `
+      <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:16px;padding:24px;">
+        <div style="width:72px;height:72px;border-radius:22px;background:var(--green);display:flex;align-items:center;justify-content:center;font-size:32px;box-shadow:0 12px 32px rgba(34,197,94,0.35);">⚡</div>
+        <div style="font-size:22px;font-weight:900;color:var(--text);">YMA</div>
+        <div style="font-size:13px;color:var(--text3);font-weight:500;">Telegram orqali kirilmoqda...</div>
+        <div style="width:120px;height:4px;background:var(--border);border-radius:2px;overflow:hidden;margin-top:8px;">
+          <div style="width:50%;height:100%;background:var(--green);border-radius:2px;animation:tgslide 1.2s ease-in-out infinite;"></div>
+        </div>
+      </div>
+      <style>@keyframes tgslide{0%{transform:translateX(-100%)}100%{transform:translateX(300%)}}</style>`;
+
+    const r = await fetch('/api/tg-auth', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({
+        tgId:        tgUser.id,
+        tgUsername:  tgUser.username || '',
+        tgFirstName: tgUser.first_name || '',
+        tgLastName:  tgUser.last_name || '',
+      })
+    });
+    const d = await r.json();
+
+    if (r.ok && d.success) {
+      const u = d.user;
+      // Session saqlash
+      saveSess({ username:u.username, isAdmin:false, nickname:u.nickname, tgId:String(tgUser.id) });
+      // Local cache
+      const users = getUsers();
+      users[u.username] = {
+        username:u.username, name:u.name, nickname:u.nickname,
+        tgId:String(tgUser.id), tgUsername:u.tgUsername||'',
+        univ:u.univ||'', kurs:u.kurs||'', pass:null, createdAt:Date.now(),
+      };
+      saveUsers(users);
+      // App ochish
+      openApp(u.username, false);
+    } else {
+      throw new Error(d.error || 'TG auth failed');
+    }
+  } catch(e) {
+    console.log('[TG Auto Login] failed:', e.message);
+    // Oddiy login ekraniga qaytish
+    if (loginScreen) loginScreen.innerHTML = '';
+    // Login cardini qayta ko'rsatish uchun sahifani reload
+    window.location.reload();
+  }
+}
+
 // TG profilni login ekranida korsatish
 async function loadTgProfileForLogin(){
   try{
@@ -5250,9 +5306,17 @@ window.addEventListener('DOMContentLoaded', async () => {
   }
 
   // ─── 3. Login ekranini tayyorlash ───────────────────────
-  lTab('nick'); // Nikname kirish ekranini korsat
-  loadTgProfileForLogin(); // TG dan malumot olish
-  initDarkMode(); // Dark mode
+  // TG WebApp dan avtomatik login
+  const tgUser = window.Telegram?.WebApp?.initDataUnsafe?.user;
+  if (tgUser && tgUser.id) {
+    // TG orqali avtomatik kirish
+    await tryTgAutoLogin(tgUser);
+  } else {
+    // Oddiy login ekrani
+    lTab('nick');
+    loadTgProfileForLogin();
+  }
+  initDarkMode();
 });
 document.addEventListener('input',e=>{
   if(e.target.id==='chat-inp'){e.target.style.height='auto';e.target.style.height=Math.min(e.target.scrollHeight,100)+'px';}

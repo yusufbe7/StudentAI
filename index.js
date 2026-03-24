@@ -703,12 +703,48 @@ bot.action('start_actual_tour', async (ctx) => {
 });
 bot.action('stop_tour', async (ctx) => { clearTourTimers(ctx.from.id); try { await ctx.deleteMessage(); } catch {} return showSubjectMenu(ctx); });
 bot.action('confirm_clear_rank', async (ctx) => {
-    if (!isAdmin(ctx.from.id)) return ctx.answerCbQuery("Ruxsat yo'q!");
-    const db = getDb();
-    Object.keys(db.users).forEach(id => { db.users[id].score = 0; db.users[id].totalTests = 0; db.users[id].totalCorrect = 0; db.users[id].totalWrong = 0; });
-    saveDb(db);
-    await ctx.editMessageText('✅ Reyting tozalandi.');
-    return ctx.answerCbQuery();
+    if (!isAdmin(ctx.from.id)) return ctx.answerCbQuery("Ruxsat yoq!");
+    try {
+        // 1. Bot foydalanuvchilari (db.users)
+        const db = getDb();
+        Object.keys(db.users).forEach(id => {
+            db.users[id].score = 0;
+            db.users[id].totalTests = 0;
+            db.users[id].totalCorrect = 0;
+            db.users[id].totalWrong = 0;
+            db.users[id].subjects = {};
+        });
+        saveDb(db);
+
+        // 2. Web foydalanuvchilari (web_users.json)
+        const wu = getWebUsers();
+        Object.keys(wu).forEach(k => {
+            wu[k].score = 0;
+            wu[k].totalTests = 0;
+            wu[k].totalCorrect = 0;
+            wu[k].totalWrong = 0;
+            wu[k].subjects = {};
+        });
+        saveWebUsers(wu);
+
+        // 3. Web scores (web_scores.json)
+        const ws = getWebScores();
+        Object.keys(ws).forEach(k => {
+            ws[k].score = 0;
+            ws[k].totalTests = 0;
+            ws[k].totalCorrect = 0;
+            ws[k].totalWrong = 0;
+        });
+        saveWebScores(ws);
+
+        const total = Object.keys(db.users).length + Object.keys(wu).length;
+        await ctx.editMessageText(`Reyting tozalandi! ${total} ta foydalanuvchi.`);
+        ctx.answerCbQuery();
+    } catch(err) {
+        console.error('[clear_rank]', err.message);
+        await ctx.editMessageText('Xatolik: ' + err.message);
+        ctx.answerCbQuery();
+    }
 });
 bot.action('cancel_clear', (ctx) => ctx.deleteMessage().catch(()=>{}));
 bot.action('confirm_full_restart', async (ctx) => {
@@ -2262,6 +2298,117 @@ app.get('/api/user-by-nick',(req,res)=>{
         const [uKey,uData]=found;
         res.json({username:uKey,name:uData.name||'',nickname:uData.nickname||uKey,univ:uData.univ||'',kurs:uData.kurs||''});
     }catch(err){res.status(500).json({error:err.message});}
+});
+
+// ─── TG orqali avtomatik login/register ──────────────────
+app.post('/api/tg-auth', async (req, res) => {
+    try {
+        const { tgId, tgUsername, tgFirstName, tgLastName } = req.body;
+        if (!tgId) return res.status(400).json({error:'tgId kerak'});
+
+        const tgIdStr = String(tgId);
+        const tgName  = [tgFirstName, tgLastName].filter(Boolean).join(' ') || tgUsername || 'Foydalanuvchi';
+        const tgUsr   = (tgUsername||'').replace('@','').toLowerCase();
+        const wu      = getWebUsers();
+        const db      = getDb();
+
+        // 1. web_users da tgId bilan bog'liq akkaunt bormi?
+        let found = Object.entries(wu).find(([,u]) => u.tgId === tgIdStr);
+
+        // 2. TG username bo'yicha izlash
+        if (!found && tgUsr) {
+            found = Object.entries(wu).find(([,u]) =>
+                (u.tgUsername||'').toLowerCase() === tgUsr ||
+                (u.username||'').toLowerCase() === tgUsr
+            );
+        }
+
+        // 3. Bot foydalanuvchi — db.users dan ismni olish
+        let botUser = db.users[tgIdStr] || null;
+        if (!botUser && tgUsr) {
+            for (const u of Object.values(db.users||{})) {
+                if ((u.username||'').replace('@','').toLowerCase() === tgUsr) {
+                    botUser = u; break;
+                }
+            }
+        }
+
+        const realName = botUser?.name || tgName;
+
+        if (found) {
+            // Akkaunt bor — tgId yangilash va qaytarish
+            const [uKey, uData] = found;
+            if (!uData.tgId) { uData.tgId = tgIdStr; wu[uKey] = uData; saveWebUsers(wu); }
+            // Bot dan score sinxronlash
+            if (botUser && botUser.score > (uData.score||0)) {
+                uData.score        = botUser.score;
+                uData.totalTests   = botUser.totalTests||0;
+                uData.totalCorrect = botUser.totalCorrect||0;
+                uData.totalWrong   = botUser.totalWrong||0;
+                wu[uKey] = uData; saveWebUsers(wu);
+            }
+            return res.json({
+                success: true,
+                isNew:   false,
+                user: {
+                    username:   uKey,
+                    name:       uData.name || realName,
+                    nickname:   uData.nickname || uKey,
+                    tgId:       tgIdStr,
+                    tgUsername: tgUsr,
+                    score:      uData.score || 0,
+                    univ:       uData.univ || botUser?.univ || '',
+                    kurs:       uData.kurs || botUser?.kurs || '',
+                }
+            });
+        }
+
+        // 4. Yangi akkaunt yaratish — tgUsername nikname sifatida
+        let nickname = tgUsr || realName.toLowerCase().replace(/[^a-z0-9]/g,'_').slice(0,20);
+        // Nikname band bo'lsa raqam qo'shish
+        let base = nickname, i = 1;
+        while (Object.values(wu).some(u => (u.nickname||'').toLowerCase() === nickname)) {
+            nickname = base + i++;
+        }
+        const newKey = nickname;
+        wu[newKey] = {
+            username:    newKey,
+            name:        realName,
+            nickname:    nickname,
+            password:    null, // parolsiz
+            tgId:        tgIdStr,
+            tgUsername:  tgUsr,
+            univ:        botUser?.univ || '',
+            kurs:        botUser?.kurs || '',
+            yonalish:    botUser?.yonalish || '',
+            score:       botUser?.score || 0,
+            totalTests:  botUser?.totalTests || 0,
+            totalCorrect:botUser?.totalCorrect || 0,
+            totalWrong:  botUser?.totalWrong || 0,
+            subjects:    botUser?.subjects || {},
+            isWebOnly:   false,
+            createdAt:   Date.now(),
+        };
+        saveWebUsers(wu);
+
+        res.json({
+            success: true,
+            isNew:   true,
+            user: {
+                username:   newKey,
+                name:       realName,
+                nickname:   nickname,
+                tgId:       tgIdStr,
+                tgUsername: tgUsr,
+                score:      wu[newKey].score,
+                univ:       wu[newKey].univ,
+                kurs:       wu[newKey].kurs,
+            }
+        });
+    } catch(err) {
+        console.error('[tg-auth]', err.message);
+        res.status(500).json({error: err.message});
+    }
 });
 
 // ─── TG profil ma'lumotlari ───────────────────────────────
