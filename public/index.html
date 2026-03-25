@@ -193,6 +193,9 @@ body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); 
 .tour-parts-btn { font-size:11px; color:var(--green); font-weight:700; cursor:pointer; background:var(--green-bg); padding:5px 10px; border-radius:10px; }
 .tour-chips { display:flex; gap:6px; flex-wrap:wrap; }
 .tour-chip { font-size:12px; font-weight:600; background:var(--bg); color:var(--text2); padding:6px 12px; border-radius:10px; }
+/* Chat list delete button */
+.cli-del{position:absolute;top:8px;right:8px;width:26px;height:26px;border-radius:8px;background:rgba(244,63,94,.12);border:none;color:var(--red,#ef4444);font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .2s;}
+.chat-list-item2:hover .cli-del{opacity:1;}
 
 /* ═══ STATS TAB ═══ */
 .stats-pad { padding:14px 16px; }
@@ -550,147 +553,46 @@ body.dark .screen-login { background:#0f0f0f; }
 
 <!-- ═══════════════════ LOGIN ═══════════════════ -->
 <div class="screen active" id="screen-login">
-  <div class="login-box">
-    <div class="login-logo">
-      <div class="login-logo-icon">⚡</div>
-      <div class="login-logo-text">YMA</div>
-      <div class="login-logo-sub">Oquv platformasi</div>
+  <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:20px;padding:32px;text-align:center;">
+    <!-- Logo -->
+    <div style="width:80px;height:80px;border-radius:24px;background:var(--green);display:flex;align-items:center;justify-content:center;font-size:36px;box-shadow:0 12px 32px rgba(34,197,94,0.35);">⚡</div>
+    <div>
+      <div style="font-size:26px;font-weight:900;color:var(--text);">Student AI</div>
+      <div style="font-size:13px;color:var(--text3);margin-top:4px;">O'quv platformasi</div>
     </div>
-    <div class="l-card">
-      <div style="text-align:center;margin-bottom:14px;">
-        <span style="font-size:12px;color:var(--text3);cursor:pointer;font-weight:600;" onclick="openAdminModal()">🔐 Admin sifatida kirish</span>
-      </div>
 
-      <!-- BOT PROFIL PREVIEW -->
-      <div id="tg-profile-preview" style="display:none;background:var(--bg);border-radius:16px;padding:14px 16px;margin-bottom:16px;">
-        <div style="display:flex;align-items:center;gap:12px;">
-          <div id="tg-prev-ava" style="width:48px;height:48px;border-radius:50%;background:var(--green-bg);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;color:var(--green);flex-shrink:0;overflow:hidden;"></div>
-          <div style="flex:1;min-width:0;">
-            <div style="font-size:15px;font-weight:800;color:var(--text);" id="tg-prev-name">—</div>
-            <div style="font-size:12px;color:var(--text3);font-weight:500;margin-top:2px;" id="tg-prev-meta">—</div>
-          </div>
+    <!-- TG foydalanuvchi kartasi -->
+    <div id="tg-login-card" style="display:none;width:100%;max-width:320px;background:var(--card);border-radius:20px;padding:20px;box-shadow:0 2px 16px rgba(0,0,0,0.08);">
+      <div style="display:flex;align-items:center;gap:14px;">
+        <div id="tg-login-ava" style="width:56px;height:56px;border-radius:50%;background:var(--green-bg);display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:900;color:var(--green);flex-shrink:0;overflow:hidden;"></div>
+        <div style="flex:1;text-align:left;">
+          <div style="font-size:17px;font-weight:800;color:var(--text);" id="tg-login-name">—</div>
+          <div style="font-size:12px;color:var(--text3);margin-top:2px;" id="tg-login-meta">—</div>
         </div>
       </div>
-
-      <!-- QADAM 1: NIKNAME — topilsa kirish, topilmasa yaratish -->
-      <div id="lf-nick">
-        <div style="text-align:center;margin-bottom:16px;" id="nick-step-label">
-          <div style="font-size:13px;font-weight:700;color:var(--text);">Niknamengizni kiriting</div>
-          <div style="font-size:11px;color:var(--text3);margin-top:4px;">Unikal @nikname</div>
+      <!-- Loading progress -->
+      <div id="tg-login-progress" style="margin-top:16px;">
+        <div style="width:100%;height:4px;background:var(--border);border-radius:2px;overflow:hidden;">
+          <div style="width:60%;height:100%;background:var(--green);border-radius:2px;animation:tgslide 1.2s ease-in-out infinite;"></div>
         </div>
-        <div class="field">
-          <div style="display:flex;align-items:center;background:var(--bg);border:1.5px solid var(--border);border-radius:12px;padding:0 14px;transition:all .2s;" id="nick-login-wrap">
-            <span style="font-size:16px;font-weight:700;color:var(--text3);">@</span>
-            <input class="field-inp" id="nick-login-inp" type="text" placeholder="nikname"
-              style="border:none;background:transparent;padding:13px 6px;flex:1;font-size:16px;font-weight:700;"
-              autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
-              oninput="onNickLoginInput(this.value)"
-              onkeydown="if(event.key==='Enter'&&!document.getElementById('nick-login-btn').disabled)doNickLogin()">
-          </div>
-          <div id="nick-login-status" style="font-size:12px;font-weight:600;margin-top:6px;padding:0 4px;min-height:18px;"></div>
-        </div>
-        <button class="l-btn" id="nick-login-btn" onclick="doNickLogin()" disabled
-          style="background:#ccc;cursor:not-allowed;transition:all .3s;">Davom etish →</button>
-        <div style="text-align:center;margin-top:12px;">
-          <span style="font-size:12px;color:var(--green);cursor:pointer;font-weight:600;" onclick="showResetPass()">Parolni unutdim?</span>
-        </div>
+        <div style="font-size:12px;color:var(--text3);margin-top:8px;">Kirish amalga oshirilmoqda...</div>
       </div>
+    </div>
 
-      <!-- QADAM 2A: ESKI ODAM — Parol kirish -->
-      <div id="lf-pass" style="display:none;">
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;cursor:pointer;" onclick="backToNick()">
-          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="var(--text3)" stroke-width="2.5" stroke-linecap="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
-          <div>
-            <div style="font-size:15px;font-weight:800;color:var(--text);" id="lf-pass-nick">@—</div>
-            <div style="font-size:11px;color:var(--text3);" id="lf-pass-name">—</div>
-          </div>
-        </div>
-        <div class="field">
-          <label class="field-lbl">Parol</label>
-          <input class="field-inp" id="si-p" type="password" placeholder="••••••"
-            onkeydown="if(event.key==='Enter')doSignIn()">
-        </div>
-        <div class="l-err" id="si-err">Parol notogri</div>
-        <div id="si-loading" style="display:none;text-align:center;padding:8px;font-size:13px;color:var(--text3);">⏳ Tekshirilmoqda...</div>
-        <button class="l-btn" onclick="doSignIn()">Kirish →</button>
-        <div style="text-align:center;margin-top:12px;">
-          <span style="font-size:12px;color:var(--green);cursor:pointer;font-weight:600;" onclick="showResetPass()">Parolni unutdim?</span>
-        </div>
+    <!-- Telegram orqali ochilmagan holda -->
+    <div id="tg-login-fallback" style="display:none;width:100%;max-width:320px;">
+      <div style="background:var(--card);border-radius:20px;padding:24px;box-shadow:0 2px 16px rgba(0,0,0,0.08);">
+        <div style="font-size:40px;margin-bottom:12px;">📱</div>
+        <div style="font-size:16px;font-weight:800;color:var(--text);margin-bottom:8px;">Telegram orqali oching</div>
+        <div style="font-size:13px;color:var(--text3);line-height:1.6;">Bu ilova faqat Telegram bot orqali ishlaydi.<br>Botga /start yuboring va "Ilovani ochish" tugmasini bosing.</div>
       </div>
-
-      <!-- QADAM 2B: YANGI ODAM — Parol yaratish -->
-      <div id="lf-create" style="display:none;">
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;cursor:pointer;" onclick="backToNick()">
-          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="var(--text3)" stroke-width="2.5" stroke-linecap="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
-          <div>
-            <div style="font-size:15px;font-weight:800;color:var(--text);">@<span id="lf-create-nick">—</span></div>
-            <div style="font-size:11px;color:var(--text3);">Yangi akkaunt yaratilyapti ✨</div>
-          </div>
-        </div>
-        <div class="field">
-          <label class="field-lbl">Parol yarating</label>
-          <input class="field-inp" id="su-p" type="password" placeholder="Kamida 6 belgi"
-            onkeydown="if(event.key==='Enter')document.getElementById('su-p2').focus()">
-          <div class="field-err" id="su-p-e">Kamida 6 belgi</div>
-        </div>
-        <div class="field">
-          <label class="field-lbl">Tasdiqlash</label>
-          <input class="field-inp" id="su-p2" type="password" placeholder="Takrorlang"
-            onkeydown="if(event.key==='Enter')doCreateAccount()">
-          <div class="field-err" id="su-p2-e">Parollar mos kelmadi</div>
-        </div>
-        <div id="su-loading" style="display:none;text-align:center;padding:8px;font-size:13px;color:var(--text3);">⏳ Saqlanmoqda...</div>
-        <div class="l-err" id="su-err"></div>
-        <button class="l-btn" onclick="doCreateAccount()" style="background:var(--green);">✅ Akkaunt yaratish →</button>
-      </div>
-
-      <!-- PAROLNI TIKLASH -->
-      <div id="lf-fp" style="display:none;padding-top:4px;">
-
-        <!-- QADAM 1: Nikname + yangi parol -->
-        <div id="fp-step1">
-          <div style="text-align:center;margin-bottom:16px;">
-            <div style="font-size:28px;margin-bottom:8px;">🔑</div>
-            <div style="font-size:14px;font-weight:700;color:var(--text);margin-bottom:6px;">Parolni tiklash</div>
-            <div style="font-size:12px;color:var(--text2);font-weight:500;line-height:1.6;">Niknamengizni va yangi parolni kiriting.<br>Telegramga tasdiqlash xabari yuboriladi.</div>
-          </div>
-          <div class="field">
-            <label class="field-lbl">Nikname</label>
-            <div style="display:flex;align-items:center;background:var(--bg);border:1.5px solid var(--border);border-radius:12px;padding:0 12px;">
-              <span style="color:var(--text3);font-weight:700;font-size:14px;">@</span>
-              <input class="field-inp" id="fp-nick" type="text" placeholder="niknamengiz"
-                style="border:none;background:transparent;padding:13px 6px;flex:1;"
-                autocomplete="off" autocorrect="off" autocapitalize="off">
-            </div>
-            <div class="field-err" id="fp-nick-e">Nikname topilmadi</div>
-          </div>
-          <div class="field"><label class="field-lbl">Yangi parol</label><input class="field-inp" id="fp-p" type="password" placeholder="Kamida 6 belgi"><div class="field-err" id="fp-p-e">Kamida 6 belgi</div></div>
-          <div class="field"><label class="field-lbl">Tasdiqlash</label><input class="field-inp" id="fp-p2" type="password" placeholder="Takrorlang"><div class="field-err" id="fp-p2-e">Parollar mos kelmadi</div></div>
-          <div id="fp-loading" style="display:none;text-align:center;padding:8px;font-size:13px;color:var(--text3);">⏳ Telegram ga yuborilmoqda...</div>
-          <div class="l-err" id="fp-err"></div>
-          <button class="l-btn" onclick="doResetPass()" style="background:var(--blue);">📨 Telegram orqali tasdiqlash →</button>
-        </div>
-
-        <!-- QADAM 2: Telegram tasdigi kutilmoqda -->
-        <div id="fp-step2" style="display:none;text-align:center;padding:16px 0;">
-          <div style="font-size:48px;margin-bottom:16px;">📱</div>
-          <div style="font-size:15px;font-weight:800;color:var(--text);margin-bottom:8px;">Telegram xabarini tasdiqlang</div>
-          <div style="font-size:13px;color:var(--text2);font-weight:500;line-height:1.7;margin-bottom:20px;">
-            Telegramga <b>✅ Tasdiqlash</b> tugmasi bilan xabar yuborildi.<br>
-            Tasdiqlashingiz bilan parol ozgartiriladi va avtomatik chiqasiz.
-          </div>
-          <div style="background:var(--bg);border-radius:14px;padding:14px;margin-bottom:16px;">
-            <div style="font-size:12px;color:var(--text3);font-weight:600;">Sorov bekor bolish vaqti</div>
-            <div id="fp-countdown" style="font-size:28px;font-weight:900;color:var(--blue);margin-top:4px;">5:00</div>
-          </div>
-          <button onclick="cancelResetPass()" style="width:100%;padding:12px;background:var(--bg);color:var(--text2);border:1.5px solid var(--border);border-radius:12px;font-family:'Inter',sans-serif;font-size:13px;font-weight:700;cursor:pointer;">✕ Bekor qilish</button>
-        </div>
-
+      <div style="margin-top:16px;">
+        <span style="font-size:12px;color:var(--text3);cursor:pointer;font-weight:600;" onclick="openAdminModal()">🔐 Admin</span>
       </div>
     </div>
   </div>
+  <style>@keyframes tgslide{0%{transform:translateX(-100%)}100%{transform:translateX(300%)}}</style>
 </div>
-
 <!-- ═══════════════════ APP ═══════════════════ -->
 <div class="screen" id="screen-app">
 
@@ -1612,21 +1514,30 @@ let _nickLoginDebounce = null;
 // ═══════════════════════════════════════════════
 // TG AVTOMATIK LOGIN
 // ═══════════════════════════════════════════════
-async function tryTgAutoLogin(tgUser) {
-  const loginScreen = document.getElementById('screen-login');
-  try {
-    // Loading animatsiya
-    if (loginScreen) loginScreen.innerHTML = `
-      <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:16px;padding:24px;">
-        <div style="width:72px;height:72px;border-radius:22px;background:var(--green);display:flex;align-items:center;justify-content:center;font-size:32px;box-shadow:0 12px 32px rgba(34,197,94,0.35);">⚡</div>
-        <div style="font-size:22px;font-weight:900;color:var(--text);">YMA</div>
-        <div style="font-size:13px;color:var(--text3);font-weight:500;">Telegram orqali kirilmoqda...</div>
-        <div style="width:120px;height:4px;background:var(--border);border-radius:2px;overflow:hidden;margin-top:8px;">
-          <div style="width:50%;height:100%;background:var(--green);border-radius:2px;animation:tgslide 1.2s ease-in-out infinite;"></div>
-        </div>
-      </div>
-      <style>@keyframes tgslide{0%{transform:translateX(-100%)}100%{transform:translateX(300%)}}</style>`;
+// TG login kartasini ko'rsatish (foydalanuvchi rasmi + ismi)
+function showTgLoginCard(tgUser) {
+  const card = document.getElementById('tg-login-card');
+  const avaEl = document.getElementById('tg-login-ava');
+  const nameEl = document.getElementById('tg-login-name');
+  const metaEl = document.getElementById('tg-login-meta');
+  if (!card) return;
+  card.style.display = 'block';
+  const fullName = [tgUser.first_name, tgUser.last_name].filter(Boolean).join(' ') || tgUser.username || 'Foydalanuvchi';
+  if (nameEl) nameEl.textContent = fullName;
+  if (metaEl) metaEl.textContent = tgUser.username ? '@' + tgUser.username : 'Telegram foydalanuvchi';
+  if (avaEl) {
+    // Telegram profil rasmini olishga urinish
+    const photoUrl = `${window.location.origin}/api/telegram-photo/${tgUser.id}`;
+    const img = document.createElement('img');
+    img.style.cssText = 'width:100%;height:100%;object-fit:cover;';
+    img.onload = () => { avaEl.innerHTML = ''; avaEl.appendChild(img); };
+    img.onerror = () => { avaEl.textContent = (fullName[0]||'?').toUpperCase(); };
+    img.src = photoUrl;
+  }
+}
 
+async function tryTgAutoLogin(tgUser) {
+  try {
     const r = await fetch('/api/tg-auth', {
       method: 'POST',
       headers: {'Content-Type':'application/json'},
@@ -1641,6 +1552,9 @@ async function tryTgAutoLogin(tgUser) {
 
     if (r.ok && d.success) {
       const u = d.user;
+      // Progress yashirish
+      const prog = document.getElementById('tg-login-progress');
+      if (prog) prog.innerHTML = '<div style="color:var(--green);font-size:13px;font-weight:700;margin-top:8px;">✅ Muvaffaqiyatli kirildi!</div>';
       // Session saqlash
       saveSess({ username:u.username, isAdmin:false, nickname:u.nickname, tgId:String(tgUser.id) });
       // Local cache
@@ -1651,17 +1565,14 @@ async function tryTgAutoLogin(tgUser) {
         univ:u.univ||'', kurs:u.kurs||'', pass:null, createdAt:Date.now(),
       };
       saveUsers(users);
-      // App ochish
-      openApp(u.username, false);
+      setTimeout(() => openApp(u.username, false), 400);
     } else {
       throw new Error(d.error || 'TG auth failed');
     }
   } catch(e) {
     console.log('[TG Auto Login] failed:', e.message);
-    // Oddiy login ekraniga qaytish
-    if (loginScreen) loginScreen.innerHTML = '';
-    // Login cardini qayta ko'rsatish uchun sahifani reload
-    window.location.reload();
+    const prog = document.getElementById('tg-login-progress');
+    if (prog) prog.innerHTML = `<div style="color:var(--red,#ef4444);font-size:12px;margin-top:8px;">⚠️ Xatolik: ${e.message}<br><span onclick="location.reload()" style="cursor:pointer;text-decoration:underline;">Qayta urinish</span></div>`;
   }
 }
 
@@ -4496,6 +4407,7 @@ async function loadChatsList(){
             ${unreadBadge}
           </div>
         </div>
+        <button class="cli-del" onclick="event.stopPropagation();deleteChatConfirm('${escA(item.otherName)}')" title="Chatni o'chirish">🗑</button>
       </div>`;
     });
     el.innerHTML=html;
@@ -4547,6 +4459,44 @@ function openChatFromList(targetName){
   const lb=_lbCache.find(u=>(u.name||'').toLowerCase()===targetName.toLowerCase());
   const nick=lb?.nickname||null;
   openChat(targetName,'',nick);
+}
+
+async function deleteChatConfirm(otherName){
+  if(!confirm(`"${otherName}" bilan chatni o'chirmoqchimisiz?`)) return;
+  const myName=getMyName(); if(!myName) return;
+  try{
+    await fetch('/api/chat/delete',{
+      method:'DELETE', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({myName, otherName})
+    });
+    toast('Chat o'chirildi');
+    loadChatsList();
+  }catch{ toast('Xatolik yuz berdi','bad'); }
+}
+
+async function loadAdminPanel(){
+  const adm=getAdm();
+  if(document.getElementById('adm-name-disp')) document.getElementById('adm-name-disp').textContent=adm.name||'Admin';
+  if(document.getElementById('adm-uname-disp')) document.getElementById('adm-uname-disp').textContent='@'+(adm.username||'admin');
+  try{
+    const r=await fetch('/api/tournament'); const t=await r.json();
+    const badge=document.getElementById('adm-t-badge'), btn=document.getElementById('adm-reject-btn');
+    if(badge&&t?.isActive){
+      badge.textContent='FAOL'; badge.className='badge badge-on';
+      if(btn) btn.style.display='block';
+    } else if(badge){
+      badge.textContent='FAOL EMAS'; badge.className='badge badge-off';
+      if(btn) btn.style.display='none';
+    }
+  }catch{}
+}
+
+async function confirmReject(){
+  if(!confirm("Musobaqani bekor qilmoqchimisiz?")) return;
+  try{
+    const r=await fetch('/api/reject',{method:'POST',headers:{'Content-Type':'application/json'}});
+    if(r.ok){ toast('✅ Musobaqa bekor qilindi!'); } else toast('❌ Server xatosi!','bad');
+  }catch{ toast('⚠️ Tarmoq xatosi!','bad'); }
 }
 
 // Participants
@@ -5257,18 +5207,21 @@ function doLogout(){
   const apc=document.getElementById('admin-panel-card');
   if(apc) apc.style.display='none';
   // 6. Input larni tozalash
-  const siP=document.getElementById('si-p'); if(siP) siP.value='';
-  const nickInp=document.getElementById('nick-login-inp'); if(nickInp) nickInp.value='';
-  const nickStatus=document.getElementById('nick-login-status'); if(nickStatus) nickStatus.textContent='';
-  const nickWrap=document.getElementById('nick-login-wrap'); if(nickWrap) nickWrap.style.borderColor='transparent';
-  const nickBtn=document.getElementById('nick-login-btn');
-  if(nickBtn){nickBtn.disabled=true;nickBtn.style.background='#ccc';nickBtn.textContent='Davom etish →';}
-  // 7. TG preview yashirish
-  const tgPrev=document.getElementById('tg-profile-preview'); if(tgPrev) tgPrev.style.display='none';
-  // 8. Nick ekraniga o'tish
-  lTab('nick');
-  // 9. TG profilni qayta yuklash
-  setTimeout(()=>loadTgProfileForLogin(), 200);
+  // 7. TG orqali qayta kirish
+  const tgUser = window.Telegram?.WebApp?.initDataUnsafe?.user;
+  if (tgUser && tgUser.id) {
+    const card = document.getElementById('tg-login-card');
+    if (card) {
+      card.style.display = 'block';
+      const prog = document.getElementById('tg-login-progress');
+      if (prog) prog.innerHTML = '<div style="width:100%;height:4px;background:var(--border);border-radius:2px;overflow:hidden;"><div style="width:60%;height:100%;background:var(--green);border-radius:2px;animation:tgslide 1.2s ease-in-out infinite;"></div></div><div style="font-size:12px;color:var(--text3);margin-top:8px;">Kirish amalga oshirilmoqda...</div>';
+    }
+    showTgLoginCard(tgUser);
+    setTimeout(() => tryTgAutoLogin(tgUser), 300);
+  } else {
+    const fallback = document.getElementById('tg-login-fallback');
+    if (fallback) fallback.style.display = 'block';
+  }
 }
 
 // Init
@@ -5306,15 +5259,14 @@ window.addEventListener('DOMContentLoaded', async () => {
   }
 
   // ─── 3. Login ekranini tayyorlash ───────────────────────
-  // TG WebApp dan avtomatik login
   const tgUser = window.Telegram?.WebApp?.initDataUnsafe?.user;
   if (tgUser && tgUser.id) {
-    // TG orqali avtomatik kirish
+    // TG foydalanuvchi ma'lumotlarini ko'rsatish
+    showTgLoginCard(tgUser);
     await tryTgAutoLogin(tgUser);
   } else {
-    // Oddiy login ekrani
-    lTab('nick');
-    loadTgProfileForLogin();
+    // Telegram orqali ochilmagan
+    document.getElementById('tg-login-fallback').style.display = 'block';
   }
   initDarkMode();
 });
