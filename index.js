@@ -2366,6 +2366,20 @@ app.get('/api/chat/list', (req, res) => {
     }
 });
 
+// Chat suhbatini o'chirish
+app.delete('/api/chat/delete', (req, res) => {
+    try {
+        const { myName, otherName } = req.body;
+        if (!myName || !otherName) return res.status(400).json({ error: 'myName va otherName kerak' });
+        const chats = getChatMsgs();
+        const cid = chatId(myName, otherName);
+        if (chats[cid]) { delete chats[cid]; saveChatMsgs(chats); }
+        res.json({ success: true });
+    } catch (err) {
+        res.status(500).json({ error: 'Xatolik' });
+    }
+});
+
 // VIP bo'lmagan foydalanuvchiga bot orqali xabar yuborish
 app.post('/api/notify-non-vip', async (req, res) => {
     try {

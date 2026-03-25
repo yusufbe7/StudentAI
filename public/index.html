@@ -243,8 +243,10 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 #img-viewer.on{display:flex;}
 #img-viewer img{max-width:95vw;max-height:90vh;border-radius:10px;object-fit:contain;}
 #img-viewer-close{position:fixed;top:16px;right:16px;width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.15);border:none;color:#fff;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
-.chat-list-item{display:flex;align-items:center;gap:12px;padding:12px;background:var(--s1);border:1px solid var(--border);border-radius:13px;margin-bottom:8px;cursor:pointer;transition:border-color .2s;}
+.chat-list-item{display:flex;align-items:center;gap:12px;padding:12px;background:var(--s1);border:1px solid var(--border);border-radius:13px;margin-bottom:8px;cursor:pointer;transition:border-color .2s;position:relative;}
 .chat-list-item:hover{border-color:var(--border2);}
+.cli-del{position:absolute;top:8px;right:8px;width:26px;height:26px;border-radius:8px;background:rgba(244,63,94,.12);border:none;color:var(--danger);font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .2s;}
+.chat-list-item:hover .cli-del{opacity:1;}
 .cli-ava{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--a2));display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;flex-shrink:0;overflow:hidden;}
 .cli-ava img{width:100%;height:100%;object-fit:cover;}
 .cli-info{flex:1;min-width:0;}
@@ -1920,6 +1922,7 @@ async function loadChatsList(){
           <div class="cli-time">${ts}</div>
           ${item.unread>0?`<div class="cli-unread">${item.unread}</div>`:''}
         </div>
+        <button class="cli-del" onclick="event.stopPropagation();deleteChatConfirm('${escA(item.otherName)}')" title="Chatni o'chirish">🗑</button>
       </div>`;
     });
     el.innerHTML=html;
@@ -1931,6 +1934,19 @@ async function loadChatsList(){
 function openChatFromList(targetName){
   _msgs=[]; _lastTs=0;
   openChat(targetName,'');
+}
+
+async function deleteChatConfirm(otherName){
+  if(!confirm(`"${otherName}" bilan chatni o'chirmoqchimisiz?`)) return;
+  const myName=getMyName(); if(!myName) return;
+  try{
+    await fetch('/api/chat/delete',{
+      method:'DELETE', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({myName, otherName})
+    });
+    toast('Chat o\'chirildi');
+    loadChatsList();
+  }catch{ toast('Xatolik yuz berdi','bad'); }
 }
 
 // ═══════════════════════════════════════════════════════════
