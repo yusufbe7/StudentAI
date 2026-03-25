@@ -38,6 +38,7 @@ const PATHS = {
     photos:   path.join(DATA_DIR, 'user_photos.json'),
     sessions: path.join(DATA_DIR, 'test_sessions.json'),
     follows:  path.join(DATA_DIR, 'follows.json'),
+    blocked: path.join(DATA_DIR, 'blocked_users.json'),
 };
 
 const CHAT_MSGS_PATH  = path.join(DATA_DIR, 'chat_messages.json');
@@ -85,6 +86,8 @@ const savePhotos   = (d) => writeJSON(PATHS.photos, d);
 const getSessions  = () => readJSON(PATHS.sessions, []);
 const saveSessions = (d) => writeJSON(PATHS.sessions, d);
 const getFollows   = () => readJSON(PATHS.follows, {});
+const getBlocked  = () => readJSON(PATHS.blocked, []);
+const saveBlocked = (d) => writeJSON(PATHS.blocked, d);
 const saveFollows  = (d) => writeJSON(PATHS.follows, d);
 const getChatMsgs  = () => readJSON(CHAT_MSGS_PATH, {});
 const saveChatMsgs = (d) => writeJSON(CHAT_MSGS_PATH, d);
@@ -492,7 +495,14 @@ async function finalizeTournament(ctx) {
 bot.use((new LocalSession({ database: PATHS.session })).middleware());
 bot.use(async (ctx, next) => {
     const db = getDb();
-    if (db.settings?.isMaintenance && ctx.from?.id !== ADMIN_ID) return ctx.reply('🛠 Botda texnik ishlar olib borilmoqda. Tez orada qaytamiz!');
+    if (db.settings?.isMaintenance && ctx.from?.id !== ADMIN_ID)
+        return ctx.reply('🛠 Botda texnik ishlar olib borilmoqda. Tez orada qaytamiz!');
+    if (ctx.from?.id && ctx.from.id !== ADMIN_ID) {
+        const blocked = getBlocked();
+        if (blocked.includes(ctx.from.id)) {
+            return ctx.reply('🚫 Siz botdan bloklangansiz. Admin bilan bog\'laning.').catch(() => {});
+        }
+    }
     return next();
 });
 bot.use(async (ctx, next) => {
@@ -2975,6 +2985,78 @@ app.post('/api/dark-mode', (req,res)=>{
 
 // ─── Test tugagandan so'ng streak va badge yangilash ──────
 // /api/web-score ga hook
+
+// ─── Admin: Bloklash ──────────────────────────────────────
+app.post('/api/admin/block-user', async (req, res) => {
+    try {
+        const { userId } = req.body;
+        if (!userId) return res.status(400).json({ error: 'userId kerak' });
+        const id = parseInt(userId);
+        if (isNaN(id)) return res.status(400).json({ error: 'Notogri ID' });
+        const blocked = getBlocked();
+        if (blocked.includes(id)) return res.json({ success: true, alreadyBlocked: true, userId: id });
+        blocked.push(id);
+        saveBlocked(blocked);
+        const db = getDb();
+        const user = db.users[id];
+        const name  = escapeHTML(user?.name || 'Foydalanuvchi');
+        const uname = user?.username ? '@' + escapeHTML(user.username) : '';
+        const uids = Object.keys(db.users);
+        let notified = 0;
+        const blockMsg =
+            `🚫 <b>E'LON</b>\n\n` +
+            `Foydalanuvchi: <b>${name}</b>\n` +
+            `ID: <code>${id}</code>${uname ? '\n' + uname : ''}\n\n` +
+            `<b>Bot'dan bloklandi.</b>\n\n` +
+            `━━━━━━━━━━━━━━━━━━━\n` +
+            `⚠️ <i>Ogohlantirish: Bot bilan chiroyli muomila qiling. Siz ham bloklab qo'yish — patir uchidan ignadek gap. Huslas.</i>`;
+        for (let i = 0; i < uids.length; i += 25) {
+            const chunk = uids.slice(i, i + 25);
+            await Promise.allSettled(
+                chunk.map(uid => bot.telegram.sendMessage(uid, blockMsg, { parse_mode: 'HTML' }).catch(() => {}))
+            );
+            notified += chunk.length;
+            if (i + 25 < uids.length) await new Promise(r => setTimeout(r, 600));
+        }
+        res.json({ success: true, name: user?.name || 'Foydalanuvchi', userId: id, notified });
+    } catch (err) {
+        console.error('[block-user]', err.message);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// ─── Admin: Blokdan chiqarish ─────────────────────────────
+app.post('/api/admin/unblock-user', async (req, res) => {
+    try {
+        const { userId } = req.body;
+        if (!userId) return res.status(400).json({ error: 'userId kerak' });
+        const id = parseInt(userId);
+        let blocked = getBlocked();
+        const was = blocked.includes(id);
+        blocked = blocked.filter(b => b !== id);
+        saveBlocked(blocked);
+        if (was) {
+            await bot.telegram.sendMessage(id,
+                `✅ <b>Blokdan chiqarildingiz!</b>\n\nEndi botdan yana foydalanishingiz mumkin.`,
+                { parse_mode: 'HTML' }
+            ).catch(() => {});
+        }
+        res.json({ success: true, wasBlocked: was, userId: id });
+    } catch (err) { res.status(500).json({ error: err.message }); }
+});
+
+// ─── Admin: Bloklangan ro'yxat ────────────────────────────
+app.get('/api/admin/blocked-users', (req, res) => {
+    try {
+        const blocked = getBlocked();
+        const db = getDb();
+        const list = blocked.map(id => {
+            const u = db.users[id] || {};
+            return { id, name: u.name || "Noma'lum", username: u.username || '' };
+        });
+        res.json({ blocked: list, total: blocked.length });
+    } catch (err) { res.status(500).json({ error: err.message }); }
+});
 
 server.listen(PORT, '0.0.0.0', () => console.log(`🌐 Express+Socket.io server ${PORT}-portda`));
 
