@@ -1,0 +1,44 @@
+{
+  "name": "Student Bot — AITEX",
+  "short_name": "StudentBot",
+  "description": "AITEX o'quv platformasi — test, reyting, chat",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f2f2f7",
+  "theme_color": "#22c55e",
+  "orientation": "portrait",
+  "scope": "/",
+  "lang": "uz",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [],
+  "categories": ["education"],
+  "shortcuts": [
+    {
+      "name": "Test ishlash",
+      "short_name": "Test",
+      "description": "Testga o'tish",
+      "url": "/?tab=tests",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Reyting",
+      "short_name": "Reyting",
+      "description": "Leaderboard ko'rish",
+      "url": "/?tab=stats",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+    }
+  ]
+}

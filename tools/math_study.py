@@ -56,4 +56,8 @@ if __name__ == '__main__':
         result = {"q": q, "a": a, "options": make_options(a), "hint": ""}
         print(json.dumps(result, ensure_ascii=False, indent=2))
     else:
+<<<<<<< HEAD
         study_sheet('dasturiy_injiniring_math', limit=20)
+=======
+        study_sheet('dasturiy_injiniring_math', limit=20)
+>>>>>>> bc37f51 (Yangilanish)
