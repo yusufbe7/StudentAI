@@ -105,7 +105,8 @@ if (customQ) Object.assign(SUBJECTS, customQ);
 
 let vipUsers    = readJSON(PATHS.vip, []);
 let botSettings = getSettings();
-let isBotPaidMode = false;
+// Pullik rejim fayldan yuklanadi (bot restart bo'lsa ham saqlanadi)
+let isBotPaidMode = !!(readJSON(PATHS.settings, {}).isPaidMode);
 const timers    = {};
 
 console.log(`✅ Savollar bazasi: ${Object.keys(SUBJECTS).length} ta fan`);
@@ -942,8 +943,18 @@ bot.hears('📊 Statistika', async (ctx) => {
     }
     if (report) await ctx.replyWithHTML(report, Markup.keyboard([["🗑 Foydalanuvchini o'chirish"],['⬅️ Orqaga']]).resize());
 });
-bot.hears('💰 Pullik versiya', (ctx) => { if(!isAdmin(ctx.from.id))return; isBotPaidMode=true; return ctx.reply("✅ Bot PULLIK REJIMGA o'tkazildi."); });
-bot.hears('🆓 Bepul versiya',   (ctx) => { if(!isAdmin(ctx.from.id))return; isBotPaidMode=false; return ctx.reply("✅ Bot BEPUL REJIMGA o'tkazildi."); });
+bot.hears('💰 Pullik versiya', (ctx) => {
+    if(!isAdmin(ctx.from.id)) return;
+    isBotPaidMode = true;
+    const s = getSettings(); s.isPaidMode = true; saveSettings(s);
+    return ctx.reply("✅ Bot PULLIK REJIMGA o'tkazildi.\n💎 Faqat VIP foydalanuvchilar ishlatishi mumkin.");
+});
+bot.hears('🆓 Bepul versiya', (ctx) => {
+    if(!isAdmin(ctx.from.id)) return;
+    isBotPaidMode = false;
+    const s = getSettings(); s.isPaidMode = false; saveSettings(s);
+    return ctx.reply("✅ Bot BEPUL REJIMGA o'tkazildi.\n👥 Barcha foydalanuvchilar ishlatishi mumkin.");
+});
 bot.hears(["🛑 Botni To'xtatish",'🟢 Botni Yoqish'], async (ctx) => {
     if (!isAdmin(ctx.from.id)) return;
     const db = getDb(); if(!db.settings) db.settings={};
