@@ -40,9 +40,10 @@ const PATHS = {
     follows:  path.join(DATA_DIR, 'follows.json'),
 };
 
-const CHAT_MSGS_PATH  = path.join(DATA_DIR, 'chat_messages.json');
-const WEB_SCORES_PATH = path.join(DATA_DIR, 'web_scores.json');
-const WEB_USERS_PATH  = path.join(DATA_DIR, 'web_users.json');
+const CHAT_MSGS_PATH    = path.join(DATA_DIR, 'chat_messages.json');
+const WEB_SCORES_PATH   = path.join(DATA_DIR, 'web_scores.json');
+const WEB_USERS_PATH    = path.join(DATA_DIR, 'web_users.json');
+const BLOCKED_PATH      = path.join(DATA_DIR, 'blocked_users.json');
 
 // ============================================================
 // BOT VA APP
@@ -86,8 +87,10 @@ const getSessions  = () => readJSON(PATHS.sessions, []);
 const saveSessions = (d) => writeJSON(PATHS.sessions, d);
 const getFollows   = () => readJSON(PATHS.follows, {});
 const saveFollows  = (d) => writeJSON(PATHS.follows, d);
-const getChatMsgs  = () => readJSON(CHAT_MSGS_PATH, {});
-const saveChatMsgs = (d) => writeJSON(CHAT_MSGS_PATH, d);
+const getChatMsgs   = () => readJSON(CHAT_MSGS_PATH, {});
+const saveChatMsgs  = (d) => writeJSON(CHAT_MSGS_PATH, d);
+const getBlocked    = () => readJSON(BLOCKED_PATH, {});
+const saveBlocked   = (d) => writeJSON(BLOCKED_PATH, d);
 const getWebScores = () => readJSON(WEB_SCORES_PATH, {});
 const saveWebScores = (d) => writeJSON(WEB_SCORES_PATH, d);
 const getWebUsers  = () => readJSON(WEB_USERS_PATH, {});
@@ -267,6 +270,7 @@ function adminMainKeyboard(db) {
         ['➕ Yangi fan qoshish',"🗑 Botni Restart qilish"],
         ['🧹 Reytingni tozalash','📣 Xabar tarqatish'],
         ["🎭 Sohta ball qo'shish",'⬅️ Orqaga (Fanlar)'],
+        ['🚫 Bloklash','🔓 Blokdan chiqarish'],
     ]).resize();
 }
 
@@ -496,6 +500,12 @@ bot.use(async (ctx, next) => {
     return next();
 });
 bot.use(async (ctx, next) => {
+    if (!ctx.from?.id || isAdmin(ctx.from.id)) return next();
+    const blocked = getBlocked();
+    if (blocked[ctx.from.id]) return ctx.reply('🚫 Siz botdan bloklangansiz. Admin tomonidan bloklangansiz. To\'g\'ri foydalanish uchun botdan to\'g\'ri maqsadda foydalaning.');
+    return next();
+});
+bot.use(async (ctx, next) => {
     if (ctx.message?.text === '/start') return next();
     if (ctx.callbackQuery) return next();
     try {
@@ -635,6 +645,35 @@ bot.action('reject_tour', async (ctx) => {
     ctx.session.adminStep = null;
     await ctx.answerCbQuery('Musobaqa bekor qilindi');
     await ctx.editMessageText("❌ <b>Musobaqa yaratish bekor qilindi.</b>",{parse_mode:'HTML'});
+    return ctx.reply('🛠 Admin Panel', adminMainKeyboard(getDb()));
+});
+bot.action('confirm_block', async (ctx) => {
+    if (!isAdmin(ctx.from.id)) return ctx.answerCbQuery("Ruxsat yo'q!");
+    const s = ctx.session;
+    const blockId = s.pendingBlockId;
+    const blockName = s.pendingBlockName || `ID: ${blockId}`;
+    s.pendingBlockId = null; s.pendingBlockName = null;
+    if (!blockId) return ctx.answerCbQuery('Xatolik');
+    const blocked = getBlocked();
+    const db = getDb();
+    blocked[blockId] = { name: blockName, blockedAt: Date.now() };
+    saveBlocked(blocked);
+    await ctx.answerCbQuery('✅ Bloklandi!');
+    await ctx.editMessageText(`🚫 <b>${escapeHTML(blockName)}</b> (ID: <code>${blockId}</code>) bloklandi.`, {parse_mode:'HTML'});
+    // Notify blocked user
+    await ctx.telegram.sendMessage(blockId, `🚫 <b>${escapeHTML(blockName)}</b> bloklandi. Noqulay foydalangani uchun botdan to'g\'ri maqsadda foydalaning.`, {parse_mode:'HTML'}).catch(()=>{});
+    // Notify ALL users about the block
+    for (const uid of Object.keys(db.users)) {
+        if (String(uid) === String(blockId)) continue;
+        await ctx.telegram.sendMessage(uid, `⚠️ <b>E'lon:</b> <b>${escapeHTML(blockName)}</b> foydalanuvchi admin tomonidan botdan bloklandi.`, {parse_mode:'HTML'}).catch(()=>{});
+    }
+    return ctx.reply('🛠 Admin Panel', adminMainKeyboard(getDb()));
+});
+bot.action('cancel_block', async (ctx) => {
+    if (!isAdmin(ctx.from.id)) return ctx.answerCbQuery("Ruxsat yo'q!");
+    ctx.session.pendingBlockId = null; ctx.session.pendingBlockName = null;
+    await ctx.answerCbQuery('Bekor qilindi');
+    await ctx.editMessageText('❌ Bloklash bekor qilindi.');
     return ctx.reply('🛠 Admin Panel', adminMainKeyboard(getDb()));
 });
 bot.action('join_tour', async (ctx) => {
@@ -992,6 +1031,26 @@ bot.hears(/^⏱ Vaqt: \d+s$/, (ctx) => {
 bot.hears('➕ Yangi fan qoshish', (ctx) => { if(!isAdmin(ctx.from.id))return; ctx.session.waitingForSubjectName=true; return ctx.reply("Yangi fan nomini kiriting:", Markup.keyboard([['🚫 Bekor qilish']]).resize()); });
 bot.hears(["🗑 Foydalanuvchini o'chirish"], (ctx) => { if(!isAdmin(ctx.from.id))return; ctx.session.adminStep='wait_delete_id'; return ctx.reply("🗑 O'chirmoqchi bo'lgan foydalanuvchining ID raqamini kiriting:"); });
 bot.hears(['⬅️ Orqaga (Admin)','⬅️ Orqaga'], (ctx) => { if(!isAdmin(ctx.from.id))return; return ctx.reply('Admin paneli:', adminMainKeyboard(getDb())); });
+bot.hears('🚫 Bloklash', (ctx) => {
+    if (!isAdmin(ctx.from.id)) return;
+    ctx.session.adminStep = 'wait_block_id';
+    return ctx.reply("🚫 Bloklamoqchi bo'lgan foydalanuvchining Telegram ID raqamini kiriting:", Markup.keyboard([['🚫 Bekor qilish']]).resize());
+});
+bot.hears('🔓 Blokdan chiqarish', async (ctx) => {
+    if (!isAdmin(ctx.from.id)) return;
+    const blocked = getBlocked();
+    const ids = Object.keys(blocked);
+    if (ids.length === 0) return ctx.reply("✅ Bloklangan foydalanuvchilar yo'q.", adminMainKeyboard(getDb()));
+    const db = getDb();
+    let text = '🔓 <b>Bloklangan foydalanuvchilar:</b>\n\n';
+    ids.forEach((id, i) => {
+        const name = db.users[id]?.name || blocked[id]?.name || 'Noma\'lum';
+        text += `${i+1}. <b>${escapeHTML(name)}</b> — ID: <code>${id}</code>\n`;
+    });
+    text += '\nBlokdan chiqarish uchun ID raqamini kiriting:';
+    ctx.session.adminStep = 'wait_unblock_id';
+    return ctx.replyWithHTML(text, Markup.keyboard([['🚫 Bekor qilish']]).resize());
+});
 bot.hears('🏆 Haftalik musobaqa', (ctx) => { if(!isAdmin(ctx.from.id))return; ctx.session.adminStep='wait_tour_date'; return ctx.reply("📅 Musobaqa sanasini kiriting (masalan: 09.03.2026):", Markup.keyboard([['🚫 Bekor qilish']]).resize()); });
 
 // ============================================================
@@ -1226,6 +1285,36 @@ bot.on(['text','photo','video','animation','document'], async (ctx, next) => {
             const db = getDb();
             if (db.users[delId]) { const userName=db.users[delId].name||'Foydalanuvchi'; delete db.users[delId]; saveDb(db); return ctx.reply(`✅ Foydalanuvchi (${escapeHTML(userName)}, ID: ${delId}) o'chirildi.`); }
             return ctx.reply("❌ Bunday ID li foydalanuvchi topilmadi.");
+        }
+        if (s.adminStep === 'wait_block_id') {
+            if (msgText === '🚫 Bekor qilish') { s.adminStep = null; return ctx.reply('Bekor qilindi.', adminMainKeyboard(getDb())); }
+            const blockId = parseInt(msgText);
+            if (isNaN(blockId)) return ctx.reply('❌ Faqat raqam (ID) kiriting:');
+            s.adminStep = null;
+            const db = getDb();
+            const targetUser = db.users[blockId];
+            const targetName = targetUser?.name || `ID: ${blockId}`;
+            // Confirm before blocking
+            s.pendingBlockId = blockId;
+            s.pendingBlockName = targetName;
+            return ctx.replyWithHTML(
+                `🚫 <b>${escapeHTML(targetName)}</b> (ID: <code>${blockId}</code>) foydalanuvchini bloklashni tasdiqlaysizmi?`,
+                Markup.inlineKeyboard([[Markup.button.callback('✅ Ha, bloklash','confirm_block'),Markup.button.callback("❌ Yo'q",'cancel_block')]])
+            );
+        }
+        if (s.adminStep === 'wait_unblock_id') {
+            if (msgText === '🚫 Bekor qilish') { s.adminStep = null; return ctx.reply('Bekor qilindi.', adminMainKeyboard(getDb())); }
+            const unblockId = parseInt(msgText);
+            if (isNaN(unblockId)) return ctx.reply('❌ Faqat raqam (ID) kiriting:');
+            s.adminStep = null;
+            const blocked = getBlocked();
+            if (!blocked[unblockId]) return ctx.reply('❌ Bu foydalanuvchi bloklangan emas.', adminMainKeyboard(getDb()));
+            const unblockedName = blocked[unblockId]?.name || `ID: ${unblockId}`;
+            delete blocked[unblockId];
+            saveBlocked(blocked);
+            // Notify unblocked user
+            await ctx.telegram.sendMessage(unblockId, '🔓 Siz botdan blok olib tashlandi. Endi botdan foydalanishingiz mumkin!').catch(()=>{});
+            return ctx.reply(`✅ <b>${escapeHTML(unblockedName)}</b> blokdan chiqarildi.`, {parse_mode:'HTML', ...adminMainKeyboard(getDb())});
         }
     }
     // Ro'yxatdan o'tish
@@ -2307,6 +2396,12 @@ app.post('/api/tg-auth', async (req, res) => {
         if (!tgId) return res.status(400).json({error:'tgId kerak'});
 
         const tgIdStr = String(tgId);
+
+        // Bloklangan foydalanuvchi tekshirish
+        const blockedUsers = getBlocked();
+        if (blockedUsers[tgIdStr]) {
+            return res.status(403).json({ error: 'blocked', message: 'Siz admin tomonidan bloklangansiz. Test yecholmaysiz.' });
+        }
         const tgName  = [tgFirstName, tgLastName].filter(Boolean).join(' ') || tgUsername || 'Foydalanuvchi';
         const tgUsr   = (tgUsername||'').replace('@','').toLowerCase();
         const wu      = getWebUsers();
