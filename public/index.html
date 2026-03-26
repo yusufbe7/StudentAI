@@ -552,53 +552,147 @@ body.dark .screen-login { background:#0f0f0f; }
 </div>
 
 <!-- ═══════════════════ LOGIN ═══════════════════ -->
-<div class="screen active" id="screen-login">
-  <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:20px;padding:32px;text-align:center;">
+<div class="screen active" id="screen-login" style="background:#fafafa;overflow-y:auto;">
+  <!-- Hidden TG compat elements (JS still references these) -->
+  <div id="tg-login-loader" style="display:none;"></div>
+  <div id="tg-login-card" style="display:none;">
+    <div id="tg-login-ava"></div><div id="tg-login-name"></div>
+    <div id="tg-login-meta"></div><div id="tg-login-progress"></div>
+  </div>
+  <div id="tg-login-fallback" style="display:none;"></div>
+
+  <div style="min-height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px 16px;gap:10px;">
+
     <!-- Logo -->
-    <div style="width:80px;height:80px;border-radius:24px;background:var(--green);display:flex;align-items:center;justify-content:center;font-size:36px;box-shadow:0 12px 32px rgba(34,197,94,0.35);">⚡</div>
-    <div>
-      <div style="font-size:26px;font-weight:900;color:var(--text);">Student AI</div>
-      <div style="font-size:13px;color:var(--text3);margin-top:4px;">O'quv platformasi</div>
+    <div style="text-align:center;margin-bottom:4px;">
+      <div style="width:72px;height:72px;border-radius:20px;background:var(--green,#22c55e);display:inline-flex;align-items:center;justify-content:center;font-size:34px;box-shadow:0 8px 24px rgba(34,197,94,.35);">⚡</div>
+      <div style="font-size:30px;font-weight:900;margin-top:10px;color:#111;letter-spacing:-0.5px;">Student AI</div>
     </div>
 
-    <!-- Default loading (always visible until JS replaces) -->
-    <div id="tg-login-loader" style="width:100%;max-width:320px;">
-      <div style="width:100%;height:4px;background:var(--border,#eee);border-radius:2px;overflow:hidden;">
-        <div style="width:60%;height:100%;background:var(--green,#22c55e);border-radius:2px;animation:tgslide 1.2s ease-in-out infinite;"></div>
+    <!-- TG auto-login indicator (shows while TG auth is running) -->
+    <div id="ig-tg-status" style="display:none;width:100%;max-width:350px;background:#e8f5e9;border-radius:8px;padding:10px 14px;font-size:13px;color:#166534;font-weight:600;text-align:center;"></div>
+
+    <!-- Login box -->
+    <div style="width:100%;max-width:350px;background:#fff;border:1px solid #dbdbdb;border-radius:6px;padding:28px 28px 20px;">
+      <div style="font-size:17px;font-weight:800;color:#111;margin-bottom:20px;text-align:center;">Student Bot ga kirish</div>
+
+      <div style="margin-bottom:8px;">
+        <input id="ig-user-inp" type="text" placeholder="Telefon raqam yoki username" autocomplete="username" autocorrect="off" autocapitalize="off"
+          style="width:100%;padding:10px 10px;background:#fafafa;border:1px solid #dbdbdb;border-radius:4px;font-size:14px;outline:none;box-sizing:border-box;font-family:inherit;"
+          oninput="igLoginInputChange()" onkeydown="if(event.key==='Enter')document.getElementById('ig-pass-inp').focus()">
       </div>
-      <div style="font-size:12px;color:var(--text3,#888);margin-top:10px;">Yuklanmoqda...</div>
+      <div style="margin-bottom:14px;">
+        <input id="ig-pass-inp" type="password" placeholder="Parol" autocomplete="current-password"
+          style="width:100%;padding:10px 10px;background:#fafafa;border:1px solid #dbdbdb;border-radius:4px;font-size:14px;outline:none;box-sizing:border-box;font-family:inherit;"
+          oninput="igLoginInputChange()" onkeydown="if(event.key==='Enter')doIgLogin()">
+      </div>
+
+      <button id="ig-login-btn" onclick="doIgLogin()" disabled
+        style="width:100%;padding:10px;background:var(--green,#22c55e);color:#fff;border:none;border-radius:6px;font-size:15px;font-weight:700;cursor:pointer;opacity:.5;transition:.2s;font-family:inherit;">
+        Kirish
+      </button>
+
+      <div id="ig-login-err" style="display:none;color:#ed4956;font-size:12px;text-align:center;margin-top:10px;font-weight:600;"></div>
+
+      <div style="text-align:center;margin-top:14px;">
+        <span onclick="showFpModal()" style="font-size:13px;color:#385185;font-weight:600;cursor:pointer;">Parolni unutdingizmi?</span>
+      </div>
     </div>
 
-    <!-- TG foydalanuvchi kartasi -->
-    <div id="tg-login-card" style="display:none;width:100%;max-width:320px;background:var(--card,#fff);border-radius:20px;padding:20px;box-shadow:0 2px 16px rgba(0,0,0,0.08);">
-      <div style="display:flex;align-items:center;gap:14px;">
-        <div id="tg-login-ava" style="width:56px;height:56px;border-radius:50%;background:var(--green-bg,#e8f5e9);display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:900;color:var(--green,#22c55e);flex-shrink:0;overflow:hidden;"></div>
-        <div style="flex:1;text-align:left;">
-          <div style="font-size:17px;font-weight:800;color:var(--text,#111);" id="tg-login-name">—</div>
-          <div style="font-size:12px;color:var(--text3,#888);margin-top:2px;" id="tg-login-meta">Telegram orqali kirilmoqda...</div>
-        </div>
-      </div>
-      <div id="tg-login-progress" style="margin-top:16px;">
-        <div style="width:100%;height:4px;background:var(--border,#eee);border-radius:2px;overflow:hidden;">
-          <div style="width:60%;height:100%;background:var(--green,#22c55e);border-radius:2px;animation:tgslide 1.2s ease-in-out infinite;"></div>
-        </div>
-        <div style="font-size:12px;color:var(--text3,#888);margin-top:8px;">Kirish amalga oshirilmoqda...</div>
-      </div>
+    <!-- OR divider -->
+    <div style="width:100%;max-width:350px;display:flex;align-items:center;gap:14px;">
+      <div style="flex:1;height:1px;background:#dbdbdb;"></div>
+      <span style="font-size:12px;font-weight:700;color:#8e8e8e;letter-spacing:.5px;">YOKI</span>
+      <div style="flex:1;height:1px;background:#dbdbdb;"></div>
     </div>
 
-    <!-- Telegram orqali ochilmagan holda -->
-    <div id="tg-login-fallback" style="display:none;width:100%;max-width:320px;">
-      <div style="background:var(--card,#fff);border-radius:20px;padding:24px;box-shadow:0 2px 16px rgba(0,0,0,0.08);">
-        <div style="font-size:40px;margin-bottom:12px;">📱</div>
-        <div style="font-size:16px;font-weight:800;color:var(--text,#111);margin-bottom:8px;">Telegram orqali oching</div>
-        <div style="font-size:13px;color:var(--text3,#888);line-height:1.6;">Bu ilova faqat Telegram bot orqali ishlaydi.<br>Botga /start yuboring va "Ilovani ochish" tugmasini bosing.</div>
-      </div>
-      <div style="margin-top:16px;">
-        <span style="font-size:12px;color:var(--text3,#888);cursor:pointer;font-weight:600;" onclick="openAdminModal()">🔐 Admin</span>
-      </div>
+    <!-- Create account -->
+    <div style="width:100%;max-width:350px;background:#fff;border:1px solid #dbdbdb;border-radius:6px;padding:14px;text-align:center;">
+      <span style="font-size:14px;color:#111;">Hisobingiz yo'qmi? </span>
+      <span onclick="showRegisterScreen()" style="color:var(--green,#22c55e);font-weight:700;cursor:pointer;font-size:14px;">Ro'yxatdan o'tish</span>
+    </div>
+
+    <!-- Admin link -->
+    <div style="margin-top:4px;">
+      <span onclick="openAdminModal()" style="font-size:12px;color:#aaa;cursor:pointer;">🔐 Admin</span>
     </div>
   </div>
   <style>@keyframes tgslide{0%{transform:translateX(-100%)}100%{transform:translateX(300%)}}</style>
+</div>
+
+<!-- ═══ Register Screen - Instagram Style ═══ -->
+<div class="screen" id="screen-register" style="background:#fafafa;overflow-y:auto;">
+  <div style="min-height:100%;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:20px 16px;gap:10px;">
+
+    <!-- Back + Logo -->
+    <div style="width:100%;max-width:350px;display:flex;align-items:center;gap:12px;margin-bottom:4px;">
+      <button onclick="showLoginScreen()" style="background:none;border:none;font-size:22px;cursor:pointer;padding:4px 8px;color:#111;line-height:1;">←</button>
+      <div style="width:38px;height:38px;border-radius:10px;background:var(--green,#22c55e);display:flex;align-items:center;justify-content:center;font-size:18px;">⚡</div>
+    </div>
+
+    <!-- Title -->
+    <div style="width:100%;max-width:350px;">
+      <div style="font-size:22px;font-weight:900;color:#111;line-height:1.2;">Get started on Student Bot</div>
+      <div style="font-size:13px;color:#8e8e8e;margin-top:6px;">Botdan foydalanish uchun ro'yxatdan o'ting.</div>
+    </div>
+
+    <!-- Register form -->
+    <div style="width:100%;max-width:350px;background:#fff;border:1px solid #dbdbdb;border-radius:6px;padding:24px 28px;display:flex;flex-direction:column;gap:12px;">
+
+      <!-- Phone -->
+      <div>
+        <div style="font-size:12px;font-weight:700;color:#111;margin-bottom:5px;">Telefon raqam</div>
+        <input id="reg-phone" type="tel" placeholder="+998 99 123 45 67" autocomplete="tel"
+          style="width:100%;padding:10px;background:#fafafa;border:1px solid #dbdbdb;border-radius:4px;font-size:14px;outline:none;box-sizing:border-box;font-family:inherit;"
+          onfocus="this.style.borderColor='#888'" onblur="this.style.borderColor='#dbdbdb'">
+      </div>
+
+      <!-- Password -->
+      <div>
+        <div style="font-size:12px;font-weight:700;color:#111;margin-bottom:5px;">Parol</div>
+        <input id="reg-password" type="password" placeholder="Kamida 6 ta belgi" autocomplete="new-password"
+          style="width:100%;padding:10px;background:#fafafa;border:1px solid #dbdbdb;border-radius:4px;font-size:14px;outline:none;box-sizing:border-box;font-family:inherit;"
+          onfocus="this.style.borderColor='#888'" onblur="this.style.borderColor='#dbdbdb'">
+      </div>
+
+      <!-- Full name -->
+      <div>
+        <div style="font-size:12px;font-weight:700;color:#111;margin-bottom:5px;">To'liq ism</div>
+        <input id="reg-name" type="text" placeholder="Ism Familiya" autocomplete="name"
+          style="width:100%;padding:10px;background:#fafafa;border:1px solid #dbdbdb;border-radius:4px;font-size:14px;outline:none;box-sizing:border-box;font-family:inherit;"
+          onfocus="this.style.borderColor='#888'" onblur="this.style.borderColor='#dbdbdb'">
+      </div>
+
+      <!-- Username -->
+      <div>
+        <div style="font-size:12px;font-weight:700;color:#111;margin-bottom:5px;">Username</div>
+        <input id="reg-username" type="text" placeholder="username (faqat a-z, 0-9, _)" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+          style="width:100%;padding:10px;background:#fafafa;border:1px solid #dbdbdb;border-radius:4px;font-size:14px;outline:none;box-sizing:border-box;font-family:inherit;"
+          oninput="checkRegUsername(this.value)"
+          onfocus="this.style.borderColor='#888'" onblur="this.style.borderColor='#dbdbdb'">
+        <div id="reg-user-status" style="font-size:11px;margin-top:5px;min-height:16px;"></div>
+      </div>
+
+      <!-- Terms -->
+      <div style="font-size:11px;color:#8e8e8e;line-height:1.5;text-align:center;">
+        <b>Submit</b> tugmasini bosish bilan siz Student AI ning foydalanish shartlariga rozilik bildirasiz.
+      </div>
+
+      <!-- Error -->
+      <div id="reg-err" style="display:none;color:#ed4956;font-size:12px;text-align:center;font-weight:600;"></div>
+
+      <!-- Submit -->
+      <button id="reg-submit-btn" onclick="submitRegister()"
+        style="width:100%;padding:10px;background:var(--green,#22c55e);color:#fff;border:none;border-radius:6px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;transition:.2s;">
+        Submit
+      </button>
+    </div>
+
+    <!-- Already have account -->
+    <div style="width:100%;max-width:350px;background:#fff;border:1px solid #dbdbdb;border-radius:6px;padding:14px;text-align:center;">
+      <span onclick="showLoginScreen()" style="font-size:14px;font-weight:600;cursor:pointer;color:#385185;">I already have an account</span>
+    </div>
+  </div>
 </div>
 <!-- ═══════════════════ APP ═══════════════════ -->
 <div class="screen" id="screen-app">
@@ -1523,38 +1617,25 @@ let _nickLoginDebounce = null;
 // ═══════════════════════════════════════════════
 // TG login kartasini ko'rsatish (foydalanuvchi rasmi + ismi)
 function showTgLoginCard(tgUser) {
-  const card = document.getElementById('tg-login-card');
-  const avaEl = document.getElementById('tg-login-ava');
-  const nameEl = document.getElementById('tg-login-name');
-  const metaEl = document.getElementById('tg-login-meta');
-  if (!card) return;
-  // Loader yashirish
-  const loader = document.getElementById('tg-login-loader');
-  if (loader) loader.style.display = 'none';
-  card.style.display = 'block';
+  // Yangi dizaynda TG auth indikatorini ko'rsatamiz
   const fullName = [tgUser.first_name, tgUser.last_name].filter(Boolean).join(' ') || tgUser.username || 'Foydalanuvchi';
-  if (nameEl) nameEl.textContent = fullName;
-  if (metaEl) metaEl.textContent = tgUser.username ? '@' + tgUser.username : 'Telegram foydalanuvchi';
-  if (avaEl) {
-    // Telegram profil rasmini olishga urinish
-    const photoUrl = `${window.location.origin}/api/telegram-photo/${tgUser.id}`;
-    const img = document.createElement('img');
-    img.style.cssText = 'width:100%;height:100%;object-fit:cover;';
-    img.onload = () => { avaEl.innerHTML = ''; avaEl.appendChild(img); };
-    img.onerror = () => { avaEl.textContent = (fullName[0]||'?').toUpperCase(); };
-    img.src = photoUrl;
+  const indicator = document.getElementById('ig-tg-status');
+  if (indicator) {
+    indicator.textContent = '✈️ ' + fullName + ' — Telegram orqali kirish amalga oshirilmoqda...';
+    indicator.style.display = 'block';
   }
+  // Compat: to'ldirish (ko'rinmasa ham)
+  const nameEl = document.getElementById('tg-login-name');
+  if (nameEl) nameEl.textContent = fullName;
 }
 
 async function tryTgAutoLogin(tgUser) {
-  const prog = document.getElementById('tg-login-progress');
   const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 8000); // 8s timeout
-
+  const timeoutId = setTimeout(() => controller.abort(), 8000);
   try {
     const r = await fetch('/api/tg-auth', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {'Content-Type':'application/json'},
       body: JSON.stringify({
         tgId: tgUser.id, tgUsername: tgUser.username || '',
         tgFirstName: tgUser.first_name || '', tgLastName: tgUser.last_name || '',
@@ -1563,255 +1644,166 @@ async function tryTgAutoLogin(tgUser) {
     });
     clearTimeout(timeoutId);
     const d = await r.json();
-    // Bloklangan foydalanuvchi
+    const indicator = document.getElementById('ig-tg-status');
+    if (indicator) indicator.style.display = 'none';
+
     if (r.status === 403 && d.error === 'blocked') {
-      if (prog) prog.innerHTML = '<div style="color:#ef4444;font-size:13px;font-weight:700;margin-top:12px;line-height:1.6;">🚫 Admin tomonidan bloklangansiz.<br>Test yecholmaysiz.</div>';
+      const errEl = document.getElementById('ig-login-err');
+      if (errEl) { errEl.textContent = '🚫 Admin tomonidan bloklangansiz. Test yecholmaysiz.'; errEl.style.display = 'block'; }
       return;
     }
     if (r.ok && d.success) {
       const u = d.user;
-      if (prog) prog.innerHTML = '<div style="color:var(--green);font-size:13px;font-weight:700;margin-top:8px;">✅ Muvaffaqiyatli kirildi!</div>';
       saveSess({ username: u.username, isAdmin: false, nickname: u.nickname, tgId: String(tgUser.id) });
       const users = getUsers();
       users[u.username] = { username: u.username, name: u.name, nickname: u.nickname,
         tgId: String(tgUser.id), tgUsername: u.tgUsername || '',
         univ: u.univ || '', kurs: u.kurs || '', pass: null, createdAt: Date.now() };
       saveUsers(users);
-      setTimeout(() => openApp(u.username, false), 400);
+      setTimeout(() => openApp(u.username, false), 300);
     } else {
       throw new Error(d.error || 'TG auth failed');
     }
   } catch(e) {
     clearTimeout(timeoutId);
-    console.log('[TG Auto Login] failed:', e.message);
-    // Loader va karta yashirish
-    const loader = document.getElementById('tg-login-loader');
-    if (loader) loader.style.display = 'none';
-    const card = document.getElementById('tg-login-card');
-    if (card) card.style.display = 'none';
-    const fallback = document.getElementById('tg-login-fallback');
-    if (fallback) {
-      fallback.style.display = 'block';
-      fallback.innerHTML = `
-        <div style="background:var(--card);border-radius:20px;padding:24px;box-shadow:0 2px 16px rgba(0,0,0,0.08);">
-          <div style="font-size:32px;margin-bottom:12px;text-align:center;">👤</div>
-          <div style="font-size:16px;font-weight:800;color:var(--text);margin-bottom:8px;text-align:center;">@Nikname bilan kirish</div>
-          <div style="font-size:13px;color:var(--text3);margin-bottom:16px;text-align:center;">Avtomatik kirish ishlamadi</div>
-          <div style="display:flex;align-items:center;background:var(--bg);border:1.5px solid transparent;border-radius:12px;padding:0 14px;margin-bottom:10px;" id="fb-wrap">
-            <span style="font-size:15px;font-weight:700;color:var(--text3);">@</span>
-            <input id="fb-nick-inp" type="text" placeholder="nikname" autocomplete="off" autocorrect="off" autocapitalize="off"
-              style="flex:1;padding:12px 6px;background:transparent;border:none;outline:none;font-family:'Inter',sans-serif;font-size:15px;font-weight:700;color:var(--text);"
-              oninput="onFbNickInput(this.value)"
-              onkeydown="if(event.key==='Enter')doFbLogin()">
-          </div>
-          <div id="fb-status" style="font-size:12px;color:var(--text3);min-height:20px;margin-bottom:10px;padding:0 4px;"></div>
-          <div id="fb-pass-area" style="display:none;margin-bottom:10px;">
-            <input id="fb-pass-inp" type="password" placeholder="Parol"
-              style="width:100%;padding:12px 14px;background:var(--bg);border:1.5px solid transparent;border-radius:12px;color:var(--text);font-family:'Inter',sans-serif;font-size:14px;outline:none;"
-              onkeydown="if(event.key==='Enter')doFbLogin()">
-          </div>
-          <button id="fb-btn" onclick="doFbLogin()" disabled
-            style="width:100%;padding:13px;background:#ccc;color:#fff;border:none;border-radius:13px;font-family:'Inter',sans-serif;font-size:14px;font-weight:700;cursor:not-allowed;transition:all .3s;">
-            Kirish →
-          </button>
-          <div id="fb-err" style="font-size:12px;color:var(--red);text-align:center;margin-top:8px;display:none;font-weight:600;"></div>
-        </div>
-        <div style="margin-top:12px;text-align:center;">
-          <span onclick="openAdminModal()" style="font-size:12px;color:var(--text3);cursor:pointer;font-weight:600;">🔐 Admin</span>
-        </div>`;
-    }
+    const indicator = document.getElementById('ig-tg-status');
+    if (indicator) indicator.style.display = 'none';
+    console.log('[TG Auto Login] failed, manual login available:', e.message);
+    // Instagram login form is already visible — user can log in manually
   }
 }
 
-// Fallback login helpers
-let _fbFoundUser = null, _fbNickDebounce = null, _fbIsNew = false;
-
-function onFbNickInput(val) {
-  _fbFoundUser = null; _fbIsNew = false;
-  const nick = val.replace(/^@/,'').trim().toLowerCase();
-  const btn = document.getElementById('fb-btn');
-  const status = document.getElementById('fb-status');
-  const passArea = document.getElementById('fb-pass-area');
-  const wrap = document.getElementById('fb-wrap');
-  if (btn) { btn.disabled = true; btn.style.background = '#ccc'; btn.style.cursor = 'not-allowed'; }
-  if (passArea) passArea.style.display = 'none';
-  if (!nick || nick.length < 2) { if (status) status.textContent = ''; return; }
-  if (!/^[a-z0-9_.]+$/.test(nick)) {
-    if (status) { status.style.color = 'var(--red)'; status.textContent = '❌ Faqat lotin, raqam, _ yoki .'; }
-    return;
-  }
-  if (status) { status.style.color = 'var(--text3)'; status.textContent = '⏳ Tekshirilmoqda...'; }
-  clearTimeout(_fbNickDebounce);
-  _fbNickDebounce = setTimeout(async () => {
-    try {
-      const r = await fetch(`/api/user-by-nick?nickname=${encodeURIComponent(nick)}`);
-      if (r.ok) {
-        const d = await r.json();
-        _fbFoundUser = d; _fbIsNew = false;
-        if (status) { status.style.color = 'var(--green)'; status.textContent = `✅ @${nick} topildi`; }
-        if (wrap) wrap.style.borderColor = 'var(--green)';
-        if (passArea) passArea.style.display = 'block';
-        if (btn) { btn.disabled = false; btn.style.background = 'var(--green)'; btn.style.cursor = 'pointer'; btn.textContent = 'Kirish →'; }
-      } else {
-        _fbIsNew = true;
-        if (status) { status.style.color = 'var(--blue,#3b82f6)'; status.textContent = `✨ @${nick} yangi akkaunt`; }
-        if (passArea) passArea.style.display = 'block';
-        if (btn) { btn.disabled = false; btn.style.background = 'var(--blue,#3b82f6)'; btn.style.cursor = 'pointer'; btn.textContent = 'Yaratish →'; }
-      }
-    } catch { if (status) { status.style.color = 'var(--text3)'; status.textContent = '⚠️ Xatolik'; } }
-  }, 500);
+// ═══════════════════════════════════════════════
+// INSTAGRAM-STYLE LOGIN / REGISTER
+// ═══════════════════════════════════════════════
+function igLoginInputChange() {
+  const u = (document.getElementById('ig-user-inp')?.value || '').trim();
+  const p = document.getElementById('ig-pass-inp')?.value || '';
+  const btn = document.getElementById('ig-login-btn');
+  if (!btn) return;
+  const ok = u.length > 0 && p.length > 0;
+  btn.disabled = !ok;
+  btn.style.opacity = ok ? '1' : '0.5';
+  btn.style.cursor = ok ? 'pointer' : 'default';
 }
 
-async function doFbLogin() {
-  const nick = (document.getElementById('fb-nick-inp')?.value || '').replace(/^@/,'').trim().toLowerCase();
-  const pass = document.getElementById('fb-pass-inp')?.value || '';
-  const errEl = document.getElementById('fb-err');
-  const btn = document.getElementById('fb-btn');
+async function doIgLogin() {
+  const uRaw = (document.getElementById('ig-user-inp')?.value || '').trim();
+  const p = document.getElementById('ig-pass-inp')?.value || '';
+  const errEl = document.getElementById('ig-login-err');
+  const btn = document.getElementById('ig-login-btn');
+  if (!uRaw || !p) return;
   if (errEl) errEl.style.display = 'none';
-  if (!nick || !pass || pass.length < 6) {
-    if (errEl) { errEl.textContent = 'Nikname va parolni to\'liq kiriting (min 6 belgi)'; errEl.style.display = 'block'; }
-    return;
-  }
-  if (btn) { btn.textContent = '⏳...'; btn.disabled = true; }
+  if (btn) { btn.disabled = true; btn.textContent = 'Kirish...'; }
   try {
-    if (_fbIsNew) {
-      const tgUser = window.Telegram?.WebApp?.initDataUnsafe?.user;
-      const r = await fetch('/api/web-auth/register', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username: nick, name: tgUser?.first_name || nick,
-          password: pass, nickname: nick,
-          tgId: tgUser?.id ? String(tgUser.id) : null,
-          tgUsername: tgUser?.username || '' })
-      });
-      const d = await r.json();
-      if (r.ok && d.success) {
-        saveSess({ username: nick, isAdmin: false, nickname: nick });
-        const users = getUsers();
-        users[nick] = { username: nick, name: tgUser?.first_name || nick, nickname: nick, pass, createdAt: Date.now() };
-        saveUsers(users);
-        toast('✅ Xush kelibsiz, @' + nick + '!');
-        openApp(nick, false);
-      } else {
-        if (errEl) { errEl.textContent = d.error === 'exists' ? 'Bu nikname band!' : (d.error || 'Xatolik'); errEl.style.display = 'block'; }
-        if (btn) { btn.textContent = 'Yaratish →'; btn.disabled = false; }
-      }
-    } else {
-      const uname = _fbFoundUser?.username || nick;
-      const r = await fetch('/api/web-auth/login', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username: uname, password: pass })
-      });
-      const d = await r.json();
-      if (r.ok && d.success) {
-        saveSess({ username: uname, isAdmin: false, nickname: d.user?.nickname || nick });
-        const users = getUsers();
-        users[uname] = { ...(users[uname] || {}), username: uname, name: d.user.name, pass, createdAt: Date.now() };
-        saveUsers(users);
-        openApp(uname, false);
-      } else {
-        if (errEl) { errEl.textContent = d.error === 'notfound' ? 'Topilmadi' : 'Parol noto\'g\'ri'; errEl.style.display = 'block'; }
-        if (btn) { btn.textContent = 'Kirish →'; btn.disabled = false; }
-      }
-    }
-  } catch {
-    if (errEl) { errEl.textContent = 'Server bilan bog\'lanib bo\'lmadi'; errEl.style.display = 'block'; }
-    if (btn) { btn.textContent = 'Qayta →'; btn.disabled = false; }
-  }
-}  try {
-    const r = await fetch('/api/tg-auth', {
-      method: 'POST',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({
-        tgId:        tgUser.id,
-        tgUsername:  tgUser.username || '',
-        tgFirstName: tgUser.first_name || '',
-        tgLastName:  tgUser.last_name || '',
-      })
+    const u = uRaw.toLowerCase().replace(/^@/, '').trim();
+    const r = await fetch('/api/web-auth/login', {
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ username: u, password: p })
     });
     const d = await r.json();
-
-    const prog = document.getElementById('tg-login-progress');
-    if (r.status === 403 && d.error === 'blocked') {
-      // Bloklangan foydalanuvchi
-      if (prog) prog.innerHTML = `<div style="color:var(--red,#ef4444);font-size:13px;font-weight:700;margin-top:8px;line-height:1.5;">🚫 Admin tomonidan bloklangansiz.<br>Test yecholmaysiz.</div>`;
-      return;
-    }
+    if (btn) { btn.disabled = false; btn.textContent = 'Kirish'; btn.style.opacity = '1'; }
     if (r.ok && d.success) {
-      const u = d.user;
-      // Progress yashirish
-      if (prog) prog.innerHTML = '<div style="color:var(--green);font-size:13px;font-weight:700;margin-top:8px;">✅ Muvaffaqiyatli kirildi!</div>';
-      // Session saqlash
-      saveSess({ username:u.username, isAdmin:false, nickname:u.nickname, tgId:String(tgUser.id) });
-      // Local cache
       const users = getUsers();
-      users[u.username] = {
-        username:u.username, name:u.name, nickname:u.nickname,
-        tgId:String(tgUser.id), tgUsername:u.tgUsername||'',
-        univ:u.univ||'', kurs:u.kurs||'', pass:null, createdAt:Date.now(),
-      };
+      users[u] = { ...(users[u]||{}), username: u, name: d.user.name, nickname: u, createdAt: d.user.createdAt||Date.now() };
       saveUsers(users);
-      setTimeout(() => openApp(u.username, false), 400);
+      saveSess({ username: u, isAdmin: false, nickname: u });
+      openApp(u, false);
     } else {
-      throw new Error(d.error || 'TG auth failed');
+      const msg = d.error === 'notfound' ? 'Bu username topilmadi'
+                : d.error === 'wrong_password' ? "Parol noto'g'ri"
+                : d.error === 'missing_fields' ? 'Username va parol kiriting'
+                : (d.error || 'Kirish xatoligi');
+      if (errEl) { errEl.textContent = msg; errEl.style.display = 'block'; }
     }
   } catch(e) {
-    console.log('[TG Auto Login] failed:', e.message);
-    const prog = document.getElementById('tg-login-progress');
-    if (prog) prog.innerHTML = `<div style="color:var(--red,#ef4444);font-size:12px;margin-top:8px;">⚠️ Xatolik: ${e.message}<br><span onclick="location.reload()" style="cursor:pointer;text-decoration:underline;">Qayta urinish</span></div>`;
+    if (btn) { btn.disabled = false; btn.textContent = 'Kirish'; }
+    if (errEl) { errEl.textContent = "Server bilan bog'lanib bo'lmadi"; errEl.style.display = 'block'; }
   }
+}
 
+function showRegisterScreen() {
+  document.getElementById('screen-login')?.classList.remove('active');
+  document.getElementById('screen-register')?.classList.add('active');
+  // Clear register form
+  ['reg-phone','reg-password','reg-name','reg-username'].forEach(id => {
+    const el = document.getElementById(id); if (el) el.value = '';
+  });
+  const st = document.getElementById('reg-user-status'); if (st) st.textContent = '';
+  const er = document.getElementById('reg-err'); if (er) er.style.display = 'none';
+}
 
-// TG profilni login ekranida korsatish
-async function loadTgProfileForLogin(){
-  try{
-    const tgUser = window.Telegram?.WebApp?.initDataUnsafe?.user;
-    _loginTgData = tgUser || null;
+function showLoginScreen() {
+  document.getElementById('screen-register')?.classList.remove('active');
+  document.getElementById('screen-login')?.classList.add('active');
+  const ind = document.getElementById('ig-tg-status'); if (ind) ind.style.display = 'none';
+}
 
-    // TG preview korsatish (agar TG dan kelgan bolsa)
-    if(tgUser){
-      const r = await fetch(`/api/tg-profile?tgId=${tgUser.id}&tgUsername=${encodeURIComponent(tgUser.username||'')}`);
-      if(r.ok){
-        const d = await r.json();
-        _loginTgData = {...tgUser, ...d}; // TG + bot malumotlari
-        const prev=document.getElementById('tg-profile-preview');
-        const nameEl=document.getElementById('tg-prev-name');
-        const metaEl=document.getElementById('tg-prev-meta');
-        const avaEl=document.getElementById('tg-prev-ava');
-        if(prev&&nameEl){
-          nameEl.textContent = d.name||tgUser.first_name||'';
-          metaEl.textContent = [d.univ,d.kurs].filter(Boolean).join(' · ')||'Bot foydalanuvchisi';
-          if(avaEl){
-            const url=getPhotoUrl(d.name||'',tgUser.username||'');
-            if(url) avaEl.innerHTML=`<img src="${url}" style="width:100%;height:100%;object-fit:cover;">`;
-            else avaEl.textContent=ini(d.name||tgUser.first_name||'?');
-          }
-          prev.style.display='block';
-        }
-      }
+let _regUsernameTimer = null;
+function checkRegUsername(rawVal) {
+  const u = rawVal.toLowerCase().replace(/[^a-z0-9_]/g, '');
+  const inp = document.getElementById('reg-username');
+  if (inp && inp.value !== u) inp.value = u; // force clean
+  const status = document.getElementById('reg-user-status');
+  if (!status) return;
+  if (!u || u.length < 3) { status.textContent = u.length > 0 ? 'Kamida 3 ta belgi' : ''; status.style.color = '#8e8e8e'; return; }
+  status.textContent = '⏳ Tekshirilmoqda...'; status.style.color = '#8e8e8e';
+  clearTimeout(_regUsernameTimer);
+  _regUsernameTimer = setTimeout(async () => {
+    try {
+      const r = await fetch('/api/web-auth/me?username=' + encodeURIComponent(u));
+      if (r.status === 404) { status.textContent = '✅ Bu username bo\'sh, ishlatsa bo\'ladi!'; status.style.color = '#22c55e'; }
+      else if (r.ok) { status.textContent = '❌ Bu username allaqachon band!'; status.style.color = '#ed4956'; }
+      else { status.textContent = ''; }
+    } catch { status.textContent = ''; }
+  }, 600);
+}
+
+async function submitRegister() {
+  const phone    = (document.getElementById('reg-phone')?.value || '').trim();
+  const password = document.getElementById('reg-password')?.value || '';
+  const name     = (document.getElementById('reg-name')?.value || '').trim();
+  const username = (document.getElementById('reg-username')?.value || '').trim();
+  const errEl    = document.getElementById('reg-err');
+  const btn      = document.getElementById('reg-submit-btn');
+
+  const showErr = (msg) => { if (errEl) { errEl.textContent = msg; errEl.style.display = 'block'; } };
+  if (errEl) errEl.style.display = 'none';
+
+  if (!phone)                   return showErr('Telefon raqamni kiriting');
+  if (password.length < 6)      return showErr("Parol kamida 6 ta belgi bo'lishi kerak");
+  if (name.length < 3)          return showErr("To'liq ismingizni kiriting (kamida 3 ta belgi)");
+  if (!username || username.length < 3) return showErr('Username kamida 3 ta belgi');
+  if (!/^[a-z0-9_]+$/.test(username))  return showErr("Username faqat a-z, 0-9, _ bo'lishi mumkin");
+
+  if (btn) { btn.disabled = true; btn.textContent = 'Yaratilmoqda...'; }
+  try {
+    const r = await fetch('/api/web-auth/register', {
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ username, name, password, phone })
+    });
+    const d = await r.json();
+    if (btn) { btn.disabled = false; btn.textContent = 'Submit'; }
+
+    if (r.ok && d.success) {
+      showLoginScreen();
+      setTimeout(() => {
+        const uInp = document.getElementById('ig-user-inp');
+        if (uInp) { uInp.value = username; igLoginInputChange(); }
+        toast('✅ Hisob yaratildi! Endi parolingizni kiriting.');
+      }, 100);
+    } else {
+      const msg = d.error === 'exists'            ? '❌ Bu username allaqachon band!'
+                : d.error === 'invalid_username'   ? "Username: faqat a-z, 0-9, _ (kamida 3 ta)"
+                : d.error === 'invalid_password'   ? "Parol kamida 6 ta belgi"
+                : d.error === 'invalid_name'       ? "To'liq ism kamida 3 ta belgi"
+                : (d.error || 'Xatolik yuz berdi');
+      showErr(msg);
     }
-
-    // Web users da shu TG ID bilan bogliq akkaunt bor-yoqligini tekshirish
-    // Agar bor bolsa — niknameni avtomatik toldirish
-    const wu=getUsers();
-    const tgIdStr=tgUser?String(tgUser.id):null;
-    let autoNick=null;
-
-    // 1. tgId boyicha topish
-    if(tgIdStr){
-      const found=Object.values(wu).find(u=>u.tgId===tgIdStr);
-      if(found?.nickname) autoNick=found.nickname;
-    }
-    // 2. TG username boyicha topish
-    if(!autoNick&&tgUser?.username){
-      const r2=await fetch(`/api/user-by-nick?nickname=${encodeURIComponent(tgUser.username)}`);
-      if(r2.ok){ const d2=await r2.json(); autoNick=d2.nickname||d2.username; }
-    }
-
-    if(autoNick){
-      const inp=document.getElementById('nick-login-inp');
-      if(inp){ inp.value=autoNick; onNickLoginInput(autoNick); }
-    }
-  }catch(e){ console.log('[TG Login]',e); }
+  } catch(e) {
+    if (btn) { btn.disabled = false; btn.textContent = 'Submit'; }
+    showErr("Server bilan bog'lanib bo'lmadi");
+  }
 }
 
 // Nikname input — topilsa Kirish, topilmasa Yaratish
@@ -5609,35 +5601,38 @@ function doLogout(){
   // 5. Admin panel yashirish
   const apc=document.getElementById('admin-panel-card');
   if(apc) apc.style.display='none';
-  // 6. Login ekranini qayta reset qilish
-  const loader3 = document.getElementById('tg-login-loader');
-  const card3   = document.getElementById('tg-login-card');
-  const fall3   = document.getElementById('tg-login-fallback');
-  if (loader3) loader3.style.display = 'block';
-  if (card3)   card3.style.display   = 'none';
-  if (fall3)   fall3.style.display   = 'none';
-  // Progress matnini ham reset
-  const prog3 = document.getElementById('tg-login-progress');
-  if (prog3) prog3.innerHTML = '<div style="width:100%;height:4px;background:var(--border,#eee);border-radius:2px;overflow:hidden;"><div style="width:60%;height:100%;background:var(--green,#22c55e);border-radius:2px;animation:tgslide 1.2s ease-in-out infinite;"></div></div><div style="font-size:12px;color:var(--text3,#888);margin-top:8px;">Kirish amalga oshirilmoqda...</div>';
+  // 6. Login ekranini qayta reset qilish (Instagram design)
+  const indicator = document.getElementById('ig-tg-status');
+  if (indicator) indicator.style.display = 'none';
+  const userInp = document.getElementById('ig-user-inp');
+  const passInp = document.getElementById('ig-pass-inp');
+  if (userInp) userInp.value = '';
+  if (passInp) passInp.value = '';
+  const errEl = document.getElementById('ig-login-err');
+  if (errEl) errEl.textContent = '';
+  const loginBtn = document.getElementById('ig-login-btn');
+  if (loginBtn) loginBtn.disabled = true;
+  // Register screen ham yopish
+  const regScr = document.getElementById('screen-register');
+  if (regScr) regScr.classList.remove('active');
   // 7. TG orqali qayta kirish
   const tgUser = window.Telegram?.WebApp?.initDataUnsafe?.user;
   if (tgUser && tgUser.id) {
     showTgLoginCard(tgUser);
     setTimeout(() => tryTgAutoLogin(tgUser), 300);
-  } else {
-    if (loader3) loader3.style.display = 'none';
-    if (fall3)   fall3.style.display   = 'block';
   }
 }
 
 // Init
 function _showFallback() {
-  const loader = document.getElementById('tg-login-loader');
-  const card   = document.getElementById('tg-login-card');
-  const fall   = document.getElementById('tg-login-fallback');
-  if (loader) loader.style.display = 'none';
-  if (card && card.style.display !== 'none') return; // karta ko'rinib tursa fallback ko'rsatma
-  if (fall) fall.style.display = 'block';
+  // Instagram design: faqat ig-tg-status ni yashir, login screen ko'rinadi
+  const indicator = document.getElementById('ig-tg-status');
+  if (indicator) indicator.style.display = 'none';
+  // screen-login active bo'lishi kerak (logout qilmagan bo'lsa)
+  const loginScr = document.getElementById('screen-login');
+  const appScr = document.getElementById('screen-app');
+  if (appScr && appScr.classList.contains('active')) return; // app ochiq bo'lsa qo'yma
+  if (loginScr) loginScr.classList.add('active');
 }
 
 window.addEventListener('DOMContentLoaded', async () => {
@@ -5688,10 +5683,9 @@ window.addEventListener('DOMContentLoaded', async () => {
     showTgLoginCard(tgUser);
     await tryTgAutoLogin(tgUser);
   } else {
-    // Telegram ichida emasmiz
-    const loader2 = document.getElementById('tg-login-loader');
-    if (loader2) loader2.style.display = 'none';
-    document.getElementById('tg-login-fallback').style.display = 'block';
+    // Telegram ichida emasmiz — Instagram login form ko'rinadi (default holatda)
+    const indicator2 = document.getElementById('ig-tg-status');
+    if (indicator2) indicator2.style.display = 'none';
   }
   clearTimeout(globalTimeout);
   initDarkMode();
