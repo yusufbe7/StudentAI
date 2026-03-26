@@ -271,7 +271,8 @@ function adminMainKeyboard(db) {
         ['🧹 Reytingni tozalash','📣 Xabar tarqatish'],
         ["🎭 Sohta ball qo'shish",'⬅️ Orqaga (Fanlar)'],
         ['🚫 Bloklash','🔓 Blokdan chiqarish'],
-        ['💎 VIP berish','🗑 Foydalanuvchini o\'chirish'],
+        ['💎 VIP berish','❌ VIP dan chiqarish'],
+        ["🗑 Foydalanuvchini o'chirish"],
     ]).resize();
 }
 
@@ -1063,6 +1064,19 @@ bot.hears('💎 VIP berish', (ctx) => {
     ctx.session.adminStep = 'wait_vip_id';
     return ctx.reply("💎 VIP bermoqchi bo'lgan foydalanuvchining Telegram ID raqamini kiriting:", Markup.keyboard([['🚫 Bekor qilish']]).resize());
 });
+bot.hears('❌ VIP dan chiqarish', async (ctx) => {
+    if (!isAdmin(ctx.from.id)) return;
+    // VIP foydalanuvchilar ro'yxatini ko'rsatish
+    const db = getDb();
+    const vipList = Object.entries(db.users||{}).filter(([,u]) => u.isVip || vipUsers.includes(parseInt(Object.keys(db.users).find(k=>db.users[k]===u)||0)));
+    const vipFromArr = vipUsers.map(id => ({ id, name: db.users[id]?.name || `ID: ${id}` }));
+    if (vipFromArr.length === 0) return ctx.reply("✅ VIP foydalanuvchilar yo'q.", adminMainKeyboard(getDb()));
+    let text = '❌ <b>VIP foydalanuvchilar:</b>\n\n';
+    vipFromArr.forEach((v, i) => { text += `${i+1}. <b>${escapeHTML(v.name)}</b> — ID: <code>${v.id}</code>\n`; });
+    text += '\nVIP dan chiqarish uchun ID raqamini kiriting:';
+    ctx.session.adminStep = 'wait_unvip_id';
+    return ctx.replyWithHTML(text, Markup.keyboard([['🚫 Bekor qilish']]).resize());
+});
 bot.hears("🗑 Foydalanuvchini o'chirish", (ctx) => { if(!isAdmin(ctx.from.id))return; ctx.session.adminStep='wait_delete_id'; return ctx.reply("🗑 O'chirmoqchi bo'lgan foydalanuvchining ID raqamini kiriting:"); });
 bot.hears('🏆 Haftalik musobaqa', (ctx) => { if(!isAdmin(ctx.from.id))return; ctx.session.adminStep='wait_tour_date'; return ctx.reply("📅 Musobaqa sanasini kiriting (masalan: 09.03.2026):", Markup.keyboard([['🚫 Bekor qilish']]).resize()); });
 
@@ -1293,6 +1307,34 @@ bot.on(['text','photo','video','animation','document'], async (ctx, next) => {
         if (s.adminStep === 'wait_tour_date') { if(msgText==='🚫 Bekor qilish'){s.adminStep=null;return ctx.reply('Bekor qilindi.');} s.tourDate=msgText; s.adminStep='wait_tour_time'; return ctx.reply('🕒 Musobaqa boshlanish soatini kiriting (masalan: 15:00):'); }
         if (s.adminStep === 'wait_tour_time') { s.tourTime=msgText; s.adminStep='wait_tour_count'; return ctx.reply('📝 Jami testlar sonini kiriting (masalan: 50):'); }
         if (s.adminStep === 'wait_tour_count') { if(isNaN(msgText))return ctx.reply('❌ Faqat raqam kiriting:'); s.tourCount=msgText; s.adminStep=null; return ctx.replyWithHTML(`🏆 <b>Yangi musobaqa tafsilotlari:</b>\n\n📅 ${s.tourDate}\n🕒 ${s.tourTime}\n📝 ${s.tourCount} ta\n\nTasdiqlaysizmi?`, Markup.inlineKeyboard([[Markup.button.callback('✅ Tasdiqlash','confirm_tour'),Markup.button.callback('❌ Rad etish','reject_tour')]])); }
+        if (s.adminStep === 'wait_unvip_id') {
+            if (msgText === '🚫 Bekor qilish') { s.adminStep = null; return ctx.reply('Bekor qilindi.', adminMainKeyboard(getDb())); }
+            const unvipId = parseInt(msgText);
+            if (isNaN(unvipId)) return ctx.reply('❌ Faqat Telegram ID (raqam) kiriting:');
+            s.adminStep = null;
+            const db = getDb();
+            const userName = db.users[unvipId]?.name || `ID: ${unvipId}`;
+            // Bot db dan VIP olib tashlash
+            if (db.users[unvipId]) {
+                db.users[unvipId].isVip = false;
+                db.users[unvipId].vipEnd = null;
+                saveDb(db);
+            }
+            // vipUsers arraydan olib tashlash
+            const wasVip = vipUsers.includes(unvipId);
+            vipUsers = vipUsers.filter(id => id !== unvipId);
+            saveVip();
+            // Web users ham yangilash
+            const wu = getWebUsers();
+            const found2 = Object.entries(wu).find(([,u]) => String(u.tgId) === String(unvipId));
+            if (found2) { wu[found2[0]].isVip = false; wu[found2[0]].vipEnd = null; saveWebUsers(wu); }
+            if (!wasVip) return ctx.reply(`❌ ${escapeHTML(userName)} VIP emas edi.`, adminMainKeyboard(getDb()));
+            await ctx.telegram.sendMessage(unvipId,
+                `ℹ️ <b>VIP a'zoligingiz tugadi.</b>\n\nVIP statusingiz admin tomonidan olib tashlandi.\nTo'lov qilish orqali qayta VIP bo'lishingiz mumkin.`,
+                {parse_mode:'HTML'}
+            ).catch(()=>{});
+            return ctx.reply(`✅ <b>${escapeHTML(userName)}</b> VIP dan chiqarildi.`, {parse_mode:'HTML', ...adminMainKeyboard(getDb())});
+        }
         if (s.adminStep === 'wait_vip_id') {
             if (msgText === '🚫 Bekor qilish') { s.adminStep = null; return ctx.reply('Bekor qilindi.', adminMainKeyboard(getDb())); }
             const vipId = parseInt(msgText);

@@ -1584,7 +1584,9 @@ async function tryTgAutoLogin(tgUser) {
   } catch(e) {
     clearTimeout(timeoutId);
     console.log('[TG Auto Login] failed:', e.message);
-    // FALLBACK: Manual login ko'rsat
+    // Loader va karta yashirish
+    const loader = document.getElementById('tg-login-loader');
+    if (loader) loader.style.display = 'none';
     const card = document.getElementById('tg-login-card');
     if (card) card.style.display = 'none';
     const fallback = document.getElementById('tg-login-fallback');
@@ -5629,23 +5631,38 @@ function doLogout(){
 }
 
 // Init
+function _showFallback() {
+  const loader = document.getElementById('tg-login-loader');
+  const card   = document.getElementById('tg-login-card');
+  const fall   = document.getElementById('tg-login-fallback');
+  if (loader) loader.style.display = 'none';
+  if (card && card.style.display !== 'none') return; // karta ko'rinib tursa fallback ko'rsatma
+  if (fall) fall.style.display = 'block';
+}
+
 window.addEventListener('DOMContentLoaded', async () => {
+  // Global timeout: 12s dan keyin hech narsa bo'lmasa fallback ko'rsat
+  const globalTimeout = setTimeout(() => {
+    console.log('[Boot] 12s timeout — fallback ko\'rsatildi');
+    _showFallback();
+  }, 12000);
+
   // ─── 1. FORCE LOGOUT — server versiyasi bilan tekshirish ───
   try {
-    const vr = await fetch('/api/app-version');
+    const verCtrl = new AbortController();
+    setTimeout(() => verCtrl.abort(), 3000); // 3s timeout
+    const vr = await fetch('/api/app-version', { signal: verCtrl.signal });
     if (vr.ok) {
       const vd = await vr.json();
       const serverVer = vd.version || '1';
       const localVer  = localStorage.getItem(APP_VER_KEY) || '0';
       if (serverVer !== localVer) {
         console.log('[Version]', localVer, '→', serverVer, '— force logout');
-        // Barcha eski sessiyalarni tozalash (v1-v4 ham)
         ['sb_sess_v1','sb_sess_v2','sb_sess_v3','sb_sess_v4','sb_sess_v5',SESS_KEY].forEach(k => {
           const old = localStorage.getItem(k);
           if (old) {
             try {
               const p = JSON.parse(old);
-              // Admin sessiyasini saqlab qolish (admin logout bolmasin)
               if (!p.isAdmin) localStorage.removeItem(k);
             } catch { localStorage.removeItem(k); }
           }
@@ -5653,27 +5670,30 @@ window.addEventListener('DOMContentLoaded', async () => {
         localStorage.setItem(APP_VER_KEY, serverVer);
       }
     }
-  } catch(e) { console.log('[Version check failed]', e); }
+  } catch(e) { console.log('[Version check failed]', e.message); }
 
   // ─── 2. Sessiya tekshirish ───────────────────────────────
   const sess = getSess();
   if (sess) {
+    clearTimeout(globalTimeout);
     openApp(sess.username, sess.isAdmin);
     return;
   }
 
   // ─── 3. Login ekranini tayyorlash ───────────────────────
+  // Telegram SDK yuklanishini 1s kutish (ba'zida kechikadi)
+  await new Promise(r => setTimeout(r, 300));
   const tgUser = window.Telegram?.WebApp?.initDataUnsafe?.user;
   if (tgUser && tgUser.id) {
-    // TG foydalanuvchi ma'lumotlarini ko'rsatish
     showTgLoginCard(tgUser);
     await tryTgAutoLogin(tgUser);
   } else {
-    // Telegram orqali ochilmagan
+    // Telegram ichida emasmiz
     const loader2 = document.getElementById('tg-login-loader');
     if (loader2) loader2.style.display = 'none';
     document.getElementById('tg-login-fallback').style.display = 'block';
   }
+  clearTimeout(globalTimeout);
   initDarkMode();
 });
 document.addEventListener('input',e=>{
