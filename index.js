@@ -3058,6 +3058,98 @@ app.get('/api/admin/blocked-users', (req, res) => {
     } catch (err) { res.status(500).json({ error: err.message }); }
 });
 
+// ─── Admin: VIP berish ────────────────────────────────────
+app.post('/api/admin/give-vip', async (req, res) => {
+    try {
+        const { userId } = req.body;
+        if (!userId) return res.status(400).json({ error: 'userId kerak' });
+        const id = parseInt(userId);
+        if (isNaN(id)) return res.status(400).json({ error: 'Notogri ID' });
+        const db = getDb();
+        const now = Date.now();
+        const vipEnd = now + 30*24*60*60*1000;
+        let name = "Noma'lum";
+        if (db.users[id]) {
+            db.users[id].isVip = true;
+            db.users[id].vipStart = now;
+            db.users[id].vipEnd = vipEnd;
+            name = db.users[id].name || name;
+            saveDb(db);
+        }
+        if (!vipUsers.includes(id)) { vipUsers.push(id); saveVip(); }
+        const fmt = ts => new Date(ts).toLocaleDateString('ru-RU',{day:'2-digit',month:'2-digit',year:'numeric'});
+        await bot.telegram.sendMessage(id,
+            `🎉 <b>VIP a'zolik berildi!</b>\n\n📅 Boshlanish: <b>${fmt(now)}</b>\n⏳ Tugaydi: <b>${fmt(vipEnd)}</b>`,
+            { parse_mode: 'HTML' }
+        ).catch(() => {});
+        res.json({ success: true, name, userId: id, vipEnd });
+    } catch (err) {
+        console.error('[give-vip]', err.message);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// ─── Admin: VIP o'chirish ─────────────────────────────────
+app.post('/api/admin/remove-vip', async (req, res) => {
+    try {
+        const { userId } = req.body;
+        if (!userId) return res.status(400).json({ error: 'userId kerak' });
+        const id = parseInt(userId);
+        if (isNaN(id)) return res.status(400).json({ error: 'Notogri ID' });
+        const db = getDb();
+        let found = false;
+        let userName = "Noma'lum";
+        if (db.users[id]) {
+            userName = db.users[id].name || userName;
+            db.users[id].isVip = false;
+            db.users[id].vipEnd = null;
+            db.users[id].vipStart = null;
+            saveDb(db);
+            found = true;
+        }
+        const vipIdx = vipUsers.indexOf(id);
+        if (vipIdx !== -1) { vipUsers.splice(vipIdx, 1); saveVip(); found = true; }
+        const wu = getWebUsers();
+        for (const [k, u] of Object.entries(wu)) {
+            if (u.tgId === String(id)) {
+                u.isVip = false; u.vipEnd = null; u.vipStart = null;
+                wu[k] = u; found = true;
+            }
+        }
+        saveWebUsers(wu);
+        if (found) {
+            await bot.telegram.sendMessage(id,
+                `⚠️ <b>VIP a'zoligingiz admin tomonidan bekor qilindi.</b>`,
+                { parse_mode: 'HTML' }
+            ).catch(() => {});
+        }
+        res.json({ success: true, found, userId: id, name: userName });
+    } catch (err) {
+        console.error('[remove-vip]', err.message);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// ─── Admin: VIP ro'yxat ───────────────────────────────────
+app.get('/api/admin/vip-users', (req, res) => {
+    try {
+        const db = getDb();
+        const list = [];
+        Object.entries(db.users || {}).forEach(([uid, u]) => {
+            if (u.isVip || vipUsers.includes(parseInt(uid))) {
+                list.push({
+                    id: parseInt(uid),
+                    name: u.name || "Noma'lum",
+                    username: u.username || '',
+                    vipEnd: u.vipEnd || null,
+                    expired: u.vipEnd ? Date.now() > u.vipEnd : false
+                });
+            }
+        });
+        res.json({ vipUsers: list, total: list.length });
+    } catch (err) { res.status(500).json({ error: err.message }); }
+});
+
 server.listen(PORT, '0.0.0.0', () => console.log(`🌐 Express+Socket.io server ${PORT}-portda`));
 
 // ─── Socket.io connection handler ─────────────────────────
