@@ -271,6 +271,7 @@ function adminMainKeyboard(db) {
         ['🧹 Reytingni tozalash','📣 Xabar tarqatish'],
         ["🎭 Sohta ball qo'shish",'⬅️ Orqaga (Fanlar)'],
         ['🚫 Bloklash','🔓 Blokdan chiqarish'],
+        ['💎 VIP berish','🗑 Foydalanuvchini o\'chirish'],
     ]).resize();
 }
 
@@ -1057,6 +1058,12 @@ bot.hears('🔓 Blokdan chiqarish', async (ctx) => {
     ctx.session.adminStep = 'wait_unblock_id';
     return ctx.replyWithHTML(text, Markup.keyboard([['🚫 Bekor qilish']]).resize());
 });
+bot.hears('💎 VIP berish', (ctx) => {
+    if (!isAdmin(ctx.from.id)) return;
+    ctx.session.adminStep = 'wait_vip_id';
+    return ctx.reply("💎 VIP bermoqchi bo'lgan foydalanuvchining Telegram ID raqamini kiriting:", Markup.keyboard([['🚫 Bekor qilish']]).resize());
+});
+bot.hears("🗑 Foydalanuvchini o'chirish", (ctx) => { if(!isAdmin(ctx.from.id))return; ctx.session.adminStep='wait_delete_id'; return ctx.reply("🗑 O'chirmoqchi bo'lgan foydalanuvchining ID raqamini kiriting:"); });
 bot.hears('🏆 Haftalik musobaqa', (ctx) => { if(!isAdmin(ctx.from.id))return; ctx.session.adminStep='wait_tour_date'; return ctx.reply("📅 Musobaqa sanasini kiriting (masalan: 09.03.2026):", Markup.keyboard([['🚫 Bekor qilish']]).resize()); });
 
 // ============================================================
@@ -1286,6 +1293,33 @@ bot.on(['text','photo','video','animation','document'], async (ctx, next) => {
         if (s.adminStep === 'wait_tour_date') { if(msgText==='🚫 Bekor qilish'){s.adminStep=null;return ctx.reply('Bekor qilindi.');} s.tourDate=msgText; s.adminStep='wait_tour_time'; return ctx.reply('🕒 Musobaqa boshlanish soatini kiriting (masalan: 15:00):'); }
         if (s.adminStep === 'wait_tour_time') { s.tourTime=msgText; s.adminStep='wait_tour_count'; return ctx.reply('📝 Jami testlar sonini kiriting (masalan: 50):'); }
         if (s.adminStep === 'wait_tour_count') { if(isNaN(msgText))return ctx.reply('❌ Faqat raqam kiriting:'); s.tourCount=msgText; s.adminStep=null; return ctx.replyWithHTML(`🏆 <b>Yangi musobaqa tafsilotlari:</b>\n\n📅 ${s.tourDate}\n🕒 ${s.tourTime}\n📝 ${s.tourCount} ta\n\nTasdiqlaysizmi?`, Markup.inlineKeyboard([[Markup.button.callback('✅ Tasdiqlash','confirm_tour'),Markup.button.callback('❌ Rad etish','reject_tour')]])); }
+        if (s.adminStep === 'wait_vip_id') {
+            if (msgText === '🚫 Bekor qilish') { s.adminStep = null; return ctx.reply('Bekor qilindi.', adminMainKeyboard(getDb())); }
+            const vipId = parseInt(msgText);
+            if (isNaN(vipId)) return ctx.reply('❌ Faqat Telegram ID (raqam) kiriting:');
+            s.adminStep = null;
+            const db = getDb();
+            const now = Date.now();
+            const vipEnd = now + 30 * 24 * 60 * 60 * 1000; // 30 kun
+            const fmt = (ms) => new Date(ms).toLocaleDateString('uz-UZ');
+            const userName = db.users[vipId]?.name || `ID: ${vipId}`;
+            if (db.users[vipId]) {
+                db.users[vipId].isVip = true;
+                db.users[vipId].vipStart = now;
+                db.users[vipId].vipEnd = vipEnd;
+                saveDb(db);
+            }
+            if (!vipUsers.includes(vipId)) { vipUsers.push(vipId); saveVip(); }
+            // Web users ham yangilash
+            const wu = getWebUsers();
+            const found = Object.entries(wu).find(([,u]) => String(u.tgId) === String(vipId));
+            if (found) { wu[found[0]].isVip = true; wu[found[0]].vipStart = now; wu[found[0]].vipEnd = vipEnd; saveWebUsers(wu); }
+            await ctx.telegram.sendMessage(vipId,
+                `🎉 <b>VIP a'zolik berildi!</b>\n\n👤 Siz admin tomonidan VIP a'zo qildingiz!\n📅 Boshlanish: <b>${fmt(now)}</b>\n⏳ Tugaydi: <b>${fmt(vipEnd)}</b>\n\n✅ Endi barcha imkoniyatlardan foydalanishingiz mumkin!`,
+                {parse_mode:'HTML'}
+            ).catch(()=>{});
+            return ctx.reply(`✅ <b>${escapeHTML(userName)}</b> VIP qilindi!\n📅 ${fmt(now)} — ${fmt(vipEnd)}`, {parse_mode:'HTML', ...adminMainKeyboard(getDb())});
+        }
         if (s.adminStep === 'wait_delete_id') {
             const delId = parseInt(msgText); s.adminStep = null;
             const db = getDb();

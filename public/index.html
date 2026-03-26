@@ -1563,6 +1563,11 @@ async function tryTgAutoLogin(tgUser) {
     });
     clearTimeout(timeoutId);
     const d = await r.json();
+    // Bloklangan foydalanuvchi
+    if (r.status === 403 && d.error === 'blocked') {
+      if (prog) prog.innerHTML = '<div style="color:#ef4444;font-size:13px;font-weight:700;margin-top:12px;line-height:1.6;">🚫 Admin tomonidan bloklangansiz.<br>Test yecholmaysiz.</div>';
+      return;
+    }
     if (r.ok && d.success) {
       const u = d.user;
       if (prog) prog.innerHTML = '<div style="color:var(--green);font-size:13px;font-weight:700;margin-top:8px;">✅ Muvaffaqiyatli kirildi!</div>';
@@ -2169,7 +2174,8 @@ async function openApp(username,isAdmin){
   document.getElementById('screen-login').classList.remove('active');
   document.getElementById('screen-nickname').classList.remove('active');
   document.getElementById('screen-app').classList.add('active');
-  await loadAllPhotos();
+  // loadAllPhotos timeout bilan — hang qilmasin
+  await Promise.race([loadAllPhotos(), new Promise(r=>setTimeout(r,3000))]);
   const sess = getSess(); // sess ni oldindan olamiz
 
   if(isAdmin){
@@ -2177,9 +2183,10 @@ async function openApp(username,isAdmin){
     setAhAvatar(adm.name||'Admin','');
     const apc=document.getElementById('admin-panel-card'); if(apc) apc.style.display='block';
   } else {
-    // Sync user from server
+    // Sync user from server (timeout bilan)
     try{
-      const r=await fetch('/api/web-auth/me?username='+encodeURIComponent(username));
+      const ctrl=new AbortController(); setTimeout(()=>ctrl.abort(),4000);
+      const r=await fetch('/api/web-auth/me?username='+encodeURIComponent(username),{signal:ctrl.signal});
       if(r.ok){
         const d=await r.json();
         const users=getUsers();
@@ -2193,8 +2200,8 @@ async function openApp(username,isAdmin){
     if(!user){doLogout();return;}
     setAhAvatar(user.name,user.username);
 
-    // ✅ Follow malumotlarini serverdan yuklash (kirish/yangilanganda)
-    await syncFollowsFromServer(user.name);
+    // Follow yuklash (timeout bilan)
+    await Promise.race([syncFollowsFromServer(user.name), new Promise(r=>setTimeout(r,3000))]);
   }
   // Socket.io ni ishga tushirish
   const myN = isAdmin ? (getAdm().name||'Admin') : (getUsers()[username]?.name||username);
