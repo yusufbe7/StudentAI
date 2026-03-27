@@ -38,8 +38,93 @@ const PATHS = {
     photos:   path.join(DATA_DIR, 'user_photos.json'),
     sessions: path.join(DATA_DIR, 'test_sessions.json'),
     follows:  path.join(DATA_DIR, 'follows.json'),
-    blocked: path.join(DATA_DIR, 'blocked_users.json'),
+    blocked:  path.join(DATA_DIR, 'blocked_users.json'),
+    config:   path.join(DATA_DIR, 'bot_config.json'),
 };
+
+// ============================================================
+// BOT KONFIGURATSIYASI (dinamik: universitetlar, yo'nalishlar, fanlar)
+// ============================================================
+const DEFAULT_CONFIG = {
+    universities: [
+        'Alfraganus Universiteti', 'Perfect Universiteti', 'TATU', 'TDPU',
+        'Toshkent Davlat Iqtisodiyot Universiteti'
+    ],
+    directionsByUniv: {
+        'Alfraganus Universiteti': {
+            '1-kurs': ["Dasturiy Injiniring","Kiberxavfsizlik","Sun'iy intelekt"],
+            '2-kurs': ["Dasturiy Injiniring","Kiberxavfsizlik","Sun'iy intelekt"],
+            '3-kurs': ['Magistratura','Boshqa'], '4-kurs': ['Magistratura','Boshqa']
+        },
+        'Perfect Universiteti': {
+            '1-kurs': ["Dasturiy Injiniring","Kiberxavfsizlik","Sun'iy intelekt"],
+            '2-kurs': ["Dasturiy Injiniring","Kiberxavfsizlik","Sun'iy intelekt"],
+            '3-kurs': ['Magistratura','Boshqa'], '4-kurs': ['Magistratura','Boshqa']
+        },
+        'TATU': {
+            '1-kurs': ["Dasturiy Injiniring","Kiberxavfsizlik","Sun'iy intelekt"],
+            '2-kurs': ["Dasturiy Injiniring","Kiberxavfsizlik","Sun'iy intelekt"],
+            '3-kurs': ['Magistratura','Boshqa'], '4-kurs': ['Magistratura','Boshqa']
+        },
+        'TDPU': {
+            '1-kurs': ["Dasturiy Injiniring","Kiberxavfsizlik","Sun'iy intelekt"],
+            '2-kurs': ["Dasturiy Injiniring","Kiberxavfsizlik","Sun'iy intelekt"],
+            '3-kurs': ['Magistratura','Boshqa'], '4-kurs': ['Magistratura','Boshqa']
+        },
+        "Toshkent Davlat Iqtisodiyot Universiteti": {
+            '1-kurs': ["Moliya va moliyaviy texnologiyalar yo'nalishi"],
+            '2-kurs': ["Moliya va moliyaviy texnologiyalar yo'nalishi"],
+            '3-kurs': ["Moliya va moliyaviy texnologiyalar yo'nalishi"],
+            '4-kurs': ["Moliya va moliyaviy texnologiyalar yo'nalishi"]
+        }
+    },
+    semesters: ['1-semestr','2-semestr'],
+    activeSemesters: ['1-semestr'],
+    subjectsByDirection: {
+        'Dasturiy Injiniring': [
+            {name:'Akademik yozuv', icon:'📝', key:'academic'},
+            {name:'Tarix',          icon:'📜', key:'history'},
+            {name:'Matematika',     icon:'➕', key:'math'},
+            {name:'Fizika',         icon:'🧲', key:'physics'},
+            {name:'Dasturlash 1',   icon:'💻', key:'dasturlash'},
+            {name:'Perfect English',icon:'🇬🇧', key:'english'}
+        ],
+        'Kiberxavfsizlik': [
+            {name:'Fizika',         icon:'🧲', key:'physics'},
+            {name:'Tarix',          icon:'📜', key:'history'},
+            {name:'Akademik yozuv', icon:'📝', key:'academic'},
+            {name:'Matematika',     icon:'➕', key:'math'},
+            {name:'Perfect English',icon:'🇬🇧', key:'english'},
+            {name:'Dasturlash 1',   icon:'💻', key:'dasturlash'}
+        ],
+        "Sun'iy intelekt": [
+            {name:'Fizika',         icon:'🧲', key:'physics'},
+            {name:'Tarix',          icon:'📜', key:'history'},
+            {name:'Akademik yozuv', icon:'📝', key:'academic'},
+            {name:'Matematika',     icon:'➕', key:'math'},
+            {name:'Perfect English',icon:'🇬🇧', key:'english'},
+            {name:'Dasturlash 1',   icon:'💻', key:'dasturlash'}
+        ],
+        'Magistratura': [
+            {name:'Akademik yozuv', icon:'📝', key:'academic'},
+            {name:'Tarix',          icon:'📜', key:'history'},
+            {name:'Matematika',     icon:'➕', key:'math'},
+            {name:'Fizika',         icon:'🧲', key:'physics'}
+        ],
+        'Boshqa': [
+            {name:'Akademik yozuv', icon:'📝', key:'academic'},
+            {name:'Tarix',          icon:'📜', key:'history'},
+            {name:'Matematika',     icon:'➕', key:'math'},
+            {name:'Fizika',         icon:'🧲', key:'physics'}
+        ],
+        "Moliya va moliyaviy texnologiyalar yo'nalishi": [
+            {name:'Makroiqtisod', icon:'📊', key:'makroiqtisod'}
+        ]
+    }
+};
+const getConfig  = () => { const c = readJSON(PATHS.config, null); return c || DEFAULT_CONFIG; };
+const saveConfig = (c) => writeJSON(PATHS.config, c);
+if (!fs.existsSync(PATHS.config)) saveConfig(DEFAULT_CONFIG);
 
 const CHAT_MSGS_PATH    = path.join(DATA_DIR, 'chat_messages.json');
 const WEB_SCORES_PATH   = path.join(DATA_DIR, 'web_scores.json');
@@ -268,6 +353,8 @@ function adminMainKeyboard(db) {
         ['📢 Musobaqa natijalari','👥 Musobaqani boshqarish'],
         ['📊 Statistika', statusBtn],
         [turboBtn, `⏱ Vaqt: ${tl}s`],
+        ['🏛 Universitetlar','🎓 Yo\'nalishlar'],
+        ['📖 Fanlar boshqaruvi','📅 Semestrlar'],
         ['➕ Yangi fan qoshish',"🗑 Botni Restart qilish"],
         ['🧹 Reytingni tozalash','📣 Xabar tarqatish'],
         ["🎭 Sohta ball qo'shish",'⬅️ Orqaga (Fanlar)'],
@@ -285,12 +372,16 @@ function showSubjectMenu(ctx) {
         const tour   = db.tournament;
         if (!user || !user.isRegistered) return ctx.reply("⚠️ Iltimos, avval /start bosing va ro'yxatdan o'ting.");
         const yonalish = user.yonalish || '';
+        // Dinamik: configdan fanlarni olish
+        const cfg  = getConfig();
+        const subs = cfg.subjectsByDirection?.[yonalish] || [];
         let keyboard = [];
-        if (yonalish === 'Dasturiy Injiniring') {
-            keyboard = [['📝 Akademik yozuv','📜 Tarix'],['➕ Matematika','🧲 Fizika'],['💻 Dasturlash 1','🇬🇧 Perfect English']];
-        } else if (['Kiberxavfsizlik',"Sun'iy intelekt"].includes(yonalish)) {
-            keyboard = [['🧲 Fizika','📜 Tarix'],['📝 Akademik yozuv','➕ Matematika'],['🇬🇧 Perfect English','💻 Dasturlash 1']];
-        } else {
+        for (let i = 0; i < subs.length; i += 2) {
+            const row = [`${subs[i].icon} ${subs[i].name}`];
+            if (subs[i+1]) row.push(`${subs[i+1].icon} ${subs[i+1].name}`);
+            keyboard.push(row);
+        }
+        if (!keyboard.length) {
             keyboard = [['📝 Akademik yozuv','📜 Tarix'],['➕ Matematika','🧲 Fizika']];
         }
         if (tour?.isActive && !user.tourFinished) keyboard.unshift(['🏆 Xalqaro test musobaqa']);
@@ -924,7 +1015,10 @@ bot.hears("📝 Ismni o'zgartirish", (ctx) => { const db=getDb(); if(!db.users[c
 bot.hears("🎓 Yo'nalishni qayta tanlash", (ctx) => {
     const db=getDb(); const user=db.users[ctx.from.id]; if(!user)return;
     user.isRegistered=false; user.step='wait_univ'; saveDb(db);
-    return ctx.reply("OTMni qayta tanlang:", Markup.keyboard([['Alfraganus Universiteti','Perfect Universiteti'],['TATU','TDPU']]).oneTime().resize());
+    const cfgR = getConfig();
+    const univRows = [];
+    for (let i=0; i<cfgR.universities.length; i+=2) { const r=[cfgR.universities[i]]; if(cfgR.universities[i+1]) r.push(cfgR.universities[i+1]); univRows.push(r); }
+    return ctx.reply("OTMni qayta tanlang:", Markup.keyboard(univRows).oneTime().resize());
 });
 
 // ─── ADMIN HANDLERLARI ─────────────────────────────────────
@@ -1091,6 +1185,205 @@ bot.hears('❌ VIP dan chiqarish', async (ctx) => {
 bot.hears("🗑 Foydalanuvchini o'chirish", (ctx) => { if(!isAdmin(ctx.from.id))return; ctx.session.adminStep='wait_delete_id'; return ctx.reply("🗑 O'chirmoqchi bo'lgan foydalanuvchining ID raqamini kiriting:"); });
 bot.hears('🏆 Haftalik musobaqa', (ctx) => { if(!isAdmin(ctx.from.id))return; ctx.session.adminStep='wait_tour_date'; return ctx.reply("📅 Musobaqa sanasini kiriting (masalan: 09.03.2026):", Markup.keyboard([['🚫 Bekor qilish']]).resize()); });
 
+// ─── ADMIN: UNIVERSITETLAR ──────────────────────────────────
+bot.hears('🏛 Universitetlar', async (ctx) => {
+    if (!isAdmin(ctx.from.id)) return;
+    const cfg = getConfig();
+    let text = '🏛 <b>Universitetlar ro\'yxati:</b>\n\n';
+    cfg.universities.forEach((u, i) => { text += `${i+1}. ${escapeHTML(u)}\n`; });
+    text += `\nJami: <b>${cfg.universities.length} ta</b>`;
+    return ctx.replyWithHTML(text, Markup.inlineKeyboard([
+        [Markup.button.callback("➕ Yangi universitet qo'shish", 'admin_add_univ')],
+        [Markup.button.callback("🗑 Universitetni o'chirish",   'admin_del_univ_list')]
+    ]));
+});
+bot.action('admin_add_univ', async (ctx) => {
+    if (!isAdmin(ctx.from.id)) return ctx.answerCbQuery();
+    await ctx.answerCbQuery();
+    ctx.session.adminStep = 'wait_new_univ';
+    return ctx.reply('Yangi universitet nomini kiriting:', Markup.keyboard([['🚫 Bekor qilish']]).resize());
+});
+bot.action('admin_del_univ_list', async (ctx) => {
+    if (!isAdmin(ctx.from.id)) return ctx.answerCbQuery();
+    await ctx.answerCbQuery();
+    const cfg = getConfig();
+    const btns = cfg.universities.map(u => [Markup.button.callback(`🗑 ${u}`, `del_univ_${u.substring(0,40)}`)]);
+    return ctx.reply("O'chirmoqchi bo'lgan universitetni tanlang:", Markup.inlineKeyboard(btns));
+});
+bot.action(/^del_univ_(.+)$/, async (ctx) => {
+    if (!isAdmin(ctx.from.id)) return ctx.answerCbQuery();
+    await ctx.answerCbQuery();
+    const partial = ctx.match[1];
+    const cfg = getConfig();
+    const found = cfg.universities.find(u => u.substring(0,40) === partial);
+    if (!found) return ctx.reply("Topilmadi.");
+    cfg.universities = cfg.universities.filter(u => u !== found);
+    saveConfig(cfg);
+    return ctx.reply(`✅ "${escapeHTML(found)}" o'chirildi.`, adminMainKeyboard(getDb()));
+});
+
+// ─── ADMIN: YO'NALISHLAR ───────────────────────────────────
+bot.hears("🎓 Yo'nalishlar", async (ctx) => {
+    if (!isAdmin(ctx.from.id)) return;
+    const cfg = getConfig();
+    const btns = cfg.universities.map(u => [Markup.button.callback(u, `yonalish_univ_${u.substring(0,40)}`)]);
+    return ctx.reply("Qaysi universitet yo'nalishlari?", Markup.inlineKeyboard(btns));
+});
+bot.action(/^yonalish_univ_(.+)$/, async (ctx) => {
+    if (!isAdmin(ctx.from.id)) return ctx.answerCbQuery();
+    await ctx.answerCbQuery();
+    const partial = ctx.match[1];
+    const cfg = getConfig();
+    const univ = cfg.universities.find(u => u.substring(0,40) === partial);
+    if (!univ) return ctx.reply("Topilmadi.");
+    const univDirs = cfg.directionsByUniv?.[univ] || {};
+    let text = `🎓 <b>${escapeHTML(univ)}</b> — yo'nalishlar:\n\n`;
+    const kursList = ['1-kurs','2-kurs','3-kurs','4-kurs'];
+    kursList.forEach(k => {
+        const dirs = univDirs[k] || [];
+        text += `📚 <b>${k}:</b> ${dirs.length ? dirs.map(d=>escapeHTML(d)).join(', ') : 'yo\'q'}\n`;
+    });
+    const encUniv = encodeURIComponent(univ).substring(0,30);
+    return ctx.replyWithHTML(text, Markup.inlineKeyboard([
+        [Markup.button.callback("➕ Yo'nalish qo'shish", `add_dir_${partial}`)],
+        [Markup.button.callback("🗑 Yo'nalish o'chirish",  `del_dir_${partial}`)]
+    ]));
+});
+bot.action(/^add_dir_(.+)$/, async (ctx) => {
+    if (!isAdmin(ctx.from.id)) return ctx.answerCbQuery();
+    await ctx.answerCbQuery();
+    const partial = ctx.match[1];
+    const cfg = getConfig();
+    const univ = cfg.universities.find(u => u.substring(0,40) === partial);
+    if (!univ) return ctx.reply("Topilmadi.");
+    ctx.session.adminStep = 'wait_new_dir_kurs';
+    ctx.session.adminTmpUniv = univ;
+    return ctx.reply(`"${univ}" uchun qaysi kurs?\n(1-kurs, 2-kurs, 3-kurs, 4-kurs yoki "barchasi"):`,
+        Markup.keyboard([['1-kurs','2-kurs'],['3-kurs','4-kurs'],['barchasi','🚫 Bekor qilish']]).resize());
+});
+bot.action(/^del_dir_(.+)$/, async (ctx) => {
+    if (!isAdmin(ctx.from.id)) return ctx.answerCbQuery();
+    await ctx.answerCbQuery();
+    const partial = ctx.match[1];
+    const cfg = getConfig();
+    const univ = cfg.universities.find(u => u.substring(0,40) === partial);
+    if (!univ) return ctx.reply("Topilmadi.");
+    ctx.session.adminStep = 'wait_del_dir_name';
+    ctx.session.adminTmpUniv = univ;
+    const univDirs = cfg.directionsByUniv?.[univ] || {};
+    const allDirs = [...new Set(Object.values(univDirs).flat())];
+    let text = `"${escapeHTML(univ)}" dagi yo'nalishlar:\n`;
+    allDirs.forEach((d,i) => { text += `${i+1}. ${escapeHTML(d)}\n`; });
+    text += "\nO'chirmoqchi bo'lgan yo'nalish nomini kiriting:";
+    return ctx.replyWithHTML(text, Markup.keyboard([['🚫 Bekor qilish']]).resize());
+});
+
+// ─── ADMIN: FANLAR BOSHQARUVI ──────────────────────────────
+bot.hears('📖 Fanlar boshqaruvi', async (ctx) => {
+    if (!isAdmin(ctx.from.id)) return;
+    const cfg = getConfig();
+    const dirs = Object.keys(cfg.subjectsByDirection || {});
+    const btns = dirs.map(d => [Markup.button.callback(d, `fanlar_dir_${d.substring(0,40)}`)]);
+    btns.push([Markup.button.callback("➕ Yangi yo'nalishga fan qo'shish", 'fanlar_new_dir')]);
+    return ctx.reply("Qaysi yo'nalish fanlari?", Markup.inlineKeyboard(btns));
+});
+bot.action(/^fanlar_dir_(.+)$/, async (ctx) => {
+    if (!isAdmin(ctx.from.id)) return ctx.answerCbQuery();
+    await ctx.answerCbQuery();
+    const partial = ctx.match[1];
+    const cfg = getConfig();
+    const dir = Object.keys(cfg.subjectsByDirection||{}).find(d => d.substring(0,40) === partial);
+    if (!dir) return ctx.reply("Topilmadi.");
+    const subs = cfg.subjectsByDirection[dir] || [];
+    let text = `📖 <b>${escapeHTML(dir)}</b> — fanlar:\n\n`;
+    subs.forEach((s,i) => { text += `${i+1}. ${s.icon} ${escapeHTML(s.name)} (kalit: <code>${s.key}</code>)\n`; });
+    text += subs.length ? '' : '— fan yo\'q\n';
+    return ctx.replyWithHTML(text, Markup.inlineKeyboard([
+        [Markup.button.callback("➕ Fan qo'shish",   `fan_add_${partial}`)],
+        [Markup.button.callback("🗑 Fan o'chirish",  `fan_del_${partial}`)]
+    ]));
+});
+bot.action('fanlar_new_dir', async (ctx) => {
+    if (!isAdmin(ctx.from.id)) return ctx.answerCbQuery();
+    await ctx.answerCbQuery();
+    ctx.session.adminStep = 'wait_fan_new_dir_name';
+    return ctx.reply("Yangi yo'nalish nomini kiriting (buning uchun fan qo'shiladi):", Markup.keyboard([['🚫 Bekor qilish']]).resize());
+});
+bot.action(/^fan_add_(.+)$/, async (ctx) => {
+    if (!isAdmin(ctx.from.id)) return ctx.answerCbQuery();
+    await ctx.answerCbQuery();
+    const partial = ctx.match[1];
+    const cfg = getConfig();
+    const dir = Object.keys(cfg.subjectsByDirection||{}).find(d => d.substring(0,40) === partial) || partial;
+    ctx.session.adminStep = 'wait_fan_add_name';
+    ctx.session.adminTmpDir = dir;
+    return ctx.reply(`"${escapeHTML(dir)}" yo'nalishiga yangi fan nomi kiriting:`, Markup.keyboard([['🚫 Bekor qilish']]).resize());
+});
+bot.action(/^fan_del_(.+)$/, async (ctx) => {
+    if (!isAdmin(ctx.from.id)) return ctx.answerCbQuery();
+    await ctx.answerCbQuery();
+    const partial = ctx.match[1];
+    const cfg = getConfig();
+    const dir = Object.keys(cfg.subjectsByDirection||{}).find(d => d.substring(0,40) === partial);
+    if (!dir) return ctx.reply("Topilmadi.");
+    const subs = cfg.subjectsByDirection[dir] || [];
+    if (!subs.length) return ctx.reply("Bu yo'nalishda fan yo'q.");
+    const btns = subs.map(s => [Markup.button.callback(`🗑 ${s.icon} ${s.name}`, `fan_del_confirm_${dir.substring(0,20)}_${s.key}`)]);
+    return ctx.reply("O'chirmoqchi bo'lgan fanni tanlang:", Markup.inlineKeyboard(btns));
+});
+bot.action(/^fan_del_confirm_(.+)_(.+)$/, async (ctx) => {
+    if (!isAdmin(ctx.from.id)) return ctx.answerCbQuery();
+    await ctx.answerCbQuery();
+    const dirPart = ctx.match[1];
+    const key = ctx.match[2];
+    const cfg = getConfig();
+    const dir = Object.keys(cfg.subjectsByDirection||{}).find(d => d.substring(0,20) === dirPart);
+    if (!dir) return ctx.reply("Topilmadi.");
+    const before = cfg.subjectsByDirection[dir]?.length || 0;
+    cfg.subjectsByDirection[dir] = (cfg.subjectsByDirection[dir]||[]).filter(s => s.key !== key);
+    saveConfig(cfg);
+    return ctx.reply(`✅ Fan (kalit: ${key}) o'chirildi. (${before}→${cfg.subjectsByDirection[dir].length})`);
+});
+
+// ─── ADMIN: SEMESTRLAR ─────────────────────────────────────
+bot.hears('📅 Semestrlar', async (ctx) => {
+    if (!isAdmin(ctx.from.id)) return;
+    const cfg = getConfig();
+    let text = '📅 <b>Semestrlar:</b>\n\n';
+    cfg.semesters.forEach(s => {
+        const active = cfg.activeSemesters.includes(s);
+        text += `${active ? '✅' : '❌'} ${escapeHTML(s)} — ${active ? 'faol' : 'yopiq'}\n`;
+    });
+    const btns = cfg.semesters.map(s => {
+        const active = cfg.activeSemesters.includes(s);
+        return [Markup.button.callback(`${active?'❌ O\'chir':'✅ Yoq'}: ${s}`, `sem_toggle_${s}`)];
+    });
+    btns.push([Markup.button.callback("➕ Yangi semestr qo'shish", 'sem_add')]);
+    return ctx.replyWithHTML(text, Markup.inlineKeyboard(btns));
+});
+bot.action(/^sem_toggle_(.+)$/, async (ctx) => {
+    if (!isAdmin(ctx.from.id)) return ctx.answerCbQuery();
+    await ctx.answerCbQuery();
+    const sem = ctx.match[1];
+    const cfg = getConfig();
+    if (!cfg.semesters.includes(sem)) return ctx.reply("Topilmadi.");
+    if (cfg.activeSemesters.includes(sem)) {
+        cfg.activeSemesters = cfg.activeSemesters.filter(s => s !== sem);
+        saveConfig(cfg);
+        return ctx.reply(`❌ "${sem}" o'chirildi (yopiq).`, adminMainKeyboard(getDb()));
+    } else {
+        cfg.activeSemesters.push(sem);
+        saveConfig(cfg);
+        return ctx.reply(`✅ "${sem}" yoqildi (faol).`, adminMainKeyboard(getDb()));
+    }
+});
+bot.action('sem_add', async (ctx) => {
+    if (!isAdmin(ctx.from.id)) return ctx.answerCbQuery();
+    await ctx.answerCbQuery();
+    ctx.session.adminStep = 'wait_new_semester';
+    return ctx.reply('Yangi semestr nomini kiriting (masalan: 3-semestr):', Markup.keyboard([['🚫 Bekor qilish']]).resize());
+});
+
 // ============================================================
 // ASOSIY MATN / MEDIA HANDLER
 // ============================================================
@@ -1102,7 +1395,10 @@ bot.on(['text','photo','video','animation','document'], async (ctx, next) => {
     if (msgText.startsWith('/')) return next();
     if (msgText === '🚫 Bekor qilish') {
         s.waitingForForward = s.waitingForTime = s.waitingForSubjectName = s.waitingForSubjectQuestions = s.waitingForName = false;
+        s.waitingForSubjectDir = s.waitingForSubjectNewDir = s.waitingForSubjectIcon = false;
         s.adminStep = null; s.fakeScoreTarget = null; s.fakeScoreUserId = null;
+        s.adminTmpUniv = null; s.adminTmpKurs = null; s.adminTmpDir = null; s.adminTmpFanName = null;
+        s.newSubName = null; s.newSubDir = null; s.newSubKey = null; s.newSubIcon = null;
         return showSubjectMenu(ctx);
     }
     // VIP chek
@@ -1137,17 +1433,163 @@ bot.on(['text','photo','video','animation','document'], async (ctx, next) => {
         await ctx.reply(`✅ Savol vaqti <b>${val} sekund</b>ga yangilandi.`,{parse_mode:'HTML'});
         return ctx.reply('🛠 Admin Panel:', adminMainKeyboard(getDb()));
     }
-    // Admin — yangi fan
-    if (isAdmin(userId) && s.waitingForSubjectName) { s.newSubName=msgText; s.waitingForSubjectName=false; s.waitingForSubjectQuestions=true; return ctx.reply(`"${msgText}" fani uchun savollarni JSON formatida yuboring:`, Markup.keyboard([['🚫 Bekor qilish']]).resize()); }
+    // ─── ADMIN: Yangi fan qoshish (to'g'ri oqim) ─────────────
+    if (isAdmin(userId) && s.waitingForSubjectName) {
+        s.newSubName = msgText; s.waitingForSubjectName = false;
+        // Yo'nalishni so'rash
+        const cfg = getConfig();
+        const dirs = Object.keys(cfg.subjectsByDirection||{});
+        s.waitingForSubjectDir = true;
+        const dirRows = [];
+        for (let i=0; i<dirs.length; i+=2) { const r=[dirs[i]]; if(dirs[i+1]) r.push(dirs[i+1]); dirRows.push(r); }
+        dirRows.push(['🆕 Yangi yo\'nalish','🚫 Bekor qilish']);
+        return ctx.reply(`"${msgText}" fani qaysi yo'nalishga? Tanlang yoki yangi yozing:`, Markup.keyboard(dirRows).resize());
+    }
+    if (isAdmin(userId) && s.waitingForSubjectDir) {
+        s.waitingForSubjectDir = false;
+        s.newSubDir = msgText === "🆕 Yangi yo'nalish" ? null : msgText;
+        if (!s.newSubDir) {
+            s.waitingForSubjectNewDir = true;
+            return ctx.reply("Yangi yo'nalish nomini kiriting:", Markup.keyboard([['🚫 Bekor qilish']]).resize());
+        }
+        s.waitingForSubjectIcon = true;
+        return ctx.reply(`Icon tanlang (yoki o'zingiz kiriting):\n📊 📝 📜 ➕ 🧲 💻 🇬🇧 📚 🔬 📐 🏛`,
+            Markup.keyboard([['📊','📝','📜'],['➕','🧲','💻'],['📚','🔬','📐'],['🚫 Bekor qilish']]).resize());
+    }
+    if (isAdmin(userId) && s.waitingForSubjectNewDir) {
+        s.waitingForSubjectNewDir = false;
+        s.newSubDir = msgText;
+        s.waitingForSubjectIcon = true;
+        return ctx.reply(`Icon tanlang (yoki o'zingiz kiriting):`,
+            Markup.keyboard([['📊','📝','📜'],['➕','🧲','💻'],['📚','🔬','📐'],['🚫 Bekor qilish']]).resize());
+    }
+    if (isAdmin(userId) && s.waitingForSubjectIcon) {
+        s.waitingForSubjectIcon = false;
+        s.newSubIcon = msgText;
+        s.waitingForSubjectQuestions = true;
+        const subKey = (s.newSubName||'fan').toLowerCase().replace(/[^a-z0-9]/g,'_').replace(/_+/g,'_');
+        s.newSubKey = subKey;
+        const yonalishKey = (s.newSubDir||'umumiy').toLowerCase().trim().replace(/'/g,'').replace(/ /g,'_');
+        const finalKey = `${yonalishKey}_${subKey}`;
+        return ctx.replyWithHTML(
+            `✅ Ma'lumot:\n📖 Fan: <b>${escapeHTML(s.newSubName)}</b>\n🎓 Yo'nalish: <b>${escapeHTML(s.newSubDir)}</b>\n🔑 Kalit: <code>${finalKey}</code>\n\nEndi savollarni JSON formatida yuboring:\n<pre>[{"q":"Savol?","options":["A","B","C","D"],"a":"To'g'ri javob"},...]</pre>\n\nYoki /skip yuboring (savolsiz fan yaratish):`,
+            Markup.keyboard([['🚫 Bekor qilish']]).resize()
+        );
+    }
     if (isAdmin(userId) && s.waitingForSubjectQuestions) {
         try {
-            const qs = JSON.parse(msgText);
-            const key = s.newSubName.toLowerCase().replace(/ /g,'_');
-            SUBJECTS[key] = { title:s.newSubName, questions:qs };
-            writeJSON(PATHS.customQ, SUBJECTS); s.waitingForSubjectQuestions=false;
-            await ctx.reply("✅ Yangi fan muvaffaqiyatli qo'shildi!");
-            return showSubjectMenu(ctx);
-        } catch { return ctx.reply("❌ JSON formati noto'g'ri! Tekshirib qaytadan yuboring:"); }
+            let qs = [];
+            if (msgText === '/skip') { qs = []; }
+            else { qs = JSON.parse(msgText); if (!Array.isArray(qs)) throw new Error('Array kerak'); }
+
+            const dir = s.newSubDir || 'Umumiy';
+            const subKey = s.newSubKey || (s.newSubName||'fan').toLowerCase().replace(/[^a-z0-9]/g,'_');
+            const yonalishKey = dir.toLowerCase().trim().replace(/'/g,'').replace(/ /g,'_');
+            const finalKey = `${yonalishKey}_${subKey}`;
+            const icon = s.newSubIcon || '📚';
+            const fanName = s.newSubName || 'Fan';
+
+            // 1. subjects.json ga qo'shish
+            SUBJECTS[finalKey] = { name: `${icon} ${fanName} (${dir.substring(0,20)})`, questions: qs };
+            writeJSON(PATHS.subjects, SUBJECTS);
+
+            // 2. Config ga qo'shish (subjectsByDirection)
+            const cfg = getConfig();
+            if (!cfg.subjectsByDirection[dir]) cfg.subjectsByDirection[dir] = [];
+            const already = cfg.subjectsByDirection[dir].find(x => x.key === subKey);
+            if (!already) cfg.subjectsByDirection[dir].push({ name: fanName, icon, key: subKey });
+            saveConfig(cfg);
+
+            s.waitingForSubjectQuestions = false; s.newSubName = null; s.newSubDir = null; s.newSubKey = null; s.newSubIcon = null;
+            await ctx.replyWithHTML(`✅ <b>${escapeHTML(icon)} ${escapeHTML(fanName)}</b> fani qo'shildi!\n🔑 Kalit: <code>${finalKey}</code>\n📝 Savollar: ${qs.length} ta`);
+            return ctx.reply('🛠 Admin Panel:', adminMainKeyboard(getDb()));
+        } catch(e) { return ctx.reply(`❌ JSON formati noto'g'ri! Xato: ${e.message}\n\nTekshirib qaytadan yuboring yoki /skip:`); }
+    }
+
+    // ─── ADMIN: Config boshqaruv qadamlari ───────────────────
+    if (isAdmin(userId) && s.adminStep === 'wait_new_univ') {
+        s.adminStep = null;
+        const cfg = getConfig();
+        if (cfg.universities.includes(msgText)) return ctx.reply('❌ Bu universitet allaqachon mavjud!', adminMainKeyboard(getDb()));
+        cfg.universities.push(msgText);
+        if (!cfg.directionsByUniv[msgText]) cfg.directionsByUniv[msgText] = {'1-kurs':[],'2-kurs':[],'3-kurs':[],'4-kurs':[]};
+        saveConfig(cfg);
+        return ctx.replyWithHTML(`✅ <b>"${escapeHTML(msgText)}"</b> qo'shildi!\nEndi 🎓 Yo'nalishlar orqali yo'nalish qo'shing.`, adminMainKeyboard(getDb()));
+    }
+    if (isAdmin(userId) && s.adminStep === 'wait_new_dir_kurs') {
+        const kurs = msgText;
+        const validKurs = ['1-kurs','2-kurs','3-kurs','4-kurs','barchasi'];
+        if (!validKurs.includes(kurs)) return ctx.reply('⚠️ 1-kurs, 2-kurs, 3-kurs, 4-kurs yoki barchasi deb kiriting:');
+        s.adminTmpKurs = kurs;
+        s.adminStep = 'wait_new_dir_name';
+        return ctx.reply(`"${s.adminTmpUniv}" uchun ${kurs === 'barchasi' ? 'barcha kurslarga' : kurs+'ga'} qo'shiladigan yo'nalish nomini kiriting:`,
+            Markup.keyboard([['🚫 Bekor qilish']]).resize());
+    }
+    if (isAdmin(userId) && s.adminStep === 'wait_new_dir_name') {
+        s.adminStep = null;
+        const univ = s.adminTmpUniv;
+        const kurs = s.adminTmpKurs;
+        const cfg = getConfig();
+        if (!cfg.directionsByUniv[univ]) cfg.directionsByUniv[univ] = {'1-kurs':[],'2-kurs':[],'3-kurs':[],'4-kurs':[]};
+        const kursList = kurs === 'barchasi' ? ['1-kurs','2-kurs','3-kurs','4-kurs'] : [kurs];
+        kursList.forEach(k => {
+            if (!cfg.directionsByUniv[univ][k]) cfg.directionsByUniv[univ][k] = [];
+            if (!cfg.directionsByUniv[univ][k].includes(msgText)) cfg.directionsByUniv[univ][k].push(msgText);
+        });
+        saveConfig(cfg);
+        return ctx.replyWithHTML(`✅ <b>"${escapeHTML(msgText)}"</b> yo'nalishi qo'shildi (${escapeHTML(univ)}, ${kurs}).\n\nFan qo'shish uchun 📖 Fanlar boshqaruviga o'ting.`, adminMainKeyboard(getDb()));
+    }
+    if (isAdmin(userId) && s.adminStep === 'wait_del_dir_name') {
+        s.adminStep = null;
+        const univ = s.adminTmpUniv;
+        const cfg = getConfig();
+        let removed = 0;
+        const kl = ['1-kurs','2-kurs','3-kurs','4-kurs'];
+        kl.forEach(k => {
+            const before = (cfg.directionsByUniv[univ]?.[k]||[]).length;
+            if (cfg.directionsByUniv[univ]?.[k]) cfg.directionsByUniv[univ][k] = cfg.directionsByUniv[univ][k].filter(d => d !== msgText);
+            removed += before - (cfg.directionsByUniv[univ]?.[k]||[]).length;
+        });
+        saveConfig(cfg);
+        return ctx.reply(removed ? `✅ "${escapeHTML(msgText)}" o'chirildi (${removed} kursdan).` : `❌ "${escapeHTML(msgText)}" topilmadi.`, adminMainKeyboard(getDb()));
+    }
+    if (isAdmin(userId) && s.adminStep === 'wait_new_semester') {
+        s.adminStep = null;
+        const cfg = getConfig();
+        if (cfg.semesters.includes(msgText)) return ctx.reply('❌ Bu semestr allaqachon mavjud!', adminMainKeyboard(getDb()));
+        cfg.semesters.push(msgText);
+        saveConfig(cfg);
+        return ctx.replyWithHTML(`✅ <b>"${escapeHTML(msgText)}"</b> semestrlar ro'yxatiga qo'shildi.\n📅 Semestrlar bo'limida yoqishingiz mumkin.`, adminMainKeyboard(getDb()));
+    }
+    if (isAdmin(userId) && s.adminStep === 'wait_fan_add_name') {
+        s.adminStep = 'wait_fan_add_icon';
+        s.adminTmpFanName = msgText;
+        return ctx.reply(`"${msgText}" fani uchun icon kiriting (masalan: 📊):`,
+            Markup.keyboard([['📊','📝','📜'],['➕','🧲','💻'],['📚','🔬','📐'],['🚫 Bekor qilish']]).resize());
+    }
+    if (isAdmin(userId) && s.adminStep === 'wait_fan_add_icon') {
+        s.adminStep = null;
+        const dir = s.adminTmpDir;
+        const fanName = s.adminTmpFanName;
+        const icon = msgText;
+        const subKey = fanName.toLowerCase().replace(/[^a-z0-9]/g,'_').replace(/_+/g,'_');
+        const yonalishKey = dir.toLowerCase().trim().replace(/'/g,'').replace(/ /g,'_');
+        const finalKey = `${yonalishKey}_${subKey}`;
+        // Config ga qo'shish
+        const cfg = getConfig();
+        if (!cfg.subjectsByDirection[dir]) cfg.subjectsByDirection[dir] = [];
+        const already = cfg.subjectsByDirection[dir].find(x => x.key === subKey);
+        if (!already) { cfg.subjectsByDirection[dir].push({name:fanName, icon, key:subKey}); saveConfig(cfg); }
+        // subjects.json ga bo'sh fan qo'shish (savolsiz)
+        if (!SUBJECTS[finalKey]) { SUBJECTS[finalKey] = {name:`${icon} ${fanName}`, questions:[]}; writeJSON(PATHS.subjects, SUBJECTS); }
+        return ctx.replyWithHTML(`✅ <b>${icon} ${escapeHTML(fanName)}</b> fani qo'shildi!\n🔑 Kalit: <code>${finalKey}</code>\n\nSavollarni keyinroq ➕ Yangi fan qoshish orqali qo'shishingiz mumkin.`, adminMainKeyboard(getDb()));
+    }
+    if (isAdmin(userId) && s.adminStep === 'wait_fan_new_dir_name') {
+        s.adminStep = 'wait_fan_add_name';
+        s.adminTmpDir = msgText;
+        const cfg = getConfig();
+        if (!cfg.subjectsByDirection[msgText]) { cfg.subjectsByDirection[msgText]=[]; saveConfig(cfg); }
+        return ctx.reply(`"${escapeHTML(msgText)}" yo'nalishi uchun fan nomini kiriting:`, Markup.keyboard([['🚫 Bekor qilish']]).resize());
     }
 
     // ✅ TO'G'RI: Admin sohta ball — o'ziga (user.score ga yozadi!)
@@ -1412,6 +1854,36 @@ bot.on(['text','photo','video','animation','document'], async (ctx, next) => {
             return ctx.reply(`✅ <b>${escapeHTML(unblockedName)}</b> blokdan chiqarildi.`, {parse_mode:'HTML', ...adminMainKeyboard(getDb())});
         }
     }
+    // ─── Dinamik fan tanlash (config dan) ────────────────────
+    {
+        const db0 = getDb();
+        const user0 = db0.users[userId];
+        if (user0?.isRegistered) {
+            const cfg0 = getConfig();
+            const dirSubs = cfg0.subjectsByDirection?.[user0.yonalish] || [];
+            const matchedSub = dirSubs.find(sub => msgText === `${sub.icon} ${sub.name}`);
+            if (matchedSub) {
+                if (isBotPaidMode && !vipUsers.includes(userId) && !isAdmin(userId)) {
+                    return ctx.reply("⚠️ Bot hozirda pullik rejimda.", Markup.inlineKeyboard([[Markup.button.callback('💎 VIP sotib olish','buy_vip')]]));
+                }
+                const yonalishKey = user0.yonalish.toLowerCase().trim().replace(/'/g,'').replace(/ /g,'_');
+                const finalKey = `${yonalishKey}_${matchedSub.key}`;
+                if (SUBJECTS[finalKey]?.questions?.length) {
+                    s.currentSubject = finalKey;
+                    s.userName = (user0.name && isValidName(user0.name)) ? user0.name : (ctx.from.first_name || 'Talaba');
+                    if (s.isTurbo) {
+                        s.activeList = shuffle([...SUBJECTS[finalKey].questions]); s.index=0; s.score=0; s.wrongs=[];
+                        return sendQuestion(ctx, true);
+                    }
+                    return ctx.reply(`Tayyormisiz? (${matchedSub.icon} ${matchedSub.name})`,
+                        Markup.keyboard([["⚡️ Blitz (25)","📝 To'liq test"],['⬅️ Orqaga (Fanlar)']]).resize());
+                } else {
+                    return ctx.reply(`⚠️ ${user0.yonalish} uchun "${matchedSub.name}" savollari hali yuklanmagan.`);
+                }
+            }
+        }
+    }
+
     // Ro'yxatdan o'tish
     const db = getDb();
     const user = db.users[userId];
@@ -1423,15 +1895,47 @@ bot.on(['text','photo','video','animation','document'], async (ctx, next) => {
             if (forbidden.includes(msgText)) return ctx.reply("❌ Menyu tugmalarini bosmang! Ism va familiyangizni yozing:", Markup.removeKeyboard());
             if (!isValidName(msgText)) return ctx.replyWithHTML(`❌ <b>Bu ism sifatida qabul qilinmadi!</b>\n\nHaqiqiy ism va familiyangizni kiriting.\nMasalan: <i>Abdullayev Jasur</i>`, Markup.removeKeyboard());
             cu.name=msgText.trim(); cu.step='wait_univ'; saveDb(db);
-            return ctx.reply(`Rahmat, ${escapeHTML(msgText.trim())}!\n\nO'qish joyingizni tanlang:`, Markup.keyboard([['Alfraganus Universiteti','Perfect Universiteti'],['TATU','TDPU']]).oneTime().resize());
+            const cfgU = getConfig();
+            const univRows = [];
+            for (let i=0; i<cfgU.universities.length; i+=2) {
+                const r=[cfgU.universities[i]]; if(cfgU.universities[i+1]) r.push(cfgU.universities[i+1]); univRows.push(r);
+            }
+            return ctx.reply(`Rahmat, ${escapeHTML(msgText.trim())}!\n\nO'qish joyingizni tanlang:`, Markup.keyboard(univRows).oneTime().resize());
         }
-        if (cu.step === 'wait_univ') { if(!['Alfraganus Universiteti','Perfect Universiteti','TATU','TDPU'].includes(msgText))return ctx.reply('⚠️ Universitetni tanlang:'); cu.univ=msgText; cu.step='wait_kurs'; saveDb(db); return ctx.reply('Nechanchi kurs?', Markup.keyboard([['1-kurs','2-kurs'],['3-kurs','4-kurs']]).oneTime().resize()); }
-        if (cu.step === 'wait_kurs') { if(!['1-kurs','2-kurs','3-kurs','4-kurs'].includes(msgText))return ctx.reply('⚠️ Kursni tanlang:'); cu.kurs=msgText; cu.step='wait_yonalish'; saveDb(db); const buttons=msgText==='1-kurs'?[["Dasturiy Injiniring","Kiberxavfsizlik"],["Sun'iy intelekt"]]:[['Magistratura','Boshqa']]; return ctx.reply("Yo'nalishingizni tanlang:", Markup.keyboard(buttons).oneTime().resize()); }
-        if (cu.step === 'wait_yonalish') { cu.yonalish=msgText; cu.step='wait_semester'; saveDb(db); return ctx.reply('Semestrni tanlang:', Markup.keyboard([['1-semestr','2-semestr']]).oneTime().resize()); }
+        if (cu.step === 'wait_univ') {
+            const cfgU2 = getConfig();
+            if(!cfgU2.universities.includes(msgText)) return ctx.reply('⚠️ Ro\'yxatdagi universitetni tanlang:');
+            cu.univ=msgText; cu.step='wait_kurs'; saveDb(db);
+            return ctx.reply('Nechanchi kurs?', Markup.keyboard([['1-kurs','2-kurs'],['3-kurs','4-kurs']]).oneTime().resize());
+        }
+        if (cu.step === 'wait_kurs') {
+            if(!['1-kurs','2-kurs','3-kurs','4-kurs'].includes(msgText)) return ctx.reply('⚠️ Kursni tanlang:');
+            cu.kurs=msgText; cu.step='wait_yonalish'; saveDb(db);
+            const cfgK = getConfig();
+            const univDirs = cfgK.directionsByUniv?.[cu.univ] || {};
+            const dirs = univDirs[msgText] || [];
+            const dirRows = [];
+            if (dirs.length) {
+                for (let i=0; i<dirs.length; i+=2) { const r=[dirs[i]]; if(dirs[i+1]) r.push(dirs[i+1]); dirRows.push(r); }
+            } else {
+                const fallback=(msgText==='1-kurs'||msgText==='2-kurs')?[["Dasturiy Injiniring","Kiberxavfsizlik"],["Sun'iy intelekt"]]:[['Magistratura','Boshqa']];
+                fallback.forEach(r=>dirRows.push(r));
+            }
+            return ctx.reply("Yo'nalishingizni tanlang:", Markup.keyboard(dirRows).oneTime().resize());
+        }
+        if (cu.step === 'wait_yonalish') {
+            cu.yonalish=msgText; cu.step='wait_semester'; saveDb(db);
+            const cfgS = getConfig();
+            const semRows = [];
+            for (let i=0; i<cfgS.semesters.length; i+=2) { const r=[cfgS.semesters[i]]; if(cfgS.semesters[i+1]) r.push(cfgS.semesters[i+1]); semRows.push(r); }
+            return ctx.reply('Semestrni tanlang:', Markup.keyboard(semRows).oneTime().resize());
+        }
         if (cu.step === 'wait_semester') {
-            if (msgText === '2-semestr') return ctx.reply("❌ Hozircha faqat 1-semestr mavjud.");
-            if (msgText === '1-semestr') { cu.semester=msgText; cu.isRegistered=true; cu.step='completed'; saveDb(db); await ctx.reply("✅ Ro'yxatdan o'tildi!"); return showSubjectMenu(ctx); }
-            return ctx.reply('⚠️ Semestrni tanlang:');
+            const cfgSem = getConfig();
+            if(!cfgSem.semesters.includes(msgText)) return ctx.reply('⚠️ Semestrni tanlang:');
+            if(!cfgSem.activeSemesters.includes(msgText)) return ctx.reply(`❌ "${msgText}" hozircha mavjud emas. Boshqa semestrni tanlang.`);
+            cu.semester=msgText; cu.isRegistered=true; cu.step='completed'; saveDb(db);
+            await ctx.reply("✅ Ro'yxatdan o'tildi!"); return showSubjectMenu(ctx);
         }
         return ctx.reply("⚠️ Davom etish uchun ismingizni kiriting!");
     }
