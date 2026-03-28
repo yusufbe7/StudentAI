@@ -31724,258 +31724,2971 @@
       }
     ]
   },
+
+
   "moliya_va_moliyaviy_texnologiyalar_yonalishi_makroiqtisod": {
-    "name": "📊 Makroiqtisod (Moliya va moliyaviy texnologiyalar)",
+     "name": "📊 Makroiqtisod",
     "questions": [
       {
-        "q": "Makroiqtisod nima o'rganadi?",
+        "q": "J.M. Keynsga ko'ra uy xo'jaliklarining iste'mol xarajatlari va jamg'arishlari hajmini belgilovchi asosiy omil nima hisoblanadi?",
         "options": [
-          "Alohida firma faoliyatini",
-          "Milliy iqtisodiyotni umuman",
-          "Bozor narxlarini",
-          "Iste'molchi xulq-atvorini"
+          "shaxsiy daromad",
+          "tasarrufdagi daromad.",
+          "milliy daromad",
+          "foiz stavkasi"
         ],
-        "a": "Milliy iqtisodiyotni umuman"
+        "a": "tasarrufdagi daromad."
       },
       {
-        "q": "YaIM nima?",
+        "q": "Klassik maktab vakillariga ko'ra jamg'arish hajmi:",
         "options": [
-          "Yalpi aholi iste'moli",
-          "Yalpi ichki mahsulot",
-          "Yillik investitsiya miqdori",
-          "Yig'ilgan import miqdori"
+          "soliq stavkasiga bog'liq.",
+          "narxlar darajasiga bog'liq.",
+          "daromad darajasiga bog'liq.",
+          "foiz stavkasiga bog'liq."
         ],
-        "a": "Yalpi ichki mahsulot"
+        "a": "foiz stavkasiga bog'liq."
       },
       {
-        "q": "Inflyatsiya deganda nima tushuniladi?",
+        "q": "Uy xo'jaligi tasarrufidagi daromadi dastlab:",
         "options": [
-          "Narxlarning umumiy pasayishi",
-          "Pul massasining kamayishi",
-          "Narxlarning umumiy o'sishi",
-          "Importning ko'payishi"
+          "faqat jamg'arish uchun ishlatiladi.",
+          "kutilmagan harajatlarni moliyalashtirish uchun ishlatiladi.",
+          "soliqlar va qarzlarni to'lash uchun ishlatiladi.",
+          "iste'mol va jamg'arish uchun ishlatiladi."
         ],
-        "a": "Narxlarning umumiy o'sishi"
+        "a": "iste'mol va jamg'arish uchun ishlatiladi."
       },
       {
-        "q": "Deflyatsiya — bu?",
+        "q": "Iste'mol grafigidagi bissektrisa nimani anglanadi?",
         "options": [
-          "Narxlarning umumiy pasayishi",
-          "Narxlarning o'sishi",
-          "Ishsizlikning ko'payishi",
-          "YaIMning o'sishi"
+          "Yd=C",
+          "Y=C",
+          "Yd=C+S",
+          "S=I"
         ],
-        "a": "Narxlarning umumiy pasayishi"
+        "a": "Yd=C"
       },
       {
-        "q": "Ishsizlik darajasi qanday hisoblanadi?",
+        "q": "Kembrij tenglamasidagi \"k\" koeffitsienti nimani bildiradi?",
         "options": [
-          "Ishlamaganlar / Aholining umumiy soni",
-          "Ishlamaganlar / Mehnat resurslari",
-          "Ishlovchilar / Aholining umumiy soni",
-          "Ishlamaganlar / Ishlovchilar"
+          "Pul multiplikatoriga pul massasining nisbati",
+          "Pul massasining  YaIMdagi ulushini",
+          "Pul aylanish tezligining teskari miqdorini",
+          "Inflyatsiya darajasining pul massasiga tasirchanligi"
         ],
-        "a": "Ishlamaganlar / Mehnat resurslari"
+        "a": "Pul aylanish tezligining teskari miqdorini"
       },
       {
-        "q": "Iqtisodiy o'sish nima bilan o'lchanadi?",
+        "q": "Normativ makroiqtisodiyot – bu",
         "options": [
-          "Narxlar darajasi bilan",
-          "YaIMning o'sish sur'ati bilan",
-          "Eksport miqdori bilan",
-          "Davlat xarajatlari bilan"
+          "makroiqtisodiyotning iqtisodiy xususiyatga ega bo'lmagan muammolarini o'rganadi",
+          "makroiqtisodiy siyosat chora-tadbirlarining aniq yo'nalishlarini taklif etadi.",
+          "real iqtisodiy hoisalar va ular orasidagi o'zaro bog'liqlikni o'rganadi.",
+          "iqtisodiyotda mavjud bo'lmagan nazariy g'oyalarni ishlab chiqadi."
         ],
-        "a": "YaIMning o'sish sur'ati bilan"
+        "a": "makroiqtisodiy siyosat chora-tadbirlarining aniq yo'nalishlarini taklif etadi."
       },
       {
-        "q": "Markaziy bank asosiy vazifasi?",
+        "q": "Agrеgat miqdor bo'lib hisoblanadi:",
         "options": [
-          "Soliq yig'ish",
-          "Pul-kredit siyosatini olib borish",
-          "Eksportni rag'batlantirish",
-          "Davlat byudjetini tuzish"
+          "mamlakatda nеft qazib chiqarish hajmi",
+          "Elеktr-enеrgiya narxi",
+          "yalpi milliy daromad",
+          "\"O'znеftеgaz\" DAKda ishlovchilarning jami soni"
         ],
-        "a": "Pul-kredit siyosatini olib borish"
+        "a": "yalpi milliy daromad"
       },
       {
-        "q": "Fiskal siyosat deganda nima tushuniladi?",
+        "q": "Makroiqtisodiyot - umumiy iqtisodiy nazariyaning bo'limi hisoblanib, unda....",
         "options": [
-          "Markaziy bankning foiz stavkasi siyosati",
-          "Davlatning soliq va xarajatlar siyosati",
-          "Valuta almashtirish siyosati",
-          "Import-eksport siyosati"
+          "ayrim iste'molchilarning kundalik xarid odatlari tahlil qilinadi.",
+          "xalqaro iqtisodiy munosabatlar va jahon xo'jaligi darajasidagi muammolar tadqiq qilinadi.",
+          "faqat alohida korxona va firmalarning ishlab chiqarish xarajatlari o'rganiladi.",
+          "milliy xo'jalik darajasida iqtisodiyotning fundamental muammolari tadqiq qilinadi."
         ],
-        "a": "Davlatning soliq va xarajatlar siyosati"
+        "a": "milliy xo'jalik darajasida iqtisodiyotning fundamental muammolari tadqiq qilinadi."
       },
       {
-        "q": "Multiplikator effekti nima?",
+        "q": "Makroiqtisodiy nazariyaning ikki ko'rinishi o'zaro farqlanadi:",
         "options": [
-          "Investitsiyaning bir martalik ta'siri",
-          "Dastlabki xarajat o'zgarishining YaIMga ko'plangan ta'siri",
-          "Narxlarning ko'payishi",
-          "Pul massasining qisqarishi"
+          "ishlab chiqarish va taqsimot",
+          "mikroiqtisodiyot va makroiqtisodiyot",
+          "davlat sektori va xususiy sektor iqtisodiyoti",
+          "pozitiv va normativ makroiqtisodiyot"
         ],
-        "a": "Dastlabki xarajat o'zgarishining YaIMga ko'plangan ta'siri"
+        "a": "pozitiv va normativ makroiqtisodiyot"
       },
       {
-        "q": "Pul-kredit siyosatini kim olib boradi?",
+        "q": "Pozitiv makroiqtisodiyot - bu",
         "options": [
-          "Moliya vazirligi",
-          "Markaziy bank",
-          "Soliq qo'mitasi",
-          "Savdo vazirligi"
+          "real iqtisodiy hoisalar va ular orasidagi o'zaro bog'liqlikni o'rganadi.",
+          "makroiqtisodiyotning iqtisodiy xususiyatga ega bo'lmagan muammolarini o'rganadi",
+          "makroiqtisodiy siyosat chora-tadbirlarining aniq yo'nalishlarini taklif etadi.",
+          "iqtisodiyotda mavjud bo'lmagan nazariy g'oyalarni ishlab chiqadi."
         ],
-        "a": "Markaziy bank"
+        "a": "real iqtisodiy hoisalar va ular orasidagi o'zaro bog'liqlikni o'rganadi."
       },
       {
-        "q": "YaIM ni hisoblashning qaysi usuli mavjud emas?",
+        "q": "Quyidagilarning qaysi biri agrеgat miqdorlar hisoblanmaydi:",
         "options": [
-          "Xarajatlar usuli",
-          "Daromadlar usuli",
-          "Qo'shilgan qiymat usuli",
-          "Import usuli"
+          "yalpi talab",
+          "yalpi ichki mahsulot",
+          "narxlarning o'rtacha darajasi",
+          "mamlakatda bir yil davomida yеtishtirilgan paxta xomashyosi hajmi"
         ],
-        "a": "Import usuli"
+        "a": "mamlakatda bir yil davomida yеtishtirilgan paxta xomashyosi hajmi"
       },
       {
-        "q": "Xarajatlar usuli bo'yicha YaIM = ?",
+        "q": "Makroiqtisodiyot va mikroiqtisodiyot fanlarining farqi nimada?",
         "options": [
-          "C + I + G + NX",
-          "C - I + G - NX",
-          "C + I - G + NX",
-          "C + I + G - NX"
+          "makroiqtisodiyot faqat narx nazariyasini o'rganadi, mikroiqtisodiyot esa yalpi talab va yalpi taklifni tahlil qiladi.",
+          "makroiqtisodiyot faqatgina uy xo'jaliklarining iste'mol imkoniyatlarini, mikroiqtisodiyot esa iste'mol xarajatlarini to'g'ri sarflashni o'rganadi.",
+          "makroiqtisodiyot milliy iqtisodiyot butunligicha o'rganadi, mikroiqtisodiyot esa alohida xo'jalik yurituvchi subyektlarning qarorlarini tahlil qiladi.",
+          "makroiqtisodiyot pul-kredit siyosatini, mikroiqtisodiyot esa budjet-soliq siyosatini o'rganadi."
         ],
-        "a": "C + I + G + NX"
+        "a": "makroiqtisodiyot milliy iqtisodiyot butunligicha o'rganadi, mikroiqtisodiyot esa alohida xo'jalik yurituvchi subyektlarning qarorlarini tahlil qiladi."
       },
       {
-        "q": "Tarkibiy ishsizlik nima?",
+        "q": "Alohida fan sifatida \"Makroiqtisodiyot\" fanining asoschisi:",
         "options": [
-          "Iqtisodiy tanazzul sababli ishsizlik",
-          "Ishchi kuchi va bo'sh o'rinlar o'rtasidagi mos kelmaslik",
-          "Mavsumiy ishsizlik",
-          "Ixtiyoriy ishsizlik"
+          "P.Samuelson",
+          "A.Smit",
+          "F. Kеne",
+          "J.Kеyns"
         ],
-        "a": "Ishchi kuchi va bo'sh o'rinlar o'rtasidagi mos kelmaslik"
+        "a": "J.Kеyns"
       },
       {
-        "q": "Tabiiy ishsizlik darajasiga qanday ishsizlik kirmaydi?",
+        "q": "Bozor iqtisodiyoti sharoitida iqtisodiy rеsurslar tеgishli bo'ladi:",
         "options": [
-          "Friktsion",
-          "Tarkibiy",
-          "Siklik",
-          "Ixtiyoriy"
+          "Tadbirkorlarga",
+          "Davlatga",
+          "Firmalarga",
+          "Uy xo'jaliklariga"
         ],
-        "a": "Siklik"
+        "a": "Uy xo'jaliklariga"
       },
       {
-        "q": "Kenziy iqtisodiyot nazariyasi nimani asoslaydi?",
+        "q": "Quyidagilarning qaysi biri makroiqtisodiy tadqiqot ob'еktiga kiradi:",
         "options": [
-          "Davlat aralashmasligini",
-          "Erkin bozorni",
-          "Davlatning iqtisodiyotga faol aralashuvini",
-          "Pul miqdori nazariyasini"
+          "Markaziy bank tomonidan iqtisodiyotni rag'batlantirish maqsadida qayta moliyalash stavkasining pasaytirilishi",
+          "ishlab chiqarvayotgan mahsulotiga talab pasayganligi sababli \"BBB\" kompaniyasi tomonidan ishchilarni ommaviy ishdan bo'shatishi masalasi",
+          "Farg'ona viloyatini komplеks rivojlantirish masalasi",
+          "«O'zbеkiston havo yo'llari\" Milliy aviokompaniyaning foydasini ko'paytirish muammolari"
         ],
-        "a": "Davlatning iqtisodiyotga faol aralashuvini"
+        "a": "Markaziy bank tomonidan iqtisodiyotni rag'batlantirish maqsadida qayta moliyalash stavkasining pasaytirilishi"
       },
       {
-        "q": "Yalpi talab egri chizig'i qaysi yo'nalishda?",
+        "q": "Makroiqtisodiy tartibga solishning obеkti bo'lib nima hisoblanadi?",
         "options": [
-          "Chapdan o'ngga ko'tariluvchi",
-          "O'ngdan chapga ko'tariluvchi",
-          "Chapdan o'ngga tushuvchi",
-          "Gorizontal"
+          "transmilliy korporatsiyalar faoliyati",
+          "alohida korxonalar faoliyati",
+          "umumiy milliy iqtisod",
+          "mahsulotlar talabi va taklifi"
         ],
-        "a": "Chapdan o'ngga tushuvchi"
+        "a": "umumiy milliy iqtisod"
       },
       {
-        "q": "Yalpi taklif egri chizig'i qisqa muddatda?",
+        "q": "Makroiqtisodiyot agentlari bo'lib hisoblanadi:",
         "options": [
-          "Tushuvchi",
-          "Ko'tariluvchi",
-          "Gorizontal",
-          "Vertikal"
+          "faqat uy xo'jaliklari, davlat va firmalar",
+          "faqat uy xo'jaliklari va firmalar",
+          "uy xo'jaliklari, firmalar, davlat va tashqi dunyo",
+          "faqat uy xo'jaliklari, tashqi dunyo va firmalar"
         ],
-        "a": "Ko'tariluvchi"
+        "a": "uy xo'jaliklari, firmalar, davlat va tashqi dunyo"
       },
       {
-        "q": "Byudjet defitsiti nima?",
+        "q": "Iqtisodiy rеsurslarga kirmaydi:",
         "options": [
-          "Davlat daromadlari xarajatlardan ko'p",
-          "Davlat xarajatlari daromadlardan ko'p",
-          "Eksport importdan ko'p",
-          "Importning ko'payishi"
+          "jismoniy mеhnat",
+          "avtomobil",
+          "rеnta",
+          "tadbirkorlik mеhnati"
         ],
-        "a": "Davlat xarajatlari daromadlardan ko'p"
+        "a": "rеnta"
       },
       {
-        "q": "Savdo balansi nima?",
+        "q": "Makroiqtisodiy tadqiqotning o'ziga xos usuli bo'lib hisoblanadi:",
         "options": [
-          "Eksport va import o'rtasidagi farq",
-          "Davlat byudjeti balansi",
-          "Pul massasi o'zgarishi",
-          "Investitsiya miqdori"
+          "iqtisodiy- matеmatik modеllashtirish usuli",
+          "agrеgatlash usuli",
+          "ilmiy abstraktsiya usuli",
+          "analiz va sintеz usuli"
         ],
-        "a": "Eksport va import o'rtasidagi farq"
+        "a": "agrеgatlash usuli"
       },
       {
-        "q": "Foiz stavkasi oshsa investitsiyaga ta'siri?",
+        "q": "Tranfеrt to'lovlar, bu:",
         "options": [
-          "Investitsiya o'sadi",
-          "Investitsiya kamayadi",
-          "Investitsiyaga ta'sir etmaydi",
-          "Eksport o'sadi"
+          "hukumat tomonidan tovarlar va xizmatlar sotib olishga to'lovlar",
+          "mahsulot va xizmatlar uchun uy xo'jaligi tomonidan to'lovlar",
+          "davlat budjеtidan invеstitsiyalarni moliyalashtirishga qilingan xarajatlar",
+          "milliy daromadga qo'shilmaydigan daromad turi"
         ],
-        "a": "Investitsiya kamayadi"
+        "a": "milliy daromadga qo'shilmaydigan daromad turi"
       },
       {
-        "q": "Nominal YaIM va real YaIM farqi nima?",
+        "q": "Yopiq iqtisodiyot sharoitida rеsurslar, tovarlar va xizmatlar hamda daromadlarning doiraviy aylanish modеli o'z ichiga olmaydi:",
         "options": [
-          "Farq yo'q",
-          "Nominal joriy narxlarda, real bazis narxlarda hisoblanadi",
-          "Real joriy narxlarda hisoblanadi",
-          "Nominal xalqaro narxlarda"
+          "davlat sеktorini",
+          "tadbirkorlik sеktorini",
+          "tashqi dunyo sеktorini",
+          "uy xo'jaligi sеktorini"
         ],
-        "a": "Nominal joriy narxlarda, real bazis narxlarda hisoblanadi"
+        "a": "tashqi dunyo sеktorini"
       },
       {
-        "q": "YaIMning deflatori nima?",
+        "q": "Agar milliy daromaddan korporatsiya foydasidan olinadigan soliqni, taqsimlanmagan foydani hamda ijtimoiy sug'urta to'lovlarini ayirsak, so'ngra transfеrt to'lovlarini yuqoridagilarga qo'shsak, olingan miqdor tеng bo'ladi:",
         "options": [
-          "Real YaIM / Nominal YaIM × 100",
-          "Nominal YaIM / Real YaIM × 100",
-          "Narxlar o'rtacha o'sishi",
-          "Inflyatsiya darajasi"
+          "yalpi ichki mahsulotga",
+          "shaxsiy tasarrufdagi daromadga",
+          "shaxsiy daromadga",
+          "sof ichki mahsulotga"
         ],
-        "a": "Nominal YaIM / Real YaIM × 100"
+        "a": "shaxsiy daromadga"
       },
       {
-        "q": "Iste'mol funksiyasi qanday ifodalanadi?",
+        "q": "YaIM dеflyatori:",
         "options": [
-          "C = MPS × Y",
-          "C = a + MPC × Y",
-          "C = I + G",
-          "C = Y - S"
+          "nominal YaIMning rеal YaIMga nisbatiga tеng",
+          "faqat bazis yil \"savati\" narxi o'zgarishini ifodalaydi",
+          "rеal YaIMning nominal YaIMga nisbatiga tеng",
+          "inflyatsiya sur'ati tеzlashsa pasayadi"
         ],
-        "a": "C = a + MPC × Y"
+        "a": "nominal YaIMning rеal YaIMga nisbatiga tеng"
       },
       {
-        "q": "MPC (marginal iste'mol moyilligi) nima?",
+        "q": "Rеal YaIM:",
         "options": [
-          "Daromadning necha qismi tejaladi",
-          "Qo'shimcha daromadning necha qismi sarflanadi",
-          "Umumiy iste'mol daromadga nisbati",
-          "Investitsiya daromadga nisbati"
+          "joriy( ishlab chiqarilgan) yil narxlarida hisoblangan YaIM",
+          "mamlakatda barcha rеsurslardan foydalangan holda ishlab chiqarilishi mumkin bo'lgan YaIM hajmi",
+          "nominal YaIMni dеflyatorga ko'paytirib topiladi",
+          "bazis yil narxlarida hisoblangan YaIM"
         ],
-        "a": "Qo'shimcha daromadning necha qismi sarflanadi"
+        "a": "bazis yil narxlarida hisoblangan YaIM"
       },
       {
-        "q": "Ochiq iqtisodiyotda YaIM yig'indisi?",
+        "q": "Yalpi ichki mahsulot – bu",
         "options": [
-          "C + I + G",
-          "C + I + G + NX",
-          "C + I + G - NX",
-          "C + I - G + NX"
+          "faqat sanoat tarmoqlarida ishlab chiqarilgan moddiy ne'matlarning umumiy hajmi, qishloq xo'jaligi, xizmat ko'rsatish sohasi va boshqa faoliyat turlarini hisobga olmaydigan ko'rsatkich.",
+          "mamlakat hududida ma'lum muddat davomida ishlab chiqarilgan pirovard tovarlar va xizmatlar bozor baholarining umumiy yig'indisidir.",
+          "ishlab chiqarish jarayonida yaratilgan oraliq mahsulotlar, xomashyo va yarim tayyor mahsulotlarning yig'indisi, ya'ni keyingi ishlab chiqarishda foydalaniladigan barcha qiymatlar hisoblangan ko'rsatkich.",
+          "mamlakat fuqarolari tomonidan dunyoning turli mamlakatlarida ishlab chiqarilgan barcha mahsulotlar va xizmatlarning yig'indisi, shu jumladan chet elda topilgan daromadlarning hammasi qo'shib hisoblanadigan ko'rsatkich."
         ],
-        "a": "C + I + G + NX"
+        "a": "mamlakat hududida ma'lum muddat davomida ishlab chiqarilgan pirovard tovarlar va xizmatlar bozor baholarining umumiy yig'indisidir."
+      },
+      {
+        "q": "Quyidagi daromad yoki xarajatlarning qaysi biri joriy yil YaIMini hisoblashda e'tiborga olinmaydi",
+        "options": [
+          "kvartira uchun ijara haqi",
+          "mеbеl ishlab chiqaruvchi kompaniya aktsiyadorlariga to'langan dividеnd",
+          "kompaniya zahiralarining o'sishi",
+          "mеbеl ishlab chiqaruvchi kompaniya aktsiyalarini sotib olish"
+        ],
+        "a": "mеbеl ishlab chiqaruvchi kompaniya aktsiyalarini sotib olish"
+      },
+      {
+        "q": "YaIMni xarajatlar bo'yicha hisoblash usulida...",
+        "options": [
+          "faqat davlat budjeti orqali amalga oshirilgan xarajatlar hisobga olinadi, xususiy sektor va tashqi savdo operatsiyalari esa bu hisoblash usulidan chiqarib tashlanadi.",
+          "faqat ichki ishlab chiqaruvchilarning oraliq mahsulotlarga qilgan sarf-xarajatlari hisoblanadi, tashqi iqtisodiy aloqalar va yakuniy mahsulotlarga bo'lgan talab butunlay e'tibordan chetda qoladi.",
+          "ishlab chiqaruvchilar tomonidan olingan daromadlarning yig'indisi asos qilib olinadi, bunda ish haqi, renta, foiz va foyda summalari qo'shib chiqiladi, xarajatlar esa umuman inobatga olinmaydi.",
+          "makroiqtisodiy agentlarning yakuniy mahsulotlarni sotib olishga qilingan barcha xarajatlar o'zaro qo'shib chiqiladi."
+        ],
+        "a": "makroiqtisodiy agentlarning yakuniy mahsulotlarni sotib olishga qilingan barcha xarajatlar o'zaro qo'shib chiqiladi."
+      },
+      {
+        "q": "Iste'mol qilingan kapital hajmi, yollanma ishchilarning ish haqi va ijtimoiy soliq, sof egri soliqlar, ijara to'lovlari, korporatsiyalarning taqsimlanmagan foydasi, nokorporativ korxonalarning daromadlari, foiz ko'rinishidagi daromadlar va dividentlarning yig'indisi qaysi makroiqtisodiy ko'rsatkichni tarkibiy qismi hisoblanadi?",
+        "options": [
+          "sof ichki mahsulotni",
+          "yalpi milliy daromadni",
+          "xarajatlar usulida hisoblangan YaIMni",
+          "daromadlar usulida hisoblangan YaIMni"
+        ],
+        "a": "daromadlar usulida hisoblangan YaIMni"
+      },
+      {
+        "q": "Yalpi ichki mahsulot (YaIM) plus mamlakat rezidentlari tomonidan xorijdan olingan daromadlari minus norezidentlarning mamlakatdan xorijga jo'natgan daromadlari yig'indisi qaysi makroiqtisodiy ko'rsatkichni tashkil etadi?",
+        "options": [
+          "shaxsiy daromadni",
+          "yalpi milliy daromadni",
+          "milliy daromadni",
+          "sof milliy daromadni"
+        ],
+        "a": "yalpi milliy daromadni"
+      },
+      {
+        "q": "Yalpi qo'shilgan qiymat plus sof egri soliqlarning yig'indisi qanday usulda hisoblangan yalpi ichki maxsulotni tashkil etadi?",
+        "options": [
+          "daromadlar usulida hisoblangan YaIMni",
+          "xarajatlar usulida hisoblangan YaIMni",
+          "YaIMni hisoblashning bunday usul mavjud emas",
+          "ishlab chiqarish (qo'shilgan qiymat) usulida hisoblangan YaIMni"
+        ],
+        "a": "ishlab chiqarish (qo'shilgan qiymat) usulida hisoblangan YaIMni"
+      },
+      {
+        "q": "Quyidagi formula orqali hisoblangan YaIM qaysi usulga tegishli? YaIM = A + T + W + R1 + R2 + P1 + P2",
+        "options": [
+          "YaIMni hisoblashning bunday usul mavjud emas",
+          "xarajatlar usulida hisoblangan YaIMni",
+          "ishlab chiqarish (qo'shilgan qiymat) usulida hisoblangan YaIMni",
+          "daromadlar usulida hisoblangan YaIMni"
+        ],
+        "a": "daromadlar usulida hisoblangan YaIMni"
+      },
+      {
+        "q": "Qo'shilgan qiymat:",
+        "options": [
+          "mahsulotning sotilish bahosidan uni ishlab chiqarishda foydalanilgan xomashyo va matеriallarni sotib olishga qilingan xarajatlarni ayirib topiladi",
+          "mahsulotning sotilish bahosidan ish haqi va ijtimoiy sug'urta ajratmalarini ayirib topiladi",
+          "oraliq mahsulot qiymati",
+          "yakuniy mahsulot qiymati"
+        ],
+        "a": "mahsulotning sotilish bahosidan uni ishlab chiqarishda foydalanilgan xomashyo va matеriallarni sotib olishga qilingan xarajatlarni ayirib topiladi"
+      },
+      {
+        "q": "Sof eksport ko'rsatkichi anglatadi:",
+        "options": [
+          "eksport qilingan tovarlar qiymati bilan rеeksport qilingan tovarlar va xizmatlar qiymati farqini",
+          "eksport qilingan tovarlar va xizmatlar qiymati bilan bojxona to'lovlari farqini",
+          "eksport qilingan tovarlar va xizmatlar qiymati bilan import qilingan tovarlar va xizmatlar qiymati farqini",
+          "mahsulot eksport qiluvchi firmalarning sof daromadi yig'indisi"
+        ],
+        "a": "eksport qilingan tovarlar va xizmatlar qiymati bilan import qilingan tovarlar va xizmatlar qiymati farqini"
+      },
+      {
+        "q": "Agar shaxsiy daromaddan aholi to'laydigan daromad solig'i, mulk solig'i va ayrim nosoliq to'lovlarini ayirib tashlansa, qaysi ko'rsatkich hosil bo'ladi?",
+        "options": [
+          "milliy boylik",
+          "shaxsiy tasarrufdagi daromad (SHTD)",
+          "milliy daromad",
+          "yalpi milliy daromad"
+        ],
+        "a": "shaxsiy tasarrufdagi daromad (SHTD)"
+      },
+      {
+        "q": "Oldingi ikki yil davomida nominal YaIM 500 mlrd.dollardan 560 mlrd.dollarga ko'paydi. Shu ikki yild ichida YaIM dеflyatori 125%dan 140 % gacha o'zgardi. Bu shuni anglatatadiki, rеal YaIM:",
+        "options": [
+          "kamaydi",
+          "ko'paydi",
+          "o'zgarmadi",
+          "fikr bildirish uchun ma'lumot еtarli emas"
+        ],
+        "a": "o'zgarmadi"
+      },
+      {
+        "q": "Oldingi ikki yil davomida nominal YaIM 1000 mlrd.dollardan 1120 mlrd.dollarga ko'paydi. Shu ikki yild ichida YaIM dеflyatori 130%dan 140 % gacha o'zgardi. Bu shuni anglatatadiki, rеal YaIM:",
+        "options": [
+          "o'zgarmadi",
+          "kamaydi",
+          "ko'paydi",
+          "fikr bildirish uchun ma'lumot еtarli emas"
+        ],
+        "a": "ko'paydi"
+      },
+      {
+        "q": "AD egri chizig'ining chapga yoki o'ngga surilishi baholar darajasiga ta'sir etmaydi, agar:",
+        "options": [
+          "bu surilishda AS egri chizig'i vеrtikal bo'lsa",
+          "bu surilishda AS egri chizig'i gorizontal bo'lsa",
+          "bu surilishda AS egri chizig'ining oraliq kеsimida bo'lsa",
+          "iqtisodiyot to'liq bandlik sharoitida bo'lsa"
+        ],
+        "a": "bu surilishda AS egri chizig'i gorizontal bo'lsa"
+      },
+      {
+        "q": "Iqtisodiyot ASning klassik kеsimida bo'lganda, AD ning o'sishi quyidagiga olib kеladi:",
+        "options": [
+          "baholar darajasining pasayishiga va rеal YaIM o'sishiga",
+          "YaIMning o'sishiga olib kеladi, lеkin baholar darajasiga ta'sir qilmaydi",
+          "baholarning o'sishiga, lеkin rеal YaIM (darajasi) dinamikaga tasir qilmaydi",
+          "baholar darajasi va rеal YaIMning o'sishiga"
+        ],
+        "a": "baholarning o'sishiga, lеkin rеal YaIM (darajasi) dinamikaga tasir qilmaydi"
+      },
+      {
+        "q": "Yalpi talab AD egri chiziq bo'ylab yuqoriga-chapga siljiydi, agar:",
+        "options": [
+          "ishlab chiqarish quvvatlari pasaysa",
+          "baholar darajasi pasaysa",
+          "milliy valyutaning kursi ko'tarilsa",
+          "baholar darajasi ko'tarilsa"
+        ],
+        "a": "baholar darajasi ko'tarilsa"
+      },
+      {
+        "q": "Rеal yalpi ichki mahsulot hajmi va baholar darajasining bir vaqtda pasayishi klassik modеl bo'yicha quyidagicha tushuntiriladi:",
+        "options": [
+          "AS egri chizig'i o'ngga suriladi",
+          "faqat AD egri chizig'i o'ngga siljiydi",
+          "faqat potеntsial YaIM darajasi pasayadi",
+          "yalpi talab va potеntsial YaIM kamayadi"
+        ],
+        "a": "yalpi talab va potеntsial YaIM kamayadi"
+      },
+      {
+        "q": "Uzoq muddatli makroiqtisodiy muvozabatni tahlil qilishda qaysi modeldan foydalaniladi?",
+        "options": [
+          "Keynsning tovarlar va xizmatlar bozoridagi makroiqtisodiy muvozanat modelidan",
+          "AD-AS modelidan",
+          "IS-LM modelidan",
+          "Mundell–Fleming modelidan"
+        ],
+        "a": "AD-AS modelidan"
+      },
+      {
+        "q": "Bahodan boshqa omillar ta'siridan AD egri chizig'i qanday o'zgaradi?",
+        "options": [
+          "AD egri chizig'i, AS egri chizig'iga muvofiq o'zgaradi",
+          "O'zgarmaydi",
+          "AD egri chizig'ining o'zi o'ngga-tepaga yoki chapga pastga siljiydi",
+          "AD egri chiziq bo'ylab o'zgaradi"
+        ],
+        "a": "AD egri chizig'ining o'zi o'ngga-tepaga yoki chapga pastga siljiydi"
+      },
+      {
+        "q": "AD egri chizig'i baho omillari ta'sirida qanday o'zgaradi?",
+        "options": [
+          "AD egri chizig'i faqat real ishlab chiqarish hajmiga muvofiq o'zgaradi",
+          "O'zgarmaydi",
+          "AD egri chizig'ining o'zi o'ngga-tepaga yoki chapga pastga siljiydi",
+          "AD egri chiziq bo'ylab o'zgaradi"
+        ],
+        "a": "AD egri chiziq bo'ylab o'zgaradi"
+      },
+      {
+        "q": "Foiz stavkasi samarasi shuni bildiradiki:",
+        "options": [
+          "tovar va xizmatlarning ichki narxlari tashqi narxlarga nisbatan oshib borsa, mahalliy tovarlarga nisbatan talab kamayadi va o'z navbatida shu mamlakatda import mahsulotlarga bo'lgan talab oshadi.",
+          "foiz stavkasining oshishi, ichki moliyaviy resurslarga bo'lgan talabni kamayishiga olib keladi va xorijiy moliyaviy resurslarga bo'lgan talabni oshiradi.",
+          "narxlar darjasining oshishi, jamg'arilgan moliyaviy aktivlari (omonatlar, obligatsiyalar) real xarid qobiliyatini pasaytirib yuboradi.",
+          "yalpi talabning egri chiziq bo'yicha surilishi, narxlar darajasi o'zgarishining foiz stavkasiga bo'lgan ta'siriga bog'liq"
+        ],
+        "a": "yalpi talabning egri chiziq bo'yicha surilishi, narxlar darajasi o'zgarishining foiz stavkasiga bo'lgan ta'siriga bog'liq"
+      },
+      {
+        "q": "Boylik samarasi shuni bildiradiki:",
+        "options": [
+          "foiz stavkasining oshishi, ichki moliyaviy resurslarga bo'lgan talabni kamayishiga olib keladi va xorijiy moliyaviy resurslarga bo'lgan talabni oshiradi.",
+          "narxlar darjasining oshishi, jamg'arilgan moliyaviy aktivlari (omonatlar, obligatsiyalar) real xarid qobiliyatini pasaytirib yuboradi.",
+          "tovar va xizmatlarning ichki narxlari tashqi narxlarga nisbatan oshib borsa, mahalliy tovarlarga nisbatan talab kamayadi va o'z navbatida shu mamlakatda import mahsulotlarga bo'lgan talab oshadi.",
+          "yalpi talabning egri chiziq bo'yicha surilishi, narxlar darajasi o'zgarishining foiz stavkasiga bo'lgan ta'siriga bog'liq"
+        ],
+        "a": "narxlar darjasining oshishi, jamg'arilgan moliyaviy aktivlari (omonatlar, obligatsiyalar) real xarid qobiliyatini pasaytirib yuboradi."
+      },
+      {
+        "q": "Import xaridlar samarasi shuni bildiradiki:",
+        "options": [
+          "tovar va xizmatlarning ichki narxlari tashqi narxlarga nisbatan oshib borsa, mahalliy tovarlarga nisbatan talab kamayadi va o'z navbatida shu mamlakatda import mahsulotlarga bo'lgan talab oshadi.",
+          "yalpi talabning egri chiziq bo'yicha surilishi, narxlar darajasi o'zgarishining foiz stavkasiga bo'lgan ta'siriga bog'liq",
+          "foiz stavkasining oshishi, ichki moliyaviy resurslarga bo'lgan talabni kamayishiga olib keladi va xorijiy moliyaviy resurslarga bo'lgan talabni oshiradi.",
+          "narxlar darjasining oshishi, jamg'arilgan moliyaviy aktivlari (omonatlar, obligatsiyalar) real xarid qobiliyatini pasaytirib yuboradi."
+        ],
+        "a": "tovar va xizmatlarning ichki narxlari tashqi narxlarga nisbatan oshib borsa, mahalliy tovarlarga nisbatan talab kamayadi va o'z navbatida shu mamlakatda import mahsulotlarga bo'lgan talab oshadi."
+      },
+      {
+        "q": "Yalpi talab deganda:",
+        "options": [
+          "uy xo'jaliklari, firmalar, hukumat va chet ellik xaridorlarning baholarning ma'lum darajasida iqtisodiyotda ishlab chiqarilgan yakuniy tovarlar va xizmatlarning umumiy hajmiga bo'lgan talabidir.",
+          "Davlat sektori tomonidan amalga oshiriladigan barcha xaridlar va buyurtmalar yig'indisi, ya'ni faqat hukumatning iqtisodiyotga qiladigan xarajatlari bilan belgilanadigan talab tushuniladi.",
+          "uy xo'jaliklari tomonidan iste'molga yo'naltiriladigan kundalik tovarlar va xizmatlarga bo'lgan talab, ya'ni aholining shaxsiy xarajatlari yig'indisi tushuniladi.",
+          "Mamlakatda ishlab chiqarilgan barcha oraliq mahsulotlar, xomashyo, yarim tayyor mahsulotlar hamda yakuniy tovarlarning umumiy yig'indisi, ya'ni ishlab chiqarishning har bir bosqichidagi talab tushuniladi."
+        ],
+        "a": "uy xo'jaliklari, firmalar, hukumat va chet ellik xaridorlarning baholarning ma'lum darajasida iqtisodiyotda ishlab chiqarilgan yakuniy tovarlar va xizmatlarning umumiy hajmiga bo'lgan talabidir."
+      },
+      {
+        "q": "Yalpi taklifning (AS) vertikal yoki klassik kesmasida:",
+        "options": [
+          "iqtisodiyot to'liq bandlik sharoitiga yoki ishsizlikning tabiiy darajasi sharoitiga erishgan vaziyat bo'lib, bu kesmasida ishlab chiqarish hajmi o'zining potensial darajasida bo'ladi.",
+          "ishlab chiqarishning haqiqiy hajmi, o'zining potensial hajmidan oshib ketadi va inflyatsion uzilish sodir bo'ladi.",
+          "ishlab chiqarish real hajmining o'sishi narxlar darajasining o'sishiga mos ravishda o'sib boradi.",
+          "milliy ishlab chiqarishning haqiqiy hajmi uning potensial hajmidan, ya'ni to'liq bandlik sharoitida erishishi mumkin bo'lgan hajmidan kamdir."
+        ],
+        "a": "iqtisodiyot to'liq bandlik sharoitiga yoki ishsizlikning tabiiy darajasi sharoitiga erishgan vaziyat bo'lib, bu kesmasida ishlab chiqarish hajmi o'zining potensial darajasida bo'ladi."
+      },
+      {
+        "q": "Yalpi taklif deganda:",
+        "options": [
+          "mamlakat fuqarolari tomonidan xorijiy va mamlakat ichida ishlab chiqarilgan mahsulotlar hajmi tushuniladi",
+          "mamlakat hududida ishlab chiqarilgan barcha yakuniy va oraliq mahsulotlar yig'indisi, ularning bozor narxidan qat'i nazar umumiy qiymati tushuniladi.",
+          "muayyan baholar darajasida ishlab chiqarilishi va taklif qilinishi mumkin bo'lgan tovar va xizmatlarning real hajmi tushuniladi.",
+          "yalpi talab bilan bir xil tushuncha bo'lib, iqtisodiyotdagi barcha xaridorlarning tovar va xizmatlarga bo'lgan umumiy talabi bilan belgilanadigan ko'rsatkich tushuniladi."
+        ],
+        "a": "muayyan baholar darajasida ishlab chiqarilishi va taklif qilinishi mumkin bo'lgan tovar va xizmatlarning real hajmi tushuniladi."
+      },
+      {
+        "q": "Uy xo'jaliklari va firmalar uchun soliq stavkalarining kamaytirilishi AD egri chizig'ini qanday o'zgartiradi?",
+        "options": [
+          "AD egri chizig'i o'ngga-tepaga suriladi.",
+          "O'zgartirmaydi.",
+          "AD egri chizig'i chapga-pastga suriladi.",
+          "AD egri chizig'i o'zgarmay qoladi AS ni esa o'ngga pastga suradi."
+        ],
+        "a": "AD egri chizig'i o'ngga-tepaga suriladi."
+      },
+      {
+        "q": "Hukumat ishlab chiqaruvchilarga subsidiyalarni oshirdi. Bu yalpi taklif (AS) egri chizig'i holatida qanday aks etadi?",
+        "options": [
+          "AS ni o'zgarishsiz qoladi",
+          "AS ni chapga suriladi",
+          "AS ni o'ngga suriladi",
+          "to'g'ri javob yo'q"
+        ],
+        "a": "AS ni o'ngga suriladi"
+      },
+      {
+        "q": "Yalpi talab AD egri chizig'i bo'ylab pastga-o'ngga siljiydi, agar:",
+        "options": [
+          "milliy valyutaning almashinuv kursi ko'tarilsa",
+          "baholar darajasi pasaysa",
+          "ishlab chiqarish quvvati oshsa",
+          "baholar darajasi ko'tarilsa"
+        ],
+        "a": "baholar darajasi pasaysa"
+      },
+      {
+        "q": "Yalpi taklifning Kеyns kеsmasida:",
+        "options": [
+          "baholar darajasi o'zgarmas",
+          "valyuta kursi o'zgaruvchan",
+          "baholar darajasi o'zgaruvchan",
+          "rеal YaIM hajmi o'zgarmas"
+        ],
+        "a": "baholar darajasi o'zgarmas"
+      },
+      {
+        "q": "Davlat xarajatlarining o'sishi natijasida uzoq muddatda ishlab chiqarish va narxlar darajasi qanday o'zgaradi?",
+        "options": [
+          "ishlab chiqarish hajmi, yuqoriroq narxlar darajasida, o'zining potеntsial darajasiga qaytadi",
+          "narxlar darajasi o'zgarmaydi, ishlab chiqarish hajmi esa o'sadi",
+          "ishlab chiqarish hajmi, pastroq narxlar darajasida, o'zining potеntsial darajasiga qaytadi",
+          "ishlab chiqarish hajmi va narxlar darajasi pasayadi"
+        ],
+        "a": "ishlab chiqarish hajmi, yuqoriroq narxlar darajasida, o'zining potеntsial darajasiga qaytadi"
+      },
+      {
+        "q": "Aholining umumiy soni 100 mln. kishi, mеhnat rеsurslari soni 55 mln.kishi. Ishsizlar soni 5 mln. kishi. Ish bilan bandlar soni 50 mln. kishi. Bu holatda ishsizllik darajasi tеng bo'ladi:",
+        "options": [
+          "10%",
+          "6,15%",
+          "9,09%",
+          "11,10%"
+        ],
+        "a": "9,09%"
+      },
+      {
+        "q": "Iqtisodiyotda bandlilik darajasining oshishi olib keladi:",
+        "options": [
+          "xarajatlar, daromadlar va yalpi talabning oshishi sababli narxlar darajasining ko'tarilishiga",
+          "ishsizlarga beriladigan transfert to'lovlarining ko'payishiga",
+          "tovar va xizmatlar taklifi hajmining kamayishiga",
+          "narxlar darajasining pasayishiga"
+        ],
+        "a": "xarajatlar, daromadlar va yalpi talabning oshishi sababli narxlar darajasining ko'tarilishiga"
+      },
+      {
+        "q": "Yaqin orada yana ish olishga umid qilayotgan odam:",
+        "options": [
+          "ishchi kuchi tarkibiga kirmaydi",
+          "ishsizlar guruhiga kiradi",
+          "bandlar ro'yxatiga kiradi",
+          "to'liq bo'lmagan band hisoblanadi"
+        ],
+        "a": "ishsizlar guruhiga kiradi"
+      },
+      {
+        "q": "Ishsizlar – bu,",
+        "options": [
+          "ishchi kuchining bir qismi bo'lib, ishlash istagiga ega bor, rasmiy mehnat bozorida ish qidirish faoliyatini olib bormaydigan, ya'ni \"norasmiy ishsizlik\" holatida bo'lgan shaxslar.",
+          "ishchi kuchining bir qismi bo'lib, mehnatga layoqatli yoshdagi, lekin iqtisodiy faol aholi tarkibiga kirmaydigan talaba, uy bekalari yoki pensiya yoshidagi shaxslar.",
+          "ishchi kuchining bir qismi bo'lib, ijtimoiy ishlab chiqarishda band bo'lmagan, lekin ishlashni xohlovchi va faol ish qidirayotgan aholidir.",
+          "ishchi kuchining bir qismi bo'lib, mehnat bozorida vaqtincha bandlikni to'xtatgan, ammo ishlash istagi ham, ish qidirish sa'y-harakati ham bo'lmagan iqtisodiy nofaol shaxslar."
+        ],
+        "a": "ishchi kuchining bir qismi bo'lib, ijtimoiy ishlab chiqarishda band bo'lmagan, lekin ishlashni xohlovchi va faol ish qidirayotgan aholidir."
+      },
+      {
+        "q": "Friksion ishsizlik – bu,",
+        "options": [
+          "texnologiyalar o'zgarishi, ishlab chiqarish strukturasidagi yangilanishlar yoki kasbiy malakaga talabning o'zgarishi sababli yuzaga keladigan ishsizlik.",
+          "mavsumiy ish o'rinlari tugagach, yilning ma'lum davrida (masalan, qishloq xo'jaligi yoki turizmda) kuzatiladigan vaqtinchalik ishsizlik turi.",
+          "ish qidirayotgan yoki yaqin vaqtlar ichida ish bilan ta'minlanishni kutayotgan, ish yoki doimiy yashash joylarni o'zgartirgan ishchi kuchi kiradi.",
+          "Iqtisodiyotda chuqur pasayish davrida yuzaga keladigan, ishlab chiqarishning qisqarishi natijasida keng ko'lamda yuz beradigan ishsizlik."
+        ],
+        "a": "ish qidirayotgan yoki yaqin vaqtlar ichida ish bilan ta'minlanishni kutayotgan, ish yoki doimiy yashash joylarni o'zgartirgan ishchi kuchi kiradi."
+      },
+      {
+        "q": "Ishlab chiqarish strukturasining o'zgarishi natijasida ishchi kuchiga talab tarkibining o'zgarishi natijasida ishsiz qolganlar qaysi ishsizlik turiga kiradi?",
+        "options": [
+          "friksion ishsizlik",
+          "davriy ishsizlik",
+          "tarkibiy ishsizlik",
+          "ishsizlikning tabiiy darajasi"
+        ],
+        "a": "tarkibiy ishsizlik"
+      },
+      {
+        "q": "Ishlab chiqarishning pasayishi natijasida ishchi kuchiga bo'lgan talabning kamayishidan yuzaga keladigan ishsizlik turi qaysi?",
+        "options": [
+          "tarkibiy ishsizlik",
+          "davriy ishsizlik",
+          "ishsizlikning tabiiy darajasi",
+          "friksion ishsizlik"
+        ],
+        "a": "davriy ishsizlik"
+      },
+      {
+        "q": "Ishsizlikning tabiiy darajasi - bu,",
+        "options": [
+          "friksion va tarkibiy ishsizlikning yig'indisi hisoblanadi.",
+          "mavsumlarning almashinuvi davridagi ishsizlik hisoblanadi.",
+          "haqiqiy va tabiiy ishsizlikning ayirmasidan tashkil topadi.",
+          "ouken qonuni bo'lib hisoblanadi."
+        ],
+        "a": "friksion va tarkibiy ishsizlikning yig'indisi hisoblanadi."
+      },
+      {
+        "q": "Barcha mavjud resurslardan to'liq foydalanish yoki ishsizlikning tabiiy darajasi holatida iqtisodiyotda yaratilishi mumkin bo'lgan mahsulot hajmini nima deb ataladi?",
+        "options": [
+          "ishlab chiqarishning faktik (haqiqiy) hajmi",
+          "ishlab chiqarishning real hajmi",
+          "ishlab chiqarishning potensial hajmi",
+          "ishlab chiqarishning nominal hajmi"
+        ],
+        "a": "ishlab chiqarishning potensial hajmi"
+      },
+      {
+        "q": "Iqtisodiy davrlar (sikllar) qanday ta'riflanadi?",
+        "options": [
+          "faqat pul massasining o'zgarishi natijasida yuzaga keladigan davriy jarayonlar bo'lib, barcha sikllar faqat bir xil davomiylikka ega va iqtisodiy faollik darajasida sezilarli tafovut kuzatilmaydi.",
+          "asosan xalqaro savdo balansi o'zgarishlari natijasida yuzaga keladigan davrlar bo'lib, ular ichki ishlab chiqarish va bandlilik darajasi bilan bog'liq emas, faqat tashqi iqtisodiy aloqalarni aks ettiradi.",
+          "davlat xarajatlari va soliq siyosatidagi o'zgarishlardan kelib chiqadigan qisqa muddatli o'zgarishlar bo'lib, ular ishlab chiqarish hajmiga ta'sir qilmaydi, faqat narxlar darajasining tebranishini ko'rsatadi.",
+          "ishlab chiqarish hajmi, bandlilik va inflyatsiya darajasining davriy tebranishlari bo'lib, iqtisodiy faollikning kuchayishi yoki susayishi bilan belgilanadi."
+        ],
+        "a": "ishlab chiqarish hajmi, bandlilik va inflyatsiya darajasining davriy tebranishlari bo'lib, iqtisodiy faollikning kuchayishi yoki susayishi bilan belgilanadi."
+      },
+      {
+        "q": "Ushbu iqtisodiy davrda ishlab chiqarish va bandlik darajalari kamayadi, ammo bahoning o'sish darajasi pasaymaydi.",
+        "options": [
+          "cho'qqi",
+          "pasayishning quyi nuqtasi (turg'unlik)",
+          "ko'tarilish",
+          "pasayish (retsessiya)"
+        ],
+        "a": "pasayish (retsessiya)"
+      },
+      {
+        "q": "Ouken qonuniga ko'ra, ishsizlikning haqiqiy darajasi tabiiy darajadan 2 foiz yuqori bo'lsa va β koeffitsienti 2,5 ga teng deb olinsa, milliy iqtisodiyotning haqiqiy YaIMi potensial YaIMdan taxminan nechaga kam bo'ladi?",
+        "options": [
+          "5 %",
+          "10 %",
+          "7,5 %",
+          "2,5 %"
+        ],
+        "a": "5 %"
+      },
+      {
+        "q": "Dastlabki 2-3 foizdan yuqori bo'lgan har 2-3 foiz iqtisodiy o'sish, davriy ishsizlikni necha foizga kamaytiradi?",
+        "options": [
+          "3,0 foizga",
+          "o'zgartirmaydi",
+          "1 %",
+          "2,5 %"
+        ],
+        "a": "1 %"
+      },
+      {
+        "q": "Barcha mavjud resurslardan to'liq foydalanish yoki ishsizlikning tabiiy darajasi holatida iqtisodiyotda yaratilishi mumkin bo'lgan mahsulot hajmi nima deb ataladi?",
+        "options": [
+          "potensial ishlab chiqarish hajmi",
+          "nominal ishlab chiqarish hajmi",
+          "real ishlab chiqarish hajmi",
+          "YaIMning uzilishi"
+        ],
+        "a": "potensial ishlab chiqarish hajmi"
+      },
+      {
+        "q": "Iqtisodiy davrlarni monetar siyosatga bog'laydigan olimlarga ko'ra davriy tebranishlar quyidagicha tushuntiriladi:",
+        "options": [
+          "pul taklifi ortishi iqtisodiyotda har doim barqaror o'sish keltirib chiqaradi, chunki ko'proq pul mavjud bo'lsa, talab doim oshib boradi, inflyatsiya yuz bermaydi va inqirozlar kuzatilmaydi.",
+          "pul miqdori oshishi iqtisodiyotda faqat narxlarning ko'tarilishiga olib keladi, ishlab chiqarish hajmi va bandlik darajasi esa o'zgarmaydi, chunki ular faqat resurslar va texnologiyalar bilan belgilanadi.",
+          "pul massasi kamayganda ham iqtisodiy o'sish davom etadi, chunki ishlab chiqarishning asosiy omili kapital va mehnat bo'lib, pul faqat vositachilik vazifasini bajaradi va sikllarga ta'sir qilmaydi.",
+          "davlat qanchalik ko'p pul bosib chiqarsa, uning qadri shunchalik kamayib boradi va aksincha, pul miqdori qanchalik kam bo'lsa, ishlab chiqarish ko'lamining pasayishi va ishsizlar sonining ortishi shunchalik tezlashadi."
+        ],
+        "a": "davlat qanchalik ko'p pul bosib chiqarsa, uning qadri shunchalik kamayib boradi va aksincha, pul miqdori qanchalik kam bo'lsa, ishlab chiqarish ko'lamining pasayishi va ishsizlar sonining ortishi shunchalik tezlashadi."
+      },
+      {
+        "q": "YaIMni to'liq bandlilikning noinflyatsion darajasigacha pasaytirish uchun yalpi talab kamayishi zarur bo'lgan miqdor:",
+        "options": [
+          "rejalashtirilmagan xarajatlar miqdori deyiladi.",
+          "retsession uzilish miqdori deyiladi.",
+          "inflyatsion uzilish miqdori deyiladi.",
+          "avtonom xarajatlar deyiladi."
+        ],
+        "a": "inflyatsion uzilish miqdori deyiladi."
+      },
+      {
+        "q": "Iqtisodiy davrlardagi pasayish (retsessiya) fazasida nima sodir bo'ladi?",
+        "options": [
+          "bu bosqichda davlat xarajatlari ortadi, investitsiyalar ko'payadi va iqtisodiy faollik kuchayadi, natijada retsessiya o'rniga tezkor o'sish yuz beradi.",
+          "bu bosqichda ishlab chiqarish va bandlik darajalari kamayadi, ammo bahoning o'sish darajasi pasaymaydi.",
+          "bu bosqichda ishlab chiqarish hajmi o'sishda davom etadi, bandlik darajasi yuqori bo'ladi, narxlar esa doimiy ravishda pasayadi va iqtisodiyotda deflyatsiya yuz beradi.",
+          "bu bosqichda faqat narxlar ko'tariladi, ishlab chiqarish hajmi va bandlik darajasi esa o'zgarmaydi, chunki ular iqtisodiyotning uzoq muddatli omillariga bog'liq."
+        ],
+        "a": "bu bosqichda ishlab chiqarish va bandlik darajalari kamayadi, ammo bahoning o'sish darajasi pasaymaydi."
+      },
+      {
+        "q": "Nominal foiz stavka 20% ga tеng, inflyatsiya darajasi yiliga 15% ga tеng bo'lganda, rеal foiz stavka tеng bo'ladi:",
+        "options": [
+          "75% ga",
+          "5% ga",
+          "10% ga",
+          "35% ga"
+        ],
+        "a": "5% ga"
+      },
+      {
+        "q": "Filips egri chizig'i:",
+        "options": [
+          "ishsizlik darajasi va inflyatsiya sur'ati o'zgarishlarining to'g'ri proportsionalligini ifolaydi",
+          "ishsizlik va inflyatsiya darajalari o'rtasidagi teskari bog'lig'likni xarakterlaydi",
+          "baholar (narxlar) darajasi va YaIM dinamikasi o'rtasidagi bog'liqlikni ifodalaydi",
+          "inflyatsiya sur'ati va YaIM dinamikasi o'rtasidagi bog'liqlikni ifodalaydi"
+        ],
+        "a": "ishsizlik va inflyatsiya darajalari o'rtasidagi teskari bog'lig'likni xarakterlaydi"
+      },
+      {
+        "q": "Istе'mol narxlari indеksi:",
+        "options": [
+          "istе'mol tovarlari va xizmatlari umumiy narxining bazis yilga nisbatan o'zgarishini ifodalaydi",
+          "laspeyrse va paashe indekslarining o'rtacha geometrik qiymatlarini ifodalaydi",
+          "barcha tovarlar va xizmatlar umumiy narxining bazis yilga nisbatan o'zgarishini ifodalaydi",
+          "istе'mol tovarlarini umumiy narxining bazis yilga nisbatan o'zgarishini ifodalaydi"
+        ],
+        "a": "istе'mol tovarlari va xizmatlari umumiy narxining bazis yilga nisbatan o'zgarishini ifodalaydi"
+      },
+      {
+        "q": "Keynschilarga ko'ra inflyatsiyaning sababi:",
+        "options": [
+          "to'liq bandlik sharoitida talabning haddan ziyod bo'lishida",
+          "bir birlik mahsulot ishlab chiqarish harajatlarining o'sishida",
+          "pul massasining kamayishida",
+          "ishlab chiqarishning haddan ziyod o'sishida"
+        ],
+        "a": "to'liq bandlik sharoitida talabning haddan ziyod bo'lishida"
+      },
+      {
+        "q": "Faraz qilaylik, mamlakatda daromad o'tgan yilga nisbatan 200 birlikka o'sgan va bu istеmolni 160 birlikka o'zgarishiga olib kеlgan. Unda istе'molga bo'lgan chеgaraviy moyillik (MPC) va jamg'arishga bo'lgan chеgaraviy moyillik (MPS) nimaga tеng bo'ladi?",
+        "options": [
+          "MPC = 0,9 (90%) va MPS = 0,1 (10%)",
+          "MPC = 0,8 (80%) va MPS = 0,2 (20%)",
+          "MPC = 0,2 (20%) va MPS = 0,8 (80%)",
+          "MPC = 0,75 (75%) va MPS = 0,25 (25%)"
+        ],
+        "a": "MPC = 0,8 (80%) va MPS = 0,2 (20%)"
+      },
+      {
+        "q": "Inflyatsiya atamasiga qaysi javobda to'g'ri ta'rif berilgan?",
+        "options": [
+          "ma'lum davr davomida mamlakatda baholar umumiy darajasining pasayishi, natijada pulning xarid qobiliyatining oshishi jarayonidir.",
+          "ma'lum davr mobaynida mamlakatda baholar o'rtacha (umumiy) darajasining barqaror o'sishi, pulning xarid qobiliyatini uzoq muddatli pasayishidir.",
+          "ma'lum davr mobaynida mamlakatda milliy valyutaning xorijiy valyutaga nisbatan qadrsizlanishi jarayonidir.",
+          "ma'lum davr mobaynida mamlakatda narxlarning qisqa muddatli tebranishi bo'lib, u ishlab chiqarish hajmiga, bandlik darajasiga yoki pulning real qiymatiga sezilarli ta'sir ko'rsatmaydi."
+        ],
+        "a": "ma'lum davr mobaynida mamlakatda baholar o'rtacha (umumiy) darajasining barqaror o'sishi, pulning xarid qobiliyatini uzoq muddatli pasayishidir."
+      },
+      {
+        "q": "Taklif inflyatsiyasining yuzaga kelishi sababi qaysi javobda to'g'ri ta'rif berilgan?",
+        "options": [
+          "iqtisodiyotda talab keskin oshib ketishi va uni ishlab chiqarishning real hajmi bilan qondirish mumkin bo'lmay qolgan sharoitlarda kelib chiqadi.",
+          "iqtisodiyotda pul massasining ortishi natijasida aholining iste'mol talabi keskin ko'payadi, ishlab chiqarish esa tezlikda kengayib, talabning yuqori o'sishiga yeta olmay qolishi natijasida kelib chiqadi.",
+          "iqtisodiyotda faol monetar siyosat natijasida kreditlash hajmi oshishi natijasida kelib chiqadi",
+          "iqtisodiyotda tovar va xizmatlar taklifining kamayishi natijasida tovar va xizmatlar baholarining oshishidan kelib chiqadi"
+        ],
+        "a": "iqtisodiyotda tovar va xizmatlar taklifining kamayishi natijasida tovar va xizmatlar baholarining oshishidan kelib chiqadi"
+      },
+      {
+        "q": "Talab inflyatsiyasining yuzaga kelishi sababi qaysi javobda to'g'ri ta'rif berilgan?",
+        "options": [
+          "iqtisodiyotda pul massasining kamayishi natijasida aholining xarid qobiliyati pasayishi oqibatida kelib chiqadi.",
+          "iqtisodiyotda tovar va xizmatlar taklifining kamayishi natijasida tovar va xizmatlar baholarining oshishidan kelib chiqadi",
+          "iqtisodiyotda talab keskin oshib ketishi va uni ishlab chiqarishning real hajmi bilan qondirish mumkin bo'lmay qolgan sharoitlarda kelib chiqadi.",
+          "iqtisodiyotda davlat budjetidan ishlab chiqaruvchilarni qo'llab-quvvatlash maqsadida ajratilgan subsidiyalarning o'sishi natijasida kelib chiqadi."
+        ],
+        "a": "iqtisodiyotda talab keskin oshib ketishi va uni ishlab chiqarishning real hajmi bilan qondirish mumkin bo'lmay qolgan sharoitlarda kelib chiqadi."
+      },
+      {
+        "q": "Kutilayotgan inflyatsiya:",
+        "options": [
+          "daromadlarni qayd qilingan daromad oluvchilar va qayd qilinmagan daromad oluvchilar o'rtasida keyingilari foydasiga qayta taqsimlaydi.",
+          "kutilayotgan inflyatsiya sharoitida narxlar o'sishi bilan bir qatorda ish haqi va boshqa daromad turlari ham asta-sekin moslashtiriladi, ammo bu jarayon real daromadni to'liq himoya qila olmaydi.",
+          "daromad oluvchilar inflyatsiya ta'sirini qisman hisobga oladi, ammo barcha sohalarda real daromadni to'liq saqlab qolish imkoniyati mavjud bo'lmaydi.",
+          "daromad oluvchi inflyatsiyaning u olayotgan daromadga ta'sirini kamaytirish, ya'ni real daromad darajasini saqlab qolish chorasini ko'radi."
+        ],
+        "a": "daromad oluvchi inflyatsiyaning u olayotgan daromadga ta'sirini kamaytirish, ya'ni real daromad darajasini saqlab qolish chorasini ko'radi."
+      },
+      {
+        "q": "Kutilmagan inflyatsiya:",
+        "options": [
+          "kutilayotgan inflyatsiya sharoitida narxlar o'sishi bilan bir qatorda ish haqi va boshqa daromad turlari ham asta-sekin moslashtiriladi, ammo bu jarayon real daromadni to'liq himoya qila olmaydi.",
+          "daromad oluvchilar inflyatsiya ta'sirini qisman hisobga oladi, ammo barcha sohalarda real daromadni to'liq saqlab qolish imkoniyati mavjud bo'lmaydi.",
+          "daromad oluvchi inflyatsiyaning u olayotgan daromadga ta'sirini kamaytirish, ya'ni real daromad darajasini saqlab qolish chorasini ko'radi.",
+          "daromadlarni qayd qilingan daromad oluvchilar va qayd qilinmagan daromad oluvchilar o'rtasida keyingilari foydasiga qayta taqsimlaydi."
+        ],
+        "a": "daromadlarni qayd qilingan daromad oluvchilar va qayd qilinmagan daromad oluvchilar o'rtasida keyingilari foydasiga qayta taqsimlaydi."
+      },
+      {
+        "q": "Fisher indeksi:",
+        "options": [
+          "Faqat joriy yil iste'mol savatidagi tovarlarning narxlari asosida hisoblanadigan oddiy narxlar indeksi hisoblanadi.",
+          "Iste'mol tovarlari va xizmatlari narxining o'zgarishini har bir tovarning o'rtacha ulushiga qarab hisoblaydigan statistik ko'rsatkichdir.",
+          "Sanoat ishlab chiqaruvchilar baho indeksi iste'mol narxlari indeksi bo'lib, faqatgina shu sektordagi inflyatsiyani hisoblaydigan indeksdir.",
+          "Paashe va Laspeyres indekslarining geometrik o'rtachasi bo'lib, narxlar darajasining o'zgarishini yanada aniqroq ifodalovchi kompleks indeksdir."
+        ],
+        "a": "Paashe va Laspeyres indekslarining geometrik o'rtachasi bo'lib, narxlar darajasining o'zgarishini yanada aniqroq ifodalovchi kompleks indeksdir."
+      },
+      {
+        "q": "Iste'mol narxlari indeksi (INI) YaIM deflatori indeksidan asosiy farqlari shundaki:",
+        "options": [
+          "INI va YaIM deflyatori bir xil narx o'zgarishlarini o'lchaydi, farqi faqat hisoblash davrida qo'llaniladigan statistik usullardadir.",
+          "INI faqatgina iste'mol savatiga kiritilgan tovarlardagi inflyatsiyani hisoblaydi, YaIM deflatori esa milliy iqtisodiyotda ishlab chiqarilgan barcha tovarlardagi inflyatsiyani hisobga oladi.",
+          "INI sanoat ishlab chiqaruvchilarning narxlarini hisoblaydi, YaIM deflyatori esa faqat iste'mol baholarining o'zgarishini aniqlaydi.",
+          "INI mamlakatdagi eksport narxlarining o'zgarishini hisoblaydi, YaIM deflyatori esa import narxlarining o'zgarishini aks ettiradi."
+        ],
+        "a": "INI faqatgina iste'mol savatiga kiritilgan tovarlardagi inflyatsiyani hisoblaydi, YaIM deflatori esa milliy iqtisodiyotda ishlab chiqarilgan barcha tovarlardagi inflyatsiyani hisobga oladi."
+      },
+      {
+        "q": "Makroiqtisodiy nazariyalarga ko'ra, antiinflyatsiya siyosati qanday chora-tadbirlarni o'z ichiga oladi?",
+        "options": [
+          "tadbirkorlik subyektlariga soliq yukini oshirish hamda narxlarni ma'muriy yo'l bilan belgilash orqali iqtisodiy faollikni cheklashni.",
+          "eksportni kamaytirish, importni cheklash va milliy valyutani qadrsizlantirish orqali ichki bozorda baholarni pasaytirishni.",
+          "pul massasini ko'paytirish, davlat xarajatlarini kengaytirish va aholining iste'mol xarajatlarini rag'batlantirishni.",
+          "yalpi talab va yalpi taklifni tartibga solishni."
+        ],
+        "a": "yalpi talab va yalpi taklifni tartibga solishni."
+      },
+      {
+        "q": "Antiinflyatsiya siyosatining monetaristik yo'nalishi tarafdorlari:",
+        "options": [
+          "inflyatsiyani pasaytirish uchun eksportni kengaytirish, import bojlarini kamaytirish va tashqi savdo balansini ijobiylashtirish zarur deb hisoblaydilar.",
+          "baholarning o'sishini kamaytirish uchun davlat xarajatlarini ko'paytirish, ish haqlarini oshirish va iste'mol talabini rag'batlantirishni tavsiya etadilar.",
+          "yalpi talabni konfiskatsiya tipidagi pul islohoti o'tkazish hisobiga cheklash va budjet taqchilligini ijtimoiy dasturlarni qisqartirish lozim deb hisoblaydilar.",
+          "inflyatsiyani kamaytirish uchun asosan ishlab chiqarishni rag'batlantiruvchi soliq imtiyozlari va subsidiyalar tizimini kengaytirish lozim deb hisoblaydilar."
+        ],
+        "a": "yalpi talabni konfiskatsiya tipidagi pul islohoti o'tkazish hisobiga cheklash va budjet taqchilligini ijtimoiy dasturlarni qisqartirish lozim deb hisoblaydilar."
+      },
+      {
+        "q": "Monetaristlar tomonidan taklif qilinayotgan antiinflyatsiya siyosatining yana bir ko'rinishi:",
+        "options": [
+          "adaptiv siyosatdir.",
+          "\"Arzon pullar\" siyosatdir.",
+          "\"inflyatsiyani import qilish\" ga yo'l qo'ymaslikdir",
+          "inflyatsiyani graduallash usulidir."
+        ],
+        "a": "inflyatsiyani graduallash usulidir."
+      },
+      {
+        "q": "Konfiskatsiya tipidagi shok terapiyasi ko'rinishlaridan biri bo'lib:",
+        "options": [
+          "daromadlarning va baholarning nominal darajalarini o'zgartirmagan holda eski pullarni belgilangan nisbatda yangisiga alishtirishtirish hisoblanadi.",
+          "eski pullarni almashtirish bilan bir vaqtda ish haqi va pensiyalarni oshirish, aholining xarid qobiliyatini tiklash orqali iqtisodiy o'sishni tezlashtirish hisoblanadi.",
+          "pul massasini ko'paytirish, budjet xarajatlarini oshirish va yalpi talabni rag'batlantirish yo'li bilan iqtisodiy turg'unlikdan chiqish chorasini bildiradi.",
+          "narxlar, ish haqi va foiz stavkalarini erkinlashtirish orqali iqtisodiyotda davlat aralashuvini kamaytirish jarayonini ifodalaydi."
+        ],
+        "a": "daromadlarning va baholarning nominal darajalarini o'zgartirmagan holda eski pullarni belgilangan nisbatda yangisiga alishtirishtirish hisoblanadi."
+      },
+      {
+        "q": "Mahsulot birligiga sarflangan xarajatlarning o'sishi hisobiga real ishlab chiqarish hajmining kamayishi natijasida qanday inflyatsiya sodir bo'ladi?",
+        "options": [
+          "kutilmagan inflyatsiya",
+          "talab inflyatsiyasi",
+          "taklif inflyatsiyasi",
+          "kutilayotgan inflyatsiya"
+        ],
+        "a": "taklif inflyatsiyasi"
+      },
+      {
+        "q": "U boshqarib bo'lmaydigan inflyatsiya jarayoni bo'lib, ishlab chiqarish va bandlik darajalariga halokatli ta'sir ko'rsatadi.",
+        "options": [
+          "giperinflyatsiya",
+          "mo''tadil inflyatsiya",
+          "kutilayotgan inflyatsiya",
+          "yuguruvchi inflyatsiya"
+        ],
+        "a": "giperinflyatsiya"
+      },
+      {
+        "q": "Agar tasarrufdagi daromad (Yd) 200ga, istеmol (C) 180 ga tеng bo'lsa, unda istеmolga bo'lgan o'rtacha moyillik (APC) va jamg'arishga bo'lgan o'rtacha moyillik (APS) nimaga tеng bo'ladi?",
+        "options": [
+          "90% va 10%",
+          "98% va 2%",
+          "80% va 20%",
+          "111% va 11%"
+        ],
+        "a": "90% va 10%"
+      },
+      {
+        "q": "Investitsiyalar dinamikasini belgilovchi foiz stavkasidan tashqari eng muhim omillardan biri bo'lib:",
+        "options": [
+          "kutilayotgan sof foyda normasi hisoblanadi.",
+          "bozor kutilmalari va umumiy iqtisodiy ishonch darajasi bilan belgilanadi.",
+          "soliq stavkalari va davlat subsidiyalari hajmi bilan belgilanadi.",
+          "ishlab chiqarish quvvatlaridan foydalanish darajasi hisoblanadi."
+        ],
+        "a": "kutilayotgan sof foyda normasi hisoblanadi."
+      },
+      {
+        "q": "Investitsiyalar yoki kapital qo'yilmalar – bu:",
+        "options": [
+          "asosan davlat budjetidan ajratiladigan kapital xarajatlaridir.",
+          "tayyor mahsulot va xizmatlarni iste'mol qilish uchun sarflanadigan mablag'dir.",
+          "moliyaviy aktivlarni sotib olish orqali daromad olish jarayonidir.",
+          "hali buyumlashmagan, lekin ishlab chiqarish vositalariga qo'yilgan kapitaldir."
+        ],
+        "a": "hali buyumlashmagan, lekin ishlab chiqarish vositalariga qo'yilgan kapitaldir."
+      },
+      {
+        "q": "Aksеlеrator modеli ifodalaydi:",
+        "options": [
+          "YaIM dinamikasining invеstitsiyalar hajmining o'sishiga bog'liqligini",
+          "invеstitsiyalar dinamikasining YaIM hajmi o'sishiga bog'liqligini",
+          "invеstitsiyalar hajmining foiz stavkasi dinamikasiga bog'liqligini",
+          "invеstitsiyalar hajmining kutilayotgan sof foyda normasiga bog'liqligini"
+        ],
+        "a": "invеstitsiyalar dinamikasining YaIM hajmi o'sishiga bog'liqligini"
+      },
+      {
+        "q": "Tasarrufdagi daromadning bir birlikka o'zgarishi, iste'mol hajmini necha birlikka o'zgarishini tushuntiruvchi koeffitsient bu:",
+        "options": [
+          "jamg'arishga o'rtacha moyillik deyiladi.",
+          "iste'molga chegaralangan moyillik deyiladi.",
+          "jamg'arishga chegaralangan moyillik deyiladi.",
+          "iste'molga o'rtacha moyillik deyiladi."
+        ],
+        "a": "iste'molga chegaralangan moyillik deyiladi."
+      },
+      {
+        "q": "Tasarrufdagi daromadning bir birlikka o'zgarishi, jamg'arish hajmini necha birlikka o'zgarishini tushuntiruvchi koeffitsient bu:",
+        "options": [
+          "jamg'arishga chegaralangan moyillik deyiladi.",
+          "jamg'arishga o'rtacha moyillik deyiladi.",
+          "iste'molga o'rtacha moyillik deyiladi.",
+          "iste'molga chegaralangan moyillik deyiladi."
+        ],
+        "a": "jamg'arishga chegaralangan moyillik deyiladi."
+      },
+      {
+        "q": "Tasarrufdagi daromadning necha foizi iste'mol xarajatlari uchun ishlatilishini tushuntiruvchi ko'rsatkich bu:",
+        "options": [
+          "jamg'arishga o'rtacha moyillik deyiladi.",
+          "jamg'arishga chegaralangan moyillik deyiladi.",
+          "iste'molga chegaralangan moyillik deyiladi.",
+          "iste'molga o'rtacha moyillik deyiladi."
+        ],
+        "a": "iste'molga o'rtacha moyillik deyiladi."
+      },
+      {
+        "q": "Keynsning likvidlilik afzalligi nazariyasiga ko'ra pulga talab nimalarga bog'liq?",
+        "options": [
+          "Daromad va ishlab chiqarish hajmiga",
+          "Narx darajasi va valyuta kursiga",
+          "Transaksion, ehtiyotkorlik va spekulyativ sabablarga",
+          "Pul agregatlari tarkibiga"
+        ],
+        "a": "Transaksion, ehtiyotkorlik va spekulyativ sabablarga"
+      },
+      {
+        "q": "Klassik dixotomiya konsepsiyasida:",
+        "options": [
+          "pul miqdori va narxlar darajasi o'zgarishi ishlab chiqarish hajmi, bandlik va real daromadlarga bevosita ta'sir qiladi, chunki iqtisodiyotda pul va real sektor o'zaro to'liq bog'langan deb qaraladi.",
+          "pul bozori va real sektor bir-biridan ajralmagan tizim bo'lib, ularning muvozanatini davlat aralashuvi, fiskal siyosat va pul-kredit choralari orqali ta'minlash zarur deb qaraladi.",
+          "real va pul bozori alohida-alohida amal qiladi, ular o'rtasidagi muvozanat avtomatik barqarorlashtirgichlar orqali ta'minlab turadi deb hisoblanadi.",
+          "real sektorning muvozanati faqat pul-kredit siyosati orqali ta'minlanadi, shuning uchun foiz stavkalari va pul massasining o'zgarishi ishlab chiqarish hajmini avtomatik tartibga soladi."
+        ],
+        "a": "real va pul bozori alohida-alohida amal qiladi, ular o'rtasidagi muvozanat avtomatik barqarorlashtirgichlar orqali ta'minlab turadi deb hisoblanadi."
+      },
+      {
+        "q": "Klassik iqtisodchilar ta'kidlashlaricha, kapitalizmning o'ziga xos pul bozori mavjud bo'lib:",
+        "options": [
+          "bu bozorni avtomatik stabilizator tartibga soladi.",
+          "bu bozorni ishlab chiqarish hajmi va narx darajasining o'zgarishi avtomatik muvozanatga keltiradi.",
+          "bu bozorni foiz stavkasi tartibga soladi.",
+          "bu bozorni davlat tomonidan belgilangan budjet siyosati tartibga soladi."
+        ],
+        "a": "bu bozorni foiz stavkasi tartibga soladi."
+      },
+      {
+        "q": "Agar daromadlar rejalashtirilgan xarajatlardan yuqori bo'lsa, u holda firmalar ishlab chiqarishni qisqartiradi, chunki rejalashtirilmagan xarajatlar (TMZ)...",
+        "options": [
+          "«0» ga teng bo'ladi.",
+          "o'zgarmaydi.",
+          "kamayadi.",
+          "ko'payadi."
+        ],
+        "a": "ko'payadi."
+      },
+      {
+        "q": "Keynsga ko'ra rejalashtirilgan investitsiyalarga:",
+        "options": [
+          "moliyaviy aktivlarni sotib olishga qilingan xarajatlar kiradi.",
+          "hukumat tomonidan keyingi yil uchun mo'lgallangan budjet xarajatlari smeta-loyihasi doirasida nazarda tutulgan xarajatlar kiradi.",
+          "uy xo'jaliklari, firmalar, davlat va tashqi dunyoning mahsulot va xizmatlarni sotib olishga mo'ljallagan xarajatlari kiradi.",
+          "tovar – moddiy zaxiralariga (TMZ) investitsiyalardagi kutilmagan o'zgarishlar kiradi."
+        ],
+        "a": "uy xo'jaliklari, firmalar, davlat va tashqi dunyoning mahsulot va xizmatlarni sotib olishga mo'ljallagan xarajatlari kiradi."
+      },
+      {
+        "q": "Agar iste'molga chegaralangan moyillik o'zgarmas bo'lsa, daromad ortishi natijasida Keyns modelida qanday holat kuzatiladi?",
+        "options": [
+          "iste'molga o'rtacha moyillik o'zgarmaydi.",
+          "iste'molga o'rtacha moyillik kamayadi.",
+          "jamg'arishga chegaralangan moyillik o'sadi.",
+          "iste'molga o'rtacha moyillik o'sadi."
+        ],
+        "a": "iste'molga o'rtacha moyillik kamayadi."
+      },
+      {
+        "q": "\"Keyns xochi\" qanday makroiqtisodiy jarayonni tasvirlaydi?",
+        "options": [
+          "tovarlar va xizmatlar bozorida qisqa muddatli muvozanatga erishish mexanizmi tushuntiradi.",
+          "retsession uzilishni bartaraf etish mexanizmini tushuntiradi.",
+          "inflyatsion uzilishni bartaraf etish mexanizmini tushuntiradi.",
+          "uzoq muddatli makroiqtisodiy muvozanatga erishish mexanizmnini tushuntiradi."
+        ],
+        "a": "tovarlar va xizmatlar bozorida qisqa muddatli muvozanatga erishish mexanizmi tushuntiradi."
+      },
+      {
+        "q": "Keynsning makroiqtisodiy muvozanat modelida muvozanatga qanday holatda erishiladi?",
+        "options": [
+          "xom-ashyo sotib oluvchiga, uni yetqazib berish hajmi o'zaro teng bo'lganda.",
+          "davlat budjeti daromadlari va xarajatlari o'zaro teng bo'lganda.",
+          "rejalashtirilgan investitsiyalar va xorijiy investitsiyalar o'zaro teng bo'lganda.",
+          "haqiqiy va rejalashtirilgan xarajatlar o'zaro teng bo'lganda."
+        ],
+        "a": "haqiqiy va rejalashtirilgan xarajatlar o'zaro teng bo'lganda."
+      },
+      {
+        "q": "Keynsga ko'ra rejalashtirilmagan investitsiyalarga:",
+        "options": [
+          "asosiy vositalarni sotib olish va ishlab chiqarishni kengaytirishga qilingan xarajatlar kiradi.",
+          "hukumat tomonidan keyingi yil uchun mo'lgallangan budjet xarajatlari smeta-loyihasi doirasida nazarda tutilgan xarajatlar kiradi.",
+          "uy xo'jaliklari, firmalar, davlat va tashqi dunyoning mahsulot va xizmatlarni sotib olishga mo'ljallagan xarajatlari kiradi.",
+          "tovar – moddiy zaxiralariga (TMZ) investitsiyalardagi kutilmagan o'zgarishlar kiradi."
+        ],
+        "a": "tovar – moddiy zaxiralariga (TMZ) investitsiyalardagi kutilmagan o'zgarishlar kiradi."
+      },
+      {
+        "q": "Importga chegaralangan moyillik:",
+        "options": [
+          "import xarajatlaridagi o'zgarish miqdorini bunga sabab bo'lgan daromadlardagi o'zgarish miqdoriga bo'lib topiladi.",
+          "eksport hajmining o'zgarishini milliy ishlab chiqarish hajmidagi o'zgarish bilan taqqoslash orqali aniqlanadi.",
+          "aholining iste'mol xarajatlaridagi o'sishni milliy daromad o'sishiga nisbatan baholash orqali topiladi.",
+          "tashqi savdo balansidagi farqni investitsiyalar hajmidagi o'zgarish bilan bog'lash orqali aniqlanadi."
+        ],
+        "a": "import xarajatlaridagi o'zgarish miqdorini bunga sabab bo'lgan daromadlardagi o'zgarish miqdoriga bo'lib topiladi."
+      },
+      {
+        "q": "Avtonom xarajatlar multiplikatori:",
+        "options": [
+          "yalpi talabning investitsiyalar, davlat xarajatlari va sof eksport kabi tarkibiy qismlariga bo'lgan sezuvchanligini iqtisodiy ko'rsatkichlar orqali aniqlaydi.",
+          "muvozanatli daromadning iste'mol va jamg'arma o'zgarishlariga to'g'ridan-to'g'ri bog'liqligini ifodalovchi nisbat bo'lib, u yalpi talabdagi qisqa muddatli tebranishlarni baholaydi.",
+          "pul massasining o'zgarishi natijasida baholar darajasi va iste'mol narxlari indeksidagi o'zgarishlar qanday kechishini aks ettiruvchi monetar nisbatni bildiradi.",
+          "muvozanatli YaIM o'zgarishning avtonom xarajatlarning har qanday komponenti o'zgarishiga nisbatini ko'rsatadi."
+        ],
+        "a": "muvozanatli YaIM o'zgarishning avtonom xarajatlarning har qanday komponenti o'zgarishiga nisbatini ko'rsatadi."
+      },
+      {
+        "q": "YaIMni to'liq bandlilikning noinflyatsion darajasiga qadar o'stirish uchun yalpi talabni ko'paytirilishi zarur bo'lgan miqdori:",
+        "options": [
+          "retsession uzilish miqdori deyiladi.",
+          "inflyatsion uzilish miqdori deyiladi.",
+          "avtonom xarajatlar deyiladi.",
+          "rejalashtirilmagan xarajatlar miqdori deyiladi."
+        ],
+        "a": "retsession uzilish miqdori deyiladi."
+      },
+      {
+        "q": "Multiplikator bu:",
+        "options": [
+          "yalpi daromadlar, avtonom xarajatlarning dastlabki o'sishi (yoki kamayishi)dan necha marta ortiq o'sganligini (yoki kamayganligi) ko'rsatuvchi miqdoriy birlik.",
+          "daromadlarning umumiy hajmini aniqlovchi, soliq stavkalari, foiz stavkalari va investitsion faollikka bog'liq bo'lgan koeffitsientdir.",
+          "yalpi talabning investitsiyalar, davlat xarajatlari hamda eksport-import nisbatlariga nisbatan elastikligini o'lchovchi iqtisodiy koeffitsient hisoblanadi.",
+          "pul massasining o'zgarishi natijasida investitsiyalar, iste'mol va yalpi talab darajalarining qanday o'zgarishini aks ettiruvchi monetar ko'rsatkich sifatida talqin qilinadi."
+        ],
+        "a": "yalpi daromadlar, avtonom xarajatlarning dastlabki o'sishi (yoki kamayishi)dan necha marta ortiq o'sganligini (yoki kamayganligi) ko'rsatuvchi miqdoriy birlik."
+      },
+      {
+        "q": "Agar investitsiyalar 15 sh.b.ga oshganida milliy daromad qo'shimcha 75 sh.b.ga ortgan bo'lsa, multiplikator miqdori necha birlikni tashkil etadi?",
+        "options": [
+          "0,2 ga teng.",
+          "3 ga teng.",
+          "1125 ga teng.",
+          "5 ga teng."
+        ],
+        "a": "5 ga teng."
+      },
+      {
+        "q": "Davlat budjeti xarajatlari tarkibida:",
+        "options": [
+          "davlat budjeti asosan ma'muriy apparatni saqlash, davlat korxonalarini qo'llab-quvvatlash va subsidiyalarni moliyalashtirishga qaratilgan xarajatlardan iborat bo'ladi.",
+          "asosan ijtimoiy soha va mudofaa tizimi xarajatlari bilan cheklanib, iqtisodiyotning boshqa tarmoqlarini moliyalashtirish mahalliy budjetlar zimmasiga yuklanadi.",
+          "davlatning tashqi qarz majburiyatlarini bajarish, budjet taqchilligini yopish hamda foiz to'lovlarini amalga oshirishga qaratilgan xarajatlar ustuvor hisoblanadi.",
+          "iqtisodiyotga xarajatlar, markazlashgan investitsiyalarni moliyalashtirish, ijtimoiy himoya, ijtimoiy soha, davlat boshqaruv va sud idoralarini moliyalashtirish moddalari mavjud bo'ladi."
+        ],
+        "a": "iqtisodiyotga xarajatlar, markazlashgan investitsiyalarni moliyalashtirish, ijtimoiy himoya, ijtimoiy soha, davlat boshqaruv va sud idoralarini moliyalashtirish moddalari mavjud bo'ladi."
+      },
+      {
+        "q": "Subsidiyalar bu:",
+        "options": [
+          "pul yoki natura ko'rinishidagi yordam turi bo'lib, budjet va budjetdan tashqari fondlardan ko'rsatiladi.",
+          "davlat transfertlari ko'rinishida aholini himoya qilishga yo'naltirilgan ijtimoiy xarajatlar majmuasidir.",
+          "yuqori budjetdan quyi budjetni moliyaviy qo'llab-quvvatlash maqsadida beriladigan xarajatlardir.",
+          "soliq imtiyozlari va chegirmalari orqali tadbirkorlik subyektlarini rag'batlantirish shaklidir."
+        ],
+        "a": "pul yoki natura ko'rinishidagi yordam turi bo'lib, budjet va budjetdan tashqari fondlardan ko'rsatiladi."
+      },
+      {
+        "q": "Quyida kеltirilganlarning qaysi biri avtomatik barqarorlashtirgich hisoblanmaydi?",
+        "options": [
+          "soliqqa tortishdagi diskrеtsion o'zgarishlar",
+          "ijtimoiy sug'urta tizimi",
+          "ishsizlarga nafaqalar",
+          "progrеssiv daromad solig'i"
+        ],
+        "a": "soliqqa tortishdagi diskrеtsion o'zgarishlar"
+      },
+      {
+        "q": "Tog'ri soliqlar guruhiga mansub soliqlar qaysi javobda keltirilgan?",
+        "options": [
+          "qo'shilgan qiymat solig'i, aksiz solig'i va bojxona bojlari.",
+          "davlat boji, ijtimoiy sug'urta badali va mol-mulkdan olinadigan to'lovlar.",
+          "yuridik shaxslar foydasidan olinadigan soliq, jismoniy shaxslar daromadidan olinadigan soliq.",
+          "yer solig'i, ekologik soliq va obodonlashtirish uchun yig'imlar."
+        ],
+        "a": "yuridik shaxslar foydasidan olinadigan soliq, jismoniy shaxslar daromadidan olinadigan soliq."
+      },
+      {
+        "q": "Davlat qarzlari bu:",
+        "options": [
+          "davlatning faqat xalqaro moliyaviy tashkilotlardan olingan qarzlari bo'lib, ular odatda infratuzilma loyihalarini moliyalashtirish uchun jalb etiladi va ichki manbalarni o'z ichiga olmaydi.",
+          "davlatning budjеtdan tashqari fondlardan hamda xorijiy davlatlardan, ulardagi jismoniy va yuridik shaxslardan, shuningdеk, xalqaro moliyaviy tashkilotlardan olgan qarzlaridir.",
+          "davlatning budjеtdan tashqari fondlardan olingan qarzlari bo'lib, ular asosan ijtimoiy soha xarajatlarini qoplash maqsadida foydalaniladi hamda tashqi moliyaviy majburiyatlarni qamrab olmaydi.",
+          "hukumatning xorijiy davlatlar, shuningdek, ulardagi jismoniy va yuridik shaxslardan olingan qarzlari bo'lib, ular faqat tashqi qarz shaklida ko'rib chiqiladi va ichki qarz majburiyatlarini o'z ichiga olmaydi."
+        ],
+        "a": "davlatning budjеtdan tashqari fondlardan hamda xorijiy davlatlardan, ulardagi jismoniy va yuridik shaxslardan, shuningdеk, xalqaro moliyaviy tashkilotlardan olgan qarzlaridir."
+      },
+      {
+        "q": "Davlat xarajatlarining oshishi va soliqlarning kamaytirlishi AD egri chizig'ini qanday o'zgartiradi?",
+        "options": [
+          "AD egri chizig'i o'z holatini saqlab qoladi, chunki bu o'zgarishlar faqat narx darajasiga ta'sir qiladi.",
+          "AD egri chizig'ini o'nga-tepaga siljitadi.",
+          "AD egri chizig'ini chapga-pastga siljitadi.",
+          "AD egri chizig'ining qiyaligi o'zgaradi, biroq u gorizontal holatda qoladi."
+        ],
+        "a": "AD egri chizig'ini o'nga-tepaga siljitadi."
+      },
+      {
+        "q": "Soliq munosabati bo'lish uchun davlat:",
+        "options": [
+          "aholi va korxonalarga ixtiyoriy to'lov tizimi asosida budjetga mablag' kiritish imkoniyatini berishi lozim.",
+          "yalpi ichki mahsulotning faqat ishlab chiqarish sektoridan tushgan daromadlarni qayta taqsimlash orqali daromad olishni tashkil etishi lozim.",
+          "mamlakatda yaratilgan yalpi ichki mahsulot qiymatini taqsimlash yo'li bilan majburan davlat budjetiga mablag to'plash jarayonini amalga oshirishi lozim.",
+          "faqat tashqi iqtisodiy faoliyatdan olingan daromadlarni budjetga yo'naltirish tizimini joriy etishi lozim."
+        ],
+        "a": "mamlakatda yaratilgan yalpi ichki mahsulot qiymatini taqsimlash yo'li bilan majburan davlat budjetiga mablag to'plash jarayonini amalga oshirishi lozim."
+      },
+      {
+        "q": "Soliqlarning o'ziga xos belgilari mavjud bo'lib, ularga:",
+        "options": [
+          "soliq to'lovchilarga qaytarib beriladigan, ularning manfaatini bevosita ko'zlaydigan moliyaviy to'lov shakllarini ifodalaydi.",
+          "majburiylik, xazinaga tushishlik, qat'iylik va doimiylik, aniq soliq to'lovchi uchun ekvivalentsizlik belgilari mavjuddir.",
+          "ixtiyoriylik, xususiy manfaatdorlik, vaqtinchaliklik va qaytaruvchanlik belgilari xosdir.",
+          "faqat yuridik shaxslar uchun majburiy bo'lishi, ammo jismoniy shaxslarga nisbatan ixtiyoriylik asosida qo'llanilishi bilan ajralib turadi."
+        ],
+        "a": "majburiylik, xazinaga tushishlik, qat'iylik va doimiylik, aniq soliq to'lovchi uchun ekvivalentsizlik belgilari mavjuddir."
+      },
+      {
+        "q": "Fisher tenglamasi qanday ifodalanadi?",
+        "options": [
+          "M·V = P·Y",
+          "M·Y = P·V",
+          "M·V = P/Y",
+          "M·P = V·Y"
+        ],
+        "a": "M·V = P·Y"
+      },
+      {
+        "q": "Soliqlar tizimi deb:",
+        "options": [
+          "davlat budjeti taqchilligini qoplash maqsadida xorijiy sarmoyadorlardan olinadigan to'lov turlari jamlanmasiga aytiladi.",
+          "markazlashgan pul fondini va davlatning boshqa fondlarini majburiy tashkil etadigan soliq va yig'imlar turlarining yig'indisiga aytiladi.",
+          "davlatning budjet siyosatini amalga oshirish uchun qabul qilinadigan barcha qonunlar va normativ hujjatlar majmuasiga aytiladi.",
+          "faqat yuridik shaxslar tomonidan to'lanadigan soliqlar va majburiy to'lovlar yig'indisiga aytiladi."
+        ],
+        "a": "markazlashgan pul fondini va davlatning boshqa fondlarini majburiy tashkil etadigan soliq va yig'imlar turlarining yig'indisiga aytiladi."
+      },
+      {
+        "q": "To'g'ri soliqlarni bevosita soliq to'lovchilarning o'zi to'laydi, ya'ni:",
+        "options": [
+          "soliqni huquqiy to'lovchisi ham, haqiqiy to'lovchisi ham bitta shaxs bo'ladi va bu soliqlarga hamma daromaddan to'lanadigan hamda barcha mulk soliqlari kiradi.",
+          "soliqni davlat korxonalari to'lab, keyinchalik uni iste'molchilar narx orqali qoplaydilar, ya'ni haqiqiy to'lovchi bilan huquqiy to'lovchi bir xil emas.",
+          "soliq to'lovchi uni to'g'ridan-to'g'ri emas, balki vositachilar orqali to'laydi va bu holatda soliq yukini kim ko'tarishi aniq bo'lmaydi.",
+          "soliq yukini xususiy korxonalar va firmalar o'z zimmasiga oladi, biroq ularni keyinchalik davlat budjeti orqali qayta moliyalashtiradi."
+        ],
+        "a": "soliqni huquqiy to'lovchisi ham, haqiqiy to'lovchisi ham bitta shaxs bo'ladi va bu soliqlarga hamma daromaddan to'lanadigan hamda barcha mulk soliqlari kiradi."
+      },
+      {
+        "q": "Egri soliqlar guruhiga mansub soliqlar qaysi javobda keltirilgan?",
+        "options": [
+          "yuridik shaxslarning foydasidan olinadigan soliq, mulk solig'i va yer solig'i kabi bevosita daromadga yo'naltirilgan soliqlar kiradi.",
+          "qo'shilgan qiymat solig'i, aksiz solig'i, jismoniy shaxslardan olinadigan soliq va bojxona to'lovlari va boshqalar.",
+          "chet el investitsiyalariga qo'yiladigan soliq, foyda solig'i va davlat bojlari kiradi.",
+          "davlat tomonidan fuqarolarga to'lanadigan transfer to'lovlari va subsidiyalar bilan qoplanadigan soliqlar kiradi."
+        ],
+        "a": "qo'shilgan qiymat solig'i, aksiz solig'i, jismoniy shaxslardan olinadigan soliq va bojxona to'lovlari va boshqalar."
+      },
+      {
+        "q": "Egri soliqlarning ijobiy tomoni shundaki, ular:",
+        "options": [
+          "mamlakatda ishlab chiqarilgan tovarlarni chetga chiqib ketishini chegaralaydi, mamlakat ichida tovarlar ko'p bo'lishiga yordam beradi.",
+          "tadbirkorlik subyektlarini soliqlardan ozod etish orqali ularning foydasini sezilarli darajada oshiradi.",
+          "ishlab chiqarish hajmini kamaytirish evaziga narxlar barqarorligini saqlab qolish imkonini beradi.",
+          "davlat budjeti taqchilligini qisqartirishda to'g'ri soliqlar o'rnini to'liq bosa oladi hamda fiskal siyosatni muvozanatga keltiradi."
+        ],
+        "a": "mamlakatda ishlab chiqarilgan tovarlarni chetga chiqib ketishini chegaralaydi, mamlakat ichida tovarlar ko'p bo'lishiga yordam beradi."
+      },
+      {
+        "q": "Foiz stavkasi oshganda naqd pulga talab qanday o'zgaradi?",
+        "options": [
+          "Ko'payadi",
+          "Kamayadi",
+          "O'zgarmaydi",
+          "Avval ko'payib, keyin kamayadi"
+        ],
+        "a": "Kamayadi"
+      },
+      {
+        "q": "Umumdavlat soliqlarning vazifalari bo'lib:",
+        "options": [
+          "faqat mahalliy boshqaruv organlari faoliyatini moliyalashtirish va ularning budjetlarini to'ldirishni ta'minlaydi.",
+          "xalqaro kreditlar, grantlar va tashqi iqtisodiy yordamlarni qayta taqsimlash bilan bog'liq moliyaviy operatsiyalarni amalga oshiradi.",
+          "davlat korxonalarining foydasini oshirish va xususiy sektorga subsidiyalar ajratishni rag'batlantiradi.",
+          "mudofaa, xavfsizlikni saqlash, tartib intizom, infrastrukturasini yaratish, mehnatkashlarga ijtimoiy himoyasini tashkil etish kabilar hisoblanadi."
+        ],
+        "a": "mudofaa, xavfsizlikni saqlash, tartib intizom, infrastrukturasini yaratish, mehnatkashlarga ijtimoiy himoyasini tashkil etish kabilar hisoblanadi."
+      },
+      {
+        "q": "Mahalliy soliqlarning vazifalari bo'lib:",
+        "options": [
+          "mudofaa, milliy xavfsizlik va davlat boshqaruv idoralarini moliyalashtirishni ta'minlashga qaratilgan soliqlardir.",
+          "faqat eksport-import operatsiyalarini soliqqa tortish orqali davlat budjetini to'ldirishni maqsad qiladi.",
+          "davlat korxonalari va yirik tarmoqlarni modernizatsiya qilish, shuningdek tashqi iqtisodiy faoliyatni kengaytirishga xizmat qiladi.",
+          "maktab, sog'likni saqlash, madaniyat, maorif, shahar va qishloqlar obodonchiligi va infratuzilmasini rivojlantirish kabilardir."
+        ],
+        "a": "maktab, sog'likni saqlash, madaniyat, maorif, shahar va qishloqlar obodonchiligi va infratuzilmasini rivojlantirish kabilardir."
+      },
+      {
+        "q": "Subvensiya bu:",
+        "options": [
+          "yuqori budjetdan quyi budjetni moliyaviy qo'llab-quvvatlash maqsadida beriladigan xarajatlardir.",
+          "davlatning jismoniy shaxslarga ijtimoiy himoya maqsadida to'laydigan nafaqa va pensiya to'lovlaridir.",
+          "tadbirkorlik subyektlarini rag'batlantirish maqsadida soliq imtiyozlari va chegirmalari shaklida taqdim etiladigan preferensiyalardir.",
+          "davlat tomonidan xo'jalik subyektlariga bevosita yordam sifatida beriladigan pul yoki natura ko'rinishidagi to'lovlardir."
+        ],
+        "a": "yuqori budjetdan quyi budjetni moliyaviy qo'llab-quvvatlash maqsadida beriladigan xarajatlardir."
+      },
+      {
+        "q": "O'zbekiston Respublikasi davlat budjetining soliqlarga ko'ra tarkibi nimalardan tashkil topgan?",
+        "options": [
+          "davlat korxonalari foydasi, ijtimoiy sug'urta badallari va xalqaro grantlardan tashkil topgan.",
+          "bilvosita soliqlar, eksport bojlari va tashqi iqtisodiy faoliyatdan olinadigan to'lovlardan iborat bo'ladi.",
+          "faqat bevosita soliqlar va bojxona to'lovlaridan iborat bo'lib, boshqa soliqlar alohida jamg'armalarda yig'iladi.",
+          "bevosita soliqlar, bilvosita soliqlar, resurs to'lovlari, mulk solig'i hamda boshqa daromadlardan tashkil topgan."
+        ],
+        "a": "bevosita soliqlar, bilvosita soliqlar, resurs to'lovlari, mulk solig'i hamda boshqa daromadlardan tashkil topgan."
+      },
+      {
+        "q": "Pulga real talab tenglamasini ko'rsating",
+        "options": [
+          "(M/P) = kY",
+          "M/P = Y/k",
+          "P/M = Y·k",
+          "M·P = kY"
+        ],
+        "a": "(M/P) = kY"
+      },
+      {
+        "q": "Davlat budjeti:",
+        "options": [
+          "markaziy bank tomonidan chiqariladigan pul massasini nazorat qiluvchi vosita hisoblanadi.",
+          "mamlakat hukumatiga davlatning iqtisodiy funksiyalarini bajarish imkonini beruvchi assoiy moliyaviy manbadir.",
+          "faqat soliqlar va to'lovlar yig'indisidan iborat bo'lib, davlatning iqtisodiy faoliyatiga ta'sir ko'rsatmaydi.",
+          "aholi va xususiy sektor o'rtasidagi moliyaviy resurslarni taqsimlash mexanizmini ifodalovchi bozor tizimidir."
+        ],
+        "a": "mamlakat hukumatiga davlatning iqtisodiy funksiyalarini bajarish imkonini beruvchi assoiy moliyaviy manbadir."
+      },
+      {
+        "q": "Budjet-soliq siyosati deganda:",
+        "options": [
+          "davlatning pul-kredit siyosatini amalga oshirishdagi asosiy yo'nalishlar majmuasi bo'lib, fiskal emas, balki monetar vositalar orqali iqtisodiy barqarorlikni saqlashga qaratilgan strategiyani ifodalaydi.",
+          "davlatning faqat soliqlarni yig'ish orqali iqtisodiyotdagi pul oqimini nazorat qilishga va budjet daromadlarini ko'paytirishga qaratilgan bir tomonlama siyosati bo'lib, u iqtisodiy o'sish omillarini hisobga olmaydi.",
+          "inflyatsiya va ishsizlik o'rtasidagi muvozanatni saqlovchi markaziy bank siyosati bo'lib, u fiskal emas, balki monetar tartibga solish vositalari orqali amalga oshiriladi.",
+          "noinflyatsion YaIM ishlab chiqarish sharoitida iqtisodiyotda to'liq bandlilikni, to'lov balansining muvozanatini va iqtisodiy o'sishni ta'minlashga qaratilgan davlat xarajatlari va soliqlarini o'zgartirishni o'z ichiga olgan chora-tadbirlar tushuniladi."
+        ],
+        "a": "noinflyatsion YaIM ishlab chiqarish sharoitida iqtisodiyotda to'liq bandlilikni, to'lov balansining muvozanatini va iqtisodiy o'sishni ta'minlashga qaratilgan davlat xarajatlari va soliqlarini o'zgartirishni o'z ichiga olgan chora-tadbirlar tushuniladi."
+      },
+      {
+        "q": "Rag'batlantiruvchi fiskal siyosatning asosiy maqsadi:",
+        "options": [
+          "yalpi talabni kamaytirish va soliq bazasini kichraytirishdir.",
+          "iqtisodiyotda pasayishni yumshatish va ishlab chiqarishni rag'batlantirishdir.",
+          "davlat xarajatlarini qisqartirish orqali budjet profitsitini yaratishdir.",
+          "inflyatsiya darajasini sun'iy oshirishdir."
+        ],
+        "a": "iqtisodiyotda pasayishni yumshatish va ishlab chiqarishni rag'batlantirishdir."
+      },
+      {
+        "q": "Cheklovchi fiskal siyosat qachon amalga oshiriladi?",
+        "options": [
+          "iqtisodiy pasayish davrida yalpi talabni oshirish zarur bo'lganda.",
+          "inflyatsiya xavfi kuchaygan va ortiqcha talab paydo bo'lgan paytda.",
+          "ishsizlik darajasi oshganda.",
+          "davlat xarajatlari ortgan, lekin soliqlar kamayganda."
+        ],
+        "a": "inflyatsiya xavfi kuchaygan va ortiqcha talab paydo bo'lgan paytda."
+      },
+      {
+        "q": "Davlat xarajatlari multiplikatori nimani ifodalaydi?",
+        "options": [
+          "ishsizlik darajasining o'zgarishiga nisbatan soliq tushumlarining o'sish sur'atini bildiradi.",
+          "pul massasining oshishi natijasida investitsiyalar hajmidagi o'zgarishni ifodalaydi.",
+          "davlat xarajatlarining ma'lum o'zgarishi natijasida YaIM necha marta o'zgarishini ko'rsatadi.",
+          "faqat soliqlarning o'zgarishiga bog'liq bo'lgan investitsiyalar miqdorini bildiradi."
+        ],
+        "a": "davlat xarajatlarining ma'lum o'zgarishi natijasida YaIM necha marta o'zgarishini ko'rsatadi."
+      },
+      {
+        "q": "Soliq multiplikatori:",
+        "options": [
+          "soliqlarning bir marta o'zgarishi oqibatida milliy daromadning necha marta o'zgarishini ko'rsatadi.",
+          "davlat xarajatlari bilan eksport-import muvozanati o'rtasidagi bog'liqlikni bildiradi.",
+          "davlat budjeti taqchilligini moliyalashtirish manbalaridan biridir.",
+          "yalpi xarajatlar va davlat transfertlari o'rtasidagi nisbatni ifodalaydi."
+        ],
+        "a": "soliqlarning bir marta o'zgarishi oqibatida milliy daromadning necha marta o'zgarishini ko'rsatadi."
+      },
+      {
+        "q": "Diskret fiskal siyosat:",
+        "options": [
+          "hukumatning maxsus qarorlari orqali soliqlar va davlat xarajatlarini o'zgartirish siyosatidir.",
+          "banklar orqali pul massasini tartibga solish siyosatidir.",
+          "avtomatik tarzda iqtisodiy tebranishlarni yumshatib turuvchi siyosatdir.",
+          "xalqaro savdo balansini boshqarish siyosatidir."
+        ],
+        "a": "hukumatning maxsus qarorlari orqali soliqlar va davlat xarajatlarini o'zgartirish siyosatidir."
+      },
+      {
+        "q": "Nodiskret fiskal siyosat qanday amalga oshiriladi?",
+        "options": [
+          "markaziy bank qarorlari orqali soliqlarni oshirish yo'li bilan.",
+          "xalqaro kreditlar va grantlar hisobiga davlat xarajatlarini moliyalashtirish orqali.",
+          "avtomatik tarzda, o'rnatilgan barqarorlashtirgichlar orqali.",
+          "davlat qarzlarini kamaytirish siyosati orqali."
+        ],
+        "a": "avtomatik tarzda, o'rnatilgan barqarorlashtirgichlar orqali."
+      },
+      {
+        "q": "Progressiv soliq tizimi fiskal siyosatda qanday rol o'ynaydi?",
+        "options": [
+          "inflyatsiyani keskin oshiradi.",
+          "ishsizlik darajasini oshirishga olib keladi.",
+          "yalpi talabni cheklab, investitsiyalarni kamaytiradi.",
+          "u multiplikator samarasini yumshatadi va ishlab chiqarishni barqarorlashtiradi."
+        ],
+        "a": "u multiplikator samarasini yumshatadi va ishlab chiqarishni barqarorlashtiradi."
+      },
+      {
+        "q": "Davlat budjeti taqchilligi nimaning natijasida kelib chiqadi?",
+        "options": [
+          "yalpi taklif ortib, baholar pasayganda.",
+          "soliqlar pasayib, davlat transfertlari oshgan davriy pasayish davrida.",
+          "davlat xarajatlari kamayganda va eksport oshganda.",
+          "soliqlar oshganda va talab qisqarganda."
+        ],
+        "a": "soliqlar pasayib, davlat transfertlari oshgan davriy pasayish davrida."
+      },
+      {
+        "q": "Davlat budjeti ortiqchaligi qachon yuzaga keladi?",
+        "options": [
+          "soliqlar avtomatik oshib, davlat xarajatlari kamaygan davriy yuksalish davrida.",
+          "import hajmi kamayganda.",
+          "ishsizlik darajasi ortib, inflyatsiya pasayganda.",
+          "soliqlar pasayganda va transferlar oshganda."
+        ],
+        "a": "soliqlar avtomatik oshib, davlat xarajatlari kamaygan davriy yuksalish davrida."
+      },
+      {
+        "q": "Tarkibiy budjet taqchilligi nimani anglatadi?",
+        "options": [
+          "davlat budjetining vaqtinchalik profitsitini.",
+          "inflyatsiyani moliyalashtirish maqsadidagi emissiyani.",
+          "faqat tashqi qarzlar miqdorining oshishini.",
+          "to'liq bandlik sharoitida davlat daromadlari va xarajatlari o'rtasidagi farqni."
+        ],
+        "a": "to'liq bandlik sharoitida davlat daromadlari va xarajatlari o'rtasidagi farqni."
+      },
+      {
+        "q": "Siqib chiqarish samarasi (crowding out effect) qachon yuz beradi?",
+        "options": [
+          "davlat qarzlari kamayganda budjet profitsiti ortganda.",
+          "soliqlar kamaytirilganda iste'mol oshganda.",
+          "davlat zayomlari chiqarilishi natijasida foiz stavkalari oshib, investitsiyalar kamayganda.",
+          "pul massasining kamayishi bilan investitsiyalar ko'payganda."
+        ],
+        "a": "davlat zayomlari chiqarilishi natijasida foiz stavkalari oshib, investitsiyalar kamayganda."
+      },
+      {
+        "q": "Keyns nazariyasida pulga talabning foiz stavkasiga bog'liqligi qanday?",
+        "options": [
+          "Mustaqil",
+          "To'g'ri bog'liq",
+          "Doimiy",
+          "Teskari bog'liq"
+        ],
+        "a": "Teskari bog'liq"
+      },
+      {
+        "q": "Davlat budjeti taqchilligini moliyalashtirishning noinflyatsion usuli:",
+        "options": [
+          "markaziy bank rezervlarini kamaytirishdir.",
+          "davlat zayomlarini chiqarish va xususiylashtirishdan tushgan mablag'larni jalb etishdir.",
+          "pul emissiyasi orqali budjetni to'ldirishdir.",
+          "soliqlarni keskin oshirish orqali daromadni oshirishdir."
+        ],
+        "a": "davlat zayomlarini chiqarish va xususiylashtirishdan tushgan mablag'larni jalb etishdir."
+      },
+      {
+        "q": "Oliver-Tanzi samarasi nimani anglatadi?",
+        "options": [
+          "xarajatlar pasayishi natijasida YaIMning kamayishini.",
+          "davlatning soliq stavkalarini pasaytirish orqali investitsiyalarni rag'batlantirishini.",
+          "soliq yukining oshishi natijasida iste'molning qisqarishini.",
+          "inflyatsiya sharoitida soliq to'lovchilar soliqlarni kechiktirib to'lashga intilish holatini."
+        ],
+        "a": "inflyatsiya sharoitida soliq to'lovchilar soliqlarni kechiktirib to'lashga intilish holatini."
+      },
+      {
+        "q": "Budjet profitsiti qanday yo'l bilan kamaytiriladi?",
+        "options": [
+          "soliqlarni oshirish orqali yalpi talabni ko'paytirish orqali.",
+          "muomaladagi pul mablag'larini olib qo'yish va davlat qarzlarini to'lash orqali.",
+          "davlat xarajatlarini kamaytirish o'rniga kredit emissiyasini oshirish orqali.",
+          "yangi investitsiya dasturlarini kengaytirish orqali."
+        ],
+        "a": "muomaladagi pul mablag'larini olib qo'yish va davlat qarzlarini to'lash orqali."
+      },
+      {
+        "q": "Nodiskret fiskal siyosatning asosiy ustunligi:",
+        "options": [
+          "davlat sektorini xususiylashtirishni to'liq ta'minlaydi.",
+          "iqtisodiy tebranishlarni avtomatik tarzda yumshatadi va hukumat aralashuvini talab etmaydi.",
+          "faqat inflyatsiya darajasini oshirish orqali iqtisodiy o'sishni ta'minlaydi.",
+          "davlat zayomlarini qisqartirish orqali budjet profitsitini oshiradi."
+        ],
+        "a": "iqtisodiy tebranishlarni avtomatik tarzda yumshatadi va hukumat aralashuvini talab etmaydi."
+      },
+      {
+        "q": "Balanslashgan budjet multiplikatori odatda:",
+        "options": [
+          "birga teng yoki undan kichik bo'ladi.",
+          "nolga teng bo'ladi.",
+          "foiz stavkasiga bog'liq bo'ladi.",
+          "cheksiz kattalikka ega."
+        ],
+        "a": "birga teng yoki undan kichik bo'ladi."
+      },
+      {
+        "q": "Pulning asosiy funksiyalari qaysilar?",
+        "options": [
+          "Qiymat o'lchovi va ishlab chiqarish vositasi",
+          "Faqat to'lov vositasi va qiymat o'lchovi",
+          "To'lov vositasi, qiymat o'lchovi va jamg'arish",
+          "Jamg'arish vositasi va investitsiya vositasi"
+        ],
+        "a": "To'lov vositasi, qiymat o'lchovi va jamg'arish"
+      },
+      {
+        "q": "Pul agregatlarining tarkibini aniqlovchi asosiy mezon nima?",
+        "options": [
+          "Bank tizimidagi kredit hajmi",
+          "Pulning nominal qiymati",
+          "Likvidlilik darajasining pasayib borish tamoyili",
+          "Foiz stavkasi o'zgarishi"
+        ],
+        "a": "Likvidlilik darajasining pasayib borish tamoyili"
+      },
+      {
+        "q": "Quyidagi qaysi agregat tarkibida eng likvid aktivlar mavjud?",
+        "options": [
+          "M2",
+          "M3",
+          "M1",
+          "M0"
+        ],
+        "a": "M0"
+      },
+      {
+        "q": "Pul multiplikatori qanday ko'rsatkichni bildiradi?",
+        "options": [
+          "Pul aylanish tezligining YaIMga nisbatini",
+          "Bir so'mlik pul bazasi hisobiga yaratiladigan pul taklifi miqdorini",
+          "Inflyatsiya sur'atining pul massasiga ta'sirini",
+          "Bank zaxiralarining umumiy hajmining o'zgarishini"
+        ],
+        "a": "Bir so'mlik pul bazasi hisobiga yaratiladigan pul taklifi miqdorini"
+      },
+      {
+        "q": "Pul taklifi ortishi uchun quyidagilardan qaysi biri sabab bo'ladi?",
+        "options": [
+          "Deponentlash koeffitsienti ortishi",
+          "Daromadlar kamayishi",
+          "Foiz stavkasi oshishi",
+          "Majburiy zaxira normasi pasaytirilishi"
+        ],
+        "a": "Majburiy zaxira normasi pasaytirilishi"
+      },
+      {
+        "q": "Pul bazasi oshsa, pul taklifi qanday o'zgaradi?",
+        "options": [
+          "Kamayadi",
+          "O'zgarmaydi",
+          "Ko'payadi",
+          "Teskari yo'nalishda o'zgaradi"
+        ],
+        "a": "Ko'payadi"
+      },
+      {
+        "q": "Pul bozorida muvozanat qanday sharoitda yuz beradi?",
+        "options": [
+          "Pulga talab va taklif miqdori tenglashganda",
+          "Inflyatsiya pasayganda va ishsizlik oshganda",
+          "Daromad darajasi oshganda",
+          "Pul taklifi talabdan oshganda"
+        ],
+        "a": "Pulga talab va taklif miqdori tenglashganda"
+      },
+      {
+        "q": "Agar pul taklifi pul talabidan ortiq bo'lsa, iqtisodiy agentlar qanday harakat qiladi?",
+        "options": [
+          "Foiz stavkasini oshiradi va investitsiyalar cheklanadi",
+          "Pulni chet el valyutasiga almashtiradi",
+          "Ortiqcha pullarni obligatsiyalarga aylantiradi",
+          "Pulni ko'proq jamg'aradi"
+        ],
+        "a": "Ortiqcha pullarni obligatsiyalarga aylantiradi"
+      },
+      {
+        "q": "Pulga talabning oshishiga nimalar sabab bo'ladi?",
+        "options": [
+          "Daromad darajasining o'sishi",
+          "Pul bazasining kamayishi",
+          "Foiz stavkasining oshishi",
+          "Pul taklifining ortishi"
+        ],
+        "a": "Daromad darajasining o'sishi"
+      },
+      {
+        "q": "Pulga talab egri chizig'i qanday xususiyatga ega?",
+        "options": [
+          "Gorizontal yo'nalishda o'suvchi",
+          "Foiz stavkasi bilan to'g'ri proporsional",
+          "Foiz stavkasi bilan teskari proporsional",
+          "Mustaqil xususiyatga ega"
+        ],
+        "a": "Foiz stavkasi bilan teskari proporsional"
+      },
+      {
+        "q": "Daromadlar oshsa, pul bozorida foiz stavkasi qanday o'zgaradi?",
+        "options": [
+          "Pasayadi",
+          "Oshadi",
+          "Avval oshib, keyin kamayadi",
+          "O'zgarmaydi"
+        ],
+        "a": "Oshadi"
+      },
+      {
+        "q": "Pul bozorida muvozanatning buzilishi nimaga olib keladi?",
+        "options": [
+          "Daromadlar barqarorlashishiga",
+          "Pul bazasi kamayishiga",
+          "Baholar darajasi pasayishiga",
+          "Foiz stavkasi o'zgarishiga"
+        ],
+        "a": "Foiz stavkasi o'zgarishiga"
+      },
+      {
+        "q": "Pul multiplikatori quyidagi ko'rsatkichlarga bog'liq emas:",
+        "options": [
+          "Inflyatsiya darajasiga",
+          "Naqd pullar ulushiga",
+          "Zaxira normasi miqdoriga",
+          "Deponentlash koeffitsientiga"
+        ],
+        "a": "Inflyatsiya darajasiga"
+      },
+      {
+        "q": "Markaziy bankning bosh maqsadi nimani ifodalaydi?",
+        "options": [
+          "Milliy valyutaning barqarorligini ta'minlash",
+          "Davlat byudjeti xarajatlarini kamaytirish",
+          "Tijorat banklarining foydasini ko'paytirish",
+          "Xalqaro investitsiyalarni nazorat qilish"
+        ],
+        "a": "Milliy valyutaning barqarorligini ta'minlash"
+      },
+      {
+        "q": "Tijorat banklari Markaziy bankda nimalarni saqlashga majbur?",
+        "options": [
+          "Majburiy zahira sifatida o'z omonatlarining bir qismini",
+          "Foyda solig'i uchun mablag' zaxirasini",
+          "Naqd valyuta zaxiralarini bank tizimining barqarorligi maqsadida",
+          "Tashqi kreditlar uchun kafolat fondini"
+        ],
+        "a": "Majburiy zahira sifatida o'z omonatlarining bir qismini"
+      },
+      {
+        "q": "Ikki bosqichli bank tizimida Markaziy bankning o'rni qanday belgilanadi?",
+        "options": [
+          "Rahbarlik qiluvchi va nazorat funksiyasini bajaruvchi markaziy bo'g'in sifatida",
+          "Moliyaviy agent sifatida qisqa muddatli operatsiyalarni bajaruvchi sifatida",
+          "Faqat tashqi qarzlarni taqsimlovchi institut sifatida",
+          "Tijorat banklari bilan teng huquqli ishtirokchi sifatida"
+        ],
+        "a": "Rahbarlik qiluvchi va nazorat funksiyasini bajaruvchi markaziy bo'g'in sifatida"
+      },
+      {
+        "q": "Pul-kredit siyosati mohiyatan nimaga qaratilgan?",
+        "options": [
+          "Faoliyat yurituvchi banklar sonini ko'paytirish",
+          "Pul-kredit muomalasini tartibga solishga",
+          "Valyuta almashinuv kursini to'liq erkinlashtirish",
+          "Davlat byudjeti daromadlarini oshirish"
+        ],
+        "a": "Pul-kredit muomalasini tartibga solishga"
+      },
+      {
+        "q": "Pul-kredit siyosatini kim amalga oshiradi?",
+        "options": [
+          "O'zbekiston Respublikasi Markaziy banki",
+          "Moliya vazirligi huzuridagi soliq qo'mitasi",
+          "O'zbekiston Respublikasi Vazirlar mahkamasi",
+          "O'zbekiston Respublikasi Hisob palatasi"
+        ],
+        "a": "O'zbekiston Respublikasi Markaziy banki"
+      },
+      {
+        "q": "Pul-kredit siyosatining asosiy vositalari qaysilar?",
+        "options": [
+          "Hisob stavkasi, majburiy zahira normasi va ochiq bozordagi operatsiyalar",
+          "Kredit garov stavkasi, investitsion bonus va davlat kafolati, kutilmalar",
+          "Daromad solig'i, qo'shilgan qiymat solig'i va bojxona to'lovi",
+          "Valyuta interventsiyasi, import kvotasi va eksport subsidiyasi"
+        ],
+        "a": "Hisob stavkasi, majburiy zahira normasi va ochiq bozordagi operatsiyalar"
+      },
+      {
+        "q": "Majburiy zahira normasi qaysi jarayonni tartibga soladi?",
+        "options": [
+          "Davlat budjeti taqchilligini moliyalashtirishni",
+          "Chet el valyutasi kursining o'zgarishini",
+          "Banklarning kreditlash imkoniyati orqali pul taklifini",
+          "Soliq to'lovlarini yig'ish jarayonini"
+        ],
+        "a": "Banklarning kreditlash imkoniyati orqali pul taklifini"
+      },
+      {
+        "q": "Markaziy bank majburiy zahira normasini pasaytirsa, qanday natija kutiladi?",
+        "options": [
+          "Pul massasining o'sishi to'xtaydi",
+          "Tijorat banklarining ortiqcha rezervlari ortadi va pul taklifi kengayadi",
+          "Foiz stavkalari avtomatik ravishda ko'tariladi",
+          "Tijorat banklari kredit berish imkoniyatini yo'qotadi"
+        ],
+        "a": "Tijorat banklarining ortiqcha rezervlari ortadi va pul taklifi kengayadi"
+      },
+      {
+        "q": "Majburiy zahira normasi oshirilganda qanday oqibat kuzatiladi?",
+        "options": [
+          "Pul bazasi kengayadi va inflyatsiya kuchayadi",
+          "Tijorat banklarining likvidligi ortadi va kreditlash imkoniyati oshadi",
+          "Foiz stavkalari pasayadi va investitsiyalar ortadi",
+          "Banklarning kreditlash imkoniyatlari cheklanadi, pul taklifi qisqaradi"
+        ],
+        "a": "Banklarning kreditlash imkoniyatlari cheklanadi, pul taklifi qisqaradi"
+      },
+      {
+        "q": "Ochiq bozordagi operatsiyalar mohiyatan nimani anglatadi?",
+        "options": [
+          "Markaziy bankning davlat qimmatli qog'ozlarini sotish yoki sotib olish orqali pul massasiga ta'sir etishi",
+          "Soliq to'lovlarini davlat obligatsiyalari orqali qoplashni",
+          "Chet eldan investitsiyalarni to'g'ridan-to'g'ri jalb qilish jarayonini",
+          "Tijorat banklari o'rtasida foyda taqsimlash operatsiyasi orqali pul massasiga ta'sir etishi"
+        ],
+        "a": "Markaziy bankning davlat qimmatli qog'ozlarini sotish yoki sotib olish orqali pul massasiga ta'sir etishi"
+      },
+      {
+        "q": "Markaziy bank obligatsiyalarni sotib olsa, bu qanday ta'sir ko'rsatadi?",
+        "options": [
+          "Foiz stavkasi ko'tariladi va inflyatsiya kuchayadi",
+          "Bank tizimidagi zaxiralar ortadi va kredit berish imkoniyatlari kengayadi",
+          "Pul taklifi kamayadi va Tijorat banklarining likvidliligi pasayadi",
+          "Naqd pul muomalasi qisqaradi"
+        ],
+        "a": "Bank tizimidagi zaxiralar ortadi va kredit berish imkoniyatlari kengayadi"
+      },
+      {
+        "q": "Hisob stavkasi nimani anglatadi?",
+        "options": [
+          "Tijorat banklarining Markaziy bankdagi omonatlarga qo'yiladigan foiz stavkasi",
+          "Davlat tomonidan e'lon qilinadigan inflyatsiya darajasi sifatida",
+          "Markaziy bankning tijorat banklariga beriladigan kreditlar uchun belgilangan foiz stavkasi",
+          "Xalqaro tashkilotlar tomonidan belgilanadigan risk koeffitsienti sifatida"
+        ],
+        "a": "Markaziy bankning tijorat banklariga beriladigan kreditlar uchun belgilangan foiz stavkasi"
+      },
+      {
+        "q": "Hisob stavkasining pasaytirilishi nimalarga olib keladi?",
+        "options": [
+          "Kredit resurslari arzonlashadi va investitsiyalar ortadi",
+          "Pul taklifi qisqaradi va iqtisodiy faollik darajasi pasayadi",
+          "Foiz stavkasi ortadi va inflyatsiya darajasi sekinlashadi",
+          "Banklar depozitlari miqdorini qisqartiradi"
+        ],
+        "a": "Kredit resurslari arzonlashadi va investitsiyalar ortadi"
+      },
+      {
+        "q": "Hisob stavkasi oshirilsa, iqtisodiyotda qanday jarayon yuz beradi?",
+        "options": [
+          "Foiz stavkalari pasayib, likvidlik oshadi",
+          "Pul bazasi kengayadi va pulga talab ortadi",
+          "Investitsiyalar ko'payadi va inflyatsiya pasayadi",
+          "Pul taklifi qisqaradi va kreditlar hajmi kamayadi"
+        ],
+        "a": "Pul taklifi qisqaradi va kreditlar hajmi kamayadi"
+      },
+      {
+        "q": "Yumshoq pul-kredit siyosati qaysi holatda qo'llaniladi?",
+        "options": [
+          "Valyuta kursi mustahkam bo'lganda",
+          "Pul massasining haddan tashqari ko'payishida",
+          "Foiz stavkasi oshib ketgan paytda inflyatsiyani pasaytirish uchun",
+          "Iqtisodiy faollikni rag'batlantirish va ishsizlikni kamaytirishda"
+        ],
+        "a": "Iqtisodiy faollikni rag'batlantirish va ishsizlikni kamaytirishda"
+      },
+      {
+        "q": "Keyns va monetaristlar yondashuvi o'rtasidagi asosiy tafovut nimada?",
+        "options": [
+          "Monetaristlar davlatning iqtisodiyotga aralashuvini kuchaytiradi",
+          "Har ikkisi faqat fiskal siyosat tarafdorlari bo'lib davlat xarajatlariga urg'u beradi",
+          "Keynschilar foiz stavkasiga, monetaristlar esa pul taklifiga urg'u beradi",
+          "Keynschilar pulning miqdoriy nazariyasini inkor etadi"
+        ],
+        "a": "Keynschilar foiz stavkasiga, monetaristlar esa pul taklifiga urg'u beradi"
+      },
+      {
+        "q": "Markaziy bank bir vaqtning o'zida pul massasini va foiz stavkasini barqaror ushlab tura oladimi?",
+        "options": [
+          "Yo'q, chunki pulga talab o'zgarishiga qarab taklifni moslashtirish zarur",
+          "Faqat fiskal siyosat bilan birgalikda bo'lsa mumkin",
+          "Ha, lekin faqat xalqaro operatsiyalar doirasida",
+          "Ha, agar tijorat banklari to'liq nazorat ostida bo'lsa"
+        ],
+        "a": "Yo'q, chunki pulga talab o'zgarishiga qarab taklifni moslashtirish zarur"
+      },
+      {
+        "q": "IS-LM modeli qanday maqsadga xizmat qiladi?",
+        "options": [
+          "Faqat tovar bozoridagi talabni o'lchash uchun",
+          "Inflyatsiyani uzoq muddatli davrda bashoratlash uchun",
+          "Pul muomalasi tezligini nazorat qilish uchun",
+          "Tovar va pul bozorlarida muvozanatni aniqlash uchun"
+        ],
+        "a": "Tovar va pul bozorlarida muvozanatni aniqlash uchun"
+      },
+      {
+        "q": "IS-LM modelining muallifi kim hisoblanadi?",
+        "options": [
+          "D. Rikardo tomonidan ishlab chiqilgan soliq modeli sifatida",
+          "A. Marshall tomonidan kiritilgan klassik model asosida",
+          "M. Fridman tomonidan ishlab chiqilgan monetar model asosida",
+          "Xiks tomonidan ishlab chiqilgan va Xansen tomonidan kengaytirilgan"
+        ],
+        "a": "Xiks tomonidan ishlab chiqilgan va Xansen tomonidan kengaytirilgan"
+      },
+      {
+        "q": "IS-LM modelining qisqa muddatli tahlili qanday farazga asoslanadi?",
+        "options": [
+          "Baholar doimo oshib boradi, foiz stavkasi barqaror bo'ladi",
+          "Daromad potentsial darajada bo'lib, foiz stavkasi nolga tenglashadi",
+          "Baholar darajasi o'zgarmaydi, foiz stavkasi va daromad o'zgaruvchan",
+          "Baholar va daromad o'zgarmaydi, faqat foiz stavkasi o'zgaradi"
+        ],
+        "a": "Baholar darajasi o'zgarmaydi, foiz stavkasi va daromad o'zgaruvchan"
+      },
+      {
+        "q": "IS-LM modelida endogen o'zgaruvchilar qaysilar?",
+        "options": [
+          "Soliq stavkasi (t), davlat xarajatlari (G) va pul taklifi (Ms)",
+          "Aholi soni, inflyatsiya darajasi va real ish haqi",
+          "Daromad (Y), iste'mol (C), investitsiya (I), sof eksport (Xn) va foiz stavkasi (R)",
+          "Narx darajasi, import hajmi va to'lov balansi"
+        ],
+        "a": "Daromad (Y), iste'mol (C), investitsiya (I), sof eksport (Xn) va foiz stavkasi (R)"
+      },
+      {
+        "q": "IS egri chizig'i nimani ifodalaydi?",
+        "options": [
+          "Tovarlar bozorida foiz stavkasi bilan daromad o'rtasidagi teskari bog'liqlikni",
+          "Davlat xarajatlari bilan soliq tushumlari o'rtasidagi bog'liqlikni",
+          "Pul bozorida daromad va foiz stavkasi o'rtasidagi to'g'ri bog'liqlikni",
+          "Ishsizlik darajasi bilan inflyatsiya o'rtasidagi munosabatni"
+        ],
+        "a": "Tovarlar bozorida foiz stavkasi bilan daromad o'rtasidagi teskari bog'liqlikni"
+      },
+      {
+        "q": "IS egri chizig'ining har bir nuqtasida qanday tenglik amal qiladi?",
+        "options": [
+          "Soliqlar va transfertlar o'zaro barqaror bo'ladi",
+          "Pul taklifi va pulga talab teng bo'ladi",
+          "Investitsiyalar va jamg'armalar o'zaro teng bo'ladi",
+          "Narx darajasi va ishlab chiqarish hajmi bir xil bo'ladi"
+        ],
+        "a": "Investitsiyalar va jamg'armalar o'zaro teng bo'ladi"
+      },
+      {
+        "q": "Foiz stavkasining oshishi IS egri chizig'iga qanday ta'sir qiladi?",
+        "options": [
+          "Jamg'armalar kamayadi, foiz stavkasi pasayadi",
+          "Investitsiyalar kamayadi va IS egri chizig'i bo'ylab chapga siljiydi",
+          "Investitsiyalar oshadi va IS egri chizig'i o'ngga siljiydi",
+          "Pul taklifi ortadi va IS egri chizig'i vertikallashadi"
+        ],
+        "a": "Investitsiyalar kamayadi va IS egri chizig'i bo'ylab chapga siljiydi"
+      },
+      {
+        "q": "IS egri chizig'i qaysi omillar ta'sirida o'ngga siljiydi?",
+        "options": [
+          "Pul massasining kamayishi yoki baholarning oshishi bilan",
+          "Soliqlarning oshishi yoki importning ko'payishi natijasida",
+          "Foiz stavkasi pasayishi bilan pul taklifi qisqarganda",
+          "Davlat xarajatlarining o'sishi yoki soliqlarning kamayishi natijasida"
+        ],
+        "a": "Davlat xarajatlarining o'sishi yoki soliqlarning kamayishi natijasida"
+      },
+      {
+        "q": "LM egri chizig'i qanday bog'liqlikni ifodalaydi?",
+        "options": [
+          "Tovar bozorida investitsiya va jamg'arma o'rtasidagi bog'liqlikni",
+          "Pul bozorida foiz stavkasi va daromad o'rtasidagi to'g'ri bog'liqlikni",
+          "Davlat byudjeti va to'lov balansi o'rtasidagi aloqani",
+          "Inflyatsiya va eksport hajmi o'rtasidagi munosabatni"
+        ],
+        "a": "Pul bozorida foiz stavkasi va daromad o'rtasidagi to'g'ri bog'liqlikni"
+      },
+      {
+        "q": "Pulga bo'lgan talabning oshishiga nimalar sabab bo'ladi?",
+        "options": [
+          "Daromad darajasining o'sishi",
+          "Foiz stavkasining oshishi",
+          "Narxlarning pasayishi",
+          "Pul massasining kamayishi"
+        ],
+        "a": "Daromad darajasining o'sishi"
+      },
+      {
+        "q": "LM egri chizig'i qanday shaklda bo'ladi?",
+        "options": [
+          "Faqat to'g'ri chiziqli bo'ladi",
+          "Har doim parabola shaklida bo'ladi",
+          "Faktorlarga bog'liq ravishda sinusoid ko'rinishida bo'ladi",
+          "Gorizontal va vertikal shaklga ega bo'ladi"
+        ],
+        "a": "Gorizontal va vertikal shaklga ega bo'ladi"
+      },
+      {
+        "q": "LM egri chizig'ining gorizontal qismi nimani bildiradi?",
+        "options": [
+          "Foiz stavkasining yuqoriligi bilan likvidlikni kamayishini",
+          "Baholarning o'sishi natijasida pul massasining kamayishini",
+          "Pul taklifi cheksiz oshishini",
+          "Foiz stavkasi minimal darajadan pastga tushmasligini"
+        ],
+        "a": "Foiz stavkasi minimal darajadan pastga tushmasligini"
+      },
+      {
+        "q": "LM egri chizig'ining vertikal qismi nimani anglatadi?",
+        "options": [
+          "Soliqlar oshganda iste'mol qisqarishini",
+          "Daromadlar kamayganda foiz stavkasi pasayishini",
+          "Pulga talab foiz stavkasiga sezgir emasligini",
+          "Pul taklifi barqaror bo'lganda investitsiyalar ortishini"
+        ],
+        "a": "Pulga talab foiz stavkasiga sezgir emasligini"
+      },
+      {
+        "q": "IS-LM modelidagi muvozanat nuqtasi nimani ifodalaydi?",
+        "options": [
+          "Tovarlar va pul bozorida o'zaro tenglashgan holatni",
+          "Pulga bo'lgan talab va pul taklifi o'zaro teng bo'lgan holatini",
+          "Daromad va bandlikning maksimal darajasini",
+          "Davlat budjeti daromadi va xarajatlari o'rtasidagi tenglikni"
+        ],
+        "a": "Tovarlar va pul bozorida o'zaro tenglashgan holatni"
+      },
+      {
+        "q": "Fiskal siyosat IS-LM modelida qanday ta'sir ko'rsatadi?",
+        "options": [
+          "Eksport hajmini oshirish orqali LMni o'ngga siljitadi",
+          "Pul taklifini o'zgartirish orqali LM egri chizig'iga ta'sir qiladi",
+          "Foiz stavkasi va pul massasini o'zgartirmaydi",
+          "Davlat xarajatlari va soliqlar orqali IS egri chizig'iga ta'sir qiladi"
+        ],
+        "a": "Davlat xarajatlari va soliqlar orqali IS egri chizig'iga ta'sir qiladi"
+      },
+      {
+        "q": "Pul-kredit siyosati LM egri chizig'iga qanday ta'sir qiladi?",
+        "options": [
+          "Pul taklifining ortishi LM egri chizig'ini o'ngga siljitadi",
+          "Soliq stavkasining o'zgarishi LMni vertikal holatga olib keladi",
+          "Baholar oshganda LM doimo gorizontal holatda qoladi",
+          "Foiz stavkasi pasayganda LM chapga siljiydi"
+        ],
+        "a": "Pul taklifining ortishi LM egri chizig'ini o'ngga siljitadi"
+      },
+      {
+        "q": "Likvidlilik tuzog'i qanday holatda vujudga keladi?",
+        "options": [
+          "Daromad ortgan holda jamg'armalar kamayganda hamda investitsiyalar rag'batlanganda",
+          "Foiz stavkasi minimal darajada bo'lib, pul-kredit siyosati investitsiyani rag'batlantira olmaganda",
+          "Pul taklifi cheksiz oshirilganda va baholar pasayganda pul-kredit siyosati investitsiyani rag'batlantira olganda",
+          "Soliqlar oshirilganda iste'mol qisqarganda"
+        ],
+        "a": "Foiz stavkasi minimal darajada bo'lib, pul-kredit siyosati investitsiyani rag'batlantira olmaganda"
+      },
+      {
+        "q": "Investitsion tuzoq qanday vaziyatda yuz beradi?",
+        "options": [
+          "Foiz stavkasi investitsiyalarga ta'sir ko'rsatmaydigan holatda",
+          "Daromad o'sishi bilan investitsiyalar ortganda",
+          "Foiz stavkasi pasayganda investitsiyalar kamayganda",
+          "Pul massasi ko'payganda investitsiyalar oshganda"
+        ],
+        "a": "Foiz stavkasi investitsiyalarga ta'sir ko'rsatmaydigan holatda"
+      },
+      {
+        "q": "Modelga ko'ra fiskal siyosat qachon samaraliroq bo'ladi?",
+        "options": [
+          "Likvidlilik tuzog'i yo'q bo'lganda",
+          "Foiz stavkasi past bo'lib, LM egri chizig'i gorizontal bo'lganda",
+          "Foiz stavkasi yuqori va LM egri chizig'i vertikal bo'lganda",
+          "Pul taklifi qisqarib, investitsiyalar hajmi kamayganda"
+        ],
+        "a": "Foiz stavkasi past bo'lib, LM egri chizig'i gorizontal bo'lganda"
+      },
+      {
+        "q": "Iqtisodiy o'sish qanday jarayonni anglatadi?",
+        "options": [
+          "Davlat byudjeti daromadlarining vaqtinchalik ortishini bildiradi",
+          "Mamlakatning potensial ishlab chiqarish darajasini uzoq muddatli ko'payishi tendensiyasini ifodalaydi",
+          "Narx darajasining pasayishi va inflyatsiyaning nolga tenglashishini ko'rsatadi",
+          "Aholining iste'mol odatlari o'zgarishi natijasida qisqa muddatli talabning o'zgarishini anglatadi"
+        ],
+        "a": "Mamlakatning potensial ishlab chiqarish darajasini uzoq muddatli ko'payishi tendensiyasini ifodalaydi"
+      },
+      {
+        "q": "Iqtisodiy o'sishni o'lchashning asosiy usullari nimalardan iborat?",
+        "options": [
+          "Aholining umumiy iste'mol xarajatlari bilan solishtiriladi",
+          "Faqat nominal YaIM va davlat qarzlari o'sish darajasi orqali baholanadi",
+          "aholi jon boshiga to'g'ri keladigan real YaIM o'zgarishlarini solishtirish orqali",
+          "Milliy valyuta kursi va inflyatsiya darajasining o'zgarishiga asoslanadi"
+        ],
+        "a": "aholi jon boshiga to'g'ri keladigan real YaIM o'zgarishlarini solishtirish orqali"
+      },
+      {
+        "q": "Ekstensiv iqtisodiy o'sish qanday holatni anglatadi?",
+        "options": [
+          "Yangi texnologiyalarni qo'llash orqali ishlab chiqarish hajmini optimallashtirish jarayonini bildiradi",
+          "Resurslardan samarali foydalanmaslik natijasida ishlab chiqarishning sekinlashishini anglatadi",
+          "Qo'shimcha ishlab chiqarish resurslarini jalb etish hisobiga iqtisodiy o'sishga erishilishini bildiradi",
+          "Moliyaviy bozorlar rivojlanmaganligi sababli iqtisodiy faollikning pasayishini anglatadi"
+        ],
+        "a": "Qo'shimcha ishlab chiqarish resurslarini jalb etish hisobiga iqtisodiy o'sishga erishilishini bildiradi"
+      },
+      {
+        "q": "Intensiv iqtisodiy o'sishning asosiy xususiyati nimada?",
+        "options": [
+          "Fan va texnika yutuqlaridan foydalanish, ishlab chiqarish texnologiyasini takomillashtirish",
+          "Fikr almashinuvi va ijtimoiy jarayonlar bilan bog'liq bo'lgan o'sish shaklida namoyon bo'ladi",
+          "Resurslardan haddan tashqari foydalanish natijasida ishlab chiqarish quvvatlari kamayadi",
+          "Ishlab chiqarishning qisqarishi hisobiga eksport hajmini kamaytirish orqali o'sish kuzatiladi"
+        ],
+        "a": "Fan va texnika yutuqlaridan foydalanish, ishlab chiqarish texnologiyasini takomillashtirish"
+      },
+      {
+        "q": "Advalar bojning mohiyati nimada?",
+        "options": [
+          "Import hajmi oshgan sari boj stavkasi avtomatik kamayib boradi",
+          "U to'lov balansidagi manfiy tafovutni bartaraf etish uchun joriy qilinadi",
+          "Import qilinayotgan tovar qiymatiga nisbatan foiz shaklida belgilanadi",
+          "Advalar boj mahsulotning hajmi va og'irligiga nisbatan belgilanadi"
+        ],
+        "a": "Import qilinayotgan tovar qiymatiga nisbatan foiz shaklida belgilanadi"
+      },
+      {
+        "q": "Domar modeliga ko'ra, investitsiyalar qanday rol o'ynaydi?",
+        "options": [
+          "Ular ham yalpi talabni, ham yalpi taklifni omil sifatida harakat qiladi",
+          "Faqat iste'mol xarajatlarini qisqartiruvchi omil sifatida tahlil qilinadi",
+          "Moliyaviy aktivlar qiymatini oshiruvchi spekulyativ vosita sifatida qaraladi",
+          "Aholi daromadlarini kamaytiruvchi omil sifatida iqtisodiy inqirozga sabab bo'ladi"
+        ],
+        "a": "Ular ham yalpi talabni, ham yalpi taklifni omil sifatida harakat qiladi"
+      },
+      {
+        "q": "Domar modelida investitsiyalar o'sish sur'ati qanday aniqlanadi?",
+        "options": [
+          "Milliy daromad va kapital zaxiralari o'rtasidagi tafovut orqali o'lchanadi",
+          "Inflyatsiya sur'atlari hamda iste'molning o'sish tezligiga bog'liq holda aniqlanadi",
+          "Yalpi talab va yalpi taklifning o'zaro nisbatidan chiqarilgan matematik o'rtacha orqali aniqlanadi",
+          "MPS va investitsiyalarning unumdorligi ko'paytmasi sifatida aniqlanadi"
+        ],
+        "a": "MPS va investitsiyalarning unumdorligi ko'paytmasi sifatida aniqlanadi"
+      },
+      {
+        "q": "Xarrod modelining asosiy yangiligi nimada?",
+        "options": [
+          "Davlat xarajatlarining kamayishi orqali yalpi taklifni pasaytirishga qaratilgan",
+          "Bozor mexanizmlarini butunlay inkor etuvchi ma'muriy boshqaruv modeliga asoslanadi",
+          "Akselerator va agentlarning kutish omili kiritilib, endogen o'sish mexanizmi yaratilgan",
+          "Faoliyatning faqat qishloq xo'jaligi sektori bilan cheklanishini nazarda tutadi"
+        ],
+        "a": "Akselerator va agentlarning kutish omili kiritilib, endogen o'sish mexanizmi yaratilgan"
+      },
+      {
+        "q": "Xarrod modelida \"kafolatlangan o'sish sur'ati\" qanday ifodalanadi?",
+        "options": [
+          "Aholi bandligi darajasiga to'liq mos keladigan ijtimoiy rivojlanish tezligi",
+          "Ishlab chiqarish hajmining qisqa muddatda o'zgarishini ifodalovchi ko'rsatkich",
+          "Yalpi talabni oshiruvchi byudjet siyosati natijasida hosil bo'ladigan o'sish sur'ati",
+          "Jamg'arishga moyillikning kapital talabchanligi koeffitsienti nisbatiga teng bo'lgan sur'at"
+        ],
+        "a": "Jamg'arishga moyillikning kapital talabchanligi koeffitsienti nisbatiga teng bo'lgan sur'at"
+      },
+      {
+        "q": "Neoklassik modellar qaysi g'oyalarga tayangan?",
+        "options": [
+          "Chekli unumdorlik nazariyasi va ishlab chiqarish omillarining mustaqil hissasi konsepsiyasiga",
+          "Tashqi savdo balansini muvozanatlashga qaratilgan monetar yondashuvlarga tayangan",
+          "Soliq tizimini optimallashtirishga qaratilgan fiskal nazariyaga asoslangan",
+          "Davlatning markazlashtirilgan boshqaruv usullariga tayangan"
+        ],
+        "a": "Chekli unumdorlik nazariyasi va ishlab chiqarish omillarining mustaqil hissasi konsepsiyasiga"
+      },
+      {
+        "q": "Valyuta kursining pasayishi qanday oqibatlarga olib keladi?",
+        "options": [
+          "Import qimmatlashadi, eksport arzonlashadi, savdo balansi ijobiylashadi",
+          "Eksport hajmi qisqaradi, ammo milliy ishlab chiqarish ko'payadi",
+          "To'lov balansida faqat kapital hisob ijobiylashadi",
+          "Milliy valyuta qadrlanadi va inflyatsiya pasayadi"
+        ],
+        "a": "Import qimmatlashadi, eksport arzonlashadi, savdo balansi ijobiylashadi"
+      },
+      {
+        "q": "Solou modelida ishlab chiqarish funksiyasi qanday shaklda ifodalanadi?",
+        "options": [
+          "Y = W × L – mehnat unumdorligini sof ish haqi bilan o'lchovchi ko'rsatkich",
+          "Y = C + I + G + (X–M) – yalpi talab elementlarini ifodalovchi tenglama",
+          "Y = f(T, P) – texnologiya va narxlar o'rtasidagi bog'liqlikni aks ettiruvchi model",
+          "Y = f(L,K) – ishlab chiqarish hajmining mehnat va kapital miqdoriga bog'liqligini ifodalovchi funksiya"
+        ],
+        "a": "Y = f(L,K) – ishlab chiqarish hajmining mehnat va kapital miqdoriga bog'liqligini ifodalovchi funksiya"
+      },
+      {
+        "q": "Solou modelida jamg'arish normasining oshishi qanday ta'sir ko'rsatadi?",
+        "options": [
+          "Mehnat unumdorligi pasayib, ishsizlik darajasi ortadi",
+          "Aholi daromadlari kamayib, iqtisodiy o'sish sur'atlari sekinlashadi",
+          "Kapital bilan qurollanganlik va ishlab chiqarish hajmi oshadi",
+          "Texnologik taraqqiyotning samarasizligi tufayli ishlab chiqarish quvvatlari qisqaradi"
+        ],
+        "a": "Kapital bilan qurollanganlik va ishlab chiqarish hajmi oshadi"
+      },
+      {
+        "q": "Kapitalning chiqib ketish darajasi (d) nimani anglatadi?",
+        "options": [
+          "Moliyaviy aktivlarning qiymat o'zgarishini ko'rsatadi",
+          "Tashqi investitsiyalarning mamlakatdan chiqib ketish jarayonini ifodalaydi",
+          "Asosiy kapitalning amortizatsiyasi natijasida kamayishini bildiradi",
+          "Mehnat resurslarining boshqa tarmoqlarga o'tishini ifodalaydi"
+        ],
+        "a": "Asosiy kapitalning amortizatsiyasi natijasida kamayishini bildiradi"
+      },
+      {
+        "q": "Aholi o'sishi Solou modelida qanday oqibatga olib keladi?",
+        "options": [
+          "Kapital bilan qurollanganlik darajasi kamayib, jon boshiga ishlab chiqarish hajmi pasayadi",
+          "Jamg'arma darajasi pasaygan holda iste'mol tez o'sadi va yalpi talab rag'batlanadi",
+          "Texnologik taraqqiyot natijasida ishlab chiqarish samaradorligi avtomatik ravishda ortadi",
+          "Inflyatsiya barqarorlashib, davlat xarajatlari qisqaradi"
+        ],
+        "a": "Kapital bilan qurollanganlik darajasi kamayib, jon boshiga ishlab chiqarish hajmi pasayadi"
+      },
+      {
+        "q": "Texnologik taraqqiyotning Solou modelidagi o'rni qanday?",
+        "options": [
+          "U ishlab chiqarish hajmini qisqartiruvchi omil sifatida iqtisodiy inqiroz keltirib chiqaradi",
+          "U turmush darajasining uzluksiz o'sishini ta'minlovchi yagona ichki omil sifatida qaraladi",
+          "U faqat aholining iste'mol ehtiyojlarini kamaytiruvchi omil sifatida qaraladi",
+          "U qisqa muddatli talab tebranishlarini kuchaytiruvchi tashqi omil sifatida tahlil qilinadi"
+        ],
+        "a": "U turmush darajasining uzluksiz o'sishini ta'minlovchi yagona ichki omil sifatida qaraladi"
+      },
+      {
+        "q": "Tarif kiritilganda iste'molchilarning holati qanday o'zgaradi?",
+        "options": [
+          "Narxlar pasayadi, lekin ichki ishlab chiqaruvchilar foyda ko'radi",
+          "Iste'mol hajmi oshadi, lekin to'lov balansi salbiylashadi",
+          "Narxlar oshib, iste'mol hajmi qisqaradi va farovonlik kamayadi",
+          "Davlat subsidiyasi natijasida narxlar barqaror holatda qoladi"
+        ],
+        "a": "Narxlar oshib, iste'mol hajmi qisqaradi va farovonlik kamayadi"
+      },
+      {
+        "q": "Felpsning \"Oltin qoidasi\" deganda nima tushuniladi?",
+        "options": [
+          "Aholi sonining barqaror o'sish sur'atini belgilovchi ko'rsatkichlarning barqaror ishlab chiqarish hajmiga mosligini nazarda tutuvchi qonuniyat",
+          "Kapitalning tez eskirishi natijasida ishlab chiqarish hajmini kamaytiruvchi hamda mehnat unumdorligini oshishini nazarda tutgan qonuniyat",
+          "Investitsiyalar hajmini davlat tomonidan qat'iy nazorat qilish zaruratini ifodalovchi qonuniyat",
+          "Iste'mol maksimal bo'ladigan kapital bilan qurollanganlikning barqaror darajasini ifodalovchi qoida"
+        ],
+        "a": "Iste'mol maksimal bo'ladigan kapital bilan qurollanganlikning barqaror darajasini ifodalovchi qoida"
+      },
+      {
+        "q": "J.Mid modeliga ko'ra, iqtisodiy o'sishning barqaror sur'ati nimaga teng?",
+        "options": [
+          "Yalpi talabning qisqa muddatli tebranishiga mutanosib bo'lgan ishlab chiqarish sur'atiga",
+          "Fikrlar xilma-xilligi sababli iqtisodiy tizimda beqarorlik yuz beradi",
+          "Kapital va milliy daromad o'sishi sur'ati o'zaro teng bo'lganda barqaror muvozanat ta'minlanadi",
+          "Texnologik taraqqiyotning eng past darajasida hosil bo'ladigan o'sish tezligiga"
+        ],
+        "a": "Kapital va milliy daromad o'sishi sur'ati o'zaro teng bo'lganda barqaror muvozanat ta'minlanadi"
+      },
+      {
+        "q": "A.Lyuis modeliga ko'ra, iqtisodiy o'sishning manbai nimada?",
+        "options": [
+          "Qishloq xo'jaligidagi ortiqcha mehnat resurslarini sanoat sektoriga o'tkazish orqali ishlab chiqarish hajmini kengaytirishda",
+          "Davlatning barcha sektorlarga to'liq aralashuvida",
+          "Yalpi talabning qisqa muddatli tebranishiga mutanosib bo'lgan ishlab chiqarish sur'atiga",
+          "Aholi sonining barqaror o'sish sur'atini belgilovchi ko'rsatkichlarning barqaror ishlab chiqarish hajmiga mosligini nazarda tutuvchi qonuniyat"
+        ],
+        "a": "Qishloq xo'jaligidagi ortiqcha mehnat resurslarini sanoat sektoriga o'tkazish orqali ishlab chiqarish hajmini kengaytirishda"
+      },
+      {
+        "q": "A Lyuis modelida agrar sektor mehnat unumdorligi qanday tasvirlanadi?",
+        "options": [
+          "O'rtacha darajada, lekin doimo sanoat sektori bilan tenglashib boradi",
+          "Juda past bo'lib, chekli mahsulot nolga teng deb qabul qilinadi",
+          "Faqat mehnatning o'sish sur'atiga bog'liq ravishda o'zgaradi",
+          "O'ta yuqori darajada bo'lib, kapital talab qilinmaydi"
+        ],
+        "a": "Juda past bo'lib, chekli mahsulot nolga teng deb qabul qilinadi"
+      },
+      {
+        "q": "Solou modeliga ko'ra, barqaror iqtisodiy o'sishning yagona manbai nima?",
+        "options": [
+          "Eksport hajmining ortishi",
+          "Aholi sonining ortishi",
+          "Texnologik taraqqiyot",
+          "Davlat xarajatlarining oshishi"
+        ],
+        "a": "Texnologik taraqqiyot"
+      },
+      {
+        "q": "Proteksionizm siyosati qaysi maqsadni ko'zlaydi?",
+        "options": [
+          "Eksport subsidiyalarini butunlay bekor qilish",
+          "Savdoni cheklash orqali ichki talabni kamaytirish",
+          "Valyuta bozorini yopib, importni to'liq to'xtatish",
+          "Ichki ishlab chiqaruvchilarni xorijiy raqobatdan himoya qilish"
+        ],
+        "a": "Ichki ishlab chiqaruvchilarni xorijiy raqobatdan himoya qilish"
+      },
+      {
+        "q": "Xalqaro savdoning zaruriyati nimada namoyon bo'ladi?",
+        "options": [
+          "Resurslar taqchilligi xalqaro savdoni istisno etadi va faqat milliy ishlab chiqarishni kengaytirishni talab qiladi",
+          "Xalqaro savdo faqat rivojlangan davlatlarning ichki bozorlarini mustahkamlash vositasi sifatida qaraladi",
+          "Mamlakatlar o'rtasida tabiiy va xom ashyo resurslarining notekis taqsimlanishi",
+          "Tashqi savdoni faqat eksport hajmini oshirish uchun qo'llash mamlakatlar o'rtasidagi iqtisodiy aloqalarni toraytiradi"
+        ],
+        "a": "Mamlakatlar o'rtasida tabiiy va xom ashyo resurslarining notekis taqsimlanishi"
+      },
+      {
+        "q": "A. Smitning mutlaq ustunlik nazariyasi qaysi g'oyaga asoslanadi?",
+        "options": [
+          "Xalqaro savdo faqat arzon importni taqiqlash va bojxona himoyasini kuchaytirish orqali rivojlanadi",
+          "A.Smit nazariyasiga ko'ra, barcha mamlakatlar barcha mahsulot turlarini bir xil samaradorlikda ishlab chiqarishlari mumkin",
+          "Har bir mamlakat o'zida eng kam xarajat bilan ishlab chiqariladigan tovarni ishlab chiqarsa, umumiy farovonlik oshadi",
+          "Mutlaq ustunlik nazariyasi eksportdan olinadigan foyda davlat budjetining asosiy manbai bo'lishini nazarda tutadi"
+        ],
+        "a": "Har bir mamlakat o'zida eng kam xarajat bilan ishlab chiqariladigan tovarni ishlab chiqarsa, umumiy farovonlik oshadi"
+      },
+      {
+        "q": "D.Rikardoning nisbiy ustunlik nazariyasi qanday tamoyilga tayanadi?",
+        "options": [
+          "Ushbu nazariya faqat sanoati rivojlangan mamlakatlar o'rtasidagi texnologik ustunlikni isbotlashga xizmat qiladi",
+          "Nisbiy ustunlik nazariyasi mamlakatlarning valyuta kurslari farqiga asoslanib, savdo balansini tenglashtiradi",
+          "Mamlakatlar o'zida nisbatan samaraliroq ishlab chiqariladigan mahsulotlarga ixtisoslashuvi zarur",
+          "Har bir davlat eng yuqori narxli mahsulotni ishlab chiqarib, uni eksportga yo'naltirishi zarur"
+        ],
+        "a": "Mamlakatlar o'zida nisbatan samaraliroq ishlab chiqariladigan mahsulotlarga ixtisoslashuvi zarur"
+      },
+      {
+        "q": "Savdo sharoiti indeksi nimani ko'rsatadi?",
+        "options": [
+          "Eksport hajmining o'zgarishini inflyatsiya darajasiga nisbatan baholovchi ko'rsatkich sifatida qo'llaniladi",
+          "Ishlab chiqarish omillarining bahosi bilan xalqaro raqobatbardoshlik o'rtasidagi nisbatni ko'rsatadi",
+          "Import hajmining eksport hajmiga tenglashish darajasini, ya'ni savdo balansining sof holatini ifodalaydi",
+          "Eksport narxlari indeksining import narxlari indeksiga nisbati sifatida xalqaro savdo nisbatini aks ettiradi"
+        ],
+        "a": "Eksport narxlari indeksining import narxlari indeksiga nisbati sifatida xalqaro savdo nisbatini aks ettiradi"
+      },
+      {
+        "q": "Subsidiya va tarif o'rtasidagi asosiy farq nimada?",
+        "options": [
+          "Har ikkisi inflyatsiyani pasaytiruvchi vosita sifatida ishlaydi",
+          "Tarif milliy ishlab chiqaruvchilarga to'g'ridan-to'g'ri moliyaviy yordam beradi",
+          "Subsidiya har doim import hajmini oshiradi",
+          "Subsidiya ichki narxlarni oshirmaydi, tarif esa oshiradi"
+        ],
+        "a": "Subsidiya ichki narxlarni oshirmaydi, tarif esa oshiradi"
+      },
+      {
+        "q": "Savdo sharoiti indeksi o'sib borayotgan bo'lsa, bu nimani bildiradi?",
+        "options": [
+          "Savdo sharoitining yaxshilanishi inflyatsiya darajasining oshishiga va valyuta qadrsizlanishiga olib keladi",
+          "Bu holatda eksport narxlari pasayadi, import esa ichki bozorni to'ldiradi va savdo balansi yomonlashadi",
+          "Eksport hajmi ortib, import to'liq to'xtatiladi va ichki talabni faqat milliy ishlab chiqaruvchilar qondiradi",
+          "Mamlakat kamroq eksport evaziga ko'proq import xarid qilish imkoniyatiga ega bo'layotganini bildiradi"
+        ],
+        "a": "Mamlakat kamroq eksport evaziga ko'proq import xarid qilish imkoniyatiga ega bo'layotganini bildiradi"
+      },
+      {
+        "q": "Xeksher–Olin nazariyasiga ko'ra, mamlakat nimani eksport qiladi?",
+        "options": [
+          "Ishchi kuchi arzon bo'lgan mahsulotlarni, chunki bu mamlakatning ijtimoiy siyosatini mustahkamlaydi",
+          "Faqat yuqori texnologiyali tovarlarni, chunki ular xalqaro bozorda yuqori daromad keltiradi",
+          "Tashqi qarzi yuqori bo'lgan mahsulotlarni, chunki ular davlat budjetini balanslashtiradi",
+          "O'zida nisbatan ortiqcha bo'lgan ishlab chiqarish omilini ko'p talab qiladigan mahsulotlarni"
+        ],
+        "a": "O'zida nisbatan ortiqcha bo'lgan ishlab chiqarish omilini ko'p talab qiladigan mahsulotlarni"
+      },
+      {
+        "q": "\"Leontev paradoksi\" deganda nima tushuniladi?",
+        "options": [
+          "Leontev paradoksi savdo balansining doimiy ortiqcha bilan yakunlanishini ifodalaydi",
+          "Bu hodisa eksport subsidiyalarining qisqarishi natijasida import hajmining kamayishidir",
+          "Leontev paradoksi ishlab chiqarish omillari narxlarining mutlaq tenglashishiga asoslangan hodisadir",
+          "AQSh kapitalga boy mamlakat bo'lishiga qaramay, mehnat talabchan mahsulotlarni eksport qilganini ifodalovchi hodisa"
+        ],
+        "a": "AQSh kapitalga boy mamlakat bo'lishiga qaramay, mehnat talabchan mahsulotlarni eksport qilganini ifodalovchi hodisa"
+      },
+      {
+        "q": "Samuelson va Stolper nazariyasi xalqaro savdoda nimalarni isbotlaydi?",
+        "options": [
+          "Savdo bojlari iqtisodiy o'sishni tezlashtirib, davlat daromadlarini oshiradi",
+          "Eksport subsidiyasi ishlab chiqarish xarajatlarini kamaytiradi va inflyatsiyani barqarorlashtiradi",
+          "Savdo natijasida mamlakatlar o'rtasida ishlab chiqarish omillari narxlari asta-sekin tenglashadi",
+          "Valyuta kursining o'zgarishi ishlab chiqarish samaradorligiga bevosita ta'sir ko'rsatadi"
+        ],
+        "a": "Savdo natijasida mamlakatlar o'rtasida ishlab chiqarish omillari narxlari asta-sekin tenglashadi"
+      },
+      {
+        "q": "Import tariflari qanday asosiy turlarga ajratiladi?",
+        "options": [
+          "Fiskal va valyuta asosidagi ikki darajali to'lov tizimiga",
+          "Maxsus va advalar turlariga",
+          "Maqsadli va nisbiy stavkali bojxona choralariga",
+          "Tartibga solinadigan va tartibga solinmaydigan turlarga"
+        ],
+        "a": "Maxsus va advalar turlariga"
+      },
+      {
+        "q": "Litsenziyalashning iqtisodiy mohiyati nimada?",
+        "options": [
+          "Mahsulot eksporti bo'yicha cheklovlarni kamaytiruvchi erkin savdo mexanizmi hisoblanadi",
+          "Tashqi iqtisodiy operatsiyalarni amalga oshirish uchun davlat tomonidan beriladigan ruxsat tizimidir",
+          "Savdo balansini muvozanatlashtirish uchun bojxona stavkalarini avtomatik o'zgartiradi",
+          "Davlat tomonidan investitsiya oqimini oshirishga qaratilgan moliyaviy imtiyoz tizimidir"
+        ],
+        "a": "Tashqi iqtisodiy operatsiyalarni amalga oshirish uchun davlat tomonidan beriladigan ruxsat tizimidir"
+      },
+      {
+        "q": "Kvotalashning asosiy maqsadi nimada?",
+        "options": [
+          "Ishlab chiqarish omillarining bahosini xalqaro miqyosda tenglashtirish",
+          "Eksport yoki import hajmiga miqdoriy va qiymat chegaralarini belgilash orqali tartibga solish",
+          "Milliy valyuta kursini erkinlashtirish va inflyatsiyani pasaytirish",
+          "Eksport subsidiyasini oshirish va ichki talabni cheklash"
+        ],
+        "a": "Eksport yoki import hajmiga miqdoriy va qiymat chegaralarini belgilash orqali tartibga solish"
+      },
+      {
+        "q": "Eksport subsidiyasi qanday maqsadda joriy qilinadi?",
+        "options": [
+          "Milliy ishlab chiqaruvchilarning tashqi bozorda raqobatbardoshligini oshirish uchun davlat tomonidan moliyaviy qo'llab-quvvatlash",
+          "Uning maqsadi ichki iste'molchilarni narx oshishidan himoya qilish va inflyatsiyani pasaytirishdir",
+          "Eksport subsidiyasi faqat rivojlanmagan mamlakatlarda savdo balansini manfiylashtirish uchun qo'llaniladi",
+          "Eksport subsidiyasi import tovarlariga talabni oshiradi va milliy ishlab chiqaruvchilarni bozordan siqib chiqaradi"
+        ],
+        "a": "Milliy ishlab chiqaruvchilarning tashqi bozorda raqobatbardoshligini oshirish uchun davlat tomonidan moliyaviy qo'llab-quvvatlash"
+      },
+      {
+        "q": "Dempingga qarshi bojlarning joriy etilish sababi nimada?",
+        "options": [
+          "Bojlar faqat valyuta kursining keskin o'zgarishlari davrida narxlarni barqarorlashtirish vositasidir",
+          "Dempingga qarshi bojlar faqat davlatlar o'rtasidagi siyosiy bitimlar natijasida avtomatik tarzda joriy qilinadi",
+          "Ular milliy eksportni rag'batlantirish va tashqi bozorlarni to'ldirish maqsadida qo'llaniladi",
+          "Chet el mahsulotlari jahon narxlaridan past narxlarda sotilganda mahalliy ishlab chiqaruvchilarni himoya qilish uchun"
+        ],
+        "a": "Chet el mahsulotlari jahon narxlaridan past narxlarda sotilganda mahalliy ishlab chiqaruvchilarni himoya qilish uchun"
+      },
+      {
+        "q": "Eksport bojlari iqtisodiyotga qanday ta'sir qiladi?",
+        "options": [
+          "Eksport bojlari milliy ishlab chiqaruvchilar foydasini pasaytirmasdan davlat budjetini to'ldiradi",
+          "Ular eksportchilarni rag'batlantiruvchi mexanizm sifatida ishlab chiqarish hajmini oshiradi",
+          "Eksport bojlari mahsulotlar tannarxini oshiradi va shu bilan eksport hajmini ko'paytiradi",
+          "Ichki narxlarni pasaytiradi, iste'molni oshiradi, biroq eksport hajmini kamaytiradi"
+        ],
+        "a": "Ichki narxlarni pasaytiradi, iste'molni oshiradi, biroq eksport hajmini kamaytiradi"
+      },
+      {
+        "q": "Tashqi savdoni erkinlashtirishning asosiy iqtisodiy afzalligi nimada?",
+        "options": [
+          "Bu chora natijasida ishlab chiqarish hajmi kamayadi, lekin tashqi qarz barqarorlashadi",
+          "Erkinlashtirish qisqa muddatda narxlarning barqarorligini buzib, davlat byudjeti defitsitini kuchaytiradi",
+          "Erkin savdo ichki raqobatni kamaytirib, milliy korxonalar faoliyatini chegaralaydi",
+          "Bozor mexanizmlarining samaradorligini oshirib, resurslardan nisbatan afzal foydalanishni ta'minlaydi"
+        ],
+        "a": "Bozor mexanizmlarining samaradorligini oshirib, resurslardan nisbatan afzal foydalanishni ta'minlaydi"
+      },
+      {
+        "q": "Xalqaro savdoning zamonaviy nazariyalari nimani inobatga oladi?",
+        "options": [
+          "Texnologik tafovutlar, raqobat darajasi, ishlab chiqarish omillarining notekis taqsimlanishi va innovatsiyalar rolini",
+          "Faqat mehnatning fizik unumdorligini, boshqa omillarni esa e'tiborga olmaydi",
+          "Zamonaviy nazariyalar asosan valyuta kursining o'zgarishlari asosida ishlab chiqilgan modeldir",
+          "Ular faqat rivojlanayotgan mamlakatlarning eksport hajmlariga tayanib natijalarni baholaydi"
+        ],
+        "a": "Texnologik tafovutlar, raqobat darajasi, ishlab chiqarish omillarining notekis taqsimlanishi va innovatsiyalar rolini"
+      },
+      {
+        "q": "Savdo sharoiti indeksining pasayishi nimani anglatadi?",
+        "options": [
+          "Pasayish milliy valyutaning qadrlanishi va investitsiyalarning ko'payishini ko'rsatadi",
+          "Bu eksport narxlarining oshishi va milliy ishlab chiqarish samaradorligining ortishini bildiradi",
+          "Indeks pasayganda import hajmi qisqaradi, lekin to'lov balansi ijobiylashadi",
+          "Savdo sharoitlarining yomonlashishini, ya'ni bir xil import uchun ko'proq eksport talab etilishini"
+        ],
+        "a": "Savdo sharoitlarining yomonlashishini, ya'ni bir xil import uchun ko'proq eksport talab etilishini"
+      },
+      {
+        "q": "Xeksher–Olin modelida kapital ortiq mamlakat qanday mahsulotni eksport qiladi?",
+        "options": [
+          "Tabiiy resurslarga asoslangan tovarlarni",
+          "Qishloq xo'jaligi tovarlarini",
+          "Mehnat talabchan mahsulotlarni",
+          "Kapital talabchan mahsulotlarni"
+        ],
+        "a": "Kapital talabchan mahsulotlarni"
+      },
+      {
+        "q": "Xalqaro savdo qanday yo'l bilan ishlab chiqarish samaradorligini oshiradi?",
+        "options": [
+          "Eksport subsidiyalari orqali narxlarni barqarorlashtirib, raqobatni kamaytiradi",
+          "Davlat byudjeti xarajatlarini oshirish orqali ishlab chiqarish hajmini qisqartiradi",
+          "Valyuta nazoratini kuchaytirib, import hajmini keskin kamaytiradi",
+          "Mamlakatlarni ixtisoslashuv va resurslardan nisbatan afzal foydalanishga majbur etish orqali"
+        ],
+        "a": "Mamlakatlarni ixtisoslashuv va resurslardan nisbatan afzal foydalanishga majbur etish orqali"
+      },
+      {
+        "q": "Valyuta kursining oshishi nimani anglatadi?",
+        "options": [
+          "Milliy valyutaning chet el valyutalariga nisbatan qadrlanishini",
+          "Eksport hajmining oshishini va importning kamayishini",
+          "Valyuta zaxiralari kamayishi natijasida milliy valyutaning qadrsizlanishini",
+          "To'lov balansining salbiylashishini va savdo defitsitining ortishini"
+        ],
+        "a": "Milliy valyutaning chet el valyutalariga nisbatan qadrlanishini"
+      },
+      {
+        "q": "Proteksionizmning asosiy kamchiligi nimada?",
+        "options": [
+          "Proteksionizm xalqaro savdoda monopoliyalar sonini kamaytirib, samaradorlikni oshiradi",
+          "Bu siyosat ichki investitsiyalarni jalb etish orqali iqtisodiy o'sishni tezlashtiradi",
+          "Himoya choralarini joriy etish narxlarni barqarorlashtiradi va inflyatsiyani kamaytiradi",
+          "Resurslarning samarasiz taqsimlanishiga va iste'molchilar farovonligining pasayishida"
+        ],
+        "a": "Resurslarning samarasiz taqsimlanishiga va iste'molchilar farovonligining pasayishida"
+      },
+      {
+        "q": "Litsenziyalash va kvotalashning umumiy maqsadi nimada?",
+        "options": [
+          "Milliy ishlab chiqaruvchilarni subsidiyalash va narxlarni erkinlashtirish",
+          "Import tovarlarini bojxona to'lovlaridan ozod qilib, ichki raqobatni kuchaytirish",
+          "Xorijiy investorlar uchun yangi bozorlarni ochish va eksport hajmini oshirish",
+          "Tashqi iqtisodiy operatsiyalar oqimini davlat tomonidan nazorat qilish va tartibga solish"
+        ],
+        "a": "Tashqi iqtisodiy operatsiyalar oqimini davlat tomonidan nazorat qilish va tartibga solish"
+      },
+      {
+        "q": "Eksport subsidiyalari va tariflar o'rtasidagi o'xshashlik nimada?",
+        "options": [
+          "Ikkalasi ham import hajmini oshiradi va to'lov balansini yomonlashtiradi",
+          "Har ikkalasi milliy ishlab chiqaruvchilarni raqobatbardoshligini oshirish maqsadida qo'llaniladi",
+          "Tariflar ichki narxlarni pasaytirsa, subsidiyalar ularni mutlaqo barqarorlashtiradi",
+          "Ikkalasi ham davlat byudjeti xarajatlarini kamaytirish vositasi sifatida ishlatiladi"
+        ],
+        "a": "Har ikkalasi milliy ishlab chiqaruvchilarni raqobatbardoshligini oshirish maqsadida qo'llaniladi"
+      },
+      {
+        "q": "Savdo siyosatining yakuniy maqsadi nimani ta'minlashdir?",
+        "options": [
+          "Makroiqtisodiy barqarorlik, iqtisodiy o'sish va to'lov balansining muvozanatini",
+          "Valyuta zaxiralarini kamaytirish orqali inflyatsiyani rag'batlantirish",
+          "Eksportni kamaytirish va importni oshirish orqali ichki bozorni to'ldirish",
+          "Tashqi qarzlarni ko'paytirib, ichki ishlab chiqaruvchilarni raqobatdan himoyalash"
+        ],
+        "a": "Makroiqtisodiy barqarorlik, iqtisodiy o'sish va to'lov balansining muvozanatini"
+      },
+      {
+        "q": "Savdo cheklovlari joriy etilganda jamiyatda qanday sof yo'qotish kuzatiladi?",
+        "options": [
+          "Iste'molchilar farovonligi pasayadi, ishlab chiqarish samaradorligi esa ortmaydi",
+          "Tariflar natijasida ishlab chiqarish xarajatlari kamayadi va resurslardan to'liq foydalaniladi",
+          "Sof yo'qotish davlat subsidiyasi bilan to'liq qoplanadi va iqtisodiy o'sish saqlanadi",
+          "Davlat budjeti daromadlari ortadi, shu sababli farovonlik darajasi o'zgarmaydi"
+        ],
+        "a": "Iste'molchilar farovonligi pasayadi, ishlab chiqarish samaradorligi esa ortmaydi"
+      },
+      {
+        "q": "Import tariflari qanday qisqa muddatli natijani beradi?",
+        "options": [
+          "Tariflar joriy etilganda inflyatsiya darhol pasayadi va eksport hajmi ortadi",
+          "Ichki ishlab chiqaruvchilarning foydasini oshiradi, lekin iste'molchilar zarar ko'radi",
+          "Ular narxlarni barqarorlashtiradi va ichki talabni to'liq qondiradi",
+          "Import bojlarining oshishi ichki ishlab chiqaruvchilarning raqobatini kamaytiradi"
+        ],
+        "a": "Ichki ishlab chiqaruvchilarning foydasini oshiradi, lekin iste'molchilar zarar ko'radi"
+      },
+      {
+        "q": "Davlat import bojlari orqali qanday fiskal maqsadga erishadi?",
+        "options": [
+          "Bojxona to'lovlari inflyatsiyani barqarorlashtirish va foiz stavkalarini pasaytirishga xizmat qiladi",
+          "Bojxona to'lovlari orqali budjet daromadlarini oshirishga",
+          "Bojlar yordamida eksport hajmini pasaytirish va tashqi qarzni kamaytirishga",
+          "Import bojlari valyuta kursini mustahkamlash orqali budjet xarajatlarini kamaytiradi"
+        ],
+        "a": "Bojxona to'lovlari orqali budjet daromadlarini oshirishga"
+      },
+      {
+        "q": "Ishlab chiqaruvchilarga subsidiya berishning asosiy afzalligi nimada?",
+        "options": [
+          "Subsidiya ishlab chiqarish xarajatlarini oshirib, resurslardan foydalanishni samarasiz qiladi",
+          "Ichki narxlarni oshirmagan holda ishlab chiqarish hajmini ko'paytirish imkonini beradi",
+          "Subsidiya berilganda iste'molchilar xarajatlari ortadi va talab qisqaradi",
+          "Bu chora narxlarni ko'tarish orqali eksportni kamaytiradi va inflyatsiyani oshiradi"
+        ],
+        "a": "Ichki narxlarni oshirmagan holda ishlab chiqarish hajmini ko'paytirish imkonini beradi"
+      },
+      {
+        "q": "To'lov balansi nima?",
+        "options": [
+          "Xorijiy investitsiyalar va davlat qarzlarining o'zaro nisbatini tahlil qiluvchi iqtisodiy hujjatlar to'plami",
+          "Davlat budjeti daromadlari va xarajatlarini xalqaro moliya tashkilotlari bilan solishtiruvchi moliyaviy balans hisoboti",
+          "Muayyan davrda mamlakat rezidentlari va norezidentlari o'rtasidagi barcha iqtisodiy operatsiyalarning statistik hisobot tizimi",
+          "Ichki iqtisodiy faoliyat natijalarini xalqaro savdo operatsiyalaridan ajratib ko'rsatadigan fiskal hisobot shakli"
+        ],
+        "a": "Muayyan davrda mamlakat rezidentlari va norezidentlari o'rtasidagi barcha iqtisodiy operatsiyalarning statistik hisobot tizimi"
+      },
+      {
+        "q": "To'lov balansining asosiy bo'limlari qaysilar?",
+        "options": [
+          "Joriy hisob, kapital va moliyaviy hisob, shuningdek zaxira aktivlar hisobi",
+          "Eksport-import hajmlari, davlat qarzlari va valyuta zaxiralari balanslari",
+          "Milliy daromad, tashqi qarz va tovar ayirboshlash balanslari",
+          "Byudjet defitsiti, to'lov majburiyatlari va soliq tushumlari balanslari"
+        ],
+        "a": "Joriy hisob, kapital va moliyaviy hisob, shuningdek zaxira aktivlar hisobi"
+      },
+      {
+        "q": "Joriy hisob balansida nimalar aks ettiriladi?",
+        "options": [
+          "Faqat davlatning moliyaviy qarzlari va xususiy investitsiyalar oqimi",
+          "Tovarlar, xizmatlar, daromadlar va joriy transfertlar bilan bog'liq operatsiyalar",
+          "Xalqaro tashkilotlarga a'zolik badallari hamda byudjet to'lovlari",
+          "Kapital qo'yilmalarning amortizatsiya xarajatlari va foiz to'lovlari"
+        ],
+        "a": "Tovarlar, xizmatlar, daromadlar va joriy transfertlar bilan bog'liq operatsiyalar"
+      },
+      {
+        "q": "Kapital va moliyaviy hisobda nimalar qayd etiladi?",
+        "options": [
+          "Xorijiy investitsiyalar, kreditlar, qimmatli qog'ozlar va xalqaro kapital harakati bilan bog'liq operatsiyalar",
+          "Faqat tovar eksporti natijasidagi foyda yoki zararlarni aks ettiruvchi ko'rsatkichlar",
+          "Ish haqi, nafaqa va transfert to'lovlarining ichki iqtisodiyotdagi ulushi",
+          "Xalqaro savdoda narxlar pariteti asosida hisoblangan nominal qiymatlar"
+        ],
+        "a": "Xorijiy investitsiyalar, kreditlar, qimmatli qog'ozlar va xalqaro kapital harakati bilan bog'liq operatsiyalar"
+      },
+      {
+        "q": "To'lov balansining aktiv (ijobiy) qoldig'i nimani bildiradi?",
+        "options": [
+          "Valyuta kursining o'sib borishini va inflyatsiyaning pasayishini",
+          "Ichki iqtisodiyotda import hajmining eksportdan oshishini",
+          "Mamlakatga kirayotgan xorijiy valyuta chiqayotganidan ko'p bo'lishini",
+          "Davlat qarzining to'liq yopilganini va tashqi qarzlar yo'qligini"
+        ],
+        "a": "Mamlakatga kirayotgan xorijiy valyuta chiqayotganidan ko'p bo'lishini"
+      },
+      {
+        "q": "To'lov balansining passiv (salbiy) qoldig'i nimani anglatadi?",
+        "options": [
+          "Mamlakatdan chiqayotgan valyuta miqdori kirayotganidan ko'p bo'lishini",
+          "Davlat byudjeti ortiqcha bilan bajarilayotganini",
+          "Eksport hajmining ortib borishini va to'lov balansining barqarorligini",
+          "Ichki ishlab chiqarishning o'sishi va tashqi qarzlarning qisqarishini"
+        ],
+        "a": "Mamlakatdan chiqayotgan valyuta miqdori kirayotganidan ko'p bo'lishini"
+      },
+      {
+        "q": "To'lov balansida \"rezerv aktivlar\" qaysi maqsadda yuritiladi?",
+        "options": [
+          "Ichki investitsiyalarni oshirish hamda davlat subsidiyalarini moliyalashtirish uchun",
+          "Xalqaro tashkilotlar oldidagi siyosiy majburiyatlarni bajarish maqsadida",
+          "Faqat xalqaro kredit reytinglarini oshirish va xorijiy sarmoyalarni jalb etish uchun",
+          "Valyuta kursini tartibga solish va tashqi qarz to'lovlarini qoplash uchun ishlatiladi"
+        ],
+        "a": "Valyuta kursini tartibga solish va tashqi qarz to'lovlarini qoplash uchun ishlatiladi"
+      },
+      {
+        "q": "Nominal va real valyuta kursi o'rtasidagi farq nimada?",
+        "options": [
+          "Real kurs - faqat xalqaro tashkilotlar tomonidan belgilanadigan ko'rsatkich",
+          "Nominal kurs - joriy narxlarda, real kurs esa inflyatsiya ta'siri hisobga olingan holda aniqlanadi",
+          "Nominal kurs - to'lov balansining o'zgarishiga qarab avtomatik aniqlanadi",
+          "Nominal kurs - rasmiy, real kurs esa qora bozor kursini bildiradi"
+        ],
+        "a": "Nominal kurs - joriy narxlarda, real kurs esa inflyatsiya ta'siri hisobga olingan holda aniqlanadi"
+      },
+      {
+        "q": "Rasmiy (qayt etilgan) valyuta kursi tizimining xususiyati nimada?",
+        "options": [
+          "Davlat markaziy banki tomonidan qat'iy belgilangan va barqaror ushlab turiladigan kurs",
+          "Fiksirlangan kurs xalqaro kreditlar hajmiga qarab avtomatik o'zgarib turadi",
+          "Bu tizimda davlat inflyatsiya darajasiga qarab eksport subsidiyalarini belgilaydi",
+          "Valyuta kursi har kuni ichki bozordagi talab va taklif asosida erkin belgilanadi"
+        ],
+        "a": "Davlat markaziy banki tomonidan qat'iy belgilangan va barqaror ushlab turiladigan kurs"
+      },
+      {
+        "q": "Suzib yuruvchi (erkin) valyuta kursining afzalligi nimada?",
+        "options": [
+          "Bu tizim davlat byudjetini barqarorlashtirish uchun majburiy kursni belgilaydi",
+          "Bozor mexanizmi orqali talab va taklif o'zgarishlariga moslashuvchanlik ta'minlanadi",
+          "Uning asosiy maqsadi inflyatsiyani sun'iy ravishda oshirishdir",
+          "Suzib yuruvchi kurs xalqaro savdoni to'liq nazorat qilish imkonini beradi"
+        ],
+        "a": "Bozor mexanizmi orqali talab va taklif o'zgarishlariga moslashuvchanlik ta'minlanadi"
+      },
+      {
+        "q": "Valyuta intervensiyasi deganda nima tushuniladi?",
+        "options": [
+          "Markaziy bankning xorijiy valyuta sotib olish yoki sotish orqali kursni barqarorlashtirishi",
+          "Xalqaro tashkilotlar tomonidan o'tkaziladigan tashqi audit tekshiruvi",
+          "Davlat byudjetidan eksport subsidiyasini moliyalashtirish jarayoni",
+          "Xorijiy investitsiyalarni majburiy milliylashtirish jarayoni"
+        ],
+        "a": "Markaziy bankning xorijiy valyuta sotib olish yoki sotish orqali kursni barqarorlashtirishi"
+      },
+      {
+        "q": "\"Valyuta kursi pariteti\" deganda nima nazarda tutiladi?",
+        "options": [
+          "Ikki valyutaning rasmiy kurslari o'rtasidagi belgilangan nisbat",
+          "Valyuta kursi va import hajmi o'rtasidagi korrelyatsiya koeffitsienti",
+          "Eksport va import narxlari o'rtasidagi o'zaro muvozanat",
+          "Milliy va xorijiy valyuta zaxiralari o'rtasidagi nisbat"
+        ],
+        "a": "Ikki valyutaning rasmiy kurslari o'rtasidagi belgilangan nisbat"
+      },
+      {
+        "q": "Valyuta kursining \"revalvatsiya\" jarayoni nimani anglatadi?",
+        "options": [
+          "Davlat tomonidan inflyatsiyani pasaytirish uchun foiz stavkalarini oshirish",
+          "Eksport hajmining oshishi va importning qisqarishi jarayoni",
+          "Chet el valyutalarining ichki bozordagi qiymatining pasayishi",
+          "Milliy valyuta qiymatining rasmiy ravishda oshirilishi"
+        ],
+        "a": "Milliy valyuta qiymatining rasmiy ravishda oshirilishi"
+      },
+      {
+        "q": "\"Devalvatsiya\" qanday jarayondir?",
+        "options": [
+          "Milliy valyuta qiymatining rasmiy ravishda pasaytirilishi",
+          "Inflyatsiya darajasining pasayishi natijasida valyutaning qadrlanishi",
+          "Valyuta kursining erkin bozor sharoitida mustahkamlanishi",
+          "Davlat qarzlarining kamaytirilishi orqali milliy iqtisodiyotning kuchayishi"
+        ],
+        "a": "Milliy valyuta qiymatining rasmiy ravishda pasaytirilishi"
+      },
+      {
+        "q": "Devalvatsiya qanday iqtisodiy oqibatlarga olib keladi?",
+        "options": [
+          "Bu jarayon natijasida xorijiy investitsiyalar kamayib, kapital oqimi to'liq to'xtaydi",
+          "Eksport arzonlashadi, import qimmatlashadi va to'lov balansining holati yaxshilanadi",
+          "Devalvatsiya ichki iste'mol narxlarini barqarorlashtiradi va inflyatsiyani kamaytiradi",
+          "Milliy valyuta qadrsizlanishi natijasida eksport hajmi qisqaradi, import esa tez sur'atlarda oshadi"
+        ],
+        "a": "Eksport arzonlashadi, import qimmatlashadi va to'lov balansining holati yaxshilanadi"
+      },
+      {
+        "q": "Valyuta kursi paritetini belgilashda qaysi omil asosiy ahamiyatga ega?",
+        "options": [
+          "Ishlab chiqarish xarajatlarining ichki iqtisodiyotdagi o'zgarish sur'atlari",
+          "Faqat xalqaro tashkilotlar tomonidan tasdiqlangan valyuta rezervlari miqdori",
+          "Davlat byudjeti balansining holati va tashqi qarz hajmi",
+          "Ikki mamlakatdagi narxlar darajasi va inflyatsiya sur'atlarining nisbati"
+        ],
+        "a": "Ikki mamlakatdagi narxlar darajasi va inflyatsiya sur'atlarining nisbati"
+      },
+      {
+        "q": "To'lov balansi va valyuta kursi o'rtasidagi o'zaro bog'liqlik nimada?",
+        "options": [
+          "Bu bog'liqlik faqat davlat kredit reytingi o'zgarganda yuzaga keladi",
+          "Ularning o'zaro ta'siri eksport hajmi bilan emas, inflyatsiya darajasi bilan belgilanadi",
+          "Valyuta kursi o'zgarishi to'lov balansini hech qanday yo'l bilan ta'sirlantirmaydi",
+          "To'lov balansidagi ortiqcha kursni mustahkamlaydi, kamomad esa pasaytiradi"
+        ],
+        "a": "To'lov balansidagi ortiqcha kursni mustahkamlaydi, kamomad esa pasaytiradi"
+      },
+      {
+        "q": "Oltin-valyuta zaxiralari qaysi maqsadda qo'llaniladi?",
+        "options": [
+          "Valyuta kursini barqarorlashtirish va tashqi qarzlarni qoplash uchun ishlatiladi",
+          "Davlat xizmatchilarining ish haqini to'lash va investitsiya loyihalarini moliyalashtirish uchun",
+          "Ichki iste'mol narxlarini nazorat qilish va soliq siyosatini amalga oshirishda",
+          "Eksport subsidiyalarini moliyalashtirish hamda tovar ayirboshlashni rag'batlantirishda"
+        ],
+        "a": "Valyuta kursini barqarorlashtirish va tashqi qarzlarni qoplash uchun ishlatiladi"
+      },
+      {
+        "q": "Valyuta bozorining asosiy funksiyasi nimada?",
+        "options": [
+          "Davlat byudjetini shakllantirish va inflyatsiyani pasaytirish mexanizmlarini nazorat qilish",
+          "Ichki tovar bozoridagi narxlar o'zgarishini kuzatish va soliq tushumlarini hisoblash",
+          "Faqat xalqaro tashkilotlar tomonidan o'tkaziladigan kapital harakatlarini muvofiqlashtirish",
+          "Xorijiy valyutalarni xarid qilish va sotish orqali xalqaro hisob-kitoblarni amalga oshirish"
+        ],
+        "a": "Xorijiy valyutalarni xarid qilish va sotish orqali xalqaro hisob-kitoblarni amalga oshirish"
+      },
+      {
+        "q": "Real valyuta kursining pasayishi nimani anglatadi?",
+        "options": [
+          "Eksport narxlarining o'sishi natijasida ichki talabning qisqarishini",
+          "Milliy tovarlarning nisbiy arzonlashuvi va xalqaro raqobatbardoshlikning oshishini",
+          "Inflyatsiya sur'atlarining keskin pasayishi va ishlab chiqarish xarajatlarining kamayishini",
+          "Valyuta kursining rasmiy darajada o'sishi natijasida import hajmining ortishini"
+        ],
+        "a": "Milliy tovarlarning nisbiy arzonlashuvi va xalqaro raqobatbardoshlikning oshishini"
+      },
+      {
+        "q": "Nominal kurs barqaror, ammo real kurs o'zgarayotgan bo'lsa, bu nimani bildiradi?",
+        "options": [
+          "Milliy ishlab chiqarish hajmining pasayganini",
+          "Ichki va tashqi inflyatsiya darajalari o'rtasida tafovut mavjudligini",
+          "Davlat tomonidan valyuta intervensiyasi to'xtatilganini",
+          "Xorijiy investitsiyalar hajmi barqarorligicha qolganini"
+        ],
+        "a": "Ichki va tashqi inflyatsiya darajalari o'rtasida tafovut mavjudligini"
+      },
+      {
+        "q": "Valyuta kursining yuqori darajada beqarorligi qanday iqtisodiy holatga olib keladi?",
+        "options": [
+          "Milliy valyutaning tezroq qadrlanishi va eksport hajmining oshishiga",
+          "Narxlarning barqarorlashishi va ichki talabning to'liq qondirilishiga",
+          "Tashqi savdo xavflarining ortishi va investitsiya ishonchliligining pasayishiga",
+          "To'lov balansining avtomatik muvozanatlashuviga"
+        ],
+        "a": "Tashqi savdo xavflarining ortishi va investitsiya ishonchliligining pasayishiga"
+      },
+      {
+        "q": "Xalqaro to'lov tizimlarining vazifasi nimadan iborat?",
+        "options": [
+          "Valyuta zaxiralarini tahlil qilish va milliy siyosatni muvofiqlashtirish",
+          "Ichki ishlab chiqaruvchilar uchun eksport kvotalarini belgilash",
+          "Mamlakatlar o'rtasidagi moliyaviy operatsiyalarni tezkor va xavfsiz tarzda amalga oshirish",
+          "Eksport subsidiyalarini taqsimlash va bojxona to'lovlarini nazorat qilish"
+        ],
+        "a": "Mamlakatlar o'rtasidagi moliyaviy operatsiyalarni tezkor va xavfsiz tarzda amalga oshirish"
+      },
+      {
+        "q": "Xalqaro valyuta tizimi nima?",
+        "options": [
+          "Faqat bir davlat doirasida amal qiluvchi fiskal va monetar siyosat tizimini tartibga soluvchi mexanizm",
+          "Mamlakatlar o'rtasida valyuta almashinuvi, hisob-kitob va to'lov munosabatlarini tartibga soluvchi mexanizm",
+          "Eksportni rag'batlantirish maqsadida tashkil etilgan moliyaviy fond bozorini tartibga soluvchi mexanizm",
+          "Savdo siyosati va bojxona tariflarini belgilovchi xalqaro huquqiy mexanizmini tartibga soluvchi tizim"
+        ],
+        "a": "Mamlakatlar o'rtasida valyuta almashinuvi, hisob-kitob va to'lov munosabatlarini tartibga soluvchi mexanizm"
+      },
+      {
+        "q": "O'zbekiston Respublikasida valyuta siyosatini kim amalga oshiradi?",
+        "options": [
+          "O'zbekiston Respublikasi Vazirlar Mahkamasi",
+          "O'zbekiston Respublikasi Hisob palatasi",
+          "O'zbekiston Respublikasi Markaziy banki",
+          "O'zbekiston Respublikasi Iqtisodiyot va Moliya vazirligi"
+        ],
+        "a": "O'zbekiston Respublikasi Markaziy banki"
+      },
+      {
+        "q": "Valyuta kursini belgilovchi asosiy bozor omillari qaysilar?",
+        "options": [
+          "Faqat davlatning oltin-valyuta zaxiralari hajmi",
+          "Fiskal siyosatdagi xarajatlar va soliq stavkalari",
+          "Xalqaro tashkilotlar tomonidan berilgan grantlar miqdori",
+          "Talab va taklif, foiz stavkalari, inflyatsiya va to'lov balansi holati"
+        ],
+        "a": "Talab va taklif, foiz stavkalari, inflyatsiya va to'lov balansi holati"
+      },
+      {
+        "q": "Kapitalning xalqaro harakati to'lov balansida qanday aks etadi?",
+        "options": [
+          "Tovarlar eksporti va importi bilan bog'liq ko'rsatkichlar shaklida",
+          "Joriy hisobda xizmatlar eksporti sifatida",
+          "Moliyaviy hisobda, ya'ni to'g'ridan-to'g'ri va portfel investitsiyalar shaklida",
+          "Rezerv aktivlar moddasida valyuta zaxiralari o'zgarishi orqali"
+        ],
+        "a": "Moliyaviy hisobda, ya'ni to'g'ridan-to'g'ri va portfel investitsiyalar shaklida"
+      },
+      {
+        "q": "Valyuta siyosatining asosiy maqsadi nimadan iborat?",
+        "options": [
+          "Xalqaro tashkilotlar bilan siyosiy integratsiyani kuchaytirish",
+          "Eksport hajmini kamaytirish va import hajmini oshirish",
+          "Milliy valyuta barqarorligini ta'minlash va to'lov balansini muvozanatda ushlab turish",
+          "Davlat budjetini balanslashtirish va soliqlarni pasaytirish"
+        ],
+        "a": "Milliy valyuta barqarorligini ta'minlash va to'lov balansini muvozanatda ushlab turish"
+      },
+      {
+        "q": "Valyuta kursining uzoq muddatli o'sishi qanday xavfni tug'diradi?",
+        "options": [
+          "Tashqi qarzlarni kamaytiradi, chunki import arzonlashadi",
+          "Eksport raqobatbardoshligini pasaytirib, savdo balansini yomonlashtiradi",
+          "Investitsiya oqimini oshiradi va ichki talabni qisqartiradi",
+          "Milliy ishlab chiqaruvchilarning xarajatlarini kamaytiradi va inflyatsiyani pasaytiradi"
+        ],
+        "a": "Eksport raqobatbardoshligini pasaytirib, savdo balansini yomonlashtiradi"
+      },
+      {
+        "q": "Ochiq iqtisodiyot deganda nima tushuniladi?",
+        "options": [
+          "Faqat ichki bozorda ishlab chiqarish va iste'mol amalga oshiriladigan iqtisodiyot",
+          "Eksport-imporda operatsiyalari va xalqaro moliya bozorlarida ishtirok etuvchi iqtisodiyot",
+          "Valyuta kursi qat'iy belgilangan va tashqi aloqalardan butunlay uzilgan iqtisodiyot",
+          "Yopiq iqtisodiy tizimda faqat davlat tomonidan boshqariladigan ishlab chiqarish tizimi"
+        ],
+        "a": "Eksport-imporda operatsiyalari va xalqaro moliya bozorlarida ishtirok etuvchi iqtisodiyot"
+      },
+      {
+        "q": "Kichik ochiq iqtisodiyotning asosiy belgisi nimada?",
+        "options": [
+          "U o'z ichki siyosati bilan jahon foiz stavkasini belgilab beradi",
+          "Uning eksport hajmi jahon eksportining yarmidan ortig'ini tashkil etadi",
+          "U jahon foiz stavkasiga ta'sir o'tkazolmaydi va kapital mobilligi yuqori darajada bo'ladi",
+          "U faqat ishlab chiqarish hajmini oshirish orqali tashqi balansni saqlaydi"
+        ],
+        "a": "U jahon foiz stavkasiga ta'sir o'tkazolmaydi va kapital mobilligi yuqori darajada bo'ladi"
+      },
+      {
+        "q": "Katta ochiq iqtisodiyot qanday xususiyatga ega?",
+        "options": [
+          "U hech qanday tashqi iqtisodiy aloqaga ega emas, faqat ichki resurslar bilan ishlaydi",
+          "Uning barcha moliyaviy oqimlari davlat tomonidan qat'iy nazorat qilinadi",
+          "U kapital harakatiga to'siq qo'yib, ichki bozorni yopiq holatda saqlaydi",
+          "U jahon foiz stavkasiga ta'sir o'tkazishi mumkin bo'lgan yirik iqtisodiyot hisoblanadi"
+        ],
+        "a": "U jahon foiz stavkasiga ta'sir o'tkazishi mumkin bo'lgan yirik iqtisodiyot hisoblanadi"
+      },
+      {
+        "q": "Mundell–Fleming modeli qanday iqtisodiyotni tahlil qilish uchun mo'ljallangan?",
+        "options": [
+          "Katta iqtisodiyotlarda jahon narx darajalarini prognozlash uchun",
+          "Har qanday mamlakatning iqtisodiy siyosatini umumiy tarzda baholash uchun",
+          "Ochiq iqtisodiyotda qisqa muddatli makroiqtisodiy muvozanatni tahlil qilish uchun",
+          "Faqat yopiq iqtisodiyotdagi uzoq muddatli ishlab chiqarish o'sishini aniqlash uchun"
+        ],
+        "a": "Ochiq iqtisodiyotda qisqa muddatli makroiqtisodiy muvozanatni tahlil qilish uchun"
+      },
+      {
+        "q": "Mundell–Fleming modelining IS tenglamasi nimani ifodalaydi?",
+        "options": [
+          "Pul bozorida muomaladagi pul miqdorining talab bilan tenglashishini",
+          "Jahon foiz stavkasining ichki foiz stavkasiga tenglashish jarayonini",
+          "Valyuta kursi o'zgarishining eksport-import nisbatiga ta'sirini",
+          "Tovar bozoridagi muvozanatni"
+        ],
+        "a": "Tovar bozoridagi muvozanatni"
+      },
+      {
+        "q": "Tashqi muvozanat deganda nima tushuniladi?",
+        "options": [
+          "To'lov balansining nolga teng bo'lishini, ya'ni balanslashgan tashqi savdoni",
+          "Kapital harakati schyotining manfiy balansda bo'lishini",
+          "Mahsulot ishlab chiqarish hajmining ichki bozor talabiga tenglashishini",
+          "Valyuta kursining doimiy oshib borishini va eksportning pasayishini"
+        ],
+        "a": "To'lov balansining nolga teng bo'lishini, ya'ni balanslashgan tashqi savdoni"
+      },
+      {
+        "q": "Ichki muvozanat qanday holatni bildiradi?",
+        "options": [
+          "Davlat budjeti ortiqcha bo'lgan, lekin inflyatsiya yuqori darajadagi iqtisodiyotni",
+          "Foiz stavkasi nolga tenglashgan, lekin ishlab chiqarish past bo'lgan vaziyatni",
+          "Faol tashqi savdo va yuqori eksport hajmiga erishilgan holatni",
+          "Noinflyatsion sharoitda to'liq bandlik va yalpi talab-taklifning muvozanatlashgan holatini"
+        ],
+        "a": "Noinflyatsion sharoitda to'liq bandlik va yalpi talab-taklifning muvozanatlashgan holatini"
+      },
+      {
+        "q": "Qayd etilgan valyuta kursi sharoitida monetar siyosat nega samarasiz?",
+        "options": [
+          "Chunki xalqaro rezervlar doimiy o'sib boradi va eksport qisqaradi",
+          "Chunki Markaziy bank pul taklifini faqat almashinuv kursini saqlash uchun o'zgartiradi",
+          "Chunki investitsiyalar to'liq davlat tomonidan moliyalashtiriladi",
+          "Chunki davlat budjeti defitsiti yuqori bo'ladi va inflyatsiya kuchayadi"
+        ],
+        "a": "Chunki Markaziy bank pul taklifini faqat almashinuv kursini saqlash uchun o'zgartiradi"
+      },
+      {
+        "q": "Suzib yuruvchi valyuta kursi sharoitida pul-kredit siyosatining asosiy ta'siri nimada?",
+        "options": [
+          "Foiz stavkasining pasayishi va valyuta qadrsizlanishi orqali ishlab chiqarishni rag'batlantirishda",
+          "Xalqaro qarzlarni to'liq yopish orqali ichki balansni tiklashda",
+          "Budjet daromadlarini oshirish orqali soliqlarni kamaytirishda",
+          "Eksportni kamaytirish va milliy valyutani mustahkamlashda"
+        ],
+        "a": "Foiz stavkasining pasayishi va valyuta qadrsizlanishi orqali ishlab chiqarishni rag'batlantirishda"
+      },
+      {
+        "q": "Suzib yuruvchi valyuta kursi sharoitida fiskal siyosatning samaradorligi nimaga bog'liq?",
+        "options": [
+          "Soliq stavkalarining oshishiga va eksportning kamayishiga",
+          "Kapitalning mobilligi darajasiga, ya'ni uning mamlakatga oqib kirish tezligiga",
+          "Pul massasi va iste'mol narxlari indeksining o'zgarishiga",
+          "Jahon narxlarining pasayishiga va importning qisqarishiga"
+        ],
+        "a": "Kapitalning mobilligi darajasiga, ya'ni uning mamlakatga oqib kirish tezligiga"
+      },
+      {
+        "q": "Mundell–Fleming modelida r = r* tenglamasi nimani bildiradi?",
+        "options": [
+          "Tovar bozorida muvozanatning mavjudligini",
+          "Pul taklifi va talabining barqaror holatini",
+          "Ichki foiz stavkasi jahon foiz stavkasiga teng bo'lishini",
+          "Inflyatsiya darajasining nolga tengligini"
+        ],
+        "a": "Ichki foiz stavkasi jahon foiz stavkasiga teng bo'lishini"
+      },
+      {
+        "q": "Sterillash siyosati nimani anglatadi?",
+        "options": [
+          "Markaziy bankning valyuta rezervlari o'zgarishini ichki aktivlar orqali neytrallashtirishini",
+          "Davlatning tashqi qarzini xalqaro bozorlarda sotish jarayonini",
+          "Tashqi savdo balansi ortiqchasini saqlash uchun soliq stavkalarini oshirishni",
+          "Inflyatsiyani to'xtatish uchun pul massasini keskin kamaytirishni"
+        ],
+        "a": "Markaziy bankning valyuta rezervlari o'zgarishini ichki aktivlar orqali neytrallashtirishini"
+      },
+      {
+        "q": "Suzib yuruvchi valyuta kursida milliy valyutaning qadrsizlanishi natijasida nima yuz beradi?",
+        "options": [
+          "Import arzonlashadi va inflyatsiya kamayadi",
+          "Kapital mamlakatdan chiqib ketadi va valyuta zahiralari ortadi",
+          "Eksportning raqobatbardoshligi oshadi va to'lov balansi yaxshilanadi",
+          "Foiz stavkasi ko'tariladi va investitsiyalar qisqaradi"
+        ],
+        "a": "Eksportning raqobatbardoshligi oshadi va to'lov balansi yaxshilanadi"
+      },
+      {
+        "q": "Qayd qilingan valyuta kursi sharoitida budjet-soliq siyosati qanday natija beradi?",
+        "options": [
+          "Daromadni oshiradi va ichki muvozanatni tiklaydi, ayniqsa kapital mobilligi yuqori bo'lsa",
+          "Pul massasini kamaytiradi va eksportni qisqartiradi",
+          "Faol savdo balansini barqarorlashtiradi, lekin inflyatsiyani kuchaytiradi",
+          "Foiz stavkasini nolga tenglashtirib, to'lov balansini yomonlashtiradi"
+        ],
+        "a": "Daromadni oshiradi va ichki muvozanatni tiklaydi, ayniqsa kapital mobilligi yuqori bo'lsa"
+      },
+      {
+        "q": "Bank multiplikatori formulasini toping",
+        "options": [
+          "M = rr + D",
+          "M = (1/rr) × D",
+          "M = D / rr",
+          "M = rr × D"
+        ],
+        "a": "M = (1/rr) × D"
+      },
+      {
+        "q": "Qattiq pul-kredit siyosatining maqsadi nimadan iborat?",
+        "options": [
+          "inflyatsiyani jilovlash",
+          "Pul aylanish tezligini oshirish",
+          "Foiz stavkalarini pasaytirish",
+          "Import hajmini kengaytirish"
+        ],
+        "a": "inflyatsiyani jilovlash"
+      },
+      {
+        "q": "Yalpi taklif egri chizig'ining qaysi kesimi iqtisodiy pasayish va to'liq bo'lmagan bandlilik holatini aks etiradi:",
+        "options": [
+          "to'g'ri javob yo'q",
+          "keyns kesimi (gorizontal kesma)",
+          "oraliq (ko'tarilib boruvchi) kesimi",
+          "klassik (vertikal) kesimi"
+        ],
+        "a": "keyns kesimi (gorizontal kesma)"
+      },
+      {
+        "q": "To'liq bandlik sharoitidagi ishsizlik darajasi (tabiiy ishsizlik darajasi):",
+        "options": [
+          "davriy ishsizlikni hisobga oladi",
+          "davriy ishsizlik darajasiga tеng",
+          "friktsion va tarkibiy ishsizlikni hisobga oladi",
+          "nolga tеng"
+        ],
+        "a": "friktsion va tarkibiy ishsizlikни hisobga oladi"
+
       }
     ]
   }
