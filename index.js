@@ -2285,6 +2285,10 @@ app.post('/api/save-photo', (req, res) => {
     try {
         const { username, photoData, isAdmin: isAdminUser } = req.body;
         if (!photoData) return res.status(400).json({error:'photoData kerak'});
+        // Profil rasm hajm cheki: max 3MB
+        if (photoData.length > 4 * 1024 * 1024) {
+            return res.status(413).json({error:'Rasm hajmi juda katta (max 3MB)'});
+        }
         const photos = getPhotos();
         const key = isAdminUser ? '__admin__' : username;
         if (!key) return res.status(400).json({error:'username kerak'});
@@ -2380,13 +2384,66 @@ app.post('/api/web-auth/login', (req, res) => {
         return res.status(404).json({error:'notfound'});
     } catch (err) { console.error('[web-login]', err.message); res.status(500).json({error:'server_error'}); }
 });
+
+// ─── Yagona VIP status tekshiruvi ─────────────────────────────────
+app.get('/api/my-vip', (req, res) => {
+    try {
+        const username = (req.query.username||'').toLowerCase().trim();
+        const name     = (req.query.name||'').trim();
+        const now      = Date.now();
+        if (!username && !name) return res.json({isVip:false, vipEnd:null});
+
+        // 1. Web users
+        if (username) {
+            const wu = getWebUsers();
+            const u  = wu[username];
+            if (u?.isVip && u?.vipEnd && u.vipEnd > now) {
+                return res.json({isVip:true, vipEnd:u.vipEnd, source:'web'});
+            }
+        }
+        // 2. Bot users (by name)
+        if (name) {
+            const db = getDb();
+            const found = Object.values(db.users||{}).find(u =>
+                (u.name||'').toLowerCase() === name.toLowerCase()
+            );
+            if (found?.isVip && found?.vipEnd && found.vipEnd > now) {
+                return res.json({isVip:true, vipEnd:found.vipEnd, source:'bot'});
+            }
+            // vipUsers array dan tekshirish
+            if (found && vipUsers.includes(parseInt(found.id||0))) {
+                return res.json({isVip:true, vipEnd:null, source:'viplist'});
+            }
+        }
+        // 3. vipUsers array — username bo'yicha
+        const db2 = getDb();
+        const byUsername = Object.values(db2.users||{}).find(u =>
+            (u.username||'').toLowerCase() === username
+        );
+        if (byUsername && vipUsers.includes(parseInt(byUsername.id||0))) {
+            return res.json({isVip:true, vipEnd:byUsername.vipEnd||null, source:'viplist'});
+        }
+
+        res.json({isVip:false, vipEnd:null});
+    } catch(err) { res.status(500).json({error:err.message, isVip:false}); }
+});
+
 app.get('/api/web-auth/me', (req, res) => {
     try {
         const u = (req.query.username||'').toLowerCase().trim();
         if (!u) return res.status(400).json({error:'missing'});
         const webUsers = getWebUsers();
         if (!webUsers[u]) return res.status(404).json({error:'notfound'});
-        res.json({ success:true, user:{username:u, name:webUsers[u].name, photo:webUsers[u].photo||null, createdAt:webUsers[u].createdAt} });
+        const wu = webUsers[u];
+        res.json({ success:true, user:{
+            username:  u,
+            name:      wu.name,
+            photo:     wu.photo||null,
+            createdAt: wu.createdAt,
+            isVip:     wu.isVip||false,
+            vipEnd:    wu.vipEnd||null,
+            vipStart:  wu.vipStart||null,
+        }});
     } catch (err) { res.status(500).json({error:'server_error'}); }
 });
 app.post('/api/web-auth/reset-password', (req, res) => {
@@ -2431,6 +2488,10 @@ app.post('/api/chat/send', async (req, res) => {
     try {
         const { fromName, toName, text, imageData } = req.body;
         if (!fromName||!toName||(!text?.trim()&&!imageData)) return res.status(400).json({error:'Parametrlar yetishmayapti'});
+        // Rasm hajm cheki: base64 max ~5MB (5*1024*1024 * 4/3 ≈ 7MB string)
+        if (imageData && imageData.length > 7 * 1024 * 1024) {
+            return res.status(413).json({error:'Rasm hajmi juda katta (max 5MB)'});
+        }
         const chats = getChatMsgs();
         const cid = chatId(fromName, toName);
         if (!chats[cid]) chats[cid] = [];
@@ -3396,6 +3457,37 @@ app.get('/api/admin/nick-stats',(req,res)=>{
             .map(u=>({username:u.username,name:u.name||u.username,nickname:u.nickname,score:u.score||0,totalTests:u.totalTests||0,totalCorrect:u.totalCorrect||0,totalWrong:u.totalWrong||0,isWebOnly:u.isWebOnly||false,createdAt:u.createdAt||Date.now()}))
             .sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
         res.json({total:users.length,totalUsers:all.length,noNickname:all.length-users.length,users});
+    }catch(err){res.status(500).json({error:err.message});}
+});
+
+
+// ─── Admin: barcha web-users ro'yxati (adminSearchUser uchun) ────
+app.get('/api/admin/all-web-users',(req,res)=>{
+    try{
+        const wu  = getWebUsers();
+        const db  = getDb();
+        const ws  = readJSON(WEB_SCORES_PATH, {});
+
+        const users = Object.values(wu).map(u => {
+            // web_scores dan qo'shimcha ball
+            const wsKey = Object.keys(ws).find(k => k.toLowerCase() === (u.name||'').toLowerCase());
+            const wsScore = wsKey ? (parseFloat(ws[wsKey]?.score)||0) : 0;
+            const totalScore = Math.max(parseFloat(u.score)||0, wsScore);
+            return {
+                name:         u.name||u.username||'',
+                nickname:     u.nickname||null,
+                username:     u.username||'',
+                score:        totalScore,
+                totalTests:   parseInt(u.totalTests)||0,
+                totalCorrect: parseInt(u.totalCorrect)||0,
+                totalWrong:   parseInt(u.totalWrong)||0,
+                isVip:        u.isVip||false,
+                vipEnd:       u.vipEnd||null,
+                isWebOnly:    u.isWebOnly||true,
+                createdAt:    u.createdAt||0,
+            };
+        });
+        res.json({users, total: users.length});
     }catch(err){res.status(500).json({error:err.message});}
 });
 
