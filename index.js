@@ -721,7 +721,39 @@ bot.action(/^approve_(\d+)$/, async (ctx) => {
     await ctx.telegram.sendMessage(targetId,`🎉 <b>VIP a'zolik tasdiqlandi!</b>\n\n📅 To'lov: <b>${fmt(now)}</b>\n⏳ Tugaydi: <b>${fmt(vipEnd)}</b>`,{parse_mode:'HTML'}).catch(()=>{});
     return ctx.editMessageCaption(`✅ <b>Tasdiqlandi:</b> ${fmt(now)} dan ${fmt(vipEnd)} gacha.`,{parse_mode:'HTML'});
 });
-bot.action(/^reject_vip_(\d+)$/, async (ctx) => { await ctx.telegram.sendMessage(parseInt(ctx.match[1]),"❌ Chek tasdiqlanmadi.").catch(()=>{}); return ctx.editMessageCaption("❌ To'lov rad etildi."); });
+bot.action(/^reject_vip_(\d+)$/, async (ctx) => {
+    const targetId = parseInt(ctx.match[1]);
+    const db = getDb();
+    if (!db.users[targetId]) db.users[targetId] = {};
+    const u = db.users[targetId];
+    u.fakeCheckCount = (u.fakeCheckCount || 0) + 1;
+    saveDb(db);
+
+    const remaining = 3 - u.fakeCheckCount;
+
+    if (u.fakeCheckCount >= 3) {
+        // Bloklash
+        const blocked = getBlocked();
+        if (!blocked.includes(targetId) && !blocked.includes(String(targetId))) {
+            blocked.push(targetId);
+            saveBlocked(blocked);
+        }
+        await ctx.telegram.sendMessage(targetId,
+            `🚫 <b>Siz botdan bloklangansiz!</b>\n\n❌ Chekingiz admin tomonidan rad etildi.\nSiz ko'p marta soxta chek yuborganligi sababli <b>botdan bloklandingiz</b>.\n\nBlokdan chiqish uchun admin bilan bog'laning.`,
+            {parse_mode:'HTML'}
+        ).catch(()=>{});
+        await ctx.editMessageCaption(`❌ To'lov rad etildi. Foydalanuvchi (ID: ${targetId}) avtomatik bloklandi.`).catch(()=>{});
+        // Adminga xabar
+        const name = u.name || `ID: ${targetId}`;
+        return ctx.reply(`🚫 <b>${escapeHTML(name)}</b> (ID: <code>${targetId}</code>) 3 marta soxta chek yuborgani uchun avtomatik bloklandi.`, {parse_mode:'HTML'});
+    } else {
+        await ctx.telegram.sendMessage(targetId,
+            `❌ <b>Chekingiz tasdiqlanmadi.</b>\n\n⚠️ <b>Diqqat!</b> Sizga yana <b>${remaining} ta imkoniyat</b> qoldi.\nAgar yana soxta chek tashlasangiz, <b>botdan umuman bloklanasiz!</b>`,
+            {parse_mode:'HTML'}
+        ).catch(()=>{});
+        return ctx.editMessageCaption(`❌ To'lov rad etildi. Foydalanuvchiga ogohlantirish yuborildi (${u.fakeCheckCount}/3).`).catch(()=>{});
+    }
+});
 
 bot.action('confirm_tour', async (ctx) => {
     if (!isAdmin(ctx.from.id)) return ctx.answerCbQuery("Ruxsat yo'q!");
@@ -1849,6 +1881,10 @@ bot.on(['text','photo','video','animation','document'], async (ctx, next) => {
             const unblockedName = db2.users[unblockId]?.name || db2.users[String(unblockId)]?.name || `ID: ${unblockId}`;
             const newBlocked = blocked.filter(b => String(b) !== String(unblockId));
             saveBlocked(newBlocked);
+            // Reset fake check count
+            if (db2.users[unblockId]) db2.users[unblockId].fakeCheckCount = 0;
+            if (db2.users[String(unblockId)]) db2.users[String(unblockId)].fakeCheckCount = 0;
+            saveDb(db2);
             // Notify unblocked user
             await ctx.telegram.sendMessage(unblockId, '🔓 Siz botdan blok olib tashlandi. Endi botdan foydalanishingiz mumkin!').catch(()=>{});
             return ctx.reply(`✅ <b>${escapeHTML(unblockedName)}</b> blokdan chiqarildi.`, {parse_mode:'HTML', ...adminMainKeyboard(getDb())});
