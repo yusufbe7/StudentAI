@@ -305,7 +305,7 @@ async function getSubKeyboard(ctx) {
             if (['left','kicked'].includes(m.status)) buttons.push([Markup.button.url(`📢 ${ch.name}`, ch.link)]);
         } catch { buttons.push([Markup.button.url(`📢 ${ch.name}`, ch.link)]); }
     }
-    buttons.push([Markup.button.callback('✅ Tekshirish','check_sub')]);
+    buttons.push([Markup.button.callback('🟢 Tekshirish','check_sub')]);
     return Markup.inlineKeyboard(buttons);
 }
 
@@ -412,7 +412,12 @@ async function showProfile(ctx) {
     let msg = `👤 <b>SIZNING PROFILINGIZ</b>\n\n🆔 <b>ID:</b> <code>${userId}</code>\n👤 <b>Ism:</b> ${escapeHTML(user.name||'Kiritilmagan')}\n🎓 <b>OTM:</b> ${escapeHTML(user.univ||'—')}\n📚 <b>Kurs:</b> ${escapeHTML(user.kurs||'—')}\n🏆 <b>Umumiy ball:</b> ${parseFloat(user.score||0).toFixed(1)}\n📈 <b>Reyting o'rni:</b> ${rank>0?rank+'-o\'rin':'—'} (${usersArr.length} tadan)\n⭐ <b>Status:</b> ${vipStatus}\n\n`;
     msg += rank<=3 ? '🌟 Siz TOP-3 talaba siz! Zo\'r!' : rank<=10 ? '🚀 TOP-10 dasiiz! Davom eting!' : '💪 TOP-10 ga kirish uchun ko\'proq mashq qiling!';
     const botUsername = ctx.botInfo?.username || 'StudentAIbot';
-    msg += `\n\n🔗 <b>Referral havola:</b>\n<code>https://t.me/${botUsername}?start=ref_${userId}</code>\n<i>Do'stingiz shu havola orqali kiri kirsa, sizga +50 ball!</i>`;
+    const refCount = user.referralCount || 0;
+    const refLeft = Math.max(0, 20 - refCount);
+    const refVipDone = user.referralVipGiven ? ' ✅ (VIP olindi)' : '';
+    msg += `\n\n🔗 <b>Referral:</b> <b>${refCount}/20</b> do'st taklif qilindi${refVipDone}`;
+    if (!user.referralVipGiven && refLeft > 0) msg += `\n<i>Yana ${refLeft} ta taklif → 1 oylik VIP 🎁</i>`;
+    msg += `\n<code>https://t.me/${botUsername}?start=ref_${userId}</code>`;
     return ctx.replyWithHTML(msg);
 }
 
@@ -457,7 +462,7 @@ async function sendQuestion(ctx, isNew = false) {
 
     if (s.isTurbo) {
         const turboText = `🚀 <b>TURBO YODLASH</b>\n📊 [${progress}]\n🔢 Savol: <b>${s.index+1}/${s.activeList.length}</b>\n_________________________\n\n❓ <b>${safe}</b>\n\n✅ <b>TO'G'RI JAVOB:</b>\n<code>${escapeHTML(qData.a)}</code>\n_________________________\n👇 Keyingi savol:`;
-        const turboBtn = Markup.inlineKeyboard([[Markup.button.callback('Keyingi savol ➡️','next_turbo_q')],[Markup.button.callback("🛑 To'xtatish",'stop_test')]]);
+        const turboBtn = Markup.inlineKeyboard([[Markup.button.callback('▶️ Keyingi savol','next_turbo_q')],[Markup.button.callback('🛑 To\'xtatish','stop_test')]]);
         if (hasImage) return ctx.replyWithPhoto({source:imagePath},{caption:turboText,parse_mode:'HTML',...turboBtn});
         try { return isNew ? ctx.replyWithHTML(turboText,turboBtn) : ctx.editMessageText(turboText,{parse_mode:'HTML',...turboBtn}); }
         catch { return ctx.replyWithHTML(turboText,turboBtn); }
@@ -469,9 +474,9 @@ async function sendQuestion(ctx, isNew = false) {
     let text = `📊 Progress: [${progress}]\n🔢 Savol: <b>${s.index+1}/${s.activeList.length}</b>\n⏱ <b>VAQT: ${timeLimit}s</b>\n\n❓ <b>${safe}</b>\n\n`;
     s.currentOptions.forEach((opt, i) => { text += `<b>${labels[i]})</b> ${escapeHTML(opt)}\n\n`; });
     const inlineBtn = Markup.inlineKeyboard([
-        s.currentOptions.map((_,i) => Markup.button.callback(labels[i],`ans_${i}`)),
-        [Markup.button.callback('💡 Tushuntirish','show_explanation')],
-        [Markup.button.callback("🛑 Testni to'xtatish",'stop_test')],
+        s.currentOptions.map((_,i) => Markup.button.callback(['🔵','🟢','🟡','🔴'][i]+' '+labels[i],`ans_${i}`)),
+        [Markup.button.callback('💡 Tushuntirish (VIP)','show_explanation')],
+        [Markup.button.callback('🛑 Testni to\'xtatish','stop_test')],
     ]);
     if (hasImage) { await ctx.replyWithPhoto({source:imagePath},{caption:text,parse_mode:'HTML',...inlineBtn}); }
     else {
@@ -544,7 +549,7 @@ async function sendTourQuestion(ctx, isNew = false) {
     let text = `🏆 <b>MUSOBAQA REJIMI</b>\n⏱ <b>Umumiy vaqt: ${String(remMin).padStart(2,'0')}:${String(remSec).padStart(2,'0')} qoldi</b>\n📊 Progress: [${progress}]\n🔢 Savol: <b>${s.tourIndex+1}/${tour.count}</b>\n⌛️ Bu savol uchun: <b>${perQSec<30?perQSec+'s (!)':'30s'}</b>\n_________________________\n\n❓ <b>${escapeHTML(qData.q)}</b>\n\n`;
     s.currentOptions.forEach((opt, i) => { text += `<b>${labels[i]})</b> ${escapeHTML(opt)}\n\n`; });
     const inlineBtn = Markup.inlineKeyboard([
-        s.currentOptions.map((_,i) => Markup.button.callback(labels[i],`tourans_${i}`)),
+        s.currentOptions.map((_,i) => Markup.button.callback(['🔵','🟢','🟡','🔴'][i]+' '+labels[i],`tourans_${i}`)),
         [Markup.button.callback('🛑 Chiqish','stop_tour')],
     ]);
     try { isNew ? await ctx.replyWithHTML(text,inlineBtn) : await ctx.editMessageText(text,{parse_mode:'HTML',...inlineBtn}); }
@@ -717,7 +722,7 @@ bot.action('show_explanation', async (ctx) => {
     const user = db.users[userId] || {};
     if (!user.isVip && !vipUsers.includes(userId) && !isAdmin(userId)) {
         await ctx.answerCbQuery("🔒 Faqat VIP a'zolar uchun!", {show_alert:true});
-        return ctx.replyWithHTML("⭐ <b>Tushuntirishlar faqat VIP a'zolar uchun!</b>", Markup.inlineKeyboard([[Markup.button.callback('💎 VIP sotib olish','buy_vip')]]));
+        return ctx.replyWithHTML("⭐ <b>Tushuntirishlar faqat VIP a'zolar uchun!</b>", Markup.inlineKeyboard([[Markup.button.callback('💎 VIP sotib olish ✨','buy_vip')]]));
     }
     const qData = s.activeList?.[s.index];
     if (!qData) return ctx.answerCbQuery('Xatolik: savol topilmadi.');
@@ -1061,7 +1066,7 @@ bot.hears(["⚡️ Blitz (25)","📝 To'liq test"], async (ctx) => {
     const s = ctx.session;
     const userId = ctx.from.id;
     s.isTurbo = false;
-    if (isBotPaidMode && !vipUsers.includes(userId) && !isAdmin(userId)) return ctx.reply("⚠️ Bot hozirda pullik rejimda.", Markup.inlineKeyboard([[Markup.button.callback('💎 VIP sotib olish','buy_vip')]]));
+    if (isBotPaidMode && !vipUsers.includes(userId) && !isAdmin(userId)) return ctx.reply("⚠️ Bot hozirda pullik rejimda.", Markup.inlineKeyboard([[Markup.button.callback('💎 VIP sotib olish ✨','buy_vip')]]));
     if (!s.currentSubject || !SUBJECTS[s.currentSubject]) return showSubjectMenu(ctx);
     const questions = SUBJECTS[s.currentSubject].questions;
     if (!questions?.length) return ctx.reply("Bu fanda savollar yo'q.");
@@ -1076,7 +1081,7 @@ bot.hears(["⚡️ Blitz (25)","📝 To'liq test"], async (ctx) => {
             u.dailyTestDate = todayStr;
             u.dailyTestCount = 0;
         }
-        const DAILY_LIMIT = 5;
+        const DAILY_LIMIT = 3;
         if ((u.dailyTestCount || 0) >= DAILY_LIMIT) {
             const cfg2 = getConfig();
             const priceStr = (cfg2.vipPrice || 6000).toLocaleString('uz-UZ');
@@ -1164,9 +1169,9 @@ bot.hears(['🚀 Turbo (Yoqish)',"🚀 Turbo (O'chirish)"], async (ctx) => {
 bot.hears("🎭 Sohta ball qo'shish", async (ctx) => {
     if (!isAdmin(ctx.from.id)) return;
     return ctx.replyWithHTML(`🎭 <b>SOHTA BALL QO'SHISH</b>\n\nKimga ball qo'shmoqchisiz?`, Markup.inlineKeyboard([
-        [Markup.button.callback("👤 O'zimga",'fake_score_self')],
-        [Markup.button.callback("👥 Boshqa foydalanuvchiga",'fake_score_other')],
-        [Markup.button.callback("❌ Bekor qilish",'cancel_fake_score')],
+        [Markup.button.callback('🟡 O\'zimga','fake_score_self')],
+        [Markup.button.callback('🔵 Boshqa foydalanuvchiga','fake_score_other')],
+        [Markup.button.callback('🔴 Bekor qilish','cancel_fake_score')],
     ]));
 });
 bot.hears('👥 Musobaqani boshqarish', async (ctx) => {
@@ -1182,7 +1187,7 @@ bot.hears('👥 Musobaqani boshqarish', async (ctx) => {
             [Markup.button.callback(`👥 Barcha foydalanuvchilar (${totalUsers} ta)`,'tour_add_all')],
             [Markup.button.callback(`💎 Faqat VIP (${vipCount} ta)`,'tour_add_vip')],
             [Markup.button.callback("🔍 Bitta ID bo'yicha",'tour_add_one')],
-            [Markup.button.callback('❌ Bekor qilish','cancel_action')],
+            [Markup.button.callback('🔴 Bekor qilish','cancel_action')],
         ])
     );
 });
@@ -1190,7 +1195,7 @@ bot.hears('🟢 Yoqish', (ctx) => { if(!isAdmin(ctx.from.id))return; const db=ge
 bot.hears("🔴 O'chirish", (ctx) => { if(!isAdmin(ctx.from.id))return; const db=getDb(); if(db.tournament){db.tournament.isActive=false;saveDb(db);} return ctx.reply("🛑 Musobaqa o'chirildi."); });
 bot.hears('📢 Musobaqa natijalari', async (ctx) => {
     if (!isAdmin(ctx.from.id)) return;
-    return ctx.reply("Natijalarni hisoblab e'lon qilishni tasdiqlaysizmi?", Markup.inlineKeyboard([[Markup.button.callback("✅ Tasdiqlash va e'lon qilish",'announce_results')],[Markup.button.callback('❌ Bekor qilish','cancel_action')]]));
+    return ctx.reply("Natijalarni hisoblab e'lon qilishni tasdiqlaysizmi?", Markup.inlineKeyboard([[Markup.button.callback('🟢 Tasdiqlash va e\'lon qilish','announce_results')],[Markup.button.callback('🔴 Bekor qilish','cancel_action')]]));
 });
 bot.hears('🚀 Musobaqani start berish', async (ctx) => {
     if (!isAdmin(ctx.from.id)) return;
@@ -1200,7 +1205,7 @@ bot.hears('🚀 Musobaqani start berish', async (ctx) => {
     if (!tour.participants.length) return ctx.reply("❌ Musobaqada hech kim ro'yxatdan o'tmagan.");
     let sent = 0;
     for (const uid of tour.participants) {
-        try { await ctx.telegram.sendMessage(uid,'🔔 <b>MUSOBAQA BOSHLANDI!</b>\n\nAdmin tomonidan start berildi. Pastdagi tugmani bosing:',{parse_mode:'HTML',...Markup.inlineKeyboard([[Markup.button.callback('🏁 TESTNI BOSHLASH','start_actual_tour')]])}); sent++; } catch {}
+        try { await ctx.telegram.sendMessage(uid,'🔔 <b>MUSOBAQA BOSHLANDI!</b>\n\nAdmin tomonidan start berildi. Pastdagi tugmani bosing:',{parse_mode:'HTML',...Markup.inlineKeyboard([[Markup.button.callback('🏁 TESTNI BOSHLASH ▶️','start_actual_tour')]])}); sent++; } catch {}
     }
     return ctx.reply(`🚀 Musobaqa ${sent} ta ishtirokchiga yuborildi!`);
 });
@@ -1218,21 +1223,21 @@ bot.hears('🏆 Xalqaro test musobaqa', async (ctx) => {
     const isJoined = tour.participants.includes(userId);
     const info = `🏆 <b>XALQARO TEST MUSOBAQA</b>\n\n📅 <b>Sana:</b> ${tour.date}\n🕒 <b>Boshlanish:</b> ${tour.time}\n🏁 <b>Tugash (taxm.):</b> ${endTimeStr}\n⏱ <b>Davomiylik:</b> ${durationStr}\n📝 <b>Savollar:</b> ${tour.count} ta\n_________________________\n`;
     if (isJoined) return ctx.replyWithHTML(`${info}\n✅ <b>Siz ro'yxatdansiz!</b>\n🚀 Musobaqa vaqtida xabar keladi.`);
-    return ctx.replyWithHTML(`${info}\nMusobaqada qatnashishni tasdiqlaysizmi?`, Markup.inlineKeyboard([[Markup.button.callback("✅ Qo'shilish",'join_tour'),Markup.button.callback('❌ Rad etish','cancel_join')]]));
+    return ctx.replyWithHTML(`${info}\nMusobaqada qatnashishni tasdiqlaysizmi?`, Markup.inlineKeyboard([[Markup.button.callback('🟢 Qo\'shilish','join_tour'),Markup.button.callback('🔴 Rad etish','cancel_join')]]));
 });
 bot.hears("🏆 Musobaqaga o'tish", async (ctx) => {
     const db = getDb();
     const tour = db.tournament;
     if (!tour?.isActive) return showSubjectMenu(ctx);
-    return ctx.replyWithHTML(`🏆 <b>Musobaqa rejasi</b>\n\n📅 Sana: ${tour.date}\n🕒 Vaqt: ${tour.time}\n📝 Savollar: ${tour.count} ta\n\nRo'yxatdan o'tish uchun:`, Markup.inlineKeyboard([[Markup.button.callback("✅ Ro'yxatdan o'tish",'join_tour')],[Markup.button.callback('⬅️ Fanlarga qaytish','back_to_main')]]));
+    return ctx.replyWithHTML(`🏆 <b>Musobaqa rejasi</b>\n\n📅 Sana: ${tour.date}\n🕒 Vaqt: ${tour.time}\n📝 Savollar: ${tour.count} ta\n\nRo'yxatdan o'tish uchun:`, Markup.inlineKeyboard([[Markup.button.callback('🟢 Ro\'yxatdan o\'tish','join_tour')],[Markup.button.callback('⬅️ Orqaga','back_to_main')]]));
 });
 bot.hears('🧹 Reytingni tozalash', (ctx) => {
     if (!isAdmin(ctx.from.id)) return;
-    return ctx.reply('⚠️ Barcha ballarni tozalashni tasdiqlaysizmi?', Markup.inlineKeyboard([[Markup.button.callback('✅ Ha, tozalash','confirm_clear_rank')],[Markup.button.callback("❌ Yo'q",'cancel_clear')]]));
+    return ctx.reply('⚠️ Barcha ballarni tozalashni tasdiqlaysizmi?', Markup.inlineKeyboard([[Markup.button.callback('🟢 Ha, tozalash','confirm_clear_rank')],[Markup.button.callback('🔴 Yo\'q','cancel_clear')]]));
 });
 bot.hears("🗑 Botni Restart qilish", (ctx) => {
     if (!isAdmin(ctx.from.id)) return;
-    return ctx.reply("⚠️ Barcha foydalanuvchilar ballari nolga tushiriladi.\n\nDavom etasizmi?", Markup.inlineKeyboard([[Markup.button.callback('✅ Ha, tozalash','confirm_full_restart')],[Markup.button.callback("❌ Yo'q",'cancel_restart')]]));
+    return ctx.reply("⚠️ Barcha foydalanuvchilar ballari nolga tushiriladi.\n\nDavom etasizmi?", Markup.inlineKeyboard([[Markup.button.callback('🟢 Ha, tozalash','confirm_full_restart')],[Markup.button.callback('🔴 Yo\'q','cancel_restart')]]));
 });
 bot.hears('📣 Xabar tarqatish', (ctx) => { if(!isAdmin(ctx.from.id))return; ctx.session.waitingForForward=true; return ctx.reply("Yubormoqchi bo'lgan xabaringizni yuboring:", Markup.keyboard([['🚫 Bekor qilish']]).resize()); });
 bot.hears(/^⏱ Vaqt: \d+s$/, (ctx) => {
@@ -1564,7 +1569,7 @@ bot.on(['text','photo','video','animation','document'], async (ctx, next) => {
         await ctx.telegram.sendPhoto(ADMIN_ID, fileId, {
             caption:`🔔 <b>Yangi to'lov!</b>\n👤 ${escapeHTML(ctx.from.first_name)}\n🆔 <code>${userId}</code>`,
             parse_mode:'HTML',
-            ...Markup.inlineKeyboard([[Markup.button.callback('✅ Tasdiqlash',`approve_${userId}`)],[Markup.button.callback('❌ Rad etish',`reject_vip_${userId}`)]])
+            ...Markup.inlineKeyboard([[Markup.button.callback('🟢 Tasdiqlash',`approve_${userId}`)],[Markup.button.callback('🔴 Rad etish',`reject_vip_${userId}`)]])
         });
         return ctx.reply("✅ Chekingiz adminga yuborildi. Tasdiqlangach xabar boradi.");
     }
@@ -1915,7 +1920,7 @@ bot.on(['text','photo','video','animation','document'], async (ctx, next) => {
     if (isAdmin(userId)) {
         if (s.adminStep === 'wait_tour_date') { if(msgText==='🚫 Bekor qilish'){s.adminStep=null;return ctx.reply('Bekor qilindi.');} s.tourDate=msgText; s.adminStep='wait_tour_time'; return ctx.reply('🕒 Musobaqa boshlanish soatini kiriting (masalan: 15:00):'); }
         if (s.adminStep === 'wait_tour_time') { s.tourTime=msgText; s.adminStep='wait_tour_count'; return ctx.reply('📝 Jami testlar sonini kiriting (masalan: 50):'); }
-        if (s.adminStep === 'wait_tour_count') { if(isNaN(msgText))return ctx.reply('❌ Faqat raqam kiriting:'); s.tourCount=msgText; s.adminStep=null; return ctx.replyWithHTML(`🏆 <b>Yangi musobaqa tafsilotlari:</b>\n\n📅 ${s.tourDate}\n🕒 ${s.tourTime}\n📝 ${s.tourCount} ta\n\nTasdiqlaysizmi?`, Markup.inlineKeyboard([[Markup.button.callback('✅ Tasdiqlash','confirm_tour'),Markup.button.callback('❌ Rad etish','reject_tour')]])); }
+        if (s.adminStep === 'wait_tour_count') { if(isNaN(msgText))return ctx.reply('❌ Faqat raqam kiriting:'); s.tourCount=msgText; s.adminStep=null; return ctx.replyWithHTML(`🏆 <b>Yangi musobaqa tafsilotlari:</b>\n\n📅 ${s.tourDate}\n🕒 ${s.tourTime}\n📝 ${s.tourCount} ta\n\nTasdiqlaysizmi?`, Markup.inlineKeyboard([[Markup.button.callback('🟢 Tasdiqlash','confirm_tour'),Markup.button.callback('🔴 Rad etish','reject_tour')]])); }
         if (s.adminStep === 'wait_unvip_id') {
             if (msgText === '🚫 Bekor qilish') { s.adminStep = null; return ctx.reply('Bekor qilindi.', adminMainKeyboard(getDb())); }
             const unvipId = parseInt(msgText);
@@ -2000,7 +2005,7 @@ bot.on(['text','photo','video','animation','document'], async (ctx, next) => {
             s.pendingBlockName = targetName;
             return ctx.replyWithHTML(
                 `🚫 <b>${escapeHTML(targetName)}</b> (ID: <code>${blockId}</code>) foydalanuvchini bloklashni tasdiqlaysizmi?`,
-                Markup.inlineKeyboard([[Markup.button.callback('✅ Ha, bloklash','confirm_block'),Markup.button.callback("❌ Yo'q",'cancel_block')]])
+                Markup.inlineKeyboard([[Markup.button.callback('🔴 Ha, bloklash','confirm_block'),Markup.button.callback('🟢 Yo\'q','cancel_block')]])
             );
         }
         if (s.adminStep === 'wait_unblock_id') {
@@ -2034,7 +2039,7 @@ bot.on(['text','photo','video','animation','document'], async (ctx, next) => {
             const matchedSub = dirSubs.find(sub => msgText === `${sub.icon} ${sub.name}`);
             if (matchedSub) {
                 if (isBotPaidMode && !vipUsers.includes(userId) && !isAdmin(userId)) {
-                    return ctx.reply("⚠️ Bot hozirda pullik rejimda.", Markup.inlineKeyboard([[Markup.button.callback('💎 VIP sotib olish','buy_vip')]]));
+                    return ctx.reply("⚠️ Bot hozirda pullik rejimda.", Markup.inlineKeyboard([[Markup.button.callback('💎 VIP sotib olish ✨','buy_vip')]]));
                 }
                 const yonalishKey = user0.yonalish.toLowerCase().trim().replace(/'/g,'').replace(/ /g,'_');
                 const finalKey = `${yonalishKey}_${matchedSub.key}`;
@@ -2110,16 +2115,39 @@ bot.on(['text','photo','video','animation','document'], async (ctx, next) => {
             // ── Referral bonus: yangi foydalanuvchi ro'yxatdan o'tdi ────
             if (cu.referralBonusPending && cu.referredBy) {
                 const REFERRAL_BONUS = 50;
+                const REFERRAL_VIP_MILESTONE = 20;
                 const refId = cu.referredBy;
                 const db2 = getDb();
                 if (db2.users[refId]) {
                     db2.users[refId].score = (db2.users[refId].score || 0) + REFERRAL_BONUS;
+                    db2.users[refId].referralCount = (db2.users[refId].referralCount || 0) + 1;
                     db2.users[userId].referralBonusPending = false;
+                    const refCount = db2.users[refId].referralCount;
                     saveDb(db2);
+                    // Har bir do'st uchun ball xabari
                     await ctx.telegram.sendMessage(refId,
-                        `🎉 <b>Do'stingiz ro'yxatdan o'tdi!</b>\n\n👤 Taklif qilganingiz uchun sizga <b>+${REFERRAL_BONUS} ball</b> berildi! 🎁`,
+                        `🎉 <b>Do'stingiz ro'yxatdan o'tdi!</b>\n\n👥 Taklif qilganlaringiz soni: <b>${refCount} ta</b>\n🏆 Sizga <b>+${REFERRAL_BONUS} ball</b> berildi! 🎁\n\n${refCount < REFERRAL_VIP_MILESTONE ? `⭐ <b>${REFERRAL_VIP_MILESTONE - refCount} ta</b> do'st yana taklif qilsangiz — <b>1 oylik VIP</b> sovg'a!` : ''}`,
                         {parse_mode:'HTML'}
                     ).catch(()=>{});
+                    // 20 ta referral = 1 oylik VIP
+                    if (refCount >= REFERRAL_VIP_MILESTONE && !db2.users[refId].referralVipGiven) {
+                        const now2 = Date.now();
+                        const vipEnd2 = now2 + 30 * 24 * 60 * 60 * 1000;
+                        const db3 = getDb();
+                        if (db3.users[refId]) {
+                            db3.users[refId].isVip = true;
+                            db3.users[refId].vipStart = now2;
+                            db3.users[refId].vipEnd = vipEnd2;
+                            db3.users[refId].referralVipGiven = true;
+                            saveDb(db3);
+                        }
+                        if (!vipUsers.includes(refId)) { vipUsers.push(refId); saveVip(); }
+                        const fmtR = (ms) => new Date(ms).toLocaleDateString('ru-RU');
+                        await ctx.telegram.sendMessage(refId,
+                            `🏆 <b>TABRIKLAYMIZ!</b>\n\n🎊 Siz <b>${REFERRAL_VIP_MILESTONE} ta do'st</b> taklif qildingiz!\n\n💎 Sizga <b>1 OYLIK VIP</b> sovg'a berildi!\n📅 Amal qilish muddati: <b>${fmtR(vipEnd2)}</b> gacha\n\n✨ Barcha VIP imkoniyatlardan foydalaning!`,
+                            {parse_mode:'HTML'}
+                        ).catch(()=>{});
+                    }
                 }
             }
             // ────────────────────────────────────────────────────────────
@@ -2223,7 +2251,7 @@ cron.schedule('* * * * *', async () => {
             await Promise.allSettled(chunk.map(uid =>
                 bot.telegram.sendMessage(uid,
                     `🔔 <b>MUSOBAQA BOSHLANDI!</b>\n\n📅 <b>${tour.date}</b> · 🕒 <b>${tour.time}</b>\n📝 Savollar: <b>${tour.count} ta</b>\n⏱ Umumiy vaqt: <b>${Math.round(totalMs/60000)} daqiqa</b>\n\n⚠️ Testni boshlamasangiz, <b>0 ball</b> bilan yakunlanadi!\n\n👇 Testni boshlang:`,
-                    {parse_mode:'HTML',...Markup.inlineKeyboard([[Markup.button.callback('🏁 TESTNI BOSHLASH','start_actual_tour')]])}
+                    {parse_mode:'HTML',...Markup.inlineKeyboard([[Markup.button.callback('🏁 TESTNI BOSHLASH ▶️','start_actual_tour')]])}
                 ).catch(()=>{})
             ));
             if (i+chunkSize < parts.length) await new Promise(r => setTimeout(r,500));
