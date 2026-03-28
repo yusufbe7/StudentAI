@@ -78,6 +78,7 @@ const DEFAULT_CONFIG = {
             '4-kurs': ["Moliya va moliyaviy texnologiyalar yo'nalishi"]
         }
     },
+    vipPrice: 6000,
     semesters: ['1-semestr','2-semestr'],
     activeSemesters: ['1-semestr'],
     subjectsByDirection: {
@@ -320,6 +321,7 @@ function updateGlobalScore(userId, name, username, score, totalInTest, wrongCoun
         u.score        = (u.score        || 0) + score;
         u.totalCorrect = (u.totalCorrect || 0) + score;
         u.totalWrong   = (u.totalWrong   || 0) + (wrongCount || 0);
+        u.lastTestAt   = Date.now();
         if (name && isValidName(name)) u.name = name;
         if (username) u.username = username;
         if (subjectKey) {
@@ -360,6 +362,7 @@ function adminMainKeyboard(db) {
         ["🎭 Sohta ball qo'shish",'⬅️ Orqaga (Fanlar)'],
         ['🚫 Bloklash','🔓 Blokdan chiqarish'],
         ['💎 VIP berish','❌ VIP dan chiqarish'],
+        ['💰 VIP narxini o\'zgartirish','📋 Hisobot'],
         ["🗑 Foydalanuvchini o'chirish"],
     ]).resize();
 }
@@ -408,6 +411,8 @@ async function showProfile(ctx) {
     const vipStatus = (user.isVip || vipUsers.includes(userId)) ? '💎 VIP' : '🆓 Oddiy';
     let msg = `👤 <b>SIZNING PROFILINGIZ</b>\n\n🆔 <b>ID:</b> <code>${userId}</code>\n👤 <b>Ism:</b> ${escapeHTML(user.name||'Kiritilmagan')}\n🎓 <b>OTM:</b> ${escapeHTML(user.univ||'—')}\n📚 <b>Kurs:</b> ${escapeHTML(user.kurs||'—')}\n🏆 <b>Umumiy ball:</b> ${parseFloat(user.score||0).toFixed(1)}\n📈 <b>Reyting o'rni:</b> ${rank>0?rank+'-o\'rin':'—'} (${usersArr.length} tadan)\n⭐ <b>Status:</b> ${vipStatus}\n\n`;
     msg += rank<=3 ? '🌟 Siz TOP-3 talaba siz! Zo\'r!' : rank<=10 ? '🚀 TOP-10 dasiiz! Davom eting!' : '💪 TOP-10 ga kirish uchun ko\'proq mashq qiling!';
+    const botUsername = ctx.botInfo?.username || 'StudentAIbot';
+    msg += `\n\n🔗 <b>Referral havola:</b>\n<code>https://t.me/${botUsername}?start=ref_${userId}</code>\n<i>Do'stingiz shu havola orqali kiri kirsa, sizga +50 ball!</i>`;
     return ctx.replyWithHTML(msg);
 }
 
@@ -606,6 +611,13 @@ bot.use(async (ctx, next) => {
     if (blocked.includes(ctx.from.id) || blocked.includes(String(ctx.from.id))) return ctx.reply('🚫 Siz botdan bloklangansiz. Admin tomonidan bloklangansiz. To\'g\'ri foydalanish uchun botdan to\'g\'ri maqsadda foydalaning.');
     return next();
 });
+// ── Session faollik vaqtini belgilash ────────────────────────
+bot.use(async (ctx, next) => {
+    if (ctx.session && ctx.from?.id) {
+        ctx.session._lastActivity = Date.now();
+    }
+    return next();
+});
 bot.use(async (ctx, next) => {
     if (ctx.message?.text === '/start') return next();
     if (ctx.callbackQuery) return next();
@@ -626,6 +638,22 @@ bot.start(async (ctx) => {
     const db = getDb();
     const userId = ctx.from.id;
     const user = db.users[userId];
+
+    // ── Referral: /start ref_12345 ─────────────────────────────
+    const startPayload = ctx.startPayload; // ref_USERID
+    if (startPayload && startPayload.startsWith('ref_')) {
+        const referrerId = parseInt(startPayload.replace('ref_', ''));
+        if (referrerId && referrerId !== userId) {
+            if (!db.users[userId]?.referredBy) {
+                // Yangi foydalanuvchi — referrerni belgilash (ro'yxatdan o'tgach ball beriladi)
+                if (!db.users[userId]) db.users[userId] = {};
+                db.users[userId].referredBy = referrerId;
+                db.users[userId].referralBonusPending = true;
+            }
+        }
+    }
+    // ──────────────────────────────────────────────────────────────
+
     if (user?.isRegistered) { await ctx.reply(`Xush kelibsiz, ${escapeHTML(user.name)}! 😊`); return showSubjectMenu(ctx); }
     if (!db.users[userId]) {
         db.users[userId] = { id:userId, username:ctx.from.username||"Noma'lum", name:'', univ:'', kurs:'', yonalish:'', score:0, totalTests:0, step:'wait_name', isRegistered:false };
@@ -708,7 +736,12 @@ bot.action('show_explanation', async (ctx) => {
     } catch {}
 });
 
-bot.action('buy_vip', (ctx) => { ctx.session.waitingForReceipt = true; return ctx.replyWithHTML(`💎 <b>VIP STATUS SOTIB OLISH</b>\n\n💳 Karta: <code>4073420058363577</code>\n👤 Egasi: M.M\n💰 Summa: 6,000 so'm\n\n📸 To'lovni amalga oshirgach, <b>chekni (rasm)</b> yuboring.`); });
+bot.action('buy_vip', (ctx) => {
+    ctx.session.waitingForReceipt = true;
+    const cfg = getConfig();
+    const price = (cfg.vipPrice || 6000).toLocaleString('uz-UZ');
+    return ctx.replyWithHTML(`💎 <b>VIP STATUS SOTIB OLISH</b>\n\n💳 Karta: <code>4073420058363577</code>\n👤 Egasi: M.M\n💰 Summa: <b>${price} so'm</b>\n\n📸 To'lovni amalga oshirgach, <b>chekni (rasm)</b> yuboring.`);
+});
 
 bot.action(/^approve_(\d+)$/, async (ctx) => {
     const targetId = parseInt(ctx.match[1]);
@@ -1032,6 +1065,40 @@ bot.hears(["⚡️ Blitz (25)","📝 To'liq test"], async (ctx) => {
     if (!s.currentSubject || !SUBJECTS[s.currentSubject]) return showSubjectMenu(ctx);
     const questions = SUBJECTS[s.currentSubject].questions;
     if (!questions?.length) return ctx.reply("Bu fanda savollar yo'q.");
+
+    // ── Kunlik test limiti (VIP va admin uchun cheksiz) ──────────
+    const isVipUser = vipUsers.includes(userId) || getDb().users[userId]?.isVip;
+    if (!isVipUser && !isAdmin(userId)) {
+        const db = getDb();
+        const u = db.users[userId] || {};
+        const todayStr = new Date().toISOString().slice(0,10); // YYYY-MM-DD
+        if (u.dailyTestDate !== todayStr) {
+            u.dailyTestDate = todayStr;
+            u.dailyTestCount = 0;
+        }
+        const DAILY_LIMIT = 5;
+        if ((u.dailyTestCount || 0) >= DAILY_LIMIT) {
+            const cfg2 = getConfig();
+            const priceStr = (cfg2.vipPrice || 6000).toLocaleString('uz-UZ');
+            return ctx.replyWithHTML(
+                `⛔ <b>Kunlik limit tugadi!</b>\n\n📊 Siz bugun <b>${DAILY_LIMIT} ta</b> test yechdingiz.\n\n💎 <b>VIP a'zo</b> bo'lsangiz — <b>cheksiz</b> test yechishingiz mumkin!\n\n✅ VIP afzalliklari:\n• Cheksiz test\n• Javob izohlari\n• Musobaqalarda ustunlik`,
+                Markup.inlineKeyboard([[Markup.button.callback(`💎 VIP sotib olish (${priceStr} so'm)`,'buy_vip')]])
+            );
+        }
+        u.dailyTestCount = (u.dailyTestCount || 0) + 1;
+        db.users[userId] = u;
+        saveDb(db);
+
+        // 5-testdan keyin VIP taklifi
+        if (u.dailyTestCount === DAILY_LIMIT) {
+            await ctx.replyWithHTML(
+                `🎉 <b>Zo'r! Bu bugungi ${DAILY_LIMIT}-testingiz!</b>\n\n⚠️ Bugungi bepul testlaringiz shu bilan tugadi.\n\n💎 <b>VIP a'zo</b> bo'ling va <b>cheksiz</b> test yeching!\n💰 Narxi: atigi <b>6 000 so'm/oy</b>`,
+                Markup.inlineKeyboard([[Markup.button.callback("💎 VIP bo'lish",'buy_vip')]])
+            );
+        }
+    }
+    // ──────────────────────────────────────────────────────────────
+
     const user = getDb().users[userId];
     s.userName = (user?.name && isValidName(user.name)) ? user.name : (ctx.from.first_name || 'Talaba');
     s.activeList = ctx.message.text.includes('25') ? shuffle(questions).slice(0,25) : shuffle(questions);
@@ -1195,6 +1262,63 @@ bot.hears('🔓 Blokdan chiqarish', async (ctx) => {
     text += '\nBlokdan chiqarish uchun ID raqamini kiriting:';
     ctx.session.adminStep = 'wait_unblock_id';
     return ctx.replyWithHTML(text, Markup.keyboard([['🚫 Bekor qilish']]).resize());
+});
+bot.hears('📋 Hisobot', async (ctx) => {
+    if (!isAdmin(ctx.from.id)) return;
+    const db = getDb();
+    const now = Date.now();
+    const sevenDaysAgo = now - 7 * 24 * 60 * 60 * 1000;
+    const threeDaysMs  = 3 * 24 * 60 * 60 * 1000;
+
+    const users = Object.entries(db.users || {});
+    const total = users.length;
+
+    // 7 kunda test yechmaganlar
+    const inactive = users.filter(([, u]) => {
+        if (!u.isRegistered) return false;
+        const last = u.lastTestAt || 0;
+        return last < sevenDaysAgo;
+    });
+
+    // VIP tugamoqda (3 kun ichida)
+    const vipExpiring = users.filter(([, u]) => {
+        if (!u.isVip || !u.vipEnd) return false;
+        const left = u.vipEnd - now;
+        return left > 0 && left <= threeDaysMs;
+    });
+
+    // VIP muddati o'tib ketganlar
+    const vipExpired = users.filter(([, u]) => u.isVip && u.vipEnd && u.vipEnd < now);
+
+    const fmt = (ms) => ms ? new Date(ms).toLocaleDateString('ru-RU') : '—';
+
+    let msg = `📋 <b>HISOBOT</b>\n\n👥 Jami foydalanuvchilar: <b>${total}</b>\n\n`;
+    msg += `😴 <b>7 kunda test yechmaganlar: ${inactive.length} ta</b>\n`;
+    for (const [id, u] of inactive.slice(0,10)) {
+        msg += `  • ${escapeHTML(u.name||'?')} (<code>${id}</code>) — oxirgi: ${fmt(u.lastTestAt)}\n`;
+    }
+    if (inactive.length > 10) msg += `  <i>...va yana ${inactive.length-10} ta</i>\n`;
+
+    msg += `\n⏰ <b>VIP 3 kun ichida tugaydigan: ${vipExpiring.length} ta</b>\n`;
+    for (const [id, u] of vipExpiring) {
+        const daysLeft = Math.ceil((u.vipEnd - now) / 86400000);
+        msg += `  • ${escapeHTML(u.name||'?')} (<code>${id}</code>) — ${daysLeft} kun qoldi\n`;
+    }
+
+    msg += `\n❌ <b>VIP muddati o'tib ketgan: ${vipExpired.length} ta</b>\n`;
+    for (const [id, u] of vipExpired.slice(0,5)) {
+        msg += `  • ${escapeHTML(u.name||'?')} (<code>${id}</code>) — ${fmt(u.vipEnd)}\n`;
+    }
+    if (vipExpired.length > 5) msg += `  <i>...va yana ${vipExpired.length-5} ta</i>\n`;
+
+    return ctx.replyWithHTML(msg, adminMainKeyboard(db));
+});
+bot.hears("💰 VIP narxini o'zgartirish", (ctx) => {
+    if (!isAdmin(ctx.from.id)) return;
+    const cfg = getConfig();
+    const cur = cfg.vipPrice || 6000;
+    ctx.session.adminStep = 'wait_vip_price';
+    return ctx.reply(`💰 Hozirgi VIP narxi: <b>${cur.toLocaleString('uz-UZ')} so'm</b>\n\nYangi narxni kiriting (faqat raqam, so'mda):`, {parse_mode:'HTML', ...Markup.keyboard([['🚫 Bekor qilish']]).resize()});
 });
 bot.hears('💎 VIP berish', (ctx) => {
     if (!isAdmin(ctx.from.id)) return;
@@ -1820,6 +1944,16 @@ bot.on(['text','photo','video','animation','document'], async (ctx, next) => {
             ).catch(()=>{});
             return ctx.reply(`✅ <b>${escapeHTML(userName)}</b> VIP dan chiqarildi.`, {parse_mode:'HTML', ...adminMainKeyboard(getDb())});
         }
+        if (s.adminStep === 'wait_vip_price') {
+            if (msgText === '🚫 Bekor qilish') { s.adminStep = null; return ctx.reply('Bekor qilindi.', adminMainKeyboard(getDb())); }
+            const newPrice = parseInt(msgText.replace(/\s/g,''));
+            if (isNaN(newPrice) || newPrice < 100) return ctx.reply('❌ Narx noto\'g\'ri. Kamida 100 so\'m bo\'lishi kerak:');
+            s.adminStep = null;
+            const cfg = getConfig();
+            cfg.vipPrice = newPrice;
+            saveConfig(cfg);
+            return ctx.reply(`✅ VIP narxi yangilandi: <b>${newPrice.toLocaleString('uz-UZ')} so'm</b>`, {parse_mode:'HTML', ...adminMainKeyboard(getDb())});
+        }
         if (s.adminStep === 'wait_vip_id') {
             if (msgText === '🚫 Bekor qilish') { s.adminStep = null; return ctx.reply('Bekor qilindi.', adminMainKeyboard(getDb())); }
             const vipId = parseInt(msgText);
@@ -1971,7 +2105,25 @@ bot.on(['text','photo','video','animation','document'], async (ctx, next) => {
             if(!cfgSem.semesters.includes(msgText)) return ctx.reply('⚠️ Semestrni tanlang:');
             if(!cfgSem.activeSemesters.includes(msgText)) return ctx.reply(`❌ "${msgText}" hozircha mavjud emas. Boshqa semestrni tanlang.`);
             cu.semester=msgText; cu.isRegistered=true; cu.step='completed'; saveDb(db);
-            await ctx.reply("✅ Ro'yxatdan o'tildi!"); return showSubjectMenu(ctx);
+            await ctx.reply("✅ Ro'yxatdan o'tildi!");
+
+            // ── Referral bonus: yangi foydalanuvchi ro'yxatdan o'tdi ────
+            if (cu.referralBonusPending && cu.referredBy) {
+                const REFERRAL_BONUS = 50;
+                const refId = cu.referredBy;
+                const db2 = getDb();
+                if (db2.users[refId]) {
+                    db2.users[refId].score = (db2.users[refId].score || 0) + REFERRAL_BONUS;
+                    db2.users[userId].referralBonusPending = false;
+                    saveDb(db2);
+                    await ctx.telegram.sendMessage(refId,
+                        `🎉 <b>Do'stingiz ro'yxatdan o'tdi!</b>\n\n👤 Taklif qilganingiz uchun sizga <b>+${REFERRAL_BONUS} ball</b> berildi! 🎁`,
+                        {parse_mode:'HTML'}
+                    ).catch(()=>{});
+                }
+            }
+            // ────────────────────────────────────────────────────────────
+            return showSubjectMenu(ctx);
         }
         return ctx.reply("⚠️ Davom etish uchun ismingizni kiriting!");
     }
@@ -2023,6 +2175,35 @@ async function forceFinishAllParticipants() {
     saveDb(db);
     console.log(`✅ Deadline: ${finished} yangi yakunladi`);
 }
+// ── Session tozalash: har 15 daqiqada (30 daqiqa faoliyatsiz bo'lsa) ──
+cron.schedule('*/15 * * * *', () => {
+    const SESSION_TIMEOUT = 30 * 60 * 1000; // 30 daqiqa
+    const now = Date.now();
+    let cleaned = 0;
+    try {
+        const sessionData = readJSON(PATHS.session, {sessions:{}});
+        const sessions = sessionData.sessions || {};
+        for (const key of Object.keys(sessions)) {
+            const s = sessions[key]?.data || {};
+            if (s.activeList && s.index !== undefined && s.index < (s.activeList.length||0)) {
+                const lastActivity = s._lastActivity || 0;
+                if (now - lastActivity > SESSION_TIMEOUT) {
+                    // Test o'rtasida tashlab ketgan — sessionni tozalash
+                    const uid = parseInt(key.replace(':',''));
+                    if (uid && timers[uid]) { clearTimeout(timers[uid]); delete timers[uid]; }
+                    sessions[key].data.activeList = null;
+                    sessions[key].data.index = undefined;
+                    sessions[key].data.score = 0;
+                    sessions[key].data.wrongs = [];
+                    sessions[key].data.isTurbo = false;
+                    cleaned++;
+                }
+            }
+        }
+        if (cleaned > 0) writeJSON(PATHS.session, sessionData);
+    } catch(e) { console.error('[session-cleanup]', e.message); }
+});
+
 cron.schedule('* * * * *', async () => {
     const now = new Date();
     const currentTime = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
@@ -2826,7 +3007,9 @@ app.post('/api/notify-non-vip', async (req, res) => {
         let userId = null;
         for (const [id,u] of Object.entries(db.users||{})) { if ((u.name||'').toLowerCase().trim()===(name||'').toLowerCase().trim()) { userId=id; break; } }
         if (!userId) return res.status(404).json({error:'Foydalanuvchi topilmadi'});
-        await bot.telegram.sendMessage(userId,`💎 <b>VIP A'zolik kerak!</b>\n\nWeb orqali test ishlash uchun VIP a'zo bo'lishingiz kerak.\n\n💳 Karta: <code>4073420058363577</code>\n👤 Egasi: M.M\n💰 Summa: <b>6,000 so'm</b>`,{parse_mode:'HTML'}).catch(()=>{});
+        const cfgVip = getConfig();
+        const vipPriceStr = (cfgVip.vipPrice || 6000).toLocaleString('uz-UZ');
+        await bot.telegram.sendMessage(userId,`💎 <b>VIP A'zolik kerak!</b>\n\nWeb orqali test ishlash uchun VIP a'zo bo'lishingiz kerak.\n\n💳 Karta: <code>4073420058363577</code>\n👤 Egasi: M.M\n💰 Summa: <b>${vipPriceStr} so'm</b>`,{parse_mode:'HTML'}).catch(()=>{});
         res.json({ success:true });
     } catch (err) { res.status(500).json({error:'Xatolik'}); }
 });
