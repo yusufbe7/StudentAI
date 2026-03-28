@@ -2250,40 +2250,44 @@ async function openApp(username,isAdmin){
 // VIP
 // ═══════════════════════════════════════════════
 let _myVipStatus=null;
+let _myVipCheckedAt=0;
+const VIP_CACHE_MS = 60000; // 1 daqiqa kesh
 async function checkMyVip(){
   const sess=getSess();
   if(!sess||sess.isAdmin){_myVipStatus=true;return true;}
   const user=getUsers()[sess.username];
+  const now=Date.now();
 
-  // 1. Local da VIP ma'lumot bor bo'lsa - ishlatamiz
-  if(user?.isVip && user?.vipEnd && Date.now()<user.vipEnd){
-    _myVipStatus=true;return true;
-  }
+  // Kesh: 1 daqiqa ichida qayta so'ramaslik
+  if(_myVipStatus!==null && (now-_myVipCheckedAt)<VIP_CACHE_MS) return _myVipStatus;
 
   try{
-    // 2. Server dan tekshirish
-    // /api/web-auth/me - web users da isVip bor
-    const mr = await fetch('/api/web-auth/me?username='+encodeURIComponent(sess.username));
-    if(mr.ok){
-      const md = await mr.json();
-      if(md.user?.isVip && md.user?.vipEnd && Date.now()<md.user.vipEnd){
-        // Local ga saqlash
-        if(user){ user.isVip=true; user.vipEnd=md.user.vipEnd; saveUsers({...getUsers(),[sess.username]:user}); }
-        _myVipStatus=true;return true;
+    // Yagona /api/my-vip endpoint — server barcha manbani tekshiradi
+    const params=new URLSearchParams({username:sess.username});
+    if(user?.name) params.append('name', user.name);
+    const r = await fetch('/api/my-vip?'+params.toString());
+    if(r.ok){
+      const d = await r.json();
+      _myVipStatus = d.isVip===true;
+      _myVipCheckedAt = now;
+      // Local keshni yangilash
+      if(_myVipStatus && d.vipEnd && user){
+        user.isVip=true; user.vipEnd=d.vipEnd;
+        saveUsers({...getUsers(),[sess.username]:user});
+      } else if(!_myVipStatus && user?.isVip){
+        // Server VIP emas desa — localdan ham olib tashlaymiz
+        user.isVip=false; user.vipEnd=null;
+        saveUsers({...getUsers(),[sess.username]:user});
       }
+      return _myVipStatus;
     }
-    // 3. user-stats dan tekshirish (bot foydalanuvchilari uchun)
-    if(user?.name){
-      let r=await fetch('/api/user-stats?name='+encodeURIComponent(user.name));
-      if(r.status===404) r=await fetch('/api/user-stats?username='+encodeURIComponent(user.username||sess.username));
-      if(r.ok){
-        const d=await r.json();
-        _myVipStatus=(d.isVip&&d.vipEnd&&Date.now()<d.vipEnd);
-        return _myVipStatus;
-      }
-    }
-    _myVipStatus=false;return false;
-  }catch{_myVipStatus=false;return false;}
+    // Server ishlamasa — local keshga ishonish
+    _myVipStatus = !!(user?.isVip && user?.vipEnd && now<user.vipEnd);
+    return _myVipStatus;
+  }catch{
+    _myVipStatus = !!(user?.isVip && user?.vipEnd && now<user.vipEnd);
+    return _myVipStatus;
+  }
 }
 function showVipModal(){document.getElementById('vip-modal').classList.add('on');}
 function openTgBot(){
@@ -2297,6 +2301,20 @@ function openTgBot(){
 // HOME
 // ═══════════════════════════════════════════════
 let _lbCache=[];
+let _lbCacheAt=0;
+const LB_CACHE_MS=30000; // 30 soniya
+async function refreshLbCache(force=false){
+  if(!force && _lbCache.length && (Date.now()-_lbCacheAt)<LB_CACHE_MS) return _lbCache;
+  try{
+    const r=await fetch('/api/leaderboard?_='+Date.now());
+    if(r.ok){
+      const raw=await r.json();
+      _lbCache=[...raw].sort((a,b)=>(parseFloat(b.score)||0)-(parseFloat(a.score)||0));
+      _lbCacheAt=Date.now();
+    }
+  }catch(e){ console.log('[lbCache]',e.message); }
+  return _lbCache;
+}
 async function loadHome(sess){
   // Darhol bo'sh holat ko'rsat (Yuklanmoqda o'rniga)
   const feedEl = document.getElementById('activity-feed');
@@ -2304,13 +2322,9 @@ async function loadHome(sess){
     feedEl.innerHTML = '';
   }
 
-  // Leaderboard yukla
+  // Leaderboard yukla (kesh bilan)
   try{
-    const r = await fetch('/api/leaderboard?_='+Date.now());
-    if(r.ok){
-      const raw = await r.json();
-      _lbCache = [...raw].sort((a,b)=>(parseFloat(b.score)||0)-(parseFloat(a.score)||0));
-    }
+    await refreshLbCache();
   }catch(e){
     console.log('[loadHome] leaderboard error:', e.message);
   }
@@ -3317,16 +3331,12 @@ async function adminSubScore(clearAll=false){
       updateSubLabel();
       _subSelectedUser=null;
       _adminAllUsers=[];
-      _lbCache=[];
+      _lbCacheAt=0; // force refresh
       // Leaderboard yangilash
       try{
-        const lbR=await fetch('/api/leaderboard?_='+Date.now());
-        if(lbR.ok){
-          const raw=await lbR.json();
-          _lbCache=[...raw].sort((a,b)=>(parseFloat(b.score)||0)-(parseFloat(a.score)||0));
-          renderPodium(_lbCache);
-          renderLbList(_lbCache,getSess());
-        }
+        await refreshLbCache(true);
+        renderPodium(_lbCache);
+        renderLbList(_lbCache,getSess());
       }catch{}
     } else {
       toast('Xatolik: '+(d.error||r.status),'bad');
@@ -3478,7 +3488,7 @@ async function adminAddScore(){
       document.getElementById('adm-score-subj').value='';
       const prev=document.getElementById('adm-score-preview');
       if(prev) prev.style.display='none';
-      _adminAllUsers=[]; _lbCache=[];
+      _adminAllUsers=[]; _lbCacheAt=0;
       try{
         const lbR=await fetch('/api/leaderboard?_='+Date.now());
         if(lbR.ok){const raw3=await lbR.json();_lbCache=[...raw3].sort((a,b)=>(parseFloat(b.score)||0)-(parseFloat(a.score)||0));renderPodium(_lbCache);renderLbList(_lbCache,getSess());}
@@ -5594,7 +5604,7 @@ function doLogout(){
   // 3. Session va state tozalash
   clearSess();
   _loginFoundUser=null; _nickIsNew=false; _loginTgData=null;
-  _lbCache=[]; _adminAllUsers=[];
+  _lbCache=[]; _lbCacheAt=0; _adminAllUsers=[];
   // 4. Barcha ekranlarni yopish
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById('screen-login').classList.add('active');
