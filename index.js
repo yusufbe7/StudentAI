@@ -321,6 +321,9 @@ function updateGlobalScore(userId, name, username, score, totalInTest, wrongCoun
         u.score        = (u.score        || 0) + score;
         u.totalCorrect = (u.totalCorrect || 0) + score;
         u.totalWrong   = (u.totalWrong   || 0) + (wrongCount || 0);
+        u.weeklyTests   = (u.weeklyTests  || 0) + 1;
+        u.weeklyCorrect = (u.weeklyCorrect|| 0) + score;
+        u.weeklyWrong   = (u.weeklyWrong  || 0) + (wrongCount || 0);
         u.lastTestAt   = Date.now();
         if (name && isValidName(name)) u.name = name;
         if (username) u.username = username;
@@ -364,6 +367,7 @@ function adminMainKeyboard(db) {
         ['💎 VIP berish','❌ VIP dan chiqarish'],
         ['💰 VIP narxini o\'zgartirish','📋 Hisobot'],
         ["🗑 Foydalanuvchini o'chirish"],
+        ['➕ Savol qo\'shish (bot)'],
     ]).resize();
 }
 
@@ -447,8 +451,14 @@ async function sendQuestion(ctx, isNew = false) {
             }
         } else if (!s.isTurbo) resultMsg += '🌟 <b>Ajoyib! Hech qanday xato qilmadingiz!</b>';
         s.isTurbo = false;
-        try { await ctx.replyWithHTML(resultMsg, Markup.keyboard([["⚡️ Blitz (25)","📝 To'liq test"],['⬅️ Orqaga (Fanlar)']]).resize()); }
-        catch { await ctx.reply(`Test yakunlandi! To'g'ri: ${s.score}, Xato: ${(s.wrongs||[]).length}`); }
+        const wrongsForRetry = [...(s.wrongs||[])];
+        const retryBtn = wrongsForRetry.length > 0 ? Markup.inlineKeyboard([[Markup.button.callback('❌ Xatolardan qayta test','retry_wrongs')]]) : undefined;
+        try {
+            await ctx.replyWithHTML(resultMsg, Markup.keyboard([["⚡️ Blitz (25)","📝 To'liq test"],['⬅️ Orqaga (Fanlar)']]).resize());
+            if (retryBtn) await ctx.replyWithHTML('🔁 Faqat xato javob bergan savollarni qayta ishlashni xohlaysizmi?', retryBtn);
+        }
+        catch { await ctx.reply(`Test yakunlandi! To'g'ri: ${s.score}, Xato: ${wrongsForRetry.length}`); }
+        s.lastWrongs = wrongsForRetry;
         return;
     }
 
@@ -475,7 +485,7 @@ async function sendQuestion(ctx, isNew = false) {
     s.currentOptions.forEach((opt, i) => { text += `<b>${labels[i]})</b> ${escapeHTML(opt)}\n\n`; });
     const inlineBtn = Markup.inlineKeyboard([
         s.currentOptions.map((_,i) => Markup.button.callback(['🔵','🟢','🟡','🔴'][i]+' '+labels[i],`ans_${i}`)),
-        [Markup.button.callback('💡 Tushuntirish (VIP)','show_explanation')],
+        [Markup.button.callback('💡 Tushuntirish (VIP)','show_explanation'), Markup.button.callback('⚠️ Xato savol','report_q')],
         [Markup.button.callback('🛑 Testni to\'xtatish','stop_test')],
     ]);
     if (hasImage) { await ctx.replyWithPhoto({source:imagePath},{caption:text,parse_mode:'HTML',...inlineBtn}); }
@@ -1247,6 +1257,21 @@ bot.hears(/^⏱ Vaqt: \d+s$/, (ctx) => {
     return ctx.reply(`⏱ Hozirgi vaqt: <b>${cur} sekund</b>\n\nYangi vaqtni <b>soniyalarda</b> kiriting:`,{parse_mode:'HTML',...Markup.keyboard([['🚫 Bekor qilish']]).resize()});
 });
 bot.hears('➕ Yangi fan qoshish', (ctx) => { if(!isAdmin(ctx.from.id))return; ctx.session.waitingForSubjectName=true; return ctx.reply("Yangi fan nomini kiriting:", Markup.keyboard([['🚫 Bekor qilish']]).resize()); });
+bot.hears("➕ Savol qo\'shish (bot)", async (ctx) => {
+    if (!isAdmin(ctx.from.id)) return;
+    const keys = Object.keys(SUBJECTS);
+    if (!keys.length) return ctx.reply('❌ Hech qanday fan mavjud emas. Avval fan qo\'shing.');
+    ctx.session.adminStep = 'wait_addq_subject';
+    ctx.session.addQData = {};
+    const rows = [];
+    for (let i = 0; i < keys.length; i += 2) {
+        const row = [keys[i]];
+        if (keys[i+1]) row.push(keys[i+1]);
+        rows.push(row);
+    }
+    rows.push(['🚫 Bekor qilish']);
+    return ctx.reply('📚 Savol qo\'shadigangi fanini tanlang:', Markup.keyboard(rows).resize());
+});
 bot.hears(["🗑 Foydalanuvchini o'chirish"], (ctx) => { if(!isAdmin(ctx.from.id))return; ctx.session.adminStep='wait_delete_id'; return ctx.reply("🗑 O'chirmoqchi bo'lgan foydalanuvchining ID raqamini kiriting:"); });
 bot.hears(['⬅️ Orqaga (Admin)','⬅️ Orqaga'], (ctx) => { if(!isAdmin(ctx.from.id))return; return ctx.reply('Admin paneli:', adminMainKeyboard(getDb())); });
 bot.hears('🚫 Bloklash', (ctx) => {
@@ -1560,6 +1585,7 @@ bot.on(['text','photo','video','animation','document'], async (ctx, next) => {
         s.adminStep = null; s.fakeScoreTarget = null; s.fakeScoreUserId = null;
         s.adminTmpUniv = null; s.adminTmpKurs = null; s.adminTmpDir = null; s.adminTmpFanName = null;
         s.newSubName = null; s.newSubDir = null; s.newSubKey = null; s.newSubIcon = null;
+        s.addQData = {};
         return showSubjectMenu(ctx);
     }
     // VIP chek
@@ -2029,6 +2055,54 @@ bot.on(['text','photo','video','animation','document'], async (ctx, next) => {
             return ctx.reply(`✅ <b>${escapeHTML(unblockedName)}</b> blokdan chiqarildi.`, {parse_mode:'HTML', ...adminMainKeyboard(getDb())});
         }
     }
+    // ─── ADMIN: Savol qo'shish (bot orqali) ──────────────────
+    if (isAdmin(userId) && s.adminStep === 'wait_addq_subject') {
+        if (msgText === '🚫 Bekor qilish') { s.adminStep = null; s.addQData = {}; return ctx.reply('Bekor qilindi.', adminMainKeyboard(getDb())); }
+        if (!SUBJECTS[msgText]) return ctx.reply('❌ Bunday fan topilmadi. Ro\'yxatdan tanlang:');
+        s.addQData = { subjectKey: msgText };
+        s.adminStep = 'wait_addq_text';
+        return ctx.reply(`✅ Fan: <b>${escapeHTML(msgText)}</b>\n\nSavol matnini kiriting:`, {parse_mode:'HTML', ...Markup.keyboard([['🚫 Bekor qilish']]).resize()});
+    }
+    if (isAdmin(userId) && s.adminStep === 'wait_addq_text') {
+        if (msgText === '🚫 Bekor qilish') { s.adminStep = null; s.addQData = {}; return ctx.reply('Bekor qilindi.', adminMainKeyboard(getDb())); }
+        s.addQData.q = msgText;
+        s.adminStep = 'wait_addq_correct';
+        return ctx.reply(`❓ Savol: <b>${escapeHTML(msgText)}</b>\n\n✅ To\'g\'ri javobni kiriting:`, {parse_mode:'HTML', ...Markup.keyboard([['🚫 Bekor qilish']]).resize()});
+    }
+    if (isAdmin(userId) && s.adminStep === 'wait_addq_correct') {
+        if (msgText === '🚫 Bekor qilish') { s.adminStep = null; s.addQData = {}; return ctx.reply('Bekor qilindi.', adminMainKeyboard(getDb())); }
+        s.addQData.a = msgText;
+        s.adminStep = 'wait_addq_wrong1';
+        return ctx.reply(`✅ To\'g\'ri javob: <b>${escapeHTML(msgText)}</b>\n\n❌ 1-xato javobni kiriting:`, {parse_mode:'HTML', ...Markup.keyboard([['🚫 Bekor qilish']]).resize()});
+    }
+    if (isAdmin(userId) && s.adminStep === 'wait_addq_wrong1') {
+        if (msgText === '🚫 Bekor qilish') { s.adminStep = null; s.addQData = {}; return ctx.reply('Bekor qilindi.', adminMainKeyboard(getDb())); }
+        s.addQData.wrong1 = msgText;
+        s.adminStep = 'wait_addq_wrong2';
+        return ctx.reply(`❌ 2-xato javobni kiriting:`, Markup.keyboard([['🚫 Bekor qilish']]).resize());
+    }
+    if (isAdmin(userId) && s.adminStep === 'wait_addq_wrong2') {
+        if (msgText === '🚫 Bekor qilish') { s.adminStep = null; s.addQData = {}; return ctx.reply('Bekor qilindi.', adminMainKeyboard(getDb())); }
+        s.addQData.wrong2 = msgText;
+        s.adminStep = 'wait_addq_wrong3';
+        return ctx.reply(`❌ 3-xato javobni kiriting:`, Markup.keyboard([['🚫 Bekor qilish']]).resize());
+    }
+    if (isAdmin(userId) && s.adminStep === 'wait_addq_wrong3') {
+        if (msgText === '🚫 Bekor qilish') { s.adminStep = null; s.addQData = {}; return ctx.reply('Bekor qilindi.', adminMainKeyboard(getDb())); }
+        s.addQData.wrong3 = msgText;
+        s.adminStep = null;
+        const d = s.addQData || {};
+        const newQ = { q: d.q, options: [d.a, d.wrong1, d.wrong2, d.wrong3], a: d.a };
+        if (!SUBJECTS[d.subjectKey]) { s.addQData = {}; return ctx.reply('❌ Fan topilmadi!'); }
+        SUBJECTS[d.subjectKey].questions.push(newQ);
+        writeJSON(PATHS.subjects, SUBJECTS);
+        s.addQData = {};
+        const total = SUBJECTS[d.subjectKey].questions.length;
+        return ctx.replyWithHTML(
+            `✅ <b>Savol muvaffaqiyatli qo\'shildi!</b>\n\n📚 Fan: <b>${escapeHTML(d.subjectKey)}</b>\n❓ Savol: ${escapeHTML(d.q)}\n✅ To\'g\'ri: <b>${escapeHTML(d.a)}</b>\n\n📊 Jami savollar: <b>${total} ta</b>`,
+            adminMainKeyboard(getDb())
+        );
+    }
     // ─── Dinamik fan tanlash (config dan) ────────────────────
     {
         const db0 = getDb();
@@ -2203,6 +2277,59 @@ async function forceFinishAllParticipants() {
     saveDb(db);
     console.log(`✅ Deadline: ${finished} yangi yakunladi`);
 }
+// ── Haftalik progress xabari: har dushanba soat 09:00 ────────────────
+cron.schedule('0 9 * * 1', async () => {
+    try {
+        const db = getDb();
+        const users = Object.values(db.users).filter(u => u.isRegistered && u.id);
+        const now = new Date();
+        const weekAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
+        const usersArr = users.sort((a,b) => (b.score||0) - (a.score||0));
+        let sent = 0;
+        const chunkSize = 20;
+        for (let i = 0; i < usersArr.length; i += chunkSize) {
+            const chunk = usersArr.slice(i, i+chunkSize);
+            await Promise.allSettled(chunk.map(async (user) => {
+                try {
+                    const rank = usersArr.findIndex(u => String(u.id) === String(user.id)) + 1;
+                    const weeklyTests = user.weeklyTests || 0;
+                    const weeklyCorrect = user.weeklyCorrect || 0;
+                    const weeklyWrong = user.weeklyWrong || 0;
+                    const totalScore = parseFloat(user.score||0).toFixed(1);
+                    const vipStatus = (user.isVip || vipUsers.includes(user.id)) ? '💎 VIP' : '🆓 Oddiy';
+                    const msg = `📊 <b>HAFTALIK HISOBOTINGIZ</b>\n` +
+                        `📅 ${now.toLocaleDateString('uz-UZ', {day:'2-digit',month:'2-digit',year:'numeric'})}\n\n` +
+                        `👤 <b>${escapeHTML(user.name||'Talaba')}</b>\n` +
+                        `⭐ Status: ${vipStatus}\n` +
+                        `🏆 Umumiy ball: <b>${totalScore}</b>\n` +
+                        `📈 Reyting: <b>${rank}-o'rin</b> (${usersArr.length} tadan)\n\n` +
+                        `━━━━━━━━━━━━━━━\n` +
+                        `📝 Bu hafta testlar: <b>${weeklyTests} ta</b>\n` +
+                        `✅ To'g'ri javoblar: <b>${weeklyCorrect} ta</b>\n` +
+                        `❌ Xato javoblar: <b>${weeklyWrong} ta</b>\n` +
+                        `━━━━━━━━━━━━━━━\n\n` +
+                        `💪 Davom eting! Har kuni mashq qiling!`;
+                    await bot.telegram.sendMessage(user.id, msg, {parse_mode:'HTML'});
+                    sent++;
+                } catch {}
+            }));
+            if (i+chunkSize < usersArr.length) await new Promise(r => setTimeout(r, 500));
+        }
+        // Haftalik statistikani reset
+        for (const user of usersArr) {
+            if (db.users[user.id]) {
+                db.users[user.id].weeklyTests = 0;
+                db.users[user.id].weeklyCorrect = 0;
+                db.users[user.id].weeklyWrong = 0;
+            }
+        }
+        saveDb(db);
+        console.log(`📊 Haftalik hisobot yuborildi: ${sent} ta foydalanuvchi`);
+    } catch (err) {
+        console.error('[WeeklyReport]', err.message);
+    }
+}, { timezone: 'Asia/Tashkent' });
+
 // ── Session tozalash: har 15 daqiqada (30 daqiqa faoliyatsiz bo'lsa) ──
 cron.schedule('*/15 * * * *', () => {
     const SESSION_TIMEOUT = 30 * 60 * 1000; // 30 daqiqa
