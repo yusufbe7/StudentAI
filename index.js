@@ -725,6 +725,30 @@ bot.action(/^ans_(\d+)$/, async (ctx) => {
 bot.action('next_turbo_q', async (ctx) => { if (ctx.session?.isTurbo) { ctx.session.index++; return sendQuestion(ctx, true); } await ctx.answerCbQuery(); });
 bot.action('stop_test', (ctx) => { if (timers[ctx.from.id]) clearTimeout(timers[ctx.from.id]); ctx.session.index = 999; return showSubjectMenu(ctx); });
 
+bot.action('report_q', async (ctx) => {
+    await ctx.answerCbQuery('✅ Xabar adminga yuborildi!');
+    const s = ctx.session;
+    const qData = s.activeList?.[s.index];
+    if (!qData) return;
+    const userId = ctx.from.id;
+    const db = getDb();
+    const userName = db.users[userId]?.name || ctx.from.first_name || 'Foydalanuvchi';
+    const msg = `⚠️ <b>XATO SAVOL XABARI</b>\n\n👤 Foydalanuvchi: <b>${escapeHTML(userName)}</b> (ID: <code>${userId}</code>)\n📚 Fan: <b>${escapeHTML(s.currentSubject||"Noma'lum")}</b>\n\n❓ Savol: ${escapeHTML(qData.q)}\n✅ To'g'ri javob: <b>${escapeHTML(qData.a)}</b>`;
+    await ctx.telegram.sendMessage(ADMIN_ID, msg, {parse_mode:'HTML'}).catch(()=>{});
+});
+
+bot.action('retry_wrongs', async (ctx) => {
+    await ctx.answerCbQuery();
+    const s = ctx.session;
+    const wrongs = s.lastWrongs || s.wrongs || [];
+    if (!wrongs.length) return ctx.reply("❌ Qayta ishlash uchun xato savollar yo'q.");
+    s.activeList = wrongs.map(w => ({ q: w.q, options: w.options, a: w.a, image: w.image }));
+    s.index = 0; s.score = 0; s.wrongs = []; s.lastWrongs = [];
+    s.currentSubject = s.currentSubject || 'retry';
+    await ctx.replyWithHTML(`🔁 <b>Xatolardan qayta test boshlandi!</b>\n📝 Jami: <b>${s.activeList.length} ta</b> savol`);
+    return sendQuestion(ctx, true);
+});
+
 bot.action('show_explanation', async (ctx) => {
     const s = ctx.session;
     const userId = ctx.from.id;
