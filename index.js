@@ -733,8 +733,49 @@ bot.action('report_q', async (ctx) => {
     const userId = ctx.from.id;
     const db = getDb();
     const userName = db.users[userId]?.name || ctx.from.first_name || 'Foydalanuvchi';
-    const msg = `⚠️ <b>XATO SAVOL XABARI</b>\n\n👤 Foydalanuvchi: <b>${escapeHTML(userName)}</b> (ID: <code>${userId}</code>)\n📚 Fan: <b>${escapeHTML(s.currentSubject||"Noma'lum")}</b>\n\n❓ Savol: ${escapeHTML(qData.q)}\n✅ To'g'ri javob: <b>${escapeHTML(qData.a)}</b>`;
-    await ctx.telegram.sendMessage(ADMIN_ID, msg, {parse_mode:'HTML'}).catch(()=>{});
+    const falseCount = db.users[userId]?.falseReportCount || 0;
+    const msg = `⚠️ <b>XATO SAVOL XABARI</b>\n\n👤 Foydalanuvchi: <b>${escapeHTML(userName)}</b>\n🆔 ID: <code>${userId}</code>\n📚 Fan: <b>${escapeHTML(s.currentSubject||"Noma'lum")}</b>\n⚠️ Noto'g'ri shikoyatlar: <b>${falseCount} ta</b>\n\n❓ Savol: ${escapeHTML(qData.q)}\n✅ To'g'ri javob: <b>${escapeHTML(qData.a)}</b>`;
+    await ctx.telegram.sendMessage(ADMIN_ID, msg, {
+        parse_mode: 'HTML',
+        ...Markup.inlineKeyboard([
+            [Markup.button.callback('✅ To\'g\'ri shikoyat', `rpt_ok_${userId}`),
+             Markup.button.callback('❌ Jarima ber', `rpt_fine_${userId}`)],
+        ])
+    }).catch(()=>{});
+});
+
+bot.action(/^rpt_ok_(\d+)$/, async (ctx) => {
+    if (!isAdmin(ctx.from.id)) return ctx.answerCbQuery("Ruxsat yo'q!");
+    await ctx.answerCbQuery('✅ Shikoyat to\'g\'ri deb belgilandi');
+    await ctx.editMessageReplyMarkup({inline_keyboard:[]}).catch(()=>{});
+});
+
+bot.action(/^rpt_fine_(\d+)$/, async (ctx) => {
+    if (!isAdmin(ctx.from.id)) return ctx.answerCbQuery("Ruxsat yo'q!");
+    const targetId = parseInt(ctx.match[1]);
+    const db = getDb();
+    const user = db.users[targetId];
+    if (!user) { await ctx.answerCbQuery('Foydalanuvchi topilmadi!'); return; }
+    const falseCount = (user.falseReportCount || 0) + 1;
+    user.falseReportCount = falseCount;
+    const fine = falseCount === 1 ? 100 : falseCount === 2 ? 200 : 300;
+    const before = parseFloat(user.score || 0);
+    user.score = Math.max(0, before - fine);
+    saveDb(db);
+    await ctx.answerCbQuery(`❌ -${fine} ball jarima berildi!`);
+    await ctx.editMessageReplyMarkup({inline_keyboard:[]}).catch(()=>{});
+    await ctx.editMessageText(
+        ctx.callbackQuery.message.text + `\n\n❌ <b>Jarima berildi: -${fine} ball</b> (${falseCount}-marta)`,
+        {parse_mode:'HTML'}
+    ).catch(()=>{});
+    await ctx.telegram.sendMessage(targetId,
+        `🚫 <b>Jarima!</b>\n\n` +
+        `Siz yuborgan savol xabari noto'g'ri ekanligi aniqlandi.\n` +
+        `💰 Hisobingizdan <b>-${fine} ball</b> yechildi.\n` +
+        `📊 Oldingi ball: <b>${before.toFixed(1)}</b> → Yangi: <b>${user.score.toFixed(1)}</b>\n\n` +
+        `⚠️ Faqat haqiqatan xato bo'lgan savollarni xabar qiling!`,
+        {parse_mode:'HTML'}
+    ).catch(()=>{});
 });
 
 bot.action('retry_wrongs', async (ctx) => {
