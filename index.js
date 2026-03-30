@@ -769,11 +769,12 @@ bot.action(/^rpt_fine_(\d+)$/, async (ctx) => {
         {parse_mode:'HTML'}
     ).catch(()=>{});
     await ctx.telegram.sendMessage(targetId,
-        `🚫 <b>Jarima!</b>\n\n` +
-        `Siz yuborgan savol xabari noto'g'ri ekanligi aniqlandi.\n` +
-        `💰 Hisobingizdan <b>-${fine} ball</b> yechildi.\n` +
-        `📊 Oldingi ball: <b>${before.toFixed(1)}</b> → Yangi: <b>${user.score.toFixed(1)}</b>\n\n` +
-        `⚠️ Faqat haqiqatan xato bo'lgan savollarni xabar qiling!`,
+        `🚫 <b>JARIMA!</b>\n\n` +
+        `❗️ Aslida bu savol <b>to'g'ri edi</b>.\n` +
+        `O'yin qilganingiz uchun hisobingizdan <b>-${fine} ball</b> yechildi.\n\n` +
+        `📊 Oldingi ball: <b>${before.toFixed(1)}</b>\n` +
+        `📉 Yangi ball: <b>${user.score.toFixed(1)}</b>\n\n` +
+        `⚠️ Bunday harakatni qaytarishdan saqlaning!`,
         {parse_mode:'HTML'}
     ).catch(()=>{});
 });
