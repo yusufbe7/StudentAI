@@ -467,13 +467,22 @@ async function sendQuestion(ctx, isNew = false) {
 
     const safe = escapeHTML(qData.q);
     const progress = getProgressBar(s.index+1, s.activeList.length);
-    const imagePath = qData.image ? path.join(__dirname,'images',qData.image) : null;
-    const hasImage  = imagePath && fs.existsSync(imagePath);
+    let imageSource = null;
+    let hasImage = false;
+    if (qData.image) {
+        if (qData.image.startsWith('data:')) {
+            const base64Data = qData.image.split(',')[1];
+            if (base64Data) { imageSource = Buffer.from(base64Data, 'base64'); hasImage = true; }
+        } else {
+            const imagePath = path.join(__dirname, 'images', qData.image);
+            if (fs.existsSync(imagePath)) { imageSource = imagePath; hasImage = true; }
+        }
+    }
 
     if (s.isTurbo) {
         const turboText = `🚀 <b>TURBO YODLASH</b>\n📊 [${progress}]\n🔢 Savol: <b>${s.index+1}/${s.activeList.length}</b>\n_________________________\n\n❓ <b>${safe}</b>\n\n✅ <b>TO'G'RI JAVOB:</b>\n<code>${escapeHTML(qData.a)}</code>\n_________________________\n👇 Keyingi savol:`;
         const turboBtn = Markup.inlineKeyboard([[Markup.button.callback('▶️ Keyingi savol','next_turbo_q')],[Markup.button.callback('🛑 To\'xtatish','stop_test')]]);
-        if (hasImage) return ctx.replyWithPhoto({source:imagePath},{caption:turboText,parse_mode:'HTML',...turboBtn});
+        if (hasImage) return ctx.replyWithPhoto({source:imageSource},{caption:turboText,parse_mode:'HTML',...turboBtn});
         try { return isNew ? ctx.replyWithHTML(turboText,turboBtn) : ctx.editMessageText(turboText,{parse_mode:'HTML',...turboBtn}); }
         catch { return ctx.replyWithHTML(turboText,turboBtn); }
     }
@@ -488,7 +497,7 @@ async function sendQuestion(ctx, isNew = false) {
         [Markup.button.callback('💡 Tushuntirish (VIP)','show_explanation'), Markup.button.callback('⚠️ Xato savol','report_q')],
         [Markup.button.callback('🛑 Testni to\'xtatish','stop_test')],
     ]);
-    if (hasImage) { await ctx.replyWithPhoto({source:imagePath},{caption:text,parse_mode:'HTML',...inlineBtn}); }
+    if (hasImage) { await ctx.replyWithPhoto({source:imageSource},{caption:text,parse_mode:'HTML',...inlineBtn}); }
     else {
         try { isNew ? await ctx.replyWithHTML(text,inlineBtn) : await ctx.editMessageText(text,{parse_mode:'HTML',...inlineBtn}); }
         catch { await ctx.replyWithHTML(text,inlineBtn); }
