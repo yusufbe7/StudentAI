@@ -7363,7 +7363,9 @@
           "potensial energiya",
           "kinetik energiya"
         ],
-        "a": "kinetik energiya"
+        "a": "kinetik energiya",
+        "hint": "💡 'Kinetikos' yunoncha 'harakatlantiruvchi' degan ma'noni beradi. Harakatlanayotgan har qanday jism kinetik energiyaga ega. Formulasi: Eₖ = mv²/2.",
+        "image": "fizika_q67_sqrt.png"
       },
       {
         "q": "Sinus yoki kosinus qonuniga nisbatan tebranish qanday nomlanadi?",
@@ -7454,7 +7456,9 @@
           "P/T=const",
           "PV=const"
         ],
-        "a": "P/T=const"
+        "a": "P/T = const",
+        "hint": "💡 'Izo' - bir xil, 'Xora' - hajm demakdir. Hajm (V) o'zgarmas bo'lsa, bosim (P) va temperatura (T) to'g'ri proporsional bo'ladi (Sharl qonuni).",
+        "image": "fizika_q76_pv.png"
       },
       {
         "q": "Izоxorik jаrаyon uchun tеrmоdinаmikаning birinchi qоnuni fоrmulаsini ko`rsаting",
