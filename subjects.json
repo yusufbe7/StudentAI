@@ -6764,7 +6764,7 @@
   },
   "dasturiy_injiniring_physics": {
     "title": "Fizika",
-     "questions": [
+    "questions": [
       {
         "q": "Tezlanish deb nimaga aytiladi?",
         "options": [
@@ -7364,8 +7364,7 @@
           "kinetik energiya"
         ],
         "a": "kinetik energiya",
-        "hint": "💡 'Kinetikos' yunoncha 'harakatlantiruvchi' degan ma'noni beradi. Harakatlanayotgan har qanday jism kinetik energiyaga ega. Formulasi: Eₖ = mv²/2.",
-        "image": "fizika_q67_sqrt.png"
+        "hint": "💡 'Kinetikos' yunoncha 'harakatlantiruvchi' degan ma'noni beradi. Harakatlanayotgan har qanday jism kinetik energiyaga ega. Formulasi: Eₖ = mv²/2."
       },
       {
         "q": "Sinus yoki kosinus qonuniga nisbatan tebranish qanday nomlanadi?",
@@ -7457,8 +7456,7 @@
           "PV=const"
         ],
         "a": "P/T = const",
-        "hint": "💡 'Izo' - bir xil, 'Xora' - hajm demakdir. Hajm (V) o'zgarmas bo'lsa, bosim (P) va temperatura (T) to'g'ri proporsional bo'ladi (Sharl qonuni).",
-        "image": "fizika_q76_pv.png"
+        "hint": "💡 'Izo' - bir xil, 'Xora' - hajm demakdir. Hajm (V) o'zgarmas bo'lsa, bosim (P) va temperatura (T) to'g'ri proporsional bo'ladi (Sharl qonuni)."
       },
       {
         "q": "Izоxorik jаrаyon uchun tеrmоdinаmikаning birinchi qоnuni fоrmulаsini ko`rsаting",
@@ -13607,7 +13605,7 @@
   },
   "kiberxavfsizlik_physics": {
     "name": "🧲 Fizika (Kiber)",
-      "questions": [
+    "questions": [
       {
         "q": "Tezlanish deb nimaga aytiladi?",
         "options": [
@@ -26894,7 +26892,7 @@
   },
   "suniy_intelekt_physics": {
     "title": "Fizika",
-      "questions": [
+    "questions": [
       {
         "q": "Tezlanish deb nimaga aytiladi?",
         "options": [
@@ -30192,10 +30190,8 @@
       }
     ]
   },
-
-
   "moliya_va_moliyaviy_texnologiyalar_yonalishi_makroiqtisod": {
-     "name": "📊 Makroiqtisod",
+    "name": "📊 Makroiqtisod",
     "questions": [
       {
         "q": "J.M. Keynsga ko'ra uy xo'jaliklarining iste'mol xarajatlari va jamg'arishlari hajmini belgilovchi asosiy omil nima hisoblanadi?",
@@ -33156,7 +33152,6 @@
           "nolga tеng"
         ],
         "a": "friktsion va tarkibiy ishsizlikни hisobga oladi"
-
       }
     ]
   }
