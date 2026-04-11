@@ -25,7 +25,7 @@ if (!ADMIN_ID)  throw new Error("ADMIN_ID env o'zgaruvchisi topilmadi!");
 // ============================================================
 // FAYL YO'LLARI
 // ============================================================
-const DATA_DIR = fs.existsSync('/data') ? '/data' : path.join(__dirname, 'data');
+const DATA_DIR = fs.existsSync('/data') ? '/data' : __dirname;
 if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
 
 const PATHS = {
