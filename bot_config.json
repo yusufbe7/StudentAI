@@ -116,245 +116,292 @@
       {
         "name": "Akademik yozuv",
         "icon": "📝",
-        "key": "academic"
+        "key": "academic",
+        "sem": "1-semestr"
       },
       {
         "name": "Tarix",
         "icon": "📜",
-        "key": "history"
+        "key": "history",
+        "sem": "1-semestr"
       },
       {
         "name": "Matematika",
         "icon": "➕",
-        "key": "math"
+        "key": "math",
+        "sem": "1-semestr"
       },
       {
         "name": "Fizika",
         "icon": "🧲",
-        "key": "physics"
+        "key": "physics",
+        "sem": "1-semestr"
       },
       {
         "name": "Dasturlash 1",
         "icon": "💻",
-        "key": "dasturlash"
+        "key": "dasturlash",
+        "sem": "1-semestr"
       },
       {
         "name": "Perfect English",
         "icon": "🇬🇧",
-        "key": "english"
+        "key": "english",
+        "sem": "1-semestr"
       },
       {
         "name": "Dasturlash 2",
         "icon": "💡",
-        "key": "dasturlash2"
+        "key": "dasturlash2",
+        "sem": "2-semestr"
       },
       {
         "name": "Dinshunoslik",
         "icon": "🕌",
-        "key": "dinshunoslik"
+        "key": "dinshunoslik",
+        "sem": "2-semestr"
       },
       {
         "name": "Falsafa",
         "icon": "💭",
-        "key": "falsafa"
+        "key": "falsafa",
+        "sem": "2-semestr"
       },
       {
         "name": "Fizika 2",
         "icon": "⚡",
-        "key": "fizika2"
+        "key": "fizika2",
+        "sem": "2-semestr"
       },
       {
         "name": "Hisob",
         "icon": "🔢",
-        "key": "hisob"
+        "key": "hisob",
+        "sem": "2-semestr"
       },
       {
         "name": "Ma'lumotlar tuzilmasi",
         "icon": "🗄️",
-        "key": "malumotlar_tuzilmasi"
+        "key": "malumotlar_tuzilmasi",
+        "sem": "2-semestr"
       },
       {
         "name": "English",
         "icon": "🌐",
-        "key": "english2"
+        "key": "english2",
+        "sem": "2-semestr"
       }
     ],
     "Kiberxavfsizlik": [
       {
         "name": "Fizika",
         "icon": "🧲",
-        "key": "physics"
+        "key": "physics",
+        "sem": "1-semestr"
       },
       {
         "name": "Tarix",
         "icon": "📜",
-        "key": "history"
+        "key": "history",
+        "sem": "1-semestr"
       },
       {
         "name": "Akademik yozuv",
         "icon": "📝",
-        "key": "academic"
+        "key": "academic",
+        "sem": "1-semestr"
       },
       {
         "name": "Matematika",
         "icon": "➕",
-        "key": "math"
+        "key": "math",
+        "sem": "1-semestr"
       },
       {
         "name": "Perfect English",
         "icon": "🇬🇧",
-        "key": "english"
+        "key": "english",
+        "sem": "1-semestr"
       },
       {
         "name": "Dasturlash 1",
         "icon": "💻",
-        "key": "dasturlash"
+        "key": "dasturlash",
+        "sem": "1-semestr"
       },
       {
         "name": "Dasturlash 2",
         "icon": "💡",
-        "key": "dasturlash2"
+        "key": "dasturlash2",
+        "sem": "2-semestr"
       },
       {
         "name": "Dinshunoslik",
         "icon": "🕌",
-        "key": "dinshunoslik"
+        "key": "dinshunoslik",
+        "sem": "2-semestr"
       },
       {
         "name": "Falsafa",
         "icon": "💭",
-        "key": "falsafa"
+        "key": "falsafa",
+        "sem": "2-semestr"
       },
       {
         "name": "Fizika 2",
         "icon": "⚡",
-        "key": "fizika2"
+        "key": "fizika2",
+        "sem": "2-semestr"
       },
       {
         "name": "Hisob",
         "icon": "🔢",
-        "key": "hisob"
+        "key": "hisob",
+        "sem": "2-semestr"
       },
       {
         "name": "Ma'lumotlar tuzilmasi",
         "icon": "🗄️",
-        "key": "malumotlar_tuzilmasi"
+        "key": "malumotlar_tuzilmasi",
+        "sem": "2-semestr"
       },
       {
         "name": "English",
         "icon": "🌐",
-        "key": "english2"
+        "key": "english2",
+        "sem": "2-semestr"
       }
     ],
     "Sun'iy intelekt": [
       {
         "name": "Fizika",
         "icon": "🧲",
-        "key": "physics"
+        "key": "physics",
+        "sem": "1-semestr"
       },
       {
         "name": "Tarix",
         "icon": "📜",
-        "key": "history"
+        "key": "history",
+        "sem": "1-semestr"
       },
       {
         "name": "Akademik yozuv",
         "icon": "📝",
-        "key": "academic"
+        "key": "academic",
+        "sem": "1-semestr"
       },
       {
         "name": "Matematika",
         "icon": "➕",
-        "key": "math"
+        "key": "math",
+        "sem": "1-semestr"
       },
       {
         "name": "Perfect English",
         "icon": "🇬🇧",
-        "key": "english"
+        "key": "english",
+        "sem": "1-semestr"
       },
       {
         "name": "Dasturlash 1",
         "icon": "💻",
-        "key": "dasturlash"
+        "key": "dasturlash",
+        "sem": "1-semestr"
       },
       {
         "name": "Dasturlash 2",
         "icon": "💡",
-        "key": "dasturlash2"
+        "key": "dasturlash2",
+        "sem": "2-semestr"
       },
       {
         "name": "Dinshunoslik",
         "icon": "🕌",
-        "key": "dinshunoslik"
+        "key": "dinshunoslik",
+        "sem": "2-semestr"
       },
       {
         "name": "Falsafa",
         "icon": "💭",
-        "key": "falsafa"
+        "key": "falsafa",
+        "sem": "2-semestr"
       },
       {
         "name": "Fizika 2",
         "icon": "⚡",
-        "key": "fizika2"
+        "key": "fizika2",
+        "sem": "2-semestr"
       },
       {
         "name": "Hisob",
         "icon": "🔢",
-        "key": "hisob"
+        "key": "hisob",
+        "sem": "2-semestr"
       },
       {
         "name": "Ma'lumotlar tuzilmasi",
         "icon": "🗄️",
-        "key": "malumotlar_tuzilmasi"
+        "key": "malumotlar_tuzilmasi",
+        "sem": "2-semestr"
       },
       {
         "name": "English",
         "icon": "🌐",
-        "key": "english2"
+        "key": "english2",
+        "sem": "2-semestr"
       }
     ],
     "Magistratura": [
       {
         "name": "Akademik yozuv",
         "icon": "📝",
-        "key": "academic"
+        "key": "academic",
+        "sem": "1-semestr"
       },
       {
         "name": "Tarix",
         "icon": "📜",
-        "key": "history"
+        "key": "history",
+        "sem": "1-semestr"
       },
       {
         "name": "Matematika",
         "icon": "➕",
-        "key": "math"
+        "key": "math",
+        "sem": "1-semestr"
       },
       {
         "name": "Fizika",
         "icon": "🧲",
-        "key": "physics"
+        "key": "physics",
+        "sem": "1-semestr"
       }
     ],
     "Boshqa": [
       {
         "name": "Akademik yozuv",
         "icon": "📝",
-        "key": "academic"
+        "key": "academic",
+        "sem": "1-semestr"
       },
       {
         "name": "Tarix",
         "icon": "📜",
-        "key": "history"
+        "key": "history",
+        "sem": "1-semestr"
       },
       {
         "name": "Matematika",
         "icon": "➕",
-        "key": "math"
+        "key": "math",
+        "sem": "1-semestr"
       },
       {
         "name": "Fizika",
         "icon": "🧲",
-        "key": "physics"
+        "key": "physics",
+        "sem": "1-semestr"
       }
     ],
     "Moliya va moliyaviy texnologiyalar yo'nalishi": [
