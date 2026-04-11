@@ -2318,13 +2318,13 @@ bot.on(['text','photo','video','animation','document'], async (ctx, next) => {
             cu.yonalish=msgText; cu.step='wait_semester'; saveDb(db);
             const cfgS = getConfig();
             const semRows = [];
-            for (let i=0; i<cfgS.semesters.length; i+=2) { const r=[cfgS.semesters[i]]; if(cfgS.semesters[i+1]) r.push(cfgS.semesters[i+1]); semRows.push(r); }
+            const availSems = cfgS.activeSemesters?.length ? cfgS.activeSemesters : cfgS.semesters;
+            for (let i=0; i<availSems.length; i+=2) { const r=[availSems[i]]; if(availSems[i+1]) r.push(availSems[i+1]); semRows.push(r); }
             return ctx.reply('Semestrni tanlang:', Markup.keyboard(semRows).oneTime().resize());
         }
         if (cu.step === 'wait_semester') {
             const cfgSem = getConfig();
-            if(!cfgSem.semesters.includes(msgText)) return ctx.reply('⚠️ Semestrni tanlang:');
-            if(!cfgSem.activeSemesters.includes(msgText)) return ctx.reply(`❌ "${msgText}" hozircha mavjud emas. Boshqa semestrni tanlang.`);
+            if(!cfgSem.semesters.includes(msgText) && !cfgSem.activeSemesters?.includes(msgText)) return ctx.reply('⚠️ Semestrni tanlang:');
             cu.semester=msgText; cu.isRegistered=true; cu.step='completed'; saveDb(db);
             await ctx.reply("✅ Ro'yxatdan o'tildi!");
 
