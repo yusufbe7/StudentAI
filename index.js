@@ -83,49 +83,49 @@ const DEFAULT_CONFIG = {
     activeSemesters: ['1-semestr','2-semestr'],
     subjectsByDirection: {
         'Dasturiy Injiniring': [
-            {name:'Akademik yozuv', icon:'📝', key:'academic'},
-            {name:'Tarix',          icon:'📜', key:'history'},
-            {name:'Matematika',     icon:'➕', key:'math'},
-            {name:'Fizika',         icon:'🧲', key:'physics'},
-            {name:'Dasturlash 1',   icon:'💻', key:'dasturlash'},
-            {name:'Perfect English',icon:'🇬🇧', key:'english'},
-            {name:'Dasturlash 2',          icon:'💡', key:'dasturlash2'},
-            {name:'Dinshunoslik',          icon:'🕌', key:'dinshunoslik'},
-            {name:'Falsafa',               icon:'💭', key:'falsafa'},
-            {name:'Fizika 2',              icon:'⚡', key:'fizika2'},
-            {name:'Hisob',                 icon:'🔢', key:'hisob'},
-            {name:"Ma'lumotlar tuzilmasi", icon:'🗄️', key:'malumotlar_tuzilmasi'},
-            {name:'English',               icon:'🌐', key:'english2'}
+            {name:'Akademik yozuv', icon:'📝', key:'academic',               sem:'1-semestr'},
+            {name:'Tarix',          icon:'📜', key:'history',                sem:'1-semestr'},
+            {name:'Matematika',     icon:'➕', key:'math',                   sem:'1-semestr'},
+            {name:'Fizika',         icon:'🧲', key:'physics',                sem:'1-semestr'},
+            {name:'Dasturlash 1',   icon:'💻', key:'dasturlash',             sem:'1-semestr'},
+            {name:'Perfect English',icon:'🇬🇧', key:'english',               sem:'1-semestr'},
+            {name:'Dasturlash 2',          icon:'💡', key:'dasturlash2',          sem:'2-semestr'},
+            {name:'Dinshunoslik',          icon:'🕌', key:'dinshunoslik',         sem:'2-semestr'},
+            {name:'Falsafa',               icon:'💭', key:'falsafa',              sem:'2-semestr'},
+            {name:'Fizika 2',              icon:'⚡', key:'fizika2',              sem:'2-semestr'},
+            {name:'Hisob',                 icon:'🔢', key:'hisob',                sem:'2-semestr'},
+            {name:"Ma'lumotlar tuzilmasi", icon:'🗄️', key:'malumotlar_tuzilmasi', sem:'2-semestr'},
+            {name:'English',               icon:'🌐', key:'english2',             sem:'2-semestr'}
         ],
         'Kiberxavfsizlik': [
-            {name:'Fizika',         icon:'🧲', key:'physics'},
-            {name:'Tarix',          icon:'📜', key:'history'},
-            {name:'Akademik yozuv', icon:'📝', key:'academic'},
-            {name:'Matematika',     icon:'➕', key:'math'},
-            {name:'Perfect English',icon:'🇬🇧', key:'english'},
-            {name:'Dasturlash 1',   icon:'💻', key:'dasturlash'},
-            {name:'Dasturlash 2',          icon:'💡', key:'dasturlash2'},
-            {name:'Dinshunoslik',          icon:'🕌', key:'dinshunoslik'},
-            {name:'Falsafa',               icon:'💭', key:'falsafa'},
-            {name:'Fizika 2',              icon:'⚡', key:'fizika2'},
-            {name:'Hisob',                 icon:'🔢', key:'hisob'},
-            {name:"Ma'lumotlar tuzilmasi", icon:'🗄️', key:'malumotlar_tuzilmasi'},
-            {name:'English',               icon:'🌐', key:'english2'}
+            {name:'Fizika',         icon:'🧲', key:'physics',                sem:'1-semestr'},
+            {name:'Tarix',          icon:'📜', key:'history',                sem:'1-semestr'},
+            {name:'Akademik yozuv', icon:'📝', key:'academic',               sem:'1-semestr'},
+            {name:'Matematika',     icon:'➕', key:'math',                   sem:'1-semestr'},
+            {name:'Perfect English',icon:'🇬🇧', key:'english',               sem:'1-semestr'},
+            {name:'Dasturlash 1',   icon:'💻', key:'dasturlash',             sem:'1-semestr'},
+            {name:'Dasturlash 2',          icon:'💡', key:'dasturlash2',          sem:'2-semestr'},
+            {name:'Dinshunoslik',          icon:'🕌', key:'dinshunoslik',         sem:'2-semestr'},
+            {name:'Falsafa',               icon:'💭', key:'falsafa',              sem:'2-semestr'},
+            {name:'Fizika 2',              icon:'⚡', key:'fizika2',              sem:'2-semestr'},
+            {name:'Hisob',                 icon:'🔢', key:'hisob',                sem:'2-semestr'},
+            {name:"Ma'lumotlar tuzilmasi", icon:'🗄️', key:'malumotlar_tuzilmasi', sem:'2-semestr'},
+            {name:'English',               icon:'🌐', key:'english2',             sem:'2-semestr'}
         ],
         "Sun'iy intelekt": [
-            {name:'Fizika',         icon:'🧲', key:'physics'},
-            {name:'Tarix',          icon:'📜', key:'history'},
-            {name:'Akademik yozuv', icon:'📝', key:'academic'},
-            {name:'Matematika',     icon:'➕', key:'math'},
-            {name:'Perfect English',icon:'🇬🇧', key:'english'},
-            {name:'Dasturlash 1',   icon:'💻', key:'dasturlash'},
-            {name:'Dasturlash 2',          icon:'💡', key:'dasturlash2'},
-            {name:'Dinshunoslik',          icon:'🕌', key:'dinshunoslik'},
-            {name:'Falsafa',               icon:'💭', key:'falsafa'},
-            {name:'Fizika 2',              icon:'⚡', key:'fizika2'},
-            {name:'Hisob',                 icon:'🔢', key:'hisob'},
-            {name:"Ma'lumotlar tuzilmasi", icon:'🗄️', key:'malumotlar_tuzilmasi'},
-            {name:'English',               icon:'🌐', key:'english2'}
+            {name:'Fizika',         icon:'🧲', key:'physics',                sem:'1-semestr'},
+            {name:'Tarix',          icon:'📜', key:'history',                sem:'1-semestr'},
+            {name:'Akademik yozuv', icon:'📝', key:'academic',               sem:'1-semestr'},
+            {name:'Matematika',     icon:'➕', key:'math',                   sem:'1-semestr'},
+            {name:'Perfect English',icon:'🇬🇧', key:'english',               sem:'1-semestr'},
+            {name:'Dasturlash 1',   icon:'💻', key:'dasturlash',             sem:'1-semestr'},
+            {name:'Dasturlash 2',          icon:'💡', key:'dasturlash2',          sem:'2-semestr'},
+            {name:'Dinshunoslik',          icon:'🕌', key:'dinshunoslik',         sem:'2-semestr'},
+            {name:'Falsafa',               icon:'💭', key:'falsafa',              sem:'2-semestr'},
+            {name:'Fizika 2',              icon:'⚡', key:'fizika2',              sem:'2-semestr'},
+            {name:'Hisob',                 icon:'🔢', key:'hisob',                sem:'2-semestr'},
+            {name:"Ma'lumotlar tuzilmasi", icon:'🗄️', key:'malumotlar_tuzilmasi', sem:'2-semestr'},
+            {name:'English',               icon:'🌐', key:'english2',             sem:'2-semestr'}
         ],
         'Magistratura': [
             {name:'Akademik yozuv', icon:'📝', key:'academic'},
@@ -400,9 +400,11 @@ function showSubjectMenu(ctx) {
         const tour   = db.tournament;
         if (!user || !user.isRegistered) return ctx.reply("⚠️ Iltimos, avval /start bosing va ro'yxatdan o'ting.");
         const yonalish = user.yonalish || '';
-        // Dinamik: configdan fanlarni olish
+        // Dinamik: configdan fanlarni olish (semestrga qarab filter)
         const cfg  = getConfig();
-        const subs = cfg.subjectsByDirection?.[yonalish] || [];
+        const userSem = user.semester || '1-semestr';
+        const allSubs = cfg.subjectsByDirection?.[yonalish] || [];
+        const subs = allSubs.filter(s => !s.sem || s.sem === userSem);
         let keyboard = [];
         for (let i = 0; i < subs.length; i += 2) {
             const row = [`${subs[i].icon} ${subs[i].name}`];
@@ -2250,7 +2252,8 @@ bot.on(['text','photo','video','animation','document'], async (ctx, next) => {
         const user0 = db0.users[userId];
         if (user0?.isRegistered) {
             const cfg0 = getConfig();
-            const dirSubs = cfg0.subjectsByDirection?.[user0.yonalish] || [];
+            const userSem0 = user0.semester || '1-semestr';
+            const dirSubs = (cfg0.subjectsByDirection?.[user0.yonalish] || []).filter(s => !s.sem || s.sem === userSem0);
             const matchedSub = dirSubs.find(sub => msgText === `${sub.icon} ${sub.name}`);
             if (matchedSub) {
                 if (isBotPaidMode && !vipUsers.includes(userId) && !isAdmin(userId)) {
