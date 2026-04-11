@@ -80,7 +80,7 @@ const DEFAULT_CONFIG = {
     },
     vipPrice: 6000,
     semesters: ['1-semestr','2-semestr'],
-    activeSemesters: ['1-semestr'],
+    activeSemesters: ['1-semestr','2-semestr'],
     subjectsByDirection: {
         'Dasturiy Injiniring': [
             {name:'Akademik yozuv', icon:'📝', key:'academic'},
