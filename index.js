@@ -387,7 +387,7 @@ function adminMainKeyboard(db) {
         ['🚫 Bloklash','🔓 Blokdan chiqarish'],
         ['💎 VIP berish','❌ VIP dan chiqarish'],
         ['💰 VIP narxini o\'zgartirish','📋 Hisobot'],
-        ["🗑 Foydalanuvchini o'chirish"],
+        ["🗑 Foydalanuvchini o'chirish",'🧹 VIP larni tozalash'],
         ['➕ Savol qo\'shish (bot)'],
     ]).resize();
 }
@@ -1220,8 +1220,22 @@ bot.hears(["⚡️ Blitz (25)","📝 To'liq test"], async (ctx) => {
 bot.hears('📊 Reyting', async (ctx) => ctx.replyWithHTML(getLeaderboard(ctx.from.id)));
 bot.hears(['👤 Profil','👤 Profilim'], async (ctx) => showProfile(ctx));
 bot.hears(['⬅️ Orqaga (Fanlar)'], (ctx) => showSubjectMenu(ctx));
-bot.hears('⚙️ Sozlamalar', (ctx) => ctx.reply('Sozlamalar:', Markup.keyboard([["📝 Ismni o'zgartirish"],["🎓 Yo'nalishni qayta tanlash"],['⬅️ Orqaga (Fanlar)']]).resize()));
+bot.hears('⚙️ Sozlamalar', (ctx) => ctx.reply('Sozlamalar:', Markup.keyboard([["📝 Ismni o'zgartirish"],["🎓 Yo'nalishni qayta tanlash"],["📅 Semestrni o'zgartirish"],['⬅️ Orqaga (Fanlar)']]).resize()));
 bot.hears("📝 Ismni o'zgartirish", (ctx) => { const db=getDb(); if(!db.users[ctx.from.id])return; db.users[ctx.from.id].step='edit_name'; saveDb(db); return ctx.reply('Yangi ismingizni kiriting:'); });
+bot.hears("📅 Semestrni o'zgartirish", (ctx) => {
+    const db = getDb(); const user = db.users[ctx.from.id];
+    if (!user || !user.isRegistered) return ctx.reply("⚠️ Iltimos, avval ro'yxatdan o'ting.");
+    const cfg = getConfig();
+    const activeSems = cfg.activeSemesters || [];
+    if (!activeSems.length) return ctx.reply("⚠️ Hozircha faol semestr mavjud emas.", Markup.keyboard([['⬅️ Orqaga (Sozlamalar)']]).resize());
+    const rows = [];
+    for (let i = 0; i < activeSems.length; i += 2) { const r = [activeSems[i]]; if (activeSems[i+1]) r.push(activeSems[i+1]); rows.push(r); }
+    rows.push(['⬅️ Orqaga (Sozlamalar)']);
+    user.step = 'edit_semester'; saveDb(db);
+    const cur = user.semester ? ` (Hozirgi: <b>${escapeHTML(user.semester)}</b>)` : '';
+    return ctx.replyWithHTML(`📅 Semestrni tanlang${cur}:`, Markup.keyboard(rows).resize());
+});
+bot.hears('⬅️ Orqaga (Sozlamalar)', (ctx) => ctx.reply('Sozlamalar:', Markup.keyboard([["📝 Ismni o'zgartirish"],["🎓 Yo'nalishni qayta tanlash"],["📅 Semestrni o'zgartirish"],['⬅️ Orqaga (Fanlar)']]).resize()));
 bot.hears("🎓 Yo'nalishni qayta tanlash", (ctx) => {
     const db=getDb(); const user=db.users[ctx.from.id]; if(!user)return;
     user.isRegistered=false; user.step='wait_univ'; saveDb(db);
@@ -1445,6 +1459,38 @@ bot.hears("💰 VIP narxini o'zgartirish", (ctx) => {
     const cur = cfg.vipPrice || 6000;
     ctx.session.adminStep = 'wait_vip_price';
     return ctx.reply(`💰 Hozirgi VIP narxi: <b>${cur.toLocaleString('uz-UZ')} so'm</b>\n\nYangi narxni kiriting (faqat raqam, so'mda):`, {parse_mode:'HTML', ...Markup.keyboard([['🚫 Bekor qilish']]).resize()});
+});
+bot.hears('🧹 VIP larni tozalash', async (ctx) => {
+    if (!isAdmin(ctx.from.id)) return;
+    const db = getDb();
+    const vipCount = vipUsers.length + Object.values(db.users).filter(u => u.isVip).length;
+    return ctx.replyWithHTML(
+        `🧹 <b>VIP larni tozalash</b>\n\n⚠️ Barcha VIP foydalanuvchilar (<b>${vipCount} ta</b>) o'chiriladi.\nUlar qayta to'lov qilishi kerak bo'ladi.\n\nDavom etasizmi?`,
+        Markup.inlineKeyboard([
+            [Markup.button.callback("✅ Ha, barchasini tozala", 'vip_clear_confirm')],
+            [Markup.button.callback('❌ Bekor qilish', 'vip_clear_cancel')]
+        ])
+    );
+});
+bot.action('vip_clear_confirm', async (ctx) => {
+    if (!isAdmin(ctx.from.id)) return ctx.answerCbQuery();
+    await ctx.answerCbQuery();
+    const db = getDb();
+    // vipUsers array ni tozalash
+    const arrCount = vipUsers.length;
+    vipUsers = [];
+    saveVip();
+    // DB dagi isVip flaglarini tozalash
+    let dbCount = 0;
+    Object.values(db.users).forEach(u => { if (u.isVip) { u.isVip = false; u.vipEnd = null; dbCount++; } });
+    saveDb(db);
+    await ctx.editMessageText(`✅ <b>VIP tozalash yakunlandi!</b>\n\n🗑 Ro'yxatdan: ${arrCount} ta\n🗑 DB dan: ${dbCount} ta\n\nBarcha VIP foydalanuvchilar qayta to'lov qilishi kerak.`, {parse_mode:'HTML'});
+    return ctx.reply('🛠 Admin Panel', adminMainKeyboard(getDb()));
+});
+bot.action('vip_clear_cancel', async (ctx) => {
+    if (!isAdmin(ctx.from.id)) return ctx.answerCbQuery();
+    await ctx.answerCbQuery('Bekor qilindi');
+    return ctx.editMessageText('❌ VIP tozalash bekor qilindi.');
 });
 bot.hears('💎 VIP berish', (ctx) => {
     if (!isAdmin(ctx.from.id)) return;
@@ -2329,6 +2375,14 @@ bot.on(['text','photo','video','animation','document'], async (ctx, next) => {
         if (!isValidName(msgText)) return ctx.replyWithHTML("❌ <b>Bu ism sifatida qabul qilinmadi!</b>\n\nHaqiqiy ism va familiyangizni kiriting:");
         user.name=msgText.trim(); user.step='completed'; saveDb(db);
         await ctx.reply(`✅ Ism o'zgartirildi: ${escapeHTML(msgText.trim())}`);
+        return showSubjectMenu(ctx);
+    }
+    if (user.step === 'edit_semester') {
+        const cfgSem = getConfig();
+        if (!cfgSem.semesters.includes(msgText)) return ctx.reply("⚠️ Semestrni ro'yxatdan tanlang:");
+        if (!cfgSem.activeSemesters.includes(msgText)) return ctx.reply(`❌ "${escapeHTML(msgText)}" hozircha faol emas. Boshqa semestrni tanlang.`);
+        user.semester = msgText; user.step = 'completed'; saveDb(db);
+        await ctx.replyWithHTML(`✅ Semestr o'zgartirildi: <b>${escapeHTML(msgText)}</b>`);
         return showSubjectMenu(ctx);
     }
     return next();
