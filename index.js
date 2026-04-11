@@ -88,7 +88,14 @@ const DEFAULT_CONFIG = {
             {name:'Matematika',     icon:'➕', key:'math'},
             {name:'Fizika',         icon:'🧲', key:'physics'},
             {name:'Dasturlash 1',   icon:'💻', key:'dasturlash'},
-            {name:'Perfect English',icon:'🇬🇧', key:'english'}
+            {name:'Perfect English',icon:'🇬🇧', key:'english'},
+            {name:'Dasturlash 2',          icon:'💡', key:'dasturlash2'},
+            {name:'Dinshunoslik',          icon:'🕌', key:'dinshunoslik'},
+            {name:'Falsafa',               icon:'💭', key:'falsafa'},
+            {name:'Fizika 2',              icon:'⚡', key:'fizika2'},
+            {name:'Hisob',                 icon:'🔢', key:'hisob'},
+            {name:"Ma'lumotlar tuzilmasi", icon:'🗄️', key:'malumotlar_tuzilmasi'},
+            {name:'English',               icon:'🌐', key:'english2'}
         ],
         'Kiberxavfsizlik': [
             {name:'Fizika',         icon:'🧲', key:'physics'},
@@ -96,7 +103,14 @@ const DEFAULT_CONFIG = {
             {name:'Akademik yozuv', icon:'📝', key:'academic'},
             {name:'Matematika',     icon:'➕', key:'math'},
             {name:'Perfect English',icon:'🇬🇧', key:'english'},
-            {name:'Dasturlash 1',   icon:'💻', key:'dasturlash'}
+            {name:'Dasturlash 1',   icon:'💻', key:'dasturlash'},
+            {name:'Dasturlash 2',          icon:'💡', key:'dasturlash2'},
+            {name:'Dinshunoslik',          icon:'🕌', key:'dinshunoslik'},
+            {name:'Falsafa',               icon:'💭', key:'falsafa'},
+            {name:'Fizika 2',              icon:'⚡', key:'fizika2'},
+            {name:'Hisob',                 icon:'🔢', key:'hisob'},
+            {name:"Ma'lumotlar tuzilmasi", icon:'🗄️', key:'malumotlar_tuzilmasi'},
+            {name:'English',               icon:'🌐', key:'english2'}
         ],
         "Sun'iy intelekt": [
             {name:'Fizika',         icon:'🧲', key:'physics'},
@@ -104,7 +118,14 @@ const DEFAULT_CONFIG = {
             {name:'Akademik yozuv', icon:'📝', key:'academic'},
             {name:'Matematika',     icon:'➕', key:'math'},
             {name:'Perfect English',icon:'🇬🇧', key:'english'},
-            {name:'Dasturlash 1',   icon:'💻', key:'dasturlash'}
+            {name:'Dasturlash 1',   icon:'💻', key:'dasturlash'},
+            {name:'Dasturlash 2',          icon:'💡', key:'dasturlash2'},
+            {name:'Dinshunoslik',          icon:'🕌', key:'dinshunoslik'},
+            {name:'Falsafa',               icon:'💭', key:'falsafa'},
+            {name:'Fizika 2',              icon:'⚡', key:'fizika2'},
+            {name:'Hisob',                 icon:'🔢', key:'hisob'},
+            {name:"Ma'lumotlar tuzilmasi", icon:'🗄️', key:'malumotlar_tuzilmasi'},
+            {name:'English',               icon:'🌐', key:'english2'}
         ],
         'Magistratura': [
             {name:'Akademik yozuv', icon:'📝', key:'academic'},
