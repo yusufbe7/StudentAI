@@ -1226,10 +1226,9 @@ bot.hears("📅 Semestrni o'zgartirish", (ctx) => {
     const db = getDb(); const user = db.users[ctx.from.id];
     if (!user || !user.isRegistered) return ctx.reply("⚠️ Iltimos, avval ro'yxatdan o'ting.");
     const cfg = getConfig();
-    const activeSems = cfg.activeSemesters || [];
-    if (!activeSems.length) return ctx.reply("⚠️ Hozircha faol semestr mavjud emas.", Markup.keyboard([['⬅️ Orqaga (Sozlamalar)']]).resize());
+    const allSems = cfg.semesters || ['1-semestr', '2-semestr'];
     const rows = [];
-    for (let i = 0; i < activeSems.length; i += 2) { const r = [activeSems[i]]; if (activeSems[i+1]) r.push(activeSems[i+1]); rows.push(r); }
+    for (let i = 0; i < allSems.length; i += 2) { const r = [allSems[i]]; if (allSems[i+1]) r.push(allSems[i+1]); rows.push(r); }
     rows.push(['⬅️ Orqaga (Sozlamalar)']);
     user.step = 'edit_semester'; saveDb(db);
     const cur = user.semester ? ` (Hozirgi: <b>${escapeHTML(user.semester)}</b>)` : '';
@@ -2318,13 +2317,14 @@ bot.on(['text','photo','video','animation','document'], async (ctx, next) => {
             cu.yonalish=msgText; cu.step='wait_semester'; saveDb(db);
             const cfgS = getConfig();
             const semRows = [];
-            const availSems = cfgS.activeSemesters?.length ? cfgS.activeSemesters : cfgS.semesters;
-            for (let i=0; i<availSems.length; i+=2) { const r=[availSems[i]]; if(availSems[i+1]) r.push(availSems[i+1]); semRows.push(r); }
+            const allSems2 = cfgS.semesters || ['1-semestr', '2-semestr'];
+            for (let i=0; i<allSems2.length; i+=2) { const r=[allSems2[i]]; if(allSems2[i+1]) r.push(allSems2[i+1]); semRows.push(r); }
             return ctx.reply('Semestrni tanlang:', Markup.keyboard(semRows).oneTime().resize());
         }
         if (cu.step === 'wait_semester') {
             const cfgSem = getConfig();
-            if(!cfgSem.semesters.includes(msgText) && !cfgSem.activeSemesters?.includes(msgText)) return ctx.reply('⚠️ Semestrni tanlang:');
+            const validSems2 = cfgSem.semesters || ['1-semestr', '2-semestr'];
+            if(!validSems2.includes(msgText)) return ctx.reply('⚠️ Semestrni tanlang:');
             cu.semester=msgText; cu.isRegistered=true; cu.step='completed'; saveDb(db);
             await ctx.reply("✅ Ro'yxatdan o'tildi!");
 
@@ -2379,8 +2379,8 @@ bot.on(['text','photo','video','animation','document'], async (ctx, next) => {
     }
     if (user.step === 'edit_semester') {
         const cfgSem = getConfig();
-        if (!cfgSem.semesters.includes(msgText)) return ctx.reply("⚠️ Semestrni ro'yxatdan tanlang:");
-        if (!cfgSem.activeSemesters.includes(msgText)) return ctx.reply(`❌ "${escapeHTML(msgText)}" hozircha faol emas. Boshqa semestrni tanlang.`);
+        const validSems = cfgSem.semesters || ['1-semestr', '2-semestr'];
+        if (!validSems.includes(msgText)) return ctx.reply("⚠️ Semestrni ro'yxatdan tanlang:");
         user.semester = msgText; user.step = 'completed'; saveDb(db);
         await ctx.replyWithHTML(`✅ Semestr o'zgartirildi: <b>${escapeHTML(msgText)}</b>`);
         return showSubjectMenu(ctx);
