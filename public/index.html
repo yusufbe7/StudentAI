@@ -1460,9 +1460,44 @@ const SESS_KEY     = "sb_sess_v5"; // v5: nickname tizimi — yangi sessiya
 const APP_VER_KEY  = "sb_app_ver";
 const ADMIN_KEY    = "sb_admin_v4";
 
-const SUB_NAMES = { academic:'Akademik yozuv', history:'Tarix', math:'Matematika', dasturlash:'Dasturlash 1', physics:'Fizika', english:'Perfect English' };
-const SUB_ICONS = { academic:'📝', history:'📜', math:'➕', dasturlash:'💻', physics:'🧲', english:'🇬🇧' };
-
+const SUB_NAMES = {
+    // 1-semestr
+    academic:   'Akademik yozuv',
+    history:    'Tarix',
+    math:       'Matematika',
+    dasturlash: 'Dasturlash 1',
+    physics:    'Fizika',
+    english:    'Perfect English',
+    // 2-semestr
+    dasturlash2:           'Dasturlash 2',
+    dinshunoslik:          'Dinshunoslik',
+    falsafa:               'Falsafa',
+    fizika2:               'Fizika 2',
+    hisob:                 'Hisob',
+    malumotlar_tuzilmasi:  "Ma'lumotlar tuzilmasi",
+    english2:              'English',
+    // Boshqa
+    makroiqtisod: 'Makroiqtisod',
+};
+const SUB_ICONS = {
+    // 1-semestr
+    academic:   '📝',
+    history:    '📜',
+    math:       '➕',
+    dasturlash: '💻',
+    physics:    '🧲',
+    english:    '🇬🇧',
+    // 2-semestr
+    dasturlash2:          '💡',
+    dinshunoslik:         '🕌',
+    falsafa:              '💭',
+    fizika2:              '⚡',
+    hisob:                '🔢',
+    malumotlar_tuzilmasi: '🗄️',
+    english2:             '🌐',
+    // Boshqa
+    makroiqtisod: '📊',
+};
 // ═══════════════════════════════════════════════
 // STORAGE
 // ═══════════════════════════════════════════════
@@ -3583,6 +3618,25 @@ async function adminLoadBlockedList() {
   } catch { el.innerHTML = '<div style="color:var(--red);font-size:12px;text-align:center;padding:8px;">Yuklanmadi</div>'; }
 }
 
+async function switchSemester() {
+    _userSemester = _userSemester === '2-semestr' ? '1-semestr' : '2-semestr';
+ 
+    // Local da saqlash
+    const sess = getSess();
+    if (sess && !sess.isAdmin) {
+        const users = getUsers();
+        const user = users[sess.username];
+        if (user) {
+            user.semester = _userSemester;
+            saveUsers({...users, [sess.username]: user});
+        }
+    }
+ 
+    // Fanlar ro'yxatini qayta yuklash
+    await loadSubjects();
+    toast(`✅ ${_userSemester} ga o'tildi`, 'ok');
+}
+
 async function quickUnblock(id) {
   try {
     const r = await fetch('/api/admin/unblock-user', { method: 'POST',
@@ -3745,36 +3799,105 @@ function renderLb(list){ renderLbList(list, getSess()); }
 // SUBJECTS & TEST
 // ═══════════════════════════════════════════════
 let _subjects={},_selKey=null,_ts={},_testTimer=null;
+let _userSemester = null;
 
-async function loadSubjects(){
-  try{
-    const r=await fetch('/api/subjects');
-    if(r.ok){_subjects=await r.json();renderSubjGrid();}
-    else document.getElementById('subj-grid').innerHTML='<div style="color:var(--text3);font-size:13px;text-align:center;padding:30px;grid-column:1/-1;">Yuklanmadi.</div>';
-  }catch{document.getElementById('subj-grid').innerHTML='<div style="color:var(--text3);font-size:13px;text-align:center;padding:30px;grid-column:1/-1;">Server bilan ulanishda xatolik.</div>';}
-}
-function renderSubjGrid(){
-  const sess=getSess(); let yo='';
-  if(sess&&!sess.isAdmin){const u=getUsers()[sess.username];yo=(u?.yonalish||'').toLowerCase().replace(/'/g,'').replace(/ /g,'_');}
-  const grid=document.getElementById('subj-grid'); let html=''; const shown=new Set();
-  Object.keys(_subjects).forEach(key=>{
-    const parts=key.split('_'); const sub=parts[parts.length-1];
-    if(shown.has(sub)) return;
-    let bk=`${yo}_${sub}`;
-    if(!_subjects[bk]) bk=sub;
-    if(!_subjects[bk]){const f=Object.keys(_subjects).find(k=>k.endsWith('_'+sub)||k===sub);bk=f||key;}
-    const count=_subjects[bk]?.questions?.length||0;
-    if(!count) return;
-    shown.add(sub);
-    const name=SUB_NAMES[sub]||sub,icon=SUB_ICONS[sub]||'📖';
-    html+=`<div class="subj-btn2" onclick="selectSubj('${escA(bk)}','${escA(name)}')">
-      <div class="subj-icon2">${icon}</div>
-      <div class="subj-name2">${escH(name)}</div>
-      <div class="subj-count2">${count} ta savol</div>
+
+async function loadSubjects() {
+    // Avval foydalanuvchi semestrini olish
+    const sess = getSess();
+    if (sess && !sess.isAdmin) {
+        const user = getUsers()[sess.username];
+        if (user?.name && !_userSemester) {
+            try {
+                const ctrl = new AbortController();
+                setTimeout(() => ctrl.abort(), 3000);
+                const r = await fetch('/api/user-stats?name=' + encodeURIComponent(user.name), {signal: ctrl.signal});
+                if (r.ok) {
+                    const d = await r.json();
+                    _userSemester = d.semester || user.semester || '1-semestr';
+                    user.semester = _userSemester;
+                    user.yonalish = d.yonalish || user.yonalish || '';
+                    saveUsers({...getUsers(), [sess.username]: user});
+                }
+            } catch { _userSemester = user.semester || '1-semestr'; }
+        }
+    }
+    const semester = _userSemester || '1-semestr';
+    const user = sess && !sess.isAdmin ? getUsers()[sess.username] : null;
+    const yonalish = user?.yonalish || '';
+ 
+    // Semester + yonalish bo'yicha filterlangan fanlarni olish
+    let url = '/api/subjects';
+    if (semester && yonalish) {
+        url += `?semester=${encodeURIComponent(semester)}&yonalish=${encodeURIComponent(yonalish)}`;
+    }
+ 
+    try {
+        const r = await fetch(url);
+        if (r.ok) {
+            _subjects = await r.json();
+            renderSubjGrid();
+        } else {
+            document.getElementById('subj-grid').innerHTML =
+                '<div style="color:var(--text3);font-size:13px;text-align:center;padding:30px;grid-column:1/-1;">Yuklanmadi.</div>';
+        }
+    } catch {
+        document.getElementById('subj-grid').innerHTML =
+            '<div style="color:var(--text3);font-size:13px;text-align:center;padding:30px;grid-column:1/-1;">Server bilan ulanishda xatolik.</div>';
+    }
+  }
+function renderSubjGrid() {
+    const sess = getSess();
+    const semester = _userSemester || '1-semestr';
+    let yo = '';
+    if (sess && !sess.isAdmin) {
+        const u = getUsers()[sess.username];
+        yo = (u?.yonalish || '').toLowerCase().replace(/'/g,'').replace(/ /g,'_');
+    }
+ 
+    const grid = document.getElementById('subj-grid');
+    let html = '';
+    const shown = new Set();
+ 
+    // Semester badge ko'rsatish
+    const semLabel = semester === '2-semestr' ? '2️⃣ 2-semestr' : '1️⃣ 1-semestr';
+    html += `<div style="grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
+        <div style="font-size:13px;font-weight:700;color:var(--text);">📅 ${semLabel}</div>
+        <div onclick="switchSemester()" style="font-size:12px;color:var(--green);font-weight:700;cursor:pointer;background:var(--green-bg);padding:5px 12px;border-radius:20px;">
+            ${semester === '2-semestr' ? '← 1-semestrga' : '2-semestrga →'}
+        </div>
     </div>`;
-  });
-  grid.innerHTML=html||'<div style="color:var(--text3);font-size:13px;text-align:center;padding:30px;grid-column:1/-1;font-weight:500;">Savollar topilmadi.</div>';
+ 
+    Object.keys(_subjects).forEach(key => {
+        const parts = key.split('_');
+        const sub = parts[parts.length - 1];
+        if (shown.has(sub)) return;
+ 
+        let bk = `${yo}_${sub}`;
+        if (!_subjects[bk]) bk = sub;
+        if (!_subjects[bk]) {
+            const f = Object.keys(_subjects).find(k => k.endsWith('_' + sub) || k === sub);
+            bk = f || key;
+        }
+        const count = _subjects[bk]?.questions?.length || 0;
+        if (!count) return;
+        shown.add(sub);
+        const name = SUB_NAMES[sub] || sub;
+        const icon = SUB_ICONS[sub] || '📖';
+        html += `<div class="subj-btn2" onclick="selectSubj('${escA(bk)}','${escA(name)}')">
+            <div class="subj-icon2">${icon}</div>
+            <div class="subj-name2">${escH(name)}</div>
+            <div class="subj-count2">${count} ta savol</div>
+        </div>`;
+    });
+ 
+    if (!shown.size) {
+        html += '<div style="color:var(--text3);font-size:13px;text-align:center;padding:30px;grid-column:1/-1;font-weight:500;">Bu semestrda savollar topilmadi.</div>';
+    }
+    grid.innerHTML = html;
 }
+
+
 function selectSubj(key,name){
   _selKey=key;
   document.getElementById('test-mode-name').textContent='📚 '+name;
