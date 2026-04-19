@@ -367,6 +367,18 @@ function isValidName(name) {
     if (FAKE_NAMES.some(fake => lower.includes(fake))) return false;
     return true;
 }
+function getBaseYonalishKey(yonalish) {
+    // "Dasturiy Injiniring 2-semestr" → "dasturiy_injiniring"
+    // "Kiberxavfsizlik 1-semestr"     → "kiberxavfsizlik"
+    // "Sun'iy intelekt 2-semestr"     → "suniy_intelekt"
+    // "Dasturiy Injiniring"           → "dasturiy_injiniring"  (eski)
+    return (yonalish || '')
+        .replace(/\s+[12]-semestr$/i, '')
+        .toLowerCase()
+        .trim()
+        .replace(/'/g, '')
+        .replace(/ /g, '_');
+}
 
 function getLeaderboard(requesterId = null) {
     const db  = getDb();
@@ -512,17 +524,18 @@ function showSubjectMenu(ctx) {
         const yonalish = user.yonalish || '';
         const cfg  = getConfig();
  
-        // ── 1-usul: to'g'ridan-to'g'ri yo'nalish nomidan fanlarni olish ──
+        // To'g'ridan-to'g'ri yo'nalish nomidan fanlarni olish
         let subs = cfg.subjectsByDirection?.[yonalish] || [];
  
-        // ── 2-usul (eski foydalanuvchilar uchun): agar yo'nalish konfigda
-        //    topilmasa, qisqa nom bilan qidiramiz
+        // Agar topilmasa — qisman moslik bilan qidirish
         if (!subs.length) {
-            // Masalan: "Dasturiy Injiniring" → "Dasturiy Injiniring 1-semestr" yoki "2-semestr"
-            const found = Object.keys(cfg.subjectsByDirection || {}).find(key =>
-                key.startsWith(yonalish) || yonalish.startsWith(key.split(' ')[0])
-            );
-            if (found) subs = cfg.subjectsByDirection[found];
+            const yonalishBase = yonalish.replace(/\s+[12]-semestr$/i, '').toLowerCase();
+            const found = Object.keys(cfg.subjectsByDirection || {}).find(key => {
+                const keyBase = key.replace(/\s+[12]-semestr$/i, '').toLowerCase();
+                return key.toLowerCase() === yonalish.toLowerCase() ||
+                       keyBase === yonalishBase;
+            });
+            if (found) subs = cfg.subjectsByDirection[found] || [];
         }
  
         let keyboard = [];
@@ -1271,10 +1284,20 @@ bot.hears(['📝 Akademik yozuv','📜 Tarix','➕ Matematika','💻 Dasturlash 
     const db = getDb();
     const user = db.users[ctx.from.id];
     if (!user?.isRegistered) return ctx.reply("⚠️ Avval ro'yxatdan o'ting.");
-    const yonalishKey = user.yonalish.toLowerCase().trim().replace(/'/g,'').replace(/ /g,'_');
-    const subjectMap = {'Akademik':'academic','Tarix':'history','Matematika':'math','Dasturlash':'dasturlash','Fizika':'physics','English':'english'};
+ 
+    // ✅ semestr qismini olib tashlaymiz
+    const baseKey = getBaseYonalishKey(user.yonalish);
+    const subjectMap = {
+        'Akademik':'academic',
+        'Tarix':   'history',
+        'Matematika':'math',
+        'Dasturlash':'dasturlash',
+        'Fizika':  'physics',
+        'English': 'english'
+    };
     const subjectPart = Object.entries(subjectMap).find(([k]) => text.includes(k))?.[1];
-    const finalKey = `${yonalishKey}_${subjectPart}`;
+    const finalKey = `${baseKey}_${subjectPart}`;
+ 
     if (SUBJECTS[finalKey]?.questions) {
         s.currentSubject = finalKey;
         const userU = getDb().users[ctx.from.id];
@@ -1286,7 +1309,9 @@ bot.hears(['📝 Akademik yozuv','📜 Tarix','➕ Matematika','💻 Dasturlash 
             return sendQuestion(ctx, true);
         }
         return ctx.reply(`Tayyormisiz? (${text})`, Markup.keyboard([["⚡️ Blitz (25)","📝 To'liq test"],['⬅️ Orqaga (Fanlar)']]).resize());
-    } else return ctx.reply(`⚠️ ${user.yonalish} uchun "${text}" savollari hali yuklanmagan.`);
+    } else {
+        return ctx.reply(`⚠️ ${user.yonalish} uchun "${text}" savollari hali yuklanmagan.`);
+    }
 });
 
 bot.hears(["⚡️ Blitz (25)","📝 To'liq test"], async (ctx) => {
@@ -2456,27 +2481,32 @@ bot.on(['text','photo','video','animation','document'], async (ctx, next) => {
         if (user0?.isRegistered) {
             const cfg0 = getConfig();
             const yonalish = user0.yonalish || '';
-            
-            // Foydalanuvchi yo'nalishiga mos fanlarni olish
+ 
+            // Yo'nalish fanlarini olish
             let dirSubs = cfg0.subjectsByDirection?.[yonalish] || [];
-            
-            // Agar topilmasa — qisman moslik bo'yicha qidirish
+ 
+            // Eski foydalanuvchilar uchun fallback
             if (!dirSubs.length) {
-                const found = Object.keys(cfg0.subjectsByDirection || {}).find(key =>
-                    key.startsWith(yonalish) || yonalish.startsWith(key.split(' ')[0])
-                );
-                if (found) dirSubs = cfg0.subjectsByDirection[found] || [];
+                const yonalishBase = yonalish.replace(/\s+[12]-semestr$/i, '').toLowerCase();
+                const foundKey = Object.keys(cfg0.subjectsByDirection || {}).find(key => {
+                    const keyBase = key.replace(/\s+[12]-semestr$/i, '').toLowerCase();
+                    return key.toLowerCase() === yonalish.toLowerCase() || keyBase === yonalishBase;
+                });
+                if (foundKey) dirSubs = cfg0.subjectsByDirection[foundKey] || [];
             }
-            
+ 
             const matchedSub = dirSubs.find(sub => msgText === `${sub.icon} ${sub.name}`);
             if (matchedSub) {
                 if (isBotPaidMode && !vipUsers.includes(userId) && !isAdmin(userId)) {
                     return ctx.reply("⚠️ Bot hozirda pullik rejimda.", Markup.inlineKeyboard([[Markup.button.callback('💎 VIP sotib olish ✨','buy_vip')]]));
                 }
-                // yonalishKey hisoblash
-                const yonalishKey = yonalish.toLowerCase().trim().replace(/'/g,'').replace(/ /g,'_');
-                const finalKey = `${yonalishKey}_${matchedSub.key}`;
-                
+ 
+                // ✅ ASOSIY TO'G'RILASH: semestr qismini olib tashlaymiz
+                const baseKey = getBaseYonalishKey(yonalish);
+                const finalKey = `${baseKey}_${matchedSub.key}`;
+ 
+                console.log(`[Fan] "${yonalish}" → "${baseKey}" → "${finalKey}" (mavjud: ${!!SUBJECTS[finalKey]?.questions?.length})`);
+ 
                 if (SUBJECTS[finalKey]?.questions?.length) {
                     s.currentSubject = finalKey;
                     s.userName = (user0.name && isValidName(user0.name)) ? user0.name : (ctx.from.first_name || 'Talaba');
@@ -2487,7 +2517,7 @@ bot.on(['text','photo','video','animation','document'], async (ctx, next) => {
                     return ctx.reply(`Tayyormisiz? (${matchedSub.icon} ${matchedSub.name})`,
                         Markup.keyboard([["⚡️ Blitz (25)","📝 To'liq test"],['⬅️ Orqaga (Fanlar)']]).resize());
                 } else {
-                    return ctx.reply(`⚠️ "${matchedSub.name}" fani uchun savollar hali yuklanmagan.\n\n📌 Admin paneldan "➕ Savol qo'shish (bot)" orqali qo'shing.`);
+                    return ctx.reply(`⚠️ "${matchedSub.name}" fani uchun savollar hali yuklanmagan.\n\n📌 Admin paneldan qo'shing.`);
                 }
             }
         }
@@ -2532,76 +2562,100 @@ bot.on(['text','photo','video','animation','document'], async (ctx, next) => {
             }
             return ctx.reply("Yo'nalishingizni tanlang:", Markup.keyboard(dirRows).oneTime().resize());
         }
-        if (cu.step === 'wait_yonalish') {
-            cu.yonalish=msgText; cu.step='wait_semester'; saveDb(db);
+                if (cu.step === 'wait_yonalish') {
+            cu.yonalish = msgText;
+            saveDb(db);
+ 
+            // Yangi format: "Dasturiy Injiniring 2-semestr" — semestr allaqachon bor
+            if (/\s+[12]-semestr$/i.test(msgText)) {
+                cu.semester = msgText.match(/([12]-semestr)$/i)?.[1] || '1-semestr';
+                cu.isRegistered = true;
+                cu.step = 'completed';
+                saveDb(db);
+                await ctx.reply("✅ Ro'yxatdan o'tildi!");
+ 
+                // ── Referral bonus ─────────────────────────────────────
+                if (cu.referralBonusPending && cu.referredBy) {
+                    const REFERRAL_BONUS = 50;
+                    const REFERRAL_VIP_MILESTONE = 20;
+                    const refId = cu.referredBy;
+                    const db2 = getDb();
+                    if (db2.users[refId]) {
+                        db2.users[refId].score = (db2.users[refId].score || 0) + REFERRAL_BONUS;
+                        db2.users[refId].referralCount = (db2.users[refId].referralCount || 0) + 1;
+                        db2.users[userId].referralBonusPending = false;
+                        const refCount = db2.users[refId].referralCount;
+                        saveDb(db2);
+                        await ctx.telegram.sendMessage(refId,
+                            `🎉 <b>Do'stingiz ro'yxatdan o'tdi!</b>\n\n👥 Taklif qilganlaringiz soni: <b>${refCount} ta</b>\n🏆 Sizga <b>+${REFERRAL_BONUS} ball</b> berildi! 🎁\n\n${refCount < REFERRAL_VIP_MILESTONE ? `⭐ <b>${REFERRAL_VIP_MILESTONE - refCount} ta</b> do'st yana taklif qilsangiz — <b>1 oylik VIP</b> sovg'a!` : ''}`,
+                            {parse_mode:'HTML'}
+                        ).catch(()=>{});
+                        if (refCount >= REFERRAL_VIP_MILESTONE && !db2.users[refId].referralVipGiven) {
+                            const now2 = Date.now();
+                            const vipEnd2 = now2 + 30 * 24 * 60 * 60 * 1000;
+                            const db3 = getDb();
+                            if (db3.users[refId]) {
+                                db3.users[refId].isVip = true;
+                                db3.users[refId].vipStart = now2;
+                                db3.users[refId].vipEnd = vipEnd2;
+                                db3.users[refId].referralVipGiven = true;
+                                saveDb(db3);
+                            }
+                            if (!vipUsers.includes(refId)) { vipUsers.push(refId); saveVip(); }
+                            const fmtR = (ms) => new Date(ms).toLocaleDateString('ru-RU');
+                            await ctx.telegram.sendMessage(refId,
+                                `🏆 <b>TABRIKLAYMIZ!</b>\n\n🎊 Siz <b>${REFERRAL_VIP_MILESTONE} ta do'st</b> taklif qildingiz!\n\n💎 Sizga <b>1 OYLIK VIP</b> sovg'a berildi!\n📅 Amal qilish muddati: <b>${fmtR(vipEnd2)}</b> gacha\n\n✨ Barcha VIP imkoniyatlardan foydalaning!`,
+                                {parse_mode:'HTML'}
+                            ).catch(()=>{});
+                        }
+                    }
+                }
+                // ──────────────────────────────────────────────────────
+                return showSubjectMenu(ctx);
+            }
+ 
+            // Eski format yoki boshqa yo'nalishlar — semestr so'rash
+            cu.step = 'wait_semester';
+            saveDb(db);
             const cfgS = getConfig();
             const semRows = [];
             const allSems2 = cfgS.semesters || ['1-semestr', '2-semestr'];
             for (let i=0; i<allSems2.length; i+=2) { const r=[allSems2[i]]; if(allSems2[i+1]) r.push(allSems2[i+1]); semRows.push(r); }
             return ctx.reply('Semestrni tanlang:', Markup.keyboard(semRows).oneTime().resize());
         }
-        if (cu.step === 'wait_semester') {
-            const cfgSem = getConfig();
-            const validSems2 = cfgSem.semesters || ['1-semestr', '2-semestr'];
-            if(!validSems2.includes(msgText)) return ctx.reply('⚠️ Semestrni tanlang:');
-            cu.semester=msgText; cu.isRegistered=true; cu.step='completed'; saveDb(db);
-            await ctx.reply("✅ Ro'yxatdan o'tildi!");
-
-            // ── Referral bonus: yangi foydalanuvchi ro'yxatdan o'tdi ────
-            if (cu.referralBonusPending && cu.referredBy) {
-                const REFERRAL_BONUS = 50;
-                const REFERRAL_VIP_MILESTONE = 20;
-                const refId = cu.referredBy;
-                const db2 = getDb();
-                if (db2.users[refId]) {
-                    db2.users[refId].score = (db2.users[refId].score || 0) + REFERRAL_BONUS;
-                    db2.users[refId].referralCount = (db2.users[refId].referralCount || 0) + 1;
-                    db2.users[userId].referralBonusPending = false;
-                    const refCount = db2.users[refId].referralCount;
-                    saveDb(db2);
-                    // Har bir do'st uchun ball xabari
-                    await ctx.telegram.sendMessage(refId,
-                        `🎉 <b>Do'stingiz ro'yxatdan o'tdi!</b>\n\n👥 Taklif qilganlaringiz soni: <b>${refCount} ta</b>\n🏆 Sizga <b>+${REFERRAL_BONUS} ball</b> berildi! 🎁\n\n${refCount < REFERRAL_VIP_MILESTONE ? `⭐ <b>${REFERRAL_VIP_MILESTONE - refCount} ta</b> do'st yana taklif qilsangiz — <b>1 oylik VIP</b> sovg'a!` : ''}`,
-                        {parse_mode:'HTML'}
-                    ).catch(()=>{});
-                    // 20 ta referral = 1 oylik VIP
-                    if (refCount >= REFERRAL_VIP_MILESTONE && !db2.users[refId].referralVipGiven) {
-                        const now2 = Date.now();
-                        const vipEnd2 = now2 + 30 * 24 * 60 * 60 * 1000;
-                        const db3 = getDb();
-                        if (db3.users[refId]) {
-                            db3.users[refId].isVip = true;
-                            db3.users[refId].vipStart = now2;
-                            db3.users[refId].vipEnd = vipEnd2;
-                            db3.users[refId].referralVipGiven = true;
-                            saveDb(db3);
-                        }
-                        if (!vipUsers.includes(refId)) { vipUsers.push(refId); saveVip(); }
-                        const fmtR = (ms) => new Date(ms).toLocaleDateString('ru-RU');
-                        await ctx.telegram.sendMessage(refId,
-                            `🏆 <b>TABRIKLAYMIZ!</b>\n\n🎊 Siz <b>${REFERRAL_VIP_MILESTONE} ta do'st</b> taklif qildingiz!\n\n💎 Sizga <b>1 OYLIK VIP</b> sovg'a berildi!\n📅 Amal qilish muddati: <b>${fmtR(vipEnd2)}</b> gacha\n\n✨ Barcha VIP imkoniyatlardan foydalaning!`,
-                            {parse_mode:'HTML'}
-                        ).catch(()=>{});
-                    }
-                }
-            }
-            // ────────────────────────────────────────────────────────────
-            return showSubjectMenu(ctx);
         }
-        return ctx.reply("⚠️ Davom etish uchun ismingizni kiriting!");
-    }
     if (user.step === 'edit_name') {
         if (!isValidName(msgText)) return ctx.replyWithHTML("❌ <b>Bu ism sifatida qabul qilinmadi!</b>\n\nHaqiqiy ism va familiyangizni kiriting:");
         user.name=msgText.trim(); user.step='completed'; saveDb(db);
         await ctx.reply(`✅ Ism o'zgartirildi: ${escapeHTML(msgText.trim())}`);
         return showSubjectMenu(ctx);
     }
-    if (user.step === 'edit_semester') {
-        const cfgSem = getConfig();
-        const validSems = cfgSem.semesters || ['1-semestr', '2-semestr'];
+  if (user.step === 'edit_semester') {
+        const cfg = getConfig();
+ 
+        // Yangi format: "Dasturiy Injiniring 2-semestr" kabi to'liq yo'nalish
+        if (/\s+[12]-semestr$/i.test(msgText)) {
+            user.yonalish = msgText;
+            user.semester = msgText.match(/([12]-semestr)$/i)?.[1] || '1-semestr';
+            user.step = 'completed';
+            saveDb(db);
+            await ctx.replyWithHTML(`✅ Yangilandi: <b>${escapeHTML(msgText)}</b>`);
+            return showSubjectMenu(ctx);
+        }
+ 
+        // Eski format: faqat "1-semestr" yoki "2-semestr"
+        const validSems = cfg.semesters || ['1-semestr', '2-semestr'];
         if (!validSems.includes(msgText)) return ctx.reply("⚠️ Semestrni ro'yxatdan tanlang:");
-        user.semester = msgText; user.step = 'completed'; saveDb(db);
-        await ctx.replyWithHTML(`✅ Semestr o'zgartirildi: <b>${escapeHTML(msgText)}</b>`);
+ 
+        // Hozirgi yo'nalish asosini saqlab semestrni yangilash
+        const baseYonalish = (user.yonalish || '')
+            .replace(/\s+[12]-semestr$/i, '')
+            .trim();
+        user.yonalish = `${baseYonalish} ${msgText}`;
+        user.semester = msgText;
+        user.step = 'completed';
+        saveDb(db);
+        await ctx.replyWithHTML(`✅ Yangilandi: <b>${escapeHTML(user.yonalish)}</b>`);
         return showSubjectMenu(ctx);
     }
     return next();
