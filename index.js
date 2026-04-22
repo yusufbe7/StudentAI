@@ -53,80 +53,56 @@ const DEFAULT_CONFIG = {
     directionsByUniv: {
         'Alfraganus Universiteti': {
             '1-kurs': [
-                "Dasturiy Injiniring 1-semestr",
-                "Dasturiy Injiniring 2-semestr",
-                "Kiberxavfsizlik 1-semestr",
-                "Kiberxavfsizlik 2-semestr",
-                "Sun'iy intelekt 1-semestr",
-                "Sun'iy intelekt 2-semestr"
+                "Dasturiy Injiniring",
+                "Kiberxavfsizlik",
+                "Sun'iy intelekt"
             ],
             '2-kurs': [
-                "Dasturiy Injiniring 1-semestr",
-                "Dasturiy Injiniring 2-semestr",
-                "Kiberxavfsizlik 1-semestr",
-                "Kiberxavfsizlik 2-semestr",
-                "Sun'iy intelekt 1-semestr",
-                "Sun'iy intelekt 2-semestr"
+                "Dasturiy Injiniring",
+                "Kiberxavfsizlik",
+                "Sun'iy intelekt"
             ],
             '3-kurs': ['Magistratura', 'Boshqa'],
             '4-kurs': ['Magistratura', 'Boshqa']
         },
         'Perfect Universiteti': {
             '1-kurs': [
-                "Dasturiy Injiniring 1-semestr",
-                "Dasturiy Injiniring 2-semestr",
-                "Kiberxavfsizlik 1-semestr",
-                "Kiberxavfsizlik 2-semestr",
-                "Sun'iy intelekt 1-semestr",
-                "Sun'iy intelekt 2-semestr"
+                "Dasturiy Injiniring",
+                "Kiberxavfsizlik",
+                "Sun'iy intelekt"
             ],
             '2-kurs': [
-                "Dasturiy Injiniring 1-semestr",
-                "Dasturiy Injiniring 2-semestr",
-                "Kiberxavfsizlik 1-semestr",
-                "Kiberxavfsizlik 2-semestr",
-                "Sun'iy intelekt 1-semestr",
-                "Sun'iy intelekt 2-semestr"
+                "Dasturiy Injiniring",
+                "Kiberxavfsizlik",
+                "Sun'iy intelekt"
             ],
             '3-kurs': ['Magistratura', 'Boshqa'],
             '4-kurs': ['Magistratura', 'Boshqa']
         },
         'TATU': {
             '1-kurs': [
-                "Dasturiy Injiniring 1-semestr",
-                "Dasturiy Injiniring 2-semestr",
-                "Kiberxavfsizlik 1-semestr",
-                "Kiberxavfsizlik 2-semestr",
-                "Sun'iy intelekt 1-semestr",
-                "Sun'iy intelekt 2-semestr"
+                "Dasturiy Injiniring",
+                "Kiberxavfsizlik",
+                "Sun'iy intelekt"
             ],
             '2-kurs': [
-                "Dasturiy Injiniring 1-semestr",
-                "Dasturiy Injiniring 2-semestr",
-                "Kiberxavfsizlik 1-semestr",
-                "Kiberxavfsizlik 2-semestr",
-                "Sun'iy intelekt 1-semestr",
-                "Sun'iy intelekt 2-semestr"
+                "Dasturiy Injiniring",
+                "Kiberxavfsizlik",
+                "Sun'iy intelekt"
             ],
             '3-kurs': ['Magistratura', 'Boshqa'],
             '4-kurs': ['Magistratura', 'Boshqa']
         },
         'TDPU': {
             '1-kurs': [
-                "Dasturiy Injiniring 1-semestr",
-                "Dasturiy Injiniring 2-semestr",
-                "Kiberxavfsizlik 1-semestr",
-                "Kiberxavfsizlik 2-semestr",
-                "Sun'iy intelekt 1-semestr",
-                "Sun'iy intelekt 2-semestr"
+                "Dasturiy Injiniring",
+                "Kiberxavfsizlik",
+                "Sun'iy intelekt"
             ],
             '2-kurs': [
-                "Dasturiy Injiniring 1-semestr",
-                "Dasturiy Injiniring 2-semestr",
-                "Kiberxavfsizlik 1-semestr",
-                "Kiberxavfsizlik 2-semestr",
-                "Sun'iy intelekt 1-semestr",
-                "Sun'iy intelekt 2-semestr"
+                "Dasturiy Injiniring",
+                "Kiberxavfsizlik",
+                "Sun'iy intelekt"
             ],
             '3-kurs': ['Magistratura', 'Boshqa'],
             '4-kurs': ['Magistratura', 'Boshqa']
@@ -139,26 +115,14 @@ const DEFAULT_CONFIG = {
         }
     },
     vipPrice: 6000,
-    semesters: ['1-semestr', '2-semestr'],
-    activeSemesters: ['1-semestr', '2-semestr'],
+    semesters: ['2-semestr'],
+    activeSemesters: ['2-semestr'],
     subjectsByDirection: {
  
         // ══════════════════════════════════════════
-        // DASTURIY INJINIRING — 1-SEMESTR
+        // DASTURIY INJINIRING — faqat 2-semestr fanlari
         // ══════════════════════════════════════════
-        "Dasturiy Injiniring 1-semestr": [
-            { name: 'Akademik yozuv', icon: '📝', key: 'academic' },
-            { name: 'Tarix',          icon: '📜', key: 'history' },
-            { name: 'Matematika',     icon: '➕', key: 'math' },
-            { name: 'Fizika',         icon: '🧲', key: 'physics' },
-            { name: 'Dasturlash 1',   icon: '💻', key: 'dasturlash' },
-            { name: 'Perfect English', icon: '🇬🇧', key: 'english' }
-        ],
- 
-        // ══════════════════════════════════════════
-        // DASTURIY INJINIRING — 2-SEMESTR
-        // ══════════════════════════════════════════
-        "Dasturiy Injiniring 2-semestr": [
+        "Dasturiy Injiniring": [
             { name: 'Dasturlash 2',           icon: '💡', key: 'dasturlash2' },
             { name: 'Dinshunoslik',           icon: '🕌', key: 'dinshunoslik' },
             { name: 'Falsafa',                icon: '💭', key: 'falsafa' },
@@ -169,21 +133,9 @@ const DEFAULT_CONFIG = {
         ],
  
         // ══════════════════════════════════════════
-        // KIBERXAVFSIZLIK — 1-SEMESTR
+        // KIBERXAVFSIZLIK — faqat 2-semestr fanlari
         // ══════════════════════════════════════════
-        "Kiberxavfsizlik 1-semestr": [
-            { name: 'Fizika',         icon: '🧲', key: 'physics' },
-            { name: 'Tarix',          icon: '📜', key: 'history' },
-            { name: 'Akademik yozuv', icon: '📝', key: 'academic' },
-            { name: 'Matematika',     icon: '➕', key: 'math' },
-            { name: 'Perfect English', icon: '🇬🇧', key: 'english' },
-            { name: 'Dasturlash 1',   icon: '💻', key: 'dasturlash' }
-        ],
- 
-        // ══════════════════════════════════════════
-        // KIBERXAVFSIZLIK — 2-SEMESTR
-        // ══════════════════════════════════════════
-        "Kiberxavfsizlik 2-semestr": [
+        "Kiberxavfsizlik": [
             { name: 'Dasturlash 2',           icon: '💡', key: 'dasturlash2' },
             { name: 'Dinshunoslik',           icon: '🕌', key: 'dinshunoslik' },
             { name: 'Falsafa',                icon: '💭', key: 'falsafa' },
@@ -194,21 +146,9 @@ const DEFAULT_CONFIG = {
         ],
  
         // ══════════════════════════════════════════
-        // SUN'IY INTELEKT — 1-SEMESTR
+        // SUN'IY INTELEKT — faqat 2-semestr fanlari
         // ══════════════════════════════════════════
-        "Sun'iy intelekt 1-semestr": [
-            { name: 'Fizika',         icon: '🧲', key: 'physics' },
-            { name: 'Tarix',          icon: '📜', key: 'history' },
-            { name: 'Akademik yozuv', icon: '📝', key: 'academic' },
-            { name: 'Matematika',     icon: '➕', key: 'math' },
-            { name: 'Perfect English', icon: '🇬🇧', key: 'english' },
-            { name: 'Dasturlash 1',   icon: '💻', key: 'dasturlash' }
-        ],
- 
-        // ══════════════════════════════════════════
-        // SUN'IY INTELEKT — 2-SEMESTR
-        // ══════════════════════════════════════════
-        "Sun'iy intelekt 2-semestr": [
+        "Sun'iy intelekt": [
             { name: 'Dasturlash 2',           icon: '💡', key: 'dasturlash2' },
             { name: 'Dinshunoslik',           icon: '🕌', key: 'dinshunoslik' },
             { name: 'Falsafa',                icon: '💭', key: 'falsafa' },
@@ -222,16 +162,16 @@ const DEFAULT_CONFIG = {
         // MAGISTRATURA va BOSHQA
         // ══════════════════════════════════════════
         'Magistratura': [
-            { name: 'Akademik yozuv', icon: '📝', key: 'academic' },
-            { name: 'Tarix',          icon: '📜', key: 'history' },
-            { name: 'Matematika',     icon: '➕', key: 'math' },
-            { name: 'Fizika',         icon: '🧲', key: 'physics' }
+            { name: 'Dasturlash 2',           icon: '💡', key: 'dasturlash2' },
+            { name: 'Dinshunoslik',           icon: '🕌', key: 'dinshunoslik' },
+            { name: 'Falsafa',                icon: '💭', key: 'falsafa' },
+            { name: 'Fizika 2',               icon: '⚡', key: 'fizika2' }
         ],
         'Boshqa': [
-            { name: 'Akademik yozuv', icon: '📝', key: 'academic' },
-            { name: 'Tarix',          icon: '📜', key: 'history' },
-            { name: 'Matematika',     icon: '➕', key: 'math' },
-            { name: 'Fizika',         icon: '🧲', key: 'physics' }
+            { name: 'Dasturlash 2',           icon: '💡', key: 'dasturlash2' },
+            { name: 'Dinshunoslik',           icon: '🕌', key: 'dinshunoslik' },
+            { name: 'Falsafa',                icon: '💭', key: 'falsafa' },
+            { name: 'Fizika 2',               icon: '⚡', key: 'fizika2' }
         ],
  
         // ══════════════════════════════════════════
@@ -522,19 +462,18 @@ function showSubjectMenu(ctx) {
         const tour   = db.tournament;
         if (!user || !user.isRegistered) return ctx.reply("⚠️ Iltimos, avval /start bosing va ro'yxatdan o'ting.");
         const yonalish = user.yonalish || '';
-        const cfg  = getConfig();
+        const cfg = getConfig();
  
-        // To'g'ridan-to'g'ri yo'nalish nomidan fanlarni olish
+        // To'g'ridan-to'g'ri yo'nalish nomidan fanlar
         let subs = cfg.subjectsByDirection?.[yonalish] || [];
  
-        // Agar topilmasa — qisman moslik bilan qidirish
+        // Agar topilmasa (eski "Dasturiy Injiniring 1-semestr" kabi nomlar uchun)
         if (!subs.length) {
-            const yonalishBase = yonalish.replace(/\s+[12]-semestr$/i, '').toLowerCase();
-            const found = Object.keys(cfg.subjectsByDirection || {}).find(key => {
-                const keyBase = key.replace(/\s+[12]-semestr$/i, '').toLowerCase();
-                return key.toLowerCase() === yonalish.toLowerCase() ||
-                       keyBase === yonalishBase;
-            });
+            // Semestr qismini olib tashlab qidirish
+            const baseYonalish = yonalish.replace(/\s+[12]-semestr$/i, '').trim();
+            const found = Object.keys(cfg.subjectsByDirection || {}).find(key =>
+                key === baseYonalish
+            );
             if (found) subs = cfg.subjectsByDirection[found] || [];
         }
  
@@ -545,7 +484,7 @@ function showSubjectMenu(ctx) {
             keyboard.push(row);
         }
         if (!keyboard.length) {
-            keyboard = [['📝 Akademik yozuv','📜 Tarix'],['➕ Matematika','🧲 Fizika']];
+            keyboard = [['💡 Dasturlash 2','🕌 Dinshunoslik'],['💭 Falsafa','⚡ Fizika 2']];
         }
         if (tour?.isActive && !user.tourFinished) keyboard.unshift(['🏆 Xalqaro test musobaqa']);
         if (db.settings?.turboMode) keyboard.push(['🚀 TURBO YODLASH']);
@@ -1349,7 +1288,7 @@ bot.hears(["⚡️ Blitz (25)","📝 To'liq test"], async (ctx) => {
         // 5-testdan keyin VIP taklifi
         if (u.dailyTestCount === DAILY_LIMIT) {
             await ctx.replyWithHTML(
-                `🎉 <b>Zo'r! Bu bugungi ${DAILY_LIMIT}-testingiz!</b>\n\n⚠️ Bugungi bepul testlaringiz shu bilan tugadi.\n\n💎 <b>VIP a'zo</b> bo'ling va <b>cheksiz</b> test yeching!\n💰 Narxi: atigi <b>6 000 so'm/oy</b>`,
+                `🎉 <b>Zo'r! Bu bugungi ${DAILY_LIMIT}-testingiz!</b>\n\n⚠️ Bugungi bepul testlaringiz shu bilan tugadi.\n\n💎 <b>VIP a'zo</b> bo'ling va <b>cheksiz</b> test yeching!\n💰 Narxi: atigi <b>10 000 so'm/oy</b>`,
                 Markup.inlineKeyboard([[Markup.button.callback("💎 VIP bo'lish",'buy_vip')]])
             );
         }
@@ -2475,7 +2414,7 @@ bot.on(['text','photo','video','animation','document'], async (ctx, next) => {
         );
     }
     // ─── Dinamik fan tanlash (config dan) ────────────────────
-     {
+        {
         const db0 = getDb();
         const user0 = db0.users[userId];
         if (user0?.isRegistered) {
@@ -2485,14 +2424,12 @@ bot.on(['text','photo','video','animation','document'], async (ctx, next) => {
             // Yo'nalish fanlarini olish
             let dirSubs = cfg0.subjectsByDirection?.[yonalish] || [];
  
-            // Eski foydalanuvchilar uchun fallback
+            // Eski foydalanuvchilar uchun: "Dasturiy Injiniring 1-semestr" → "Dasturiy Injiniring"
             if (!dirSubs.length) {
-                const yonalishBase = yonalish.replace(/\s+[12]-semestr$/i, '').toLowerCase();
-                const foundKey = Object.keys(cfg0.subjectsByDirection || {}).find(key => {
-                    const keyBase = key.replace(/\s+[12]-semestr$/i, '').toLowerCase();
-                    return key.toLowerCase() === yonalish.toLowerCase() || keyBase === yonalishBase;
-                });
-                if (foundKey) dirSubs = cfg0.subjectsByDirection[foundKey] || [];
+                const baseYonalish = yonalish.replace(/\s+[12]-semestr$/i, '').trim();
+                if (cfg0.subjectsByDirection?.[baseYonalish]) {
+                    dirSubs = cfg0.subjectsByDirection[baseYonalish];
+                }
             }
  
             const matchedSub = dirSubs.find(sub => msgText === `${sub.icon} ${sub.name}`);
@@ -2501,11 +2438,12 @@ bot.on(['text','photo','video','animation','document'], async (ctx, next) => {
                     return ctx.reply("⚠️ Bot hozirda pullik rejimda.", Markup.inlineKeyboard([[Markup.button.callback('💎 VIP sotib olish ✨','buy_vip')]]));
                 }
  
-                // ✅ ASOSIY TO'G'RILASH: semestr qismini olib tashlaymiz
-                const baseKey = getBaseYonalishKey(yonalish);
-                const finalKey = `${baseKey}_${matchedSub.key}`;
+                // yonalishKey: semestr qismisiz
+                const baseYonalish = yonalish.replace(/\s+[12]-semestr$/i, '').trim();
+                const yonalishKey = baseYonalish.toLowerCase().replace(/'/g,'').replace(/ /g,'_');
+                const finalKey = `${yonalishKey}_${matchedSub.key}`;
  
-                console.log(`[Fan] "${yonalish}" → "${baseKey}" → "${finalKey}" (mavjud: ${!!SUBJECTS[finalKey]?.questions?.length})`);
+                console.log(`[Fan] "${yonalish}" → "${yonalishKey}" → "${finalKey}"`);
  
                 if (SUBJECTS[finalKey]?.questions?.length) {
                     s.currentSubject = finalKey;
@@ -2517,7 +2455,7 @@ bot.on(['text','photo','video','animation','document'], async (ctx, next) => {
                     return ctx.reply(`Tayyormisiz? (${matchedSub.icon} ${matchedSub.name})`,
                         Markup.keyboard([["⚡️ Blitz (25)","📝 To'liq test"],['⬅️ Orqaga (Fanlar)']]).resize());
                 } else {
-                    return ctx.reply(`⚠️ "${matchedSub.name}" fani uchun savollar hali yuklanmagan.\n\n📌 Admin paneldan qo'shing.`);
+                    return ctx.reply(`⚠️ "${matchedSub.name}" fani uchun savollar hali yuklanmagan.\n\n📌 Admin paneldan "➕ Savol qo'shish (bot)" orqali qo'shing.`);
                 }
             }
         }
@@ -2562,66 +2500,52 @@ bot.on(['text','photo','video','animation','document'], async (ctx, next) => {
             }
             return ctx.reply("Yo'nalishingizni tanlang:", Markup.keyboard(dirRows).oneTime().resize());
         }
-                if (cu.step === 'wait_yonalish') {
+               if (cu.step === 'wait_yonalish') {
             cu.yonalish = msgText;
+            cu.semester = '2-semestr';   // har doim 2-semestr
+            cu.isRegistered = true;
+            cu.step = 'completed';
             saveDb(db);
+            await ctx.reply("✅ Ro'yxatdan o'tildi!");
  
-            // Yangi format: "Dasturiy Injiniring 2-semestr" — semestr allaqachon bor
-            if (/\s+[12]-semestr$/i.test(msgText)) {
-                cu.semester = msgText.match(/([12]-semestr)$/i)?.[1] || '1-semestr';
-                cu.isRegistered = true;
-                cu.step = 'completed';
-                saveDb(db);
-                await ctx.reply("✅ Ro'yxatdan o'tildi!");
- 
-                // ── Referral bonus ─────────────────────────────────────
-                if (cu.referralBonusPending && cu.referredBy) {
-                    const REFERRAL_BONUS = 50;
-                    const REFERRAL_VIP_MILESTONE = 20;
-                    const refId = cu.referredBy;
-                    const db2 = getDb();
-                    if (db2.users[refId]) {
-                        db2.users[refId].score = (db2.users[refId].score || 0) + REFERRAL_BONUS;
-                        db2.users[refId].referralCount = (db2.users[refId].referralCount || 0) + 1;
-                        db2.users[userId].referralBonusPending = false;
-                        const refCount = db2.users[refId].referralCount;
-                        saveDb(db2);
+            // ── Referral bonus ────────────────────────────────────
+            if (cu.referralBonusPending && cu.referredBy) {
+                const REFERRAL_BONUS = 50;
+                const REFERRAL_VIP_MILESTONE = 20;
+                const refId = cu.referredBy;
+                const db2 = getDb();
+                if (db2.users[refId]) {
+                    db2.users[refId].score = (db2.users[refId].score || 0) + REFERRAL_BONUS;
+                    db2.users[refId].referralCount = (db2.users[refId].referralCount || 0) + 1;
+                    db2.users[userId].referralBonusPending = false;
+                    const refCount = db2.users[refId].referralCount;
+                    saveDb(db2);
+                    await ctx.telegram.sendMessage(refId,
+                        `🎉 <b>Do'stingiz ro'yxatdan o'tdi!</b>\n\n👥 Taklif qilganlaringiz soni: <b>${refCount} ta</b>\n🏆 Sizga <b>+${REFERRAL_BONUS} ball</b> berildi! 🎁\n\n${refCount < REFERRAL_VIP_MILESTONE ? `⭐ <b>${REFERRAL_VIP_MILESTONE - refCount} ta</b> do'st yana taklif qilsangiz — <b>1 oylik VIP</b> sovg'a!` : ''}`,
+                        {parse_mode:'HTML'}
+                    ).catch(()=>{});
+                    if (refCount >= REFERRAL_VIP_MILESTONE && !db2.users[refId].referralVipGiven) {
+                        const now2 = Date.now();
+                        const vipEnd2 = now2 + 30 * 24 * 60 * 60 * 1000;
+                        const db3 = getDb();
+                        if (db3.users[refId]) {
+                            db3.users[refId].isVip = true;
+                            db3.users[refId].vipStart = now2;
+                            db3.users[refId].vipEnd = vipEnd2;
+                            db3.users[refId].referralVipGiven = true;
+                            saveDb(db3);
+                        }
+                        if (!vipUsers.includes(refId)) { vipUsers.push(refId); saveVip(); }
+                        const fmtR = (ms) => new Date(ms).toLocaleDateString('ru-RU');
                         await ctx.telegram.sendMessage(refId,
-                            `🎉 <b>Do'stingiz ro'yxatdan o'tdi!</b>\n\n👥 Taklif qilganlaringiz soni: <b>${refCount} ta</b>\n🏆 Sizga <b>+${REFERRAL_BONUS} ball</b> berildi! 🎁\n\n${refCount < REFERRAL_VIP_MILESTONE ? `⭐ <b>${REFERRAL_VIP_MILESTONE - refCount} ta</b> do'st yana taklif qilsangiz — <b>1 oylik VIP</b> sovg'a!` : ''}`,
+                            `🏆 <b>TABRIKLAYMIZ!</b>\n\n🎊 Siz <b>${REFERRAL_VIP_MILESTONE} ta do'st</b> taklif qildingiz!\n\n💎 Sizga <b>1 OYLIK VIP</b> sovg'a berildi!\n📅 Amal qilish muddati: <b>${fmtR(vipEnd2)}</b> gacha`,
                             {parse_mode:'HTML'}
                         ).catch(()=>{});
-                        if (refCount >= REFERRAL_VIP_MILESTONE && !db2.users[refId].referralVipGiven) {
-                            const now2 = Date.now();
-                            const vipEnd2 = now2 + 30 * 24 * 60 * 60 * 1000;
-                            const db3 = getDb();
-                            if (db3.users[refId]) {
-                                db3.users[refId].isVip = true;
-                                db3.users[refId].vipStart = now2;
-                                db3.users[refId].vipEnd = vipEnd2;
-                                db3.users[refId].referralVipGiven = true;
-                                saveDb(db3);
-                            }
-                            if (!vipUsers.includes(refId)) { vipUsers.push(refId); saveVip(); }
-                            const fmtR = (ms) => new Date(ms).toLocaleDateString('ru-RU');
-                            await ctx.telegram.sendMessage(refId,
-                                `🏆 <b>TABRIKLAYMIZ!</b>\n\n🎊 Siz <b>${REFERRAL_VIP_MILESTONE} ta do'st</b> taklif qildingiz!\n\n💎 Sizga <b>1 OYLIK VIP</b> sovg'a berildi!\n📅 Amal qilish muddati: <b>${fmtR(vipEnd2)}</b> gacha\n\n✨ Barcha VIP imkoniyatlardan foydalaning!`,
-                                {parse_mode:'HTML'}
-                            ).catch(()=>{});
-                        }
                     }
                 }
-                // ──────────────────────────────────────────────────────
-                return showSubjectMenu(ctx);
             }
- 
-            // Eski format yoki boshqa yo'nalishlar — semestr so'rash
-            cu.step = 'wait_semester';
-            saveDb(db);
-            const cfgS = getConfig();
-            const semRows = [];
-            const allSems2 = cfgS.semesters || ['1-semestr', '2-semestr'];
-            for (let i=0; i<allSems2.length; i+=2) { const r=[allSems2[i]]; if(allSems2[i+1]) r.push(allSems2[i+1]); semRows.push(r); }
-            return ctx.reply('Semestrni tanlang:', Markup.keyboard(semRows).oneTime().resize());
+            // ─────────────────────────────────────────────────────
+            return showSubjectMenu(ctx);
         }
         }
     if (user.step === 'edit_name') {
