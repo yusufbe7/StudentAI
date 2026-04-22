@@ -1217,41 +1217,41 @@ bot.action('tour_add_one', async (ctx) => {
 // ============================================================
 // BOT.HEARS — FAN VA TEST
 // ============================================================
-bot.hears(['📝 Akademik yozuv','📜 Tarix','➕ Matematika','💻 Dasturlash 1','🧲 Fizika','🇬🇧 Perfect English'], async (ctx) => {
-    const text = ctx.message.text;
-    const s = ctx.session;
-    const db = getDb();
-    const user = db.users[ctx.from.id];
-    if (!user?.isRegistered) return ctx.reply("⚠️ Avval ro'yxatdan o'ting.");
+// bot.hears(['📝 Akademik yozuv','📜 Tarix','➕ Matematika','💻 Dasturlash 1','🧲 Fizika','🇬🇧 Perfect English'], async (ctx) => {
+//     const text = ctx.message.text;
+//     const s = ctx.session;
+//     const db = getDb();
+//     const user = db.users[ctx.from.id];
+//     if (!user?.isRegistered) return ctx.reply("⚠️ Avval ro'yxatdan o'ting.");
  
-    // ✅ semestr qismini olib tashlaymiz
-    const baseKey = getBaseYonalishKey(user.yonalish);
-    const subjectMap = {
-        'Akademik':'academic',
-        'Tarix':   'history',
-        'Matematika':'math',
-        'Dasturlash':'dasturlash',
-        'Fizika':  'physics',
-        'English': 'english'
-    };
-    const subjectPart = Object.entries(subjectMap).find(([k]) => text.includes(k))?.[1];
-    const finalKey = `${baseKey}_${subjectPart}`;
+//     // ✅ semestr qismini olib tashlaymiz
+//     const baseKey = getBaseYonalishKey(user.yonalish);
+//     const subjectMap = {
+//         'Akademik':'academic',
+//         'Tarix':   'history',
+//         'Matematika':'math',
+//         'Dasturlash':'dasturlash',
+//         'Fizika':  'physics',
+//         'English': 'english'
+//     };
+//     const subjectPart = Object.entries(subjectMap).find(([k]) => text.includes(k))?.[1];
+//     const finalKey = `${baseKey}_${subjectPart}`;
  
-    if (SUBJECTS[finalKey]?.questions) {
-        s.currentSubject = finalKey;
-        const userU = getDb().users[ctx.from.id];
-        s.userName = (userU?.name && isValidName(userU.name)) ? userU.name : (ctx.from.first_name || 'Talaba');
-        if (s.isTurbo) {
-            const questions = SUBJECTS[finalKey].questions;
-            if (!questions.length) return ctx.reply("Bu fanda savollar yo'q.");
-            s.activeList = shuffle([...questions]); s.index = 0; s.score = 0; s.wrongs = [];
-            return sendQuestion(ctx, true);
-        }
-        return ctx.reply(`Tayyormisiz? (${text})`, Markup.keyboard([["⚡️ Blitz (25)","📝 To'liq test"],['⬅️ Orqaga (Fanlar)']]).resize());
-    } else {
-        return ctx.reply(`⚠️ ${user.yonalish} uchun "${text}" savollari hali yuklanmagan.`);
-    }
-});
+//     if (SUBJECTS[finalKey]?.questions) {
+//         s.currentSubject = finalKey;
+//         const userU = getDb().users[ctx.from.id];
+//         s.userName = (userU?.name && isValidName(userU.name)) ? userU.name : (ctx.from.first_name || 'Talaba');
+//         if (s.isTurbo) {
+//             const questions = SUBJECTS[finalKey].questions;
+//             if (!questions.length) return ctx.reply("Bu fanda savollar yo'q.");
+//             s.activeList = shuffle([...questions]); s.index = 0; s.score = 0; s.wrongs = [];
+//             return sendQuestion(ctx, true);
+//         }
+//         return ctx.reply(`Tayyormisiz? (${text})`, Markup.keyboard([["⚡️ Blitz (25)","📝 To'liq test"],['⬅️ Orqaga (Fanlar)']]).resize());
+//     } else {
+//         return ctx.reply(`⚠️ ${user.yonalish} uchun "${text}" savollari hali yuklanmagan.`);
+//     }
+// });
 
 bot.hears(["⚡️ Blitz (25)","📝 To'liq test"], async (ctx) => {
     const s = ctx.session;
@@ -1305,21 +1305,10 @@ bot.hears(["⚡️ Blitz (25)","📝 To'liq test"], async (ctx) => {
 bot.hears('📊 Reyting', async (ctx) => ctx.replyWithHTML(getLeaderboard(ctx.from.id)));
 bot.hears(['👤 Profil','👤 Profilim'], async (ctx) => showProfile(ctx));
 bot.hears(['⬅️ Orqaga (Fanlar)'], (ctx) => showSubjectMenu(ctx));
-bot.hears('⚙️ Sozlamalar', (ctx) => ctx.reply('Sozlamalar:', Markup.keyboard([["📝 Ismni o'zgartirish"],["🎓 Yo'nalishni qayta tanlash"],["📅 Semestrni o'zgartirish"],['⬅️ Orqaga (Fanlar)']]).resize()));
+bot.hears('⚙️ Sozlamalar', (ctx) => ctx.reply('Sozlamalar:', Markup.keyboard([["📝 Ismni o'zgartirish"],["🎓 Yo'nalishni qayta tanlash"],['⬅️ Orqaga (Fanlar)']]).resize()));
 bot.hears("📝 Ismni o'zgartirish", (ctx) => { const db=getDb(); if(!db.users[ctx.from.id])return; db.users[ctx.from.id].step='edit_name'; saveDb(db); return ctx.reply('Yangi ismingizni kiriting:'); });
-bot.hears("📅 Semestrni o'zgartirish", (ctx) => {
-    const db = getDb(); const user = db.users[ctx.from.id];
-    if (!user || !user.isRegistered) return ctx.reply("⚠️ Iltimos, avval ro'yxatdan o'ting.");
-    const cfg = getConfig();
-    const allSems = cfg.semesters || ['1-semestr', '2-semestr'];
-    const rows = [];
-    for (let i = 0; i < allSems.length; i += 2) { const r = [allSems[i]]; if (allSems[i+1]) r.push(allSems[i+1]); rows.push(r); }
-    rows.push(['⬅️ Orqaga (Sozlamalar)']);
-    user.step = 'edit_semester'; saveDb(db);
-    const cur = user.semester ? ` (Hozirgi: <b>${escapeHTML(user.semester)}</b>)` : '';
-    return ctx.replyWithHTML(`📅 Semestrni tanlang${cur}:`, Markup.keyboard(rows).resize());
-});
-bot.hears('⬅️ Orqaga (Sozlamalar)', (ctx) => ctx.reply('Sozlamalar:', Markup.keyboard([["📝 Ismni o'zgartirish"],["🎓 Yo'nalishni qayta tanlash"],["📅 Semestrni o'zgartirish"],['⬅️ Orqaga (Fanlar)']]).resize()));
+bot.hears("📅 Semestrni o'zgartirish", (ctx) => showSubjectMenu(ctx));
+bot.hears('⬅️ Orqaga (Sozlamalar)', (ctx) => ctx.reply('Sozlamalar:', Markup.keyboard([["📝 Ismni o'zgartirish"],["🎓 Yo'nalishni qayta tanlash"],['⬅️ Orqaga (Fanlar)']]).resize()));
 bot.hears("🎓 Yo'nalishni qayta tanlash", (ctx) => {
     const db=getDb(); const user=db.users[ctx.from.id]; if(!user)return;
     user.isRegistered=false; user.step='wait_univ'; saveDb(db);
