@@ -588,7 +588,7 @@ async function sendQuestion(ctx, isNew = false) {
     s.currentOptions.forEach((opt, i) => { text += `<b>${labels[i]})</b> ${escapeHTML(opt)}\n\n`; });
     const inlineBtn = Markup.inlineKeyboard([
         s.currentOptions.map((_,i) => Markup.button.callback(['🔵','🟢','🟡','🔴'][i]+' '+labels[i],`ans_${i}`)),
-        [Markup.button.callback('💡 Tushuntirish (VIP)','show_explanation'), Markup.button.callback('⚠️ Xato savol','report_q')],
+        [Markup.button.callback('💡 Tushuntirish (VIP)','show_explanation')],
         [Markup.button.callback('🛑 Testni to\'xtatish','stop_test')],
     ]);
     if (hasImage) { await ctx.replyWithPhoto({source:imageSource},{caption:text,parse_mode:'HTML',...inlineBtn}); }
@@ -2450,14 +2450,14 @@ bot.on(['text','photo','video','animation','document'], async (ctx, next) => {
         }
     }
 
-    // Ro'yxatdan o'tish
-    const db = getDb();
+ const db = getDb();
     const user = db.users[userId];
     if (!user || !user.isRegistered) {
         if (!db.users[userId]) { db.users[userId]={id:userId,step:'wait_name',isRegistered:false,score:0,username}; saveDb(db); }
         const cu = db.users[userId];
         if (cu.step === 'wait_name') {
-            const forbidden = ['📝 Akademik yozuv','📜 Tarix','➕ Matematika','💻 Dasturlash 1','🧲 Fizika','🇬🇧 Perfect English','📊 Reyting','👤 Profil','⚙️ Sozlamalar'];
+            // ✅ Faqat 2-semestr tugmalari forbidden listda
+            const forbidden = ['💡 Dasturlash 2','🕌 Dinshunoslik','💭 Falsafa','⚡ Fizika 2','🔢 Hisob',"🗄️ Ma'lumotlar tuzilmasi",'🌐 English','📊 Reyting','👤 Profil','⚙️ Sozlamalar'];
             if (forbidden.includes(msgText)) return ctx.reply("❌ Menyu tugmalarini bosmang! Ism va familiyangizni yozing:", Markup.removeKeyboard());
             if (!isValidName(msgText)) return ctx.replyWithHTML(`❌ <b>Bu ism sifatida qabul qilinmadi!</b>\n\nHaqiqiy ism va familiyangizni kiriting.\nMasalan: <i>Abdullayev Jasur</i>`, Markup.removeKeyboard());
             cu.name=msgText.trim(); cu.step='wait_univ'; saveDb(db);
@@ -2489,9 +2489,9 @@ bot.on(['text','photo','video','animation','document'], async (ctx, next) => {
             }
             return ctx.reply("Yo'nalishingizni tanlang:", Markup.keyboard(dirRows).oneTime().resize());
         }
-               if (cu.step === 'wait_yonalish') {
+        if (cu.step === 'wait_yonalish') {
             cu.yonalish = msgText;
-            cu.semester = '2-semestr';   // har doim 2-semestr
+            cu.semester = '2-semestr';
             cu.isRegistered = true;
             cu.step = 'completed';
             saveDb(db);
@@ -2536,7 +2536,7 @@ bot.on(['text','photo','video','animation','document'], async (ctx, next) => {
             // ─────────────────────────────────────────────────────
             return showSubjectMenu(ctx);
         }
-        }
+    }
     if (user.step === 'edit_name') {
         if (!isValidName(msgText)) return ctx.replyWithHTML("❌ <b>Bu ism sifatida qabul qilinmadi!</b>\n\nHaqiqiy ism va familiyangizni kiriting:");
         user.name=msgText.trim(); user.step='completed'; saveDb(db);
