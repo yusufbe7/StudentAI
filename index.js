@@ -122,74 +122,85 @@ const DEFAULT_CONFIG = {
         // ══════════════════════════════════════════
         // DASTURIY INJINIRING — faqat 2-semestr fanlari
         // ══════════════════════════════════════════
-        "Dasturiy Injiniring": [
-            { name: 'Dasturlash 2',           icon: '💡', key: 'dasturlash2' },
-            { name: 'Dinshunoslik',           icon: '🕌', key: 'dinshunoslik' },
-            { name: 'Falsafa',                icon: '💭', key: 'falsafa' },
-            { name: 'Fizika 2',               icon: '⚡', key: 'fizika2' },
-            { name: 'Hisob',                  icon: '🔢', key: 'hisob' },
-            { name: "Ma'lumotlar tuzilmasi",  icon: '🗄️', key: 'malumotlar_tuzilmasi' },
-            { name: 'English',                icon: '🌐', key: 'english2' }
-        ],
+        "Dasturiy Injiniring": {
+   "2-semestr": [
+      { name: 'Dasturlash 2', icon:'💡', key:'dasturlash2' },
+      { name: 'Dinshunoslik', icon:'🕌', key:'dinshunoslik' },
+      { name: 'Falsafa', icon:'💭', key:'falsafa' },
+      { name: 'Fizika 2', icon: '⚡', key: 'fizika2' },
+      { name: 'Hisob', icon: '🔢', key: 'hisob' },
+      { name: "Ma'lumotlar tuzilmasi",  icon: '🗄️', key: 'malumotlar_tuzilmasi' },
+      { name: 'English', icon: '🌐', key: 'english2' }
+   ]
+},
  
         // ══════════════════════════════════════════
         // KIBERXAVFSIZLIK — faqat 2-semestr fanlari
         // ══════════════════════════════════════════
-        "Kiberxavfsizlik": [
-            { name: 'Dasturlash 2',           icon: '💡', key: 'dasturlash2' },
-            { name: 'Dinshunoslik',           icon: '🕌', key: 'dinshunoslik' },
-            { name: 'Falsafa',                icon: '💭', key: 'falsafa' },
-            { name: 'Fizika 2',               icon: '⚡', key: 'fizika2' },
-            { name: 'Hisob',                  icon: '🔢', key: 'hisob' },
+        "Kiberxavfsizlik": {
+   "2-semestr": [
+      { name: 'Dasturlash 2', icon:'💡', key:'dasturlash2' },
+      { name: 'Dinshunoslik', icon:'🕌', key:'dinshunoslik' },
+      { name: 'Falsafa', icon:'💭', key:'falsafa' },
+      { name: 'Fizika 2', icon: '⚡', key: 'fizika2' },
+      { name: 'Hisob', icon: '🔢', key: 'hisob' },
             { name: "Ma'lumotlar tuzilmasi",  icon: '🗄️', key: 'malumotlar_tuzilmasi' },
             { name: 'English',                icon: '🌐', key: 'english2' }
         ],
+    },
  
         // ══════════════════════════════════════════
         // SUN'IY INTELEKT — faqat 2-semestr fanlari
         // ══════════════════════════════════════════
-        "Sun'iy intelekt": [
-            { name: 'Dasturlash 2',           icon: '💡', key: 'dasturlash2' },
-            { name: 'Dinshunoslik',           icon: '🕌', key: 'dinshunoslik' },
+        "Sun'iy intelekt": {
+         "2-semestr": [
+            { name: 'Dasturlash 2', icon:'💡', key:'dasturlash2' },
+            { name: 'Dinshunoslik', icon:'🕌', key:'dinshunoslik' },
             { name: 'Falsafa',                icon: '💭', key: 'falsafa' },
             { name: 'Fizika 2',               icon: '⚡', key: 'fizika2' },
             { name: 'Hisob',                  icon: '🔢', key: 'hisob' },
             { name: "Ma'lumotlar tuzilmasi",  icon: '🗄️', key: 'malumotlar_tuzilmasi' },
             { name: 'English',                icon: '🌐', key: 'english2' }
         ],
+    },
  
         // ══════════════════════════════════════════
         // MAGISTRATURA va BOSHQA
         // ══════════════════════════════════════════
-        'Magistratura': [
-            { name: 'Dasturlash 2',           icon: '💡', key: 'dasturlash2' },
-            { name: 'Dinshunoslik',           icon: '🕌', key: 'dinshunoslik' },
-            { name: 'Falsafa',                icon: '💭', key: 'falsafa' },
-            { name: 'Fizika 2',               icon: '⚡', key: 'fizika2' }
-        ],
-        'Boshqa': [
-            { name: 'Dasturlash 2',           icon: '💡', key: 'dasturlash2' },
-            { name: 'Dinshunoslik',           icon: '🕌', key: 'dinshunoslik' },
-            { name: 'Falsafa',                icon: '💭', key: 'falsafa' },
-            { name: 'Fizika 2',               icon: '⚡', key: 'fizika2' }
-        ],
+        "Magistratura": {
+   "2-semestr": [
+      { name: 'Dasturlash 2', icon:'💡', key:'dasturlash2' },
+      { name: 'Dinshunoslik', icon:'🕌', key:'dinshunoslik' },
+      { name: 'Falsafa', icon:'💭', key:'falsafa' },
+      { name: 'Fizika 2', icon: '⚡', key: 'fizika2' },
+      { name: 'Hisob', icon: '🔢', key: 'hisob' }
+   ]
+},
+        "Boshqa": {
+   "2-semestr": [
+      { name: 'Dasturlash 2', icon:'💡', key:'dasturlash2' },
+      { name: 'Dinshunoslik', icon:'🕌', key:'dinshunoslik' },
+      { name: 'Falsafa', icon:'💭', key:'falsafa' },
+      { name: 'Fizika 2', icon: '⚡', key: 'fizika2' }
+   ]
+},
  
-        // ══════════════════════════════════════════
-        // MOLIYA
-        // ══════════════════════════════════════════
-        "Moliya va moliyaviy texnologiyalar yo'nalishi": [
-            { name: 'Makroiqtisod', icon: '📊', key: 'makroiqtisod' }
-        ]
+
     }
 };
 
 function getSubjectsBySemester(cfg, yonalish, semester) {
     const dirSubs = cfg.subjectsByDirection?.[yonalish];
+
     if (!dirSubs) return [];
-    if (!Array.isArray(dirSubs)) {
-        return dirSubs[semester] || dirSubs['1-semestr'] || [];
+
+    // Agar oddiy array bo‘lsa
+    if (Array.isArray(dirSubs)) {
+        return dirSubs;
     }
-    return dirSubs;
+
+    // Semestr bo‘yicha olish
+    return dirSubs[semester] || dirSubs['2-semestr'] || [];
 }
 
 
@@ -455,48 +466,146 @@ function adminMainKeyboard(db) {
 }
 
 function showSubjectMenu(ctx) {
+
     try {
+
         const db = getDb();
         const userId = ctx.from.id;
-        const user   = db.users[userId];
-        const tour   = db.tournament;
-        if (!user || !user.isRegistered) return ctx.reply("⚠️ Iltimos, avval /start bosing va ro'yxatdan o'ting.");
-        const yonalish = user.yonalish || '';
-        const cfg = getConfig();
- 
-        // To'g'ridan-to'g'ri yo'nalish nomidan fanlar
-        let subs = cfg.subjectsByDirection?.[yonalish] || [];
- 
-        // Agar topilmasa (eski "Dasturiy Injiniring 1-semestr" kabi nomlar uchun)
-        if (!subs.length) {
-            // Semestr qismini olib tashlab qidirish
-            const baseYonalish = yonalish.replace(/\s+[12]-semestr$/i, '').trim();
-            const found = Object.keys(cfg.subjectsByDirection || {}).find(key =>
-                key === baseYonalish
+        const user = db.users[userId];
+        const tour = db.tournament;
+
+        // USER YO'Q
+        if (!user || !user.isRegistered) {
+            return ctx.reply(
+                "⚠️ Iltimos, avval /start bosing va ro'yxatdan o'ting."
             );
-            if (found) subs = cfg.subjectsByDirection[found] || [];
         }
- 
+
+        // ESKI USERLAR UCHUN FIX
+        if (!user.semester) {
+            user.semester = '2-semestr';
+            saveDb(db);
+        }
+
+        const yonalish = user.yonalish || '';
+        const semester = user.semester || '2-semestr';
+
+        const cfg = getConfig();
+
+        // FANLARNI OLISH
+        let subs = getSubjectsBySemester(
+            cfg,
+            yonalish,
+            semester
+        );
+
+        // ESKI YO'NALISHLAR UCHUN FIX
+        if (!subs.length) {
+
+            const baseYonalish = yonalish
+                .replace(/\s+[12]-semestr$/i, '')
+                .trim();
+
+            const found = Object.keys(
+                cfg.subjectsByDirection || {}
+            ).find(key => key === baseYonalish);
+
+            if (found) {
+
+                subs = getSubjectsBySemester(
+                    cfg,
+                    found,
+                    semester
+                );
+            }
+        }
+
+        // AGAR HALI HAM FAN TOPILMASA
+        if (!subs.length) {
+
+            console.log(
+                '[FAN TOPILMADI]',
+                yonalish,
+                semester
+            );
+
+            return ctx.reply(
+                "❌ Bu yo'nalish uchun fan topilmadi."
+            );
+        }
+
+        // KEYBOARD YASASH
         let keyboard = [];
+
         for (let i = 0; i < subs.length; i += 2) {
-            const row = [`${subs[i].icon} ${subs[i].name}`];
-            if (subs[i+1]) row.push(`${subs[i+1].icon} ${subs[i+1].name}`);
+
+            const row = [];
+
+            // 1-fan
+            if (subs[i]) {
+                row.push(
+                    `${subs[i].icon} ${subs[i].name}`
+                );
+            }
+
+            // 2-fan
+            if (subs[i + 1]) {
+                row.push(
+                    `${subs[i + 1].icon} ${subs[i + 1].name}`
+                );
+            }
+
             keyboard.push(row);
         }
-        if (!keyboard.length) {
-            keyboard = [['💡 Dasturlash 2','🕌 Dinshunoslik'],['💭 Falsafa','⚡ Fizika 2']];
+
+        // MUSOBAQA
+        if (
+            tour?.isActive &&
+            !user.tourFinished
+        ) {
+            keyboard.unshift([
+                '🏆 Xalqaro test musobaqa'
+            ]);
         }
-        if (tour?.isActive && !user.tourFinished) keyboard.unshift(['🏆 Xalqaro test musobaqa']);
-        if (db.settings?.turboMode) keyboard.push(['🚀 TURBO YODLASH']);
-        keyboard.push(['📊 Reyting','👤 Profil']);
-        keyboard.push(['⚙️ Sozlamalar']);
+
+        // TURBO
+        if (db.settings?.turboMode) {
+            keyboard.push([
+                '🚀 TURBO YODLASH'
+            ]);
+        }
+
+        // ODDIY MENYU
+        keyboard.push([
+            '📊 Reyting',
+            '👤 Profil'
+        ]);
+
+        keyboard.push([
+            '⚙️ Sozlamalar'
+        ]);
+
+        // MENYU YUBORISH
         return ctx.replyWithHTML(
-            `👤 <b>Foydalanuvchi:</b> ${escapeHTML(user.name||'Talaba')}\n🎓 <b>Yo'nalish:</b> ${escapeHTML(yonalish||"Noma'lum")}\n\nFanni tanlang:`,
+
+            `👤 <b>Foydalanuvchi:</b> ${escapeHTML(user.name || 'Talaba')}\n` +
+            `🎓 <b>Yo'nalish:</b> ${escapeHTML(yonalish || "Noma'lum")}\n` +
+            `📚 <b>Semestr:</b> ${escapeHTML(semester)}\n\n` +
+            `Fanni tanlang:`,
+
             Markup.keyboard(keyboard).resize()
         );
+
     } catch (err) {
-        console.error('[Menu]', err.message);
-        return ctx.reply('❌ Menyuni yuklashda xatolik. Qaytadan /start bosing.');
+
+        console.error(
+            '[Menu Error]',
+            err
+        );
+
+        return ctx.reply(
+            '❌ Menyuni yuklashda xatolik. Qaytadan /start bosing.'
+        );
     }
 }
 async function showProfile(ctx) {
@@ -758,30 +867,95 @@ bot.start(async (ctx) => {
     const user = db.users[userId];
 
     // ── Referral: /start ref_12345 ─────────────────────────────
-    const startPayload = ctx.startPayload; // ref_USERID
+    const startPayload = ctx.startPayload;
+
     if (startPayload && startPayload.startsWith('ref_')) {
         const referrerId = parseInt(startPayload.replace('ref_', ''));
+
         if (referrerId && referrerId !== userId) {
             if (!db.users[userId]?.referredBy) {
-                // Yangi foydalanuvchi — referrerni belgilash (ro'yxatdan o'tgach ball beriladi)
-                if (!db.users[userId]) db.users[userId] = {};
+
+                if (!db.users[userId]) {
+                    db.users[userId] = {};
+                }
+
                 db.users[userId].referredBy = referrerId;
                 db.users[userId].referralBonusPending = true;
             }
         }
     }
-    // ──────────────────────────────────────────────────────────────
 
-    if (user?.isRegistered) { await ctx.reply(`Xush kelibsiz, ${escapeHTML(user.name)}! 😊`); return showSubjectMenu(ctx); }
-    if (!db.users[userId]) {
-        db.users[userId] = { id:userId, username:ctx.from.username||"Noma'lum", name:'', univ:'', kurs:'', yonalish:'', score:0, totalTests:0, step:'wait_name', isRegistered:false };
-    } else { db.users[userId].step = 'wait_name'; db.users[userId].isRegistered = false; }
-    saveDb(db);
-    const existingName = db.users[userId].name;
-    if (existingName && isValidName(existingName)) {
-        return ctx.replyWithHTML(`✨ <b>Assalomu alaykum!</b>\n\nAvvalgi ismingiz: <b>${escapeHTML(existingName)}</b>\n\nIsm va familiyangizni qayta kiriting:`, Markup.removeKeyboard());
+    // ─────────────────────────────────────────────────────────────
+
+    if (user?.isRegistered) {
+
+        // ESKI USERLAR UCHUN FIX
+        if (!user.semester) {
+            user.semester = '2-semestr';
+            saveDb(db);
+        }
+
+        await ctx.reply(
+            `Xush kelibsiz, ${escapeHTML(user.name)}! 😊`
+        );
+
+        return showSubjectMenu(ctx);
     }
-    return ctx.replyWithHTML(`✨ <b>Assalomu alaykum! Botga xush kelibsiz.</b>\n\nRo'yxatdan o'tish uchun ism va familiyangizni kiriting:`, Markup.removeKeyboard());
+
+    // YANGI USER YARATISH
+    if (!db.users[userId]) {
+
+        db.users[userId] = {
+            id: userId,
+            username: ctx.from.username || "Noma'lum",
+
+            name: '',
+            univ: '',
+            kurs: '',
+            yonalish: '',
+
+            // SEMESTER
+            semester: '2-semestr',
+
+            score: 0,
+            totalTests: 0,
+
+            step: 'wait_name',
+            isRegistered: false
+        };
+
+    } else {
+
+        db.users[userId].step = 'wait_name';
+        db.users[userId].isRegistered = false;
+
+        // ESKI USERLAR UCHUN
+        if (!db.users[userId].semester) {
+            db.users[userId].semester = '2-semestr';
+        }
+    }
+
+    saveDb(db);
+
+    const existingName = db.users[userId].name;
+
+    if (existingName && isValidName(existingName)) {
+
+        return ctx.replyWithHTML(
+            `✨ <b>Assalomu alaykum!</b>\n\n` +
+            `Avvalgi ismingiz: <b>${escapeHTML(existingName)}</b>\n\n` +
+            `Ism va familiyangizni qayta kiriting:`,
+
+            Markup.removeKeyboard()
+        );
+    }
+
+    return ctx.replyWithHTML(
+        `✨ <b>Assalomu alaykum! Botga xush kelibsiz.</b>\n\n` +
+        `Ro'yxatdan o'tish uchun ism va familiyangizni kiriting:`,
+
+        Markup.removeKeyboard()
+    );
 });
 
 bot.command('admin', (ctx) => {
@@ -834,7 +1008,7 @@ bot.action('report_q', async (ctx) => {
     const qData = s.activeList?.[s.index];
     if (!qData) return;
     const userId = ctx.from.id;
-    const db = getDb();
+    const db = getDb(); 
     const userName = db.users[userId]?.name || ctx.from.first_name || 'Foydalanuvchi';
     const falseCount = db.users[userId]?.falseReportCount || 0;
     const msg = `⚠️ <b>XATO SAVOL XABARI</b>\n\n👤 Foydalanuvchi: <b>${escapeHTML(userName)}</b>\n🆔 ID: <code>${userId}</code>\n📚 Fan: <b>${escapeHTML(s.currentSubject||"Noma'lum")}</b>\n⚠️ Noto'g'ri shikoyatlar: <b>${falseCount} ta</b>\n\n❓ Savol: ${escapeHTML(qData.q)}\n✅ To'g'ri javob: <b>${escapeHTML(qData.a)}</b>`;
