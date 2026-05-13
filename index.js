@@ -124,13 +124,13 @@ const DEFAULT_CONFIG = {
         // ══════════════════════════════════════════
         "Dasturiy Injiniring": {
    "2-semestr": [
-      { name: 'Dasturlash 2', icon:'💡', key:'dasturlash2' },
-      { name: 'Dinshunoslik', icon:'🕌', key:'dinshunoslik' },
-      { name: 'Falsafa', icon:'💭', key:'falsafa' },
-      { name: 'Fizika 2', icon: '⚡', key: 'fizika2' },
-      { name: 'Hisob', icon: '🔢', key: 'hisob' },
-      { name: "Ma'lumotlar tuzilmasi",  icon: '🗄️', key: 'malumotlar_tuzilmasi' },
-      { name: 'English', icon: '🌐', key: 'english2' }
+      { name: 'Dasturlash 2', icon:'💡', key:'dasturiy_injiniring_dasturlash2' },
+      { name: 'Dinshunoslik', icon:'🕌', key:'dasturiy_injiniring_dinshunoslik' },
+      { name: 'Falsafa', icon:'💭', key:'dasturiy_injiniring_falsafa' },
+      { name: 'Fizika 2', icon: '⚡', key: 'dasturiy_injiniring_fizika2' },
+      { name: 'Hisob', icon: '🔢', key: 'dasturiy_injiniring_hisob' },
+      { name: "Ma'lumotlar tuzilmasi",  icon: '🗄️', key: 'dasturiy_injiniring_malumotlar_tuzilmasi' },
+      { name: 'English', icon: '🌐', key: 'dasturiy_injiniring_english2' }
    ]
 },
  
@@ -139,13 +139,13 @@ const DEFAULT_CONFIG = {
         // ══════════════════════════════════════════
         "Kiberxavfsizlik": {
    "2-semestr": [
-      { name: 'Dasturlash 2', icon:'💡', key:'dasturlash2' },
-      { name: 'Dinshunoslik', icon:'🕌', key:'dinshunoslik' },
-      { name: 'Falsafa', icon:'💭', key:'falsafa' },
-      { name: 'Fizika 2', icon: '⚡', key: 'fizika2' },
-      { name: 'Hisob', icon: '🔢', key: 'hisob' },
-            { name: "Ma'lumotlar tuzilmasi",  icon: '🗄️', key: 'malumotlar_tuzilmasi' },
-            { name: 'English',                icon: '🌐', key: 'english2' }
+      { name: 'Dasturlash 2', icon:'💡', key:'dasturiy_injiniring_dasturlash2' },
+      { name: 'Dinshunoslik', icon:'🕌', key:'dasturiy_injiniring_dinshunoslik' },
+      { name: 'Falsafa', icon:'💭', key:'dasturiy_injiniring_falsafa' },
+      { name: 'Fizika 2', icon: '⚡', key: 'dasturiy_injiniring_fizika2' },
+      { name: 'Hisob', icon: '🔢', key: 'dasturiy_injiniring_hisob' },
+            { name: "Ma'lumotlar tuzilmasi",  icon: '🗄️', key: 'dasturiy_injiniring_malumotlar_tuzilmasi' },
+            { name: 'English',                icon: '🌐', key: 'dasturiy_injiniring_english2' }
         ],
     },
  
@@ -154,13 +154,13 @@ const DEFAULT_CONFIG = {
         // ════════════════════
         "Sun'iy intelekt": {
          "2-semestr": [
-            { name: 'Dasturlash 2', icon:'💡', key:'dasturlash2' },
-            { name: 'Dinshunoslik', icon:'🕌', key:'dinshunoslik' },
-            { name: 'Falsafa',                icon: '💭', key: 'falsafa' },
-            { name: 'Fizika 2',               icon: '⚡', key: 'fizika2' },
-            { name: 'Hisob',                  icon: '🔢', key: 'hisob' },
-            { name: "Ma'lumotlar tuzilmasi",  icon: '🗄️', key: 'malumotlar_tuzilmasi' },
-            { name: 'English',                icon: '🌐', key: 'english2' }
+            { name: 'Dasturlash 2', icon:'💡', key:'dasturiy_injiniring_dasturlash2' },
+            { name: 'Dinshunoslik', icon:'🕌', key:'dasturiy_injiniring_dinshunoslik' },
+            { name: 'Falsafa',                icon: '💭', key: 'dasturiy_injiniring_falsafa' },
+            { name: 'Fizika 2',               icon: '⚡', key: 'dasturiy_injiniring_fizika2' },
+            { name: 'Hisob',                  icon: '🔢', key: 'dasturiy_injiniring_hisob' },
+            { name: "Ma'lumotlar tuzilmasi",  icon: '🗄️', key: 'dasturiy_injiniring_malumotlar_tuzilmasi' },
+            { name: 'English',                icon: '🌐', key: 'dasturiy_injiniring_english2' }
         ],
     },
  
@@ -169,19 +169,19 @@ const DEFAULT_CONFIG = {
         // ══════════════════════════════════════════
         "Magistratura": {
    "2-semestr": [
-      { name: 'Dasturlash 2', icon:'💡', key:'dasturlash2' },
-      { name: 'Dinshunoslik', icon:'🕌', key:'dinshunoslik' },
-      { name: 'Falsafa', icon:'💭', key:'falsafa' },
-      { name: 'Fizika 2', icon: '⚡', key: 'fizika2' },
-      { name: 'Hisob', icon: '🔢', key: 'hisob' }
+      { name: 'Dasturlash 2', icon:'💡', key:'dasturiy_injiniring_dasturlash2' },
+      { name: 'Dinshunoslik', icon:'🕌', key:'dasturiy_injiniring_dinshunoslik' },
+      { name: 'Falsafa', icon:'💭', key:'dasturiy_injiniring_falsafa' },
+      { name: 'Fizika 2', icon: '⚡', key: 'dasturiy_injiniring_fizika2' },
+      { name: 'Hisob', icon: '🔢', key: 'dasturiy_injiniring_hisob' }
    ]
 },
         "Boshqa": {
    "2-semestr": [
-      { name: 'Dasturlash 2', icon:'💡', key:'dasturlash2' },
-      { name: 'Dinshunoslik', icon:'🕌', key:'dinshunoslik' },
-      { name: 'Falsafa', icon:'💭', key:'falsafa' },
-      { name: 'Fizika 2', icon: '⚡', key: 'fizika2' }
+      { name: 'Dasturlash 2', icon:'💡', key:'dasturiy_injiniring_dasturlash2' },
+      { name: 'Dinshunoslik', icon:'🕌', key:'dasturiy_injiniring_dinshunoslik' },
+      { name: 'Falsafa', icon:'💭', key:'dasturiy_injiniring_falsafa' },
+      { name: 'Fizika 2', icon: '⚡', key: 'dasturiy_injiniring_fizika2' }
    ]
 },
  
