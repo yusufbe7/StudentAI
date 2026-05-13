@@ -2598,52 +2598,138 @@ bot.on(['text','photo','video','animation','document'], async (ctx, next) => {
         );
     }
     // ─── Dinamik fan tanlash (config dan) ────────────────────
-        {
-        const db0 = getDb();
-        const user0 = db0.users[userId];
-        if (user0?.isRegistered) {
-            const cfg0 = getConfig();
-            const yonalish = user0.yonalish || '';
- 
-            // Yo'nalish fanlarini olish
-            let dirSubs = cfg0.subjectsByDirection?.[yonalish] || [];
- 
-            // Eski foydalanuvchilar uchun: "Dasturiy Injiniring 1-semestr" → "Dasturiy Injiniring"
-            if (!dirSubs.length) {
-                const baseYonalish = yonalish.replace(/\s+[12]-semestr$/i, '').trim();
-                if (cfg0.subjectsByDirection?.[baseYonalish]) {
-                    dirSubs = cfg0.subjectsByDirection[baseYonalish];
-                }
+   
+{
+    const db0 = getDb();
+    const user0 = db0.users[userId];
+
+    if (user0?.isRegistered) {
+
+        const cfg0 = getConfig();
+
+        const yonalish =
+            user0.yonalish || '';
+
+        const semester =
+            user0.semester || '2-semestr';
+
+        // FANLARNI OLISH
+        let dirSubs = getSubjectsBySemester(
+            cfg0,
+            yonalish,
+            semester
+        );
+
+        // ESKI YO'NALISH FIX
+        if (!dirSubs.length) {
+
+            const baseYonalish = yonalish
+                .replace(/\s+[12]-semestr$/i, '')
+                .trim();
+
+            dirSubs = getSubjectsBySemester(
+                cfg0,
+                baseYonalish,
+                semester
+            );
+        }
+
+        // FAN TOPISH
+        const matchedSub = dirSubs.find(sub =>
+            msgText === `${sub.icon} ${sub.name}`
+        );
+
+        if (matchedSub) {
+
+            // PULLIK REJIM
+            if (
+                isBotPaidMode &&
+                !vipUsers.includes(userId) &&
+                !isAdmin(userId)
+            ) {
+
+                return ctx.reply(
+                    "⚠️ Bot hozirda pullik rejimda.",
+
+                    Markup.inlineKeyboard([
+                        [
+                            Markup.button.callback(
+                                '💎 VIP sotib olish ✨',
+                                'buy_vip'
+                            )
+                        ]
+                    ])
+                );
             }
- 
-            const matchedSub = dirSubs.find(sub => msgText === `${sub.icon} ${sub.name}`);
-            if (matchedSub) {
-                if (isBotPaidMode && !vipUsers.includes(userId) && !isAdmin(userId)) {
-                    return ctx.reply("⚠️ Bot hozirda pullik rejimda.", Markup.inlineKeyboard([[Markup.button.callback('💎 VIP sotib olish ✨','buy_vip')]]));
+
+            // FINAL SUBJECT KEY
+            const finalKey = matchedSub.key;
+
+            console.log(
+                '[FAN]',
+                yonalish,
+                semester,
+                finalKey
+            );
+
+            // SUBJECT TEKSHIRISH
+            if (
+                SUBJECTS[finalKey] &&
+                SUBJECTS[finalKey].questions &&
+                SUBJECTS[finalKey].questions.length
+            ) {
+
+                s.currentSubject = finalKey;
+
+                s.userName =
+                    (user0.name &&
+                     isValidName(user0.name))
+                    ? user0.name
+                    : (ctx.from.first_name || 'Talaba');
+
+                // TURBO
+                if (s.isTurbo) {
+
+                    s.activeList = shuffle([
+                        ...SUBJECTS[finalKey].questions
+                    ]);
+
+                    s.index = 0;
+                    s.score = 0;
+                    s.wrongs = [];
+
+                    return sendQuestion(ctx, true);
                 }
- 
-                // yonalishKey: semestr qismisiz
-                const baseYonalish = yonalish.replace(/\s+[12]-semestr$/i, '').trim();
-                const yonalishKey = baseYonalish.toLowerCase().replace(/'/g,'').replace(/ /g,'_');
-                const finalKey = `${yonalishKey}_${matchedSub.key}`;
- 
-                console.log(`[Fan] "${yonalish}" → "${yonalishKey}" → "${finalKey}"`);
- 
-                if (SUBJECTS[finalKey]?.questions?.length) {
-                    s.currentSubject = finalKey;
-                    s.userName = (user0.name && isValidName(user0.name)) ? user0.name : (ctx.from.first_name || 'Talaba');
-                    if (s.isTurbo) {
-                        s.activeList = shuffle([...SUBJECTS[finalKey].questions]); s.index=0; s.score=0; s.wrongs=[];
-                        return sendQuestion(ctx, true);
-                    }
-                    return ctx.reply(`Tayyormisiz? (${matchedSub.icon} ${matchedSub.name})`,
-                        Markup.keyboard([["⚡️ Blitz (25)","📝 To'liq test"],['⬅️ Orqaga (Fanlar)']]).resize());
-                } else {
-                    return ctx.reply(`⚠️ "${matchedSub.name}" fani uchun savollar hali yuklanmagan.\n\n📌 Admin paneldan "➕ Savol qo'shish (bot)" orqali qo'shing.`);
-                }
+
+                // ODDIY TEST
+                return ctx.reply(
+
+                    `Tayyormisiz?\n\n` +
+                    `${matchedSub.icon} ${matchedSub.name}`,
+
+                    Markup.keyboard([
+                        ["⚡️ Blitz (25)", "📝 To'liq test"],
+                        ['⬅️ Orqaga (Fanlar)']
+                    ]).resize()
+                );
             }
+
+            // SUBJECT YO'Q
+            console.log(
+                '[SUBJECT TOPILMADI]',
+                finalKey
+            );
+
+            return ctx.reply(
+
+                `⚠️ "${matchedSub.name}" ` +
+                `fani uchun savollar topilmadi.\n\n` +
+
+                `KEY: ${finalKey}`
+            );
         }
     }
+}
 
  const db = getDb();
     const user = db.users[userId];
