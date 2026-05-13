@@ -151,7 +151,7 @@ const DEFAULT_CONFIG = {
  
         // ══════════════════════════════════════════
         // SUN'IY INTELEKT — faqat 2-semestr fanlari
-        // ══════════════════════════════════════════
+        // ════════════════════
         "Sun'iy intelekt": {
          "2-semestr": [
             { name: 'Dasturlash 2', icon:'💡', key:'dasturlash2' },
@@ -205,9 +205,15 @@ function getSubjectsBySemester(cfg, yonalish, semester) {
 
 
 
-const getConfig  = () => { const c = readJSON(PATHS.config, null); return c || DEFAULT_CONFIG; };
+const getConfig = () => {
+    const c = readJSON(PATHS.config, null);
+    return c || DEFAULT_CONFIG;
+};
+
 const saveConfig = (c) => writeJSON(PATHS.config, c);
-if (!fs.existsSync(PATHS.config)) saveConfig(DEFAULT_CONFIG);
+
+// HAR RESTARTDA CONFIG YANGILASH
+saveConfig(DEFAULT_CONFIG);
 
 const CHAT_MSGS_PATH    = path.join(DATA_DIR, 'chat_messages.json');
 const WEB_SCORES_PATH   = path.join(DATA_DIR, 'web_scores.json');
