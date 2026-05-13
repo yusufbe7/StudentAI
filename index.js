@@ -33,7 +33,10 @@ const PATHS = {
     settings: path.join(DATA_DIR, 'settings.json'),
     vip:      path.join(DATA_DIR, 'vip_users.json'),
     session:  path.join(DATA_DIR, 'session.json'),
-    subjects: path.join(__dirname, 'subjects.json'),
+
+    // SUBJECTS
+    subjects: path.join(DATA_DIR, 'subjects.json'),
+
     customQ:  path.join(DATA_DIR, 'custom_questions.json'),
     photos:   path.join(DATA_DIR, 'user_photos.json'),
     sessions: path.join(DATA_DIR, 'test_sessions.json'),
@@ -41,6 +44,16 @@ const PATHS = {
     blocked:  path.join(DATA_DIR, 'blocked_users.json'),
     config:   path.join(DATA_DIR, 'bot_config.json'),
 };
+
+if (!fs.existsSync(PATHS.subjects)) {
+
+    fs.copyFileSync(
+        path.join(__dirname, 'subjects.json'),
+        PATHS.subjects
+    );
+
+    console.log('✅ subjects.json copied to DATA_DIR');
+}
 
 // ============================================================
 // BOT KONFIGURATSIYASI (dinamik: universitetlar, yo'nalishlar, fanlar)
@@ -212,8 +225,10 @@ const getConfig = () => {
 
 const saveConfig = (c) => writeJSON(PATHS.config, c);
 
-// HAR RESTARTDA CONFIG YANGILASH
-saveConfig(DEFAULT_CONFIG);
+// saveConfig(DEFAULT_CONFIG);
+if (!fs.existsSync(PATHS.config)) {
+    saveConfig(DEFAULT_CONFIG);
+}
 
 const CHAT_MSGS_PATH    = path.join(DATA_DIR, 'chat_messages.json');
 const WEB_SCORES_PATH   = path.join(DATA_DIR, 'web_scores.json');
