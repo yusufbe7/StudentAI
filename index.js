@@ -1118,7 +1118,7 @@ bot.action('show_explanation', async (ctx) => {
 bot.action('buy_vip', (ctx) => {
     ctx.session.waitingForReceipt = true;
     const cfg = getConfig();
-    const price = (cfg.vipPrice || 6000).toLocaleString('uz-UZ');
+    const price = (cfg.vipPrice || 10000).toLocaleString('uz-UZ');
     return ctx.replyWithHTML(`💎 <b>VIP STATUS SOTIB OLISH</b>\n\n💳 Karta: <code>4073420058363577</code>\n👤 Egasi: M.M\n💰 Summa: <b>${price} so'm</b>\n\n📸 To'lovni amalga oshirgach, <b>chekni (rasm)</b> yuboring.`);
 });
 
@@ -1470,7 +1470,7 @@ bot.hears(["⚡️ Blitz (25)","📝 To'liq test"], async (ctx) => {
         const DAILY_LIMIT = 3;
         if ((u.dailyTestCount || 0) >= DAILY_LIMIT) {
             const cfg2 = getConfig();
-            const priceStr = (cfg2.vipPrice || 6000).toLocaleString('uz-UZ');
+            const priceStr = (cfg2.vipPrice || 10000).toLocaleString('uz-UZ');
             return ctx.replyWithHTML(
                 `⛔ <b>Kunlik limit tugadi!</b>\n\n📊 Siz bugun <b>${DAILY_LIMIT} ta</b> test yechdingiz.\n\n💎 <b>VIP a'zo</b> bo'lsangiz — <b>cheksiz</b> test yechishingiz mumkin!\n\n✅ VIP afzalliklari:\n• Cheksiz test\n• Javob izohlari\n• Musobaqalarda ustunlik`,
                 Markup.inlineKeyboard([[Markup.button.callback(`💎 VIP sotib olish (${priceStr} so'm)`,'buy_vip')]])
@@ -1724,7 +1724,7 @@ bot.hears('📋 Hisobot', async (ctx) => {
 bot.hears("💰 VIP narxini o'zgartirish", (ctx) => {
     if (!isAdmin(ctx.from.id)) return;
     const cfg = getConfig();
-    const cur = cfg.vipPrice || 6000;
+    const cur = cfg.vipPrice || 10000;
     ctx.session.adminStep = 'wait_vip_price';
     return ctx.reply(`💰 Hozirgi VIP narxi: <b>${cur.toLocaleString('uz-UZ')} so'm</b>\n\nYangi narxni kiriting (faqat raqam, so'mda):`, {parse_mode:'HTML', ...Markup.keyboard([['🚫 Bekor qilish']]).resize()});
 });
@@ -3900,7 +3900,7 @@ app.post('/api/notify-non-vip', async (req, res) => {
         for (const [id,u] of Object.entries(db.users||{})) { if ((u.name||'').toLowerCase().trim()===(name||'').toLowerCase().trim()) { userId=id; break; } }
         if (!userId) return res.status(404).json({error:'Foydalanuvchi topilmadi'});
         const cfgVip = getConfig();
-        const vipPriceStr = (cfgVip.vipPrice || 6000).toLocaleString('uz-UZ');
+        const vipPriceStr = (cfgVip.vipPrice || 10000).toLocaleString('uz-UZ');
         await bot.telegram.sendMessage(userId,`💎 <b>VIP A'zolik kerak!</b>\n\nWeb orqali test ishlash uchun VIP a'zo bo'lishingiz kerak.\n\n💳 Karta: <code>4073420058363577</code>\n👤 Egasi: M.M\n💰 Summa: <b>${vipPriceStr} so'm</b>`,{parse_mode:'HTML'}).catch(()=>{});
         res.json({ success:true });
     } catch (err) { res.status(500).json({error:'Xatolik'}); }
