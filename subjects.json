@@ -1004,7 +1004,558 @@
         "options": ["$-1 \\le x \\le 1, 3x+4 \\le y \\le 4x+5, x+4y+1 \\le z \\le 5x+3y+2$", "$-1 \\le x \\le 1, 0 \\le y \\le 4x+5, 0 \\le z \\le 5x+3y+2$", "$x \\in [-1, 1], y \\in [3x, 4x], z \\in [x, 5x]$"],
         "a": "$-1 \\le x \\le 1, 3x+4 \\le y \\le 4x+5, x+4y+1 \\le z \\le 5x+3y+2$"
       },
-      
+      {
+        "id": 15,
+        "q": "$z = -2x^2 + y^2 + 3xy - 2x + y + 2$ funksiya ekstremumi mavjudligini $\\Delta = \\begin{vmatrix} z''_{xx} & z''_{xy} \\\\ z''_{xy} & z''_{yy} \\end{vmatrix}$ determinantning ishorasiga qarab aniqlang.",
+        "options": ["$\\Delta = -17 < 0$, ekstremum mavjud emas", "$\\Delta = 17 > 0$, ekstremum mavjud", "$\\Delta = 0$, shubhali holat", "$\\Delta = 5 > 0$, ekstremum mavjud"],
+        "a": "$\\Delta = -17 < 0$, ekstremum mavjud emas"
+      },
+      {
+        "id": 16,
+        "q": "$\\frac{1}{2} + \\frac{2}{3} + \\frac{3}{4} + ...$ uchun qator yaqinlashishining zaruriy sharti bajarilishini tekshiring.",
+        "options": ["$\\lim_{n \\to \\infty} a_n = 1 \\neq 0$, bajarilmaydi", "$\\lim_{n \\to \\infty} a_n = 0$, bajariladi", "$\\lim_{n \\to \\infty} a_n = \\infty$, bajarilmaydi", "Qator yaqinlashuvchi, bajariladi"],
+        "a": "$\\lim_{n \\to \\infty} a_n = 1 \\neq 0$, bajarilmaydi"
+      },
+      {
+        "id": 17,
+        "q": "Integrallash sohasi $D = \\{(x, y): 1 \\le x \\le 4, x^2 + 1 \\le y \\le 2x^2 + 1\\}$ bo'lsa, $\\iint\\limits_D 3 dxdy$ ikki o'lchovli integralni hisoblang.",
+        "options": ["63", "21", "126", "42"],
+        "a": "63"
+      },
+      {
+        "id": 18,
+        "q": "Ushbu funksiyaning birinchi tartibli xususiy hosilalarini toping: $f(x, y) = \\sin x \\cdot \\cos y$.",
+        "options": ["$f'_x = \\cos x \\cos y; f'_y = -\\sin x \\sin y$", "$f'_x = -\\cos x \\cos y; f'_y = \\sin x \\sin y$", "$f'_x = \\sin x \\cos y; f'_y = \\cos x \\sin y$", "$f'_x = \\cos x; f'_y = -\\sin y$"],
+        "a": "$f'_x = \\cos x \\cos y; f'_y = -\\sin x \\sin y$"
+      },
+      {
+        "id": 19,
+        "q": "Integrallash sohasi $D = \\{(x, y): 0 \\le x \\le 2, 2x^3 + 5 \\le y \\le 3x^3 + 5\\}$ bo'lsa, $\\iint\\limits_D 4 dxdy$ ikki o'lchovli integralni hisoblang.",
+        "options": ["16", "8", "32", "12"],
+        "a": "16"
+      },
+      {
+        "id": 20,
+        "q": "$\\frac{1}{2} + \\frac{1}{4} + \\frac{1}{9} + \\frac{1}{16} + ...$ uchun qator yaqinlashishining zaruriy sharti bajarilishini tekshiring.",
+        "options": ["$\\lim_{n \\to \\infty} a_n = 0$, bajariladi", "$\\lim_{n \\to \\infty} a_n = 1$, bajarilmaydi", "$\\lim_{n \\to \\infty} a_n = \\infty$, bajarilmaydi", "Shart bajarilmaydi"],
+        "a": "$\\lim_{n \\to \\infty} a_n = 0$, bajariladi"
+      },
+      {
+        "id": 21,
+        "q": "Agar $\\iiint\\limits_{\\Omega} f(x, y, z) dxdydz = \\int_1^3 dx \\int_{\\sqrt{x+3}}^{4x+5} dy \\int_{\\sqrt{x+y+1}}^{5x+y+4} f(x, y, z) dz$ bo'lsa, $\\Omega$ sohasini toping.",
+        "options": ["$1 \\le x \\le 3, \\sqrt{x+3} \\le y \\le 4x+5, \\sqrt{x+y+1} \\le z \\le 5x+y+4$", "$1 \\le x \\le 3, 0 \\le y \\le 4x+5, 0 \\le z \\le 5x+y+4$", "$x \\in [1,3], y \\in [x, 4x], z \\in [y, 5x]$"],
+        "a": "$1 \\le x \\le 3, \\sqrt{x+3} \\le y \\le 4x+5, \\sqrt{x+y+1} \\le z \\le 5x+y+4$"
+      },
+      {
+        "id": 22,
+        "q": "Agar integrallash sohasi $D = \\{(x, y): 2 \\le x \\le 5, x^2 \\le y \\le x^3\\}$ bo'lsa, $\\iint\\limits_D f(x, y) dxdy$ takroriy integralga o'tkazilsa:",
+        "options": ["$\\int_2^5 dx \\int_{x^2}^{x^3} f(x, y) dy$", "$\\int_2^5 dx \\int_0^{x^3} f(x, y) dy$", "$\\int_{x^2}^{x^3} dy \\int_2^5 f(x, y) dx$", "$\\int_0^2 dx \\int_{x^2}^{x^3} f(x, y) dy$"],
+        "a": "$\\int_2^5 dx \\int_{x^2}^{x^3} f(x, y) dy$"
+      },
+      {
+        "id": 23,
+        "q": "$z = 3x^2 + y^2 + 2xy - 2x + y + 2$ funksiya ekstremumi mavjudligini $\\Delta$ determinant orqali aniqlang.",
+        "options": ["$\\Delta = 8 > 0$, ekstremum mavjud", "$\\Delta = -8 < 0$, ekstremum mavjud emas", "$\\Delta = 0$, shubhali holat", "$\\Delta = 4 > 0$, ekstremum mavjud"],
+        "a": "$\\Delta = 8 > 0$, ekstremum mavjud"
+      },
+      {
+        "id": 24,
+        "q": "Ushbu funksiyaning birinchi tartibli xususiy hosilalarini toping: $f(x, y) = \\sin x + \\cos y$.",
+        "options": ["$f'_x = \\cos x; f'_y = -\\sin y$", "$f'_x = -\\cos x; f'_y = \\sin y$", "$f'_x = \\sin x; f'_y = \\cos y$", "$f'_x = \\cos x; f'_y = \\sin y$"],
+        "a": "$f'_x = \\cos x; f'_y = -\\sin y$"
+      },
+      {
+        "id": 25,
+        "q": "Agar integrallash sohasi $D = \\{(x, y): 3 \\le x \\le 7, 2x-1 \\le y \\le x^3\\}$ bo'lsa, $\\iint\\limits_D f(x, y) dxdy$ takroriy integralga o'tkazilsa:",
+        "options": ["$\\int_3^7 dx \\int_{2x-1}^{x^3} f(x, y) dy$", "$\\int_3^7 dx \\int_0^{x^3} f(x, y) dy$", "$\\int_{2x-1}^{x^3} dy \\int_3^7 f(x, y) dx$", "$\\int_0^3 dx \\int_{2x-1}^{x^3} f(x, y) dy$"],
+        "a": "$\\int_3^7 dx \\int_{2x-1}^{x^3} f(x, y) dy$"
+      },
+      {
+        "id": 26,
+        "q": "$z = 3x^2 + 2y^2 - 4xy - 2x + y + 2$ funksiya ekstremumi mavjudligini $\\Delta$ determinant orqali aniqlang.",
+        "options": ["$\\Delta = 8 > 0$, ekstremum mavjud", "$\\Delta = -8 < 0$, ekstremum mavjud emas", "$\\Delta = 0$, shubhali holat", "$\\Delta = 12 > 0$, ekstremum mavjud"],
+        "a": "$\\Delta = 8 > 0$, ekstremum mavjud"
+      },
+      {
+        "id": 27,
+        "q": "$\\frac{1}{3} + \\frac{2}{5} + \\frac{3}{7} + \\frac{4}{9} + ...$ qatorning umumiy $u_n$ hadini toping.",
+        "options": ["$u_n = \\frac{n}{2n+1}$", "$u_n = \\frac{n}{n+2}$", "$u_n = \\frac{n}{2n-1}$", "$u_n = \\frac{n+1}{2n+1}$"],
+        "a": "$u_n = \\frac{n}{2n+1}$"
+      },
+      {
+        "id": 28,
+        "q": "Agar $\\iiint\\limits_{\\Omega} f(x, y, z) dxdydz = \\int_2^4 dx \\int_{\\sqrt{2x+3}}^{5x+4} dy \\int_{\\sqrt{2x+y+1}}^{3x+4y+5} f(x, y, z) dz$ bo'lsa, $\\Omega$ sohasini toping.",
+        "options": ["$2 \\le x \\le 4, \\sqrt{2x+3} \\le y \\le 5x+4, \\sqrt{2x+y+1} \\le z \\le 3x+4y+5$", "$2 \\le x \\le 4, 0 \\le y \\le 5x+4, 0 \\le z \\le 3x+4y+5$", "$x \\in [2,4], y \\in [\\sqrt{2x}, 5x], z \\in [\\sqrt{2y}, 3x]$"],
+        "a": "$2 \\le x \\le 4, \\sqrt{2x+3} \\le y \\le 5x+4, \\sqrt{2x+y+1} \\le z \\le 3x+4y+5$"
+      },
+      {
+        "id": 15,
+        "q": "$z = -2x^2 + y^2 + 3xy - 2x + y + 2$ funksiya ekstremumi mavjudligini $\\Delta = \\begin{vmatrix} z''_{xx} & z''_{xy} \\\\ z''_{xy} & z''_{yy} \\end{vmatrix}$ determinantning ishorasiga qarab aniqlang.",
+        "options": ["$\\Delta = -17 < 0$, ekstremum mavjud emas", "$\\Delta = 17 > 0$, ekstremum mavjud", "$\\Delta = 0$, shubhali holat", "$\\Delta = 5 > 0$, ekstremum mavjud"],
+        "a": "$\\Delta = -17 < 0$, ekstremum mavjud emas"
+      },
+      {
+        "id": 16,
+        "q": "$\\frac{1}{2} + \\frac{2}{3} + \\frac{3}{4} + ...$ uchun qator yaqinlashishining zaruriy sharti bajarilishini tekshiring.",
+        "options": ["$\\lim_{n \\to \\infty} a_n = 1 \\neq 0$, bajarilmaydi", "$\\lim_{n \\to \\infty} a_n = 0$, bajariladi", "$\\lim_{n \\to \\infty} a_n = \\infty$, bajarilmaydi", "Qator yaqinlashuvchi, bajariladi"],
+        "a": "$\\lim_{n \\to \\infty} a_n = 1 \\neq 0$, bajarilmaydi"
+      },
+      {
+        "id": 17,
+        "q": "Integrallash sohasi $D = \\{(x, y): 1 \\le x \\le 4, x^2 + 1 \\le y \\le 2x^2 + 1\\}$ bo'lsa, $\\iint\\limits_D 3 dxdy$ ikki o'lchovli integralni hisoblang.",
+        "options": ["63", "21", "126", "42"],
+        "a": "63"
+      },
+      {
+        "id": 18,
+        "q": "Ushbu funksiyaning birinchi tartibli xususiy hosilalarini toping: $f(x, y) = \\sin x \\cdot \\cos y$.",
+        "options": ["$f'_x = \\cos x \\cos y; f'_y = -\\sin x \\sin y$", "$f'_x = -\\cos x \\cos y; f'_y = \\sin x \\sin y$", "$f'_x = \\sin x \\cos y; f'_y = \\cos x \\sin y$", "$f'_x = \\cos x; f'_y = -\\sin y$"],
+        "a": "$f'_x = \\cos x \\cos y; f'_y = -\\sin x \\sin y$"
+      },
+      {
+        "id": 19,
+        "q": "Integrallash sohasi $D = \\{(x, y): 0 \\le x \\le 2, 2x^3 + 5 \\le y \\le 3x^3 + 5\\}$ bo'lsa, $\\iint\\limits_D 4 dxdy$ ikki o'lchovli integralni hisoblang.",
+        "options": ["16", "8", "32", "12"],
+        "a": "16"
+      },
+      {
+        "id": 20,
+        "q": "$\\frac{1}{2} + \\frac{1}{4} + \\frac{1}{9} + \\frac{1}{16} + ...$ uchun qator yaqinlashishining zaruriy sharti bajarilishini tekshiring.",
+        "options": ["$\\lim_{n \\to \\infty} a_n = 0$, bajariladi", "$\\lim_{n \\to \\infty} a_n = 1$, bajarilmaydi", "$\\lim_{n \\to \\infty} a_n = \\infty$, bajarilmaydi", "Shart bajarilmaydi"],
+        "a": "$\\lim_{n \\to \\infty} a_n = 0$, bajariladi"
+      },
+      {
+        "id": 21,
+        "q": "Agar $\\iiint\\limits_{\\Omega} f(x, y, z) dxdydz = \\int_1^3 dx \\int_{\\sqrt{x+3}}^{4x+5} dy \\int_{\\sqrt{x+y+1}}^{5x+y+4} f(x, y, z) dz$ bo'lsa, $\\Omega$ sohasini toping.",
+        "options": ["$1 \\le x \\le 3, \\sqrt{x+3} \\le y \\le 4x+5, \\sqrt{x+y+1} \\le z \\le 5x+y+4$", "$1 \\le x \\le 3, 0 \\le y \\le 4x+5, 0 \\le z \\le 5x+y+4$", "$x \\in [1,3], y \\in [x, 4x], z \\in [y, 5x]$"],
+        "a": "$1 \\le x \\le 3, \\sqrt{x+3} \\le y \\le 4x+5, \\sqrt{x+y+1} \\le z \\le 5x+y+4$"
+      },
+      {
+        "id": 22,
+        "q": "Agar integrallash sohasi $D = \\{(x, y): 2 \\le x \\le 5, x^2 \\le y \\le x^3\\}$ bo'lsa, $\\iint\\limits_D f(x, y) dxdy$ takroriy integralga o'tkazilsa:",
+        "options": ["$\\int_2^5 dx \\int_{x^2}^{x^3} f(x, y) dy$", "$\\int_2^5 dx \\int_0^{x^3} f(x, y) dy$", "$\\int_{x^2}^{x^3} dy \\int_2^5 f(x, y) dx$", "$\\int_0^2 dx \\int_{x^2}^{x^3} f(x, y) dy$"],
+        "a": "$\\int_2^5 dx \\int_{x^2}^{x^3} f(x, y) dy$"
+      },
+      {
+        "id": 23,
+        "q": "$z = 3x^2 + y^2 + 2xy - 2x + y + 2$ funksiya ekstremumi mavjudligini $\\Delta$ determinant orqali aniqlang.",
+        "options": ["$\\Delta = 8 > 0$, ekstremum mavjud", "$\\Delta = -8 < 0$, ekstremum mavjud emas", "$\\Delta = 0$, shubhali holat", "$\\Delta = 4 > 0$, ekstremum mavjud"],
+        "a": "$\\Delta = 8 > 0$, ekstremum mavjud"
+      },
+      {
+        "id": 24,
+        "q": "Ushbu funksiyaning birinchi tartibli xususiy hosilalarini toping: $f(x, y) = \\sin x + \\cos y$.",
+        "options": ["$f'_x = \\cos x; f'_y = -\\sin y$", "$f'_x = -\\cos x; f'_y = \\sin y$", "$f'_x = \\sin x; f'_y = \\cos y$", "$f'_x = \\cos x; f'_y = \\sin y$"],
+        "a": "$f'_x = \\cos x; f'_y = -\\sin y$"
+      },
+      {
+        "id": 25,
+        "q": "Agar integrallash sohasi $D = \\{(x, y): 3 \\le x \\le 7, 2x-1 \\le y \\le x^3\\}$ bo'lsa, $\\iint\\limits_D f(x, y) dxdy$ takroriy integralga o'tkazilsa:",
+        "options": ["$\\int_3^7 dx \\int_{2x-1}^{x^3} f(x, y) dy$", "$\\int_3^7 dx \\int_0^{x^3} f(x, y) dy$", "$\\int_{2x-1}^{x^3} dy \\int_3^7 f(x, y) dx$", "$\\int_0^3 dx \\int_{2x-1}^{x^3} f(x, y) dy$"],
+        "a": "$\\int_3^7 dx \\int_{2x-1}^{x^3} f(x, y) dy$"
+      },
+      {
+        "id": 26,
+        "q": "$z = 3x^2 + 2y^2 - 4xy - 2x + y + 2$ funksiya ekstremumi mavjudligini $\\Delta$ determinant orqali aniqlang.",
+        "options": ["$\\Delta = 8 > 0$, ekstremum mavjud", "$\\Delta = -8 < 0$, ekstremum mavjud emas", "$\\Delta = 0$, shubhali holat", "$\\Delta = 12 > 0$, ekstremum mavjud"],
+        "a": "$\\Delta = 8 > 0$, ekstremum mavjud"
+      },
+      {
+        "id": 27,
+        "q": "$\\frac{1}{3} + \\frac{2}{5} + \\frac{3}{7} + \\frac{4}{9} + ...$ qatorning umumiy $u_n$ hadini toping.",
+        "options": ["$u_n = \\frac{n}{2n+1}$", "$u_n = \\frac{n}{n+2}$", "$u_n = \\frac{n}{2n-1}$", "$u_n = \\frac{n+1}{2n+1}$"],
+        "a": "$u_n = \\frac{n}{2n+1}$"
+      },
+      {
+        "id": 28,
+        "q": "Agar $\\iiint\\limits_{\\Omega} f(x, y, z) dxdydz = \\int_2^4 dx \\int_{\\sqrt{2x+3}}^{5x+4} dy \\int_{\\sqrt{2x+y+1}}^{3x+4y+5} f(x, y, z) dz$ bo'lsa, $\\Omega$ sohasini toping.",
+        "options": ["$2 \\le x \\le 4, \\sqrt{2x+3} \\le y \\le 5x+4, \\sqrt{2x+y+1} \\le z \\le 3x+4y+5$", "$2 \\le x \\le 4, 0 \\le y \\le 5x+4, 0 \\le z \\le 3x+4y+5$", "$x \\in [2,4], y \\in [\\sqrt{2x}, 5x], z \\in [\\sqrt{2y}, 3x]$"],
+        "a": "$2 \\le x \\le 4, \\sqrt{2x+3} \\le y \\le 5x+4, \\sqrt{2x+y+1} \\le z \\le 3x+4y+5$"
+      },
+      {
+        "id": 44,
+        "q": "Integrallash sohasi $D = \\{(x, y): 2 \\le x \\le 3, x^2 - 1 \\le y \\le 4x^2 - 1\\}$ bo'lsa, $\\iint\\limits_D 2 dxdy$ ikki o'lchovli integralni hisoblang.",
+        "options": ["38", "19", "76", "24"],
+        "a": "38"
+      },
+      {
+        "id": 45,
+        "q": "Agar $\\iiint\\limits_{\\Omega} f(x, y, z) dxdydz = \\int_3^7 dx \\int_{\\sqrt{2x+5}}^{\\sqrt{6x+1}} dy \\int_{\\sqrt{2x+3y-2}}^{\\sqrt{5x+6y+1}} f(x, y, z) dz$ bo'lsa, $\\Omega$ sohasini toping.",
+        "options": ["$3 \\le x \\le 7, \\sqrt{2x+5} \\le y \\le \\sqrt{6x+1}, \\sqrt{2x+3y-2} \\le z \\le \\sqrt{5x+6y+1}$", "$3 \\le x \\le 7, 0 \\le y \\le \\sqrt{6x+1}, 0 \\le z \\le \\sqrt{5x+6y+1}$", "$x \\in [3,7], y \\in [2x, 6x], z \\in [3y, 6y]$"],
+        "a": "$3 \\le x \\le 7, \\sqrt{2x+5} \\le y \\le \\sqrt{6x+1}, \\sqrt{2x+3y-2} \\le z \\le \\sqrt{5x+6y+1}$"
+      },
+      {
+        "id": 46,
+        "q": "Agar integrallash sohasi $D = \\{(x, y): 0 \\le x \\le \\frac{\\pi}{4}, \\sin x \\le y \\le \\cos x\\}$ bo'lsa, $\\iint\\limits_D f(x, y) dxdy$ takroriy integralga o'tkazilsa:",
+        "options": ["$\\int_0^{\\frac{\\pi}{4}} dx \\int_{\\sin x}^{\\cos x} f(x, y) dy$", "$\\int_0^{\\frac{\\pi}{4}} dx \\int_0^{\\cos x} f(x, y) dy$", "$\\int_{\\sin x}^{\\cos x} dy \\int_0^{\\frac{\\pi}{4}} f(x, y) dx$", "$\\int_0^{\\pi} dx \\int_{\\sin x}^{\\cos x} f(x, y) dy$"],
+        "a": "$\\int_0^{\\frac{\\pi}{4}} dx \\int_{\\sin x}^{\\cos x} f(x, y) dy$"
+      },
+      {
+        "id": 47,
+        "q": "$z = 4x^2 - y^2 + 6xy + 8x + 9y - 3$ funksiya ekstremumi mavjudligini $\\Delta$ determinant orqali aniqlang.",
+        "options": ["$\\Delta = -52 < 0$, ekstremum mavjud emas", "$\\Delta = 52 > 0$, ekstremum mavjud", "$\\Delta = 0$, shubhali holat", "$\\Delta = 16 > 0$, ekstremum mavjud"],
+        "a": "$\\Delta = -52 < 0$, ekstremum mavjud emas"
+      },
+      {
+        "id": 48,
+        "q": "$\\frac{1}{3} + \\frac{2}{9} + \\frac{3}{27} + \\frac{4}{81} + ...$ qatorning umumiy $u_n$ hadini toping.",
+        "options": ["$u_n = \\frac{n}{3^n}$", "$u_n = \\frac{n}{3n}$", "$u_n = \\frac{1}{3^n}$", "$u_n = \\frac{n}{3^{n-1}}$"],
+        "a": "$u_n = \\frac{n}{3^n}$"
+      },
+      {
+        "id": 49,
+        "q": "Ushbu funksiyaning birinchi tartibli xususiy hosilalarini toping: $f(x, y) = x^2e^y$.",
+        "options": ["$f'_x = 2xe^y; f'_y = x^2e^y$", "$f'_x = x^2e^y; f'_y = 2xe^y$", "$f'_x = 2x; f'_y = e^y$", "$f'_x = 2xe^x; f'_y = x^2e^x$"],
+        "a": "$f'_x = 2xe^y; f'_y = x^2e^y$"
+      },
+      {
+        "id": 50,
+        "q": "Agar $\\iiint\\limits_{\\Omega} f(x, y, z) dxdydz = \\int_3^6 dx \\int_{3x+1}^{x^2+2} dy \\int_{\\sqrt{2x+3y-2}}^{x^2+y^2+1} f(x, y, z) dz$ bo'lsa, $\\Omega$ sohasini toping.",
+        "options": ["$3 \\le x \\le 6, 3x+1 \\le y \\le x^2+2, \\sqrt{2x+3y-2} \\le z \\le x^2+y^2+1$", "$3 \\le x \\le 6, 0 \\le y \\le x^2+2, 0 \\le z \\le x^2+y^2+1$", "$x \\in [3,6], y \\in [3x, x^2], z \\in [\\sqrt{y}, x^2+y^2]$"],
+        "a": "$3 \\le x \\le 6, 3x+1 \\le y \\le x^2+2, \\sqrt{2x+3y-2} \\le z \\le x^2+y^2+1$"
+      },
+      {
+        "id": 51,
+        "q": "$z = x^2 - 5y^2 - xy + 6x + 5y - 9$ funksiya ekstremumi mavjudligini $\\Delta$ determinant orqali aniqlang.",
+        "options": ["$\\Delta = -21 < 0$, ekstremum mavjud emas", "$\\Delta = 21 > 0$, ekstremum mavjud", "$\\Delta = 0$, shubhali holat", "$\\Delta = -19 < 0$, ekstremum mavjud emas"],
+        "a": "$\\Delta = -21 < 0$, ekstremum mavjud emas"
+      },
+      {
+        "id": 52,
+        "q": "$\\sum_{n=1}^{\\infty} \\frac{n}{n+1}$ qatorning dastlabki ikkita hadining yig'indisini toping.",
+        "options": ["$\\frac{7}{6}$", "$\\frac{1}{2}$", "$\\frac{2}{3}$", "$\\frac{3}{2}$"],
+        "a": "$\\frac{7}{6}$"
+      },
+      {
+        "id": 53,
+        "q": "Agar integrallash sohasi $D = \\{(x, y): 0 \\le x \\le \\frac{\\pi}{2}, \\sin x \\le y \\le e^x\\}$ bo'lsa, $\\iint\\limits_D f(x, y) dxdy$ takroriy integralga o'tkazilsa:",
+        "options": ["$\\int_0^{\\frac{\\pi}{2}} dx \\int_{\\sin x}^{e^x} f(x, y) dy$", "$\\int_0^{\\frac{\\pi}{2}} dx \\int_0^{e^x} f(x, y) dy$", "$\\int_{\\sin x}^{e^x} dy \\int_0^{\\frac{\\pi}{2}} f(x, y) dx$", "$\\int_0^1 dx \\int_{\\sin x}^{e^x} f(x, y) dy$"],
+        "a": "$\\int_0^{\\frac{\\pi}{2}} dx \\int_{\\sin x}^{e^x} f(x, y) dy$"
+      },
+      {
+        "id": 54,
+        "q": "Integrallash sohasi $D = \\{(x, y): 1 \\le x \\le 2, 4x^3 + 7 \\le y \\le 8x^3 + 7\\}$ bo'lsa, $\\iint\\limits_D 2 dxdy$ ikki o'lchovli integralni hisoblang.",
+        "options": ["30", "15", "60", "45"],
+        "a": "30"
+      },
+      {
+        "id": 55,
+        "q": "Ushbu funksiyaning birinchi tartibli xususiy hosilalarini toping: $f(x, y) = \\sin x \\cdot e^y$.",
+        "options": ["$f'_x = \\cos x \\cdot e^y; f'_y = \\sin x \\cdot e^y$", "$f'_x = \\sin x \\cdot e^y; f'_y = \\cos x \\cdot e^y$", "$f'_x = \\cos x; f'_y = e^y$", "$f'_x = -\\cos x \\cdot e^y; f'_y = \\sin x \\cdot e^y$"],
+        "a": "$f'_x = \\cos x \\cdot e^y; f'_y = \\sin x \\cdot e^y$"
+      },
+      {
+        "id": 56,
+        "q": "Agar $\\iiint\\limits_{\\Omega} f(x, y, z) dxdydz = \\int_3^8 dx \\int_{3x+1}^{7x+2} dy \\int_{x+3y+1}^{3x+5y+1} f(x, y, z) dz$ bo'lsa, $\\Omega$ sohasini toping.",
+        "options": ["$3 \\le x \\le 8, 3x+1 \\le y \\le 7x+2, x+3y+1 \\le z \\le 3x+5y+1$", "$3 \\le x \\le 8, 0 \\le y \\le 7x+2, 0 \\le z \\le 3x+5y+1$", "$x \\in [3,8], y \\in [3x, 7x], z \\in [3y, 5y]$"],
+        "a": "$3 \\le x \\le 8, 3x+1 \\le y \\le 7x+2, x+3y+1 \\le z \\le 3x+5y+1$"
+      },
+      {
+        "id": 57,
+        "q": "Agar integrallash sohasi $D = \\{(x, y): 0 \\le x \\le 4, \\sqrt{x} \\le y \\le 4x+3\\}$ bo'lsa, $\\iint\\limits_D f(x, y) dxdy$ takroriy integralga o'tkazilsa:",
+        "options": ["$\\int_0^4 dx \\int_{\\sqrt{x}}^{4x+3} f(x, y) dy$", "$\\int_0^4 dx \\int_0^{4x+3} f(x, y) dy$", "$\\int_{\\sqrt{x}}^{4x+3} dy \\int_0^4 f(x, y) dx$", "$\\int_0^2 dx \\int_{\\sqrt{x}}^{4x+3} f(x, y) dy$"],
+        "a": "$\\int_0^4 dx \\int_{\\sqrt{x}}^{4x+3} f(x, y) dy$"
+      },
+      {
+        "id": 58,
+        "q": "$z = -7x^2 - 5y^2 + 6xy + x + 5y - 9$ funksiya ekstremumi mavjudligini $\\Delta = \\begin{vmatrix} z''_{xx} & z''_{xy} \\\\ z''_{xy} & z''_{yy} \\end{vmatrix}$ determinantning ishorasiga qarab aniqlang.",
+        "options": ["$\\Delta = 104 > 0$, ekstremum mavjud", "$\\Delta = -104 < 0$, ekstremum mavjud emas", "$\\Delta = 0$, shubhali holat", "$\\Delta = 70 > 0$, ekstremum mavjud"],
+        "a": "$\\Delta = 104 > 0$, ekstremum mavjud"
+      },
+      {
+        "id": 59,
+        "q": "$\\sum_{n=1}^{\\infty} \\frac{n}{2n+1}$ qatorning dastlabki ikkita hadining yig'indisini toping.",
+        "options": ["$\\frac{11}{15}$", "$\\frac{1}{3}$", "$\\frac{2}{5}$", "$\\frac{13}{15}$"],
+        "a": "$\\frac{11}{15}$"
+      },
+      {
+        "id": 60,
+        "q": "Integrallash sohasi $D = \\{(x, y): 3 \\le x \\le 4, 4x - 3 \\le y \\le 6x - 3\\}$ bo'lsa, $\\iint\\limits_D dxdy$ ikki o'lchovli integralni hisoblang.",
+        "options": ["1", "2", "3", "4"],
+        "a": "1"
+      },
+      {
+        "id": 61,
+        "q": "Integrallash sohasi $\\Omega = \\{(x, y, z): 3 \\le x \\le 8, 0 \\le y \\le 7, 1 \\le z \\le 3\\}$ bo'lsa, $\\iiint\\limits_{\\Omega} dxdydz$ uch o'lchovli integralni hisoblang.",
+        "options": ["70", "35", "105", "140"],
+        "a": "70"
+      },
+      {
+        "id": 62,
+        "q": "Agar $\\iint\\limits_D f(x, y) dxdy = \\int_1^5 dx \\int_{2x-1}^{2x+4} f(x, y) dy$ bo'lsa, $D$ integrallash sohasini toping.",
+        "options": ["$1 \\le x \\le 5, 2x-1 \\le y \\le 2x+4$", "$1 \\le x \\le 5, 0 \\le y \\le 2x+4$", "$0 \\le x \\le 5, 2x-1 \\le y \\le 2x+4$", "$1 \\le x \\le 5, x \\le y \\le 2x$"],
+        "a": "$1 \\le x \\le 5, 2x-1 \\le y \\le 2x+4$"
+      },
+      {
+        "id": 63,
+        "q": "Integrallash sohasi $D = \\{(x, y): 0 \\le x \\le 2, 4x^4 + 5 \\le y \\le 9x^4 + 5\\}$ bo'lsa, $\\iint\\limits_D 3 dxdy$ ikki o'lchovli integralni hisoblang.",
+        "options": ["96", "32", "48", "64"],
+        "a": "96"
+      },
+      {
+        "id": 64,
+        "q": "Ushbu funksiyaning birinchi tartibli xususiy hosilalarini toping: $f(x, y) = e^x \\cos y$.",
+        "options": ["$f'_x = e^x \\cos y; f'_y = -e^x \\sin y$", "$f'_x = e^x \\sin y; f'_y = e^x \\cos y$", "$f'_x = \\cos y; f'_y = -\\sin y$", "$f'_x = e^x; f'_y = -\\sin y$"],
+        "a": "$f'_x = e^x \\cos y; f'_y = -e^x \\sin y$"
+      },
+      {
+        "id": 65,
+        "q": "Agar integrallash sohasi $D = \\{(x, y): 0 \\le x \\le 5, \\sqrt{x+4} \\le y \\le 3x+5\\}$ bo'lsa, $\\iint\\limits_D f(x, y) dxdy$ takroriy integralga o'tkazilsa:",
+        "options": ["$\\int_0^5 dx \\int_{\\sqrt{x+4}}^{3x+5} f(x, y) dy$", "$\\int_0^5 dx \\int_0^{3x+5} f(x, y) dy$", "$\\int_{\\sqrt{x+4}}^{3x+5} dy \\int_0^5 f(x, y) dx$", "$\\int_2^3 dx \\int_{\\sqrt{x+4}}^{3x+5} f(x, y) dy$"],
+        "a": "$\\int_0^5 dx \\int_{\\sqrt{x+4}}^{3x+5} f(x, y) dy$"
+      },
+      {
+        "id": 66,
+        "q": "$z = -x^2 - 2y^2 + 5xy + 2x + 5y - 1$ funksiya ekstremumi mavjudligini $\\Delta$ determinant orqali aniqlang.",
+        "options": ["$\\Delta = -17 < 0$, ekstremum mavjud emas", "$\\Delta = 17 > 0$, ekstremum mavjud", "$\\Delta = 0$, shubhali holat", "$\\Delta = 8 > 0$, ekstremum mavjud"],
+        "a": "$\\Delta = -17 < 0$, ekstremum mavjud emas"
+      },
+      {
+        "id": 67,
+        "q": "$\\sum_{n=1}^{\\infty} \\frac{n}{3^n}$ qatorning dastlabki ikkita hadining yig'indisini toping.",
+        "options": ["$\\frac{5}{9}$", "$\\frac{1}{3}$", "$\\frac{2}{9}$", "$\\frac{4}{9}$"],
+        "a": "$\\frac{5}{9}$"
+      },
+      {
+        "id": 68,
+        "q": "Ushbu funksiyaning birinchi tartibli xususiy hosilalarini toping: $f(x, y) = 4x^5 \\cos y$.",
+        "options": ["$f'_x = 20x^4 \\cos y; f'_y = -4x^5 \\sin y$", "$f'_x = 20x^5 \\cos y; f'_y = 4x^5 \\sin y$", "$f'_x = 4x^4 \\cos y; f'_y = -4x^5 \\sin y$", "$f'_x = 20x^4; f'_y = -\\sin y$"],
+        "a": "$f'_x = 20x^4 \\cos y; f'_y = -4x^5 \\sin y$"
+      },
+      {
+        "id": 69,
+        "q": "Integrallash sohasi $\\Omega = \\{(x, y, z): -2 \\le x \\le 4, -1 \\le y \\le 7, 1 \\le z \\le 5\\}$ bo'lsa, $\\iiint\\limits_{\\Omega} dxdydz$ ni hisoblang.",
+        "options": ["192", "96", "48", "240"],
+        "a": "192"
+      },
+      {
+        "id": 70,
+        "q": "$\\sum_{n=1}^{\\infty} \\frac{n}{2^n+1}$ qatorning dastlabki ikkita hadining yig'indisini toping.",
+        "options": ["$\\frac{11}{15}$", "$\\frac{1}{3}$", "$\\frac{2}{5}$", "$\\frac{13}{15}$"],
+        "a": "$\\frac{11}{15}$"
+      },
+      {
+        "id": 71,
+        "q": "$z = x^2 - 3y^2 + 2xy - 3x + 5y - 3$ funksiya ekstremumi mavjudligini $\\Delta$ determinant orqali aniqlang.",
+        "options": ["$\\Delta = -16 < 0$, ekstremum mavjud emas", "$\\Delta = 16 > 0$, ekstremum mavjud", "$\\Delta = 0$, shubhali holat", "$\\Delta = -12 < 0$, ekstremum mavjud emas"],
+        "a": "$\\Delta = -16 < 0$, ekstremum mavjud emas"
+      },
+      {
+        "id": 72,
+        "q": "Agar $\\iint\\limits_D f(x, y) dxdy = \\int_2^5 dx \\int_{x^2}^{x^3} f(x, y) dy$ bo'lsa, $D$ integrallash sohasini toping.",
+        "options": ["$2 \\le x \\le 5, x^2 \\le y \\le x^3$", "$2 \\le x \\le 5, 0 \\le y \\le x^3$", "$x \\in [2,5], y \\in [x, x^2]$"],
+        "a": "$2 \\le x \\le 5, x^2 \\le y \\le x^3$"
+      },
+      {
+        "id": 73,
+        "q": "Ushbu funksiyaning birinchi tartibli xususiy hosilalarini toping: $f(x, y) = -3y^6 \\sin x$.",
+        "options": ["$f'_x = -3y^6 \\cos x; f'_y = -18y^5 \\sin x$", "$f'_x = 3y^6 \\cos x; f'_y = 18y^5 \\sin x$", "$f'_x = -3y^6 \\sin x; f'_y = -18y^5 \\cos x$"],
+        "a": "$f'_x = -3y^6 \\cos x; f'_y = -18y^5 \\sin x$"
+      },
+      {
+        "id": 74,
+        "q": "Integrallash sohasi $\\Omega = \\{(x, y, z): -6 \\le x \\le -1, -1 \\le y \\le 1, 1 \\le z \\le 3\\}$ bo'lsa, $\\iiint\\limits_{\\Omega} dxdydz$ ni hisoblang.",
+        "options": ["20", "10", "30", "40"],
+        "a": "20"
+      },
+      {
+        "id": 75,
+        "q": "$z = 5x^2 + y^2 + 7xy - 9x - 5y - 1$ funksiya ekstremumi mavjudligini $\\Delta$ determinant orqali aniqlang.",
+        "options": ["$\\Delta = -29 < 0$, ekstremum mavjud emas", "$\\Delta = 29 > 0$, ekstremum mavjud", "$\\Delta = 0$, shubhali holat"],
+        "a": "$\\Delta = -29 < 0$, ekstremum mavjud emas"
+      },
+      {
+        "id": 76,
+        "q": "$w = f(z) = u(x, y) + iv(x, y)$ funksiyasi differensiallanuvchi bo'lishi uchun Koshi-Riman shartini ko'rsating.",
+        "options": ["$\\frac{\\partial u}{\\partial x} = \\frac{\\partial v}{\\partial y}; \\frac{\\partial u}{\\partial y} = -\\frac{\\partial v}{\\partial x}$", "$\\frac{\\partial u}{\\partial x} = -\\frac{\\partial v}{\\partial y}; \\frac{\\partial u}{\\partial y} = \\frac{\\partial v}{\\partial x}$", "$\\frac{\\partial u}{\\partial x} = \\frac{\\partial v}{\\partial x}; \\frac{\\partial u}{\\partial y} = \\frac{\\partial v}{\\partial y}$"],
+        "a": "$\\frac{\\partial u}{\\partial x} = \\frac{\\partial v}{\\partial y}; \\frac{\\partial u}{\\partial y} = -\\frac{\\partial v}{\\partial x}$"
+      },
+      {
+        "id": 77,
+        "q": "Agar $\\iint\\limits_D f(x, y) dxdy = \\int_3^7 dx \\int_{2x-1}^{x^3} f(x, y) dy$ bo'lsa, $D$ integrallash sohasini toping.",
+        "options": ["$3 \\le x \\le 7, 2x-1 \\le y \\le x^3$", "$3 \\le x \\le 7, 0 \\le y \\le x^3$", "$x \\in [3,7], y \\in [2x, x^3]$"],
+        "a": "$3 \\le x \\le 7, 2x-1 \\le y \\le x^3$"
+      },
+      {
+        "id": 78,
+        "q": "Ushbu funksiyaning birinchi tartibli xususiy hosilalarini toping: $f(x, y) = 4y^7 \\ln x$.",
+        "options": ["$f'_x = \\frac{4y^7}{x}; f'_y = 28y^6 \\ln x$", "$f'_x = 4y^7 x; f'_y = 28y^6 \\ln x$", "$f'_x = \\frac{1}{x}; f'_y = 28y^6$"],
+        "a": "$f'_x = \\frac{4y^7}{x}; f'_y = 28y^6 \\ln x$"
+      },
+      {
+        "id": 79,
+        "q": "Integrallash sohasi $\\Omega = \\{(x, y, z): -6 \\le x \\le -2, -1 \\le y \\le 3, 1 \\le z \\le 5\\}$ bo'lsa, $\\iiint\\limits_{\\Omega} 2dxdydz$ ni hisoblang.",
+        "options": ["128", "64", "32", "256"],
+        "a": "128"
+      },
+      {
+        "id": 80,
+        "q": "$z = 5x^2 + 6y^2 + 7xy + 9x - 5y - 11$ funksiya ekstremumi mavjudligini $\\Delta$ orqali aniqlang.",
+        "options": ["$\\Delta = 71 > 0$, ekstremum mavjud", "$\\Delta = -71 < 0$, ekstremum mavjud emas", "$\\Delta = 0$, shubhali holat"],
+        "a": "$\\Delta = 71 > 0$, ekstremum mavjud"
+      },
+      {
+        "id": 81,
+        "q": "$f(z) = 3z^2$ kompleks o'zgaruvchili funksiyaning hosilasini toping.",
+        "options": ["$6z$", "$3z$", "$z^3$", "$6z^2$"],
+        "a": "$6z$"
+      },
+      {
+        "id": 82,
+        "q": "Ushbu funksiyaning birinchi tartibli xususiy hosilalarini toping: $f(x, y) = x^4 + 3 \\sin y$.",
+        "options": ["$f'_x = 4x^3; f'_y = 3 \\cos y$", "$f'_x = 4x^3; f'_y = -3 \\cos y$", "$f'_x = x^4; f'_y = 3 \\cos y$"],
+        "a": "$f'_x = 4x^3; f'_y = 3 \\cos y$"
+      },
+      {
+        "id": 83,
+        "q": "$z = -3x^2 - 6y^2 + 7xy - 5x + 2y + 1$ funksiya ekstremumi mavjudligini $\\Delta$ orqali aniqlang.",
+        "options": ["$\\Delta = 23 > 0$, ekstremum mavjud", "$\\Delta = -23 < 0$, ekstremum mavjud emas", "$\\Delta = 0$, shubhali holat"],
+        "a": "$\\Delta = 23 > 0$, ekstremum mavjud"
+      },
+      {
+        "id": 84,
+        "q": "Integrallash sohasi $\\Omega = \\{(x, y, z): -7 \\le x \\le 2, -3 \\le y \\le 3, 2 \\le z \\le 5\\}$ bo'lsa, $\\iiint\\limits_{\\Omega} (-3)dxdydz$ ni hisoblang.",
+        "options": ["-486", "-162", "-243", "-324"],
+        "a": "-486"
+      },
+      {
+        "id": 85,
+        "q": "Agar $\\iint\\limits_D f(x, y) dxdy = \\int_1^3 dx \\int_x^{e^x} f(x, y) dy$ bo'lsa, $D$ integrallash sohasini toping.",
+        "options": ["$1 \\le x \\le 3, x \\le y \\le e^x$", "$1 \\le x \\le 3, 0 \\le y \\le e^x$", "$x \\in [1,3], y \\in [1, e^x]$"],
+        "a": "$1 \\le x \\le 3, x \\le y \\le e^x$"
+      },
+      {
+        "id": 86,
+        "q": "Ushbu funksiyaning birinchi tartibli xususiy hosilalarini toping: $f(x, y) = \\frac{1}{x^4} - 5 \\sin y$.",
+        "options": ["$f'_x = -\\frac{4}{x^5}; f'_y = -5 \\cos y$", "$f'_x = \\frac{4}{x^5}; f'_y = 5 \\cos y$", "$f'_x = -\\frac{1}{x^3}; f'_y = -5 \\cos y$"],
+        "a": "$f'_x = -\\frac{4}{x^5}; f'_y = -5 \\cos y$"
+      },
+      {
+        "id": 87,
+        "q": "$z = -3x^2 - 4y^2 + 7xy - 5x - 12y + 13$ funksiya ekstremumi mavjudligini $\\Delta = \\begin{vmatrix} z''_{xx} & z''_{xy} \\\\ z''_{xy} & z''_{yy} \\end{vmatrix}$ determinantning ishorasiga qarab aniqlang.",
+        "options": ["$\\Delta = 47 > 0$, ekstremum mavjud", "$\\Delta = -47 < 0$, ekstremum mavjud emas", "$\\Delta = 0$, shubhali holat"],
+        "a": "$\\Delta = 47 > 0$, ekstremum mavjud"
+      },
+      {
+        "id": 88,
+        "q": "Integrallash sohasi $\\Omega = \\{(x, y, z): -7 \\le x \\le 1, -3 \\le y \\le -1, 4 \\le z \\le 5\\}$ bo'lsa, $\\iiint\\limits_{\\Omega} 5dxdydz$ ni hisoblang.",
+        "options": ["80", "40", "160", "20"],
+        "a": "80"
+      },
+      {
+        "id": 89,
+        "q": "$f(z) = -5z^3$ kompleks o'zgaruvchili funksiyaning hosilasini toping.",
+        "options": ["$-15z^2$", "$15z^2$", "$-15z$", "$-5z^2$"],
+        "a": "$-15z^2$"
+      },
+      {
+        "id": 90,
+        "q": "Agar $\\iint\\limits_D f(x, y) dxdy = \\int_1^4 dx \\int_{\\ln x}^{2x+1} f(x, y) dy$ bo'lsa, $D$ integrallash sohasini toping.",
+        "options": ["$1 \\le x \\le 4, \\ln x \\le y \\le 2x+1$", "$1 \\le x \\le 4, 0 \\le y \\le 2x+1$", "$x \\in [1,4], y \\in [x, 2x]$"],
+        "a": "$1 \\le x \\le 4, \\ln x \\le y \\le 2x+1$"
+      },
+      {
+        "id": 91,
+        "q": "Ushbu funksiyaning birinchi tartibli xususiy hosilalarini toping: $f(x, y) = \\frac{1}{7x^3} - \\frac{5}{y^2}$.",
+        "options": ["$f'_x = -\\frac{3}{7x^4}; f'_y = \\frac{10}{y^3}$", "$f'_x = \\frac{3}{7x^4}; f'_y = -\\frac{10}{y^3}$", "$f'_x = -\\frac{1}{7x^2}; f'_y = \\frac{5}{y}$"],
+        "a": "$f'_x = -\\frac{3}{7x^4}; f'_y = \\frac{10}{y^3}$"
+      },
+      {
+        "id": 92,
+        "q": "$z = 6x^2 - 3y^2 + 2xy + 11x - 12y + 10$ funksiya ekstremumi mavjudligini $\\Delta$ orqali aniqlang.",
+        "options": ["$\\Delta = -40 < 0$, ekstremum mavjud emas", "$\\Delta = 40 > 0$, ekstremum mavjud", "$\\Delta = 0$, shubhali holat"],
+        "a": "$\\Delta = -40 < 0$, ekstremum mavjud emas"
+      },
+      {
+        "id": 93,
+        "q": "Integrallash sohasi $\\Omega = \\{(x, y, z): -8 \\le x \\le -3, -5 \\le y \\le -2, 4 \\le z \\le 8\\}$ bo'lsa, $\\iiint\\limits_{\\Omega} 2dxdydz$ ni hisoblang.",
+        "options": ["120", "60", "240", "180"],
+        "a": "120"
+      },
+      {
+        "id": 94,
+        "q": "Agar $\\iint\\limits_D f(x, y) dxdy = \\int_2^5 dx \\int_{x-3}^{2x+1} f(x, y) dy$ bo'lsa, $D$ integrallash sohasini toping.",
+        "options": ["$2 \\le x \\le 5, x-3 \\le y \\le 2x+1$", "$2 \\le x \\le 5, 0 \\le y \\le 2x+1$", "$x \\in [2,5], y \\in [x-3, x+1]$"],
+        "a": "$2 \\le x \\le 5, x-3 \\le y \\le 2x+1$"
+      },
+      {
+        "id": 95,
+        "q": "Ushbu funksiyaning birinchi tartibli xususiy hosilalarini toping: $f(x, y) = \\frac{1}{x^3y^5}$.",
+        "options": ["$f'_x = -\\frac{3}{x^4y^5}; f'_y = -\\frac{5}{x^3y^6}$", "$f'_x = \\frac{3}{x^4y^5}; f'_y = \\frac{5}{x^3y^6}$", "$f'_x = -\\frac{1}{x^2y^5}; f'_y = -\\frac{1}{x^3y^4}$"],
+        "a": "$f'_x = -\\frac{3}{x^4y^5}; f'_y = -\\frac{5}{x^3y^6}$"
+      },
+      {
+        "id": 96,
+        "q": "Integrallash sohasi $\\Omega = \\{(x, y, z): -8 \\le x \\le 3, -2 \\le y \\le 2, -1 \\le z \\le 8\\}$ bo'lsa, $\\iiint\\limits_{\\Omega} dxdydz$ ni hisoblang.",
+        "options": ["396", "198", "99", "440"],
+        "a": "396"
+      },
+      {
+        "id": "extra_4",
+        "q": "D sohada analitik $f(z)$ funksiyasi uchun Koshining integral formulasini ko'rsating.",
+        "options": ["$f(z_0) = \\frac{1}{2\\pi i} \\oint_C \\frac{f(z)}{z-z_0} dz$", "$f(z_0) = \\oint_C \\frac{f(z)}{z-z_0} dz$", "$f(z_0) = \\frac{1}{\\pi i} \\oint_C f(z) dz$"],
+        "a": "$f(z_0) = \\frac{1}{2\\pi i} \\oint_C \\frac{f(z)}{z-z_0} dz$"
+      },
+      {
+        "id": 97,
+        "q": "$z = -2x^2 + y^2 - 4xy + 13x - 15y + 14$ funksiya ekstremumi mavjudligini $\\Delta$ orqali aniqlang.",
+        "options": ["$\\Delta = -20 < 0$, ekstremum mavjud emas", "$\\Delta = 20 > 0$, ekstremum mavjud", "$\\Delta = 0$, shubhali holat"],
+        "a": "$\\Delta = -20 < 0$, ekstremum mavjud emas"
+      },
+      {
+        "id": 98,
+        "q": "Agar $\\iint\\limits_D f(x, y) dxdy = \\int_0^{\\pi/4} dx \\int_{\\sin x}^{\\cos x} f(x, y) dy$ bo'lsa, $D$ integrallash sohasini toping.",
+        "options": ["$0 \\le x \\le \\pi/4, \\sin x \\le y \\le \\cos x$", "$0 \\le x \\le \\pi/4, \\cos x \\le y \\le \\sin x$", "$x \\in [0, \\pi/2], y \\in [\\sin x, \\cos x]$"],
+        "a": "$0 \\le x \\le \\pi/4, \\sin x \\le y \\le \\cos x$"
+      },
+      {
+        "id": 99,
+        "q": "Ushbu funksiyaning birinchi tartibli xususiy hosilalarini toping: $f(x, y) = \\frac{1}{12x^4y^3}$.",
+        "options": ["$f'_x = -\\frac{1}{3x^5y^3}; f'_y = -\\frac{1}{4x^4y^4}$", "$f'_x = \\frac{1}{3x^5y^3}; f'_y = \\frac{1}{4x^4y^4}$", "$f'_x = -\\frac{1}{12x^3y^3}; f'_y = -\\frac{1}{12x^4y^2}$"],
+        "a": "$f'_x = -\\frac{1}{3x^5y^3}; f'_y = -\\frac{1}{4x^4y^4}$"
+      },
+      {
+        "id": 100,
+        "q": "$z = 5x^2 + 7y^2 - 8xy - 11x - 15y + 11$ funksiya ekstremumi mavjudligini $\\Delta = \\begin{vmatrix} z''_{xx} & z''_{xy} \\\\ z''_{xy} & z''_{yy} \\end{vmatrix}$ determinantning ishorasiga qarab aniqlang.",
+        "options": ["$\\Delta = 76 > 0$, ekstremum mavjud", "$\\Delta = -76 < 0$, ekstremum mavjud emas", "$\\Delta = 0$, shubhali holat"],
+        "a": "$\\Delta = 76 > 0$, ekstremum mavjud"
+      },
+      {
+        "id": 101,
+        "q": "Integrallash sohasi $\\Omega = \\{(x, y, z): -10 \\le x \\le -6, -5 \\le y \\le -2, -1 \\le z \\le 8\\}$ bo'lsa, $\\iiint\\limits_{\\Omega} (-3)dxdydz$ ni hisoblang.",
+        "options": ["-324", "-108", "-162", "-216"],
+        "a": "-324"
+      },
+      {
+        "id": 102,
+        "q": "Agar $\\iint\\limits_D f(x, y) dxdy = \\int_0^{\\pi/2} dx \\int_{\\sin x}^{e^x} f(x, y) dy$ bo'lsa, $D$ integrallash sohasini toping.",
+        "options": ["$0 \\le x \\le \\pi/2, \\sin x \\le y \\le e^x$", "$0 \\le x \\le \\pi/2, e^x \\le y \\le \\sin x$", "$x \\in [0, \\pi], y \\in [\\sin x, e^x]$"],
+        "a": "$0 \\le x \\le \\pi/2, \\sin x \\le y \\le e^x$"
+      },
+      {
+        "id": 103,
+        "q": "Ushbu funksiyaning birinchi tartibli xususiy hosilalarini toping: $f(x, y) = \\frac{\\sin x}{y^3}$.",
+        "options": ["$f'_x = \\frac{\\cos x}{y^3}; f'_y = -\\frac{3 \\sin x}{y^4}$", "$f'_x = \\frac{\\sin x}{y^3}; f'_y = \\frac{3 \\sin x}{y^4}$", "$f'_x = \\cos x; f'_y = -3y^{-4}$"],
+        "a": "$f'_x = \\frac{\\cos x}{y^3}; f'_y = -\\frac{3 \\sin x}{y^4}$"
+      },
+      {
+        "id": 104,
+        "q": "$z = x^2 + 7y^2 + xy + 9x - 12y + 15$ funksiya ekstremumi mavjudligini $\\Delta$ orqali aniqlang.",
+        "options": ["$\\Delta = 27 > 0$, ekstremum mavjud", "$\\Delta = -27 < 0$, ekstremum mavjud emas", "$\\Delta = 0$, shubhali holat"],
+        "a": "$\\Delta = 27 > 0$, ekstremum mavjud"
+      },
+      {
+        "id": 105,
+        "q": "Integrallash sohasi $\\Omega = \\{(x, y, z): -11 \\le x \\le -9, -6 \\le y \\le -2, -1 \\le z \\le 6\\}$ bo'lsa, $\\iiint\\limits_{\\Omega} 5dxdydz$ ni hisoblang.",
+        "options": ["280", "140", "70", "210"],
+        "a": "280"
+      },
+      {
+        "id": 106,
+        "q": "Agar $\\iint\\limits_D f(x, y) dxdy = \\int_0^4 dx \\int_{\\sqrt{x}}^{4x+3} f(x, y) dy$ bo'lsa, $D$ integrallash sohasini toping.",
+        "options": ["$0 \\le x \\le 4, \\sqrt{x} \\le y \\le 4x+3$", "$0 \\le x \\le 4, 0 \\le y \\le 4x+3$", "$x \\in [0,4], y \\in [x, \\sqrt{x}]$"],
+        "a": "$0 \\le x \\le 4, \\sqrt{x} \\le y \\le 4x+3$"
+      }
     ]
   },
   "dasturiy_injiniring_malumotlar_tuzilmasi": {
@@ -1936,7 +2487,644 @@
   },
   "kiberxavfsizlik_hisob": {
     "name": "Hisob",
-    "questions": []
+     "questions": [
+      {
+        "id": 1,
+        "q": "$1 + \\frac{1}{2} + \\frac{1}{3} + \\frac{1}{4} + ...$ uchun qator yaqinlashishining zaruriy sharti bajarilishini tekshiring.",
+        "options": ["$\\lim_{n \\to \\infty} a_n = 0$, bajariladi", "$\\lim_{n \\to \\infty} a_n = 1$, bajarilmaydi", "$\\lim_{n \\to \\infty} a_n = \\infty$, bajarilmaydi", "Qator uzoqlashuvchi, bajarilmaydi"],
+        "a": "$\\lim_{n \\to \\infty} a_n = 0$, bajariladi"
+      },
+      {
+        "id": 2,
+        "q": "Ushbu funksiyaning birinchi tartibli xususiy hosilalarini toping: $f(x, y) = 5x^2y^3$.",
+        "options": ["$f'_x = 10xy^3; f'_y = 15x^2y^2$", "$f'_x = 5xy^3; f'_y = 15x^2y^2$", "$f'_x = 10x^2y; f'_y = 5xy^3$", "$f'_x = 10xy^2; f'_y = 15x^3y^2$"],
+        "a": "$f'_x = 10xy^3; f'_y = 15x^2y^2$"
+      },
+      {
+        "id": 3,
+        "q": "$z = x^2 + 3y^2 + 3xy - 5x + 4y - 8$ funksiya ekstremumi mavjudligini $\\Delta = \\begin{vmatrix} z''_{xx} & z''_{xy} \\\\ z''_{xy} & z''_{yy} \\end{vmatrix}$ determinantning ishorasiga qarab aniqlang.",
+        "options": ["$\\Delta = 3 > 0$, ekstremum mavjud", "$\\Delta = -3 < 0$, ekstremum mavjud emas", "$\\Delta = 0$, shubhali holat", "$\\Delta = 12 > 0$, ekstremum mavjud"],
+        "a": "$\\Delta = 3 > 0$, ekstremum mavjud"
+      },
+      {
+        "id": 4,
+        "q": "Integrallash sohasi $D = \\{(x, y): 1 \\le x \\le 3, 0 \\le y \\le 2x\\}$ bo'lsa, $\\iint\\limits_D dxdy$ ikki o'lchovli integralni hisoblang.",
+        "options": ["8", "4", "10", "6"],
+        "a": "8"
+      },
+      {
+        "id": 5,
+        "q": "Agar $\\iint\\limits_D f(x, y) dxdy = \\int_0^5 dx \\int_{\\sqrt{x+4}}^{3x+5} f(x, y) dy$ bo'lsa, $D$ integrallash sohasini toping.",
+        "options": ["$0 \\le x \\le 5, \\sqrt{x+4} \\le y \\le 3x+5$", "$0 \\le x \\le 5, 0 \\le y \\le 3x+5$", "$\\sqrt{x+4} \\le x \\le 3x+5, 0 \\le y \\le 5$", "$0 \\le x \\le 5, x+4 \\le y \\le 3x+5$"],
+        "a": "$0 \\le x \\le 5, \\sqrt{x+4} \\le y \\le 3x+5$"
+      },
+      {
+        "id": 6,
+        "q": "Agar $\\iiint\\limits_{\\Omega} f(x, y, z) dxdydz = \\int_2^5 dx \\int_{2x-1}^{3x+2} dy \\int_{3x+4y-1}^{4x+5y+1} f(x, y, z) dz$ bo'lsa, $\\Omega$ sohasini toping.",
+        "options": ["$2 \\le x \\le 5, 2x-1 \\le y \\le 3x+2, 3x+4y-1 \\le z \\le 4x+5y+1$", "$2 \\le x \\le 5, 0 \\le y \\le 3x+2, 0 \\le z \\le 4x+5y+1$", "$x \\in [2,5], y \\in [2x, 3x], z \\in [3x, 4x]$"],
+        "a": "$2 \\le x \\le 5, 2x-1 \\le y \\le 3x+2, 3x+4y-1 \\le z \\le 4x+5y+1$"
+      },
+      {
+        "id": 7,
+        "q": "Ushbu funksiyaning birinchi tartibli xususiy hosilalarini toping: $f(x, y) = -2x^3y^4$.",
+        "options": ["$f'_x = -6x^2y^4; f'_y = -8x^3y^3$", "$f'_x = -6x^3y^4; f'_y = -8x^2y^3$", "$f'_x = -2x^2y^4; f'_y = -2x^3y^3$", "$f'_x = -6x^2y^3; f'_y = -8x^3y^4$"],
+        "a": "$f'_x = -6x^2y^4; f'_y = -8x^3y^3$"
+      },
+      {
+        "id": 8,
+        "q": "Integrallash sohasi $D = \\{(x, y): 2 \\le x \\le 4, 2x+1 \\le y \\le 4x+1\\}$ bo'lsa, $\\iint\\limits_D 5 dxdy$ ni hisoblang.",
+        "options": ["60", "30", "45", "50"],
+        "a": "60"
+      },
+      {
+        "id": 9,
+        "q": "$1 - \\frac{1}{2} + \\frac{1}{3} - \\frac{1}{4} + ...$ uchun qator yaqinlashishining zaruriy sharti bajarilishini tekshiring.",
+        "options": ["$\\lim_{n \\to \\infty} |a_n| = 0$, bajariladi", "$\\lim_{n \\to \\infty} a_n = 1$, bajarilmaydi", "$\\\\lim_{n \\to \\infty} a_n \\neq 0$, bajarilmaydi", "Qator uzoqlashuvchi"],
+        "a": "$\\lim_{n \\to \\infty} |a_n| = 0$, bajariladi"
+      },
+      {
+        "id": 10,
+        "q": "Agar $\\iiint\\limits_{\\Omega} f(x, y, z) dxdydz = \\int_1^3 dx \\int_{2x+1}^{3x+5} dy \\int_{x+y+2}^{2x+4y+1} f(x, y, z) dz$ bo'lsa, $\\Omega$ sohasini toping.",
+        "options": ["$1 \\le x \\le 3, 2x+1 \\le y \\le 3x+5, x+y+2 \\le z \\le 2x+4y+1$", "$1 \\le x \\le 3, 0 \\le y \\le 3x+5, 0 \\le z \\le 2x+4y+1$", "$x \\in [1,3], y \\in [2x+1, 3x+5], z \\in [0, 1]$"],
+        "a": "$1 \\le x \\le 3, 2x+1 \\le y \\le 3x+5, x+y+2 \\le z \\le 2x+4y+1$"
+      },
+      {
+        "id": 11,
+        "q": "$z = x^2 + 3y^2 + 4xy - 2x + y + 2$ funksiya ekstremumi mavjudligini $\\Delta$ determinant orqali aniqlang.",
+        "options": ["$\\Delta = -4 < 0$, ekstremum mavjud emas", "$\\Delta = 4 > 0$, ekstremum mavjud", "$\\Delta = 0$, shubhali holat", "$\\Delta = 8 > 0$, ekstremum mavjud"],
+        "a": "$\\Delta = -4 < 0$, ekstremum mavjud emas"
+      },
+      {
+        "id": 12,
+        "q": "Agar $D = \\{(x, y): 1 \\le x \\le 5, 2x-1 \\le y \\le 2x+4\\}$ bo'lsa, $\\iint\\limits_D f(x, y) dxdy$ takroriy integralga o'tkazilsa:",
+        "options": ["$\\int_1^5 dx \\int_{2x-1}^{2x+4} f(x, y) dy$", "$\\int_1^5 dx \\int_0^{2x+4} f(x, y) dy$", "$\\int_{2x-1}^{2x+4} dy \\int_1^5 f(x, y) dx$", "$\\int_0^1 dx \\int_{2x-1}^{2x+4} f(x, y) dy$"],
+        "a": "$\\int_1^5 dx \\int_{2x-1}^{2x+4} f(x, y) dy$"
+      },
+      {
+        "id": 13,
+        "q": "Ushbu funksiyaning birinchi tartibli xususiy hosilalarini toping: $f(x, y) = 7x^2y^5$.",
+        "options": ["$f'_x = 14xy^5; f'_y = 35x^2y^4$", "$f'_x = 7xy^5; f'_y = 35x^2y^5$", "$f'_x = 14x^2y; f'_y = 14xy^4$", "$f'_x = 14xy^4; f'_y = 35x^3y^4$"],
+        "a": "$f'_x = 14xy^5; f'_y = 35x^2y^4$"
+      },
+      {
+        "id": 14,
+        "q": "Agar $\\iiint\\limits_{\\Omega} f(x, y, z) dxdydz = \\int_{-1}^1 dx \\int_{3x+4}^{4x+5} dy \\int_{x+4y+1}^{5x+3y+2} f(x, y, z) dz$ bo'lsa, $\\Omega$ sohasini toping.",
+        "options": ["$-1 \\le x \\le 1, 3x+4 \\le y \\le 4x+5, x+4y+1 \\le z \\le 5x+3y+2$", "$-1 \\le x \\le 1, 0 \\le y \\le 4x+5, 0 \\le z \\le 5x+3y+2$", "$x \\in [-1, 1], y \\in [3x, 4x], z \\in [x, 5x]$"],
+        "a": "$-1 \\le x \\le 1, 3x+4 \\le y \\le 4x+5, x+4y+1 \\le z \\le 5x+3y+2$"
+      },
+      {
+        "id": 15,
+        "q": "$z = -2x^2 + y^2 + 3xy - 2x + y + 2$ funksiya ekstremumi mavjudligini $\\Delta = \\begin{vmatrix} z''_{xx} & z''_{xy} \\\\ z''_{xy} & z''_{yy} \\end{vmatrix}$ determinantning ishorasiga qarab aniqlang.",
+        "options": ["$\\Delta = -17 < 0$, ekstremum mavjud emas", "$\\Delta = 17 > 0$, ekstremum mavjud", "$\\Delta = 0$, shubhali holat", "$\\Delta = 5 > 0$, ekstremum mavjud"],
+        "a": "$\\Delta = -17 < 0$, ekstremum mavjud emas"
+      },
+      {
+        "id": 16,
+        "q": "$\\frac{1}{2} + \\frac{2}{3} + \\frac{3}{4} + ...$ uchun qator yaqinlashishining zaruriy sharti bajarilishini tekshiring.",
+        "options": ["$\\lim_{n \\to \\infty} a_n = 1 \\neq 0$, bajarilmaydi", "$\\lim_{n \\to \\infty} a_n = 0$, bajariladi", "$\\lim_{n \\to \\infty} a_n = \\infty$, bajarilmaydi", "Qator yaqinlashuvchi, bajariladi"],
+        "a": "$\\lim_{n \\to \\infty} a_n = 1 \\neq 0$, bajarilmaydi"
+      },
+      {
+        "id": 17,
+        "q": "Integrallash sohasi $D = \\{(x, y): 1 \\le x \\le 4, x^2 + 1 \\le y \\le 2x^2 + 1\\}$ bo'lsa, $\\iint\\limits_D 3 dxdy$ ikki o'lchovli integralni hisoblang.",
+        "options": ["63", "21", "126", "42"],
+        "a": "63"
+      },
+      {
+        "id": 18,
+        "q": "Ushbu funksiyaning birinchi tartibli xususiy hosilalarini toping: $f(x, y) = \\sin x \\cdot \\cos y$.",
+        "options": ["$f'_x = \\cos x \\cos y; f'_y = -\\sin x \\sin y$", "$f'_x = -\\cos x \\cos y; f'_y = \\sin x \\sin y$", "$f'_x = \\sin x \\cos y; f'_y = \\cos x \\sin y$", "$f'_x = \\cos x; f'_y = -\\sin y$"],
+        "a": "$f'_x = \\cos x \\cos y; f'_y = -\\sin x \\sin y$"
+      },
+      {
+        "id": 19,
+        "q": "Integrallash sohasi $D = \\{(x, y): 0 \\le x \\le 2, 2x^3 + 5 \\le y \\le 3x^3 + 5\\}$ bo'lsa, $\\iint\\limits_D 4 dxdy$ ikki o'lchovli integralni hisoblang.",
+        "options": ["16", "8", "32", "12"],
+        "a": "16"
+      },
+      {
+        "id": 20,
+        "q": "$\\frac{1}{2} + \\frac{1}{4} + \\frac{1}{9} + \\frac{1}{16} + ...$ uchun qator yaqinlashishining zaruriy sharti bajarilishini tekshiring.",
+        "options": ["$\\lim_{n \\to \\infty} a_n = 0$, bajariladi", "$\\lim_{n \\to \\infty} a_n = 1$, bajarilmaydi", "$\\lim_{n \\to \\infty} a_n = \\infty$, bajarilmaydi", "Shart bajarilmaydi"],
+        "a": "$\\lim_{n \\to \\infty} a_n = 0$, bajariladi"
+      },
+      {
+        "id": 21,
+        "q": "Agar $\\iiint\\limits_{\\Omega} f(x, y, z) dxdydz = \\int_1^3 dx \\int_{\\sqrt{x+3}}^{4x+5} dy \\int_{\\sqrt{x+y+1}}^{5x+y+4} f(x, y, z) dz$ bo'lsa, $\\Omega$ sohasini toping.",
+        "options": ["$1 \\le x \\le 3, \\sqrt{x+3} \\le y \\le 4x+5, \\sqrt{x+y+1} \\le z \\le 5x+y+4$", "$1 \\le x \\le 3, 0 \\le y \\le 4x+5, 0 \\le z \\le 5x+y+4$", "$x \\in [1,3], y \\in [x, 4x], z \\in [y, 5x]$"],
+        "a": "$1 \\le x \\le 3, \\sqrt{x+3} \\le y \\le 4x+5, \\sqrt{x+y+1} \\le z \\le 5x+y+4$"
+      },
+      {
+        "id": 22,
+        "q": "Agar integrallash sohasi $D = \\{(x, y): 2 \\le x \\le 5, x^2 \\le y \\le x^3\\}$ bo'lsa, $\\iint\\limits_D f(x, y) dxdy$ takroriy integralga o'tkazilsa:",
+        "options": ["$\\int_2^5 dx \\int_{x^2}^{x^3} f(x, y) dy$", "$\\int_2^5 dx \\int_0^{x^3} f(x, y) dy$", "$\\int_{x^2}^{x^3} dy \\int_2^5 f(x, y) dx$", "$\\int_0^2 dx \\int_{x^2}^{x^3} f(x, y) dy$"],
+        "a": "$\\int_2^5 dx \\int_{x^2}^{x^3} f(x, y) dy$"
+      },
+      {
+        "id": 23,
+        "q": "$z = 3x^2 + y^2 + 2xy - 2x + y + 2$ funksiya ekstremumi mavjudligini $\\Delta$ determinant orqali aniqlang.",
+        "options": ["$\\Delta = 8 > 0$, ekstremum mavjud", "$\\Delta = -8 < 0$, ekstremum mavjud emas", "$\\Delta = 0$, shubhali holat", "$\\Delta = 4 > 0$, ekstremum mavjud"],
+        "a": "$\\Delta = 8 > 0$, ekstremum mavjud"
+      },
+      {
+        "id": 24,
+        "q": "Ushbu funksiyaning birinchi tartibli xususiy hosilalarini toping: $f(x, y) = \\sin x + \\cos y$.",
+        "options": ["$f'_x = \\cos x; f'_y = -\\sin y$", "$f'_x = -\\cos x; f'_y = \\sin y$", "$f'_x = \\sin x; f'_y = \\cos y$", "$f'_x = \\cos x; f'_y = \\sin y$"],
+        "a": "$f'_x = \\cos x; f'_y = -\\sin y$"
+      },
+      {
+        "id": 25,
+        "q": "Agar integrallash sohasi $D = \\{(x, y): 3 \\le x \\le 7, 2x-1 \\le y \\le x^3\\}$ bo'lsa, $\\iint\\limits_D f(x, y) dxdy$ takroriy integralga o'tkazilsa:",
+        "options": ["$\\int_3^7 dx \\int_{2x-1}^{x^3} f(x, y) dy$", "$\\int_3^7 dx \\int_0^{x^3} f(x, y) dy$", "$\\int_{2x-1}^{x^3} dy \\int_3^7 f(x, y) dx$", "$\\int_0^3 dx \\int_{2x-1}^{x^3} f(x, y) dy$"],
+        "a": "$\\int_3^7 dx \\int_{2x-1}^{x^3} f(x, y) dy$"
+      },
+      {
+        "id": 26,
+        "q": "$z = 3x^2 + 2y^2 - 4xy - 2x + y + 2$ funksiya ekstremumi mavjudligini $\\Delta$ determinant orqali aniqlang.",
+        "options": ["$\\Delta = 8 > 0$, ekstremum mavjud", "$\\Delta = -8 < 0$, ekstremum mavjud emas", "$\\Delta = 0$, shubhali holat", "$\\Delta = 12 > 0$, ekstremum mavjud"],
+        "a": "$\\Delta = 8 > 0$, ekstremum mavjud"
+      },
+      {
+        "id": 27,
+        "q": "$\\frac{1}{3} + \\frac{2}{5} + \\frac{3}{7} + \\frac{4}{9} + ...$ qatorning umumiy $u_n$ hadini toping.",
+        "options": ["$u_n = \\frac{n}{2n+1}$", "$u_n = \\frac{n}{n+2}$", "$u_n = \\frac{n}{2n-1}$", "$u_n = \\frac{n+1}{2n+1}$"],
+        "a": "$u_n = \\frac{n}{2n+1}$"
+      },
+      {
+        "id": 28,
+        "q": "Agar $\\iiint\\limits_{\\Omega} f(x, y, z) dxdydz = \\int_2^4 dx \\int_{\\sqrt{2x+3}}^{5x+4} dy \\int_{\\sqrt{2x+y+1}}^{3x+4y+5} f(x, y, z) dz$ bo'lsa, $\\Omega$ sohasini toping.",
+        "options": ["$2 \\le x \\le 4, \\sqrt{2x+3} \\le y \\le 5x+4, \\sqrt{2x+y+1} \\le z \\le 3x+4y+5$", "$2 \\le x \\le 4, 0 \\le y \\le 5x+4, 0 \\le z \\le 3x+4y+5$", "$x \\in [2,4], y \\in [\\sqrt{2x}, 5x], z \\in [\\sqrt{2y}, 3x]$"],
+        "a": "$2 \\le x \\le 4, \\sqrt{2x+3} \\le y \\le 5x+4, \\sqrt{2x+y+1} \\le z \\le 3x+4y+5$"
+      },
+      {
+        "id": 15,
+        "q": "$z = -2x^2 + y^2 + 3xy - 2x + y + 2$ funksiya ekstremumi mavjudligini $\\Delta = \\begin{vmatrix} z''_{xx} & z''_{xy} \\\\ z''_{xy} & z''_{yy} \\end{vmatrix}$ determinantning ishorasiga qarab aniqlang.",
+        "options": ["$\\Delta = -17 < 0$, ekstremum mavjud emas", "$\\Delta = 17 > 0$, ekstremum mavjud", "$\\Delta = 0$, shubhali holat", "$\\Delta = 5 > 0$, ekstremum mavjud"],
+        "a": "$\\Delta = -17 < 0$, ekstremum mavjud emas"
+      },
+      {
+        "id": 16,
+        "q": "$\\frac{1}{2} + \\frac{2}{3} + \\frac{3}{4} + ...$ uchun qator yaqinlashishining zaruriy sharti bajarilishini tekshiring.",
+        "options": ["$\\lim_{n \\to \\infty} a_n = 1 \\neq 0$, bajarilmaydi", "$\\lim_{n \\to \\infty} a_n = 0$, bajariladi", "$\\lim_{n \\to \\infty} a_n = \\infty$, bajarilmaydi", "Qator yaqinlashuvchi, bajariladi"],
+        "a": "$\\lim_{n \\to \\infty} a_n = 1 \\neq 0$, bajarilmaydi"
+      },
+      {
+        "id": 17,
+        "q": "Integrallash sohasi $D = \\{(x, y): 1 \\le x \\le 4, x^2 + 1 \\le y \\le 2x^2 + 1\\}$ bo'lsa, $\\iint\\limits_D 3 dxdy$ ikki o'lchovli integralni hisoblang.",
+        "options": ["63", "21", "126", "42"],
+        "a": "63"
+      },
+      {
+        "id": 18,
+        "q": "Ushbu funksiyaning birinchi tartibli xususiy hosilalarini toping: $f(x, y) = \\sin x \\cdot \\cos y$.",
+        "options": ["$f'_x = \\cos x \\cos y; f'_y = -\\sin x \\sin y$", "$f'_x = -\\cos x \\cos y; f'_y = \\sin x \\sin y$", "$f'_x = \\sin x \\cos y; f'_y = \\cos x \\sin y$", "$f'_x = \\cos x; f'_y = -\\sin y$"],
+        "a": "$f'_x = \\cos x \\cos y; f'_y = -\\sin x \\sin y$"
+      },
+      {
+        "id": 19,
+        "q": "Integrallash sohasi $D = \\{(x, y): 0 \\le x \\le 2, 2x^3 + 5 \\le y \\le 3x^3 + 5\\}$ bo'lsa, $\\iint\\limits_D 4 dxdy$ ikki o'lchovli integralni hisoblang.",
+        "options": ["16", "8", "32", "12"],
+        "a": "16"
+      },
+      {
+        "id": 20,
+        "q": "$\\frac{1}{2} + \\frac{1}{4} + \\frac{1}{9} + \\frac{1}{16} + ...$ uchun qator yaqinlashishining zaruriy sharti bajarilishini tekshiring.",
+        "options": ["$\\lim_{n \\to \\infty} a_n = 0$, bajariladi", "$\\lim_{n \\to \\infty} a_n = 1$, bajarilmaydi", "$\\lim_{n \\to \\infty} a_n = \\infty$, bajarilmaydi", "Shart bajarilmaydi"],
+        "a": "$\\lim_{n \\to \\infty} a_n = 0$, bajariladi"
+      },
+      {
+        "id": 21,
+        "q": "Agar $\\iiint\\limits_{\\Omega} f(x, y, z) dxdydz = \\int_1^3 dx \\int_{\\sqrt{x+3}}^{4x+5} dy \\int_{\\sqrt{x+y+1}}^{5x+y+4} f(x, y, z) dz$ bo'lsa, $\\Omega$ sohasini toping.",
+        "options": ["$1 \\le x \\le 3, \\sqrt{x+3} \\le y \\le 4x+5, \\sqrt{x+y+1} \\le z \\le 5x+y+4$", "$1 \\le x \\le 3, 0 \\le y \\le 4x+5, 0 \\le z \\le 5x+y+4$", "$x \\in [1,3], y \\in [x, 4x], z \\in [y, 5x]$"],
+        "a": "$1 \\le x \\le 3, \\sqrt{x+3} \\le y \\le 4x+5, \\sqrt{x+y+1} \\le z \\le 5x+y+4$"
+      },
+      {
+        "id": 22,
+        "q": "Agar integrallash sohasi $D = \\{(x, y): 2 \\le x \\le 5, x^2 \\le y \\le x^3\\}$ bo'lsa, $\\iint\\limits_D f(x, y) dxdy$ takroriy integralga o'tkazilsa:",
+        "options": ["$\\int_2^5 dx \\int_{x^2}^{x^3} f(x, y) dy$", "$\\int_2^5 dx \\int_0^{x^3} f(x, y) dy$", "$\\int_{x^2}^{x^3} dy \\int_2^5 f(x, y) dx$", "$\\int_0^2 dx \\int_{x^2}^{x^3} f(x, y) dy$"],
+        "a": "$\\int_2^5 dx \\int_{x^2}^{x^3} f(x, y) dy$"
+      },
+      {
+        "id": 23,
+        "q": "$z = 3x^2 + y^2 + 2xy - 2x + y + 2$ funksiya ekstremumi mavjudligini $\\Delta$ determinant orqali aniqlang.",
+        "options": ["$\\Delta = 8 > 0$, ekstremum mavjud", "$\\Delta = -8 < 0$, ekstremum mavjud emas", "$\\Delta = 0$, shubhali holat", "$\\Delta = 4 > 0$, ekstremum mavjud"],
+        "a": "$\\Delta = 8 > 0$, ekstremum mavjud"
+      },
+      {
+        "id": 24,
+        "q": "Ushbu funksiyaning birinchi tartibli xususiy hosilalarini toping: $f(x, y) = \\sin x + \\cos y$.",
+        "options": ["$f'_x = \\cos x; f'_y = -\\sin y$", "$f'_x = -\\cos x; f'_y = \\sin y$", "$f'_x = \\sin x; f'_y = \\cos y$", "$f'_x = \\cos x; f'_y = \\sin y$"],
+        "a": "$f'_x = \\cos x; f'_y = -\\sin y$"
+      },
+      {
+        "id": 25,
+        "q": "Agar integrallash sohasi $D = \\{(x, y): 3 \\le x \\le 7, 2x-1 \\le y \\le x^3\\}$ bo'lsa, $\\iint\\limits_D f(x, y) dxdy$ takroriy integralga o'tkazilsa:",
+        "options": ["$\\int_3^7 dx \\int_{2x-1}^{x^3} f(x, y) dy$", "$\\int_3^7 dx \\int_0^{x^3} f(x, y) dy$", "$\\int_{2x-1}^{x^3} dy \\int_3^7 f(x, y) dx$", "$\\int_0^3 dx \\int_{2x-1}^{x^3} f(x, y) dy$"],
+        "a": "$\\int_3^7 dx \\int_{2x-1}^{x^3} f(x, y) dy$"
+      },
+      {
+        "id": 26,
+        "q": "$z = 3x^2 + 2y^2 - 4xy - 2x + y + 2$ funksiya ekstremumi mavjudligini $\\Delta$ determinant orqali aniqlang.",
+        "options": ["$\\Delta = 8 > 0$, ekstremum mavjud", "$\\Delta = -8 < 0$, ekstremum mavjud emas", "$\\Delta = 0$, shubhali holat", "$\\Delta = 12 > 0$, ekstremum mavjud"],
+        "a": "$\\Delta = 8 > 0$, ekstremum mavjud"
+      },
+      {
+        "id": 27,
+        "q": "$\\frac{1}{3} + \\frac{2}{5} + \\frac{3}{7} + \\frac{4}{9} + ...$ qatorning umumiy $u_n$ hadini toping.",
+        "options": ["$u_n = \\frac{n}{2n+1}$", "$u_n = \\frac{n}{n+2}$", "$u_n = \\frac{n}{2n-1}$", "$u_n = \\frac{n+1}{2n+1}$"],
+        "a": "$u_n = \\frac{n}{2n+1}$"
+      },
+      {
+        "id": 28,
+        "q": "Agar $\\iiint\\limits_{\\Omega} f(x, y, z) dxdydz = \\int_2^4 dx \\int_{\\sqrt{2x+3}}^{5x+4} dy \\int_{\\sqrt{2x+y+1}}^{3x+4y+5} f(x, y, z) dz$ bo'lsa, $\\Omega$ sohasini toping.",
+        "options": ["$2 \\le x \\le 4, \\sqrt{2x+3} \\le y \\le 5x+4, \\sqrt{2x+y+1} \\le z \\le 3x+4y+5$", "$2 \\le x \\le 4, 0 \\le y \\le 5x+4, 0 \\le z \\le 3x+4y+5$", "$x \\in [2,4], y \\in [\\sqrt{2x}, 5x], z \\in [\\sqrt{2y}, 3x]$"],
+        "a": "$2 \\le x \\le 4, \\sqrt{2x+3} \\le y \\le 5x+4, \\sqrt{2x+y+1} \\le z \\le 3x+4y+5$"
+      },
+      {
+        "id": 44,
+        "q": "Integrallash sohasi $D = \\{(x, y): 2 \\le x \\le 3, x^2 - 1 \\le y \\le 4x^2 - 1\\}$ bo'lsa, $\\iint\\limits_D 2 dxdy$ ikki o'lchovli integralni hisoblang.",
+        "options": ["38", "19", "76", "24"],
+        "a": "38"
+      },
+      {
+        "id": 45,
+        "q": "Agar $\\iiint\\limits_{\\Omega} f(x, y, z) dxdydz = \\int_3^7 dx \\int_{\\sqrt{2x+5}}^{\\sqrt{6x+1}} dy \\int_{\\sqrt{2x+3y-2}}^{\\sqrt{5x+6y+1}} f(x, y, z) dz$ bo'lsa, $\\Omega$ sohasini toping.",
+        "options": ["$3 \\le x \\le 7, \\sqrt{2x+5} \\le y \\le \\sqrt{6x+1}, \\sqrt{2x+3y-2} \\le z \\le \\sqrt{5x+6y+1}$", "$3 \\le x \\le 7, 0 \\le y \\le \\sqrt{6x+1}, 0 \\le z \\le \\sqrt{5x+6y+1}$", "$x \\in [3,7], y \\in [2x, 6x], z \\in [3y, 6y]$"],
+        "a": "$3 \\le x \\le 7, \\sqrt{2x+5} \\le y \\le \\sqrt{6x+1}, \\sqrt{2x+3y-2} \\le z \\le \\sqrt{5x+6y+1}$"
+      },
+      {
+        "id": 46,
+        "q": "Agar integrallash sohasi $D = \\{(x, y): 0 \\le x \\le \\frac{\\pi}{4}, \\sin x \\le y \\le \\cos x\\}$ bo'lsa, $\\iint\\limits_D f(x, y) dxdy$ takroriy integralga o'tkazilsa:",
+        "options": ["$\\int_0^{\\frac{\\pi}{4}} dx \\int_{\\sin x}^{\\cos x} f(x, y) dy$", "$\\int_0^{\\frac{\\pi}{4}} dx \\int_0^{\\cos x} f(x, y) dy$", "$\\int_{\\sin x}^{\\cos x} dy \\int_0^{\\frac{\\pi}{4}} f(x, y) dx$", "$\\int_0^{\\pi} dx \\int_{\\sin x}^{\\cos x} f(x, y) dy$"],
+        "a": "$\\int_0^{\\frac{\\pi}{4}} dx \\int_{\\sin x}^{\\cos x} f(x, y) dy$"
+      },
+      {
+        "id": 47,
+        "q": "$z = 4x^2 - y^2 + 6xy + 8x + 9y - 3$ funksiya ekstremumi mavjudligini $\\Delta$ determinant orqali aniqlang.",
+        "options": ["$\\Delta = -52 < 0$, ekstremum mavjud emas", "$\\Delta = 52 > 0$, ekstremum mavjud", "$\\Delta = 0$, shubhali holat", "$\\Delta = 16 > 0$, ekstremum mavjud"],
+        "a": "$\\Delta = -52 < 0$, ekstremum mavjud emas"
+      },
+      {
+        "id": 48,
+        "q": "$\\frac{1}{3} + \\frac{2}{9} + \\frac{3}{27} + \\frac{4}{81} + ...$ qatorning umumiy $u_n$ hadini toping.",
+        "options": ["$u_n = \\frac{n}{3^n}$", "$u_n = \\frac{n}{3n}$", "$u_n = \\frac{1}{3^n}$", "$u_n = \\frac{n}{3^{n-1}}$"],
+        "a": "$u_n = \\frac{n}{3^n}$"
+      },
+      {
+        "id": 49,
+        "q": "Ushbu funksiyaning birinchi tartibli xususiy hosilalarini toping: $f(x, y) = x^2e^y$.",
+        "options": ["$f'_x = 2xe^y; f'_y = x^2e^y$", "$f'_x = x^2e^y; f'_y = 2xe^y$", "$f'_x = 2x; f'_y = e^y$", "$f'_x = 2xe^x; f'_y = x^2e^x$"],
+        "a": "$f'_x = 2xe^y; f'_y = x^2e^y$"
+      },
+      {
+        "id": 50,
+        "q": "Agar $\\iiint\\limits_{\\Omega} f(x, y, z) dxdydz = \\int_3^6 dx \\int_{3x+1}^{x^2+2} dy \\int_{\\sqrt{2x+3y-2}}^{x^2+y^2+1} f(x, y, z) dz$ bo'lsa, $\\Omega$ sohasini toping.",
+        "options": ["$3 \\le x \\le 6, 3x+1 \\le y \\le x^2+2, \\sqrt{2x+3y-2} \\le z \\le x^2+y^2+1$", "$3 \\le x \\le 6, 0 \\le y \\le x^2+2, 0 \\le z \\le x^2+y^2+1$", "$x \\in [3,6], y \\in [3x, x^2], z \\in [\\sqrt{y}, x^2+y^2]$"],
+        "a": "$3 \\le x \\le 6, 3x+1 \\le y \\le x^2+2, \\sqrt{2x+3y-2} \\le z \\le x^2+y^2+1$"
+      },
+      {
+        "id": 51,
+        "q": "$z = x^2 - 5y^2 - xy + 6x + 5y - 9$ funksiya ekstremumi mavjudligini $\\Delta$ determinant orqali aniqlang.",
+        "options": ["$\\Delta = -21 < 0$, ekstremum mavjud emas", "$\\Delta = 21 > 0$, ekstremum mavjud", "$\\Delta = 0$, shubhali holat", "$\\Delta = -19 < 0$, ekstremum mavjud emas"],
+        "a": "$\\Delta = -21 < 0$, ekstremum mavjud emas"
+      },
+      {
+        "id": 52,
+        "q": "$\\sum_{n=1}^{\\infty} \\frac{n}{n+1}$ qatorning dastlabki ikkita hadining yig'indisini toping.",
+        "options": ["$\\frac{7}{6}$", "$\\frac{1}{2}$", "$\\frac{2}{3}$", "$\\frac{3}{2}$"],
+        "a": "$\\frac{7}{6}$"
+      },
+      {
+        "id": 53,
+        "q": "Agar integrallash sohasi $D = \\{(x, y): 0 \\le x \\le \\frac{\\pi}{2}, \\sin x \\le y \\le e^x\\}$ bo'lsa, $\\iint\\limits_D f(x, y) dxdy$ takroriy integralga o'tkazilsa:",
+        "options": ["$\\int_0^{\\frac{\\pi}{2}} dx \\int_{\\sin x}^{e^x} f(x, y) dy$", "$\\int_0^{\\frac{\\pi}{2}} dx \\int_0^{e^x} f(x, y) dy$", "$\\int_{\\sin x}^{e^x} dy \\int_0^{\\frac{\\pi}{2}} f(x, y) dx$", "$\\int_0^1 dx \\int_{\\sin x}^{e^x} f(x, y) dy$"],
+        "a": "$\\int_0^{\\frac{\\pi}{2}} dx \\int_{\\sin x}^{e^x} f(x, y) dy$"
+      },
+      {
+        "id": 54,
+        "q": "Integrallash sohasi $D = \\{(x, y): 1 \\le x \\le 2, 4x^3 + 7 \\le y \\le 8x^3 + 7\\}$ bo'lsa, $\\iint\\limits_D 2 dxdy$ ikki o'lchovli integralni hisoblang.",
+        "options": ["30", "15", "60", "45"],
+        "a": "30"
+      },
+      {
+        "id": 55,
+        "q": "Ushbu funksiyaning birinchi tartibli xususiy hosilalarini toping: $f(x, y) = \\sin x \\cdot e^y$.",
+        "options": ["$f'_x = \\cos x \\cdot e^y; f'_y = \\sin x \\cdot e^y$", "$f'_x = \\sin x \\cdot e^y; f'_y = \\cos x \\cdot e^y$", "$f'_x = \\cos x; f'_y = e^y$", "$f'_x = -\\cos x \\cdot e^y; f'_y = \\sin x \\cdot e^y$"],
+        "a": "$f'_x = \\cos x \\cdot e^y; f'_y = \\sin x \\cdot e^y$"
+      },
+      {
+        "id": 56,
+        "q": "Agar $\\iiint\\limits_{\\Omega} f(x, y, z) dxdydz = \\int_3^8 dx \\int_{3x+1}^{7x+2} dy \\int_{x+3y+1}^{3x+5y+1} f(x, y, z) dz$ bo'lsa, $\\Omega$ sohasini toping.",
+        "options": ["$3 \\le x \\le 8, 3x+1 \\le y \\le 7x+2, x+3y+1 \\le z \\le 3x+5y+1$", "$3 \\le x \\le 8, 0 \\le y \\le 7x+2, 0 \\le z \\le 3x+5y+1$", "$x \\in [3,8], y \\in [3x, 7x], z \\in [3y, 5y]$"],
+        "a": "$3 \\le x \\le 8, 3x+1 \\le y \\le 7x+2, x+3y+1 \\le z \\le 3x+5y+1$"
+      },
+      {
+        "id": 57,
+        "q": "Agar integrallash sohasi $D = \\{(x, y): 0 \\le x \\le 4, \\sqrt{x} \\le y \\le 4x+3\\}$ bo'lsa, $\\iint\\limits_D f(x, y) dxdy$ takroriy integralga o'tkazilsa:",
+        "options": ["$\\int_0^4 dx \\int_{\\sqrt{x}}^{4x+3} f(x, y) dy$", "$\\int_0^4 dx \\int_0^{4x+3} f(x, y) dy$", "$\\int_{\\sqrt{x}}^{4x+3} dy \\int_0^4 f(x, y) dx$", "$\\int_0^2 dx \\int_{\\sqrt{x}}^{4x+3} f(x, y) dy$"],
+        "a": "$\\int_0^4 dx \\int_{\\sqrt{x}}^{4x+3} f(x, y) dy$"
+      },
+      {
+        "id": 58,
+        "q": "$z = -7x^2 - 5y^2 + 6xy + x + 5y - 9$ funksiya ekstremumi mavjudligini $\\Delta = \\begin{vmatrix} z''_{xx} & z''_{xy} \\\\ z''_{xy} & z''_{yy} \\end{vmatrix}$ determinantning ishorasiga qarab aniqlang.",
+        "options": ["$\\Delta = 104 > 0$, ekstremum mavjud", "$\\Delta = -104 < 0$, ekstremum mavjud emas", "$\\Delta = 0$, shubhali holat", "$\\Delta = 70 > 0$, ekstremum mavjud"],
+        "a": "$\\Delta = 104 > 0$, ekstremum mavjud"
+      },
+      {
+        "id": 59,
+        "q": "$\\sum_{n=1}^{\\infty} \\frac{n}{2n+1}$ qatorning dastlabki ikkita hadining yig'indisini toping.",
+        "options": ["$\\frac{11}{15}$", "$\\frac{1}{3}$", "$\\frac{2}{5}$", "$\\frac{13}{15}$"],
+        "a": "$\\frac{11}{15}$"
+      },
+      {
+        "id": 60,
+        "q": "Integrallash sohasi $D = \\{(x, y): 3 \\le x \\le 4, 4x - 3 \\le y \\le 6x - 3\\}$ bo'lsa, $\\iint\\limits_D dxdy$ ikki o'lchovli integralni hisoblang.",
+        "options": ["1", "2", "3", "4"],
+        "a": "1"
+      },
+      {
+        "id": 61,
+        "q": "Integrallash sohasi $\\Omega = \\{(x, y, z): 3 \\le x \\le 8, 0 \\le y \\le 7, 1 \\le z \\le 3\\}$ bo'lsa, $\\iiint\\limits_{\\Omega} dxdydz$ uch o'lchovli integralni hisoblang.",
+        "options": ["70", "35", "105", "140"],
+        "a": "70"
+      },
+      {
+        "id": 62,
+        "q": "Agar $\\iint\\limits_D f(x, y) dxdy = \\int_1^5 dx \\int_{2x-1}^{2x+4} f(x, y) dy$ bo'lsa, $D$ integrallash sohasini toping.",
+        "options": ["$1 \\le x \\le 5, 2x-1 \\le y \\le 2x+4$", "$1 \\le x \\le 5, 0 \\le y \\le 2x+4$", "$0 \\le x \\le 5, 2x-1 \\le y \\le 2x+4$", "$1 \\le x \\le 5, x \\le y \\le 2x$"],
+        "a": "$1 \\le x \\le 5, 2x-1 \\le y \\le 2x+4$"
+      },
+      {
+        "id": 63,
+        "q": "Integrallash sohasi $D = \\{(x, y): 0 \\le x \\le 2, 4x^4 + 5 \\le y \\le 9x^4 + 5\\}$ bo'lsa, $\\iint\\limits_D 3 dxdy$ ikki o'lchovli integralni hisoblang.",
+        "options": ["96", "32", "48", "64"],
+        "a": "96"
+      },
+      {
+        "id": 64,
+        "q": "Ushbu funksiyaning birinchi tartibli xususiy hosilalarini toping: $f(x, y) = e^x \\cos y$.",
+        "options": ["$f'_x = e^x \\cos y; f'_y = -e^x \\sin y$", "$f'_x = e^x \\sin y; f'_y = e^x \\cos y$", "$f'_x = \\cos y; f'_y = -\\sin y$", "$f'_x = e^x; f'_y = -\\sin y$"],
+        "a": "$f'_x = e^x \\cos y; f'_y = -e^x \\sin y$"
+      },
+      {
+        "id": 65,
+        "q": "Agar integrallash sohasi $D = \\{(x, y): 0 \\le x \\le 5, \\sqrt{x+4} \\le y \\le 3x+5\\}$ bo'lsa, $\\iint\\limits_D f(x, y) dxdy$ takroriy integralga o'tkazilsa:",
+        "options": ["$\\int_0^5 dx \\int_{\\sqrt{x+4}}^{3x+5} f(x, y) dy$", "$\\int_0^5 dx \\int_0^{3x+5} f(x, y) dy$", "$\\int_{\\sqrt{x+4}}^{3x+5} dy \\int_0^5 f(x, y) dx$", "$\\int_2^3 dx \\int_{\\sqrt{x+4}}^{3x+5} f(x, y) dy$"],
+        "a": "$\\int_0^5 dx \\int_{\\sqrt{x+4}}^{3x+5} f(x, y) dy$"
+      },
+      {
+        "id": 66,
+        "q": "$z = -x^2 - 2y^2 + 5xy + 2x + 5y - 1$ funksiya ekstremumi mavjudligini $\\Delta$ determinant orqali aniqlang.",
+        "options": ["$\\Delta = -17 < 0$, ekstremum mavjud emas", "$\\Delta = 17 > 0$, ekstremum mavjud", "$\\Delta = 0$, shubhali holat", "$\\Delta = 8 > 0$, ekstremum mavjud"],
+        "a": "$\\Delta = -17 < 0$, ekstremum mavjud emas"
+      },
+      {
+        "id": 67,
+        "q": "$\\sum_{n=1}^{\\infty} \\frac{n}{3^n}$ qatorning dastlabki ikkita hadining yig'indisini toping.",
+        "options": ["$\\frac{5}{9}$", "$\\frac{1}{3}$", "$\\frac{2}{9}$", "$\\frac{4}{9}$"],
+        "a": "$\\frac{5}{9}$"
+      },
+      {
+        "id": 68,
+        "q": "Ushbu funksiyaning birinchi tartibli xususiy hosilalarini toping: $f(x, y) = 4x^5 \\cos y$.",
+        "options": ["$f'_x = 20x^4 \\cos y; f'_y = -4x^5 \\sin y$", "$f'_x = 20x^5 \\cos y; f'_y = 4x^5 \\sin y$", "$f'_x = 4x^4 \\cos y; f'_y = -4x^5 \\sin y$", "$f'_x = 20x^4; f'_y = -\\sin y$"],
+        "a": "$f'_x = 20x^4 \\cos y; f'_y = -4x^5 \\sin y$"
+      },
+      {
+        "id": 69,
+        "q": "Integrallash sohasi $\\Omega = \\{(x, y, z): -2 \\le x \\le 4, -1 \\le y \\le 7, 1 \\le z \\le 5\\}$ bo'lsa, $\\iiint\\limits_{\\Omega} dxdydz$ ni hisoblang.",
+        "options": ["192", "96", "48", "240"],
+        "a": "192"
+      },
+      {
+        "id": 70,
+        "q": "$\\sum_{n=1}^{\\infty} \\frac{n}{2^n+1}$ qatorning dastlabki ikkita hadining yig'indisini toping.",
+        "options": ["$\\frac{11}{15}$", "$\\frac{1}{3}$", "$\\frac{2}{5}$", "$\\frac{13}{15}$"],
+        "a": "$\\frac{11}{15}$"
+      },
+      {
+        "id": 71,
+        "q": "$z = x^2 - 3y^2 + 2xy - 3x + 5y - 3$ funksiya ekstremumi mavjudligini $\\Delta$ determinant orqali aniqlang.",
+        "options": ["$\\Delta = -16 < 0$, ekstremum mavjud emas", "$\\Delta = 16 > 0$, ekstremum mavjud", "$\\Delta = 0$, shubhali holat", "$\\Delta = -12 < 0$, ekstremum mavjud emas"],
+        "a": "$\\Delta = -16 < 0$, ekstremum mavjud emas"
+      },
+      {
+        "id": 72,
+        "q": "Agar $\\iint\\limits_D f(x, y) dxdy = \\int_2^5 dx \\int_{x^2}^{x^3} f(x, y) dy$ bo'lsa, $D$ integrallash sohasini toping.",
+        "options": ["$2 \\le x \\le 5, x^2 \\le y \\le x^3$", "$2 \\le x \\le 5, 0 \\le y \\le x^3$", "$x \\in [2,5], y \\in [x, x^2]$"],
+        "a": "$2 \\le x \\le 5, x^2 \\le y \\le x^3$"
+      },
+      {
+        "id": 73,
+        "q": "Ushbu funksiyaning birinchi tartibli xususiy hosilalarini toping: $f(x, y) = -3y^6 \\sin x$.",
+        "options": ["$f'_x = -3y^6 \\cos x; f'_y = -18y^5 \\sin x$", "$f'_x = 3y^6 \\cos x; f'_y = 18y^5 \\sin x$", "$f'_x = -3y^6 \\sin x; f'_y = -18y^5 \\cos x$"],
+        "a": "$f'_x = -3y^6 \\cos x; f'_y = -18y^5 \\sin x$"
+      },
+      {
+        "id": 74,
+        "q": "Integrallash sohasi $\\Omega = \\{(x, y, z): -6 \\le x \\le -1, -1 \\le y \\le 1, 1 \\le z \\le 3\\}$ bo'lsa, $\\iiint\\limits_{\\Omega} dxdydz$ ni hisoblang.",
+        "options": ["20", "10", "30", "40"],
+        "a": "20"
+      },
+      {
+        "id": 75,
+        "q": "$z = 5x^2 + y^2 + 7xy - 9x - 5y - 1$ funksiya ekstremumi mavjudligini $\\Delta$ determinant orqali aniqlang.",
+        "options": ["$\\Delta = -29 < 0$, ekstremum mavjud emas", "$\\Delta = 29 > 0$, ekstremum mavjud", "$\\Delta = 0$, shubhali holat"],
+        "a": "$\\Delta = -29 < 0$, ekstremum mavjud emas"
+      },
+      {
+        "id": 76,
+        "q": "$w = f(z) = u(x, y) + iv(x, y)$ funksiyasi differensiallanuvchi bo'lishi uchun Koshi-Riman shartini ko'rsating.",
+        "options": ["$\\frac{\\partial u}{\\partial x} = \\frac{\\partial v}{\\partial y}; \\frac{\\partial u}{\\partial y} = -\\frac{\\partial v}{\\partial x}$", "$\\frac{\\partial u}{\\partial x} = -\\frac{\\partial v}{\\partial y}; \\frac{\\partial u}{\\partial y} = \\frac{\\partial v}{\\partial x}$", "$\\frac{\\partial u}{\\partial x} = \\frac{\\partial v}{\\partial x}; \\frac{\\partial u}{\\partial y} = \\frac{\\partial v}{\\partial y}$"],
+        "a": "$\\frac{\\partial u}{\\partial x} = \\frac{\\partial v}{\\partial y}; \\frac{\\partial u}{\\partial y} = -\\frac{\\partial v}{\\partial x}$"
+      },
+      {
+        "id": 77,
+        "q": "Agar $\\iint\\limits_D f(x, y) dxdy = \\int_3^7 dx \\int_{2x-1}^{x^3} f(x, y) dy$ bo'lsa, $D$ integrallash sohasini toping.",
+        "options": ["$3 \\le x \\le 7, 2x-1 \\le y \\le x^3$", "$3 \\le x \\le 7, 0 \\le y \\le x^3$", "$x \\in [3,7], y \\in [2x, x^3]$"],
+        "a": "$3 \\le x \\le 7, 2x-1 \\le y \\le x^3$"
+      },
+      {
+        "id": 78,
+        "q": "Ushbu funksiyaning birinchi tartibli xususiy hosilalarini toping: $f(x, y) = 4y^7 \\ln x$.",
+        "options": ["$f'_x = \\frac{4y^7}{x}; f'_y = 28y^6 \\ln x$", "$f'_x = 4y^7 x; f'_y = 28y^6 \\ln x$", "$f'_x = \\frac{1}{x}; f'_y = 28y^6$"],
+        "a": "$f'_x = \\frac{4y^7}{x}; f'_y = 28y^6 \\ln x$"
+      },
+      {
+        "id": 79,
+        "q": "Integrallash sohasi $\\Omega = \\{(x, y, z): -6 \\le x \\le -2, -1 \\le y \\le 3, 1 \\le z \\le 5\\}$ bo'lsa, $\\iiint\\limits_{\\Omega} 2dxdydz$ ni hisoblang.",
+        "options": ["128", "64", "32", "256"],
+        "a": "128"
+      },
+      {
+        "id": 80,
+        "q": "$z = 5x^2 + 6y^2 + 7xy + 9x - 5y - 11$ funksiya ekstremumi mavjudligini $\\Delta$ orqali aniqlang.",
+        "options": ["$\\Delta = 71 > 0$, ekstremum mavjud", "$\\Delta = -71 < 0$, ekstremum mavjud emas", "$\\Delta = 0$, shubhali holat"],
+        "a": "$\\Delta = 71 > 0$, ekstremum mavjud"
+      },
+      {
+        "id": 81,
+        "q": "$f(z) = 3z^2$ kompleks o'zgaruvchili funksiyaning hosilasini toping.",
+        "options": ["$6z$", "$3z$", "$z^3$", "$6z^2$"],
+        "a": "$6z$"
+      },
+      {
+        "id": 82,
+        "q": "Ushbu funksiyaning birinchi tartibli xususiy hosilalarini toping: $f(x, y) = x^4 + 3 \\sin y$.",
+        "options": ["$f'_x = 4x^3; f'_y = 3 \\cos y$", "$f'_x = 4x^3; f'_y = -3 \\cos y$", "$f'_x = x^4; f'_y = 3 \\cos y$"],
+        "a": "$f'_x = 4x^3; f'_y = 3 \\cos y$"
+      },
+      {
+        "id": 83,
+        "q": "$z = -3x^2 - 6y^2 + 7xy - 5x + 2y + 1$ funksiya ekstremumi mavjudligini $\\Delta$ orqali aniqlang.",
+        "options": ["$\\Delta = 23 > 0$, ekstremum mavjud", "$\\Delta = -23 < 0$, ekstremum mavjud emas", "$\\Delta = 0$, shubhali holat"],
+        "a": "$\\Delta = 23 > 0$, ekstremum mavjud"
+      },
+      {
+        "id": 84,
+        "q": "Integrallash sohasi $\\Omega = \\{(x, y, z): -7 \\le x \\le 2, -3 \\le y \\le 3, 2 \\le z \\le 5\\}$ bo'lsa, $\\iiint\\limits_{\\Omega} (-3)dxdydz$ ni hisoblang.",
+        "options": ["-486", "-162", "-243", "-324"],
+        "a": "-486"
+      },
+      {
+        "id": 85,
+        "q": "Agar $\\iint\\limits_D f(x, y) dxdy = \\int_1^3 dx \\int_x^{e^x} f(x, y) dy$ bo'lsa, $D$ integrallash sohasini toping.",
+        "options": ["$1 \\le x \\le 3, x \\le y \\le e^x$", "$1 \\le x \\le 3, 0 \\le y \\le e^x$", "$x \\in [1,3], y \\in [1, e^x]$"],
+        "a": "$1 \\le x \\le 3, x \\le y \\le e^x$"
+      },
+      {
+        "id": 86,
+        "q": "Ushbu funksiyaning birinchi tartibli xususiy hosilalarini toping: $f(x, y) = \\frac{1}{x^4} - 5 \\sin y$.",
+        "options": ["$f'_x = -\\frac{4}{x^5}; f'_y = -5 \\cos y$", "$f'_x = \\frac{4}{x^5}; f'_y = 5 \\cos y$", "$f'_x = -\\frac{1}{x^3}; f'_y = -5 \\cos y$"],
+        "a": "$f'_x = -\\frac{4}{x^5}; f'_y = -5 \\cos y$"
+      },
+      {
+        "id": 87,
+        "q": "$z = -3x^2 - 4y^2 + 7xy - 5x - 12y + 13$ funksiya ekstremumi mavjudligini $\\Delta = \\begin{vmatrix} z''_{xx} & z''_{xy} \\\\ z''_{xy} & z''_{yy} \\end{vmatrix}$ determinantning ishorasiga qarab aniqlang.",
+        "options": ["$\\Delta = 47 > 0$, ekstremum mavjud", "$\\Delta = -47 < 0$, ekstremum mavjud emas", "$\\Delta = 0$, shubhali holat"],
+        "a": "$\\Delta = 47 > 0$, ekstremum mavjud"
+      },
+      {
+        "id": 88,
+        "q": "Integrallash sohasi $\\Omega = \\{(x, y, z): -7 \\le x \\le 1, -3 \\le y \\le -1, 4 \\le z \\le 5\\}$ bo'lsa, $\\iiint\\limits_{\\Omega} 5dxdydz$ ni hisoblang.",
+        "options": ["80", "40", "160", "20"],
+        "a": "80"
+      },
+      {
+        "id": 89,
+        "q": "$f(z) = -5z^3$ kompleks o'zgaruvchili funksiyaning hosilasini toping.",
+        "options": ["$-15z^2$", "$15z^2$", "$-15z$", "$-5z^2$"],
+        "a": "$-15z^2$"
+      },
+      {
+        "id": 90,
+        "q": "Agar $\\iint\\limits_D f(x, y) dxdy = \\int_1^4 dx \\int_{\\ln x}^{2x+1} f(x, y) dy$ bo'lsa, $D$ integrallash sohasini toping.",
+        "options": ["$1 \\le x \\le 4, \\ln x \\le y \\le 2x+1$", "$1 \\le x \\le 4, 0 \\le y \\le 2x+1$", "$x \\in [1,4], y \\in [x, 2x]$"],
+        "a": "$1 \\le x \\le 4, \\ln x \\le y \\le 2x+1$"
+      },
+      {
+        "id": 91,
+        "q": "Ushbu funksiyaning birinchi tartibli xususiy hosilalarini toping: $f(x, y) = \\frac{1}{7x^3} - \\frac{5}{y^2}$.",
+        "options": ["$f'_x = -\\frac{3}{7x^4}; f'_y = \\frac{10}{y^3}$", "$f'_x = \\frac{3}{7x^4}; f'_y = -\\frac{10}{y^3}$", "$f'_x = -\\frac{1}{7x^2}; f'_y = \\frac{5}{y}$"],
+        "a": "$f'_x = -\\frac{3}{7x^4}; f'_y = \\frac{10}{y^3}$"
+      },
+      {
+        "id": 92,
+        "q": "$z = 6x^2 - 3y^2 + 2xy + 11x - 12y + 10$ funksiya ekstremumi mavjudligini $\\Delta$ orqali aniqlang.",
+        "options": ["$\\Delta = -40 < 0$, ekstremum mavjud emas", "$\\Delta = 40 > 0$, ekstremum mavjud", "$\\Delta = 0$, shubhali holat"],
+        "a": "$\\Delta = -40 < 0$, ekstremum mavjud emas"
+      },
+      {
+        "id": 93,
+        "q": "Integrallash sohasi $\\Omega = \\{(x, y, z): -8 \\le x \\le -3, -5 \\le y \\le -2, 4 \\le z \\le 8\\}$ bo'lsa, $\\iiint\\limits_{\\Omega} 2dxdydz$ ni hisoblang.",
+        "options": ["120", "60", "240", "180"],
+        "a": "120"
+      },
+      {
+        "id": 94,
+        "q": "Agar $\\iint\\limits_D f(x, y) dxdy = \\int_2^5 dx \\int_{x-3}^{2x+1} f(x, y) dy$ bo'lsa, $D$ integrallash sohasini toping.",
+        "options": ["$2 \\le x \\le 5, x-3 \\le y \\le 2x+1$", "$2 \\le x \\le 5, 0 \\le y \\le 2x+1$", "$x \\in [2,5], y \\in [x-3, x+1]$"],
+        "a": "$2 \\le x \\le 5, x-3 \\le y \\le 2x+1$"
+      },
+      {
+        "id": 95,
+        "q": "Ushbu funksiyaning birinchi tartibli xususiy hosilalarini toping: $f(x, y) = \\frac{1}{x^3y^5}$.",
+        "options": ["$f'_x = -\\frac{3}{x^4y^5}; f'_y = -\\frac{5}{x^3y^6}$", "$f'_x = \\frac{3}{x^4y^5}; f'_y = \\frac{5}{x^3y^6}$", "$f'_x = -\\frac{1}{x^2y^5}; f'_y = -\\frac{1}{x^3y^4}$"],
+        "a": "$f'_x = -\\frac{3}{x^4y^5}; f'_y = -\\frac{5}{x^3y^6}$"
+      },
+      {
+        "id": 96,
+        "q": "Integrallash sohasi $\\Omega = \\{(x, y, z): -8 \\le x \\le 3, -2 \\le y \\le 2, -1 \\le z \\le 8\\}$ bo'lsa, $\\iiint\\limits_{\\Omega} dxdydz$ ni hisoblang.",
+        "options": ["396", "198", "99", "440"],
+        "a": "396"
+      },
+      {
+        "id": "extra_4",
+        "q": "D sohada analitik $f(z)$ funksiyasi uchun Koshining integral formulasini ko'rsating.",
+        "options": ["$f(z_0) = \\frac{1}{2\\pi i} \\oint_C \\frac{f(z)}{z-z_0} dz$", "$f(z_0) = \\oint_C \\frac{f(z)}{z-z_0} dz$", "$f(z_0) = \\frac{1}{\\pi i} \\oint_C f(z) dz$"],
+        "a": "$f(z_0) = \\frac{1}{2\\pi i} \\oint_C \\frac{f(z)}{z-z_0} dz$"
+      },
+      {
+        "id": 97,
+        "q": "$z = -2x^2 + y^2 - 4xy + 13x - 15y + 14$ funksiya ekstremumi mavjudligini $\\Delta$ orqali aniqlang.",
+        "options": ["$\\Delta = -20 < 0$, ekstremum mavjud emas", "$\\Delta = 20 > 0$, ekstremum mavjud", "$\\Delta = 0$, shubhali holat"],
+        "a": "$\\Delta = -20 < 0$, ekstremum mavjud emas"
+      },
+      {
+        "id": 98,
+        "q": "Agar $\\iint\\limits_D f(x, y) dxdy = \\int_0^{\\pi/4} dx \\int_{\\sin x}^{\\cos x} f(x, y) dy$ bo'lsa, $D$ integrallash sohasini toping.",
+        "options": ["$0 \\le x \\le \\pi/4, \\sin x \\le y \\le \\cos x$", "$0 \\le x \\le \\pi/4, \\cos x \\le y \\le \\sin x$", "$x \\in [0, \\pi/2], y \\in [\\sin x, \\cos x]$"],
+        "a": "$0 \\le x \\le \\pi/4, \\sin x \\le y \\le \\cos x$"
+      },
+      {
+        "id": 99,
+        "q": "Ushbu funksiyaning birinchi tartibli xususiy hosilalarini toping: $f(x, y) = \\frac{1}{12x^4y^3}$.",
+        "options": ["$f'_x = -\\frac{1}{3x^5y^3}; f'_y = -\\frac{1}{4x^4y^4}$", "$f'_x = \\frac{1}{3x^5y^3}; f'_y = \\frac{1}{4x^4y^4}$", "$f'_x = -\\frac{1}{12x^3y^3}; f'_y = -\\frac{1}{12x^4y^2}$"],
+        "a": "$f'_x = -\\frac{1}{3x^5y^3}; f'_y = -\\frac{1}{4x^4y^4}$"
+      },
+      {
+        "id": 100,
+        "q": "$z = 5x^2 + 7y^2 - 8xy - 11x - 15y + 11$ funksiya ekstremumi mavjudligini $\\Delta = \\begin{vmatrix} z''_{xx} & z''_{xy} \\\\ z''_{xy} & z''_{yy} \\end{vmatrix}$ determinantning ishorasiga qarab aniqlang.",
+        "options": ["$\\Delta = 76 > 0$, ekstremum mavjud", "$\\Delta = -76 < 0$, ekstremum mavjud emas", "$\\Delta = 0$, shubhali holat"],
+        "a": "$\\Delta = 76 > 0$, ekstremum mavjud"
+      },
+      {
+        "id": 101,
+        "q": "Integrallash sohasi $\\Omega = \\{(x, y, z): -10 \\le x \\le -6, -5 \\le y \\le -2, -1 \\le z \\le 8\\}$ bo'lsa, $\\iiint\\limits_{\\Omega} (-3)dxdydz$ ni hisoblang.",
+        "options": ["-324", "-108", "-162", "-216"],
+        "a": "-324"
+      },
+      {
+        "id": 102,
+        "q": "Agar $\\iint\\limits_D f(x, y) dxdy = \\int_0^{\\pi/2} dx \\int_{\\sin x}^{e^x} f(x, y) dy$ bo'lsa, $D$ integrallash sohasini toping.",
+        "options": ["$0 \\le x \\le \\pi/2, \\sin x \\le y \\le e^x$", "$0 \\le x \\le \\pi/2, e^x \\le y \\le \\sin x$", "$x \\in [0, \\pi], y \\in [\\sin x, e^x]$"],
+        "a": "$0 \\le x \\le \\pi/2, \\sin x \\le y \\le e^x$"
+      },
+      {
+        "id": 103,
+        "q": "Ushbu funksiyaning birinchi tartibli xususiy hosilalarini toping: $f(x, y) = \\frac{\\sin x}{y^3}$.",
+        "options": ["$f'_x = \\frac{\\cos x}{y^3}; f'_y = -\\frac{3 \\sin x}{y^4}$", "$f'_x = \\frac{\\sin x}{y^3}; f'_y = \\frac{3 \\sin x}{y^4}$", "$f'_x = \\cos x; f'_y = -3y^{-4}$"],
+        "a": "$f'_x = \\frac{\\cos x}{y^3}; f'_y = -\\frac{3 \\sin x}{y^4}$"
+      },
+      {
+        "id": 104,
+        "q": "$z = x^2 + 7y^2 + xy + 9x - 12y + 15$ funksiya ekstremumi mavjudligini $\\Delta$ orqali aniqlang.",
+        "options": ["$\\Delta = 27 > 0$, ekstremum mavjud", "$\\Delta = -27 < 0$, ekstremum mavjud emas", "$\\Delta = 0$, shubhali holat"],
+        "a": "$\\Delta = 27 > 0$, ekstremum mavjud"
+      },
+      {
+        "id": 105,
+        "q": "Integrallash sohasi $\\Omega = \\{(x, y, z): -11 \\le x \\le -9, -6 \\le y \\le -2, -1 \\le z \\le 6\\}$ bo'lsa, $\\iiint\\limits_{\\Omega} 5dxdydz$ ni hisoblang.",
+        "options": ["280", "140", "70", "210"],
+        "a": "280"
+      },
+      {
+        "id": 106,
+        "q": "Agar $\\iint\\limits_D f(x, y) dxdy = \\int_0^4 dx \\int_{\\sqrt{x}}^{4x+3} f(x, y) dy$ bo'lsa, $D$ integrallash sohasini toping.",
+        "options": ["$0 \\le x \\le 4, \\sqrt{x} \\le y \\le 4x+3$", "$0 \\le x \\le 4, 0 \\le y \\le 4x+3$", "$x \\in [0,4], y \\in [x, \\sqrt{x}]$"],
+        "a": "$0 \\le x \\le 4, \\sqrt{x} \\le y \\le 4x+3$"
+      }
+    ]
   },
   "kiberxavfsizlik_malumotlar_tuzilmasi": {
     "name": "Ma'lumotlar tuzilmasi",
@@ -2866,7 +4054,644 @@
   },
   "suniy_intelekt_hisob": {
     "name": "Hisob",
-    "questions": []
+     "questions": [
+      {
+        "id": 1,
+        "q": "$1 + \\frac{1}{2} + \\frac{1}{3} + \\frac{1}{4} + ...$ uchun qator yaqinlashishining zaruriy sharti bajarilishini tekshiring.",
+        "options": ["$\\lim_{n \\to \\infty} a_n = 0$, bajariladi", "$\\lim_{n \\to \\infty} a_n = 1$, bajarilmaydi", "$\\lim_{n \\to \\infty} a_n = \\infty$, bajarilmaydi", "Qator uzoqlashuvchi, bajarilmaydi"],
+        "a": "$\\lim_{n \\to \\infty} a_n = 0$, bajariladi"
+      },
+      {
+        "id": 2,
+        "q": "Ushbu funksiyaning birinchi tartibli xususiy hosilalarini toping: $f(x, y) = 5x^2y^3$.",
+        "options": ["$f'_x = 10xy^3; f'_y = 15x^2y^2$", "$f'_x = 5xy^3; f'_y = 15x^2y^2$", "$f'_x = 10x^2y; f'_y = 5xy^3$", "$f'_x = 10xy^2; f'_y = 15x^3y^2$"],
+        "a": "$f'_x = 10xy^3; f'_y = 15x^2y^2$"
+      },
+      {
+        "id": 3,
+        "q": "$z = x^2 + 3y^2 + 3xy - 5x + 4y - 8$ funksiya ekstremumi mavjudligini $\\Delta = \\begin{vmatrix} z''_{xx} & z''_{xy} \\\\ z''_{xy} & z''_{yy} \\end{vmatrix}$ determinantning ishorasiga qarab aniqlang.",
+        "options": ["$\\Delta = 3 > 0$, ekstremum mavjud", "$\\Delta = -3 < 0$, ekstremum mavjud emas", "$\\Delta = 0$, shubhali holat", "$\\Delta = 12 > 0$, ekstremum mavjud"],
+        "a": "$\\Delta = 3 > 0$, ekstremum mavjud"
+      },
+      {
+        "id": 4,
+        "q": "Integrallash sohasi $D = \\{(x, y): 1 \\le x \\le 3, 0 \\le y \\le 2x\\}$ bo'lsa, $\\iint\\limits_D dxdy$ ikki o'lchovli integralni hisoblang.",
+        "options": ["8", "4", "10", "6"],
+        "a": "8"
+      },
+      {
+        "id": 5,
+        "q": "Agar $\\iint\\limits_D f(x, y) dxdy = \\int_0^5 dx \\int_{\\sqrt{x+4}}^{3x+5} f(x, y) dy$ bo'lsa, $D$ integrallash sohasini toping.",
+        "options": ["$0 \\le x \\le 5, \\sqrt{x+4} \\le y \\le 3x+5$", "$0 \\le x \\le 5, 0 \\le y \\le 3x+5$", "$\\sqrt{x+4} \\le x \\le 3x+5, 0 \\le y \\le 5$", "$0 \\le x \\le 5, x+4 \\le y \\le 3x+5$"],
+        "a": "$0 \\le x \\le 5, \\sqrt{x+4} \\le y \\le 3x+5$"
+      },
+      {
+        "id": 6,
+        "q": "Agar $\\iiint\\limits_{\\Omega} f(x, y, z) dxdydz = \\int_2^5 dx \\int_{2x-1}^{3x+2} dy \\int_{3x+4y-1}^{4x+5y+1} f(x, y, z) dz$ bo'lsa, $\\Omega$ sohasini toping.",
+        "options": ["$2 \\le x \\le 5, 2x-1 \\le y \\le 3x+2, 3x+4y-1 \\le z \\le 4x+5y+1$", "$2 \\le x \\le 5, 0 \\le y \\le 3x+2, 0 \\le z \\le 4x+5y+1$", "$x \\in [2,5], y \\in [2x, 3x], z \\in [3x, 4x]$"],
+        "a": "$2 \\le x \\le 5, 2x-1 \\le y \\le 3x+2, 3x+4y-1 \\le z \\le 4x+5y+1$"
+      },
+      {
+        "id": 7,
+        "q": "Ushbu funksiyaning birinchi tartibli xususiy hosilalarini toping: $f(x, y) = -2x^3y^4$.",
+        "options": ["$f'_x = -6x^2y^4; f'_y = -8x^3y^3$", "$f'_x = -6x^3y^4; f'_y = -8x^2y^3$", "$f'_x = -2x^2y^4; f'_y = -2x^3y^3$", "$f'_x = -6x^2y^3; f'_y = -8x^3y^4$"],
+        "a": "$f'_x = -6x^2y^4; f'_y = -8x^3y^3$"
+      },
+      {
+        "id": 8,
+        "q": "Integrallash sohasi $D = \\{(x, y): 2 \\le x \\le 4, 2x+1 \\le y \\le 4x+1\\}$ bo'lsa, $\\iint\\limits_D 5 dxdy$ ni hisoblang.",
+        "options": ["60", "30", "45", "50"],
+        "a": "60"
+      },
+      {
+        "id": 9,
+        "q": "$1 - \\frac{1}{2} + \\frac{1}{3} - \\frac{1}{4} + ...$ uchun qator yaqinlashishining zaruriy sharti bajarilishini tekshiring.",
+        "options": ["$\\lim_{n \\to \\infty} |a_n| = 0$, bajariladi", "$\\lim_{n \\to \\infty} a_n = 1$, bajarilmaydi", "$\\\\lim_{n \\to \\infty} a_n \\neq 0$, bajarilmaydi", "Qator uzoqlashuvchi"],
+        "a": "$\\lim_{n \\to \\infty} |a_n| = 0$, bajariladi"
+      },
+      {
+        "id": 10,
+        "q": "Agar $\\iiint\\limits_{\\Omega} f(x, y, z) dxdydz = \\int_1^3 dx \\int_{2x+1}^{3x+5} dy \\int_{x+y+2}^{2x+4y+1} f(x, y, z) dz$ bo'lsa, $\\Omega$ sohasini toping.",
+        "options": ["$1 \\le x \\le 3, 2x+1 \\le y \\le 3x+5, x+y+2 \\le z \\le 2x+4y+1$", "$1 \\le x \\le 3, 0 \\le y \\le 3x+5, 0 \\le z \\le 2x+4y+1$", "$x \\in [1,3], y \\in [2x+1, 3x+5], z \\in [0, 1]$"],
+        "a": "$1 \\le x \\le 3, 2x+1 \\le y \\le 3x+5, x+y+2 \\le z \\le 2x+4y+1$"
+      },
+      {
+        "id": 11,
+        "q": "$z = x^2 + 3y^2 + 4xy - 2x + y + 2$ funksiya ekstremumi mavjudligini $\\Delta$ determinant orqali aniqlang.",
+        "options": ["$\\Delta = -4 < 0$, ekstremum mavjud emas", "$\\Delta = 4 > 0$, ekstremum mavjud", "$\\Delta = 0$, shubhali holat", "$\\Delta = 8 > 0$, ekstremum mavjud"],
+        "a": "$\\Delta = -4 < 0$, ekstremum mavjud emas"
+      },
+      {
+        "id": 12,
+        "q": "Agar $D = \\{(x, y): 1 \\le x \\le 5, 2x-1 \\le y \\le 2x+4\\}$ bo'lsa, $\\iint\\limits_D f(x, y) dxdy$ takroriy integralga o'tkazilsa:",
+        "options": ["$\\int_1^5 dx \\int_{2x-1}^{2x+4} f(x, y) dy$", "$\\int_1^5 dx \\int_0^{2x+4} f(x, y) dy$", "$\\int_{2x-1}^{2x+4} dy \\int_1^5 f(x, y) dx$", "$\\int_0^1 dx \\int_{2x-1}^{2x+4} f(x, y) dy$"],
+        "a": "$\\int_1^5 dx \\int_{2x-1}^{2x+4} f(x, y) dy$"
+      },
+      {
+        "id": 13,
+        "q": "Ushbu funksiyaning birinchi tartibli xususiy hosilalarini toping: $f(x, y) = 7x^2y^5$.",
+        "options": ["$f'_x = 14xy^5; f'_y = 35x^2y^4$", "$f'_x = 7xy^5; f'_y = 35x^2y^5$", "$f'_x = 14x^2y; f'_y = 14xy^4$", "$f'_x = 14xy^4; f'_y = 35x^3y^4$"],
+        "a": "$f'_x = 14xy^5; f'_y = 35x^2y^4$"
+      },
+      {
+        "id": 14,
+        "q": "Agar $\\iiint\\limits_{\\Omega} f(x, y, z) dxdydz = \\int_{-1}^1 dx \\int_{3x+4}^{4x+5} dy \\int_{x+4y+1}^{5x+3y+2} f(x, y, z) dz$ bo'lsa, $\\Omega$ sohasini toping.",
+        "options": ["$-1 \\le x \\le 1, 3x+4 \\le y \\le 4x+5, x+4y+1 \\le z \\le 5x+3y+2$", "$-1 \\le x \\le 1, 0 \\le y \\le 4x+5, 0 \\le z \\le 5x+3y+2$", "$x \\in [-1, 1], y \\in [3x, 4x], z \\in [x, 5x]$"],
+        "a": "$-1 \\le x \\le 1, 3x+4 \\le y \\le 4x+5, x+4y+1 \\le z \\le 5x+3y+2$"
+      },
+      {
+        "id": 15,
+        "q": "$z = -2x^2 + y^2 + 3xy - 2x + y + 2$ funksiya ekstremumi mavjudligini $\\Delta = \\begin{vmatrix} z''_{xx} & z''_{xy} \\\\ z''_{xy} & z''_{yy} \\end{vmatrix}$ determinantning ishorasiga qarab aniqlang.",
+        "options": ["$\\Delta = -17 < 0$, ekstremum mavjud emas", "$\\Delta = 17 > 0$, ekstremum mavjud", "$\\Delta = 0$, shubhali holat", "$\\Delta = 5 > 0$, ekstremum mavjud"],
+        "a": "$\\Delta = -17 < 0$, ekstremum mavjud emas"
+      },
+      {
+        "id": 16,
+        "q": "$\\frac{1}{2} + \\frac{2}{3} + \\frac{3}{4} + ...$ uchun qator yaqinlashishining zaruriy sharti bajarilishini tekshiring.",
+        "options": ["$\\lim_{n \\to \\infty} a_n = 1 \\neq 0$, bajarilmaydi", "$\\lim_{n \\to \\infty} a_n = 0$, bajariladi", "$\\lim_{n \\to \\infty} a_n = \\infty$, bajarilmaydi", "Qator yaqinlashuvchi, bajariladi"],
+        "a": "$\\lim_{n \\to \\infty} a_n = 1 \\neq 0$, bajarilmaydi"
+      },
+      {
+        "id": 17,
+        "q": "Integrallash sohasi $D = \\{(x, y): 1 \\le x \\le 4, x^2 + 1 \\le y \\le 2x^2 + 1\\}$ bo'lsa, $\\iint\\limits_D 3 dxdy$ ikki o'lchovli integralni hisoblang.",
+        "options": ["63", "21", "126", "42"],
+        "a": "63"
+      },
+      {
+        "id": 18,
+        "q": "Ushbu funksiyaning birinchi tartibli xususiy hosilalarini toping: $f(x, y) = \\sin x \\cdot \\cos y$.",
+        "options": ["$f'_x = \\cos x \\cos y; f'_y = -\\sin x \\sin y$", "$f'_x = -\\cos x \\cos y; f'_y = \\sin x \\sin y$", "$f'_x = \\sin x \\cos y; f'_y = \\cos x \\sin y$", "$f'_x = \\cos x; f'_y = -\\sin y$"],
+        "a": "$f'_x = \\cos x \\cos y; f'_y = -\\sin x \\sin y$"
+      },
+      {
+        "id": 19,
+        "q": "Integrallash sohasi $D = \\{(x, y): 0 \\le x \\le 2, 2x^3 + 5 \\le y \\le 3x^3 + 5\\}$ bo'lsa, $\\iint\\limits_D 4 dxdy$ ikki o'lchovli integralni hisoblang.",
+        "options": ["16", "8", "32", "12"],
+        "a": "16"
+      },
+      {
+        "id": 20,
+        "q": "$\\frac{1}{2} + \\frac{1}{4} + \\frac{1}{9} + \\frac{1}{16} + ...$ uchun qator yaqinlashishining zaruriy sharti bajarilishini tekshiring.",
+        "options": ["$\\lim_{n \\to \\infty} a_n = 0$, bajariladi", "$\\lim_{n \\to \\infty} a_n = 1$, bajarilmaydi", "$\\lim_{n \\to \\infty} a_n = \\infty$, bajarilmaydi", "Shart bajarilmaydi"],
+        "a": "$\\lim_{n \\to \\infty} a_n = 0$, bajariladi"
+      },
+      {
+        "id": 21,
+        "q": "Agar $\\iiint\\limits_{\\Omega} f(x, y, z) dxdydz = \\int_1^3 dx \\int_{\\sqrt{x+3}}^{4x+5} dy \\int_{\\sqrt{x+y+1}}^{5x+y+4} f(x, y, z) dz$ bo'lsa, $\\Omega$ sohasini toping.",
+        "options": ["$1 \\le x \\le 3, \\sqrt{x+3} \\le y \\le 4x+5, \\sqrt{x+y+1} \\le z \\le 5x+y+4$", "$1 \\le x \\le 3, 0 \\le y \\le 4x+5, 0 \\le z \\le 5x+y+4$", "$x \\in [1,3], y \\in [x, 4x], z \\in [y, 5x]$"],
+        "a": "$1 \\le x \\le 3, \\sqrt{x+3} \\le y \\le 4x+5, \\sqrt{x+y+1} \\le z \\le 5x+y+4$"
+      },
+      {
+        "id": 22,
+        "q": "Agar integrallash sohasi $D = \\{(x, y): 2 \\le x \\le 5, x^2 \\le y \\le x^3\\}$ bo'lsa, $\\iint\\limits_D f(x, y) dxdy$ takroriy integralga o'tkazilsa:",
+        "options": ["$\\int_2^5 dx \\int_{x^2}^{x^3} f(x, y) dy$", "$\\int_2^5 dx \\int_0^{x^3} f(x, y) dy$", "$\\int_{x^2}^{x^3} dy \\int_2^5 f(x, y) dx$", "$\\int_0^2 dx \\int_{x^2}^{x^3} f(x, y) dy$"],
+        "a": "$\\int_2^5 dx \\int_{x^2}^{x^3} f(x, y) dy$"
+      },
+      {
+        "id": 23,
+        "q": "$z = 3x^2 + y^2 + 2xy - 2x + y + 2$ funksiya ekstremumi mavjudligini $\\Delta$ determinant orqali aniqlang.",
+        "options": ["$\\Delta = 8 > 0$, ekstremum mavjud", "$\\Delta = -8 < 0$, ekstremum mavjud emas", "$\\Delta = 0$, shubhali holat", "$\\Delta = 4 > 0$, ekstremum mavjud"],
+        "a": "$\\Delta = 8 > 0$, ekstremum mavjud"
+      },
+      {
+        "id": 24,
+        "q": "Ushbu funksiyaning birinchi tartibli xususiy hosilalarini toping: $f(x, y) = \\sin x + \\cos y$.",
+        "options": ["$f'_x = \\cos x; f'_y = -\\sin y$", "$f'_x = -\\cos x; f'_y = \\sin y$", "$f'_x = \\sin x; f'_y = \\cos y$", "$f'_x = \\cos x; f'_y = \\sin y$"],
+        "a": "$f'_x = \\cos x; f'_y = -\\sin y$"
+      },
+      {
+        "id": 25,
+        "q": "Agar integrallash sohasi $D = \\{(x, y): 3 \\le x \\le 7, 2x-1 \\le y \\le x^3\\}$ bo'lsa, $\\iint\\limits_D f(x, y) dxdy$ takroriy integralga o'tkazilsa:",
+        "options": ["$\\int_3^7 dx \\int_{2x-1}^{x^3} f(x, y) dy$", "$\\int_3^7 dx \\int_0^{x^3} f(x, y) dy$", "$\\int_{2x-1}^{x^3} dy \\int_3^7 f(x, y) dx$", "$\\int_0^3 dx \\int_{2x-1}^{x^3} f(x, y) dy$"],
+        "a": "$\\int_3^7 dx \\int_{2x-1}^{x^3} f(x, y) dy$"
+      },
+      {
+        "id": 26,
+        "q": "$z = 3x^2 + 2y^2 - 4xy - 2x + y + 2$ funksiya ekstremumi mavjudligini $\\Delta$ determinant orqali aniqlang.",
+        "options": ["$\\Delta = 8 > 0$, ekstremum mavjud", "$\\Delta = -8 < 0$, ekstremum mavjud emas", "$\\Delta = 0$, shubhali holat", "$\\Delta = 12 > 0$, ekstremum mavjud"],
+        "a": "$\\Delta = 8 > 0$, ekstremum mavjud"
+      },
+      {
+        "id": 27,
+        "q": "$\\frac{1}{3} + \\frac{2}{5} + \\frac{3}{7} + \\frac{4}{9} + ...$ qatorning umumiy $u_n$ hadini toping.",
+        "options": ["$u_n = \\frac{n}{2n+1}$", "$u_n = \\frac{n}{n+2}$", "$u_n = \\frac{n}{2n-1}$", "$u_n = \\frac{n+1}{2n+1}$"],
+        "a": "$u_n = \\frac{n}{2n+1}$"
+      },
+      {
+        "id": 28,
+        "q": "Agar $\\iiint\\limits_{\\Omega} f(x, y, z) dxdydz = \\int_2^4 dx \\int_{\\sqrt{2x+3}}^{5x+4} dy \\int_{\\sqrt{2x+y+1}}^{3x+4y+5} f(x, y, z) dz$ bo'lsa, $\\Omega$ sohasini toping.",
+        "options": ["$2 \\le x \\le 4, \\sqrt{2x+3} \\le y \\le 5x+4, \\sqrt{2x+y+1} \\le z \\le 3x+4y+5$", "$2 \\le x \\le 4, 0 \\le y \\le 5x+4, 0 \\le z \\le 3x+4y+5$", "$x \\in [2,4], y \\in [\\sqrt{2x}, 5x], z \\in [\\sqrt{2y}, 3x]$"],
+        "a": "$2 \\le x \\le 4, \\sqrt{2x+3} \\le y \\le 5x+4, \\sqrt{2x+y+1} \\le z \\le 3x+4y+5$"
+      },
+      {
+        "id": 15,
+        "q": "$z = -2x^2 + y^2 + 3xy - 2x + y + 2$ funksiya ekstremumi mavjudligini $\\Delta = \\begin{vmatrix} z''_{xx} & z''_{xy} \\\\ z''_{xy} & z''_{yy} \\end{vmatrix}$ determinantning ishorasiga qarab aniqlang.",
+        "options": ["$\\Delta = -17 < 0$, ekstremum mavjud emas", "$\\Delta = 17 > 0$, ekstremum mavjud", "$\\Delta = 0$, shubhali holat", "$\\Delta = 5 > 0$, ekstremum mavjud"],
+        "a": "$\\Delta = -17 < 0$, ekstremum mavjud emas"
+      },
+      {
+        "id": 16,
+        "q": "$\\frac{1}{2} + \\frac{2}{3} + \\frac{3}{4} + ...$ uchun qator yaqinlashishining zaruriy sharti bajarilishini tekshiring.",
+        "options": ["$\\lim_{n \\to \\infty} a_n = 1 \\neq 0$, bajarilmaydi", "$\\lim_{n \\to \\infty} a_n = 0$, bajariladi", "$\\lim_{n \\to \\infty} a_n = \\infty$, bajarilmaydi", "Qator yaqinlashuvchi, bajariladi"],
+        "a": "$\\lim_{n \\to \\infty} a_n = 1 \\neq 0$, bajarilmaydi"
+      },
+      {
+        "id": 17,
+        "q": "Integrallash sohasi $D = \\{(x, y): 1 \\le x \\le 4, x^2 + 1 \\le y \\le 2x^2 + 1\\}$ bo'lsa, $\\iint\\limits_D 3 dxdy$ ikki o'lchovli integralni hisoblang.",
+        "options": ["63", "21", "126", "42"],
+        "a": "63"
+      },
+      {
+        "id": 18,
+        "q": "Ushbu funksiyaning birinchi tartibli xususiy hosilalarini toping: $f(x, y) = \\sin x \\cdot \\cos y$.",
+        "options": ["$f'_x = \\cos x \\cos y; f'_y = -\\sin x \\sin y$", "$f'_x = -\\cos x \\cos y; f'_y = \\sin x \\sin y$", "$f'_x = \\sin x \\cos y; f'_y = \\cos x \\sin y$", "$f'_x = \\cos x; f'_y = -\\sin y$"],
+        "a": "$f'_x = \\cos x \\cos y; f'_y = -\\sin x \\sin y$"
+      },
+      {
+        "id": 19,
+        "q": "Integrallash sohasi $D = \\{(x, y): 0 \\le x \\le 2, 2x^3 + 5 \\le y \\le 3x^3 + 5\\}$ bo'lsa, $\\iint\\limits_D 4 dxdy$ ikki o'lchovli integralni hisoblang.",
+        "options": ["16", "8", "32", "12"],
+        "a": "16"
+      },
+      {
+        "id": 20,
+        "q": "$\\frac{1}{2} + \\frac{1}{4} + \\frac{1}{9} + \\frac{1}{16} + ...$ uchun qator yaqinlashishining zaruriy sharti bajarilishini tekshiring.",
+        "options": ["$\\lim_{n \\to \\infty} a_n = 0$, bajariladi", "$\\lim_{n \\to \\infty} a_n = 1$, bajarilmaydi", "$\\lim_{n \\to \\infty} a_n = \\infty$, bajarilmaydi", "Shart bajarilmaydi"],
+        "a": "$\\lim_{n \\to \\infty} a_n = 0$, bajariladi"
+      },
+      {
+        "id": 21,
+        "q": "Agar $\\iiint\\limits_{\\Omega} f(x, y, z) dxdydz = \\int_1^3 dx \\int_{\\sqrt{x+3}}^{4x+5} dy \\int_{\\sqrt{x+y+1}}^{5x+y+4} f(x, y, z) dz$ bo'lsa, $\\Omega$ sohasini toping.",
+        "options": ["$1 \\le x \\le 3, \\sqrt{x+3} \\le y \\le 4x+5, \\sqrt{x+y+1} \\le z \\le 5x+y+4$", "$1 \\le x \\le 3, 0 \\le y \\le 4x+5, 0 \\le z \\le 5x+y+4$", "$x \\in [1,3], y \\in [x, 4x], z \\in [y, 5x]$"],
+        "a": "$1 \\le x \\le 3, \\sqrt{x+3} \\le y \\le 4x+5, \\sqrt{x+y+1} \\le z \\le 5x+y+4$"
+      },
+      {
+        "id": 22,
+        "q": "Agar integrallash sohasi $D = \\{(x, y): 2 \\le x \\le 5, x^2 \\le y \\le x^3\\}$ bo'lsa, $\\iint\\limits_D f(x, y) dxdy$ takroriy integralga o'tkazilsa:",
+        "options": ["$\\int_2^5 dx \\int_{x^2}^{x^3} f(x, y) dy$", "$\\int_2^5 dx \\int_0^{x^3} f(x, y) dy$", "$\\int_{x^2}^{x^3} dy \\int_2^5 f(x, y) dx$", "$\\int_0^2 dx \\int_{x^2}^{x^3} f(x, y) dy$"],
+        "a": "$\\int_2^5 dx \\int_{x^2}^{x^3} f(x, y) dy$"
+      },
+      {
+        "id": 23,
+        "q": "$z = 3x^2 + y^2 + 2xy - 2x + y + 2$ funksiya ekstremumi mavjudligini $\\Delta$ determinant orqali aniqlang.",
+        "options": ["$\\Delta = 8 > 0$, ekstremum mavjud", "$\\Delta = -8 < 0$, ekstremum mavjud emas", "$\\Delta = 0$, shubhali holat", "$\\Delta = 4 > 0$, ekstremum mavjud"],
+        "a": "$\\Delta = 8 > 0$, ekstremum mavjud"
+      },
+      {
+        "id": 24,
+        "q": "Ushbu funksiyaning birinchi tartibli xususiy hosilalarini toping: $f(x, y) = \\sin x + \\cos y$.",
+        "options": ["$f'_x = \\cos x; f'_y = -\\sin y$", "$f'_x = -\\cos x; f'_y = \\sin y$", "$f'_x = \\sin x; f'_y = \\cos y$", "$f'_x = \\cos x; f'_y = \\sin y$"],
+        "a": "$f'_x = \\cos x; f'_y = -\\sin y$"
+      },
+      {
+        "id": 25,
+        "q": "Agar integrallash sohasi $D = \\{(x, y): 3 \\le x \\le 7, 2x-1 \\le y \\le x^3\\}$ bo'lsa, $\\iint\\limits_D f(x, y) dxdy$ takroriy integralga o'tkazilsa:",
+        "options": ["$\\int_3^7 dx \\int_{2x-1}^{x^3} f(x, y) dy$", "$\\int_3^7 dx \\int_0^{x^3} f(x, y) dy$", "$\\int_{2x-1}^{x^3} dy \\int_3^7 f(x, y) dx$", "$\\int_0^3 dx \\int_{2x-1}^{x^3} f(x, y) dy$"],
+        "a": "$\\int_3^7 dx \\int_{2x-1}^{x^3} f(x, y) dy$"
+      },
+      {
+        "id": 26,
+        "q": "$z = 3x^2 + 2y^2 - 4xy - 2x + y + 2$ funksiya ekstremumi mavjudligini $\\Delta$ determinant orqali aniqlang.",
+        "options": ["$\\Delta = 8 > 0$, ekstremum mavjud", "$\\Delta = -8 < 0$, ekstremum mavjud emas", "$\\Delta = 0$, shubhali holat", "$\\Delta = 12 > 0$, ekstremum mavjud"],
+        "a": "$\\Delta = 8 > 0$, ekstremum mavjud"
+      },
+      {
+        "id": 27,
+        "q": "$\\frac{1}{3} + \\frac{2}{5} + \\frac{3}{7} + \\frac{4}{9} + ...$ qatorning umumiy $u_n$ hadini toping.",
+        "options": ["$u_n = \\frac{n}{2n+1}$", "$u_n = \\frac{n}{n+2}$", "$u_n = \\frac{n}{2n-1}$", "$u_n = \\frac{n+1}{2n+1}$"],
+        "a": "$u_n = \\frac{n}{2n+1}$"
+      },
+      {
+        "id": 28,
+        "q": "Agar $\\iiint\\limits_{\\Omega} f(x, y, z) dxdydz = \\int_2^4 dx \\int_{\\sqrt{2x+3}}^{5x+4} dy \\int_{\\sqrt{2x+y+1}}^{3x+4y+5} f(x, y, z) dz$ bo'lsa, $\\Omega$ sohasini toping.",
+        "options": ["$2 \\le x \\le 4, \\sqrt{2x+3} \\le y \\le 5x+4, \\sqrt{2x+y+1} \\le z \\le 3x+4y+5$", "$2 \\le x \\le 4, 0 \\le y \\le 5x+4, 0 \\le z \\le 3x+4y+5$", "$x \\in [2,4], y \\in [\\sqrt{2x}, 5x], z \\in [\\sqrt{2y}, 3x]$"],
+        "a": "$2 \\le x \\le 4, \\sqrt{2x+3} \\le y \\le 5x+4, \\sqrt{2x+y+1} \\le z \\le 3x+4y+5$"
+      },
+      {
+        "id": 44,
+        "q": "Integrallash sohasi $D = \\{(x, y): 2 \\le x \\le 3, x^2 - 1 \\le y \\le 4x^2 - 1\\}$ bo'lsa, $\\iint\\limits_D 2 dxdy$ ikki o'lchovli integralni hisoblang.",
+        "options": ["38", "19", "76", "24"],
+        "a": "38"
+      },
+      {
+        "id": 45,
+        "q": "Agar $\\iiint\\limits_{\\Omega} f(x, y, z) dxdydz = \\int_3^7 dx \\int_{\\sqrt{2x+5}}^{\\sqrt{6x+1}} dy \\int_{\\sqrt{2x+3y-2}}^{\\sqrt{5x+6y+1}} f(x, y, z) dz$ bo'lsa, $\\Omega$ sohasini toping.",
+        "options": ["$3 \\le x \\le 7, \\sqrt{2x+5} \\le y \\le \\sqrt{6x+1}, \\sqrt{2x+3y-2} \\le z \\le \\sqrt{5x+6y+1}$", "$3 \\le x \\le 7, 0 \\le y \\le \\sqrt{6x+1}, 0 \\le z \\le \\sqrt{5x+6y+1}$", "$x \\in [3,7], y \\in [2x, 6x], z \\in [3y, 6y]$"],
+        "a": "$3 \\le x \\le 7, \\sqrt{2x+5} \\le y \\le \\sqrt{6x+1}, \\sqrt{2x+3y-2} \\le z \\le \\sqrt{5x+6y+1}$"
+      },
+      {
+        "id": 46,
+        "q": "Agar integrallash sohasi $D = \\{(x, y): 0 \\le x \\le \\frac{\\pi}{4}, \\sin x \\le y \\le \\cos x\\}$ bo'lsa, $\\iint\\limits_D f(x, y) dxdy$ takroriy integralga o'tkazilsa:",
+        "options": ["$\\int_0^{\\frac{\\pi}{4}} dx \\int_{\\sin x}^{\\cos x} f(x, y) dy$", "$\\int_0^{\\frac{\\pi}{4}} dx \\int_0^{\\cos x} f(x, y) dy$", "$\\int_{\\sin x}^{\\cos x} dy \\int_0^{\\frac{\\pi}{4}} f(x, y) dx$", "$\\int_0^{\\pi} dx \\int_{\\sin x}^{\\cos x} f(x, y) dy$"],
+        "a": "$\\int_0^{\\frac{\\pi}{4}} dx \\int_{\\sin x}^{\\cos x} f(x, y) dy$"
+      },
+      {
+        "id": 47,
+        "q": "$z = 4x^2 - y^2 + 6xy + 8x + 9y - 3$ funksiya ekstremumi mavjudligini $\\Delta$ determinant orqali aniqlang.",
+        "options": ["$\\Delta = -52 < 0$, ekstremum mavjud emas", "$\\Delta = 52 > 0$, ekstremum mavjud", "$\\Delta = 0$, shubhali holat", "$\\Delta = 16 > 0$, ekstremum mavjud"],
+        "a": "$\\Delta = -52 < 0$, ekstremum mavjud emas"
+      },
+      {
+        "id": 48,
+        "q": "$\\frac{1}{3} + \\frac{2}{9} + \\frac{3}{27} + \\frac{4}{81} + ...$ qatorning umumiy $u_n$ hadini toping.",
+        "options": ["$u_n = \\frac{n}{3^n}$", "$u_n = \\frac{n}{3n}$", "$u_n = \\frac{1}{3^n}$", "$u_n = \\frac{n}{3^{n-1}}$"],
+        "a": "$u_n = \\frac{n}{3^n}$"
+      },
+      {
+        "id": 49,
+        "q": "Ushbu funksiyaning birinchi tartibli xususiy hosilalarini toping: $f(x, y) = x^2e^y$.",
+        "options": ["$f'_x = 2xe^y; f'_y = x^2e^y$", "$f'_x = x^2e^y; f'_y = 2xe^y$", "$f'_x = 2x; f'_y = e^y$", "$f'_x = 2xe^x; f'_y = x^2e^x$"],
+        "a": "$f'_x = 2xe^y; f'_y = x^2e^y$"
+      },
+      {
+        "id": 50,
+        "q": "Agar $\\iiint\\limits_{\\Omega} f(x, y, z) dxdydz = \\int_3^6 dx \\int_{3x+1}^{x^2+2} dy \\int_{\\sqrt{2x+3y-2}}^{x^2+y^2+1} f(x, y, z) dz$ bo'lsa, $\\Omega$ sohasini toping.",
+        "options": ["$3 \\le x \\le 6, 3x+1 \\le y \\le x^2+2, \\sqrt{2x+3y-2} \\le z \\le x^2+y^2+1$", "$3 \\le x \\le 6, 0 \\le y \\le x^2+2, 0 \\le z \\le x^2+y^2+1$", "$x \\in [3,6], y \\in [3x, x^2], z \\in [\\sqrt{y}, x^2+y^2]$"],
+        "a": "$3 \\le x \\le 6, 3x+1 \\le y \\le x^2+2, \\sqrt{2x+3y-2} \\le z \\le x^2+y^2+1$"
+      },
+      {
+        "id": 51,
+        "q": "$z = x^2 - 5y^2 - xy + 6x + 5y - 9$ funksiya ekstremumi mavjudligini $\\Delta$ determinant orqali aniqlang.",
+        "options": ["$\\Delta = -21 < 0$, ekstremum mavjud emas", "$\\Delta = 21 > 0$, ekstremum mavjud", "$\\Delta = 0$, shubhali holat", "$\\Delta = -19 < 0$, ekstremum mavjud emas"],
+        "a": "$\\Delta = -21 < 0$, ekstremum mavjud emas"
+      },
+      {
+        "id": 52,
+        "q": "$\\sum_{n=1}^{\\infty} \\frac{n}{n+1}$ qatorning dastlabki ikkita hadining yig'indisini toping.",
+        "options": ["$\\frac{7}{6}$", "$\\frac{1}{2}$", "$\\frac{2}{3}$", "$\\frac{3}{2}$"],
+        "a": "$\\frac{7}{6}$"
+      },
+      {
+        "id": 53,
+        "q": "Agar integrallash sohasi $D = \\{(x, y): 0 \\le x \\le \\frac{\\pi}{2}, \\sin x \\le y \\le e^x\\}$ bo'lsa, $\\iint\\limits_D f(x, y) dxdy$ takroriy integralga o'tkazilsa:",
+        "options": ["$\\int_0^{\\frac{\\pi}{2}} dx \\int_{\\sin x}^{e^x} f(x, y) dy$", "$\\int_0^{\\frac{\\pi}{2}} dx \\int_0^{e^x} f(x, y) dy$", "$\\int_{\\sin x}^{e^x} dy \\int_0^{\\frac{\\pi}{2}} f(x, y) dx$", "$\\int_0^1 dx \\int_{\\sin x}^{e^x} f(x, y) dy$"],
+        "a": "$\\int_0^{\\frac{\\pi}{2}} dx \\int_{\\sin x}^{e^x} f(x, y) dy$"
+      },
+      {
+        "id": 54,
+        "q": "Integrallash sohasi $D = \\{(x, y): 1 \\le x \\le 2, 4x^3 + 7 \\le y \\le 8x^3 + 7\\}$ bo'lsa, $\\iint\\limits_D 2 dxdy$ ikki o'lchovli integralni hisoblang.",
+        "options": ["30", "15", "60", "45"],
+        "a": "30"
+      },
+      {
+        "id": 55,
+        "q": "Ushbu funksiyaning birinchi tartibli xususiy hosilalarini toping: $f(x, y) = \\sin x \\cdot e^y$.",
+        "options": ["$f'_x = \\cos x \\cdot e^y; f'_y = \\sin x \\cdot e^y$", "$f'_x = \\sin x \\cdot e^y; f'_y = \\cos x \\cdot e^y$", "$f'_x = \\cos x; f'_y = e^y$", "$f'_x = -\\cos x \\cdot e^y; f'_y = \\sin x \\cdot e^y$"],
+        "a": "$f'_x = \\cos x \\cdot e^y; f'_y = \\sin x \\cdot e^y$"
+      },
+      {
+        "id": 56,
+        "q": "Agar $\\iiint\\limits_{\\Omega} f(x, y, z) dxdydz = \\int_3^8 dx \\int_{3x+1}^{7x+2} dy \\int_{x+3y+1}^{3x+5y+1} f(x, y, z) dz$ bo'lsa, $\\Omega$ sohasini toping.",
+        "options": ["$3 \\le x \\le 8, 3x+1 \\le y \\le 7x+2, x+3y+1 \\le z \\le 3x+5y+1$", "$3 \\le x \\le 8, 0 \\le y \\le 7x+2, 0 \\le z \\le 3x+5y+1$", "$x \\in [3,8], y \\in [3x, 7x], z \\in [3y, 5y]$"],
+        "a": "$3 \\le x \\le 8, 3x+1 \\le y \\le 7x+2, x+3y+1 \\le z \\le 3x+5y+1$"
+      },
+      {
+        "id": 57,
+        "q": "Agar integrallash sohasi $D = \\{(x, y): 0 \\le x \\le 4, \\sqrt{x} \\le y \\le 4x+3\\}$ bo'lsa, $\\iint\\limits_D f(x, y) dxdy$ takroriy integralga o'tkazilsa:",
+        "options": ["$\\int_0^4 dx \\int_{\\sqrt{x}}^{4x+3} f(x, y) dy$", "$\\int_0^4 dx \\int_0^{4x+3} f(x, y) dy$", "$\\int_{\\sqrt{x}}^{4x+3} dy \\int_0^4 f(x, y) dx$", "$\\int_0^2 dx \\int_{\\sqrt{x}}^{4x+3} f(x, y) dy$"],
+        "a": "$\\int_0^4 dx \\int_{\\sqrt{x}}^{4x+3} f(x, y) dy$"
+      },
+      {
+        "id": 58,
+        "q": "$z = -7x^2 - 5y^2 + 6xy + x + 5y - 9$ funksiya ekstremumi mavjudligini $\\Delta = \\begin{vmatrix} z''_{xx} & z''_{xy} \\\\ z''_{xy} & z''_{yy} \\end{vmatrix}$ determinantning ishorasiga qarab aniqlang.",
+        "options": ["$\\Delta = 104 > 0$, ekstremum mavjud", "$\\Delta = -104 < 0$, ekstremum mavjud emas", "$\\Delta = 0$, shubhali holat", "$\\Delta = 70 > 0$, ekstremum mavjud"],
+        "a": "$\\Delta = 104 > 0$, ekstremum mavjud"
+      },
+      {
+        "id": 59,
+        "q": "$\\sum_{n=1}^{\\infty} \\frac{n}{2n+1}$ qatorning dastlabki ikkita hadining yig'indisini toping.",
+        "options": ["$\\frac{11}{15}$", "$\\frac{1}{3}$", "$\\frac{2}{5}$", "$\\frac{13}{15}$"],
+        "a": "$\\frac{11}{15}$"
+      },
+      {
+        "id": 60,
+        "q": "Integrallash sohasi $D = \\{(x, y): 3 \\le x \\le 4, 4x - 3 \\le y \\le 6x - 3\\}$ bo'lsa, $\\iint\\limits_D dxdy$ ikki o'lchovli integralni hisoblang.",
+        "options": ["1", "2", "3", "4"],
+        "a": "1"
+      },
+      {
+        "id": 61,
+        "q": "Integrallash sohasi $\\Omega = \\{(x, y, z): 3 \\le x \\le 8, 0 \\le y \\le 7, 1 \\le z \\le 3\\}$ bo'lsa, $\\iiint\\limits_{\\Omega} dxdydz$ uch o'lchovli integralni hisoblang.",
+        "options": ["70", "35", "105", "140"],
+        "a": "70"
+      },
+      {
+        "id": 62,
+        "q": "Agar $\\iint\\limits_D f(x, y) dxdy = \\int_1^5 dx \\int_{2x-1}^{2x+4} f(x, y) dy$ bo'lsa, $D$ integrallash sohasini toping.",
+        "options": ["$1 \\le x \\le 5, 2x-1 \\le y \\le 2x+4$", "$1 \\le x \\le 5, 0 \\le y \\le 2x+4$", "$0 \\le x \\le 5, 2x-1 \\le y \\le 2x+4$", "$1 \\le x \\le 5, x \\le y \\le 2x$"],
+        "a": "$1 \\le x \\le 5, 2x-1 \\le y \\le 2x+4$"
+      },
+      {
+        "id": 63,
+        "q": "Integrallash sohasi $D = \\{(x, y): 0 \\le x \\le 2, 4x^4 + 5 \\le y \\le 9x^4 + 5\\}$ bo'lsa, $\\iint\\limits_D 3 dxdy$ ikki o'lchovli integralni hisoblang.",
+        "options": ["96", "32", "48", "64"],
+        "a": "96"
+      },
+      {
+        "id": 64,
+        "q": "Ushbu funksiyaning birinchi tartibli xususiy hosilalarini toping: $f(x, y) = e^x \\cos y$.",
+        "options": ["$f'_x = e^x \\cos y; f'_y = -e^x \\sin y$", "$f'_x = e^x \\sin y; f'_y = e^x \\cos y$", "$f'_x = \\cos y; f'_y = -\\sin y$", "$f'_x = e^x; f'_y = -\\sin y$"],
+        "a": "$f'_x = e^x \\cos y; f'_y = -e^x \\sin y$"
+      },
+      {
+        "id": 65,
+        "q": "Agar integrallash sohasi $D = \\{(x, y): 0 \\le x \\le 5, \\sqrt{x+4} \\le y \\le 3x+5\\}$ bo'lsa, $\\iint\\limits_D f(x, y) dxdy$ takroriy integralga o'tkazilsa:",
+        "options": ["$\\int_0^5 dx \\int_{\\sqrt{x+4}}^{3x+5} f(x, y) dy$", "$\\int_0^5 dx \\int_0^{3x+5} f(x, y) dy$", "$\\int_{\\sqrt{x+4}}^{3x+5} dy \\int_0^5 f(x, y) dx$", "$\\int_2^3 dx \\int_{\\sqrt{x+4}}^{3x+5} f(x, y) dy$"],
+        "a": "$\\int_0^5 dx \\int_{\\sqrt{x+4}}^{3x+5} f(x, y) dy$"
+      },
+      {
+        "id": 66,
+        "q": "$z = -x^2 - 2y^2 + 5xy + 2x + 5y - 1$ funksiya ekstremumi mavjudligini $\\Delta$ determinant orqali aniqlang.",
+        "options": ["$\\Delta = -17 < 0$, ekstremum mavjud emas", "$\\Delta = 17 > 0$, ekstremum mavjud", "$\\Delta = 0$, shubhali holat", "$\\Delta = 8 > 0$, ekstremum mavjud"],
+        "a": "$\\Delta = -17 < 0$, ekstremum mavjud emas"
+      },
+      {
+        "id": 67,
+        "q": "$\\sum_{n=1}^{\\infty} \\frac{n}{3^n}$ qatorning dastlabki ikkita hadining yig'indisini toping.",
+        "options": ["$\\frac{5}{9}$", "$\\frac{1}{3}$", "$\\frac{2}{9}$", "$\\frac{4}{9}$"],
+        "a": "$\\frac{5}{9}$"
+      },
+      {
+        "id": 68,
+        "q": "Ushbu funksiyaning birinchi tartibli xususiy hosilalarini toping: $f(x, y) = 4x^5 \\cos y$.",
+        "options": ["$f'_x = 20x^4 \\cos y; f'_y = -4x^5 \\sin y$", "$f'_x = 20x^5 \\cos y; f'_y = 4x^5 \\sin y$", "$f'_x = 4x^4 \\cos y; f'_y = -4x^5 \\sin y$", "$f'_x = 20x^4; f'_y = -\\sin y$"],
+        "a": "$f'_x = 20x^4 \\cos y; f'_y = -4x^5 \\sin y$"
+      },
+      {
+        "id": 69,
+        "q": "Integrallash sohasi $\\Omega = \\{(x, y, z): -2 \\le x \\le 4, -1 \\le y \\le 7, 1 \\le z \\le 5\\}$ bo'lsa, $\\iiint\\limits_{\\Omega} dxdydz$ ni hisoblang.",
+        "options": ["192", "96", "48", "240"],
+        "a": "192"
+      },
+      {
+        "id": 70,
+        "q": "$\\sum_{n=1}^{\\infty} \\frac{n}{2^n+1}$ qatorning dastlabki ikkita hadining yig'indisini toping.",
+        "options": ["$\\frac{11}{15}$", "$\\frac{1}{3}$", "$\\frac{2}{5}$", "$\\frac{13}{15}$"],
+        "a": "$\\frac{11}{15}$"
+      },
+      {
+        "id": 71,
+        "q": "$z = x^2 - 3y^2 + 2xy - 3x + 5y - 3$ funksiya ekstremumi mavjudligini $\\Delta$ determinant orqali aniqlang.",
+        "options": ["$\\Delta = -16 < 0$, ekstremum mavjud emas", "$\\Delta = 16 > 0$, ekstremum mavjud", "$\\Delta = 0$, shubhali holat", "$\\Delta = -12 < 0$, ekstremum mavjud emas"],
+        "a": "$\\Delta = -16 < 0$, ekstremum mavjud emas"
+      },
+      {
+        "id": 72,
+        "q": "Agar $\\iint\\limits_D f(x, y) dxdy = \\int_2^5 dx \\int_{x^2}^{x^3} f(x, y) dy$ bo'lsa, $D$ integrallash sohasini toping.",
+        "options": ["$2 \\le x \\le 5, x^2 \\le y \\le x^3$", "$2 \\le x \\le 5, 0 \\le y \\le x^3$", "$x \\in [2,5], y \\in [x, x^2]$"],
+        "a": "$2 \\le x \\le 5, x^2 \\le y \\le x^3$"
+      },
+      {
+        "id": 73,
+        "q": "Ushbu funksiyaning birinchi tartibli xususiy hosilalarini toping: $f(x, y) = -3y^6 \\sin x$.",
+        "options": ["$f'_x = -3y^6 \\cos x; f'_y = -18y^5 \\sin x$", "$f'_x = 3y^6 \\cos x; f'_y = 18y^5 \\sin x$", "$f'_x = -3y^6 \\sin x; f'_y = -18y^5 \\cos x$"],
+        "a": "$f'_x = -3y^6 \\cos x; f'_y = -18y^5 \\sin x$"
+      },
+      {
+        "id": 74,
+        "q": "Integrallash sohasi $\\Omega = \\{(x, y, z): -6 \\le x \\le -1, -1 \\le y \\le 1, 1 \\le z \\le 3\\}$ bo'lsa, $\\iiint\\limits_{\\Omega} dxdydz$ ni hisoblang.",
+        "options": ["20", "10", "30", "40"],
+        "a": "20"
+      },
+      {
+        "id": 75,
+        "q": "$z = 5x^2 + y^2 + 7xy - 9x - 5y - 1$ funksiya ekstremumi mavjudligini $\\Delta$ determinant orqali aniqlang.",
+        "options": ["$\\Delta = -29 < 0$, ekstremum mavjud emas", "$\\Delta = 29 > 0$, ekstremum mavjud", "$\\Delta = 0$, shubhali holat"],
+        "a": "$\\Delta = -29 < 0$, ekstremum mavjud emas"
+      },
+      {
+        "id": 76,
+        "q": "$w = f(z) = u(x, y) + iv(x, y)$ funksiyasi differensiallanuvchi bo'lishi uchun Koshi-Riman shartini ko'rsating.",
+        "options": ["$\\frac{\\partial u}{\\partial x} = \\frac{\\partial v}{\\partial y}; \\frac{\\partial u}{\\partial y} = -\\frac{\\partial v}{\\partial x}$", "$\\frac{\\partial u}{\\partial x} = -\\frac{\\partial v}{\\partial y}; \\frac{\\partial u}{\\partial y} = \\frac{\\partial v}{\\partial x}$", "$\\frac{\\partial u}{\\partial x} = \\frac{\\partial v}{\\partial x}; \\frac{\\partial u}{\\partial y} = \\frac{\\partial v}{\\partial y}$"],
+        "a": "$\\frac{\\partial u}{\\partial x} = \\frac{\\partial v}{\\partial y}; \\frac{\\partial u}{\\partial y} = -\\frac{\\partial v}{\\partial x}$"
+      },
+      {
+        "id": 77,
+        "q": "Agar $\\iint\\limits_D f(x, y) dxdy = \\int_3^7 dx \\int_{2x-1}^{x^3} f(x, y) dy$ bo'lsa, $D$ integrallash sohasini toping.",
+        "options": ["$3 \\le x \\le 7, 2x-1 \\le y \\le x^3$", "$3 \\le x \\le 7, 0 \\le y \\le x^3$", "$x \\in [3,7], y \\in [2x, x^3]$"],
+        "a": "$3 \\le x \\le 7, 2x-1 \\le y \\le x^3$"
+      },
+      {
+        "id": 78,
+        "q": "Ushbu funksiyaning birinchi tartibli xususiy hosilalarini toping: $f(x, y) = 4y^7 \\ln x$.",
+        "options": ["$f'_x = \\frac{4y^7}{x}; f'_y = 28y^6 \\ln x$", "$f'_x = 4y^7 x; f'_y = 28y^6 \\ln x$", "$f'_x = \\frac{1}{x}; f'_y = 28y^6$"],
+        "a": "$f'_x = \\frac{4y^7}{x}; f'_y = 28y^6 \\ln x$"
+      },
+      {
+        "id": 79,
+        "q": "Integrallash sohasi $\\Omega = \\{(x, y, z): -6 \\le x \\le -2, -1 \\le y \\le 3, 1 \\le z \\le 5\\}$ bo'lsa, $\\iiint\\limits_{\\Omega} 2dxdydz$ ni hisoblang.",
+        "options": ["128", "64", "32", "256"],
+        "a": "128"
+      },
+      {
+        "id": 80,
+        "q": "$z = 5x^2 + 6y^2 + 7xy + 9x - 5y - 11$ funksiya ekstremumi mavjudligini $\\Delta$ orqali aniqlang.",
+        "options": ["$\\Delta = 71 > 0$, ekstremum mavjud", "$\\Delta = -71 < 0$, ekstremum mavjud emas", "$\\Delta = 0$, shubhali holat"],
+        "a": "$\\Delta = 71 > 0$, ekstremum mavjud"
+      },
+      {
+        "id": 81,
+        "q": "$f(z) = 3z^2$ kompleks o'zgaruvchili funksiyaning hosilasini toping.",
+        "options": ["$6z$", "$3z$", "$z^3$", "$6z^2$"],
+        "a": "$6z$"
+      },
+      {
+        "id": 82,
+        "q": "Ushbu funksiyaning birinchi tartibli xususiy hosilalarini toping: $f(x, y) = x^4 + 3 \\sin y$.",
+        "options": ["$f'_x = 4x^3; f'_y = 3 \\cos y$", "$f'_x = 4x^3; f'_y = -3 \\cos y$", "$f'_x = x^4; f'_y = 3 \\cos y$"],
+        "a": "$f'_x = 4x^3; f'_y = 3 \\cos y$"
+      },
+      {
+        "id": 83,
+        "q": "$z = -3x^2 - 6y^2 + 7xy - 5x + 2y + 1$ funksiya ekstremumi mavjudligini $\\Delta$ orqali aniqlang.",
+        "options": ["$\\Delta = 23 > 0$, ekstremum mavjud", "$\\Delta = -23 < 0$, ekstremum mavjud emas", "$\\Delta = 0$, shubhali holat"],
+        "a": "$\\Delta = 23 > 0$, ekstremum mavjud"
+      },
+      {
+        "id": 84,
+        "q": "Integrallash sohasi $\\Omega = \\{(x, y, z): -7 \\le x \\le 2, -3 \\le y \\le 3, 2 \\le z \\le 5\\}$ bo'lsa, $\\iiint\\limits_{\\Omega} (-3)dxdydz$ ni hisoblang.",
+        "options": ["-486", "-162", "-243", "-324"],
+        "a": "-486"
+      },
+      {
+        "id": 85,
+        "q": "Agar $\\iint\\limits_D f(x, y) dxdy = \\int_1^3 dx \\int_x^{e^x} f(x, y) dy$ bo'lsa, $D$ integrallash sohasini toping.",
+        "options": ["$1 \\le x \\le 3, x \\le y \\le e^x$", "$1 \\le x \\le 3, 0 \\le y \\le e^x$", "$x \\in [1,3], y \\in [1, e^x]$"],
+        "a": "$1 \\le x \\le 3, x \\le y \\le e^x$"
+      },
+      {
+        "id": 86,
+        "q": "Ushbu funksiyaning birinchi tartibli xususiy hosilalarini toping: $f(x, y) = \\frac{1}{x^4} - 5 \\sin y$.",
+        "options": ["$f'_x = -\\frac{4}{x^5}; f'_y = -5 \\cos y$", "$f'_x = \\frac{4}{x^5}; f'_y = 5 \\cos y$", "$f'_x = -\\frac{1}{x^3}; f'_y = -5 \\cos y$"],
+        "a": "$f'_x = -\\frac{4}{x^5}; f'_y = -5 \\cos y$"
+      },
+      {
+        "id": 87,
+        "q": "$z = -3x^2 - 4y^2 + 7xy - 5x - 12y + 13$ funksiya ekstremumi mavjudligini $\\Delta = \\begin{vmatrix} z''_{xx} & z''_{xy} \\\\ z''_{xy} & z''_{yy} \\end{vmatrix}$ determinantning ishorasiga qarab aniqlang.",
+        "options": ["$\\Delta = 47 > 0$, ekstremum mavjud", "$\\Delta = -47 < 0$, ekstremum mavjud emas", "$\\Delta = 0$, shubhali holat"],
+        "a": "$\\Delta = 47 > 0$, ekstremum mavjud"
+      },
+      {
+        "id": 88,
+        "q": "Integrallash sohasi $\\Omega = \\{(x, y, z): -7 \\le x \\le 1, -3 \\le y \\le -1, 4 \\le z \\le 5\\}$ bo'lsa, $\\iiint\\limits_{\\Omega} 5dxdydz$ ni hisoblang.",
+        "options": ["80", "40", "160", "20"],
+        "a": "80"
+      },
+      {
+        "id": 89,
+        "q": "$f(z) = -5z^3$ kompleks o'zgaruvchili funksiyaning hosilasini toping.",
+        "options": ["$-15z^2$", "$15z^2$", "$-15z$", "$-5z^2$"],
+        "a": "$-15z^2$"
+      },
+      {
+        "id": 90,
+        "q": "Agar $\\iint\\limits_D f(x, y) dxdy = \\int_1^4 dx \\int_{\\ln x}^{2x+1} f(x, y) dy$ bo'lsa, $D$ integrallash sohasini toping.",
+        "options": ["$1 \\le x \\le 4, \\ln x \\le y \\le 2x+1$", "$1 \\le x \\le 4, 0 \\le y \\le 2x+1$", "$x \\in [1,4], y \\in [x, 2x]$"],
+        "a": "$1 \\le x \\le 4, \\ln x \\le y \\le 2x+1$"
+      },
+      {
+        "id": 91,
+        "q": "Ushbu funksiyaning birinchi tartibli xususiy hosilalarini toping: $f(x, y) = \\frac{1}{7x^3} - \\frac{5}{y^2}$.",
+        "options": ["$f'_x = -\\frac{3}{7x^4}; f'_y = \\frac{10}{y^3}$", "$f'_x = \\frac{3}{7x^4}; f'_y = -\\frac{10}{y^3}$", "$f'_x = -\\frac{1}{7x^2}; f'_y = \\frac{5}{y}$"],
+        "a": "$f'_x = -\\frac{3}{7x^4}; f'_y = \\frac{10}{y^3}$"
+      },
+      {
+        "id": 92,
+        "q": "$z = 6x^2 - 3y^2 + 2xy + 11x - 12y + 10$ funksiya ekstremumi mavjudligini $\\Delta$ orqali aniqlang.",
+        "options": ["$\\Delta = -40 < 0$, ekstremum mavjud emas", "$\\Delta = 40 > 0$, ekstremum mavjud", "$\\Delta = 0$, shubhali holat"],
+        "a": "$\\Delta = -40 < 0$, ekstremum mavjud emas"
+      },
+      {
+        "id": 93,
+        "q": "Integrallash sohasi $\\Omega = \\{(x, y, z): -8 \\le x \\le -3, -5 \\le y \\le -2, 4 \\le z \\le 8\\}$ bo'lsa, $\\iiint\\limits_{\\Omega} 2dxdydz$ ni hisoblang.",
+        "options": ["120", "60", "240", "180"],
+        "a": "120"
+      },
+      {
+        "id": 94,
+        "q": "Agar $\\iint\\limits_D f(x, y) dxdy = \\int_2^5 dx \\int_{x-3}^{2x+1} f(x, y) dy$ bo'lsa, $D$ integrallash sohasini toping.",
+        "options": ["$2 \\le x \\le 5, x-3 \\le y \\le 2x+1$", "$2 \\le x \\le 5, 0 \\le y \\le 2x+1$", "$x \\in [2,5], y \\in [x-3, x+1]$"],
+        "a": "$2 \\le x \\le 5, x-3 \\le y \\le 2x+1$"
+      },
+      {
+        "id": 95,
+        "q": "Ushbu funksiyaning birinchi tartibli xususiy hosilalarini toping: $f(x, y) = \\frac{1}{x^3y^5}$.",
+        "options": ["$f'_x = -\\frac{3}{x^4y^5}; f'_y = -\\frac{5}{x^3y^6}$", "$f'_x = \\frac{3}{x^4y^5}; f'_y = \\frac{5}{x^3y^6}$", "$f'_x = -\\frac{1}{x^2y^5}; f'_y = -\\frac{1}{x^3y^4}$"],
+        "a": "$f'_x = -\\frac{3}{x^4y^5}; f'_y = -\\frac{5}{x^3y^6}$"
+      },
+      {
+        "id": 96,
+        "q": "Integrallash sohasi $\\Omega = \\{(x, y, z): -8 \\le x \\le 3, -2 \\le y \\le 2, -1 \\le z \\le 8\\}$ bo'lsa, $\\iiint\\limits_{\\Omega} dxdydz$ ni hisoblang.",
+        "options": ["396", "198", "99", "440"],
+        "a": "396"
+      },
+      {
+        "id": "extra_4",
+        "q": "D sohada analitik $f(z)$ funksiyasi uchun Koshining integral formulasini ko'rsating.",
+        "options": ["$f(z_0) = \\frac{1}{2\\pi i} \\oint_C \\frac{f(z)}{z-z_0} dz$", "$f(z_0) = \\oint_C \\frac{f(z)}{z-z_0} dz$", "$f(z_0) = \\frac{1}{\\pi i} \\oint_C f(z) dz$"],
+        "a": "$f(z_0) = \\frac{1}{2\\pi i} \\oint_C \\frac{f(z)}{z-z_0} dz$"
+      },
+      {
+        "id": 97,
+        "q": "$z = -2x^2 + y^2 - 4xy + 13x - 15y + 14$ funksiya ekstremumi mavjudligini $\\Delta$ orqali aniqlang.",
+        "options": ["$\\Delta = -20 < 0$, ekstremum mavjud emas", "$\\Delta = 20 > 0$, ekstremum mavjud", "$\\Delta = 0$, shubhali holat"],
+        "a": "$\\Delta = -20 < 0$, ekstremum mavjud emas"
+      },
+      {
+        "id": 98,
+        "q": "Agar $\\iint\\limits_D f(x, y) dxdy = \\int_0^{\\pi/4} dx \\int_{\\sin x}^{\\cos x} f(x, y) dy$ bo'lsa, $D$ integrallash sohasini toping.",
+        "options": ["$0 \\le x \\le \\pi/4, \\sin x \\le y \\le \\cos x$", "$0 \\le x \\le \\pi/4, \\cos x \\le y \\le \\sin x$", "$x \\in [0, \\pi/2], y \\in [\\sin x, \\cos x]$"],
+        "a": "$0 \\le x \\le \\pi/4, \\sin x \\le y \\le \\cos x$"
+      },
+      {
+        "id": 99,
+        "q": "Ushbu funksiyaning birinchi tartibli xususiy hosilalarini toping: $f(x, y) = \\frac{1}{12x^4y^3}$.",
+        "options": ["$f'_x = -\\frac{1}{3x^5y^3}; f'_y = -\\frac{1}{4x^4y^4}$", "$f'_x = \\frac{1}{3x^5y^3}; f'_y = \\frac{1}{4x^4y^4}$", "$f'_x = -\\frac{1}{12x^3y^3}; f'_y = -\\frac{1}{12x^4y^2}$"],
+        "a": "$f'_x = -\\frac{1}{3x^5y^3}; f'_y = -\\frac{1}{4x^4y^4}$"
+      },
+      {
+        "id": 100,
+        "q": "$z = 5x^2 + 7y^2 - 8xy - 11x - 15y + 11$ funksiya ekstremumi mavjudligini $\\Delta = \\begin{vmatrix} z''_{xx} & z''_{xy} \\\\ z''_{xy} & z''_{yy} \\end{vmatrix}$ determinantning ishorasiga qarab aniqlang.",
+        "options": ["$\\Delta = 76 > 0$, ekstremum mavjud", "$\\Delta = -76 < 0$, ekstremum mavjud emas", "$\\Delta = 0$, shubhali holat"],
+        "a": "$\\Delta = 76 > 0$, ekstremum mavjud"
+      },
+      {
+        "id": 101,
+        "q": "Integrallash sohasi $\\Omega = \\{(x, y, z): -10 \\le x \\le -6, -5 \\le y \\le -2, -1 \\le z \\le 8\\}$ bo'lsa, $\\iiint\\limits_{\\Omega} (-3)dxdydz$ ni hisoblang.",
+        "options": ["-324", "-108", "-162", "-216"],
+        "a": "-324"
+      },
+      {
+        "id": 102,
+        "q": "Agar $\\iint\\limits_D f(x, y) dxdy = \\int_0^{\\pi/2} dx \\int_{\\sin x}^{e^x} f(x, y) dy$ bo'lsa, $D$ integrallash sohasini toping.",
+        "options": ["$0 \\le x \\le \\pi/2, \\sin x \\le y \\le e^x$", "$0 \\le x \\le \\pi/2, e^x \\le y \\le \\sin x$", "$x \\in [0, \\pi], y \\in [\\sin x, e^x]$"],
+        "a": "$0 \\le x \\le \\pi/2, \\sin x \\le y \\le e^x$"
+      },
+      {
+        "id": 103,
+        "q": "Ushbu funksiyaning birinchi tartibli xususiy hosilalarini toping: $f(x, y) = \\frac{\\sin x}{y^3}$.",
+        "options": ["$f'_x = \\frac{\\cos x}{y^3}; f'_y = -\\frac{3 \\sin x}{y^4}$", "$f'_x = \\frac{\\sin x}{y^3}; f'_y = \\frac{3 \\sin x}{y^4}$", "$f'_x = \\cos x; f'_y = -3y^{-4}$"],
+        "a": "$f'_x = \\frac{\\cos x}{y^3}; f'_y = -\\frac{3 \\sin x}{y^4}$"
+      },
+      {
+        "id": 104,
+        "q": "$z = x^2 + 7y^2 + xy + 9x - 12y + 15$ funksiya ekstremumi mavjudligini $\\Delta$ orqali aniqlang.",
+        "options": ["$\\Delta = 27 > 0$, ekstremum mavjud", "$\\Delta = -27 < 0$, ekstremum mavjud emas", "$\\Delta = 0$, shubhali holat"],
+        "a": "$\\Delta = 27 > 0$, ekstremum mavjud"
+      },
+      {
+        "id": 105,
+        "q": "Integrallash sohasi $\\Omega = \\{(x, y, z): -11 \\le x \\le -9, -6 \\le y \\le -2, -1 \\le z \\le 6\\}$ bo'lsa, $\\iiint\\limits_{\\Omega} 5dxdydz$ ni hisoblang.",
+        "options": ["280", "140", "70", "210"],
+        "a": "280"
+      },
+      {
+        "id": 106,
+        "q": "Agar $\\iint\\limits_D f(x, y) dxdy = \\int_0^4 dx \\int_{\\sqrt{x}}^{4x+3} f(x, y) dy$ bo'lsa, $D$ integrallash sohasini toping.",
+        "options": ["$0 \\le x \\le 4, \\sqrt{x} \\le y \\le 4x+3$", "$0 \\le x \\le 4, 0 \\le y \\le 4x+3$", "$x \\in [0,4], y \\in [x, \\sqrt{x}]$"],
+        "a": "$0 \\le x \\le 4, \\sqrt{x} \\le y \\le 4x+3$"
+      }
+    ]
   },
   "suniy_intelekt_malumotlar_tuzilmasi": {
     "name": "Ma'lumotlar tuzilmasi",
