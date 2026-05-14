@@ -45,15 +45,12 @@ const PATHS = {
     config:   path.join(DATA_DIR, 'bot_config.json'),
 };
 
-if (!fs.existsSync(PATHS.subjects)) {
+fs.copyFileSync(
+    path.join(__dirname, 'subjects.json'),
+    PATHS.subjects
+);
 
-    fs.copyFileSync(
-        path.join(__dirname, 'subjects.json'),
-        PATHS.subjects
-    );
-
-    console.log('✅ subjects.json copied to DATA_DIR');
-}
+console.log('✅ subjects.json updated');
 
 // ============================================================
 // BOT KONFIGURATSIYASI (dinamik: universitetlar, yo'nalishlar, fanlar)
