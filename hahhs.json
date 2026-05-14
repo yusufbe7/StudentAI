@@ -1,1634 +1,974 @@
 {
-  "dinshunoslik": {
-    "name": "Dinshunoslik",
+  "dasturiy_injiniring_hisob": {
+    "name": "Hisob",
     "questions": [
       {
         "id": 1,
-        "q": "Muhammad s.a.v. qachon o’zini Allohning rasuli (elchisi) deb e’lon qildi?",
+        "q": "1 + 1/2 + 1/3 + 1/4 + ... uchun qator yaqinlashishining zaruriy sharti bajarilishini tekshiring.",
         "options": [
-          "A) 610 y",
-          "B) 622 y",
-          "C) 570 y",
-          "D) 632 y"
+          "lim(n→∞) aₙ = 0, bajariladi",
+          "lim(n→∞) aₙ = 1, bajarilmaydi",
+          "lim(n→∞) aₙ = ∞, bajarilmaydi",
+          "Qator uzoqlashuvchi, bajarilmaydi"
         ],
-        "a": "A) 610 y"
+        "a": "A) lim(n→∞) aₙ = 0, bajariladi"
       },
       {
         "id": 2,
-        "q": "Ja’fariya qaysi yo’nalishga mansub?",
+        "q": "Ushbu funksiyaning birinchi tartibli xususiy hosilalarini toping: f(x, y) = 5x²y³",
         "options": [
-          "A) Shia",
-          "B) Sunniylik",
-          "C) Mutaziliya",
-          "D) Xavorijlar"
+          "f'ₓ = 10xy³;  f'ᵧ = 15x²y²",
+          "f'ₓ = 5xy³;   f'ᵧ = 15x²y²",
+          "f'ₓ = 10x²y;  f'ᵧ = 5xy³",
+          "f'ₓ = 10xy²;  f'ᵧ = 15x³y²"
         ],
-        "a": "A) Shia"
+        "a": "A) f'ₓ = 10xy³;  f'ᵧ = 15x²y²"
       },
       {
         "id": 3,
-        "q": "Buddizm dini qachon paydo bo’ldi?",
+        "q": "z = x² + 3y² + 3xy − 5x + 4y − 8 funksiya ekstremumi mavjudligini Δ determinant orqali aniqlang.",
         "options": [
-          "A) Miloddan avv. VI-V asrda",
-          "B) Miloddan avv. V asrda",
-          "C) Milodiy I asrda",
-          "D) Miloddan avv. XIII asrda"
+          "Δ = 3 > 0, ekstremum mavjud",
+          "Δ = −3 < 0, ekstremum mavjud emas",
+          "Δ = 0, shubhali holat",
+          "Δ = 12 > 0, ekstremum mavjud"
         ],
-        "a": "A) Miloddan avv. VI-V asrda"
+        "a": "A) Δ = 3 > 0, ekstremum mavjud"
       },
       {
         "id": 4,
-        "q": "Islom dinida Xulofoi Roshidinlar  ko`rsatilgan javobni toping?",
+        "q": "Integrallash sohasi D = {(x,y): 1 ≤ x ≤ 3, 0 ≤ y ≤ 2x} bo'lsa, ∬D dxdy ni hisoblang.",
         "options": [
-          "A) Abu Bakr, Umar, Usmon, Ali",
-          "B) Muhammad, Ali, Hasan, Husan",
-          "C) Abu Hurayra, Ibn Hanbal, Ibn Hoshim",
-          "D) Ibrohim, Muso, Iso, Dovud"
+          "8",
+          "4",
+          "10",
+          "6"
         ],
-        "a": "A) Abu Bakr, Umar, Usmon, Ali"
+        "a": "A) 8"
       },
       {
         "id": 5,
-        "q": "Vatikan davlati nasroniylikdagi qaysi oqimning markazi hisoblanadi?",
+        "q": "Agar ∬D f(x,y) dxdy = ∫₀⁵ dx ∫[√(x+4)]^[3x+5] f(x,y) dy bo'lsa, D sohasini toping.",
         "options": [
-          "A) Katolikning",
-          "B) Pravoslavlikning",
-          "C) Protestantlikning",
-          "D) Baptistlikning"
+          "0 ≤ x ≤ 5,  √(x+4) ≤ y ≤ 3x+5",
+          "0 ≤ x ≤ 5,  0 ≤ y ≤ 3x+5",
+          "√(x+4) ≤ x ≤ 3x+5,  0 ≤ y ≤ 5",
+          "0 ≤ x ≤ 5,  x+4 ≤ y ≤ 3x+5"
         ],
-        "a": "A) Katolikning"
+        "a": "A) 0 ≤ x ≤ 5,  √(x+4) ≤ y ≤ 3x+5"
       },
       {
         "id": 6,
-        "q": "Qur’onda nechta sura bor ?",
+        "q": "Agar ∭Ω f dxdydz = ∫₂⁵ dx ∫[2x−1]^[3x+2] dy ∫[3x+4y−1]^[4x+5y+1] f dz bo'lsa, Ω sohasini toping.",
         "options": [
-          "A) 114",
-          "B) 124",
-          "C) 144",
-          "D) 104"
+          "2 ≤ x ≤ 5,  2x−1 ≤ y ≤ 3x+2,  3x+4y−1 ≤ z ≤ 4x+5y+1",
+          "2 ≤ x ≤ 5,  0 ≤ y ≤ 3x+2,  0 ≤ z ≤ 4x+5y+1",
+          "x∈[2,5],  y∈[2x, 3x],  z∈[3x, 4x]"
         ],
-        "a": "A) 114"
+        "a": "A) 2 ≤ x ≤ 5,  2x−1 ≤ y ≤ 3x+2,  3x+4y−1 ≤ z ≤ 4x+5y+1"
       },
       {
         "id": 7,
-        "q": "Buddizmda ishongan  kishining asosiy  maqsadi nima?",
+        "q": "Ushbu funksiyaning birinchi tartibli xususiy hosilalarini toping: f(x, y) = −2x³y⁴",
         "options": [
-          "A) Qayta tug`ilish zanjiridan o`tish",
-          "B) \"Muqaddas  qadamjo\"larga sig’inish;",
-          "C) Rohiblikni qabul qilish",
-          "D) Ilohlarga  sig’inish"
+          "f'ₓ = −6x²y⁴;  f'ᵧ = −8x³y³",
+          "f'ₓ = −6x³y⁴;  f'ᵧ = −8x²y³",
+          "f'ₓ = −2x²y⁴;  f'ᵧ = −2x³y³",
+          "f'ₓ = −6x²y³;  f'ᵧ = −8x³y⁴"
         ],
-        "a": "A) Qayta tug`ilish zanjiridan o`tish"
+        "a": "A) f'ₓ = −6x²y⁴;  f'ᵧ = −8x³y³"
       },
       {
         "id": 8,
-        "q": "Buddaviylik dinining asoschisi Siddhartha Gautama kim bo`lgan?",
+        "q": "Integrallash sohasi D = {(x,y): 2 ≤ x ≤ 4, 2x+1 ≤ y ≤ 4x+1} bo'lsa, ∬D 5 dxdy ni hisoblang.",
         "options": [
-          "A) Shahzoda;",
-          "B) Dehqon;",
-          "C) Cho`pon;",
-          "D) Savdogar;"
+          "60",
+          "30",
+          "45",
+          "50"
         ],
-        "a": "A) Shahzoda;"
+        "a": "A) 60"
       },
       {
         "id": 9,
-        "q": "Quyidagilardan qaysi biri dinning jamiyatda bajaradigan vazifalaridan emas?",
+        "q": "1 − 1/2 + 1/3 − 1/4 + ... uchun qator yaqinlashishining zaruriy sharti bajarilishini tekshiring.",
         "options": [
-          "A) Qiynash;",
-          "B) Tasalli berish, to`ldirish;",
-          "C) Qonuniylashtirish;",
-          "D) Boshqarish;"
+          "lim(n→∞) |aₙ| = 0, bajariladi",
+          "lim(n→∞) aₙ = 1, bajarilmaydi",
+          "lim(n→∞) aₙ ≠ 0, bajarilmaydi",
+          "Qator uzoqlashuvchi"
         ],
-        "a": "A) Qiynash;"
+        "a": "A) lim(n→∞) |aₙ| = 0, bajariladi"
       },
       {
         "id": 10,
-        "q": "Xristianlikning muqaddas manbasi?",
+        "q": "Agar ∭Ω f dxdydz = ∫₁³ dx ∫[2x+1]^[3x+5] dy ∫[x+y+2]^[2x+4y+1] f dz bo'lsa, Ω sohasini toping.",
         "options": [
-          "A) Injil",
-          "B) Qadimgi Ahd",
-          "C) Talmud",
-          "D) Zabur"
+          "1 ≤ x ≤ 3,  2x+1 ≤ y ≤ 3x+5,  x+y+2 ≤ z ≤ 2x+4y+1",
+          "1 ≤ x ≤ 3,  0 ≤ y ≤ 3x+5,  0 ≤ z ≤ 2x+4y+1",
+          "x∈[1,3],  y∈[2x+1, 3x+5],  z∈[0, 1]"
         ],
-        "a": "A) Injil"
+        "a": "A) 1 ≤ x ≤ 3,  2x+1 ≤ y ≤ 3x+5,  x+y+2 ≤ z ≤ 2x+4y+1"
       },
       {
         "id": 11,
-        "q": "Islom dini qachon paydo bo’ldi?",
+        "q": "z = x² + 3y² + 4xy − 2x + y + 2 funksiya ekstremumi mavjudligini Δ determinant orqali aniqlang.",
         "options": [
-          "A) Milodning VII asrida",
-          "B) Milodgacha V asrda",
-          "C) Milodning I asrida",
-          "D) Milodning VI asrida"
+          "Δ = −4 < 0, ekstremum mavjud emas",
+          "Δ = 4 > 0, ekstremum mavjud",
+          "Δ = 0, shubhali holat",
+          "Δ = 8 > 0, ekstremum mavjud"
         ],
-        "a": "A) Milodning VII asrida"
+        "a": "A) Δ = −4 < 0, ekstremum mavjud emas"
       },
       {
         "id": 12,
-        "q": "O‘zining kelib chiqishini o‘simliklar yoki hayvonlarning ma’lum bir turlaridan kelib chiqqan deb hisoblovchi eng qadimgi diniy ta’limot qanday nomlanadi?",
+        "q": "D = {(x,y): 1 ≤ x ≤ 5, 2x−1 ≤ y ≤ 2x+4} bo'lsa, ∬D f dxdy takroriy integralga o'tkazilsa:",
         "options": [
-          "A) Totemizm;",
-          "B) Magiya;",
-          "C) Fetishizm;",
-          "D) Animizm;"
+          "∫₁⁵ dx ∫[2x−1]^[2x+4] f dy",
+          "∫₁⁵ dx ∫₀^[2x+4] f dy",
+          "∫[2x−1]^[2x+4] dy ∫₁⁵ f dx",
+          "∫₀¹ dx ∫[2x−1]^[2x+4] f dy"
         ],
-        "a": "A) Totemizm;"
+        "a": "A) ∫₁⁵ dx ∫[2x−1]^[2x+4] f dy"
       },
       {
         "id": 13,
-        "q": "O’zbеkistоnda qancha kоnfеssiya mavjud ?",
+        "q": "Ushbu funksiyaning birinchi tartibli xususiy hosilalarini toping: f(x, y) = 7x²y⁵",
         "options": [
-          "A) 16 ta",
-          "B) 15 ta",
-          "C) 18 ta",
-          "D) 20 ta"
+          "f'ₓ = 14xy⁵;  f'ᵧ = 35x²y⁴",
+          "f'ₓ = 7xy⁵;   f'ᵧ = 35x²y⁵",
+          "f'ₓ = 14x²y;  f'ᵧ = 14xy⁴",
+          "f'ₓ = 14xy⁴;  f'ᵧ = 35x³y⁴"
         ],
-        "a": "A) 16 ta"
+        "a": "A) f'ₓ = 14xy⁵;  f'ᵧ = 35x²y⁴"
       },
       {
         "id": 14,
-        "q": "Islom dinining  asosiy bayramlari qaysilar ?",
+        "q": "Agar ∭Ω f dxdydz = ∫₋₁¹ dx ∫[3x+4]^[4x+5] dy ∫[x+4y+1]^[5x+3y+2] f dz bo'lsa, Ω sohasini toping.",
         "options": [
-          "A) Ramazon hayiti, Qurbon hayiti",
-          "B) Pasxa, Rojdestvo",
-          "C) Xatna, nikoh,",
-          "D) Navro’z, Mavlud"
+          "−1 ≤ x ≤ 1,  3x+4 ≤ y ≤ 4x+5,  x+4y+1 ≤ z ≤ 5x+3y+2",
+          "−1 ≤ x ≤ 1,  0 ≤ y ≤ 4x+5,  0 ≤ z ≤ 5x+3y+2",
+          "x∈[−1,1],  y∈[3x, 4x],  z∈[x, 5x]"
         ],
-        "a": "A) Ramazon hayiti, Qurbon hayiti"
+        "a": "A) −1 ≤ x ≤ 1,  3x+4 ≤ y ≤ 4x+5,  x+4y+1 ≤ z ≤ 5x+3y+2"
       },
       {
         "id": 15,
-        "q": "S. Gautama necha yoshida saroyni tark qiladi?",
+        "q": "z = −2x² + y² + 3xy − 2x + y + 2 funksiya ekstremumi mavjudligini Δ determinant orqali aniqlang.",
         "options": [
-          "A) 30 yosh;",
-          "B) 20 yosh;",
-          "C) 33 yosh;",
-          "D) 40 yosh;"
+          "Δ = −17 < 0, ekstremum mavjud emas",
+          "Δ = 17 > 0, ekstremum mavjud",
+          "Δ = 0, shubhali holat",
+          "Δ = 5 > 0, ekstremum mavjud"
         ],
-        "a": "A) 30 yosh;"
+        "a": "A) Δ = −17 < 0, ekstremum mavjud emas"
       },
       {
         "id": 16,
-        "q": "Bibliyaning xristianlikka oid qismi qanday nomlanadi?",
+        "q": "1/2 + 2/3 + 3/4 + ... uchun qator yaqinlashishining zaruriy sharti bajarilishini tekshiring.",
         "options": [
-          "A) Yangi Ahd",
-          "B) Tavrot",
-          "C) Eski Ahd",
-          "D) Injil"
+          "lim(n→∞) aₙ = 1 ≠ 0, bajarilmaydi",
+          "lim(n→∞) aₙ = 0, bajariladi",
+          "lim(n→∞) aₙ = ∞, bajarilmaydi",
+          "Qator yaqinlashuvchi, bajariladi"
         ],
-        "a": "A) Yangi Ahd"
+        "a": "A) lim(n→∞) aₙ = 1 ≠ 0, bajarilmaydi"
       },
       {
         "id": 17,
-        "q": "Ilk ibtidoiy diniy tasavvurlarda sehrgarlik qanday nomlangan?",
+        "q": "Integrallash sohasi D = {(x,y): 1 ≤ x ≤ 4, x²+1 ≤ y ≤ 2x²+1} bo'lsa, ∬D 3 dxdy ni hisoblang.",
         "options": [
-          "A) Magiya;",
-          "B) Totemizm;",
-          "C) Fetishizm;",
-          "D) Animizm;"
+          "63",
+          "21",
+          "126",
+          "42"
         ],
-        "a": "A) Magiya;"
+        "a": "A) 63"
       },
       {
         "id": 18,
-        "q": "Muhammad s.a.v. pay`gambar tug`ilgan kuniga bag’ishlangan bayramning nomi qanday ataladi?",
+        "q": "Ushbu funksiyaning birinchi tartibli xususiy hosilalarini toping: f(x, y) = sin(x)·cos(y)",
         "options": [
-          "A) Mavlud",
-          "B) Qadr kechasi",
-          "C) Qurbon hayit",
-          "D) Ramazon hayit"
+          "f'ₓ = cos(x)·cos(y);   f'ᵧ = −sin(x)·sin(y)",
+          "f'ₓ = −cos(x)·cos(y);  f'ᵧ = sin(x)·sin(y)",
+          "f'ₓ = sin(x)·cos(y);   f'ᵧ = cos(x)·sin(y)",
+          "f'ₓ = cos(x);          f'ᵧ = −sin(y)"
         ],
-        "a": "A) Mavlud"
+        "a": "A) f'ₓ = cos(x)·cos(y);  f'ᵧ = −sin(x)·sin(y)"
       },
       {
         "id": 19,
-        "q": "“Xushxabar” deb tarjima qilingan nasroniylikning muqaddas kitoblaridan biri…?",
+        "q": "Integrallash sohasi D = {(x,y): 0 ≤ x ≤ 2, 2x³+5 ≤ y ≤ 3x³+5} bo'lsa, ∬D 4 dxdy ni hisoblang.",
         "options": [
-          "A) Injil",
-          "B) Tavrot",
-          "C) Muqaddas yozuvlar",
-          "D) Apokalipsis"
+          "16",
+          "8",
+          "32",
+          "12"
         ],
-        "a": "A) Injil"
+        "a": "A) 16"
       },
       {
         "id": 20,
-        "q": "Din so`zining ma’nosi qanday?",
+        "q": "1/2 + 1/4 + 1/9 + 1/16 + ... uchun qator yaqinlashishining zaruriy sharti bajarilishini tekshiring.",
         "options": [
-          "A) Ishonch;",
-          "B) Quvonch;",
-          "C) Mukofot;",
-          "D) Ezgulik;"
+          "lim(n→∞) aₙ = 0, bajariladi",
+          "lim(n→∞) aₙ = 1, bajarilmaydi",
+          "lim(n→∞) aₙ = ∞, bajarilmaydi",
+          "Shart bajarilmaydi"
         ],
-        "a": "A) Ishonch;"
+        "a": "A) lim(n→∞) aₙ = 0, bajariladi"
       },
       {
         "id": 21,
-        "q": "S.Gautama haqiqatni anglashda necha kun daraxt tagida o`tirdi?",
+        "q": "Agar ∭Ω f dxdydz = ∫₁³ dx ∫[√(x+3)]^[4x+5] dy ∫[√(x+y+1)]^[5x+y+4] f dz bo'lsa, Ω sohasini toping.",
         "options": [
-          "A) 49 kun;",
-          "B) 44 kun;",
-          "C) 30 kun.",
-          "D) 55 kun;"
+          "1 ≤ x ≤ 3,  √(x+3) ≤ y ≤ 4x+5,  √(x+y+1) ≤ z ≤ 5x+y+4",
+          "1 ≤ x ≤ 3,  0 ≤ y ≤ 4x+5,  0 ≤ z ≤ 5x+y+4",
+          "x∈[1,3],  y∈[x, 4x],  z∈[y, 5x]"
         ],
-        "a": "A) 49 kun;"
+        "a": "A) 1 ≤ x ≤ 3,  √(x+3) ≤ y ≤ 4x+5,  √(x+y+1) ≤ z ≤ 5x+y+4"
       },
       {
         "id": 22,
-        "q": "Islom dinining muqaddas kitobi nima deb ataladi?",
+        "q": "D = {(x,y): 2 ≤ x ≤ 5, x² ≤ y ≤ x³} bo'lsa, ∬D f dxdy takroriy integralga o'tkazilsa:",
         "options": [
-          "A) Qur’on",
-          "B) Avesto",
-          "C) Tavrot",
-          "D) Tripitaka"
+          "∫₂⁵ dx ∫[x²]^[x³] f dy",
+          "∫₂⁵ dx ∫₀^[x³] f dy",
+          "∫[x²]^[x³] dy ∫₂⁵ f dx",
+          "∫₀² dx ∫[x²]^[x³] f dy"
         ],
-        "a": "A) Qur’on"
+        "a": "A) ∫₂⁵ dx ∫[x²]^[x³] f dy"
       },
       {
         "id": 23,
-        "q": "Islomda Ramazon oyi ro‘zasi necha kun tutiladi?",
+        "q": "z = 3x² + y² + 2xy − 2x + y + 2 funksiya ekstremumi mavjudligini Δ determinant orqali aniqlang.",
         "options": [
-          "A) 30 kun",
-          "B) 70 kun",
-          "C) 33 kun",
-          "D) 40 kun"
+          "Δ = 8 > 0, ekstremum mavjud",
+          "Δ = −8 < 0, ekstremum mavjud emas",
+          "Δ = 0, shubhali holat",
+          "Δ = 4 > 0, ekstremum mavjud"
         ],
-        "a": "A) 30 kun"
+        "a": "A) Δ = 8 > 0, ekstremum mavjud"
       },
       {
         "id": 24,
-        "q": "Buddaviylik dinida inson erishishi mumkin bo`lgan oliy daraja qanaday nomlanadi?",
+        "q": "Ushbu funksiyaning birinchi tartibli xususiy hosilalarini toping: f(x, y) = sin(x) + cos(y)",
         "options": [
-          "A) Nirvana;",
-          "B) Rohib;",
-          "C) Ruhoniy;",
-          "D) Ravvin;"
+          "f'ₓ = cos(x);   f'ᵧ = −sin(y)",
+          "f'ₓ = −cos(x);  f'ᵧ = sin(y)",
+          "f'ₓ = sin(x);   f'ᵧ = cos(y)",
+          "f'ₓ = cos(x);   f'ᵧ = sin(y)"
         ],
-        "a": "A) Nirvana;"
+        "a": "A) f'ₓ = cos(x);  f'ᵧ = −sin(y)"
       },
       {
         "id": 25,
-        "q": "Odamlar guruhi (urug’i, qabilasi) bilan hayvon va  o’simliklarning muayyan turi o’rtasida g’ayri tabiiy aloqadorlik, qon-qarindoshlik borligi  to’g’risidagi ishonch  (e’tiqod) qaysi dinning xususiyati?",
+        "q": "D = {(x,y): 3 ≤ x ≤ 7, 2x−1 ≤ y ≤ x³} bo'lsa, ∬D f dxdy takroriy integralga o'tkazilsa:",
         "options": [
-          "A) Totemizm",
-          "B) Fetishizm",
-          "C) Magiya",
-          "D) Animizm"
+          "∫₃⁷ dx ∫[2x−1]^[x³] f dy",
+          "∫₃⁷ dx ∫₀^[x³] f dy",
+          "∫[2x−1]^[x³] dy ∫₃⁷ f dx",
+          "∫₀³ dx ∫[2x−1]^[x³] f dy"
         ],
-        "a": "A) Totemizm"
+        "a": "A) ∫₃⁷ dx ∫[2x−1]^[x³] f dy"
       },
       {
         "id": 26,
-        "q": "Qaysi din ta`limotida inson vafotidan keyin boshqa narsa ko`rinishida qayta tug`iladi?",
+        "q": "z = 3x² + 2y² − 4xy − 2x + y + 2 funksiya ekstremumi mavjudligini Δ determinant orqali aniqlang.",
         "options": [
-          "A) Buddaviylik;",
-          "B) Xristianlik;",
-          "C) Zardushtiylik;",
-          "D) Yahudiylik;"
+          "Δ = 8 > 0, ekstremum mavjud",
+          "Δ = −8 < 0, ekstremum mavjud emas",
+          "Δ = 0, shubhali holat",
+          "Δ = 12 > 0, ekstremum mavjud"
         ],
-        "a": "A) Buddaviylik;"
+        "a": "A) Δ = 8 > 0, ekstremum mavjud"
       },
       {
         "id": 27,
-        "q": "E’tiqod qiluvchilarning soniga ko‘ra eng katta jahon dini qaysi?",
+        "q": "1/3 + 2/5 + 3/7 + 4/9 + ... qatorning umumiy uₙ hadini toping.",
         "options": [
-          "A) Xristianlik",
-          "B) Hinduiylik",
-          "C) Buddizm",
-          "D) Islom"
+          "uₙ = n / (2n+1)",
+          "uₙ = n / (n+2)",
+          "uₙ = n / (2n−1)",
+          "uₙ = (n+1) / (2n+1)"
         ],
-        "a": "A) Xristianlik"
+        "a": "A) uₙ = n / (2n+1)"
       },
       {
         "id": 28,
-        "q": "Islom dinida qanday yo’nalishlari bor?",
+        "q": "Agar ∭Ω f dxdydz = ∫₂⁴ dx ∫[√(2x+3)]^[5x+4] dy ∫[√(2x+y+1)]^[3x+4y+5] f dz bo'lsa, Ω sohasini toping.",
         "options": [
-          "A) Sunniylik va shialik",
-          "B) Modernizm va fundamentalizm",
-          "C) Ismoiliylik va  vahobiylik",
-          "D) Bahoiylik va bobiylik"
+          "2 ≤ x ≤ 4,  √(2x+3) ≤ y ≤ 5x+4,  √(2x+y+1) ≤ z ≤ 3x+4y+5",
+          "2 ≤ x ≤ 4,  0 ≤ y ≤ 5x+4,  0 ≤ z ≤ 3x+4y+5",
+          "x∈[2,4],  y∈[√(2x), 5x],  z∈[√(2y), 3x]"
         ],
-        "a": "A) Sunniylik va shialik"
-      },
-      {
-        "id": 29,
-        "q": "Buddaviylikda Budda o`tirgan daraxt qanday nomlandi?",
-        "options": [
-          "A) Botha;",
-          "B) Trishna;",
-          "C) Mayya;",
-          "D) Gautama;"
-        ],
-        "a": "A) Botha;"
-      },
-      {
-        "id": 30,
-        "q": "Xristianlikning qaysi oqimi Gʼarbiy Yevropa va Lotin Аmerikasida eng koʼp tarqalgan?",
-        "options": [
-          "A) Katolitsizm",
-          "B) Protestantsizm",
-          "C) Pravoslavie",
-          "D) Baptizm"
-        ],
-        "a": "A) Katolitsizm"
-      },
-      {
-        "id": 31,
-        "q": "Dinning ibtidoiy shakllari qaysilar?",
-        "options": [
-          "A) Fetishizm, totemizm, magiya, animizm",
-          "B) Magiya, iudaizm, jaynizm, zorastrizm",
-          "C) Xristianlik, totemizm, sintoizm, tabiatni ilohiylashtirish",
-          "D) Fetishizm, buddizm, qabila boshliqlarining shaxsiga sig’inish,"
-        ],
-        "a": "A) Fetishizm, totemizm, magiya, animizm"
-      },
-      {
-        "id": 32,
-        "q": "Buddaga dastlab necha kishi hamroh bo`ladi?",
-        "options": [
-          "A) 5 kishi;",
-          "B) 8 kishi;",
-          "C) 6 kishi;",
-          "D) 7 kishi;"
-        ],
-        "a": "A) 5 kishi;"
-      },
-      {
-        "id": 33,
-        "q": "Xristianlik dinida protestantizm oqimi qachon ajralib chiqqan?",
-        "options": [
-          "A) 1517 yilda",
-          "B) 1532 yilda",
-          "C) 1054 yilda",
-          "D) 1534 yilda"
-        ],
-        "a": "A) 1517 yilda"
-      },
-      {
-        "id": 34,
-        "q": "Odamlarga, narsalarga va atrof olamdagi hodisalarga g’ayritabiiy yo’l bilan ta’sir qilish mumkinligiga bo’lgan ishonch asosidagi e’tiqodlar va maroismlar qaysi dinning xususiyati?",
-        "options": [
-          "A) Magiya",
-          "B) Totemizm",
-          "C) Fetishizm",
-          "D) Animizm"
-        ],
-        "a": "A) Magiya"
-      },
-      {
-        "id": 35,
-        "q": "Buddaviylik dinida azoblardan qutulish uchun inson qanday holatga erishishi kerak?",
-        "options": [
-          "A) Nirvana;",
-          "B) Meditatsiya;",
-          "C) Donolik;",
-          "D) Trishna;"
-        ],
-        "a": "A) Nirvana;"
-      },
-      {
-        "id": 36,
-        "q": "“Yetti sirli marosim” qaysi dinga tegishli?",
-        "options": [
-          "A) Xristianlik",
-          "B) Sintoiylik",
-          "C) Hinduiylik",
-          "D) Buddizm"
-        ],
-        "a": "A) Xristianlik"
-      },
-      {
-        "id": 37,
-        "q": "Dinning kelib chiqishi haqidagi asosiy qarashlar quyidagilardan qaysi biri?",
-        "options": [
-          "A) Diniy va ilmiy",
-          "B) Metafizik va dialektik",
-          "C) Idealistik va materialistik",
-          "D) Nasroniylarcha va musulmonlarcha"
-        ],
-        "a": "A) Diniy va ilmiy"
-      },
-      {
-        "id": 38,
-        "q": "Vijdоn erkinligi va diniy tashkilоtlar to’g’risidagi qоnun qachоn qabul qilingan ?",
-        "options": [
-          "A) 2021-yil 4-may",
-          "B) 2020-yil 1-avgust",
-          "C) 2019-yil 1-sentabr",
-          "D) 2022-yil 14-iyun"
-        ],
-        "a": "A) 2021-yil 4-may"
-      },
-      {
-        "id": 39,
-        "q": "Provaslav cherkovi qachon mustaqil bo‘lgan?",
-        "options": [
-          "A) 1054- yilda",
-          "B) 988-yilda",
-          "C) 395-yilda",
-          "D) 1448-yilda"
-        ],
-        "a": "A) 1054- yilda"
-      },
-      {
-        "id": 40,
-        "q": "Xristianlik dinida eng oxirida vujudga kelgan yo’nalish qaysi?",
-        "options": [
-          "A) Protestantlik",
-          "B) Baptizm",
-          "C) Katolik",
-          "D) Pravoslav"
-        ],
-        "a": "A) Protestantlik"
-      },
-      {
-        "id": 41,
-        "q": "Har xil buyumlar yoki tumorlarni balo-qazolardan asrovchi yoki baxt-saodatga erishtiruvchi eng qadimgi diniy ta’limot qanday nomlanadi?",
-        "options": [
-          "A) Fetishizm;",
-          "B) Totemizm;",
-          "C) Magiya;",
-          "D) Animizm;"
-        ],
-        "a": "A) Fetishizm;"
-      },
-      {
-        "id": 42,
-        "q": "Sintoiylik dini qaysi davlatda vujudga kelgan?",
-        "options": [
-          "A) Yaponiya",
-          "B) Tibet",
-          "C) Xitoy",
-          "D) Hindiston"
-        ],
-        "a": "A) Yaponiya"
-      },
-      {
-        "id": 43,
-        "q": "Yahudiylikda  ibodatxona qanday nomlanadi?",
-        "options": [
-          "A) sinagoga",
-          "B) masjid",
-          "C) cherkov",
-          "D) yeparxiya"
-        ],
-        "a": "A) sinagoga"
+        "a": "A) 2 ≤ x ≤ 4,  √(2x+3) ≤ y ≤ 5x+4,  √(2x+y+1) ≤ z ≤ 3x+4y+5"
       },
       {
         "id": 44,
-        "q": "Jahonda e’tiqod qiluvchilari soni jihatidan  eng katta milliy din qaysi ?",
+        "q": "Integrallash sohasi D = {(x,y): 2 ≤ x ≤ 3, x²−1 ≤ y ≤ 4x²−1} bo'lsa, ∬D 2 dxdy ni hisoblang.",
         "options": [
-          "A) Hinduizm",
-          "B) Daosizm",
-          "C) Yahudiylik",
-          "D) Sintoizm"
+          "38",
+          "19",
+          "76",
+          "24"
         ],
-        "a": "A) Hinduizm"
+        "a": "A) 38"
       },
       {
         "id": 45,
-        "q": "Konfutsiy ta’limotida qaysi muammolar asosiy o’rin tutadi?",
+        "q": "Agar ∭Ω f dxdydz = ∫₃⁷ dx ∫[√(2x+5)]^[√(6x+1)] dy ∫[√(2x+3y−2)]^[√(5x+6y+1)] f dz bo'lsa, Ω sohasini toping.",
         "options": [
-          "A) Ijtimoiy-axloqiy",
-          "B) Siyosiy",
-          "C) Falsafiy",
-          "D) Estetik"
+          "3 ≤ x ≤ 7,  √(2x+5) ≤ y ≤ √(6x+1),  √(2x+3y−2) ≤ z ≤ √(5x+6y+1)",
+          "3 ≤ x ≤ 7,  0 ≤ y ≤ √(6x+1),  0 ≤ z ≤ √(5x+6y+1)",
+          "x∈[3,7],  y∈[2x, 6x],  z∈[3y, 6y]"
         ],
-        "a": "A) Ijtimoiy-axloqiy"
+        "a": "A) 3 ≤ x ≤ 7,  √(2x+5) ≤ y ≤ √(6x+1),  √(2x+3y−2) ≤ z ≤ √(5x+6y+1)"
       },
       {
         "id": 46,
-        "q": "Daosizm qayerda paydo bo`lgan?",
+        "q": "D = {(x,y): 0 ≤ x ≤ π/4, sin(x) ≤ y ≤ cos(x)} bo'lsa, ∬D f dxdy takroriy integralga o'tkazilsa:",
         "options": [
-          "A) Xitoy",
-          "B) Yaponiya",
-          "C) Tibet",
-          "D) Hindiston"
+          "∫₀^[π/4] dx ∫[sin x]^[cos x] f dy",
+          "∫₀^[π/4] dx ∫₀^[cos x] f dy",
+          "∫[sin x]^[cos x] dy ∫₀^[π/4] f dx",
+          "∫₀^π dx ∫[sin x]^[cos x] f dy"
         ],
-        "a": "A) Xitoy"
+        "a": "A) ∫₀^[π/4] dx ∫[sin x]^[cos x] f dy"
       },
       {
         "id": 47,
-        "q": "Konfutsiychilikning asoschisi kim ?",
+        "q": "z = 4x² − y² + 6xy + 8x + 9y − 3 funksiya ekstremumi mavjudligini Δ determinant orqali aniqlang.",
         "options": [
-          "A) Kun Szi",
-          "B) Pan Gu",
-          "C) Lao Szi",
-          "D) SHan Di"
+          "Δ = −52 < 0, ekstremum mavjud emas",
+          "Δ = 52 > 0, ekstremum mavjud",
+          "Δ = 0, shubhali holat",
+          "Δ = 16 > 0, ekstremum mavjud"
         ],
-        "a": "A) Kun Szi"
+        "a": "A) Δ = −52 < 0, ekstremum mavjud emas"
       },
       {
         "id": 48,
-        "q": "Sintoizmning bosh xudosi kim?",
+        "q": "1/3 + 2/9 + 3/27 + 4/81 + ... qatorning umumiy uₙ hadini toping.",
         "options": [
-          "A) Quyosh  ma’budasi Amaterasu",
-          "B) Yaratuvchi xudo Brahma",
-          "C) Oxirgi paygambar Jina",
-          "D) Saqlovchi xudo Vishnu"
+          "uₙ = n / 3ⁿ",
+          "uₙ = n / (3n)",
+          "uₙ = 1 / 3ⁿ",
+          "uₙ = n / 3ⁿ⁻¹"
         ],
-        "a": "A) Quyosh  ma’budasi Amaterasu"
+        "a": "A) uₙ = n / 3ⁿ"
       },
       {
         "id": 49,
-        "q": "Jaynizm qaysi davlatning milliy dinidir?",
+        "q": "Ushbu funksiyaning birinchi tartibli xususiy hosilalarini toping: f(x, y) = x²eʸ",
         "options": [
-          "A) Hindiston",
-          "B) Yaponiya",
-          "C) Xitoy",
-          "D) Mongoliya"
+          "f'ₓ = 2xeʸ;   f'ᵧ = x²eʸ",
+          "f'ₓ = x²eʸ;   f'ᵧ = 2xeʸ",
+          "f'ₓ = 2x;     f'ᵧ = eʸ",
+          "f'ₓ = 2xeˣ;  f'ᵧ = x²eˣ"
         ],
-        "a": "A) Hindiston"
+        "a": "A) f'ₓ = 2xeʸ;  f'ᵧ = x²eʸ"
       },
       {
         "id": 50,
-        "q": "Yahudiylik ta`limotida ular bilishi kerak bo`lgan ko`rsatmalar qanchani tashkil etadi?",
+        "q": "Agar ∭Ω f dxdydz = ∫₃⁶ dx ∫[3x+1]^[x²+2] dy ∫[√(2x+3y−2)]^[x²+y²+1] f dz bo'lsa, Ω sohasini toping.",
         "options": [
-          "A) 613 ta;",
-          "B) 365;",
-          "C) 546 ta;",
-          "D) 248;"
+          "3 ≤ x ≤ 6,  3x+1 ≤ y ≤ x²+2,  √(2x+3y−2) ≤ z ≤ x²+y²+1",
+          "3 ≤ x ≤ 6,  0 ≤ y ≤ x²+2,  0 ≤ z ≤ x²+y²+1",
+          "x∈[3,6],  y∈[3x, x²],  z∈[√y, x²+y²]"
         ],
-        "a": "A) 613 ta;"
+        "a": "A) 3 ≤ x ≤ 6,  3x+1 ≤ y ≤ x²+2,  √(2x+3y−2) ≤ z ≤ x²+y²+1"
       },
       {
         "id": 51,
-        "q": "Yahudiylik ta`limotida ular bilishi kerak bo`lgan taqiqlar qanchani tashkil etadi?",
+        "q": "z = x² − 5y² − xy + 6x + 5y − 9 funksiya ekstremumi mavjudligini Δ determinant orqali aniqlang.",
         "options": [
-          "A) 365;",
-          "B) 613 ta;",
-          "C) 546 ta;",
-          "D) 248;"
+          "Δ = −21 < 0, ekstremum mavjud emas",
+          "Δ = 21 > 0, ekstremum mavjud",
+          "Δ = 0, shubhali holat",
+          "Δ = −19 < 0, ekstremum mavjud emas"
         ],
-        "a": "A) 365;"
+        "a": "A) Δ = −21 < 0, ekstremum mavjud emas"
       },
       {
         "id": 52,
-        "q": "Inson o‘zini o‘rab turgan muhitda ruhlarning mavjudligiga ishonuvchi eng qadimgi diniy ta’limot qanday nomlanadi?",
+        "q": "∑(n=1 → ∞) n/(n+1) qatorning dastlabki ikkita hadining yig'indisini toping.",
         "options": [
-          "A) Animizm;",
-          "B) Fetishizm;",
-          "C) Magiya;",
-          "D) Totemizm;"
+          "7/6",
+          "1/2",
+          "2/3",
+          "3/2"
         ],
-        "a": "A) Animizm;"
+        "a": "A) 7/6"
       },
       {
         "id": 53,
-        "q": "Hinduizm dinidagi oliy xudoni toping?",
+        "q": "D = {(x,y): 0 ≤ x ≤ π/2, sin(x) ≤ y ≤ eˣ} bo'lsa, ∬D f dxdy takroriy integralga o'tkazilsa:",
         "options": [
-          "A) Brahma;",
-          "B) Shiva;",
-          "C) Sinto;",
-          "D) Vishnu;"
+          "∫₀^[π/2] dx ∫[sin x]^[eˣ] f dy",
+          "∫₀^[π/2] dx ∫₀^[eˣ] f dy",
+          "∫[sin x]^[eˣ] dy ∫₀^[π/2] f dx",
+          "∫₀¹ dx ∫[sin x]^[eˣ] f dy"
         ],
-        "a": "A) Brahma;"
+        "a": "A) ∫₀^[π/2] dx ∫[sin x]^[eˣ] f dy"
       },
       {
         "id": 54,
-        "q": "Konfutsiyning shogirdlari qancha bo`lgan?",
+        "q": "Integrallash sohasi D = {(x,y): 1 ≤ x ≤ 2, 4x³+7 ≤ y ≤ 8x³+7} bo'lsa, ∬D 2 dxdy ni hisoblang.",
         "options": [
-          "A) 3 ming;",
-          "B) 2,5 ming;",
-          "C) Shogirdlari bo`lmagan.",
-          "D) 72 ta;"
+          "30",
+          "15",
+          "60",
+          "45"
         ],
-        "a": "A) 3 ming;"
+        "a": "A) 30"
       },
       {
         "id": 55,
-        "q": "Quyidagi milliy dinlarning qaysi biri samoviy dinlardan hisoblanadi?",
+        "q": "Ushbu funksiyaning birinchi tartibli xususiy hosilalarini toping: f(x, y) = sin(x)·eʸ",
         "options": [
-          "A) Yahudiylik;",
-          "B) Hinduizm;",
-          "C) Sintoizm;",
-          "D) Konfutsiylik;"
+          "f'ₓ = cos(x)·eʸ;   f'ᵧ = sin(x)·eʸ",
+          "f'ₓ = sin(x)·eʸ;   f'ᵧ = cos(x)·eʸ",
+          "f'ₓ = cos(x);      f'ᵧ = eʸ",
+          "f'ₓ = −cos(x)·eʸ;  f'ᵧ = sin(x)·eʸ"
         ],
-        "a": "A) Yahudiylik;"
+        "a": "A) f'ₓ = cos(x)·eʸ;  f'ᵧ = sin(x)·eʸ"
       },
       {
         "id": 56,
-        "q": "Avesto qaysi dinning muqaddas kitobi hisoblanadi?",
+        "q": "Agar ∭Ω f dxdydz = ∫₃⁸ dx ∫[3x+1]^[7x+2] dy ∫[x+3y+1]^[3x+5y+1] f dz bo'lsa, Ω sohasini toping.",
         "options": [
-          "A) Zardushtiylik;",
-          "B) Islom;",
-          "C) Xristianlik;",
-          "D) Yahudiylik;"
+          "3 ≤ x ≤ 8,  3x+1 ≤ y ≤ 7x+2,  x+3y+1 ≤ z ≤ 3x+5y+1",
+          "3 ≤ x ≤ 8,  0 ≤ y ≤ 7x+2,  0 ≤ z ≤ 3x+5y+1",
+          "x∈[3,8],  y∈[3x, 7x],  z∈[3y, 5y]"
         ],
-        "a": "A) Zardushtiylik;"
+        "a": "A) 3 ≤ x ≤ 8,  3x+1 ≤ y ≤ 7x+2,  x+3y+1 ≤ z ≤ 3x+5y+1"
       },
       {
         "id": 57,
-        "q": "Sinagoga so‘zining lug‘aviy ma'nosi nima?",
+        "q": "D = {(x,y): 0 ≤ x ≤ 4, √x ≤ y ≤ 4x+3} bo'lsa, ∬D f dxdy takroriy integralga o'tkazilsa:",
         "options": [
-          "A) ibodatxona",
-          "B) marosim",
-          "C) yig‘ilish",
-          "D) alohida ajratilgan joy"
+          "∫₀⁴ dx ∫[√x]^[4x+3] f dy",
+          "∫₀⁴ dx ∫₀^[4x+3] f dy",
+          "∫[√x]^[4x+3] dy ∫₀⁴ f dx",
+          "∫₀² dx ∫[√x]^[4x+3] f dy"
         ],
-        "a": "A) ibodatxona"
+        "a": "A) ∫₀⁴ dx ∫[√x]^[4x+3] f dy"
       },
       {
         "id": 58,
-        "q": "G`arb nazariyasiga ko`ra zardushtiylik dini qayerda vujudga kelgan?",
+        "q": "z = −7x² − 5y² + 6xy + x + 5y − 9 funksiya ekstremumi mavjudligini Δ determinant orqali aniqlang.",
         "options": [
-          "A) Eronda;",
-          "B) Pokistonda;",
-          "C) Xorazmda;",
-          "D) Arabistonda;"
+          "Δ = 104 > 0, ekstremum mavjud",
+          "Δ = −104 < 0, ekstremum mavjud emas",
+          "Δ = 0, shubhali holat",
+          "Δ = 70 > 0, ekstremum mavjud"
         ],
-        "a": "A) Eronda;"
+        "a": "A) Δ = 104 > 0, ekstremum mavjud"
       },
       {
         "id": 59,
-        "q": "Zardushtiylikning asosiy ta`limotiga aloqador bo`lmagan javobni toping?",
+        "q": "∑(n=1 → ∞) n/(2n+1) qatorning dastlabki ikkita hadining yig'indisini toping.",
         "options": [
-          "A) Ezgu niyat;",
-          "B) Ezgu fikr;",
-          "C) Ezgu so`z;",
-          "D) Ezgu amal;"
+          "11/15",
+          "1/3",
+          "2/5",
+          "13/15"
         ],
-        "a": "A) Ezgu niyat;"
+        "a": "A) 11/15"
       },
       {
         "id": 60,
-        "q": "Sharq nazariyasiga ko`ra zardushtiylik dini qayerda vujudga kelgan?",
+        "q": "Integrallash sohasi D = {(x,y): 3 ≤ x ≤ 4, 4x−3 ≤ y ≤ 6x−3} bo'lsa, ∬D dxdy ni hisoblang.",
         "options": [
-          "A) Xorazmda;",
-          "B) Eronda;",
-          "C) Pokistonda;",
-          "D) Arabistonda;"
+          "1",
+          "2",
+          "3",
+          "4"
         ],
-        "a": "A) Xorazmda;"
+        "a": "A) 1"
       },
       {
         "id": 61,
-        "q": "Quyidagilarning qaysi biri zardushtiylikdagi muqaddas 4 unsurga kirmaydi;",
-        "options": [
-          "A) bulut;",
-          "B) suv;",
-          "C) olov;",
-          "D) havo;"
-        ],
-        "a": "A) bulut;"
-      },
-      {
-        "id": 62,
-        "q": "Hizbut-tahrir oqimiga qachon asos solingan?",
-        "options": [
-          "A) 1953-yil",
-          "B) 1954-yil",
-          "C) 1951-yil",
-          "D) 1952-yil"
-        ],
-        "a": "A) 1953-yil"
-      },
-      {
-        "id": 63,
-        "q": "12 ming qoramol terisiga yozilgan muqaddas kitob?",
-        "options": [
-          "A) Avesto;",
-          "B) Qur`on;",
-          "C) Injil;",
-          "D) Tavrot;"
-        ],
-        "a": "A) Avesto;"
-      },
-      {
-        "id": 64,
-        "q": "Movarounnahrlik allomalarning qaysi biri Avestoning “30 nask” ligi to`g`risidagi ma`lumotlarni keltirib o`tgan?",
-        "options": [
-          "A) Beruniy;",
-          "B) Farg`oniy;",
-          "C) Ibn Sino;",
-          "D) Xorazmiy;"
-        ],
-        "a": "A) Beruniy;"
-      },
-      {
-        "id": 65,
-        "q": "Zardushtiylikdagi kunlik ibodatlar soni qancha?",
-        "options": [
-          "A) 5 ta;",
-          "B) 6 ta.",
-          "C) 3 ta;",
-          "D) 4 ta;"
-        ],
-        "a": "A) 5 ta;"
-      },
-      {
-        "id": 66,
-        "q": "Zardushtiylar orasida 3 yil yashab, ularning tarixini o`rgangan olim kim?",
-        "options": [
-          "A) Dyuperron;",
-          "B) B.Axmedov.",
-          "C) Zamaxshariy;",
-          "D) Volter;"
-        ],
-        "a": "A) Dyuperron;"
-      },
-      {
-        "id": 67,
-        "q": "Dinning jamiyatdagi vazifalari mazmunini qaysi qatorda noto‘g‘ri ko‘rsatilgan?",
-        "options": [
-          "A) legitimizatsiya - nazorat qiluvchilik",
-          "B) kompensator - tasalli beruvchilik",
-          "C) integrator  - birlashtiruvchilik",
-          "D) kommunikativ - bog‘lashtiruvchi"
-        ],
-        "a": "A) legitimizatsiya - nazorat qiluvchilik"
-      },
-      {
-        "id": 68,
-        "q": "Qaysi dinda vafot etganlarning suyaklari maxsus idishda saqlanadi?",
-        "options": [
-          "A) Zardushtiylik;",
-          "B) Yahudiylik;",
-          "C) Hinduizm;",
-          "D) Xristianlik;"
-        ],
-        "a": "A) Zardushtiylik;"
-      },
-      {
-        "id": 69,
-        "q": "«Hamma uchun vijdon erkinligi kafolatlanadi. Har bir inson xohlagan dinga e'tiqod qilish yoki hech qaysi dinga e'tiqod qilmaslik huquqiga ega. Diniy qarashlarni majburan singdirishga yo‘l qo‘yilmaydi». Bu qonun  konstitutsiyamizning qaysi moddada keltirilgan?",
-        "options": [
-          "A) 35-modda",
-          "B) 18-modda",
-          "C) 57-modda",
-          "D) 61-modda"
-        ],
-        "a": "A) 35-modda"
-      },
-      {
-        "id": 70,
-        "q": "“Ettinchi kun adventistlari” oqimi nechanchi yil tuzilgan?",
-        "options": [
-          "A) 1844",
-          "B) 1850",
-          "C) 1860",
-          "D) 1863"
-        ],
-        "a": "A) 1844"
-      },
-      {
-        "id": 71,
-        "q": "Quyidagi harakatlardan qaysi biri Eronda vujudga kelgan ?",
-        "options": [
-          "A) Bahoiylar;",
-          "B) Marifatchilar;",
-          "C) Shohidiylar;",
-          "D) Baxshillochilar;"
-        ],
-        "a": "A) Bahoiylar;"
-      },
-      {
-        "id": 72,
-        "q": "ISESCO tomonidan Toshkent shahriga “Islom madaniyatining poytaxti\" maqomi berildi?",
-        "options": [
-          "A) 2007",
-          "B) 2010",
-          "C) 2008",
-          "D) 2009"
-        ],
-        "a": "A) 2007"
-      },
-      {
-        "id": 73,
-        "q": "Quyidagilardan qaysi biri Hinduizmdagi ilohlardan emas?",
-        "options": [
-          "A) Sinto",
-          "B) Shiva",
-          "C) Vishnu",
-          "D) Braxma"
-        ],
-        "a": "A) Sinto"
-      },
-      {
-        "id": 74,
-        "q": "Qaysi ta’limot 24 ta Payg’ambar yoki avliyo tomonidan asos solingan?",
-        "options": [
-          "A) jaynizim",
-          "B) daosizm",
-          "C) sikhiylik",
-          "D) veda"
-        ],
-        "a": "A) jaynizim"
-      },
-      {
-        "id": 75,
-        "q": "Sintoizm dini qayerda vujudga kelgan?",
-        "options": [
-          "A) Yaponiya",
-          "B) Eron",
-          "C) Korea",
-          "D) Xitoy"
-        ],
-        "a": "A) Yaponiya"
-      },
-      {
-        "id": 76,
-        "q": "Konfutsiylikka kim asos solgan?",
-        "options": [
-          "A) Kun szi",
-          "B) Lao Szi",
-          "C) Min",
-          "D) Kim in"
-        ],
-        "a": "A) Kun szi"
-      },
-      {
-        "id": 77,
-        "q": "O’zbekistonda diniy tashkilotlar, muassasalar qaysi organ tomonidan ro’yxatga olinadi?",
-        "options": [
-          "A) adliya vazirligi",
-          "B) mudofaa vazirligi",
-          "C) tashqi ishlar vazirligi",
-          "D) ichki ishlar vazirligi"
-        ],
-        "a": "A) adliya vazirligi"
-      },
-      {
-        "id": 78,
-        "q": "O’zbekiston Respublikasi Vazirlar Mahkamasi huzuridagi Islom sivilizatsiyasi markazi qachon tashkil etildi?",
-        "options": [
-          "A) 2017 y",
-          "B) 2016 y",
-          "C) 2018 y",
-          "D) 2019 y"
-        ],
-        "a": "A) 2017 y"
-      },
-      {
-        "id": 79,
-        "q": "Hоzir BMTning tеrrоrizmgа qаrshi turishgа qаrаtilgаn nechta hujjat bor?",
-        "options": [
-          "A) 13 tа",
-          "B) 16 tа",
-          "C) 14 tа",
-          "D) 15 tа"
-        ],
-        "a": "A) 13 tа"
-      },
-      {
-        "id": 80,
-        "q": "Nabiy bilan rasul оrasidagi farqni toping?",
-        "options": [
-          "A) Nabiy avvalgi shariatni davom ettiradi, rasulga yangi shariat tushadi",
-          "B) Nabiy ham rasul ham avvalgi shariatni davom etadi",
-          "C) Nabiy yangi shariat tushadi. Rasulga avvalgi shariatni davom etadi",
-          "D) Nabiyga rasulga ham yangi shariat tushadi"
-        ],
-        "a": "A) Nabiy avvalgi shariatni davom ettiradi, rasulga yangi shariat tushadi"
-      },
-      {
-        "id": 81,
-        "q": "Insоn taqdirini o’zi bеlgilaydi dеydigan tоifani nоmini ayting ?",
-        "options": [
-          "A) Qadariylar",
-          "B) Jafariylar",
-          "C) Salafiylar",
-          "D) Xorijiylar"
-        ],
-        "a": "A) Qadariylar"
-      },
-      {
-        "id": 82,
-        "q": "Markaziy Osiyoda qaysi mazhab keng tarqalgan?",
-        "options": [
-          "A) Hanafiy;",
-          "B) Molikiy;",
-          "C) Hanbaliy;",
-          "D) Shofeiy;"
-        ],
-        "a": "A) Hanafiy;"
-      },
-      {
-        "id": 83,
-        "q": "Quyidagi qaysi norasmiy diniy harakat faoliyati mustaqillik yillarida O`zbekistonda vujudga kelgan?",
-        "options": [
-          "A) Baxshillochilar;",
-          "B) Bobiylar;",
-          "C) Bahoiylar;",
-          "D) Ahmadiylar;"
-        ],
-        "a": "A) Baxshillochilar;"
-      },
-      {
-        "id": 84,
-        "q": "Quyidagilardan qaysi biri milliy dinlarga kirmaydi?",
-        "options": [
-          "A) Buddaviylik;",
-          "B) Yahudiylik;",
-          "C) Hinduizm;",
-          "D) Sintoizm;"
-        ],
-        "a": "A) Buddaviylik;"
-      },
-      {
-        "id": 85,
-        "q": "Zardushtiylikning oliy xudosini toping.",
-        "options": [
-          "A) Ahuramazda;",
-          "B) Axriman;",
-          "C) Mitra;",
-          "D) Anaxita;"
-        ],
-        "a": "A) Ahuramazda;"
-      },
-      {
-        "id": 86,
-        "q": "Qaysi din ta`limotida “to`rt oliy haqiqat” mavjud?",
-        "options": [
-          "A) Buddaviylik;",
-          "B) Xristianlik;",
-          "C) Hinduizm;",
-          "D) Yahudiylik;"
-        ],
-        "a": "A) Buddaviylik;"
-      },
-      {
-        "id": 87,
-        "q": "“Tripitaka” qaysi dinning muqaddas manbasi hisoblanadi?",
-        "options": [
-          "A) Buddaviylik;",
-          "B) Yahudiylik;",
-          "C) Xristianlik;",
-          "D) Hinduizm;"
-        ],
-        "a": "A) Buddaviylik;"
-      },
-      {
-        "id": 88,
-        "q": "Pul evaziga gunohlarni kechirish - indulgensiya haqidagi ta`limot qaysi dinda mavjud?",
-        "options": [
-          "A) Xristianlik;",
-          "B) Hinduizm;",
-          "C) Buddaviylik;",
-          "D) Yahudiylik;"
-        ],
-        "a": "A) Xristianlik;"
-      },
-      {
-        "id": 89,
-        "q": "“Al-jome` as-Sahih” nomli hadislar to`plami muallifini toping?",
-        "options": [
-          "A) Al-Buxoriy;",
-          "B) At-Termiziy;",
-          "C) Ibn Moja;",
-          "D) Imom Muslim"
-        ],
-        "a": "A) Al-Buxoriy;"
-      },
-      {
-        "id": 90,
-        "q": "Quyidagi qaysi muqaddas kitob 23 yil davomida nozil bo`lgan?",
-        "options": [
-          "A) Qur`on;",
-          "B) Tripiotaka;",
-          "C) Injil;",
-          "D) Tavrot;"
-        ],
-        "a": "A) Qur`on;"
-      },
-      {
-        "id": 91,
-        "q": "“Tavrot” qaysi payg`ambarga nozil bo`lgan?",
-        "options": [
-          "A) Muso;",
-          "B) Sulaymon;",
-          "C) Dovud;",
-          "D) Iso;"
-        ],
-        "a": "A) Muso;"
-      },
-      {
-        "id": 92,
-        "q": "“Xorijiylar” oqimi kimning xalifalik davrida paydo bo`lgan?",
-        "options": [
-          "A) Ali ibn Abu Tolib;",
-          "B) Abu Bakr Siddiq;",
-          "C) Umar ibn Xattob;",
-          "D) Usmon ibn Affon;"
-        ],
-        "a": "A) Ali ibn Abu Tolib;"
-      },
-      {
-        "id": 93,
-        "q": "“Shialik” yo`nalishi kimning xalifalik davrida paydo bo`lgan?",
-        "options": [
-          "A) Ali ibn Abu Tolib;",
-          "B) Abu Bakr Siddiq;",
-          "C) Umar ibn Xattob;",
-          "D) Usmon ibn Affon;"
-        ],
-        "a": "A) Ali ibn Abu Tolib;"
-      },
-      {
-        "id": 94,
-        "q": "Musulmonlarning 47 foizdan ko`prog`i ergashadigan mazhab nomini toping.",
-        "options": [
-          "A) Hanafiy;",
-          "B) Shofeiy;",
-          "C) Hanbaliy;",
-          "D) Molikiy;"
-        ],
-        "a": "A) Hanafiy;"
-      },
-      {
-        "id": 95,
-        "q": "Qaysi mazhabboshi «al-Muvatto» nomli hadis ilmiga oid to‘pam muallifi hisoblanadi?",
-        "options": [
-          "A) Molik ibn Anas;",
-          "B) Abu Hanifa;",
-          "C) Ahmad ibn Hanbal;",
-          "D) Muhammad ibn Idris ash-Shofeiy;"
-        ],
-        "a": "A) Molik ibn Anas;"
-      },
-      {
-        "id": 96,
-        "q": "“dil ba yoru, dast ba kor” g`oyasini ilgari surgan tasavvuf vakilini toping?",
-        "options": [
-          "A) Bahouddin Naqshband;",
-          "B) Abdulqodir Jiyloniy;",
-          "C) Najmiddin Kubro;",
-          "D) Ahmad Yassaviy;"
-        ],
-        "a": "A) Bahouddin Naqshband;"
-      },
-      {
-        "id": 97,
-        "q": "Xorazmshohlar davlatida paydo bo`lgan va tarqalgan tariqatni toping?",
-        "options": [
-          "A) Kubroviylik;",
-          "B) Yassaviylik;",
-          "C) Jiyloniylik;",
-          "D) Naqshbandiylik;"
-        ],
-        "a": "A) Kubroviylik;"
-      },
-      {
-        "id": 98,
-        "q": "“Iyegova shohidlari” qaysi din negizida paydo bo`lgan konfessiya  hisoblanadi?",
-        "options": [
-          "A) Xristianlik;",
-          "B) Yahudiylik;",
-          "C) Hinduizm;",
-          "D) Buddaviylik;"
-        ],
-        "a": "A) Xristianlik;"
-      },
-      {
-        "id": 99,
-        "q": "Qaysi so`z «yuborish», «vazifa topshirish» degan ma`noni anglatadi?",
-        "options": [
-          "A) Missionerlik;",
-          "B) Sekta;",
-          "C) Tolerantlik;",
-          "D) Konfessiya;"
-        ],
-        "a": "A) Missionerlik;"
-      },
-      {
-        "id": 100,
-        "q": "Quyidagi harakatlardan qaysi birining faoliyati O`zbekistonda kuzatilmagan?",
-        "options": [
-          "A) Ahmadiylik;",
-          "B) Marifatchilar;",
-          "C) Shohidiylar;",
-          "D) Baxshillochilar;"
-        ],
-        "a": "A) Ahmadiylik;"
-      },
-      {
-        "id": 101,
-        "q": "Teologiya so`zining ma`nosi?",
-        "options": [
-          "A) (yun. theos — xudo va logiya – ta’limot ) — xudoning mohiyati va irodasi haqidagi diniy talimotlar majmui.",
-          "B) (lot, theos — xudo va logiya – ta’limot ) — xudoning mohiyati va irodasi haqidagi diniy talimotlar majmui.",
-          "C) (arab. theos — xudo va logiya – ta’limot ) — xudoning mohiyati va irodasi haqidagi diniy talimotlar majmui.",
-          "D) (yun. theos — olam va logiya – ta’limot ) — xudoning olami mohiyati va irodasi haqidagi diniy talimotlar majmui."
-        ],
-        "a": "A) (yun. theos — xudo va logiya – ta’limot ) — xudoning mohiyati va irodasi haqidagi diniy talimotlar majmui."
-      },
-      {
-        "id": 102,
-        "q": "Muhammad S.A.V.ga sut-ona bo‘lish kimga nasib etgandi.",
-        "options": [
-          "A) Xalimaga",
-          "B) Saodatga",
-          "C) Salimaga",
-          "D) Fotimaga"
-        ],
-        "a": "A) Xalimaga"
-      },
-      {
-        "id": 103,
-        "q": "Lamaizm yo‘nalishining oliy diniy rahnamosi kim?",
-        "options": [
-          "A) Dalay-Lama",
-          "B) Vishnu",
-          "C) Braxma",
-          "D) Sinto"
-        ],
-        "a": "A) Dalay-Lama"
-      },
-      {
-        "id": 104,
-        "q": "Qaysi bayram yahudiy bayramlarining ichida eng quvnoq hisoblanadi.",
-        "options": [
-          "A) Purim",
-          "B) Rosh-Ashona",
-          "C) Yom-Kipur",
-          "D) Pasxa"
-        ],
-        "a": "A) Purim"
-      },
-      {
-        "id": 105,
-        "q": "Kimlar islom dini vujudga kelmasdan ilgari arablar orasida yakkahudolik gʻoyasini targʻib qilgan shaxslar.",
-        "options": [
-          "A) Haniflar",
-          "B) Zardushtiylar",
-          "C) Moniylar",
-          "D) Mazdakiylar"
-        ],
-        "a": "A) Haniflar"
-      },
-      {
-        "id": 106,
-        "q": "Tasavvuf atamasi o'rniga oldingi davrlarda qaysi so'z ishlatilingan?",
-        "options": [
-          "A) Zuxd",
-          "B) Suluk",
-          "C) Xushu",
-          "D) Xuzu"
-        ],
-        "a": "A) Zuxd"
-      },
-      {
-        "id": 107,
-        "q": "\"Suluk\" so'zi tasavvufda qanday ma'noni anglatadi?",
-        "options": [
-          "A) Qalbni dunyoviy zavqlardan xoli qilish yo‘li",
-          "B) Muvaffaqiyatga erishish usuli",
-          "C) Nafsni himoya qilish",
-          "D) Xalq oldida obro‘ orttirish"
-        ],
-        "a": "A) Qalbni dunyoviy zavqlardan xoli qilish yo‘li"
-      },
-      {
-        "id": 108,
-        "q": "Tasavvufda so'fiy so'zi qanday ma'noni anglatgan?",
-        "options": [
-          "A) jun mato kiygan kishi",
-          "B) hurmatga sazavor kishi",
-          "C) kitob o'qigan kishi",
-          "D) dindor kishi"
-        ],
-        "a": "A) jun mato kiygan kishi"
-      },
-      {
-        "id": 109,
-        "q": "Shariatsiz tariqat, tariqatsiz ma'rifat, ma'rifatsiz haqiqat yo'q ekani haqida kim so'z yuritadi?",
-        "options": [
-          "A) Ahmad Yassaviy",
-          "B) Najmiddin Kubro",
-          "C) Fariddin Attor",
-          "D) Abdulholiq G'ijduvoniy"
-        ],
-        "a": "A) Ahmad Yassaviy"
-      },
-      {
-        "id": 110,
-        "q": "Tariqat so'zining ma'nosi nima?",
-        "options": [
-          "A) arabcha - yoʻl, usul- tasavvufga amal qilish.",
-          "B) arabcha - tasavvufga amal qilmaslik",
-          "C) arabcha - dindor bo'lish",
-          "D) forscha - yoʻl, usul - tasavvufga amal qilish."
-        ],
-        "a": "A) arabcha - yoʻl, usul- tasavvufga amal qilish."
-      },
-      {
-        "id": 111,
-        "q": "\"Musulmon olami\"da eng ko‘p musulmon aholisi qaysi hududda yashaydi?",
-        "options": [
-          "A) Osiyo va Tinch okeani",
-          "B) Afrika",
-          "C) Yaqin Sharq",
-          "D) Yevropa"
-        ],
-        "a": "A) Osiyo va Tinch okeani"
-      },
-      {
-        "id": 112,
-        "q": "O‘zbekistonga IHTga kuzatuvchi maqomi berilgan yil qaysi?",
-        "options": [
-          "A) 1995",
-          "B) 1997",
-          "C) 1999",
-          "D) 2016"
-        ],
-        "a": "A) 1995"
-      },
-      {
-        "id": 113,
-        "q": "Iso Masihni sotgan havoriy kim?",
-        "options": [
-          "A) Iuda",
-          "B) Pavel",
-          "C) Pyotr",
-          "D) Pavel II"
-        ],
-        "a": "A) Iuda"
-      },
-      {
-        "id": 114,
-        "q": "Katolik cherkovining “Muqaddas Ruh” borasida e’tiqodi qanday?",
-        "options": [
-          "A) “Muqaddas  Ruh”  nafaqat  Ota-xudodan  balki  O‘g‘il-xudodan   ham kelib chiqqan deb ishonadilar.",
-          "B) “Muqaddas  Ruh”  faqatgina  Ota-xudodan  kelib  chiqqan  deb   etiqod qiladilar.",
-          "C) Katoliklar “Muqaddas Ruh” O‘g‘il-xudodan kelib chiqqanligiga   inonadilar.",
-          "D) “Muqaddas  Ruh”  faqatgina  Ona-xudodan  kelib  chiqqan  deb   etiqod qiladilar."
-        ],
-        "a": "A) “Muqaddas  Ruh”  nafaqat  Ota-xudodan  balki  O‘g‘il-xudodan   ham kelib chiqqan deb ishonadilar."
-      },
-      {
-        "id": 115,
-        "q": "Katolik  cherkovida  ibodat  vaqti  va  bayram  kunlarini belgilashda qaysi taqvimdan foydalanadilar?",
-        "options": [
-          "A) Grigorian solnomasidan foydalanadilar.",
-          "B) Yulian taqvimidan foydalanadilar.",
-          "C) Katolik cherkovi ibodat vaqti yil fasllariga ko‘ra belgilanadi.",
-          "D) Quyosh va Oy taqvimidan."
-        ],
-        "a": "A) Grigorian solnomasidan foydalanadilar."
-      },
-      {
-        "id": 116,
-        "q": "Indulgensiya kachon va kim tomonidan bekor qilingan?",
-        "options": [
-          "A) 1567 yilda Rim papasi Piy V tomonidan.",
-          "B) 325 yili imperator Konstantin tomonidan.",
-          "C) Indulgensiya bekor qilinmagan.",
-          "D) 333 yili imperator Konstantin tomonidan."
-        ],
-        "a": "A) 1567 yilda Rim papasi Piy V tomonidan."
-      },
-      {
-        "id": 117,
-        "q": "Aqida so’zining ma’nоsi nima ?",
-        "options": [
-          "A) Bog’lanish",
-          "B) Yuborish",
-          "C) Ajratish",
-          "D) Bajarish"
-        ],
-        "a": "A) Bog’lanish"
-      },
-      {
-        "id": 118,
-        "q": "Oʻzbekiston musulmonlari idorasi qachon tashkil topgan",
-        "options": [
-          "A) 1943",
-          "B) 1947",
-          "C) 1953",
-          "D) 1933"
-        ],
-        "a": "A) 1943"
-      },
-      {
-        "id": 119,
-        "q": "Oʻzbekistonda Oʻzbekiston xalqaro islom akademiyasi qachondan boshlab faoliyat yuritgan",
-        "options": [
-          "A) 1999 yil",
-          "B) 1997 yil",
-          "C) 2001 yil",
-          "D) 1992 yil"
-        ],
-        "a": "A) 1999 yil"
-      },
-      {
-        "id": 120,
-        "q": "Oʻzbekistonda vaqf xayriya jamoat fondi qachondan boshlangan",
-        "options": [
-          "A) 2016 yildan",
-          "B) 2019 yildan",
-          "C) 2021 yildan",
-          "D) 2018 yildan"
-        ],
-        "a": "A) 2016 yildan"
-      },
-      {
-        "id": 121,
-        "q": "Fundamentalizm atamasi ilk bor qayerda tarqalgan",
-        "options": [
-          "A) AQSh",
-          "B) Yaponiya",
-          "C) Falastin va Iroqda",
-          "D) Eron"
-        ],
-        "a": "A) AQSh"
-      },
-      {
-        "id": 122,
-        "q": "Qurʼon milliy tilda boʻlishi kerak.....fikri kimga tegishli",
-        "options": [
-          "A) B.Mamajonov",
-          "B) B Aliyev",
-          "C) Karimov Xabib",
-          "D) Sh Mamajonov"
-        ],
-        "a": "A) B.Mamajonov"
-      },
-      {
-        "id": 123,
-        "q": "3- islom anjumani qayerda va qachon boʻlgan ?",
-        "options": [
-          "A) 1981 yil Makkada",
-          "B) 1985 yil Madinada",
-          "C) 1990 yil Qatarda",
-          "D) 1985 yil Eronda"
-        ],
-        "a": "A) 1981 yil Makkada"
-      },
-      {
-        "id": 124,
-        "q": "Islom Sivilizatsiya Markazi qaysi shaharda joylashgan?",
-        "options": [
-          "A) Toshkent",
-          "B) Madinada",
-          "C) Buxoro",
-          "D) Makkada"
-        ],
-        "a": "A) Toshkent"
-      },
-      {
-        "id": 125,
-        "q": "Islom Sivilizatsiya Markazi xalqaro miqyosda qanday ahamiyatga ega?",
-        "options": [
-          "A) Islomiy merosni ommalashtirishga xizmat qiladi",
-          "B) Dunyodagi barcha fan sohalarini boshqaradi",
-          "C) Faqat mahalliy tadqiqotlar olib boradi",
-          "D) Savdo aloqalarini rivojlantirishga xizmat qiladi"
-        ],
-        "a": "A) Islomiy merosni ommalashtirishga xizmat qiladi"
-      },
-      {
-        "id": 126,
-        "q": "Ekstremizmning oldini olish uchun asosiy choralar qaysilar?",
-        "options": [
-          "A) Ta’lim va xabardorlikni oshirish.",
-          "B) Zo‘ravonlikka qarshi zo‘ravonlik ishlatish.",
-          "C) Har qanday e’tiqodni taqiqlash.",
-          "D) Faqat kuch ishlatish."
-        ],
-        "a": "A) Ta’lim va xabardorlikni oshirish."
-      },
-      {
-        "id": 127,
-        "q": "Ekstremizmning jamiyat uchun xavfi nimada?",
-        "options": [
-          "A) Zo‘ravonlik va bo‘linishga sabab bo‘lish.",
-          "B) Ijtimoiy birdamlikni mustahkamlash.",
-          "C) Iqtisodiy rivojlanishni tezlashtirish.",
-          "D) Qonuniylikni oshirish."
-        ],
-        "a": "A) Zo‘ravonlik va bo‘linishga sabab bo‘lish."
-      },
-      {
-        "id": 128,
-        "q": "Radikallashuv qanday jarayon?",
-        "options": [
-          "A) Shaxsning g‘oyalari va harakatlari ekstremistik tus olish jarayoni.",
-          "B) Ijtimoiy tenglikni ta’minlash jarayoni.",
-          "C) O‘z-o‘zini taraqqiy ettirish jarayoni.",
-          "D) Tabiiy resurslarni himoya qilish jarayoni."
-        ],
-        "a": "A) Shaxsning g‘oyalari va harakatlari ekstremistik tus olish jarayoni."
-      },
-      {
-        "id": 129,
-        "q": "Yangi diniy sektalar odatda qanday qilib shakllanadi?",
-        "options": [
-          "A) Yangi liderning ilhomlantiruvchi g‘oyalari asosida",
-          "B) Qadimgi ibodat usullarining qayta tiklanishi orqali",
-          "C) Bir nechta dinni birlashtirish orqali",
-          "D) Faqat milliy madaniyatga asoslanib"
-        ],
-        "a": "A) Yangi liderning ilhomlantiruvchi g‘oyalari asosida"
-      },
-      {
-        "id": 130,
-        "q": "Sekta a'zolariga qanday ta’sir ko‘rsatiladi?",
-        "options": [
-          "A) Tashqi dunyo bilan cheklanish",
-          "B) Fikrlash erkinligini rag‘batlantirish",
-          "C) An’anaviy dinlarni o‘rgatish",
-          "D) Faqat madaniy tadbirlarni targ‘ib qilish"
-        ],
-        "a": "A) Tashqi dunyo bilan cheklanish"
-      },
-      {
-        "id": 131,
-        "q": "Sekta liderlarining ta’limotlari qanday targ‘ib qilinadi?",
-        "options": [
-          "A) Kitoblar va nutqlar orqali",
-          "B) Faqat diniy marosimlarda",
-          "C) Faqat davlat qonunlari orqali",
-          "D) Hech qanday tarzda targ‘ib qilinmaydi. Audio tarqatiladi."
-        ],
-        "a": "A) Kitoblar va nutqlar orqali"
-      },
-      {
-        "id": 132,
-        "q": "2017-2021 yillarda Oʻzbekiston respublikasining rivojlantirish beshta ustuvor yoʻnalishlari boʻyicha harakatlar strategiyasining 3 yil davomida qanday maqsadlar qoʻyilgan edi",
-        "options": [
-          "A) Barcha javoblar toʻgʻri",
-          "B) Oʻzbekiston musulmonlar idorasini rivojlantirish",
-          "C) Oʻzbekiston musulmonlar idorasi sohasida",
-          "D) Oʻzbekiston musulmonlar idorasi terisida"
-        ],
-        "a": "A) Barcha javoblar toʻgʻri"
-      },
-      {
-        "id": 133,
-        "q": ".....soʻzi jiddu jahd yani inson oʻz maqsadiga erishish yoʻlida bor imkoniyatlarini ishga solib harakat qilish",
-        "options": [
-          "A) Jihod",
-          "B) Tavba",
-          "C) Tavrod",
-          "D) Shahid"
-        ],
-        "a": "A) Jihod"
-      },
-      {
-        "id": 134,
-        "q": "Xristianlikda  ibodatga  chorlov  qanday  amalga  oshiriladi?",
-        "options": [
-          "A) Qo‘ng‘iroq chalinadi.",
-          "B) Azon aytiladi.",
-          "C) Sur chalish vositasida.",
-          "D) Kuy chalinadi."
-        ],
-        "a": "A) Qo‘ng‘iroq chalinadi."
-      },
-      {
-        "id": 135,
-        "q": "Islom olamidagi eng yirik universitet qaysi?",
-        "options": [
-          "A) Al-Azhar",
-          "B) Qohira universiteti",
-          "C) Sorbonna",
-          "D) Istanbul universiteti"
-        ],
-        "a": "A) Al-Azhar"
-      },
-      {
-        "id": 136,
-        "q": "\"Al-Azhar\" universitetining asosiy vazifalaridan biri nima?",
-        "options": [
-          "A) Dunyoviy va diniy ta’limni birlashtirish",
-          "B) Faqat islomiy fanlarni o‘rgatish",
-          "C) Chegaralangan doirada faoliyat yuritish",
-          "D) Faqat diniy tadqiqotlar o‘tkazish"
-        ],
-        "a": "A) Dunyoviy va diniy ta’limni birlashtirish"
-      },
-      {
-        "id": 137,
-        "q": "Kim Xojai jahon nomi bilan mashhur va Yusuf Xamadoniyning tortinchi halfasi sifatida tilga olinadi?",
-        "options": [
-          "A) Abdulholiq G'ijduvoniy",
-          "B) Yusuf Xamadoniy",
-          "C) Abdulqodir Giloniy",
-          "D) Imom G‘azzoliy"
-        ],
-        "a": "A) Abdulholiq G'ijduvoniy"
-      },
-      {
-        "id": 138,
-        "q": "Tasavvufning asosiy tariqatlaridan biri bo‘lgan Qodiriya tariqatining asoschisi kim?",
-        "options": [
-          "A) Abdulqodir Giloniy",
-          "B) Abdulholiq G'ijduvoniy",
-          "C) Yusuf Xamadoniy",
-          "D) Imom G‘azzoliy"
-        ],
-        "a": "A) Abdulqodir Giloniy"
-      },
-      {
-        "id": 139,
-        "q": "Yassaviylik tariqatining asoslar nimada aks etgani uchun ushbu risola bayoni berilgan?",
-        "options": [
-          "A) Faqrnoma",
-          "B) Xamadoniy",
-          "C) So'fiylik tarmog'i",
-          "D) Darveshlik"
-        ],
-        "a": "A) Faqrnoma"
-      },
-      {
-        "id": 140,
-        "q": "Qur’oni Karimda nechta payg‘ambarni ismi zikr qilingan?",
-        "options": [
-          "A) 25",
-          "B) 30",
-          "C) 20",
-          "D) 35"
-        ],
-        "a": "A) 25"
-      },
-      {
-        "id": 141,
-        "q": "Abu Bakr 632 yilda Qur’on sahifalarini to‘plab, dastxat qilishni qaysi sahoba  topshirgan?",
-        "options": [
-          "A) Zayd ibn Sobit",
-          "B) Abd alUzza",
-          "C) Ali ibn Abu Tolib",
-          "D) Usmon ibn Affon"
-        ],
-        "a": "A) Zayd ibn Sobit"
-      },
-      {
-        "id": 142,
-        "q": "Buxoriyning «Al-Jomi’ as-sahih» kitobi nechi jilddan iborat?",
-        "options": [
-          "A) 4",
-          "B) 5",
-          "C) 3",
-          "D) 2"
-        ],
-        "a": "A) 4"
-      },
-      {
-        "id": 143,
-        "q": "Qurbon hayit bayrami  Ro‘za hayit bayramidan nechi kundan keyin nishonlanadi?",
-        "options": [
-          "A) 70",
-          "B) 60",
-          "C) 50",
-          "D) 71"
+        "q": "Integrallash sohasi Ω = {(x,y,z): 3 ≤ x ≤ 8, 0 ≤ y ≤ 7, 1 ≤ z ≤ 3} bo'lsa, ∭Ω dxdydz ni hisoblang.",
+        "options": [
+          "70",
+          "35",
+          "105",
+          "140"
         ],
         "a": "A) 70"
       },
       {
-        "id": 144,
-        "q": "Islom dinida farz amali nima?",
+        "id": 62,
+        "q": "Agar ∬D f dxdy = ∫₁⁵ dx ∫[2x−1]^[2x+4] f dy bo'lsa, D sohasini toping.",
         "options": [
-          "A) bajarilishi qat’iyan majburiy hisoblangan xatti-harakatlar",
-          "B) amalga oshirilishi majburiy emas, lekin ma’qul, lozim deb hisoblanuvchi normalar",
-          "C) bajarilishi ixtiyoriy normalar",
-          "D) amalga oshirilishi noma’qul sanaluvchi normalar"
+          "1 ≤ x ≤ 5,  2x−1 ≤ y ≤ 2x+4",
+          "1 ≤ x ≤ 5,  0 ≤ y ≤ 2x+4",
+          "0 ≤ x ≤ 5,  2x−1 ≤ y ≤ 2x+4",
+          "1 ≤ x ≤ 5,  x ≤ y ≤ 2x"
         ],
-        "a": "A) bajarilishi qat’iyan majburiy hisoblangan xatti-harakatlar"
+        "a": "A) 1 ≤ x ≤ 5,  2x−1 ≤ y ≤ 2x+4"
       },
       {
-        "id": 145,
-        "q": "Islom dinida mandub (sunnat) amali nima?",
+        "id": 63,
+        "q": "Integrallash sohasi D = {(x,y): 0 ≤ x ≤ 2, 4x⁴+5 ≤ y ≤ 9x⁴+5} bo'lsa, ∬D 3 dxdy ni hisoblang.",
         "options": [
-          "A) amalga oshirilishi majburiy emas, lekin ma’qul, lozim deb hisoblanuvchi normalar",
-          "B) bajarilishi qat’iyan majburiy hisoblangan xatti-harakatlar",
-          "C) bajarilishi ixtiyoriy normalar",
-          "D) amalga oshirilishi noma’qul sanaluvchi normalar"
+          "96",
+          "32",
+          "48",
+          "64"
         ],
-        "a": "A) amalga oshirilishi majburiy emas, lekin ma’qul, lozim deb hisoblanuvchi normalar"
+        "a": "A) 96"
       },
       {
-        "id": 146,
-        "q": "Islom dinida makruh amali nima?",
+        "id": 64,
+        "q": "Ushbu funksiyaning birinchi tartibli xususiy hosilalarini toping: f(x, y) = eˣ·cos(y)",
         "options": [
-          "A) amalga oshirilishi noma’qul sanaluvchi normalar",
-          "B) amalga oshirilishi majburiy emas, lekin ma’qul, lozim deb hisoblanuvchi normalar",
-          "C) bajarilishi qat’iyan majburiy hisoblangan xatti-harakatlar",
-          "D) bajarilishi ixtiyoriy normalar"
+          "f'ₓ = eˣ·cos(y);   f'ᵧ = −eˣ·sin(y)",
+          "f'ₓ = eˣ·sin(y);   f'ᵧ = eˣ·cos(y)",
+          "f'ₓ = cos(y);      f'ᵧ = −sin(y)",
+          "f'ₓ = eˣ;          f'ᵧ = −sin(y)"
         ],
-        "a": "A) amalga oshirilishi noma’qul sanaluvchi normalar"
+        "a": "A) f'ₓ = eˣ·cos(y);  f'ᵧ = −eˣ·sin(y)"
       },
       {
-        "id": 147,
-        "q": "Qavliy sunnat nima?",
+        "id": 65,
+        "q": "D = {(x,y): 0 ≤ x ≤ 5, √(x+4) ≤ y ≤ 3x+5} bo'lsa, ∬D f dxdy takroriy integralga o'tkazilsa:",
         "options": [
-          "A) Rasululloh (a.s.)ning turli holat va munosabatlarda aytgan so‘zlari",
-          "B) Rasululloh (a.s.)dan sodir bo‘lgan shar’iy ishlar",
-          "C) sahobiylar tomonidan qilingan biror hatti–harakat yoki gap–so‘zga Payg‘ambar (a.s.)ning indamasliklari yoki ma’qullashlari",
-          "D) bajarilishi qat’iyan majburiy hisoblangan xatti-harakatlar"
+          "∫₀⁵ dx ∫[√(x+4)]^[3x+5] f dy",
+          "∫₀⁵ dx ∫₀^[3x+5] f dy",
+          "∫[√(x+4)]^[3x+5] dy ∫₀⁵ f dx",
+          "∫₂³ dx ∫[√(x+4)]^[3x+5] f dy"
         ],
-        "a": "A) Rasululloh (a.s.)ning turli holat va munosabatlarda aytgan so‘zlari"
+        "a": "A) ∫₀⁵ dx ∫[√(x+4)]^[3x+5] f dy"
       },
       {
-        "id": 148,
-        "q": "Fe’liy sunnat nima?",
+        "id": 66,
+        "q": "z = −x² − 2y² + 5xy + 2x + 5y − 1 funksiya ekstremumi mavjudligini Δ determinant orqali aniqlang.",
         "options": [
-          "A) Rasululloh (a.s.)dan sodir bo‘lgan shar’iy ishlar",
-          "B) Rasululloh (a.s.)ning turli holat va munosabatlarda aytgan so‘zlari",
-          "C) sahobiylar tomonidan qilingan biror hatti–harakat yoki gap–so‘zga Payg‘ambar (a.s.)ning indamasliklari yoki ma’qullashlari",
-          "D) bajarilishi qat’iyan majburiy hisoblangan xatti-harakatlar"
+          "Δ = −17 < 0, ekstremum mavjud emas",
+          "Δ = 17 > 0, ekstremum mavjud",
+          "Δ = 0, shubhali holat",
+          "Δ = 8 > 0, ekstremum mavjud"
         ],
-        "a": "A) Rasululloh (a.s.)dan sodir bo‘lgan shar’iy ishlar"
+        "a": "A) Δ = −17 < 0, ekstremum mavjud emas"
+      },
+      {
+        "id": 67,
+        "q": "∑(n=1 → ∞) n/3ⁿ qatorning dastlabki ikkita hadining yig'indisini toping.",
+        "options": [
+          "5/9",
+          "1/3",
+          "2/9",
+          "4/9"
+        ],
+        "a": "A) 5/9"
+      },
+      {
+        "id": 68,
+        "q": "Ushbu funksiyaning birinchi tartibli xususiy hosilalarini toping: f(x, y) = 4x⁵·cos(y)",
+        "options": [
+          "f'ₓ = 20x⁴·cos(y);   f'ᵧ = −4x⁵·sin(y)",
+          "f'ₓ = 20x⁵·cos(y);   f'ᵧ = 4x⁵·sin(y)",
+          "f'ₓ = 4x⁴·cos(y);    f'ᵧ = −4x⁵·sin(y)",
+          "f'ₓ = 20x⁴;          f'ᵧ = −sin(y)"
+        ],
+        "a": "A) f'ₓ = 20x⁴·cos(y);  f'ᵧ = −4x⁵·sin(y)"
+      },
+      {
+        "id": 69,
+        "q": "Integrallash sohasi Ω = {(x,y,z): −2 ≤ x ≤ 4, −1 ≤ y ≤ 7, 1 ≤ z ≤ 5} bo'lsa, ∭Ω dxdydz ni hisoblang.",
+        "options": [
+          "192",
+          "96",
+          "48",
+          "240"
+        ],
+        "a": "A) 192"
+      },
+      {
+        "id": 70,
+        "q": "∑(n=1 → ∞) n/(2ⁿ+1) qatorning dastlabki ikkita hadining yig'indisini toping.",
+        "options": [
+          "11/15",
+          "1/3",
+          "2/5",
+          "13/15"
+        ],
+        "a": "A) 11/15"
+      },
+      {
+        "id": 71,
+        "q": "z = x² − 3y² + 2xy − 3x + 5y − 3 funksiya ekstremumi mavjudligini Δ determinant orqali aniqlang.",
+        "options": [
+          "Δ = −16 < 0, ekstremum mavjud emas",
+          "Δ = 16 > 0, ekstremum mavjud",
+          "Δ = 0, shubhali holat",
+          "Δ = −12 < 0, ekstremum mavjud emas"
+        ],
+        "a": "A) Δ = −16 < 0, ekstremum mavjud emas"
+      },
+      {
+        "id": 72,
+        "q": "Agar ∬D f dxdy = ∫₂⁵ dx ∫[x²]^[x³] f dy bo'lsa, D sohasini toping.",
+        "options": [
+          "2 ≤ x ≤ 5,  x² ≤ y ≤ x³",
+          "2 ≤ x ≤ 5,  0 ≤ y ≤ x³",
+          "x∈[2,5],  y∈[x, x²]"
+        ],
+        "a": "A) 2 ≤ x ≤ 5,  x² ≤ y ≤ x³"
+      },
+      {
+        "id": 73,
+        "q": "Ushbu funksiyaning birinchi tartibli xususiy hosilalarini toping: f(x, y) = −3y⁶·sin(x)",
+        "options": [
+          "f'ₓ = −3y⁶·cos(x);   f'ᵧ = −18y⁵·sin(x)",
+          "f'ₓ = 3y⁶·cos(x);    f'ᵧ = 18y⁵·sin(x)",
+          "f'ₓ = −3y⁶·sin(x);  f'ᵧ = −18y⁵·cos(x)"
+        ],
+        "a": "A) f'ₓ = −3y⁶·cos(x);  f'ᵧ = −18y⁵·sin(x)"
+      },
+      {
+        "id": 74,
+        "q": "Integrallash sohasi Ω = {(x,y,z): −6 ≤ x ≤ −1, −1 ≤ y ≤ 1, 1 ≤ z ≤ 3} bo'lsa, ∭Ω dxdydz ni hisoblang.",
+        "options": [
+          "20",
+          "10",
+          "30",
+          "40"
+        ],
+        "a": "A) 20"
+      },
+      {
+        "id": 75,
+        "q": "z = 5x² + y² + 7xy − 9x − 5y − 1 funksiya ekstremumi mavjudligini Δ determinant orqali aniqlang.",
+        "options": [
+          "Δ = −29 < 0, ekstremum mavjud emas",
+          "Δ = 29 > 0, ekstremum mavjud",
+          "Δ = 0, shubhali holat"
+        ],
+        "a": "A) Δ = −29 < 0, ekstremum mavjud emas"
+      },
+      {
+        "id": 76,
+        "q": "w = f(z) = u(x,y) + iv(x,y) funksiyasi differensiallanuvchi bo'lishi uchun Koshi-Riman shartini ko'rsating.",
+        "options": [
+          "∂u/∂x = ∂v/∂y;   ∂u/∂y = −∂v/∂x",
+          "∂u/∂x = −∂v/∂y;  ∂u/∂y = ∂v/∂x",
+          "∂u/∂x = ∂v/∂x;   ∂u/∂y = ∂v/∂y"
+        ],
+        "a": "A) ∂u/∂x = ∂v/∂y;  ∂u/∂y = −∂v/∂x"
+      },
+      {
+        "id": 77,
+        "q": "Agar ∬D f dxdy = ∫₃⁷ dx ∫[2x−1]^[x³] f dy bo'lsa, D sohasini toping.",
+        "options": [
+          "3 ≤ x ≤ 7,  2x−1 ≤ y ≤ x³",
+          "3 ≤ x ≤ 7,  0 ≤ y ≤ x³",
+          "x∈[3,7],  y∈[2x, x³]"
+        ],
+        "a": "A) 3 ≤ x ≤ 7,  2x−1 ≤ y ≤ x³"
+      },
+      {
+        "id": 78,
+        "q": "Ushbu funksiyaning birinchi tartibli xususiy hosilalarini toping: f(x, y) = 4y⁷·ln(x)",
+        "options": [
+          "f'ₓ = 4y⁷/x;   f'ᵧ = 28y⁶·ln(x)",
+          "f'ₓ = 4y⁷·x;   f'ᵧ = 28y⁶·ln(x)",
+          "f'ₓ = 1/x;     f'ᵧ = 28y⁶"
+        ],
+        "a": "A) f'ₓ = 4y⁷/x;  f'ᵧ = 28y⁶·ln(x)"
+      },
+      {
+        "id": 79,
+        "q": "Integrallash sohasi Ω = {(x,y,z): −6 ≤ x ≤ −2, −1 ≤ y ≤ 3, 1 ≤ z ≤ 5} bo'lsa, ∭Ω 2 dxdydz ni hisoblang.",
+        "options": [
+          "128",
+          "64",
+          "32",
+          "256"
+        ],
+        "a": "A) 128"
+      },
+      {
+        "id": 80,
+        "q": "z = 5x² + 6y² + 7xy + 9x − 5y − 11 funksiya ekstremumi mavjudligini Δ orqali aniqlang.",
+        "options": [
+          "Δ = 71 > 0, ekstremum mavjud",
+          "Δ = −71 < 0, ekstremum mavjud emas",
+          "Δ = 0, shubhali holat"
+        ],
+        "a": "A) Δ = 71 > 0, ekstremum mavjud"
+      },
+      {
+        "id": 81,
+        "q": "f(z) = 3z² kompleks o'zgaruvchili funksiyaning hosilasini toping.",
+        "options": [
+          "6z",
+          "3z",
+          "z³",
+          "6z²"
+        ],
+        "a": "A) 6z"
+      },
+      {
+        "id": 82,
+        "q": "Ushbu funksiyaning birinchi tartibli xususiy hosilalarini toping: f(x, y) = x⁴ + 3·sin(y)",
+        "options": [
+          "f'ₓ = 4x³;   f'ᵧ = 3·cos(y)",
+          "f'ₓ = 4x³;   f'ᵧ = −3·cos(y)",
+          "f'ₓ = x⁴;    f'ᵧ = 3·cos(y)"
+        ],
+        "a": "A) f'ₓ = 4x³;  f'ᵧ = 3·cos(y)"
+      },
+      {
+        "id": 83,
+        "q": "z = −3x² − 6y² + 7xy − 5x + 2y + 1 funksiya ekstremumi mavjudligini Δ orqali aniqlang.",
+        "options": [
+          "Δ = 23 > 0, ekstremum mavjud",
+          "Δ = −23 < 0, ekstremum mavjud emas",
+          "Δ = 0, shubhali holat"
+        ],
+        "a": "A) Δ = 23 > 0, ekstremum mavjud"
+      },
+      {
+        "id": 84,
+        "q": "Integrallash sohasi Ω = {(x,y,z): −7 ≤ x ≤ 2, −3 ≤ y ≤ 3, 2 ≤ z ≤ 5} bo'lsa, ∭Ω (−3) dxdydz ni hisoblang.",
+        "options": [
+          "−486",
+          "−162",
+          "−243",
+          "−324"
+        ],
+        "a": "A) −486"
+      },
+      {
+        "id": 85,
+        "q": "Agar ∬D f dxdy = ∫₁³ dx ∫[x]^[eˣ] f dy bo'lsa, D sohasini toping.",
+        "options": [
+          "1 ≤ x ≤ 3,  x ≤ y ≤ eˣ",
+          "1 ≤ x ≤ 3,  0 ≤ y ≤ eˣ",
+          "x∈[1,3],  y∈[1, eˣ]"
+        ],
+        "a": "A) 1 ≤ x ≤ 3,  x ≤ y ≤ eˣ"
+      },
+      {
+        "id": 86,
+        "q": "Ushbu funksiyaning birinchi tartibli xususiy hosilalarini toping: f(x, y) = 1/x⁴ − 5·sin(y)",
+        "options": [
+          "f'ₓ = −4/x⁵;   f'ᵧ = −5·cos(y)",
+          "f'ₓ = 4/x⁵;    f'ᵧ = 5·cos(y)",
+          "f'ₓ = −1/x³;   f'ᵧ = −5·cos(y)"
+        ],
+        "a": "A) f'ₓ = −4/x⁵;  f'ᵧ = −5·cos(y)"
+      },
+      {
+        "id": 87,
+        "q": "z = −3x² − 4y² + 7xy − 5x − 12y + 13 funksiya ekstremumi mavjudligini Δ determinant orqali aniqlang.",
+        "options": [
+          "Δ = 47 > 0, ekstremum mavjud",
+          "Δ = −47 < 0, ekstremum mavjud emas",
+          "Δ = 0, shubhali holat"
+        ],
+        "a": "A) Δ = 47 > 0, ekstremum mavjud"
+      },
+      {
+        "id": 88,
+        "q": "Integrallash sohasi Ω = {(x,y,z): −7 ≤ x ≤ 1, −3 ≤ y ≤ −1, 4 ≤ z ≤ 5} bo'lsa, ∭Ω 5 dxdydz ni hisoblang.",
+        "options": [
+          "80",
+          "40",
+          "160",
+          "20"
+        ],
+        "a": "A) 80"
+      },
+      {
+        "id": 89,
+        "q": "f(z) = −5z³ kompleks o'zgaruvchili funksiyaning hosilasini toping.",
+        "options": [
+          "−15z²",
+          "15z²",
+          "−15z",
+          "−5z²"
+        ],
+        "a": "A) −15z²"
+      },
+      {
+        "id": 90,
+        "q": "Agar ∬D f dxdy = ∫₁⁴ dx ∫[ln x]^[2x+1] f dy bo'lsa, D sohasini toping.",
+        "options": [
+          "1 ≤ x ≤ 4,  ln(x) ≤ y ≤ 2x+1",
+          "1 ≤ x ≤ 4,  0 ≤ y ≤ 2x+1",
+          "x∈[1,4],  y∈[x, 2x]"
+        ],
+        "a": "A) 1 ≤ x ≤ 4,  ln(x) ≤ y ≤ 2x+1"
+      },
+      {
+        "id": 91,
+        "q": "Ushbu funksiyaning birinchi tartibli xususiy hosilalarini toping: f(x, y) = 1/(7x³) − 5/y²",
+        "options": [
+          "f'ₓ = −3/(7x⁴);   f'ᵧ = 10/y³",
+          "f'ₓ = 3/(7x⁴);    f'ᵧ = −10/y³",
+          "f'ₓ = −1/(7x²);   f'ᵧ = 5/y"
+        ],
+        "a": "A) f'ₓ = −3/(7x⁴);  f'ᵧ = 10/y³"
+      },
+      {
+        "id": 92,
+        "q": "z = 6x² − 3y² + 2xy + 11x − 12y + 10 funksiya ekstremumi mavjudligini Δ orqali aniqlang.",
+        "options": [
+          "Δ = −40 < 0, ekstremum mavjud emas",
+          "Δ = 40 > 0, ekstremum mavjud",
+          "Δ = 0, shubhali holat"
+        ],
+        "a": "A) Δ = −40 < 0, ekstremum mavjud emas"
+      },
+      {
+        "id": 93,
+        "q": "Integrallash sohasi Ω = {(x,y,z): −8 ≤ x ≤ −3, −5 ≤ y ≤ −2, 4 ≤ z ≤ 8} bo'lsa, ∭Ω 2 dxdydz ni hisoblang.",
+        "options": [
+          "120",
+          "60",
+          "240",
+          "180"
+        ],
+        "a": "A) 120"
+      },
+      {
+        "id": 94,
+        "q": "Agar ∬D f dxdy = ∫₂⁵ dx ∫[x−3]^[2x+1] f dy bo'lsa, D sohasini toping.",
+        "options": [
+          "2 ≤ x ≤ 5,  x−3 ≤ y ≤ 2x+1",
+          "2 ≤ x ≤ 5,  0 ≤ y ≤ 2x+1",
+          "x∈[2,5],  y∈[x−3, x+1]"
+        ],
+        "a": "A) 2 ≤ x ≤ 5,  x−3 ≤ y ≤ 2x+1"
+      },
+      {
+        "id": 95,
+        "q": "Ushbu funksiyaning birinchi tartibli xususiy hosilalarini toping: f(x, y) = 1/(x³y⁵)",
+        "options": [
+          "f'ₓ = −3/(x⁴y⁵);   f'ᵧ = −5/(x³y⁶)",
+          "f'ₓ = 3/(x⁴y⁵);    f'ᵧ = 5/(x³y⁶)",
+          "f'ₓ = −1/(x²y⁵);   f'ᵧ = −1/(x³y⁴)"
+        ],
+        "a": "A) f'ₓ = −3/(x⁴y⁵);  f'ᵧ = −5/(x³y⁶)"
+      },
+      {
+        "id": 96,
+        "q": "Integrallash sohasi Ω = {(x,y,z): −8 ≤ x ≤ 3, −2 ≤ y ≤ 2, −1 ≤ z ≤ 8} bo'lsa, ∭Ω dxdydz ni hisoblang.",
+        "options": [
+          "396",
+          "198",
+          "99",
+          "440"
+        ],
+        "a": "A) 396"
+      },
+      {
+        "q": "z = −2x² + y² − 4xy + 13x − 15y + 14 funksiya ekstremumi mavjudligini Δ orqali aniqlang.",
+        "options": [
+          "Δ = −20 < 0, ekstremum mavjud emas",
+          "Δ = 20 > 0, ekstremum mavjud",
+          "Δ = 0, shubhali holat"
+        ],
+        "a": "A) Δ = −20 < 0, ekstremum mavjud emas",
+        "id": 97
+      },
+      {
+        "id": 98,
+        "q": "Agar ∬D f dxdy = ∫₀^[π/4] dx ∫[sin x]^[cos x] f dy bo'lsa, D sohasini toping.",
+        "options": [
+          "0 ≤ x ≤ π/4,  sin(x) ≤ y ≤ cos(x)",
+          "0 ≤ x ≤ π/4,  cos(x) ≤ y ≤ sin(x)",
+          "x∈[0, π/2],  y∈[sin x, cos x]"
+        ],
+        "a": "A) 0 ≤ x ≤ π/4,  sin(x) ≤ y ≤ cos(x)"
+      },
+      {
+        "id": 99,
+        "q": "Ushbu funksiyaning birinchi tartibli xususiy hosilalarini toping: f(x, y) = 1/(12x⁴y³)",
+        "options": [
+          "f'ₓ = −1/(3x⁵y³);   f'ᵧ = −1/(4x⁴y⁴)",
+          "f'ₓ = 1/(3x⁵y³);    f'ᵧ = 1/(4x⁴y⁴)",
+          "f'ₓ = −1/(12x³y³);  f'ᵧ = −1/(12x⁴y²)"
+        ],
+        "a": "A) f'ₓ = −1/(3x⁵y³);  f'ᵧ = −1/(4x⁴y⁴)"
+      },
+      {
+        "id": 100,
+        "q": "z = 5x² + 7y² − 8xy − 11x − 15y + 11 funksiya ekstremumi mavjudligini Δ determinant orqali aniqlang.",
+        "options": [
+          "Δ = 76 > 0, ekstremum mavjud",
+          "Δ = −76 < 0, ekstremum mavjud emas",
+          "Δ = 0, shubhali holat"
+        ],
+        "a": "A) Δ = 76 > 0, ekstremum mavjud"
+      },
+      {
+        "id": 101,
+        "q": "Integrallash sohasi Ω = {(x,y,z): −10 ≤ x ≤ −6, −5 ≤ y ≤ −2, −1 ≤ z ≤ 8} bo'lsa, ∭Ω (−3) dxdydz ni hisoblang.",
+        "options": [
+          "−324",
+          "−108",
+          "−162",
+          "−216"
+        ],
+        "a": "A) −324"
+      },
+      {
+        "id": 102,
+        "q": "Agar ∬D f dxdy = ∫₀^[π/2] dx ∫[sin x]^[eˣ] f dy bo'lsa, D sohasini toping.",
+        "options": [
+          "0 ≤ x ≤ π/2,  sin(x) ≤ y ≤ eˣ",
+          "0 ≤ x ≤ π/2,  eˣ ≤ y ≤ sin(x)",
+          "x∈[0, π],  y∈[sin x, eˣ]"
+        ],
+        "a": "A) 0 ≤ x ≤ π/2,  sin(x) ≤ y ≤ eˣ"
+      },
+      {
+        "id": 103,
+        "q": "Ushbu funksiyaning birinchi tartibli xususiy hosilalarini toping: f(x, y) = sin(x)/y³",
+        "options": [
+          "f'ₓ = cos(x)/y³;   f'ᵧ = −3·sin(x)/y⁴",
+          "f'ₓ = sin(x)/y³;   f'ᵧ = 3·sin(x)/y⁴",
+          "f'ₓ = cos(x);      f'ᵧ = −3y⁻⁴"
+        ],
+        "a": "A) f'ₓ = cos(x)/y³;  f'ᵧ = −3·sin(x)/y⁴"
+      },
+      {
+        "id": 104,
+        "q": "z = x² + 7y² + xy + 9x − 12y + 15 funksiya ekstremumi mavjudligini Δ orqali aniqlang.",
+        "options": [
+          "Δ = 27 > 0, ekstremum mavjud",
+          "Δ = −27 < 0, ekstremum mavjud emas",
+          "Δ = 0, shubhali holat"
+        ],
+        "a": "A) Δ = 27 > 0, ekstremum mavjud"
+      },
+      {
+        "id": 105,
+        "q": "Integrallash sohasi Ω = {(x,y,z): −11 ≤ x ≤ −9, −6 ≤ y ≤ −2, −1 ≤ z ≤ 6} bo'lsa, ∭Ω 5 dxdydz ni hisoblang.",
+        "options": [
+          "280",
+          "140",
+          "70",
+          "210"
+        ],
+        "a": "A) 280"
+      },
+      {
+        "id": 106,
+        "q": "Agar ∬D f dxdy = ∫₀⁴ dx ∫[√x]^[4x+3] f dy bo'lsa, D sohasini toping.",
+        "options": [
+          "0 ≤ x ≤ 4,  √x ≤ y ≤ 4x+3",
+          "0 ≤ x ≤ 4,  0 ≤ y ≤ 4x+3",
+          "x∈[0,4],  y∈[x, √x]"
+        ],
+        "a": "A) 0 ≤ x ≤ 4,  √x ≤ y ≤ 4x+3"
       }
     ]
   }
