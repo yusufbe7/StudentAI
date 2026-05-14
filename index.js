@@ -127,7 +127,7 @@ const DEFAULT_CONFIG = {
             '4-kurs': ["Moliya va moliyaviy texnologiyalar yo'nalishi"]
         }
     },
-    vipPrice: 6000,
+    vipPrice: 10000, // Pullik VIP narxi (so'mda)
     semesters: ['2-semestr'],
     activeSemesters: ['2-semestr'],
     subjectsByDirection: {
