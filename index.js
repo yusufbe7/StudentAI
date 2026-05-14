@@ -156,9 +156,9 @@ const DEFAULT_CONFIG = {
       { name: 'Dinshunoslik', icon:'🕌', key:'dasturiy_injiniring_dinshunoslik' },
       { name: 'Falsafa', icon:'💭', key:'dasturiy_injiniring_falsafa' },
       { name: 'Fizika 2', icon: '⚡', key: 'dasturiy_injiniring_fizika2' },
-      { name: 'Hisob', icon: '🔢', key: 'dasturiy_injiniring_hisob' },
-            { name: "Ma'lumotlar tuzilmasi",  icon: '🗄️', key: 'dasturiy_injiniring_malumotlar_tuzilmasi' },
-            { name: 'English',                icon: '🌐', key: 'dasturiy_injiniring_english2' }
+      { name: 'Hisob', icon: '🔢', key: 'kiberxavfsizlik_hisob' },
+      { name: "Ma'lumotlar tuzilmasi",  icon: '🗄️', key: 'dasturiy_injiniring_malumotlar_tuzilmasi' },
+      { name: 'English',                icon: '🌐', key: 'dasturiy_injiniring_english2' }
         ],
     },
  
@@ -171,7 +171,7 @@ const DEFAULT_CONFIG = {
             { name: 'Dinshunoslik', icon:'🕌', key:'dasturiy_injiniring_dinshunoslik' },
             { name: 'Falsafa',                icon: '💭', key: 'dasturiy_injiniring_falsafa' },
             { name: 'Fizika 2',               icon: '⚡', key: 'dasturiy_injiniring_fizika2' },
-            { name: 'Hisob',                  icon: '🔢', key: 'dasturiy_injiniring_hisob' },
+            { name: 'Hisob',                  icon: '🔢', key: 'suniy_intelekt_hisob' },
             { name: "Ma'lumotlar tuzilmasi",  icon: '🗄️', key: 'dasturiy_injiniring_malumotlar_tuzilmasi' },
             { name: 'English',                icon: '🌐', key: 'dasturiy_injiniring_english2' }
         ],
@@ -186,7 +186,7 @@ const DEFAULT_CONFIG = {
       { name: 'Dinshunoslik', icon:'🕌', key:'dasturiy_injiniring_dinshunoslik' },
       { name: 'Falsafa', icon:'💭', key:'dasturiy_injiniring_falsafa' },
       { name: 'Fizika 2', icon: '⚡', key: 'dasturiy_injiniring_fizika2' },
-      { name: 'Hisob', icon: '🔢', key: 'dasturiy_injiniring_hisob' }
+      { name: 'Hisob', icon: '🔢', key: 'suniy_intelekt_hisob' }
    ]
 },
         "Boshqa": {
