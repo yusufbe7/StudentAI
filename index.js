@@ -50,7 +50,7 @@ fs.copyFileSync(
     PATHS.subjects
 );
 
-console.log('✅ subjects.json updated');
+console.log('✅ subjects.json uiipdated');
 
 // ============================================================
 // BOT KONFIGURATSIYASI (dinamik: universitetlar, yo'nalishlar, fanlar)
