@@ -1004,13 +1004,18 @@ bot.action(/^ans_(\d+)$/, async (ctx) => {
     const selIdx = parseInt(ctx.match[1]);
     const currentQ = s.activeList[s.index];
     const labels = ['A','B','C','D'];
+
+    const normalize = str => (str || '').replace(/^[A-D]\)\s*/i, '').trim();
+
     try {
         const userAnswer = s.currentOptions[selIdx];
-        if (userAnswer === currentQ.a) { s.score++; await ctx.answerCbQuery("✅ To'g'ri!"); }
-        else {
+        if (normalize(userAnswer) === normalize(currentQ.a)) {
+            s.score++;
+            await ctx.answerCbQuery("✅ To'g'ri!");
+        } else {
             s.wrongs.push({...currentQ, userAnswer});
-            const ci = s.currentOptions.indexOf(currentQ.a);
-            await ctx.answerCbQuery(`❌ Noto'g'ri!\nTo'g'ri: ${labels[ci]||'?'}) ${currentQ.a}`, {show_alert:true});
+            const ci = s.currentOptions.findIndex(opt => normalize(opt) === normalize(currentQ.a));
+            await ctx.answerCbQuery(`❌ Noto'g'ri!\nTo'g'ri: ${labels[ci]||'?'}) ${normalize(currentQ.a)}`, {show_alert:true});
         }
         s.index++;
         return sendQuestion(ctx, false);

@@ -1,0 +1,1657 @@
+{
+  "ingliz_tili": {
+    "name": "Ingliz tili",
+    "questions": [
+      {
+        "id": 1,
+        "q": "Which sentence shows ability (present)?",
+        "options": [
+          "I can speak four languages",
+          "Alcohol can cause cancer",
+          "Can I use your book, please?",
+          "He could play football when he was a kid"
+        ],
+        "a": " I can speak four languages"
+      },
+      {
+        "id": 2,
+        "q": "Which sentence shows possibility (present)?",
+        "options": [
+          "Alcohol can cause cancer",
+          "I can speak four languages",
+          "Can you make me coffee?",
+          "A lot of crime could be prevented"
+        ],
+        "a": " Alcohol can cause cancer"
+      },
+      {
+        "id": 3,
+        "q": "Which sentence shows permission (informal)?",
+        "options": [
+          "Can I use your book, please?",
+          "You can not (can't) smoke here",
+          "Could I take your book, please?",
+          "If you called me, I could find you some suggestion"
+        ],
+        "a": " Can I use your book, please?"
+      },
+      {
+        "id": 4,
+        "q": "Which sentence shows ability (past)?",
+        "options": [
+          "He could play football when he was a kid",
+          "I can speak four languages",
+          "Alcohol can cause cancer",
+          "Can I help you?"
+        ],
+        "a": " He could play football when he was a kid"
+      },
+      {
+        "id": 5,
+        "q": "Which sentence shows request (polite)?",
+        "options": [
+          "Could you lend me this book?",
+          "Can you make me coffee?",
+          "You can not (can't) smoke here",
+          "I could help you with English"
+        ],
+        "a": " Could you lend me this book?"
+      },
+      {
+        "id": 6,
+        "q": "Which sentence shows conditional of could?",
+        "options": [
+          "If you called me, I could find you some suggestion",
+          "I can speak four languages",
+          "Alcohol can cause cancer",
+          "Can I help you?"
+        ],
+        "a": " If you called me, I could find you some suggestion"
+      },
+      {
+        "id": 7,
+        "q": "Sorry, I _______ help you yesterday. I was busy.",
+        "options": [
+          "can",
+          "could",
+          "can't",
+          "could not"
+        ],
+        "a": "D) could not"
+      },
+      {
+        "id": 8,
+        "q": "My grandmother _______ speak German when she was young. (positive sentence)",
+        "options": [
+          "can",
+          "could",
+          "can't",
+          "could not"
+        ],
+        "a": "B) could"
+      },
+      {
+        "id": 9,
+        "q": "I _______ see you tomorrow if you like.",
+        "options": [
+          "can",
+          "could",
+          "can't",
+          "could not"
+        ],
+        "a": " can"
+      },
+      {
+        "id": 10,
+        "q": "She _______ come to the party last week because she was ill.",
+        "options": [
+          "can",
+          "could",
+          "can't",
+          "could not"
+        ],
+        "a": "D) could not"
+      },
+      {
+        "id": 11,
+        "q": "I'm _______ a jacket today.",
+        "options": [
+          "wear",
+          "wearing",
+          "wears",
+          "wore"
+        ],
+        "a": "B) wearing"
+      },
+      {
+        "id": 12,
+        "q": "I often _______ a jacket.",
+        "options": [
+          "wear",
+          "wearing",
+          "wears",
+          "wore"
+        ],
+        "a": " wear"
+      },
+      {
+        "id": 13,
+        "q": "I _______ in Mumbai this month.",
+        "options": [
+          "working",
+          "work",
+          "am working",
+          "worked"
+        ],
+        "a": "C) am working"
+      },
+      {
+        "id": 14,
+        "q": "They _______ any photos today.",
+        "options": [
+          "aren't taking",
+          "don't take",
+          "didn't take",
+          "not take"
+        ],
+        "a": " aren't taking"
+      },
+      {
+        "id": 15,
+        "q": "We _______ computer games.",
+        "options": [
+          "never playing",
+          "never play",
+          "don't play never",
+          "aren't never playing"
+        ],
+        "a": "B) never play"
+      },
+      {
+        "id": 16,
+        "q": "\"Why _______?\" \"I'm late!\"",
+        "options": [
+          "are you running",
+          "do you run",
+          "did you run",
+          "you run"
+        ],
+        "a": " are you running"
+      },
+      {
+        "id": 17,
+        "q": "Mona didn't __________ a story yesterday.",
+        "options": [
+          "write",
+          "wrote",
+          "writed",
+          "wroted"
+        ],
+        "a": " write"
+      },
+      {
+        "id": 18,
+        "q": "\"How often _______ TV?\" \"Every evening.\"",
+        "options": [
+          "are you watching",
+          "do you watch",
+          "watched",
+          "watching"
+        ],
+        "a": "B) do you watch"
+      },
+      {
+        "id": 19,
+        "q": "\"_______ a shower?\" \"No, he's in bed.\"",
+        "options": [
+          "Is he having",
+          "Does he have",
+          "Has he",
+          "He having"
+        ],
+        "a": " Is he having"
+      },
+      {
+        "id": 20,
+        "q": "She ______ (tidy) her room an hour ago.",
+        "options": [
+          "tidied",
+          "tidyd",
+          "tidyed",
+          "tidy"
+        ],
+        "a": " tidied"
+      },
+      {
+        "id": 21,
+        "q": "\"Who's _______ in the garden?\" \"That's Ella. She's a very good dancer.\"",
+        "options": [
+          "dancing",
+          "dances",
+          "danced",
+          "dance"
+        ],
+        "a": " dancing"
+      },
+      {
+        "id": 22,
+        "q": "\"What's your brother _______?\" \"He's an engineer.\"",
+        "options": [
+          "doing",
+          "does",
+          "did",
+          "do"
+        ],
+        "a": " doing"
+      },
+      {
+        "id": 23,
+        "q": "She sings ___ in the choir",
+        "options": [
+          "well",
+          "good",
+          "high",
+          "hard"
+        ],
+        "a": " well"
+      },
+      {
+        "id": 24,
+        "q": "The train arrived ___.",
+        "options": [
+          "late",
+          "wrong",
+          "long",
+          "straight"
+        ],
+        "a": " late"
+      },
+      {
+        "id": 25,
+        "q": "He is a ___ student, but he doesn't study.",
+        "options": [
+          "good / well",
+          "fast / fast",
+          "high / high",
+          "wrong / wrong"
+        ],
+        "a": " good / well"
+      },
+      {
+        "id": 26,
+        "q": "They worked ___ all night to finish the project.",
+        "options": [
+          "hard",
+          "early",
+          "low",
+          "wrong"
+        ],
+        "a": " hard"
+      },
+      {
+        "id": 27,
+        "q": "The mountain is very ___, but the plane is flying ___.",
+        "options": [
+          "high / high",
+          "low / low",
+          "long / long",
+          "straight / straight"
+        ],
+        "a": " high / high"
+      },
+      {
+        "id": 28,
+        "q": "She speaks English _______.",
+        "options": [
+          "good",
+          "well",
+          "betterly",
+          "goodly"
+        ],
+        "a": "B) well"
+      },
+      {
+        "id": 29,
+        "q": "Which sentence uses *fast* correctly as an adverb?",
+        "options": [
+          "He is a fast runner.",
+          "She runs fast.",
+          "The fast car is red.",
+          "He is fastly tired."
+        ],
+        "a": "B) She runs fast."
+      },
+      {
+        "id": 30,
+        "q": "Adjective: hard → Adverb: _______",
+        "options": [
+          "hardly",
+          "hard",
+          "difficultly",
+          "strong"
+        ],
+        "a": "B) hard"
+      },
+      {
+        "id": 31,
+        "q": "We arrived _______ to the meeting, so we missed the introduction.",
+        "options": [
+          "late",
+          "lately",
+          "lateness",
+          "latterly"
+        ],
+        "a": " late"
+      },
+      {
+        "id": 32,
+        "q": "Which sentence shows early used as an adverb?",
+        "options": [
+          "She arrived early to class.",
+          "The early train leaves at 6.",
+          "He is an early riser.",
+          "The early bird catches the worm"
+        ],
+        "a": " She arrived early to class."
+      },
+      {
+        "id": 33,
+        "q": "The climbers reached the _______ peak after hours of effort.",
+        "options": [
+          "high",
+          "highly",
+          "height",
+          "higherly"
+        ],
+        "a": " high"
+      },
+      {
+        "id": 34,
+        "q": "Which sentence uses wrong correctly as an adverb?",
+        "options": [
+          "She spelled the word wrong.",
+          "The wrong decision was made.",
+          "He gave me the wrong answer.",
+          "Wrong ideas spread quickly."
+        ],
+        "a": " She spelled the word wrong."
+      },
+      {
+        "id": 35,
+        "q": "She _______ at the library yesterday.",
+        "options": [
+          "was",
+          "were",
+          "wasn't",
+          "weren't"
+        ],
+        "a": " was"
+      },
+      {
+        "id": 36,
+        "q": "They _______ ready for the exam. (negative)",
+        "options": [
+          "was",
+          "were",
+          "wasn't",
+          "weren't"
+        ],
+        "a": "D) weren't"
+      },
+      {
+        "id": 37,
+        "q": "_______ he late for class last Monday?",
+        "options": [
+          "Was",
+          "Were",
+          "Is",
+          "Are"
+        ],
+        "a": " Was"
+      },
+      {
+        "id": 38,
+        "q": "It _______ cold and rainy last night.",
+        "options": [
+          "was",
+          "were",
+          "isn't",
+          "aren't"
+        ],
+        "a": " was"
+      },
+      {
+        "id": 39,
+        "q": "We _______ happy with the results.",
+        "options": [
+          "was",
+          "weren't",
+          "wasn't",
+          "weren't"
+        ],
+        "a": "D) weren't"
+      },
+      {
+        "id": 40,
+        "q": "When _______ they born?",
+        "options": [
+          "was",
+          "were",
+          "is",
+          "are"
+        ],
+        "a": "B) were"
+      },
+      {
+        "id": 41,
+        "q": "Were you at school? Yes, I _______.",
+        "options": [
+          "was",
+          "were",
+          "wasn't",
+          "weren't"
+        ],
+        "a": " was"
+      },
+      {
+        "id": 42,
+        "q": "Was he at the party yesterday? No, he _______.",
+        "options": [
+          "was",
+          "were",
+          "wasn't",
+          "weren't"
+        ],
+        "a": "C) wasn't"
+      },
+      {
+        "id": 43,
+        "q": "Were they ready for the lesson. Yes, they _______.",
+        "options": [
+          "was",
+          "were",
+          "wasn't",
+          "weren't"
+        ],
+        "a": "B) were"
+      },
+      {
+        "id": 44,
+        "q": "Were you awake at night? No, we _______.",
+        "options": [
+          "was",
+          "were",
+          "wasn't",
+          "weren't"
+        ],
+        "a": "D) weren't"
+      },
+      {
+        "id": 45,
+        "q": "She is _______ right.",
+        "options": [
+          "absolutely",
+          "completely",
+          "extremely",
+          "fairly"
+        ],
+        "a": " absolutely"
+      },
+      {
+        "id": 46,
+        "q": "I _______ understand you.",
+        "options": [
+          "completely",
+          "partly",
+          "slightly",
+          "nearly"
+        ],
+        "a": " completely"
+      },
+      {
+        "id": 47,
+        "q": "The weather is _______ hot today.",
+        "options": [
+          "extremely",
+          "slightly",
+          "rather",
+          "somewhat"
+        ],
+        "a": " extremely"
+      },
+      {
+        "id": 48,
+        "q": "She is _______ kind.",
+        "options": [
+          "very",
+          "hardly",
+          "deeply",
+          "partly"
+        ],
+        "a": " very"
+      },
+      {
+        "id": 49,
+        "q": "I _______ like this book.",
+        "options": [
+          "really",
+          "barely",
+          "almost",
+          "not at all"
+        ],
+        "a": " really"
+      },
+      {
+        "id": 50,
+        "q": "The exam was _______ difficult.",
+        "options": [
+          "quite",
+          "a little",
+          "nearly",
+          "totally"
+        ],
+        "a": " quite"
+      },
+      {
+        "id": 51,
+        "q": "It is _______ cold outside.",
+        "options": [
+          "rather",
+          "completely",
+          "perfectly",
+          "somewhat"
+        ],
+        "a": " rather"
+      },
+      {
+        "id": 52,
+        "q": "She _______ a glass of water after lunch.",
+        "options": [
+          "drink",
+          "drinked",
+          "drank",
+          "drinking"
+        ],
+        "a": "C) drank"
+      },
+      {
+        "id": 53,
+        "q": "They _______ him a birthday present yesterday.",
+        "options": [
+          "give",
+          "gives",
+          "gave",
+          "giving"
+        ],
+        "a": "C) gave"
+      },
+      {
+        "id": 54,
+        "q": "We _______ the keys under the table last night.",
+        "options": [
+          "find",
+          "finds",
+          "found",
+          "finding"
+        ],
+        "a": "C) found"
+      },
+      {
+        "id": 55,
+        "q": "Did you _______ in the sea?",
+        "options": [
+          "swim",
+          "swimm",
+          "swam",
+          "swimming"
+        ],
+        "a": " swim"
+      },
+      {
+        "id": 56,
+        "q": "— Did you swim in the sea? — Yes, I _______.",
+        "options": [
+          "did",
+          "do",
+          "does",
+          "deed"
+        ],
+        "a": " did"
+      },
+      {
+        "id": 57,
+        "q": "Did he _______ the whole island?",
+        "options": [
+          "visit",
+          "vissit",
+          "visited",
+          "visiting"
+        ],
+        "a": " visit"
+      },
+      {
+        "id": 58,
+        "q": "— Did he visit the whole island? — No, he _______.",
+        "options": [
+          "didn't",
+          "don't",
+          "did nott",
+          "does not"
+        ],
+        "a": " didn't"
+      },
+      {
+        "id": 59,
+        "q": "We went to work yesterday. → We _______ to work yesterday.",
+        "options": [
+          "didn't went",
+          "didn't go",
+          "not go",
+          "don't go"
+        ],
+        "a": "B) didn't go"
+      },
+      {
+        "id": 60,
+        "q": "Choose the correct Wh-question:",
+        "options": [
+          "What did you do there?",
+          "What you did there?",
+          "What did you did there?",
+          "What do you do there?"
+        ],
+        "a": " What did you do there?"
+      },
+      {
+        "id": 61,
+        "q": "She did not go to the library yesterday. Choose the positive form.",
+        "options": [
+          "She went to the library yesterday.",
+          "She goes to the library yesterday.",
+          "She going to the library yesterday.",
+          "She was go to the library yesterday."
+        ],
+        "a": " She went to the library yesterday."
+      },
+      {
+        "id": 62,
+        "q": "I don't have any money. Can you lend me £10?",
+        "options": [
+          "take something for a short time",
+          "give something for a short time",
+          "keep something forever",
+          "lose something"
+        ],
+        "a": "B) give something for a short time"
+      },
+      {
+        "id": 63,
+        "q": "I forgot my pen, so I borrowed one from my classmate.",
+        "options": [
+          "give something for a short time",
+          "take something for a short time",
+          "buy something new",
+          "sell something"
+        ],
+        "a": "B) take something for a short time"
+      },
+      {
+        "id": 64,
+        "q": "Why don't you come to my house for dinner tomorrow?",
+        "options": [
+          "move from here to another place",
+          "move from another place to here",
+          "stay at home",
+          "leave quickly"
+        ],
+        "a": "B) move from another place to here"
+      },
+      {
+        "id": 65,
+        "q": "Did you go to the swimming pool yesterday?",
+        "options": [
+          "move from another place to here",
+          "move from here to another place",
+          "stay in one place",
+          "return home"
+        ],
+        "a": "B) move from here to another place"
+      },
+      {
+        "id": 66,
+        "q": "She told me her name.",
+        "options": [
+          "give information to somebody",
+          "give information generally",
+          "ask a question",
+          "write a story"
+        ],
+        "a": " give information to somebody"
+      },
+      {
+        "id": 67,
+        "q": "He looked at his watch.",
+        "options": [
+          "look at something for a short time",
+          "look at something for a long time",
+          "ignore something",
+          "hide something"
+        ],
+        "a": " look at something for a short time"
+      },
+      {
+        "id": 68,
+        "q": "The police watched the house for two days.",
+        "options": [
+          "look at something for a short time",
+          "look at something for a long time",
+          "move around the house",
+          "protect the house physically"
+        ],
+        "a": "B) look at something for a long time"
+      },
+      {
+        "id": 69,
+        "q": "Which is correct for agreeing with a positive statement?",
+        "options": [
+          "I am agree.",
+          "So do I.",
+          "Neither do I.",
+          "I don't."
+        ],
+        "a": "B) So do I."
+      },
+      {
+        "id": 70,
+        "q": "Which phrase shows agreement with a negative statement?",
+        "options": [
+          "So am I.",
+          "Neither do I.",
+          "I couldn't agree more.",
+          "Exactly."
+        ],
+        "a": "B) Neither do I."
+      },
+      {
+        "id": 71,
+        "q": "Which option shows polite disagreement?",
+        "options": [
+          "I strongly agree.",
+          "Absolutely.",
+          "I'm afraid I can't agree.",
+          "That's so true."
+        ],
+        "a": "C) I'm afraid I can't agree."
+      },
+      {
+        "id": 72,
+        "q": "Which phrase expresses partial agreement?",
+        "options": [
+          "I agree up to a point, but…",
+          "Exactly.",
+          "Absolutely.",
+          "I couldn't agree more."
+        ],
+        "a": " I agree up to a point, but…"
+      },
+      {
+        "id": 73,
+        "q": "Which intensifier strengthens disagreement?",
+        "options": [
+          "I totally disagree.",
+          "I agree up to a point.",
+          "I'm not so sure.",
+          "Neither do I."
+        ],
+        "a": " I totally disagree."
+      },
+      {
+        "id": 74,
+        "q": "Which sentence is incorrect?",
+        "options": [
+          "I agree.",
+          "I am agree.",
+          "I strongly agree.",
+          "I couldn't agree more."
+        ],
+        "a": "B) I am agree."
+      },
+      {
+        "id": 75,
+        "q": "I_________ at the bank two hours ago.",
+        "options": [
+          "was",
+          "were",
+          "did",
+          "be"
+        ],
+        "a": " was"
+      },
+      {
+        "id": 76,
+        "q": "You ___ wear warm clothes when it's cold.",
+        "options": [
+          "should",
+          "shouldn't",
+          "should to",
+          "shoulds"
+        ],
+        "a": " should"
+      },
+      {
+        "id": 77,
+        "q": "She ___ buy that jacket, it's very expensive.",
+        "options": [
+          "should",
+          "shouldn't",
+          "shoulds",
+          "should to"
+        ],
+        "a": "B) shouldn't"
+      },
+      {
+        "id": 78,
+        "q": "I ___ go out tonight. (lots of work to do)",
+        "options": [
+          "should",
+          "shouldn't",
+          "shoulds",
+          "should to"
+        ],
+        "a": "B) shouldn't"
+      },
+      {
+        "id": 79,
+        "q": "He ___ buy his mother a birthday present.",
+        "options": [
+          "should",
+          "shouldn't",
+          "shoulds",
+          "should to"
+        ],
+        "a": " should"
+      },
+      {
+        "id": 80,
+        "q": "You ___ sleep eight hours a night.",
+        "options": [
+          "should",
+          "shouldn't",
+          "shoulds",
+          "should to"
+        ],
+        "a": " should"
+      },
+      {
+        "id": 81,
+        "q": "I ___ work on Saturdays.",
+        "options": [
+          "don't have to",
+          "don't has to",
+          "shouldn't to",
+          "doesn't have too"
+        ],
+        "a": " don't have to"
+      },
+      {
+        "id": 82,
+        "q": "She ___ wear a uniform at work.",
+        "options": [
+          "has to",
+          "have too",
+          "should to",
+          "has too"
+        ],
+        "a": " has to"
+      },
+      {
+        "id": 83,
+        "q": "He ___ work long hours.",
+        "options": [
+          "doesn't have to",
+          "don't has to",
+          "shouldn't to",
+          "doesn't has to"
+        ],
+        "a": " doesn't have to"
+      },
+      {
+        "id": 84,
+        "q": "Where ___ he have to go?",
+        "options": [
+          "does",
+          "do",
+          "dids",
+          "is"
+        ],
+        "a": " does"
+      },
+      {
+        "id": 85,
+        "q": "I ___ call my boss.",
+        "options": [
+          "have to",
+          "have too",
+          "should to",
+          "has to"
+        ],
+        "a": " have to"
+      },
+      {
+        "id": 86,
+        "q": "I need to ___ a haircut before the wedding.",
+        "options": [
+          "take",
+          "get",
+          "have",
+          "make"
+        ],
+        "a": "B) get"
+      },
+      {
+        "id": 87,
+        "q": "She will ___ married next month.",
+        "options": [
+          "get",
+          "take",
+          "have",
+          "do"
+        ],
+        "a": " get"
+      },
+      {
+        "id": 88,
+        "q": "We must ___ to the airport by 7 a.m.",
+        "options": [
+          "get",
+          "take",
+          "have",
+          "go"
+        ],
+        "a": " get"
+      },
+      {
+        "id": 89,
+        "q": "I don't ___ it. Can you explain again?",
+        "options": [
+          "take",
+          "get",
+          "have",
+          "make"
+        ],
+        "a": "B) get"
+      },
+      {
+        "id": 90,
+        "q": "Let's ___ a break after class.",
+        "options": [
+          "get",
+          "take",
+          "have",
+          "make"
+        ],
+        "a": "B) take"
+      },
+      {
+        "id": 91,
+        "q": "He decided to ___ responsibility for the mistake.",
+        "options": [
+          "get",
+          "take",
+          "have",
+          "give"
+        ],
+        "a": "B) take"
+      },
+      {
+        "id": 92,
+        "q": "We usually ___ the train to work.",
+        "options": [
+          "get",
+          "take",
+          "have",
+          "go"
+        ],
+        "a": "B) take"
+      },
+      {
+        "id": 93,
+        "q": "You should ___ medicine if you feel sick.",
+        "options": [
+          "get",
+          "take",
+          "have",
+          "make"
+        ],
+        "a": "B) take"
+      },
+      {
+        "id": 94,
+        "q": "They will ___ a party this weekend.",
+        "options": [
+          "get",
+          "take",
+          "have",
+          "make"
+        ],
+        "a": "C) have"
+      },
+      {
+        "id": 95,
+        "q": "I usually ___ breakfast at 7 o'clock.",
+        "options": [
+          "get",
+          "take",
+          "have",
+          "eat"
+        ],
+        "a": "C) have"
+      },
+      {
+        "id": 96,
+        "q": "We use ___ with singular countable nouns.",
+        "options": [
+          "a/an",
+          "some",
+          "any",
+          "the"
+        ],
+        "a": " a/an"
+      },
+      {
+        "id": 97,
+        "q": "We use ___ with plural countable nouns or uncountable nouns in positive sentences.",
+        "options": [
+          "a/an",
+          "some",
+          "any",
+          "the"
+        ],
+        "a": "B) some"
+      },
+      {
+        "id": 98,
+        "q": "We use ___ with plural countable nouns or uncountable nouns in negative sentences and questions.",
+        "options": [
+          "a/an",
+          "some",
+          "any",
+          "the"
+        ],
+        "a": "C) any"
+      },
+      {
+        "id": 99,
+        "q": "Can I have ___ eggs, please?",
+        "options": [
+          "some",
+          "any",
+          "a",
+          "an"
+        ],
+        "a": " some"
+      },
+      {
+        "id": 100,
+        "q": "Is there ___ milk?",
+        "options": [
+          "some",
+          "any",
+          "a",
+          "an"
+        ],
+        "a": "B) any"
+      },
+      {
+        "id": 101,
+        "q": "We don't have ___ meat.",
+        "options": [
+          "some",
+          "any",
+          "a",
+          "an"
+        ],
+        "a": "B) any"
+      },
+      {
+        "id": 102,
+        "q": "There aren't ___ mushrooms.",
+        "options": [
+          "some",
+          "any",
+          "a",
+          "an"
+        ],
+        "a": "B) any"
+      },
+      {
+        "id": 103,
+        "q": "Are there ___ vegetables?",
+        "options": [
+          "some",
+          "any",
+          "a",
+          "an"
+        ],
+        "a": "B) any"
+      },
+      {
+        "id": 104,
+        "q": "Does he have ___ drink?",
+        "options": [
+          "some",
+          "any",
+          "a",
+          "an"
+        ],
+        "a": "C) a"
+      },
+      {
+        "id": 105,
+        "q": "She doesn't have ___ money.",
+        "options": [
+          "some",
+          "any",
+          "a",
+          "an"
+        ],
+        "a": "B) any"
+      },
+      {
+        "id": 106,
+        "q": "He has ___ clothes.",
+        "options": [
+          "quite a lot of",
+          "quite lots of",
+          "much",
+          "manys"
+        ],
+        "a": " quite a lot of"
+      },
+      {
+        "id": 107,
+        "q": "I don't have ___ coffee.",
+        "options": [
+          "much",
+          "many",
+          "muchs",
+          "lot of"
+        ],
+        "a": " much"
+      },
+      {
+        "id": 108,
+        "q": "They don't have ___ lemons.",
+        "options": [
+          "many",
+          "much",
+          "manys",
+          "lot of"
+        ],
+        "a": " many"
+      },
+      {
+        "id": 109,
+        "q": "We don't have ___ tomatoes.",
+        "options": [
+          "a lot of",
+          "alot",
+          "muchs",
+          "manys"
+        ],
+        "a": " a lot of"
+      },
+      {
+        "id": 110,
+        "q": "How ___ books are there?",
+        "options": [
+          "much",
+          "many",
+          "lot",
+          "any"
+        ],
+        "a": "B) many"
+      },
+      {
+        "id": 111,
+        "q": "How ___ milk do you drink?",
+        "options": [
+          "many",
+          "much",
+          "lots",
+          "any"
+        ],
+        "a": "B) much"
+      },
+      {
+        "id": 112,
+        "q": "There ___ no potatoes.",
+        "options": [
+          "is",
+          "are",
+          "was",
+          "were"
+        ],
+        "a": "B) are"
+      },
+      {
+        "id": 113,
+        "q": "There's ___ milk.",
+        "options": [
+          "no",
+          "none",
+          "any",
+          "many"
+        ],
+        "a": " no"
+      },
+      {
+        "id": 114,
+        "q": "There aren't ___ tomatoes.",
+        "options": [
+          "some",
+          "any",
+          "a",
+          "an"
+        ],
+        "a": "B) any"
+      },
+      {
+        "id": 115,
+        "q": "We don't have ___ money.",
+        "options": [
+          "some",
+          "any",
+          "a",
+          "an"
+        ],
+        "a": "B) any"
+      },
+      {
+        "id": 116,
+        "q": "How do we say 3692 5847 in English?",
+        "options": [
+          "three six nine two, five eight four seven",
+          "thirtysix ninetytwo, fiftyeight fortyseven",
+          "three thousand six hundred ninetytwo, five thousand eight hundred fortyseven",
+          "three nine six two, five four eight seven"
+        ],
+        "a": " three six nine two, five eight four seven"
+      },
+      {
+        "id": 117,
+        "q": "How do we say 5059 1023 using \"oh\"?",
+        "options": [
+          "five zero five nine, one zero two three",
+          "five oh five nine, one oh two three",
+          "fifty fiftynine, ten twentythree",
+          "five five nine, one two three"
+        ],
+        "a": "B) five oh five nine, one oh two three"
+      },
+      {
+        "id": 118,
+        "q": "How do we say 5718 3369 in English?",
+        "options": [
+          "five seven one eight, three three six nine",
+          "fiftyseven eighteen, thirtythree sixtynine",
+          "five seven one eight, double three six nine",
+          "five seven one eight, triple three six nine"
+        ],
+        "a": "C) five seven one eight, double three six nine"
+      },
+      {
+        "id": 119,
+        "q": "How do we say 2149 8777 in English?",
+        "options": [
+          "two one four nine, eight triple seven",
+          "twentyone fortynine, eight seven seven seven",
+          "two one four nine, eight double seven seven",
+          "two one four nine, eight seven seventyseven"
+        ],
+        "a": " two one four nine, eight triple seven"
+      },
+      {
+        "id": 120,
+        "q": "4² = ___",
+        "options": [
+          "four squared",
+          "four cube",
+          "four double",
+          "four two"
+        ],
+        "a": " four squared"
+      },
+      {
+        "id": 121,
+        "q": "7³ = ___",
+        "options": [
+          "seven cubed",
+          "seven squared",
+          "seven triple",
+          "seven three"
+        ],
+        "a": " seven cubed"
+      },
+      {
+        "id": 122,
+        "q": "8⁴ = ___",
+        "options": [
+          "eight to the power of four",
+          "eight squared four",
+          "eight cube four",
+          "eight four"
+        ],
+        "a": " eight to the power of four"
+      },
+      {
+        "id": 123,
+        "q": "32°C = ___",
+        "options": [
+          "thirtytwo degrees Celsius",
+          "thirtytwo Celsius degree",
+          "thirtytwo centigrade degree",
+          "thirtytwo degree"
+        ],
+        "a": " thirtytwo degrees Celsius"
+      },
+      {
+        "id": 124,
+        "q": "1,623,457 = ___",
+        "options": [
+          "one million, six hundred and twentythree thousand, four hundred and fiftyseven",
+          "one million six hundred twentythree four hundred fiftyseven",
+          "one million six hundred twentythree thousand four hundred fiftyseven hundred",
+          "one million six hundred twentythree thousand fiftyseven"
+        ],
+        "a": " one million, six hundred and twentythree thousand, four hundred and fiftyseven"
+      },
+      {
+        "id": 125,
+        "q": "10.3 = ___",
+        "options": [
+          "ten point three",
+          "ten dot three",
+          "ten comma three",
+          "ten three"
+        ],
+        "a": " ten point three"
+      },
+      {
+        "id": 126,
+        "q": "___ right (place where the object).",
+        "options": [
+          "into",
+          "on",
+          "at the",
+          "in"
+        ],
+        "a": "C) at the"
+      },
+      {
+        "id": 127,
+        "q": "Go strait ____ (continue the action).",
+        "options": [
+          "on",
+          "off",
+          "with",
+          "at"
+        ],
+        "a": " on"
+      },
+      {
+        "id": 128,
+        "q": "___ the second right. (turn to the second right)",
+        "options": [
+          "across",
+          "on",
+          "in",
+          "take"
+        ],
+        "a": "D) take"
+      },
+      {
+        "id": 129,
+        "q": "___ the end. (place)",
+        "options": [
+          "into",
+          "on",
+          "at",
+          "in"
+        ],
+        "a": "C) at"
+      },
+      {
+        "id": 130,
+        "q": "Jump ___ the box.",
+        "options": [
+          "into",
+          "at",
+          "on",
+          "in"
+        ],
+        "a": " into"
+      },
+      {
+        "id": 131,
+        "q": "___ the door!",
+        "options": [
+          "Open",
+          "Opens",
+          "Opening",
+          "Opened"
+        ],
+        "a": " Open"
+      },
+      {
+        "id": 132,
+        "q": "___ quiet!",
+        "options": [
+          "Be",
+          "Is",
+          "Are",
+          "Being"
+        ],
+        "a": " Be"
+      },
+      {
+        "id": 133,
+        "q": "___ your homework!",
+        "options": [
+          "Do",
+          "Does",
+          "Doing",
+          "Did"
+        ],
+        "a": " Do"
+      },
+      {
+        "id": 134,
+        "q": "___ here!",
+        "options": [
+          "Come",
+          "Comes",
+          "Coming",
+          "Came"
+        ],
+        "a": " Come"
+      },
+      {
+        "id": 135,
+        "q": "___ the window!",
+        "options": [
+          "Close",
+          "Closes",
+          "Closing",
+          "Closed"
+        ],
+        "a": " Close"
+      },
+      {
+        "id": 136,
+        "q": "Mumbai is ___city to visit.",
+        "options": [
+          "a",
+          "an",
+          "the",
+          "—"
+        ],
+        "a": " a"
+      },
+      {
+        "id": 137,
+        "q": "The Nile river is in ___ Africa.",
+        "options": [
+          "a",
+          "an",
+          "the",
+          "—"
+        ],
+        "a": "D) —"
+      },
+      {
+        "id": 138,
+        "q": "We go to ___ cinema on ___Saturday.",
+        "options": [
+          "A/an",
+          "An/-",
+          "The /the",
+          "the /-"
+        ],
+        "a": "D) the /-"
+      },
+      {
+        "id": 139,
+        "q": "Is there ___ airport near your town.",
+        "options": [
+          "a",
+          "—",
+          "the",
+          "an"
+        ],
+        "a": "D) an"
+      },
+      {
+        "id": 140,
+        "q": "___ book on the table is mine.",
+        "options": [
+          "A",
+          "An",
+          "The",
+          "—"
+        ],
+        "a": "C) The"
+      },
+      {
+        "id": 141,
+        "q": "The capital of Thailand is ___ Bangkok.",
+        "options": [
+          "a",
+          "the",
+          "an",
+          "—"
+        ],
+        "a": "D) —"
+      },
+      {
+        "id": 142,
+        "q": "I need ___ pen.",
+        "options": [
+          "a",
+          "an",
+          "the",
+          "—"
+        ],
+        "a": " a"
+      },
+      {
+        "id": 143,
+        "q": "___ moon is beautiful.",
+        "options": [
+          "A",
+          "An",
+          "The",
+          "—"
+        ],
+        "a": "C) The"
+      },
+      {
+        "id": 144,
+        "q": "There is __ supermarket opposite __ cinema.",
+        "options": [
+          "a/the",
+          "an/the",
+          "the/a",
+          "-/-"
+        ],
+        "a": " a/the"
+      },
+      {
+        "id": 145,
+        "q": "I saw ___ elephant.",
+        "options": [
+          "a",
+          "an",
+          "the",
+          "—"
+        ],
+        "a": "B) an"
+      },
+      {
+        "id": 146,
+        "q": "A person who teaches is a ___",
+        "options": [
+          "teach",
+          "teacher",
+          "teaching",
+          "teaches"
+        ],
+        "a": "B) teacher"
+      },
+      {
+        "id": 147,
+        "q": "A person who drives is a ___",
+        "options": [
+          "driver",
+          "drive",
+          "driving",
+          "drives"
+        ],
+        "a": " driver"
+      },
+      {
+        "id": 148,
+        "q": "A person who sings is a ___",
+        "options": [
+          "singer",
+          "sing",
+          "singing",
+          "sings"
+        ],
+        "a": " singer"
+      },
+      {
+        "id": 149,
+        "q": "A person who works on a farm is a ___",
+        "options": [
+          "farm",
+          "farmer",
+          "farming",
+          "farms"
+        ],
+        "a": "B) farmer"
+      },
+      {
+        "id": 150,
+        "q": "A person who plays football is a ___",
+        "options": [
+          "play",
+          "player",
+          "playing",
+          "plays"
+        ],
+        "a": "B) player"
+      }
+    ]
+  }
+}

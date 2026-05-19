@@ -213,7 +213,7 @@
 //   }
 
 //   // --- Video fayl kutilmoqda (admin) ---
-//   // (video uchun alohida handler pastda)
+//   // (video uchun alohida handler pastd
 
 //   // --- Oddiy foydalanuvchi: kino kodi ---
 //   const { ok, missing } = await checkSubscription(userId);
