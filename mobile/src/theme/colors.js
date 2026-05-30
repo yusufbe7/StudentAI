@@ -1,0 +1,46 @@
+// Dark va Light tema ranglari
+export const darkTheme = {
+  mode: 'dark',
+  bg: '#0d1117',
+  card: '#161b22',
+  card2: '#1c2230',
+  border: '#272e3a',
+  text: '#e6edf3',
+  textDim: '#8b949e',
+  primary: '#6c5ce7',
+  primaryDim: '#4834b3',
+  accent: '#00b894',
+  danger: '#ff6b6b',
+  warning: '#fdcb6e',
+  gold: '#ffd700',
+  silver: '#c0c0c0',
+  bronze: '#cd7f32',
+  inputBg: '#0b0f14',
+  bubbleMe: '#6c5ce7',
+  bubbleOther: '#1c2230',
+  online: '#2ecc71',
+};
+
+export const lightTheme = {
+  mode: 'light',
+  bg: '#f4f6fb',
+  card: '#ffffff',
+  card2: '#eef1f7',
+  border: '#e2e6ee',
+  text: '#1a1d24',
+  textDim: '#6b7280',
+  primary: '#6c5ce7',
+  primaryDim: '#a29bfe',
+  accent: '#00b894',
+  danger: '#e74c3c',
+  warning: '#f39c12',
+  gold: '#e0a800',
+  silver: '#9aa0a6',
+  bronze: '#b87333',
+  inputBg: '#f0f2f7',
+  bubbleMe: '#6c5ce7',
+  bubbleOther: '#eceff5',
+  online: '#27ae60',
+};
+
+export default { darkTheme, lightTheme };

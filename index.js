@@ -244,6 +244,8 @@ const io = new Server(server, {
     transports: ['websocket','polling'],
 });
 app.use(express.static(path.join(__dirname, 'public')));
+// Savol rasmlarini web/mobil ilova uchun ochish (/images/<fayl>.png)
+app.use('/images', express.static(path.join(__dirname, 'images')));
 app.use(express.json({ limit: '10mb' }));
 
 // ─── Online foydalanuvchilar: name → socket.id ─────────────
