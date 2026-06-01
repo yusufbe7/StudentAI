@@ -2791,7 +2791,1174 @@
   },
   "dasturiy_injiniring_malumotlar_tuzilmasi": {
     "name": "Ma'lumotlar tuzilmasi",
-    "questions": []
+    "questions": [
+    {
+      "id": 1,
+      "q": "Ma'lumotlar tuzilmasi nima?",
+      "options": [
+        "Algoritmlar to'plami",
+        "Xotirada tashkil etilgan elementlar yig'indisi",
+        "Dastur kodi",
+        "Operatsion tizim"
+      ],
+      "a": "Xotirada tashkil etilgan elementlar yig'indisi"
+    },
+    {
+      "id": 2,
+      "q": "Ma'lumot nima?",
+      "options": [
+        "Qayta ishlangan natija",
+        "Algoritm",
+        "Qiymatlar yig'indisi",
+        "Funksiya"
+      ],
+      "a": "Qiymatlar yig'indisi"
+    },
+    {
+      "id": 3,
+      "q": "Axborot nima?",
+      "options": [
+        "Xom ma'lumot",
+        "Qayta ishlangan ma'lumot",
+        "Algoritm",
+        "Fayl"
+      ],
+      "a": "Qayta ishlangan ma'lumot"
+    },
+    {
+      "id": 4,
+      "q": "Ma'lumotlar tuzilmasi elementi nima?",
+      "options": [
+        "Butun tizim",
+        "Fayl",
+        "Qiymatlar to'plamining bir bo'lagi",
+        "Algoritm"
+      ],
+      "a": "Qiymatlar to'plamining bir bo'lagi"
+    },
+    {
+      "id": 5,
+      "q": "Ob'ekt nima?",
+      "options": [
+        "Faqat son",
+        "Xususiyat va atributlarga ega tuzilma",
+        "Funksiya",
+        "Kod"
+      ],
+      "a": "Xususiyat va atributlarga ega tuzilma"
+    },
+    {
+      "id": 6,
+      "q": "Maydon nima?",
+      "options": [
+        "Algoritm",
+        "Ob'ekt atributi yoki xususiyati",
+        "Fayl",
+        "Matritsa"
+      ],
+      "a": "Ob'ekt atributi yoki xususiyati"
+    },
+    {
+      "id": 7,
+      "q": "Yozuv nima?",
+      "options": [
+        "Bitta qiymat",
+        "Turli toifadagi maydonlar to'plami",
+        "Algoritm",
+        "Dastur"
+      ],
+      "a": "Turli toifadagi maydonlar to'plami"
+    },
+    {
+      "id": 8,
+      "q": "Fayl nima?",
+      "options": [
+        "Bitta yozuv",
+        "Yozuvlar to'plami",
+        "Algoritm",
+        "Funksiya"
+      ],
+      "a": "Yozuvlar to'plami"
+    },
+    {
+      "id": 9,
+      "q": "Kalit nima?",
+      "options": [
+        "Algoritm",
+        "Yozuvni aniqlovchi maydon",
+        "Fayl",
+        "Funksiya"
+      ],
+      "a": "Yozuvni aniqlovchi maydon"
+    },
+    {
+      "id": 10,
+      "q": "Ma'lumotlar toifasi nimani o'z ichiga oladi?",
+      "options": [
+        "Faqat qiymatlar",
+        "Faqat algoritmlar",
+        "Fayllar",
+        "Qiymatlar va amallar to'plami"
+      ],
+      "a": "Qiymatlar va amallar to'plami"
+    },
+    {
+      "id": 11,
+      "q": "Primitiv toifalarga qaysi kiradi?",
+      "options": [
+        "struct",
+        "int, float, char",
+        "enum",
+        "graf"
+      ],
+      "a": "int, float, char"
+    },
+    {
+      "id": 12,
+      "q": "Abstrakt toifa nima?",
+      "options": [
+        "Faqat fizik daraja",
+        "Fayl",
+        "Mantiqiy xususiyatlarni aniqlovchi toifa",
+        "Matritsa"
+      ],
+      "a": "Mantiqiy xususiyatlarni aniqlovchi toifa"
+    },
+    {
+      "id": 13,
+      "q": "Ma'lumotlar tuzilmasini tanlash nimaga bog'liq?",
+      "options": [
+        "Faqat xotiraga",
+        "Faqat dasturlash tiliga",
+        "Elementlararo munosabat va samaradorlikka",
+        "Faqat algoritmga"
+      ],
+      "a": "Elementlararo munosabat va samaradorlikka"
+    },
+    {
+      "id": 14,
+      "q": "Qidirish nima?",
+      "options": [
+        "O'chirish",
+        "Kiritish",
+        "Saralash",
+        "Element joylashuvini aniqlash"
+      ],
+      "a": "Element joylashuvini aniqlash"
+    },
+    {
+      "id": 15,
+      "q": "Saralash nima?",
+      "options": [
+        "Tartiblash amali",
+        "O'chirish",
+        "Qidirish",
+        "Birlashtirish"
+      ],
+      "a": "Tartiblash amali"
+    },
+    {
+      "id": 16,
+      "q": "Algoritm nima?",
+      "options": [
+        "Fayl",
+        "Ma'lumot",
+        "Masalani yechish ketma-ketligi",
+        "Xotira"
+      ],
+      "a": "Masalani yechish ketma-ketligi"
+    },
+    {
+      "id": 17,
+      "q": "Abstrakt bosqich nima?",
+      "options": [
+        "Fizik daraja",
+        "Xotira darajasi",
+        "Matematika model darajasi",
+        "Dastur darajasi"
+      ],
+      "a": "Matematika model darajasi"
+    },
+    {
+      "id": 18,
+      "q": "Mantiqiy bosqich nima?",
+      "options": [
+        "Dasturlash tilida ifodalash",
+        "Xotira",
+        "Matematika model",
+        "Fizik qurilma"
+      ],
+      "a": "Dasturlash tilida ifodalash"
+    },
+    {
+      "id": 19,
+      "q": "Fizik bosqich nima?",
+      "options": [
+        "Model",
+        "Xotirada akslantirish",
+        "Algoritm",
+        "Kod"
+      ],
+      "a": "Xotirada akslantirish"
+    },
+    {
+      "id": 20,
+      "q": "Daraxt qanday tuzilma?",
+      "options": [
+        "Chiziqli",
+        "Ierarxik",
+        "Tasodifiy",
+        "Matritsa"
+      ],
+      "a": "Ierarxik"
+    },
+    {
+      "id": 21,
+      "q": "Graf qanday tuzilma?",
+      "options": [
+        "Chiziqli",
+        "Binar munosabatli tuzilma",
+        "Faqat daraxt",
+        "Matritsa"
+      ],
+      "a": "Binar munosabatli tuzilma"
+    },
+    {
+      "id": 22,
+      "q": "Dinamik ma'lumotlar tuzilmasi nima?",
+      "options": [
+        "O'zgarmaydigan",
+        "Faqat massiv",
+        "Elementlari o'zgaradigan tuzilma",
+        "Faqat fayl"
+      ],
+      "a": "Elementlari o'zgaradigan tuzilma"
+    },
+    {
+      "id": 23,
+      "q": "Yarimstatik ma'lumotlar tuzilmasi nima?",
+      "options": [
+        "Faqat statik tuzilma",
+        "Statik va dinamik xususiyatlarni birlashtirgan tuzilma",
+        "Faqat dinamik tuzilma",
+        "Faqat massiv"
+      ],
+      "a": "Statik va dinamik xususiyatlarni birlashtirgan tuzilma"
+    },
+    {
+      "id": 24,
+      "q": "Yarimstatik tuzilmalarga qaysilar kiradi?",
+      "options": [
+        "Daraxt va graf",
+        "Matritsa va massiv",
+        "Fayl va yozuv",
+        "Stek, navbat, dek"
+      ],
+      "a": "Stek, navbat, dek"
+    },
+    {
+      "id": 25,
+      "q": "Yarimstatik tuzilmalarning asosiy xususiyati nima?",
+      "options": [
+        "Faqat o'zgarmas",
+        "Uzunligi o'zgaradi, lekin elementlar ketma-ket joylashadi",
+        "Faqat o'zgaruvchan",
+        "Faqat graf"
+      ],
+      "a": "Uzunligi o'zgaradi, lekin elementlar ketma-ket joylashadi"
+    },
+    {
+      "id": 26,
+      "q": "Stek qanday tuzilma?",
+      "options": [
+        "Ierarxik",
+        "Graf",
+        "Chiziqli",
+        "Matritsa"
+      ],
+      "a": "Chiziqli"
+    },
+    {
+      "id": 27,
+      "q": "Stek qanday prinsip asosida ishlaydi?",
+      "options": [
+        "FIFO",
+        "LIFO",
+        "Random",
+        "Parallel"
+      ],
+      "a": "LIFO"
+    },
+    {
+      "id": 28,
+      "q": "LIFO nimani anglatadi?",
+      "options": [
+        "Birinchi kelgan birinchi ketadi",
+        "Oxirgi kelgan birinchi ketadi",
+        "Tasodifiy tanlash",
+        "Doimiy tartib"
+      ],
+      "a": "Oxirgi kelgan birinchi ketadi"
+    },
+    {
+      "id": 29,
+      "q": "Stekga element qo'shish amali qanday ataladi?",
+      "options": [
+        "pop",
+        "push",
+        "enqueue",
+        "dequeue"
+      ],
+      "a": "push"
+    },
+    {
+      "id": 30,
+      "q": "Stekdan element olish amali qanday ataladi?",
+      "options": [
+        "push",
+        "pop",
+        "insert",
+        "search"
+      ],
+      "a": "pop"
+    },
+    {
+      "id": 31,
+      "q": "Stekda element qayerdan qo'shiladi va olinadi?",
+      "options": [
+        "Har ikki tomondan",
+        "Faqat boshidan",
+        "Bitta tomondan qo'shilib, o'sha tomondan olinadi",
+        "Faqat oxiridan"
+      ],
+      "a": "Bitta tomondan qo'shilib, o'sha tomondan olinadi"
+    },
+    {
+      "id": 32,
+      "q": "Navbat qanday tuzilma?",
+      "options": [
+        "Ierarxik",
+        "LIFO",
+        "Graf",
+        "FIFO asosida ishlovchi tuzilma"
+      ],
+      "a": "FIFO asosida ishlovchi tuzilma"
+    },
+    {
+      "id": 33,
+      "q": "FIFO nimani bildiradi?",
+      "options": [
+        "Oxirgi kelgan birinchi ketadi",
+        "Birinchi kelgan birinchi ketadi",
+        "Tasodifiy",
+        "Parallel"
+      ],
+      "a": "Birinchi kelgan birinchi ketadi"
+    },
+    {
+      "id": 34,
+      "q": "Navbatga element qo'shish amali?",
+      "options": [
+        "push",
+        "enqueue",
+        "pop",
+        "top"
+      ],
+      "a": "enqueue"
+    },
+    {
+      "id": 35,
+      "q": "Navbatdan element olish amali?",
+      "options": [
+        "push",
+        "dequeue",
+        "insert",
+        "clear"
+      ],
+      "a": "dequeue"
+    },
+    {
+      "id": 36,
+      "q": "Navbatda element qayerdan qo'shiladi?",
+      "options": [
+        "Boshidan",
+        "Oxiridan",
+        "Har ikkala tomondan",
+        "O'rtasidan"
+      ],
+      "a": "Oxiridan"
+    },
+    {
+      "id": 37,
+      "q": "Navbatdan element qayerdan olinadi?",
+      "options": [
+        "Boshidan",
+        "Oxiridan",
+        "O'rtasidan",
+        "Har ikkala tomondan"
+      ],
+      "a": "Boshidan"
+    },
+    {
+      "id": 38,
+      "q": "Dek nima?",
+      "options": [
+        "Stekning turi",
+        "Ikkala tomondan ishlovchi navbat",
+        "Graf",
+        "Daraxt"
+      ],
+      "a": "Ikkala tomondan ishlovchi navbat"
+    },
+    {
+      "id": 39,
+      "q": "DEQ nimani anglatadi?",
+      "options": [
+        "Double Queue",
+        "Double Ended Queue",
+        "Data Queue",
+        "Direct Queue"
+      ],
+      "a": "Double Ended Queue"
+    },
+    {
+      "id": 40,
+      "q": "Dekda element qayerdan qo'shiladi?",
+      "options": [
+        "Faqat boshidan",
+        "Faqat oxiridan",
+        "Har ikkala tomondan",
+        "O'rtasidan"
+      ],
+      "a": "Har ikkala tomondan"
+    },
+    {
+      "id": 41,
+      "q": "Dekda element qayerdan olinadi?",
+      "options": [
+        "Faqat boshidan",
+        "Faqat oxiridan",
+        "Har ikkala tomondan",
+        "Faqat o'rtadan"
+      ],
+      "a": "Har ikkala tomondan"
+    },
+    {
+      "id": 42,
+      "q": "Dekda boshidan qo'shish amali?",
+      "options": [
+        "push_back",
+        "pop_back",
+        "push_front",
+        "dequeue"
+      ],
+      "a": "push_front"
+    },
+    {
+      "id": 43,
+      "q": "Dekda oxiridan qo'shish amali?",
+      "options": [
+        "push_front",
+        "push_back",
+        "pop_front",
+        "clear"
+      ],
+      "a": "push_back"
+    },
+    {
+      "id": 44,
+      "q": "Stek qayerda qo'llaniladi?",
+      "options": [
+        "Faqat grafda",
+        "Ajratkichlarni tekshirishda",
+        "Faqat faylda",
+        "Faqat matritsada"
+      ],
+      "a": "Ajratkichlarni tekshirishda"
+    },
+    {
+      "id": 45,
+      "q": "Navbat qayerda qo'llaniladi?",
+      "options": [
+        "Rekursiyada",
+        "Jarayonlarni boshqarishda (masalan, navbat tizimi)",
+        "Faqat massivda",
+        "Faqat grafda"
+      ],
+      "a": "Jarayonlarni boshqarishda (masalan, navbat tizimi)"
+    },
+    {
+      "id": 46,
+      "q": "Dek qanday tuzilma sifatida qaralishi mumkin?",
+      "options": [
+        "Ikkita birlashtirilgan stek",
+        "Ikkita bog'langan graf",
+        "Matritsa",
+        "Fayl"
+      ],
+      "a": "Ikkita birlashtirilgan stek"
+    },
+    {
+      "id": 47,
+      "q": "Dinamik ma'lumotlar tuzilmasi nima?",
+      "options": [
+        "O'lchami o'zgarmaydigan tuzilma",
+        "Faqat massiv",
+        "O'lchami va bog'lanishlari o'zgaradigan tuzilma",
+        "Faqat fayl"
+      ],
+      "a": "O'lchami va bog'lanishlari o'zgaradigan tuzilma"
+    },
+    {
+      "id": 48,
+      "q": "Massivning asosiy kamchiligi nima?",
+      "options": [
+        "O'lchamini o'zgartirib bo'lmaydi",
+        "Tez ishlaydi",
+        "Xotirada kam joy egallaydi",
+        "Qidirish oson"
+      ],
+      "a": "O'lchamini o'zgartirib bo'lmaydi"
+    },
+    {
+      "id": 49,
+      "q": "Bog'langan ro'yxat nima?",
+      "options": [
+        "Ketma-ket massiv",
+        "Ko'rsatkichlar orqali bog'langan elementlar to'plami",
+        "Graf",
+        "Fayl"
+      ],
+      "a": "Ko'rsatkichlar orqali bog'langan elementlar to'plami"
+    },
+    {
+      "id": 50,
+      "q": "Bog'langan ro'yxatda elementlar qayerda joylashadi?",
+      "options": [
+        "Faqat ketma-ket",
+        "Xotiraning istalgan joyida",
+        "Faqat boshida",
+        "Faqat oxirida"
+      ],
+      "a": "Xotiraning istalgan joyida"
+    },
+    {
+      "id": 51,
+      "q": "Tugun (node) nimadan iborat?",
+      "options": [
+        "Faqat qiymat",
+        "Faqat ko'rsatkich",
+        "Ma'lumot va ko'rsatkich maydoni",
+        "Faqat indeks"
+      ],
+      "a": "Ma'lumot va ko'rsatkich maydoni"
+    },
+    {
+      "id": 52,
+      "q": "Ko'rsatkichli maydon nimani saqlaydi?",
+      "options": [
+        "Son",
+        "Keyingi element manzili",
+        "Matn",
+        "Fayl"
+      ],
+      "a": "Keyingi element manzili"
+    },
+    {
+      "id": 53,
+      "q": "Dinamik tuzilmaning afzalligi nimada?",
+      "options": [
+        "O'lchami o'zgarmaydi",
+        "Oson o'chirish va qo'shish mumkin",
+        "Faqat tez ishlaydi",
+        "Faqat massiv"
+      ],
+      "a": "Oson o'chirish va qo'shish mumkin"
+    },
+    {
+      "id": 54,
+      "q": "Dinamik tuzilmaning kamchiligi nimada?",
+      "options": [
+        "To'g'ridan-to'g'ri murojaat yo'q",
+        "Xotira ko'p",
+        "Sekin ishlaydi",
+        "O'zgarmaydi"
+      ],
+      "a": "To'g'ridan-to'g'ri murojaat yo'q"
+    },
+    {
+      "id": 55,
+      "q": "Chiziqli ro'yxat nima?",
+      "options": [
+        "Bog'lanmagan",
+        "Tartiblangan bog'lanishga ega tuzilma",
+        "Tasodifiy",
+        "Graf"
+      ],
+      "a": "Tartiblangan bog'lanishga ega tuzilma"
+    },
+    {
+      "id": 56,
+      "q": "Chiziqsiz ro'yxat nima?",
+      "options": [
+        "Faqat bitta ko'rsatkichli",
+        "Bir nechta bog'lanishga ega tuzilma",
+        "Faqat massiv",
+        "Statik"
+      ],
+      "a": "Bir nechta bog'lanishga ega tuzilma"
+    },
+    {
+      "id": 57,
+      "q": "Bir bog'lamli ro'yxat nima?",
+      "options": [
+        "Har tugun faqat keyingi elementga bog'lanadi",
+        "Har tugun ikkita bog'lanadi",
+        "Har tugun oldingiga bog'lanadi",
+        "Bog'lanmaydi"
+      ],
+      "a": "Har tugun faqat keyingi elementga bog'lanadi"
+    },
+    {
+      "id": 58,
+      "q": "Ikki bog'lamli ro'yxat nima?",
+      "options": [
+        "Faqat oldinga bog'lanadi",
+        "Oldingi va keyingi elementga bog'lanadi",
+        "Faqat orqaga bog'lanadi",
+        "Bog'lanmaydi"
+      ],
+      "a": "Oldingi va keyingi elementga bog'lanadi"
+    },
+    {
+      "id": 59,
+      "q": "Halqasimon ro'yxat nima?",
+      "options": [
+        "Oxiri NULL",
+        "Bog'lanmagan",
+        "Oxiri boshiga bog'langan",
+        "Faqat bitta element"
+      ],
+      "a": "Oxiri boshiga bog'langan"
+    },
+    {
+      "id": 60,
+      "q": "Ro'yxat boshi ko'rsatkichi nima deyiladi?",
+      "options": [
+        "last",
+        "lst",
+        "first",
+        "node"
+      ],
+      "a": "lst"
+    },
+    {
+      "id": 61,
+      "q": "Agar ro'yxat bo'sh bo'lsa, lst nimaga teng?",
+      "options": [
+        "0",
+        "NULL",
+        "1",
+        "-1"
+      ],
+      "a": "NULL"
+    },
+    {
+      "id": 62,
+      "q": "Node strukturasi qanday maydonlardan iborat?",
+      "options": [
+        "Faqat info",
+        "info va next",
+        "Faqat next",
+        "index va data"
+      ],
+      "a": "info va next"
+    },
+    {
+      "id": 63,
+      "q": "Yangi element qo'shishda xotira qanday ajratiladi?",
+      "options": [
+        "statik",
+        "dinamik (new operatori bilan)",
+        "fayldan",
+        "massivdan"
+      ],
+      "a": "dinamik (new operatori bilan)"
+    },
+    {
+      "id": 64,
+      "q": "Ro'yxat boshiga element qo'shishda birinchi amal?",
+      "options": [
+        "O'chirish",
+        "Yangi element yaratish",
+        "Qidirish",
+        "Saralash"
+      ],
+      "a": "Yangi element yaratish"
+    },
+    {
+      "id": 65,
+      "q": "Boshiga qo'shishda p->next nimaga teng bo'ladi?",
+      "options": [
+        "NULL",
+        "last",
+        "lst ga teng bo'ladi",
+        "index"
+      ],
+      "a": "lst ga teng bo'ladi"
+    },
+    {
+      "id": 66,
+      "q": "Boshiga qo'shilgandan keyin lst nimaga teng bo'ladi?",
+      "options": [
+        "eski qiymat",
+        "p ga teng bo'ladi",
+        "NULL",
+        "last"
+      ],
+      "a": "p ga teng bo'ladi"
+    },
+    {
+      "id": 67,
+      "q": "Elementni o'chirishda delete nima qiladi?",
+      "options": [
+        "Qo'shadi",
+        "Xotirani bo'shatadi",
+        "Qidiradi",
+        "Ayuradi"
+      ],
+      "a": "Xotirani bo'shatadi"
+    },
+    {
+      "id": 68,
+      "q": "Ro'yxatda kalit nima uchun kerak?",
+      "options": [
+        "Saralash",
+        "Xotira ajratish",
+        "Elementni identifikatsiya qilish uchun",
+        "Qo'shish"
+      ],
+      "a": "Elementni identifikatsiya qilish uchun"
+    },
+    {
+      "id": 69,
+      "q": "Chiziqsiz ma'lumotlar tuzilmasi nima?",
+      "options": [
+        "Tartibli bog'langan tuzilma",
+        "Tartiblanmagan bog'lanishga ega tuzilma",
+        "Faqat massiv",
+        "Faqat fayl"
+      ],
+      "a": "Tartiblanmagan bog'lanishga ega tuzilma"
+    },
+    {
+      "id": 70,
+      "q": "Chiziqsiz tuzilmada elementlar qanday bog'lanadi?",
+      "options": [
+        "Faqat ketma-ket",
+        "Ixtiyoriy bog'lanadi",
+        "Faqat boshdan",
+        "Faqat oxiridan"
+      ],
+      "a": "Ixtiyoriy bog'lanadi"
+    },
+    {
+      "id": 71,
+      "q": "Chiziqsiz tuzilmaning nechta asosiy belgisi bor?",
+      "options": [
+        "2",
+        "3",
+        "4",
+        "5"
+      ],
+      "a": "3"
+    },
+    {
+      "id": 72,
+      "q": "Chiziqsiz tuzilmaning belgilaridan biri qaysi?",
+      "options": [
+        "Faqat bitta elementga murojaat",
+        "Har bir element boshqa ixtiyoriy elementga murojaat qilishi mumkin",
+        "Faqat ketma-ket bog'lanish",
+        "Faqat massiv"
+      ],
+      "a": "Har bir element boshqa ixtiyoriy elementga murojaat qilishi mumkin"
+    },
+    {
+      "id": 73,
+      "q": "Chiziqsiz tuzilmalarga qaysilar kiradi?",
+      "options": [
+        "Massivlar",
+        "Faqat stek",
+        "Ro'yxatlar, daraxtlar, graflar",
+        "Faqat navbat"
+      ],
+      "a": "Ro'yxatlar, daraxtlar, graflar"
+    },
+    {
+      "id": 74,
+      "q": "Daraxt qanday tuzilma hisoblanadi?",
+      "options": [
+        "Chiziqli",
+        "Yo'naltirilgan graf sifatida qaraladi",
+        "Faqat massiv",
+        "Statik"
+      ],
+      "a": "Yo'naltirilgan graf sifatida qaraladi"
+    },
+    {
+      "id": 75,
+      "q": "Graf turlari qaysilar?",
+      "options": [
+        "Yo'naltirilgan va yo'naltirilmagan",
+        "Faqat yo'naltirilgan",
+        "Faqat halqasimon",
+        "Faqat daraxt"
+      ],
+      "a": "Yo'naltirilgan va yo'naltirilmagan"
+    },
+    {
+      "id": 76,
+      "q": "Ko'p bog'lamli ro'yxat nima?",
+      "options": [
+        "Bitta ko'rsatkichli ro'yxat",
+        "Bir nechta ko'rsatkichli ro'yxat",
+        "Faqat massiv",
+        "Faqat daraxt"
+      ],
+      "a": "Bir nechta ko'rsatkichli ro'yxat"
+    },
+    {
+      "id": 77,
+      "q": "Ko'p bog'lamli ro'yxatning afzalligi nimada?",
+      "options": [
+        "Sekin ishlaydi",
+        "Qidirish qiyin",
+        "Xotira tejaladi",
+        "O'zgarmaydi"
+      ],
+      "a": "Xotira tejaladi"
+    },
+    {
+      "id": 78,
+      "q": "Bir element bir nechta ro'yxatda ishlatilsa nima qilinadi?",
+      "options": [
+        "Nusxa olinadi",
+        "Chiziqsiz ro'yxat yaratiladi",
+        "O'chiriladi",
+        "Saralanadi"
+      ],
+      "a": "Chiziqsiz ro'yxat yaratiladi"
+    },
+    {
+      "id": 79,
+      "q": "Ko'p bog'lamli ro'yxatda o'zgarish qayerga ta'sir qiladi?",
+      "options": [
+        "Barcha ro'yxatlarga",
+        "Faqat bitta ro'yxatga",
+        "Hech qayerga",
+        "Faqat massivga"
+      ],
+      "a": "Barcha ro'yxatlarga"
+    },
+    {
+      "id": 80,
+      "q": "Ko'p bog'lamli ro'yxatda elementni qachon o'chirish mumkin?",
+      "options": [
+        "Har doim",
+        "Hech qachon",
+        "Hech bir qism ro'yxatda qolmaganda",
+        "Faqat boshidan"
+      ],
+      "a": "Hech bir qism ro'yxatda qolmaganda"
+    },
+    {
+      "id": 81,
+      "q": "Chiziqsiz tarmoqlanuvchi ro'yxat nima?",
+      "options": [
+        "Faqat massiv",
+        "Elementlari ham ro'yxat bo'lishi mumkin bo'lgan tuzilma",
+        "Faqat graf",
+        "Faqat daraxt"
+      ],
+      "a": "Elementlari ham ro'yxat bo'lishi mumkin bo'lgan tuzilma"
+    },
+    {
+      "id": 82,
+      "q": "Bo'sh ro'yxat qanday yoziladi?",
+      "options": [
+        "()",
+        "{}",
+        "[]",
+        "NULL"
+      ],
+      "a": "()"
+    },
+    {
+      "id": 83,
+      "q": "Node strukturasi qanday maydonlarga ega?",
+      "options": [
+        "info va next",
+        "info, down, next",
+        "faqat info",
+        "index"
+      ],
+      "a": "info, down, next"
+    },
+    {
+      "id": 84,
+      "q": "Chiziqsiz ro'yxatda qidirish qanday yaxshilanadi?",
+      "options": [
+        "Indeks orqali",
+        "Skip list orqali",
+        "Fayl orqali",
+        "Massiv orqali"
+      ],
+      "a": "Skip list orqali"
+    },
+    {
+      "id": 85,
+      "q": "Chiziqsiz tuzilmaning asosiy ustunligi nimada?",
+      "options": [
+        "Moslashuvchanlik va samarali murojaat",
+        "Sekin ishlash",
+        "Faqat kichik hajm",
+        "Faqat statik"
+      ],
+      "a": "Moslashuvchanlik va samarali murojaat"
+    },
+    {
+      "id": 86,
+      "q": "Rekursiya nima?",
+      "options": [
+        "Takroriy sikl",
+        "Massiv turi",
+        "Funksiyaning o'z-o'zini chaqirishi",
+        "Saralash usuli"
+      ],
+      "a": "Funksiyaning o'z-o'zini chaqirishi"
+    },
+    {
+      "id": 87,
+      "q": "Rekursiv ta'rif nechta qismdan iborat?",
+      "options": [
+        "1",
+        "2",
+        "3",
+        "4"
+      ],
+      "a": "2"
+    },
+    {
+      "id": 88,
+      "q": "Rekursiv ta'rifning birinchi qismi nima?",
+      "options": [
+        "Asosiy holat (base case)",
+        "Qoidalar",
+        "Sikl",
+        "Iteratsiya"
+      ],
+      "a": "Asosiy holat (base case)"
+    },
+    {
+      "id": 89,
+      "q": "Rekursiv ta'rifning ikkinchi qismi nima?",
+      "options": [
+        "Asosiy element",
+        "Yangi elementlar hosil qilish qoidasi",
+        "Qaytarish operatori",
+        "Funksiya nomi"
+      ],
+      "a": "Yangi elementlar hosil qilish qoidasi"
+    },
+    {
+      "id": 90,
+      "q": "Faktorial funksiyaning asosiy holati qaysi?",
+      "options": [
+        "n=0",
+        "n=1",
+        "n=2",
+        "n=10"
+      ],
+      "a": "n=0"
+    },
+    {
+      "id": 91,
+      "q": "Rekursiv algoritmning asosiy kamchiligi nima?",
+      "options": [
+        "Tez ishlaydi",
+        "Ko'p xotira talab qiladi",
+        "Har doim to'g'ri ishlaydi",
+        "Oddiy tuziladi"
+      ],
+      "a": "Ko'p xotira talab qiladi"
+    },
+    {
+      "id": 92,
+      "q": "Rekursiya bajarilishida qaysi tuzilma ishlatiladi?",
+      "options": [
+        "Queue",
+        "Stack",
+        "Tree",
+        "Graph"
+      ],
+      "a": "Stack"
+    },
+    {
+      "id": 93,
+      "q": "Rekursiyada qaytish adresi qayerda saqlanadi?",
+      "options": [
+        "Faylda",
+        "Registrda",
+        "Stackda",
+        "Diskda"
+      ],
+      "a": "Stackda"
+    },
+    {
+      "id": 94,
+      "q": "Rekursiya qachon to'xtaydi?",
+      "options": [
+        "Har doim",
+        "Sikl tugaganda",
+        "Xotira tugaganda",
+        "Base case bajarilganda"
+      ],
+      "a": "Base case bajarilganda"
+    },
+    {
+      "id": 95,
+      "q": "Daraxt qanday tuzilma?",
+      "options": [
+        "Chiziqli",
+        "Chiziqsiz",
+        "Statik",
+        "Massiv"
+      ],
+      "a": "Chiziqsiz"
+    },
+    {
+      "id": 96,
+      "q": "Daraxtning ildizi nima?",
+      "options": [
+        "Boshlang'ich tugun",
+        "Oxirgi tugun",
+        "Eng katta tugun",
+        "Barg tugun"
+      ],
+      "a": "Boshlang'ich tugun"
+    },
+    {
+      "id": 97,
+      "q": "Daraxtdagi barg tugun nima?",
+      "options": [
+        "Ota tugun",
+        "Shoxi yo'q tugun",
+        "Farzand tugun",
+        "Ildiz"
+      ],
+      "a": "Shoxi yo'q tugun"
+    },
+    {
+      "id": 98,
+      "q": "Daraxt balandligi nima?",
+      "options": [
+        "Bosqichlar soni",
+        "Tugunlar soni",
+        "Qirralar soni",
+        "Ildizlar soni"
+      ],
+      "a": "Bosqichlar soni"
+    },
+    {
+      "id": 99,
+      "q": "Tugundan chiqadigan shoxlar soni nima deyiladi?",
+      "options": [
+        "Uzunlik",
+        "Indeks",
+        "Daraja",
+        "Kalit"
+      ],
+      "a": "Daraja"
+    },
+    {
+      "id": 100,
+      "q": "Maksimal darajasi 2 bo'lgan daraxt nima?",
+      "options": [
+        "Binar daraxt",
+        "Oddiy daraxt",
+        "Graf",
+        "Ro'yxat"
+      ],
+      "a": "Binar daraxt"
+    },
+    {
+      "id": 101,
+      "q": "To'liq binar daraxtda tugun darajasi qanday bo'ladi?",
+      "options": [
+        "1 yoki 3",
+        "2 yoki 4",
+        "0 yoki 2",
+        "1 yoki 2"
+      ],
+      "a": "0 yoki 2"
+    },
+    {
+      "id": 102,
+      "q": "Daraxtda \"ota\" tushunchasi nimani bildiradi?",
+      "options": [
+        "Pastki tugun",
+        "Barg",
+        "Yuqori tugun",
+        "Oxirgi tugun"
+      ],
+      "a": "Yuqori tugun"
+    },
+    {
+      "id": 103,
+      "q": "\"Farzand\" tugun nima?",
+      "options": [
+        "Ildiz",
+        "Pastki bog'langan tugun",
+        "Ota tugun",
+        "Bo'sh tugun"
+      ],
+      "a": "Pastki bog'langan tugun"
+    },
+    {
+      "id": 104,
+      "q": "Rekursiv algoritmning alternativasi nima?",
+      "options": [
+        "Iterativ algoritm",
+        "Daraxt",
+        "Graf",
+        "Stack"
+      ],
+      "a": "Iterativ algoritm"
+    },
+    {
+      "id": 105,
+      "q": "Rekursiyada lokal o'zgaruvchilar qayerda saqlanadi?",
+      "options": [
+        "Diskda",
+        "Stackda",
+        "Faylda",
+        "Registrda"
+      ],
+      "a": "Stackda"
+    },
+    {
+      "id": 106,
+      "q": "Rekursiv chaqiriqlar zanjiri nimaga olib keladi?",
+      "options": [
+        "Cheksizlikka",
+        "Xatoga",
+        "Ildiz (base case)ga",
+        "Diskga"
+      ],
+      "a": "Ildiz (base case)ga"
+    }
+  ]
   },
   "dasturiy_injiniring_english2": {
     "name": "English",
@@ -7241,7 +8408,1174 @@
   },
   "kiberxavfsizlik_malumotlar_tuzilmasi": {
     "name": "Ma'lumotlar tuzilmasi",
-    "questions": []
+    "questions": [
+    {
+      "id": 1,
+      "q": "Ma'lumotlar tuzilmasi nima?",
+      "options": [
+        "Algoritmlar to'plami",
+        "Xotirada tashkil etilgan elementlar yig'indisi",
+        "Dastur kodi",
+        "Operatsion tizim"
+      ],
+      "a": "Xotirada tashkil etilgan elementlar yig'indisi"
+    },
+    {
+      "id": 2,
+      "q": "Ma'lumot nima?",
+      "options": [
+        "Qayta ishlangan natija",
+        "Algoritm",
+        "Qiymatlar yig'indisi",
+        "Funksiya"
+      ],
+      "a": "Qiymatlar yig'indisi"
+    },
+    {
+      "id": 3,
+      "q": "Axborot nima?",
+      "options": [
+        "Xom ma'lumot",
+        "Qayta ishlangan ma'lumot",
+        "Algoritm",
+        "Fayl"
+      ],
+      "a": "Qayta ishlangan ma'lumot"
+    },
+    {
+      "id": 4,
+      "q": "Ma'lumotlar tuzilmasi elementi nima?",
+      "options": [
+        "Butun tizim",
+        "Fayl",
+        "Qiymatlar to'plamining bir bo'lagi",
+        "Algoritm"
+      ],
+      "a": "Qiymatlar to'plamining bir bo'lagi"
+    },
+    {
+      "id": 5,
+      "q": "Ob'ekt nima?",
+      "options": [
+        "Faqat son",
+        "Xususiyat va atributlarga ega tuzilma",
+        "Funksiya",
+        "Kod"
+      ],
+      "a": "Xususiyat va atributlarga ega tuzilma"
+    },
+    {
+      "id": 6,
+      "q": "Maydon nima?",
+      "options": [
+        "Algoritm",
+        "Ob'ekt atributi yoki xususiyati",
+        "Fayl",
+        "Matritsa"
+      ],
+      "a": "Ob'ekt atributi yoki xususiyati"
+    },
+    {
+      "id": 7,
+      "q": "Yozuv nima?",
+      "options": [
+        "Bitta qiymat",
+        "Turli toifadagi maydonlar to'plami",
+        "Algoritm",
+        "Dastur"
+      ],
+      "a": "Turli toifadagi maydonlar to'plami"
+    },
+    {
+      "id": 8,
+      "q": "Fayl nima?",
+      "options": [
+        "Bitta yozuv",
+        "Yozuvlar to'plami",
+        "Algoritm",
+        "Funksiya"
+      ],
+      "a": "Yozuvlar to'plami"
+    },
+    {
+      "id": 9,
+      "q": "Kalit nima?",
+      "options": [
+        "Algoritm",
+        "Yozuvni aniqlovchi maydon",
+        "Fayl",
+        "Funksiya"
+      ],
+      "a": "Yozuvni aniqlovchi maydon"
+    },
+    {
+      "id": 10,
+      "q": "Ma'lumotlar toifasi nimani o'z ichiga oladi?",
+      "options": [
+        "Faqat qiymatlar",
+        "Faqat algoritmlar",
+        "Fayllar",
+        "Qiymatlar va amallar to'plami"
+      ],
+      "a": "Qiymatlar va amallar to'plami"
+    },
+    {
+      "id": 11,
+      "q": "Primitiv toifalarga qaysi kiradi?",
+      "options": [
+        "struct",
+        "int, float, char",
+        "enum",
+        "graf"
+      ],
+      "a": "int, float, char"
+    },
+    {
+      "id": 12,
+      "q": "Abstrakt toifa nima?",
+      "options": [
+        "Faqat fizik daraja",
+        "Fayl",
+        "Mantiqiy xususiyatlarni aniqlovchi toifa",
+        "Matritsa"
+      ],
+      "a": "Mantiqiy xususiyatlarni aniqlovchi toifa"
+    },
+    {
+      "id": 13,
+      "q": "Ma'lumotlar tuzilmasini tanlash nimaga bog'liq?",
+      "options": [
+        "Faqat xotiraga",
+        "Faqat dasturlash tiliga",
+        "Elementlararo munosabat va samaradorlikka",
+        "Faqat algoritmga"
+      ],
+      "a": "Elementlararo munosabat va samaradorlikka"
+    },
+    {
+      "id": 14,
+      "q": "Qidirish nima?",
+      "options": [
+        "O'chirish",
+        "Kiritish",
+        "Saralash",
+        "Element joylashuvini aniqlash"
+      ],
+      "a": "Element joylashuvini aniqlash"
+    },
+    {
+      "id": 15,
+      "q": "Saralash nima?",
+      "options": [
+        "Tartiblash amali",
+        "O'chirish",
+        "Qidirish",
+        "Birlashtirish"
+      ],
+      "a": "Tartiblash amali"
+    },
+    {
+      "id": 16,
+      "q": "Algoritm nima?",
+      "options": [
+        "Fayl",
+        "Ma'lumot",
+        "Masalani yechish ketma-ketligi",
+        "Xotira"
+      ],
+      "a": "Masalani yechish ketma-ketligi"
+    },
+    {
+      "id": 17,
+      "q": "Abstrakt bosqich nima?",
+      "options": [
+        "Fizik daraja",
+        "Xotira darajasi",
+        "Matematika model darajasi",
+        "Dastur darajasi"
+      ],
+      "a": "Matematika model darajasi"
+    },
+    {
+      "id": 18,
+      "q": "Mantiqiy bosqich nima?",
+      "options": [
+        "Dasturlash tilida ifodalash",
+        "Xotira",
+        "Matematika model",
+        "Fizik qurilma"
+      ],
+      "a": "Dasturlash tilida ifodalash"
+    },
+    {
+      "id": 19,
+      "q": "Fizik bosqich nima?",
+      "options": [
+        "Model",
+        "Xotirada akslantirish",
+        "Algoritm",
+        "Kod"
+      ],
+      "a": "Xotirada akslantirish"
+    },
+    {
+      "id": 20,
+      "q": "Daraxt qanday tuzilma?",
+      "options": [
+        "Chiziqli",
+        "Ierarxik",
+        "Tasodifiy",
+        "Matritsa"
+      ],
+      "a": "Ierarxik"
+    },
+    {
+      "id": 21,
+      "q": "Graf qanday tuzilma?",
+      "options": [
+        "Chiziqli",
+        "Binar munosabatli tuzilma",
+        "Faqat daraxt",
+        "Matritsa"
+      ],
+      "a": "Binar munosabatli tuzilma"
+    },
+    {
+      "id": 22,
+      "q": "Dinamik ma'lumotlar tuzilmasi nima?",
+      "options": [
+        "O'zgarmaydigan",
+        "Faqat massiv",
+        "Elementlari o'zgaradigan tuzilma",
+        "Faqat fayl"
+      ],
+      "a": "Elementlari o'zgaradigan tuzilma"
+    },
+    {
+      "id": 23,
+      "q": "Yarimstatik ma'lumotlar tuzilmasi nima?",
+      "options": [
+        "Faqat statik tuzilma",
+        "Statik va dinamik xususiyatlarni birlashtirgan tuzilma",
+        "Faqat dinamik tuzilma",
+        "Faqat massiv"
+      ],
+      "a": "Statik va dinamik xususiyatlarni birlashtirgan tuzilma"
+    },
+    {
+      "id": 24,
+      "q": "Yarimstatik tuzilmalarga qaysilar kiradi?",
+      "options": [
+        "Daraxt va graf",
+        "Matritsa va massiv",
+        "Fayl va yozuv",
+        "Stek, navbat, dek"
+      ],
+      "a": "Stek, navbat, dek"
+    },
+    {
+      "id": 25,
+      "q": "Yarimstatik tuzilmalarning asosiy xususiyati nima?",
+      "options": [
+        "Faqat o'zgarmas",
+        "Uzunligi o'zgaradi, lekin elementlar ketma-ket joylashadi",
+        "Faqat o'zgaruvchan",
+        "Faqat graf"
+      ],
+      "a": "Uzunligi o'zgaradi, lekin elementlar ketma-ket joylashadi"
+    },
+    {
+      "id": 26,
+      "q": "Stek qanday tuzilma?",
+      "options": [
+        "Ierarxik",
+        "Graf",
+        "Chiziqli",
+        "Matritsa"
+      ],
+      "a": "Chiziqli"
+    },
+    {
+      "id": 27,
+      "q": "Stek qanday prinsip asosida ishlaydi?",
+      "options": [
+        "FIFO",
+        "LIFO",
+        "Random",
+        "Parallel"
+      ],
+      "a": "LIFO"
+    },
+    {
+      "id": 28,
+      "q": "LIFO nimani anglatadi?",
+      "options": [
+        "Birinchi kelgan birinchi ketadi",
+        "Oxirgi kelgan birinchi ketadi",
+        "Tasodifiy tanlash",
+        "Doimiy tartib"
+      ],
+      "a": "Oxirgi kelgan birinchi ketadi"
+    },
+    {
+      "id": 29,
+      "q": "Stekga element qo'shish amali qanday ataladi?",
+      "options": [
+        "pop",
+        "push",
+        "enqueue",
+        "dequeue"
+      ],
+      "a": "push"
+    },
+    {
+      "id": 30,
+      "q": "Stekdan element olish amali qanday ataladi?",
+      "options": [
+        "push",
+        "pop",
+        "insert",
+        "search"
+      ],
+      "a": "pop"
+    },
+    {
+      "id": 31,
+      "q": "Stekda element qayerdan qo'shiladi va olinadi?",
+      "options": [
+        "Har ikki tomondan",
+        "Faqat boshidan",
+        "Bitta tomondan qo'shilib, o'sha tomondan olinadi",
+        "Faqat oxiridan"
+      ],
+      "a": "Bitta tomondan qo'shilib, o'sha tomondan olinadi"
+    },
+    {
+      "id": 32,
+      "q": "Navbat qanday tuzilma?",
+      "options": [
+        "Ierarxik",
+        "LIFO",
+        "Graf",
+        "FIFO asosida ishlovchi tuzilma"
+      ],
+      "a": "FIFO asosida ishlovchi tuzilma"
+    },
+    {
+      "id": 33,
+      "q": "FIFO nimani bildiradi?",
+      "options": [
+        "Oxirgi kelgan birinchi ketadi",
+        "Birinchi kelgan birinchi ketadi",
+        "Tasodifiy",
+        "Parallel"
+      ],
+      "a": "Birinchi kelgan birinchi ketadi"
+    },
+    {
+      "id": 34,
+      "q": "Navbatga element qo'shish amali?",
+      "options": [
+        "push",
+        "enqueue",
+        "pop",
+        "top"
+      ],
+      "a": "enqueue"
+    },
+    {
+      "id": 35,
+      "q": "Navbatdan element olish amali?",
+      "options": [
+        "push",
+        "dequeue",
+        "insert",
+        "clear"
+      ],
+      "a": "dequeue"
+    },
+    {
+      "id": 36,
+      "q": "Navbatda element qayerdan qo'shiladi?",
+      "options": [
+        "Boshidan",
+        "Oxiridan",
+        "Har ikkala tomondan",
+        "O'rtasidan"
+      ],
+      "a": "Oxiridan"
+    },
+    {
+      "id": 37,
+      "q": "Navbatdan element qayerdan olinadi?",
+      "options": [
+        "Boshidan",
+        "Oxiridan",
+        "O'rtasidan",
+        "Har ikkala tomondan"
+      ],
+      "a": "Boshidan"
+    },
+    {
+      "id": 38,
+      "q": "Dek nima?",
+      "options": [
+        "Stekning turi",
+        "Ikkala tomondan ishlovchi navbat",
+        "Graf",
+        "Daraxt"
+      ],
+      "a": "Ikkala tomondan ishlovchi navbat"
+    },
+    {
+      "id": 39,
+      "q": "DEQ nimani anglatadi?",
+      "options": [
+        "Double Queue",
+        "Double Ended Queue",
+        "Data Queue",
+        "Direct Queue"
+      ],
+      "a": "Double Ended Queue"
+    },
+    {
+      "id": 40,
+      "q": "Dekda element qayerdan qo'shiladi?",
+      "options": [
+        "Faqat boshidan",
+        "Faqat oxiridan",
+        "Har ikkala tomondan",
+        "O'rtasidan"
+      ],
+      "a": "Har ikkala tomondan"
+    },
+    {
+      "id": 41,
+      "q": "Dekda element qayerdan olinadi?",
+      "options": [
+        "Faqat boshidan",
+        "Faqat oxiridan",
+        "Har ikkala tomondan",
+        "Faqat o'rtadan"
+      ],
+      "a": "Har ikkala tomondan"
+    },
+    {
+      "id": 42,
+      "q": "Dekda boshidan qo'shish amali?",
+      "options": [
+        "push_back",
+        "pop_back",
+        "push_front",
+        "dequeue"
+      ],
+      "a": "push_front"
+    },
+    {
+      "id": 43,
+      "q": "Dekda oxiridan qo'shish amali?",
+      "options": [
+        "push_front",
+        "push_back",
+        "pop_front",
+        "clear"
+      ],
+      "a": "push_back"
+    },
+    {
+      "id": 44,
+      "q": "Stek qayerda qo'llaniladi?",
+      "options": [
+        "Faqat grafda",
+        "Ajratkichlarni tekshirishda",
+        "Faqat faylda",
+        "Faqat matritsada"
+      ],
+      "a": "Ajratkichlarni tekshirishda"
+    },
+    {
+      "id": 45,
+      "q": "Navbat qayerda qo'llaniladi?",
+      "options": [
+        "Rekursiyada",
+        "Jarayonlarni boshqarishda (masalan, navbat tizimi)",
+        "Faqat massivda",
+        "Faqat grafda"
+      ],
+      "a": "Jarayonlarni boshqarishda (masalan, navbat tizimi)"
+    },
+    {
+      "id": 46,
+      "q": "Dek qanday tuzilma sifatida qaralishi mumkin?",
+      "options": [
+        "Ikkita birlashtirilgan stek",
+        "Ikkita bog'langan graf",
+        "Matritsa",
+        "Fayl"
+      ],
+      "a": "Ikkita birlashtirilgan stek"
+    },
+    {
+      "id": 47,
+      "q": "Dinamik ma'lumotlar tuzilmasi nima?",
+      "options": [
+        "O'lchami o'zgarmaydigan tuzilma",
+        "Faqat massiv",
+        "O'lchami va bog'lanishlari o'zgaradigan tuzilma",
+        "Faqat fayl"
+      ],
+      "a": "O'lchami va bog'lanishlari o'zgaradigan tuzilma"
+    },
+    {
+      "id": 48,
+      "q": "Massivning asosiy kamchiligi nima?",
+      "options": [
+        "O'lchamini o'zgartirib bo'lmaydi",
+        "Tez ishlaydi",
+        "Xotirada kam joy egallaydi",
+        "Qidirish oson"
+      ],
+      "a": "O'lchamini o'zgartirib bo'lmaydi"
+    },
+    {
+      "id": 49,
+      "q": "Bog'langan ro'yxat nima?",
+      "options": [
+        "Ketma-ket massiv",
+        "Ko'rsatkichlar orqali bog'langan elementlar to'plami",
+        "Graf",
+        "Fayl"
+      ],
+      "a": "Ko'rsatkichlar orqali bog'langan elementlar to'plami"
+    },
+    {
+      "id": 50,
+      "q": "Bog'langan ro'yxatda elementlar qayerda joylashadi?",
+      "options": [
+        "Faqat ketma-ket",
+        "Xotiraning istalgan joyida",
+        "Faqat boshida",
+        "Faqat oxirida"
+      ],
+      "a": "Xotiraning istalgan joyida"
+    },
+    {
+      "id": 51,
+      "q": "Tugun (node) nimadan iborat?",
+      "options": [
+        "Faqat qiymat",
+        "Faqat ko'rsatkich",
+        "Ma'lumot va ko'rsatkich maydoni",
+        "Faqat indeks"
+      ],
+      "a": "Ma'lumot va ko'rsatkich maydoni"
+    },
+    {
+      "id": 52,
+      "q": "Ko'rsatkichli maydon nimani saqlaydi?",
+      "options": [
+        "Son",
+        "Keyingi element manzili",
+        "Matn",
+        "Fayl"
+      ],
+      "a": "Keyingi element manzili"
+    },
+    {
+      "id": 53,
+      "q": "Dinamik tuzilmaning afzalligi nimada?",
+      "options": [
+        "O'lchami o'zgarmaydi",
+        "Oson o'chirish va qo'shish mumkin",
+        "Faqat tez ishlaydi",
+        "Faqat massiv"
+      ],
+      "a": "Oson o'chirish va qo'shish mumkin"
+    },
+    {
+      "id": 54,
+      "q": "Dinamik tuzilmaning kamchiligi nimada?",
+      "options": [
+        "To'g'ridan-to'g'ri murojaat yo'q",
+        "Xotira ko'p",
+        "Sekin ishlaydi",
+        "O'zgarmaydi"
+      ],
+      "a": "To'g'ridan-to'g'ri murojaat yo'q"
+    },
+    {
+      "id": 55,
+      "q": "Chiziqli ro'yxat nima?",
+      "options": [
+        "Bog'lanmagan",
+        "Tartiblangan bog'lanishga ega tuzilma",
+        "Tasodifiy",
+        "Graf"
+      ],
+      "a": "Tartiblangan bog'lanishga ega tuzilma"
+    },
+    {
+      "id": 56,
+      "q": "Chiziqsiz ro'yxat nima?",
+      "options": [
+        "Faqat bitta ko'rsatkichli",
+        "Bir nechta bog'lanishga ega tuzilma",
+        "Faqat massiv",
+        "Statik"
+      ],
+      "a": "Bir nechta bog'lanishga ega tuzilma"
+    },
+    {
+      "id": 57,
+      "q": "Bir bog'lamli ro'yxat nima?",
+      "options": [
+        "Har tugun faqat keyingi elementga bog'lanadi",
+        "Har tugun ikkita bog'lanadi",
+        "Har tugun oldingiga bog'lanadi",
+        "Bog'lanmaydi"
+      ],
+      "a": "Har tugun faqat keyingi elementga bog'lanadi"
+    },
+    {
+      "id": 58,
+      "q": "Ikki bog'lamli ro'yxat nima?",
+      "options": [
+        "Faqat oldinga bog'lanadi",
+        "Oldingi va keyingi elementga bog'lanadi",
+        "Faqat orqaga bog'lanadi",
+        "Bog'lanmaydi"
+      ],
+      "a": "Oldingi va keyingi elementga bog'lanadi"
+    },
+    {
+      "id": 59,
+      "q": "Halqasimon ro'yxat nima?",
+      "options": [
+        "Oxiri NULL",
+        "Bog'lanmagan",
+        "Oxiri boshiga bog'langan",
+        "Faqat bitta element"
+      ],
+      "a": "Oxiri boshiga bog'langan"
+    },
+    {
+      "id": 60,
+      "q": "Ro'yxat boshi ko'rsatkichi nima deyiladi?",
+      "options": [
+        "last",
+        "lst",
+        "first",
+        "node"
+      ],
+      "a": "lst"
+    },
+    {
+      "id": 61,
+      "q": "Agar ro'yxat bo'sh bo'lsa, lst nimaga teng?",
+      "options": [
+        "0",
+        "NULL",
+        "1",
+        "-1"
+      ],
+      "a": "NULL"
+    },
+    {
+      "id": 62,
+      "q": "Node strukturasi qanday maydonlardan iborat?",
+      "options": [
+        "Faqat info",
+        "info va next",
+        "Faqat next",
+        "index va data"
+      ],
+      "a": "info va next"
+    },
+    {
+      "id": 63,
+      "q": "Yangi element qo'shishda xotira qanday ajratiladi?",
+      "options": [
+        "statik",
+        "dinamik (new operatori bilan)",
+        "fayldan",
+        "massivdan"
+      ],
+      "a": "dinamik (new operatori bilan)"
+    },
+    {
+      "id": 64,
+      "q": "Ro'yxat boshiga element qo'shishda birinchi amal?",
+      "options": [
+        "O'chirish",
+        "Yangi element yaratish",
+        "Qidirish",
+        "Saralash"
+      ],
+      "a": "Yangi element yaratish"
+    },
+    {
+      "id": 65,
+      "q": "Boshiga qo'shishda p->next nimaga teng bo'ladi?",
+      "options": [
+        "NULL",
+        "last",
+        "lst ga teng bo'ladi",
+        "index"
+      ],
+      "a": "lst ga teng bo'ladi"
+    },
+    {
+      "id": 66,
+      "q": "Boshiga qo'shilgandan keyin lst nimaga teng bo'ladi?",
+      "options": [
+        "eski qiymat",
+        "p ga teng bo'ladi",
+        "NULL",
+        "last"
+      ],
+      "a": "p ga teng bo'ladi"
+    },
+    {
+      "id": 67,
+      "q": "Elementni o'chirishda delete nima qiladi?",
+      "options": [
+        "Qo'shadi",
+        "Xotirani bo'shatadi",
+        "Qidiradi",
+        "Ayuradi"
+      ],
+      "a": "Xotirani bo'shatadi"
+    },
+    {
+      "id": 68,
+      "q": "Ro'yxatda kalit nima uchun kerak?",
+      "options": [
+        "Saralash",
+        "Xotira ajratish",
+        "Elementni identifikatsiya qilish uchun",
+        "Qo'shish"
+      ],
+      "a": "Elementni identifikatsiya qilish uchun"
+    },
+    {
+      "id": 69,
+      "q": "Chiziqsiz ma'lumotlar tuzilmasi nima?",
+      "options": [
+        "Tartibli bog'langan tuzilma",
+        "Tartiblanmagan bog'lanishga ega tuzilma",
+        "Faqat massiv",
+        "Faqat fayl"
+      ],
+      "a": "Tartiblanmagan bog'lanishga ega tuzilma"
+    },
+    {
+      "id": 70,
+      "q": "Chiziqsiz tuzilmada elementlar qanday bog'lanadi?",
+      "options": [
+        "Faqat ketma-ket",
+        "Ixtiyoriy bog'lanadi",
+        "Faqat boshdan",
+        "Faqat oxiridan"
+      ],
+      "a": "Ixtiyoriy bog'lanadi"
+    },
+    {
+      "id": 71,
+      "q": "Chiziqsiz tuzilmaning nechta asosiy belgisi bor?",
+      "options": [
+        "2",
+        "3",
+        "4",
+        "5"
+      ],
+      "a": "3"
+    },
+    {
+      "id": 72,
+      "q": "Chiziqsiz tuzilmaning belgilaridan biri qaysi?",
+      "options": [
+        "Faqat bitta elementga murojaat",
+        "Har bir element boshqa ixtiyoriy elementga murojaat qilishi mumkin",
+        "Faqat ketma-ket bog'lanish",
+        "Faqat massiv"
+      ],
+      "a": "Har bir element boshqa ixtiyoriy elementga murojaat qilishi mumkin"
+    },
+    {
+      "id": 73,
+      "q": "Chiziqsiz tuzilmalarga qaysilar kiradi?",
+      "options": [
+        "Massivlar",
+        "Faqat stek",
+        "Ro'yxatlar, daraxtlar, graflar",
+        "Faqat navbat"
+      ],
+      "a": "Ro'yxatlar, daraxtlar, graflar"
+    },
+    {
+      "id": 74,
+      "q": "Daraxt qanday tuzilma hisoblanadi?",
+      "options": [
+        "Chiziqli",
+        "Yo'naltirilgan graf sifatida qaraladi",
+        "Faqat massiv",
+        "Statik"
+      ],
+      "a": "Yo'naltirilgan graf sifatida qaraladi"
+    },
+    {
+      "id": 75,
+      "q": "Graf turlari qaysilar?",
+      "options": [
+        "Yo'naltirilgan va yo'naltirilmagan",
+        "Faqat yo'naltirilgan",
+        "Faqat halqasimon",
+        "Faqat daraxt"
+      ],
+      "a": "Yo'naltirilgan va yo'naltirilmagan"
+    },
+    {
+      "id": 76,
+      "q": "Ko'p bog'lamli ro'yxat nima?",
+      "options": [
+        "Bitta ko'rsatkichli ro'yxat",
+        "Bir nechta ko'rsatkichli ro'yxat",
+        "Faqat massiv",
+        "Faqat daraxt"
+      ],
+      "a": "Bir nechta ko'rsatkichli ro'yxat"
+    },
+    {
+      "id": 77,
+      "q": "Ko'p bog'lamli ro'yxatning afzalligi nimada?",
+      "options": [
+        "Sekin ishlaydi",
+        "Qidirish qiyin",
+        "Xotira tejaladi",
+        "O'zgarmaydi"
+      ],
+      "a": "Xotira tejaladi"
+    },
+    {
+      "id": 78,
+      "q": "Bir element bir nechta ro'yxatda ishlatilsa nima qilinadi?",
+      "options": [
+        "Nusxa olinadi",
+        "Chiziqsiz ro'yxat yaratiladi",
+        "O'chiriladi",
+        "Saralanadi"
+      ],
+      "a": "Chiziqsiz ro'yxat yaratiladi"
+    },
+    {
+      "id": 79,
+      "q": "Ko'p bog'lamli ro'yxatda o'zgarish qayerga ta'sir qiladi?",
+      "options": [
+        "Barcha ro'yxatlarga",
+        "Faqat bitta ro'yxatga",
+        "Hech qayerga",
+        "Faqat massivga"
+      ],
+      "a": "Barcha ro'yxatlarga"
+    },
+    {
+      "id": 80,
+      "q": "Ko'p bog'lamli ro'yxatda elementni qachon o'chirish mumkin?",
+      "options": [
+        "Har doim",
+        "Hech qachon",
+        "Hech bir qism ro'yxatda qolmaganda",
+        "Faqat boshidan"
+      ],
+      "a": "Hech bir qism ro'yxatda qolmaganda"
+    },
+    {
+      "id": 81,
+      "q": "Chiziqsiz tarmoqlanuvchi ro'yxat nima?",
+      "options": [
+        "Faqat massiv",
+        "Elementlari ham ro'yxat bo'lishi mumkin bo'lgan tuzilma",
+        "Faqat graf",
+        "Faqat daraxt"
+      ],
+      "a": "Elementlari ham ro'yxat bo'lishi mumkin bo'lgan tuzilma"
+    },
+    {
+      "id": 82,
+      "q": "Bo'sh ro'yxat qanday yoziladi?",
+      "options": [
+        "()",
+        "{}",
+        "[]",
+        "NULL"
+      ],
+      "a": "()"
+    },
+    {
+      "id": 83,
+      "q": "Node strukturasi qanday maydonlarga ega?",
+      "options": [
+        "info va next",
+        "info, down, next",
+        "faqat info",
+        "index"
+      ],
+      "a": "info, down, next"
+    },
+    {
+      "id": 84,
+      "q": "Chiziqsiz ro'yxatda qidirish qanday yaxshilanadi?",
+      "options": [
+        "Indeks orqali",
+        "Skip list orqali",
+        "Fayl orqali",
+        "Massiv orqali"
+      ],
+      "a": "Skip list orqali"
+    },
+    {
+      "id": 85,
+      "q": "Chiziqsiz tuzilmaning asosiy ustunligi nimada?",
+      "options": [
+        "Moslashuvchanlik va samarali murojaat",
+        "Sekin ishlash",
+        "Faqat kichik hajm",
+        "Faqat statik"
+      ],
+      "a": "Moslashuvchanlik va samarali murojaat"
+    },
+    {
+      "id": 86,
+      "q": "Rekursiya nima?",
+      "options": [
+        "Takroriy sikl",
+        "Massiv turi",
+        "Funksiyaning o'z-o'zini chaqirishi",
+        "Saralash usuli"
+      ],
+      "a": "Funksiyaning o'z-o'zini chaqirishi"
+    },
+    {
+      "id": 87,
+      "q": "Rekursiv ta'rif nechta qismdan iborat?",
+      "options": [
+        "1",
+        "2",
+        "3",
+        "4"
+      ],
+      "a": "2"
+    },
+    {
+      "id": 88,
+      "q": "Rekursiv ta'rifning birinchi qismi nima?",
+      "options": [
+        "Asosiy holat (base case)",
+        "Qoidalar",
+        "Sikl",
+        "Iteratsiya"
+      ],
+      "a": "Asosiy holat (base case)"
+    },
+    {
+      "id": 89,
+      "q": "Rekursiv ta'rifning ikkinchi qismi nima?",
+      "options": [
+        "Asosiy element",
+        "Yangi elementlar hosil qilish qoidasi",
+        "Qaytarish operatori",
+        "Funksiya nomi"
+      ],
+      "a": "Yangi elementlar hosil qilish qoidasi"
+    },
+    {
+      "id": 90,
+      "q": "Faktorial funksiyaning asosiy holati qaysi?",
+      "options": [
+        "n=0",
+        "n=1",
+        "n=2",
+        "n=10"
+      ],
+      "a": "n=0"
+    },
+    {
+      "id": 91,
+      "q": "Rekursiv algoritmning asosiy kamchiligi nima?",
+      "options": [
+        "Tez ishlaydi",
+        "Ko'p xotira talab qiladi",
+        "Har doim to'g'ri ishlaydi",
+        "Oddiy tuziladi"
+      ],
+      "a": "Ko'p xotira talab qiladi"
+    },
+    {
+      "id": 92,
+      "q": "Rekursiya bajarilishida qaysi tuzilma ishlatiladi?",
+      "options": [
+        "Queue",
+        "Stack",
+        "Tree",
+        "Graph"
+      ],
+      "a": "Stack"
+    },
+    {
+      "id": 93,
+      "q": "Rekursiyada qaytish adresi qayerda saqlanadi?",
+      "options": [
+        "Faylda",
+        "Registrda",
+        "Stackda",
+        "Diskda"
+      ],
+      "a": "Stackda"
+    },
+    {
+      "id": 94,
+      "q": "Rekursiya qachon to'xtaydi?",
+      "options": [
+        "Har doim",
+        "Sikl tugaganda",
+        "Xotira tugaganda",
+        "Base case bajarilganda"
+      ],
+      "a": "Base case bajarilganda"
+    },
+    {
+      "id": 95,
+      "q": "Daraxt qanday tuzilma?",
+      "options": [
+        "Chiziqli",
+        "Chiziqsiz",
+        "Statik",
+        "Massiv"
+      ],
+      "a": "Chiziqsiz"
+    },
+    {
+      "id": 96,
+      "q": "Daraxtning ildizi nima?",
+      "options": [
+        "Boshlang'ich tugun",
+        "Oxirgi tugun",
+        "Eng katta tugun",
+        "Barg tugun"
+      ],
+      "a": "Boshlang'ich tugun"
+    },
+    {
+      "id": 97,
+      "q": "Daraxtdagi barg tugun nima?",
+      "options": [
+        "Ota tugun",
+        "Shoxi yo'q tugun",
+        "Farzand tugun",
+        "Ildiz"
+      ],
+      "a": "Shoxi yo'q tugun"
+    },
+    {
+      "id": 98,
+      "q": "Daraxt balandligi nima?",
+      "options": [
+        "Bosqichlar soni",
+        "Tugunlar soni",
+        "Qirralar soni",
+        "Ildizlar soni"
+      ],
+      "a": "Bosqichlar soni"
+    },
+    {
+      "id": 99,
+      "q": "Tugundan chiqadigan shoxlar soni nima deyiladi?",
+      "options": [
+        "Uzunlik",
+        "Indeks",
+        "Daraja",
+        "Kalit"
+      ],
+      "a": "Daraja"
+    },
+    {
+      "id": 100,
+      "q": "Maksimal darajasi 2 bo'lgan daraxt nima?",
+      "options": [
+        "Binar daraxt",
+        "Oddiy daraxt",
+        "Graf",
+        "Ro'yxat"
+      ],
+      "a": "Binar daraxt"
+    },
+    {
+      "id": 101,
+      "q": "To'liq binar daraxtda tugun darajasi qanday bo'ladi?",
+      "options": [
+        "1 yoki 3",
+        "2 yoki 4",
+        "0 yoki 2",
+        "1 yoki 2"
+      ],
+      "a": "0 yoki 2"
+    },
+    {
+      "id": 102,
+      "q": "Daraxtda \"ota\" tushunchasi nimani bildiradi?",
+      "options": [
+        "Pastki tugun",
+        "Barg",
+        "Yuqori tugun",
+        "Oxirgi tugun"
+      ],
+      "a": "Yuqori tugun"
+    },
+    {
+      "id": 103,
+      "q": "\"Farzand\" tugun nima?",
+      "options": [
+        "Ildiz",
+        "Pastki bog'langan tugun",
+        "Ota tugun",
+        "Bo'sh tugun"
+      ],
+      "a": "Pastki bog'langan tugun"
+    },
+    {
+      "id": 104,
+      "q": "Rekursiv algoritmning alternativasi nima?",
+      "options": [
+        "Iterativ algoritm",
+        "Daraxt",
+        "Graf",
+        "Stack"
+      ],
+      "a": "Iterativ algoritm"
+    },
+    {
+      "id": 105,
+      "q": "Rekursiyada lokal o'zgaruvchilar qayerda saqlanadi?",
+      "options": [
+        "Diskda",
+        "Stackda",
+        "Faylda",
+        "Registrda"
+      ],
+      "a": "Stackda"
+    },
+    {
+      "id": 106,
+      "q": "Rekursiv chaqiriqlar zanjiri nimaga olib keladi?",
+      "options": [
+        "Cheksizlikka",
+        "Xatoga",
+        "Ildiz (base case)ga",
+        "Diskga"
+      ],
+      "a": "Ildiz (base case)ga"
+    }
+  ]
   },
   "kiberxavfsizlik_english2": {
     "name": "English",
@@ -11690,7 +14024,1174 @@
   },
   "suniy_intelekt_malumotlar_tuzilmasi": {
     "name": "Ma'lumotlar tuzilmasi",
-    "questions": []
+    "questions": [
+    {
+      "id": 1,
+      "q": "Ma'lumotlar tuzilmasi nima?",
+      "options": [
+        "Algoritmlar to'plami",
+        "Xotirada tashkil etilgan elementlar yig'indisi",
+        "Dastur kodi",
+        "Operatsion tizim"
+      ],
+      "a": "Xotirada tashkil etilgan elementlar yig'indisi"
+    },
+    {
+      "id": 2,
+      "q": "Ma'lumot nima?",
+      "options": [
+        "Qayta ishlangan natija",
+        "Algoritm",
+        "Qiymatlar yig'indisi",
+        "Funksiya"
+      ],
+      "a": "Qiymatlar yig'indisi"
+    },
+    {
+      "id": 3,
+      "q": "Axborot nima?",
+      "options": [
+        "Xom ma'lumot",
+        "Qayta ishlangan ma'lumot",
+        "Algoritm",
+        "Fayl"
+      ],
+      "a": "Qayta ishlangan ma'lumot"
+    },
+    {
+      "id": 4,
+      "q": "Ma'lumotlar tuzilmasi elementi nima?",
+      "options": [
+        "Butun tizim",
+        "Fayl",
+        "Qiymatlar to'plamining bir bo'lagi",
+        "Algoritm"
+      ],
+      "a": "Qiymatlar to'plamining bir bo'lagi"
+    },
+    {
+      "id": 5,
+      "q": "Ob'ekt nima?",
+      "options": [
+        "Faqat son",
+        "Xususiyat va atributlarga ega tuzilma",
+        "Funksiya",
+        "Kod"
+      ],
+      "a": "Xususiyat va atributlarga ega tuzilma"
+    },
+    {
+      "id": 6,
+      "q": "Maydon nima?",
+      "options": [
+        "Algoritm",
+        "Ob'ekt atributi yoki xususiyati",
+        "Fayl",
+        "Matritsa"
+      ],
+      "a": "Ob'ekt atributi yoki xususiyati"
+    },
+    {
+      "id": 7,
+      "q": "Yozuv nima?",
+      "options": [
+        "Bitta qiymat",
+        "Turli toifadagi maydonlar to'plami",
+        "Algoritm",
+        "Dastur"
+      ],
+      "a": "Turli toifadagi maydonlar to'plami"
+    },
+    {
+      "id": 8,
+      "q": "Fayl nima?",
+      "options": [
+        "Bitta yozuv",
+        "Yozuvlar to'plami",
+        "Algoritm",
+        "Funksiya"
+      ],
+      "a": "Yozuvlar to'plami"
+    },
+    {
+      "id": 9,
+      "q": "Kalit nima?",
+      "options": [
+        "Algoritm",
+        "Yozuvni aniqlovchi maydon",
+        "Fayl",
+        "Funksiya"
+      ],
+      "a": "Yozuvni aniqlovchi maydon"
+    },
+    {
+      "id": 10,
+      "q": "Ma'lumotlar toifasi nimani o'z ichiga oladi?",
+      "options": [
+        "Faqat qiymatlar",
+        "Faqat algoritmlar",
+        "Fayllar",
+        "Qiymatlar va amallar to'plami"
+      ],
+      "a": "Qiymatlar va amallar to'plami"
+    },
+    {
+      "id": 11,
+      "q": "Primitiv toifalarga qaysi kiradi?",
+      "options": [
+        "struct",
+        "int, float, char",
+        "enum",
+        "graf"
+      ],
+      "a": "int, float, char"
+    },
+    {
+      "id": 12,
+      "q": "Abstrakt toifa nima?",
+      "options": [
+        "Faqat fizik daraja",
+        "Fayl",
+        "Mantiqiy xususiyatlarni aniqlovchi toifa",
+        "Matritsa"
+      ],
+      "a": "Mantiqiy xususiyatlarni aniqlovchi toifa"
+    },
+    {
+      "id": 13,
+      "q": "Ma'lumotlar tuzilmasini tanlash nimaga bog'liq?",
+      "options": [
+        "Faqat xotiraga",
+        "Faqat dasturlash tiliga",
+        "Elementlararo munosabat va samaradorlikka",
+        "Faqat algoritmga"
+      ],
+      "a": "Elementlararo munosabat va samaradorlikka"
+    },
+    {
+      "id": 14,
+      "q": "Qidirish nima?",
+      "options": [
+        "O'chirish",
+        "Kiritish",
+        "Saralash",
+        "Element joylashuvini aniqlash"
+      ],
+      "a": "Element joylashuvini aniqlash"
+    },
+    {
+      "id": 15,
+      "q": "Saralash nima?",
+      "options": [
+        "Tartiblash amali",
+        "O'chirish",
+        "Qidirish",
+        "Birlashtirish"
+      ],
+      "a": "Tartiblash amali"
+    },
+    {
+      "id": 16,
+      "q": "Algoritm nima?",
+      "options": [
+        "Fayl",
+        "Ma'lumot",
+        "Masalani yechish ketma-ketligi",
+        "Xotira"
+      ],
+      "a": "Masalani yechish ketma-ketligi"
+    },
+    {
+      "id": 17,
+      "q": "Abstrakt bosqich nima?",
+      "options": [
+        "Fizik daraja",
+        "Xotira darajasi",
+        "Matematika model darajasi",
+        "Dastur darajasi"
+      ],
+      "a": "Matematika model darajasi"
+    },
+    {
+      "id": 18,
+      "q": "Mantiqiy bosqich nima?",
+      "options": [
+        "Dasturlash tilida ifodalash",
+        "Xotira",
+        "Matematika model",
+        "Fizik qurilma"
+      ],
+      "a": "Dasturlash tilida ifodalash"
+    },
+    {
+      "id": 19,
+      "q": "Fizik bosqich nima?",
+      "options": [
+        "Model",
+        "Xotirada akslantirish",
+        "Algoritm",
+        "Kod"
+      ],
+      "a": "Xotirada akslantirish"
+    },
+    {
+      "id": 20,
+      "q": "Daraxt qanday tuzilma?",
+      "options": [
+        "Chiziqli",
+        "Ierarxik",
+        "Tasodifiy",
+        "Matritsa"
+      ],
+      "a": "Ierarxik"
+    },
+    {
+      "id": 21,
+      "q": "Graf qanday tuzilma?",
+      "options": [
+        "Chiziqli",
+        "Binar munosabatli tuzilma",
+        "Faqat daraxt",
+        "Matritsa"
+      ],
+      "a": "Binar munosabatli tuzilma"
+    },
+    {
+      "id": 22,
+      "q": "Dinamik ma'lumotlar tuzilmasi nima?",
+      "options": [
+        "O'zgarmaydigan",
+        "Faqat massiv",
+        "Elementlari o'zgaradigan tuzilma",
+        "Faqat fayl"
+      ],
+      "a": "Elementlari o'zgaradigan tuzilma"
+    },
+    {
+      "id": 23,
+      "q": "Yarimstatik ma'lumotlar tuzilmasi nima?",
+      "options": [
+        "Faqat statik tuzilma",
+        "Statik va dinamik xususiyatlarni birlashtirgan tuzilma",
+        "Faqat dinamik tuzilma",
+        "Faqat massiv"
+      ],
+      "a": "Statik va dinamik xususiyatlarni birlashtirgan tuzilma"
+    },
+    {
+      "id": 24,
+      "q": "Yarimstatik tuzilmalarga qaysilar kiradi?",
+      "options": [
+        "Daraxt va graf",
+        "Matritsa va massiv",
+        "Fayl va yozuv",
+        "Stek, navbat, dek"
+      ],
+      "a": "Stek, navbat, dek"
+    },
+    {
+      "id": 25,
+      "q": "Yarimstatik tuzilmalarning asosiy xususiyati nima?",
+      "options": [
+        "Faqat o'zgarmas",
+        "Uzunligi o'zgaradi, lekin elementlar ketma-ket joylashadi",
+        "Faqat o'zgaruvchan",
+        "Faqat graf"
+      ],
+      "a": "Uzunligi o'zgaradi, lekin elementlar ketma-ket joylashadi"
+    },
+    {
+      "id": 26,
+      "q": "Stek qanday tuzilma?",
+      "options": [
+        "Ierarxik",
+        "Graf",
+        "Chiziqli",
+        "Matritsa"
+      ],
+      "a": "Chiziqli"
+    },
+    {
+      "id": 27,
+      "q": "Stek qanday prinsip asosida ishlaydi?",
+      "options": [
+        "FIFO",
+        "LIFO",
+        "Random",
+        "Parallel"
+      ],
+      "a": "LIFO"
+    },
+    {
+      "id": 28,
+      "q": "LIFO nimani anglatadi?",
+      "options": [
+        "Birinchi kelgan birinchi ketadi",
+        "Oxirgi kelgan birinchi ketadi",
+        "Tasodifiy tanlash",
+        "Doimiy tartib"
+      ],
+      "a": "Oxirgi kelgan birinchi ketadi"
+    },
+    {
+      "id": 29,
+      "q": "Stekga element qo'shish amali qanday ataladi?",
+      "options": [
+        "pop",
+        "push",
+        "enqueue",
+        "dequeue"
+      ],
+      "a": "push"
+    },
+    {
+      "id": 30,
+      "q": "Stekdan element olish amali qanday ataladi?",
+      "options": [
+        "push",
+        "pop",
+        "insert",
+        "search"
+      ],
+      "a": "pop"
+    },
+    {
+      "id": 31,
+      "q": "Stekda element qayerdan qo'shiladi va olinadi?",
+      "options": [
+        "Har ikki tomondan",
+        "Faqat boshidan",
+        "Bitta tomondan qo'shilib, o'sha tomondan olinadi",
+        "Faqat oxiridan"
+      ],
+      "a": "Bitta tomondan qo'shilib, o'sha tomondan olinadi"
+    },
+    {
+      "id": 32,
+      "q": "Navbat qanday tuzilma?",
+      "options": [
+        "Ierarxik",
+        "LIFO",
+        "Graf",
+        "FIFO asosida ishlovchi tuzilma"
+      ],
+      "a": "FIFO asosida ishlovchi tuzilma"
+    },
+    {
+      "id": 33,
+      "q": "FIFO nimani bildiradi?",
+      "options": [
+        "Oxirgi kelgan birinchi ketadi",
+        "Birinchi kelgan birinchi ketadi",
+        "Tasodifiy",
+        "Parallel"
+      ],
+      "a": "Birinchi kelgan birinchi ketadi"
+    },
+    {
+      "id": 34,
+      "q": "Navbatga element qo'shish amali?",
+      "options": [
+        "push",
+        "enqueue",
+        "pop",
+        "top"
+      ],
+      "a": "enqueue"
+    },
+    {
+      "id": 35,
+      "q": "Navbatdan element olish amali?",
+      "options": [
+        "push",
+        "dequeue",
+        "insert",
+        "clear"
+      ],
+      "a": "dequeue"
+    },
+    {
+      "id": 36,
+      "q": "Navbatda element qayerdan qo'shiladi?",
+      "options": [
+        "Boshidan",
+        "Oxiridan",
+        "Har ikkala tomondan",
+        "O'rtasidan"
+      ],
+      "a": "Oxiridan"
+    },
+    {
+      "id": 37,
+      "q": "Navbatdan element qayerdan olinadi?",
+      "options": [
+        "Boshidan",
+        "Oxiridan",
+        "O'rtasidan",
+        "Har ikkala tomondan"
+      ],
+      "a": "Boshidan"
+    },
+    {
+      "id": 38,
+      "q": "Dek nima?",
+      "options": [
+        "Stekning turi",
+        "Ikkala tomondan ishlovchi navbat",
+        "Graf",
+        "Daraxt"
+      ],
+      "a": "Ikkala tomondan ishlovchi navbat"
+    },
+    {
+      "id": 39,
+      "q": "DEQ nimani anglatadi?",
+      "options": [
+        "Double Queue",
+        "Double Ended Queue",
+        "Data Queue",
+        "Direct Queue"
+      ],
+      "a": "Double Ended Queue"
+    },
+    {
+      "id": 40,
+      "q": "Dekda element qayerdan qo'shiladi?",
+      "options": [
+        "Faqat boshidan",
+        "Faqat oxiridan",
+        "Har ikkala tomondan",
+        "O'rtasidan"
+      ],
+      "a": "Har ikkala tomondan"
+    },
+    {
+      "id": 41,
+      "q": "Dekda element qayerdan olinadi?",
+      "options": [
+        "Faqat boshidan",
+        "Faqat oxiridan",
+        "Har ikkala tomondan",
+        "Faqat o'rtadan"
+      ],
+      "a": "Har ikkala tomondan"
+    },
+    {
+      "id": 42,
+      "q": "Dekda boshidan qo'shish amali?",
+      "options": [
+        "push_back",
+        "pop_back",
+        "push_front",
+        "dequeue"
+      ],
+      "a": "push_front"
+    },
+    {
+      "id": 43,
+      "q": "Dekda oxiridan qo'shish amali?",
+      "options": [
+        "push_front",
+        "push_back",
+        "pop_front",
+        "clear"
+      ],
+      "a": "push_back"
+    },
+    {
+      "id": 44,
+      "q": "Stek qayerda qo'llaniladi?",
+      "options": [
+        "Faqat grafda",
+        "Ajratkichlarni tekshirishda",
+        "Faqat faylda",
+        "Faqat matritsada"
+      ],
+      "a": "Ajratkichlarni tekshirishda"
+    },
+    {
+      "id": 45,
+      "q": "Navbat qayerda qo'llaniladi?",
+      "options": [
+        "Rekursiyada",
+        "Jarayonlarni boshqarishda (masalan, navbat tizimi)",
+        "Faqat massivda",
+        "Faqat grafda"
+      ],
+      "a": "Jarayonlarni boshqarishda (masalan, navbat tizimi)"
+    },
+    {
+      "id": 46,
+      "q": "Dek qanday tuzilma sifatida qaralishi mumkin?",
+      "options": [
+        "Ikkita birlashtirilgan stek",
+        "Ikkita bog'langan graf",
+        "Matritsa",
+        "Fayl"
+      ],
+      "a": "Ikkita birlashtirilgan stek"
+    },
+    {
+      "id": 47,
+      "q": "Dinamik ma'lumotlar tuzilmasi nima?",
+      "options": [
+        "O'lchami o'zgarmaydigan tuzilma",
+        "Faqat massiv",
+        "O'lchami va bog'lanishlari o'zgaradigan tuzilma",
+        "Faqat fayl"
+      ],
+      "a": "O'lchami va bog'lanishlari o'zgaradigan tuzilma"
+    },
+    {
+      "id": 48,
+      "q": "Massivning asosiy kamchiligi nima?",
+      "options": [
+        "O'lchamini o'zgartirib bo'lmaydi",
+        "Tez ishlaydi",
+        "Xotirada kam joy egallaydi",
+        "Qidirish oson"
+      ],
+      "a": "O'lchamini o'zgartirib bo'lmaydi"
+    },
+    {
+      "id": 49,
+      "q": "Bog'langan ro'yxat nima?",
+      "options": [
+        "Ketma-ket massiv",
+        "Ko'rsatkichlar orqali bog'langan elementlar to'plami",
+        "Graf",
+        "Fayl"
+      ],
+      "a": "Ko'rsatkichlar orqali bog'langan elementlar to'plami"
+    },
+    {
+      "id": 50,
+      "q": "Bog'langan ro'yxatda elementlar qayerda joylashadi?",
+      "options": [
+        "Faqat ketma-ket",
+        "Xotiraning istalgan joyida",
+        "Faqat boshida",
+        "Faqat oxirida"
+      ],
+      "a": "Xotiraning istalgan joyida"
+    },
+    {
+      "id": 51,
+      "q": "Tugun (node) nimadan iborat?",
+      "options": [
+        "Faqat qiymat",
+        "Faqat ko'rsatkich",
+        "Ma'lumot va ko'rsatkich maydoni",
+        "Faqat indeks"
+      ],
+      "a": "Ma'lumot va ko'rsatkich maydoni"
+    },
+    {
+      "id": 52,
+      "q": "Ko'rsatkichli maydon nimani saqlaydi?",
+      "options": [
+        "Son",
+        "Keyingi element manzili",
+        "Matn",
+        "Fayl"
+      ],
+      "a": "Keyingi element manzili"
+    },
+    {
+      "id": 53,
+      "q": "Dinamik tuzilmaning afzalligi nimada?",
+      "options": [
+        "O'lchami o'zgarmaydi",
+        "Oson o'chirish va qo'shish mumkin",
+        "Faqat tez ishlaydi",
+        "Faqat massiv"
+      ],
+      "a": "Oson o'chirish va qo'shish mumkin"
+    },
+    {
+      "id": 54,
+      "q": "Dinamik tuzilmaning kamchiligi nimada?",
+      "options": [
+        "To'g'ridan-to'g'ri murojaat yo'q",
+        "Xotira ko'p",
+        "Sekin ishlaydi",
+        "O'zgarmaydi"
+      ],
+      "a": "To'g'ridan-to'g'ri murojaat yo'q"
+    },
+    {
+      "id": 55,
+      "q": "Chiziqli ro'yxat nima?",
+      "options": [
+        "Bog'lanmagan",
+        "Tartiblangan bog'lanishga ega tuzilma",
+        "Tasodifiy",
+        "Graf"
+      ],
+      "a": "Tartiblangan bog'lanishga ega tuzilma"
+    },
+    {
+      "id": 56,
+      "q": "Chiziqsiz ro'yxat nima?",
+      "options": [
+        "Faqat bitta ko'rsatkichli",
+        "Bir nechta bog'lanishga ega tuzilma",
+        "Faqat massiv",
+        "Statik"
+      ],
+      "a": "Bir nechta bog'lanishga ega tuzilma"
+    },
+    {
+      "id": 57,
+      "q": "Bir bog'lamli ro'yxat nima?",
+      "options": [
+        "Har tugun faqat keyingi elementga bog'lanadi",
+        "Har tugun ikkita bog'lanadi",
+        "Har tugun oldingiga bog'lanadi",
+        "Bog'lanmaydi"
+      ],
+      "a": "Har tugun faqat keyingi elementga bog'lanadi"
+    },
+    {
+      "id": 58,
+      "q": "Ikki bog'lamli ro'yxat nima?",
+      "options": [
+        "Faqat oldinga bog'lanadi",
+        "Oldingi va keyingi elementga bog'lanadi",
+        "Faqat orqaga bog'lanadi",
+        "Bog'lanmaydi"
+      ],
+      "a": "Oldingi va keyingi elementga bog'lanadi"
+    },
+    {
+      "id": 59,
+      "q": "Halqasimon ro'yxat nima?",
+      "options": [
+        "Oxiri NULL",
+        "Bog'lanmagan",
+        "Oxiri boshiga bog'langan",
+        "Faqat bitta element"
+      ],
+      "a": "Oxiri boshiga bog'langan"
+    },
+    {
+      "id": 60,
+      "q": "Ro'yxat boshi ko'rsatkichi nima deyiladi?",
+      "options": [
+        "last",
+        "lst",
+        "first",
+        "node"
+      ],
+      "a": "lst"
+    },
+    {
+      "id": 61,
+      "q": "Agar ro'yxat bo'sh bo'lsa, lst nimaga teng?",
+      "options": [
+        "0",
+        "NULL",
+        "1",
+        "-1"
+      ],
+      "a": "NULL"
+    },
+    {
+      "id": 62,
+      "q": "Node strukturasi qanday maydonlardan iborat?",
+      "options": [
+        "Faqat info",
+        "info va next",
+        "Faqat next",
+        "index va data"
+      ],
+      "a": "info va next"
+    },
+    {
+      "id": 63,
+      "q": "Yangi element qo'shishda xotira qanday ajratiladi?",
+      "options": [
+        "statik",
+        "dinamik (new operatori bilan)",
+        "fayldan",
+        "massivdan"
+      ],
+      "a": "dinamik (new operatori bilan)"
+    },
+    {
+      "id": 64,
+      "q": "Ro'yxat boshiga element qo'shishda birinchi amal?",
+      "options": [
+        "O'chirish",
+        "Yangi element yaratish",
+        "Qidirish",
+        "Saralash"
+      ],
+      "a": "Yangi element yaratish"
+    },
+    {
+      "id": 65,
+      "q": "Boshiga qo'shishda p->next nimaga teng bo'ladi?",
+      "options": [
+        "NULL",
+        "last",
+        "lst ga teng bo'ladi",
+        "index"
+      ],
+      "a": "lst ga teng bo'ladi"
+    },
+    {
+      "id": 66,
+      "q": "Boshiga qo'shilgandan keyin lst nimaga teng bo'ladi?",
+      "options": [
+        "eski qiymat",
+        "p ga teng bo'ladi",
+        "NULL",
+        "last"
+      ],
+      "a": "p ga teng bo'ladi"
+    },
+    {
+      "id": 67,
+      "q": "Elementni o'chirishda delete nima qiladi?",
+      "options": [
+        "Qo'shadi",
+        "Xotirani bo'shatadi",
+        "Qidiradi",
+        "Ayuradi"
+      ],
+      "a": "Xotirani bo'shatadi"
+    },
+    {
+      "id": 68,
+      "q": "Ro'yxatda kalit nima uchun kerak?",
+      "options": [
+        "Saralash",
+        "Xotira ajratish",
+        "Elementni identifikatsiya qilish uchun",
+        "Qo'shish"
+      ],
+      "a": "Elementni identifikatsiya qilish uchun"
+    },
+    {
+      "id": 69,
+      "q": "Chiziqsiz ma'lumotlar tuzilmasi nima?",
+      "options": [
+        "Tartibli bog'langan tuzilma",
+        "Tartiblanmagan bog'lanishga ega tuzilma",
+        "Faqat massiv",
+        "Faqat fayl"
+      ],
+      "a": "Tartiblanmagan bog'lanishga ega tuzilma"
+    },
+    {
+      "id": 70,
+      "q": "Chiziqsiz tuzilmada elementlar qanday bog'lanadi?",
+      "options": [
+        "Faqat ketma-ket",
+        "Ixtiyoriy bog'lanadi",
+        "Faqat boshdan",
+        "Faqat oxiridan"
+      ],
+      "a": "Ixtiyoriy bog'lanadi"
+    },
+    {
+      "id": 71,
+      "q": "Chiziqsiz tuzilmaning nechta asosiy belgisi bor?",
+      "options": [
+        "2",
+        "3",
+        "4",
+        "5"
+      ],
+      "a": "3"
+    },
+    {
+      "id": 72,
+      "q": "Chiziqsiz tuzilmaning belgilaridan biri qaysi?",
+      "options": [
+        "Faqat bitta elementga murojaat",
+        "Har bir element boshqa ixtiyoriy elementga murojaat qilishi mumkin",
+        "Faqat ketma-ket bog'lanish",
+        "Faqat massiv"
+      ],
+      "a": "Har bir element boshqa ixtiyoriy elementga murojaat qilishi mumkin"
+    },
+    {
+      "id": 73,
+      "q": "Chiziqsiz tuzilmalarga qaysilar kiradi?",
+      "options": [
+        "Massivlar",
+        "Faqat stek",
+        "Ro'yxatlar, daraxtlar, graflar",
+        "Faqat navbat"
+      ],
+      "a": "Ro'yxatlar, daraxtlar, graflar"
+    },
+    {
+      "id": 74,
+      "q": "Daraxt qanday tuzilma hisoblanadi?",
+      "options": [
+        "Chiziqli",
+        "Yo'naltirilgan graf sifatida qaraladi",
+        "Faqat massiv",
+        "Statik"
+      ],
+      "a": "Yo'naltirilgan graf sifatida qaraladi"
+    },
+    {
+      "id": 75,
+      "q": "Graf turlari qaysilar?",
+      "options": [
+        "Yo'naltirilgan va yo'naltirilmagan",
+        "Faqat yo'naltirilgan",
+        "Faqat halqasimon",
+        "Faqat daraxt"
+      ],
+      "a": "Yo'naltirilgan va yo'naltirilmagan"
+    },
+    {
+      "id": 76,
+      "q": "Ko'p bog'lamli ro'yxat nima?",
+      "options": [
+        "Bitta ko'rsatkichli ro'yxat",
+        "Bir nechta ko'rsatkichli ro'yxat",
+        "Faqat massiv",
+        "Faqat daraxt"
+      ],
+      "a": "Bir nechta ko'rsatkichli ro'yxat"
+    },
+    {
+      "id": 77,
+      "q": "Ko'p bog'lamli ro'yxatning afzalligi nimada?",
+      "options": [
+        "Sekin ishlaydi",
+        "Qidirish qiyin",
+        "Xotira tejaladi",
+        "O'zgarmaydi"
+      ],
+      "a": "Xotira tejaladi"
+    },
+    {
+      "id": 78,
+      "q": "Bir element bir nechta ro'yxatda ishlatilsa nima qilinadi?",
+      "options": [
+        "Nusxa olinadi",
+        "Chiziqsiz ro'yxat yaratiladi",
+        "O'chiriladi",
+        "Saralanadi"
+      ],
+      "a": "Chiziqsiz ro'yxat yaratiladi"
+    },
+    {
+      "id": 79,
+      "q": "Ko'p bog'lamli ro'yxatda o'zgarish qayerga ta'sir qiladi?",
+      "options": [
+        "Barcha ro'yxatlarga",
+        "Faqat bitta ro'yxatga",
+        "Hech qayerga",
+        "Faqat massivga"
+      ],
+      "a": "Barcha ro'yxatlarga"
+    },
+    {
+      "id": 80,
+      "q": "Ko'p bog'lamli ro'yxatda elementni qachon o'chirish mumkin?",
+      "options": [
+        "Har doim",
+        "Hech qachon",
+        "Hech bir qism ro'yxatda qolmaganda",
+        "Faqat boshidan"
+      ],
+      "a": "Hech bir qism ro'yxatda qolmaganda"
+    },
+    {
+      "id": 81,
+      "q": "Chiziqsiz tarmoqlanuvchi ro'yxat nima?",
+      "options": [
+        "Faqat massiv",
+        "Elementlari ham ro'yxat bo'lishi mumkin bo'lgan tuzilma",
+        "Faqat graf",
+        "Faqat daraxt"
+      ],
+      "a": "Elementlari ham ro'yxat bo'lishi mumkin bo'lgan tuzilma"
+    },
+    {
+      "id": 82,
+      "q": "Bo'sh ro'yxat qanday yoziladi?",
+      "options": [
+        "()",
+        "{}",
+        "[]",
+        "NULL"
+      ],
+      "a": "()"
+    },
+    {
+      "id": 83,
+      "q": "Node strukturasi qanday maydonlarga ega?",
+      "options": [
+        "info va next",
+        "info, down, next",
+        "faqat info",
+        "index"
+      ],
+      "a": "info, down, next"
+    },
+    {
+      "id": 84,
+      "q": "Chiziqsiz ro'yxatda qidirish qanday yaxshilanadi?",
+      "options": [
+        "Indeks orqali",
+        "Skip list orqali",
+        "Fayl orqali",
+        "Massiv orqali"
+      ],
+      "a": "Skip list orqali"
+    },
+    {
+      "id": 85,
+      "q": "Chiziqsiz tuzilmaning asosiy ustunligi nimada?",
+      "options": [
+        "Moslashuvchanlik va samarali murojaat",
+        "Sekin ishlash",
+        "Faqat kichik hajm",
+        "Faqat statik"
+      ],
+      "a": "Moslashuvchanlik va samarali murojaat"
+    },
+    {
+      "id": 86,
+      "q": "Rekursiya nima?",
+      "options": [
+        "Takroriy sikl",
+        "Massiv turi",
+        "Funksiyaning o'z-o'zini chaqirishi",
+        "Saralash usuli"
+      ],
+      "a": "Funksiyaning o'z-o'zini chaqirishi"
+    },
+    {
+      "id": 87,
+      "q": "Rekursiv ta'rif nechta qismdan iborat?",
+      "options": [
+        "1",
+        "2",
+        "3",
+        "4"
+      ],
+      "a": "2"
+    },
+    {
+      "id": 88,
+      "q": "Rekursiv ta'rifning birinchi qismi nima?",
+      "options": [
+        "Asosiy holat (base case)",
+        "Qoidalar",
+        "Sikl",
+        "Iteratsiya"
+      ],
+      "a": "Asosiy holat (base case)"
+    },
+    {
+      "id": 89,
+      "q": "Rekursiv ta'rifning ikkinchi qismi nima?",
+      "options": [
+        "Asosiy element",
+        "Yangi elementlar hosil qilish qoidasi",
+        "Qaytarish operatori",
+        "Funksiya nomi"
+      ],
+      "a": "Yangi elementlar hosil qilish qoidasi"
+    },
+    {
+      "id": 90,
+      "q": "Faktorial funksiyaning asosiy holati qaysi?",
+      "options": [
+        "n=0",
+        "n=1",
+        "n=2",
+        "n=10"
+      ],
+      "a": "n=0"
+    },
+    {
+      "id": 91,
+      "q": "Rekursiv algoritmning asosiy kamchiligi nima?",
+      "options": [
+        "Tez ishlaydi",
+        "Ko'p xotira talab qiladi",
+        "Har doim to'g'ri ishlaydi",
+        "Oddiy tuziladi"
+      ],
+      "a": "Ko'p xotira talab qiladi"
+    },
+    {
+      "id": 92,
+      "q": "Rekursiya bajarilishida qaysi tuzilma ishlatiladi?",
+      "options": [
+        "Queue",
+        "Stack",
+        "Tree",
+        "Graph"
+      ],
+      "a": "Stack"
+    },
+    {
+      "id": 93,
+      "q": "Rekursiyada qaytish adresi qayerda saqlanadi?",
+      "options": [
+        "Faylda",
+        "Registrda",
+        "Stackda",
+        "Diskda"
+      ],
+      "a": "Stackda"
+    },
+    {
+      "id": 94,
+      "q": "Rekursiya qachon to'xtaydi?",
+      "options": [
+        "Har doim",
+        "Sikl tugaganda",
+        "Xotira tugaganda",
+        "Base case bajarilganda"
+      ],
+      "a": "Base case bajarilganda"
+    },
+    {
+      "id": 95,
+      "q": "Daraxt qanday tuzilma?",
+      "options": [
+        "Chiziqli",
+        "Chiziqsiz",
+        "Statik",
+        "Massiv"
+      ],
+      "a": "Chiziqsiz"
+    },
+    {
+      "id": 96,
+      "q": "Daraxtning ildizi nima?",
+      "options": [
+        "Boshlang'ich tugun",
+        "Oxirgi tugun",
+        "Eng katta tugun",
+        "Barg tugun"
+      ],
+      "a": "Boshlang'ich tugun"
+    },
+    {
+      "id": 97,
+      "q": "Daraxtdagi barg tugun nima?",
+      "options": [
+        "Ota tugun",
+        "Shoxi yo'q tugun",
+        "Farzand tugun",
+        "Ildiz"
+      ],
+      "a": "Shoxi yo'q tugun"
+    },
+    {
+      "id": 98,
+      "q": "Daraxt balandligi nima?",
+      "options": [
+        "Bosqichlar soni",
+        "Tugunlar soni",
+        "Qirralar soni",
+        "Ildizlar soni"
+      ],
+      "a": "Bosqichlar soni"
+    },
+    {
+      "id": 99,
+      "q": "Tugundan chiqadigan shoxlar soni nima deyiladi?",
+      "options": [
+        "Uzunlik",
+        "Indeks",
+        "Daraja",
+        "Kalit"
+      ],
+      "a": "Daraja"
+    },
+    {
+      "id": 100,
+      "q": "Maksimal darajasi 2 bo'lgan daraxt nima?",
+      "options": [
+        "Binar daraxt",
+        "Oddiy daraxt",
+        "Graf",
+        "Ro'yxat"
+      ],
+      "a": "Binar daraxt"
+    },
+    {
+      "id": 101,
+      "q": "To'liq binar daraxtda tugun darajasi qanday bo'ladi?",
+      "options": [
+        "1 yoki 3",
+        "2 yoki 4",
+        "0 yoki 2",
+        "1 yoki 2"
+      ],
+      "a": "0 yoki 2"
+    },
+    {
+      "id": 102,
+      "q": "Daraxtda \"ota\" tushunchasi nimani bildiradi?",
+      "options": [
+        "Pastki tugun",
+        "Barg",
+        "Yuqori tugun",
+        "Oxirgi tugun"
+      ],
+      "a": "Yuqori tugun"
+    },
+    {
+      "id": 103,
+      "q": "\"Farzand\" tugun nima?",
+      "options": [
+        "Ildiz",
+        "Pastki bog'langan tugun",
+        "Ota tugun",
+        "Bo'sh tugun"
+      ],
+      "a": "Pastki bog'langan tugun"
+    },
+    {
+      "id": 104,
+      "q": "Rekursiv algoritmning alternativasi nima?",
+      "options": [
+        "Iterativ algoritm",
+        "Daraxt",
+        "Graf",
+        "Stack"
+      ],
+      "a": "Iterativ algoritm"
+    },
+    {
+      "id": 105,
+      "q": "Rekursiyada lokal o'zgaruvchilar qayerda saqlanadi?",
+      "options": [
+        "Diskda",
+        "Stackda",
+        "Faylda",
+        "Registrda"
+      ],
+      "a": "Stackda"
+    },
+    {
+      "id": 106,
+      "q": "Rekursiv chaqiriqlar zanjiri nimaga olib keladi?",
+      "options": [
+        "Cheksizlikka",
+        "Xatoga",
+        "Ildiz (base case)ga",
+        "Diskga"
+      ],
+      "a": "Ildiz (base case)ga"
+    }
+  ]
   },
   "suniy_intelekt_english2": {
     "name": "English",
