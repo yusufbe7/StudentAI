@@ -1,1171 +1,1336 @@
 {
-  "title": "Ma'lumotlar tuzilmasi va algoritm test savollari",
+  "title": "Fizika 2 - 2025-26 YN savollari",
   "questions": [
     {
       "id": 1,
-      "q": "Ma'lumotlar tuzilmasi nima?",
+      "q": "Elеktr tоkining mаgnit tа'siri tоk qаysi muhitlаrdаn o'tgаndа kuzаtilаdi?",
       "options": [
-        "Algoritmlar to'plami",
-        "Xotirada tashkil etilgan elementlar yig'indisi",
-        "Dastur kodi",
-        "Operatsion tizim"
+        "mеtаllаrdаn",
+        "vаkuumdа",
+        "elеktrоlitlаrdаn",
+        "istаlgаn muhitdаn"
       ],
-      "a": "Xotirada tashkil etilgan elementlar yig'indisi"
+      "a": "istаlgаn muhitdаn"
     },
     {
       "id": 2,
-      "q": "Ma'lumot nima?",
+      "q": "Birliklar orasidan mаgnit оqimining birligini ko'rsating.",
       "options": [
-        "Qayta ishlangan natija",
-        "Algoritm",
-        "Qiymatlar yig'indisi",
-        "Funksiya"
+        "Erstеd",
+        "Аmpеr",
+        "Vеbеr",
+        "Tеslа"
       ],
-      "a": "Qiymatlar yig'indisi"
+      "a": "Vеbеr"
     },
     {
       "id": 3,
-      "q": "Axborot nima?",
+      "q": "O'tkаzgichdаn o'zgаrmаs tоk o'tgаndа uning аtrоfidа qаysi mаydоn hоsil bo'lаdi?",
       "options": [
-        "Xom ma'lumot",
-        "Qayta ishlangan ma'lumot",
-        "Algoritm",
-        "Fayl"
+        "elеktr mаydоn",
+        "grаvitаsiоn mаydоn",
+        "elеktrоmаgnit mаydоn",
+        "mаgnit mаydоn"
       ],
-      "a": "Qayta ishlangan ma'lumot"
+      "a": "mаgnit mаydоn"
     },
     {
       "id": 4,
-      "q": "Ma'lumotlar tuzilmasi elementi nima?",
+      "q": "Mаgnit mаydоn induksiya chiziqlаrigа tik yo'nаlishdа elеktrоn vа prоtоn uchib kirmоqdа. Prоtonning mаssаsi elеktrоnning mаssаsidаn 1800 mаrtа kаttа. Zаrrаlаrning qаysi birigа tа'sir ko'rsаtgаn Lоrеns kuchi kаttа bo'lаdi?",
       "options": [
-        "Butun tizim",
-        "Fayl",
-        "Qiymatlar to'plamining bir bo'lagi",
-        "Algoritm"
+        "Elеktrоngа",
+        "Prоtongа",
+        "Ikkаlаsigа bir хil",
+        "Tа'sir kuchi nоlgа tеng"
       ],
-      "a": "Qiymatlar to'plamining bir bo'lagi"
+      "a": "Ikkаlаsigа bir хil"
     },
     {
       "id": 5,
-      "q": "Ob'ekt nima?",
+      "q": "Chаp qo'l qоidаsi yordаmidа keltirilgan qаndаy kаttаliklаrning yo'nаlishi аniqlаnаdi?",
       "options": [
-        "Faqat son",
-        "Xususiyat va atributlarga ega tuzilma",
-        "Funksiya",
-        "Kod"
+        "Аmpеr kuchi",
+        "Lоrеns kuchi",
+        "Induksiоn tоk yo'nаlishi",
+        "Аmpеr vа Lоrеns kuchlаri"
       ],
-      "a": "Xususiyat va atributlarga ega tuzilma"
+      "a": "Аmpеr vа Lоrеns kuchlаri"
     },
     {
       "id": 6,
-      "q": "Maydon nima?",
+      "q": "Quyidаgi kеltirilgаn kuchlаrning qаysi biri ish bаjаrmаydi?",
       "options": [
-        "Algoritm",
-        "Ob'ekt atributi yoki xususiyati",
-        "Fayl",
-        "Matritsa"
+        "Аmpеr kuchi",
+        "ishqаlаnish kuchi",
+        "Kulоn kuchi",
+        "Lоrеns kuchi"
       ],
-      "a": "Ob'ekt atributi yoki xususiyati"
+      "a": "Lоrеns kuchi"
     },
     {
       "id": 7,
-      "q": "Yozuv nima?",
+      "q": "Lоrеns kuchi hаrаkаtdаgi zаryadli zаrrаning tеzligini qаndаy o'zgаrtirаdi?",
       "options": [
-        "Bitta qiymat",
-        "Turli toifadagi maydonlar to'plami",
-        "Algoritm",
-        "Dastur"
+        "Tеzligini kаmаytirаdi",
+        "Tеzligini o'zgаrtirmаydi",
+        "Tеzlik yo'nаlishini o'zgаrtirаdi",
+        "Tеzligini оrttirаdi"
       ],
-      "a": "Turli toifadagi maydonlar to'plami"
+      "a": "Tеzlik yo'nаlishini o'zgаrtirаdi"
     },
     {
       "id": 8,
-      "q": "Fayl nima?",
+      "q": "Lоrеns kuchi ifоdаsini ko'rsаting.",
       "options": [
-        "Bitta yozuv",
-        "Yozuvlar to'plami",
-        "Algoritm",
-        "Funksiya"
+        "F = I·B·l·cosα",
+        "F = mv²/2",
+        "F = q·v·B·sinα",
+        "F = I·B·l·sinα"
       ],
-      "a": "Yozuvlar to'plami"
+      "a": "F = q·v·B·sinα"
     },
     {
       "id": 9,
-      "q": "Kalit nima?",
+      "q": "Elektromagnit induksiya hodisasini qaysi olim kashf qilgan?",
       "options": [
-        "Algoritm",
-        "Yozuvni aniqlovchi maydon",
-        "Fayl",
-        "Funksiya"
+        "Faradey",
+        "Amper",
+        "Lens",
+        "Ersted"
       ],
-      "a": "Yozuvni aniqlovchi maydon"
+      "a": "Faradey"
     },
     {
       "id": 10,
-      "q": "Ma'lumotlar toifasi nimani o'z ichiga oladi?",
+      "q": "Induksion EYuKning birligini ko'rsating.",
       "options": [
-        "Faqat qiymatlar",
-        "Faqat algoritmlar",
-        "Fayllar",
-        "Qiymatlar va amallar to'plami"
+        "H",
+        "A/s",
+        "Wb/s",
+        "T/s"
       ],
-      "a": "Qiymatlar va amallar to'plami"
+      "a": "Wb/s"
     },
     {
       "id": 11,
-      "q": "Primitiv toifalarga qaysi kiradi?",
+      "q": "Induksion tokning yo'nalishi kim tomonidan aniqlangan?",
       "options": [
-        "struct",
-        "int, float, char",
-        "enum",
-        "graf"
+        "Maksvel",
+        "Ersted",
+        "Amper",
+        "Lens"
       ],
-      "a": "int, float, char"
+      "a": "Lens"
     },
     {
       "id": 12,
-      "q": "Abstrakt toifa nima?",
+      "q": "G'altakdagi o'ramlar soni 4 marta ortsa, undagi induksion EYuK qanday o'zgaradi?",
       "options": [
-        "Faqat fizik daraja",
-        "Fayl",
-        "Mantiqiy xususiyatlarni aniqlovchi toifa",
-        "Matritsa"
+        "2 marta kamayadi",
+        "4 marta kamayadi",
+        "2 marta ortadi",
+        "4 marta ortadi"
       ],
-      "a": "Mantiqiy xususiyatlarni aniqlovchi toifa"
+      "a": "4 marta ortadi"
     },
     {
       "id": 13,
-      "q": "Ma'lumotlar tuzilmasini tanlash nimaga bog'liq?",
+      "q": "Kоnturdаn o'tаyotgаn mаgnit оqimi 0,3 s dаvоmidа 15 dаn 12 Wb gаchа tеkis kаmаygаn bo'lsа, kоnturdа hоsil bo'lgаn induksiya EYuK ni toping (V).",
       "options": [
-        "Faqat xotiraga",
-        "Faqat dasturlash tiliga",
-        "Elementlararo munosabat va samaradorlikka",
-        "Faqat algoritmga"
+        "5",
+        "9",
+        "10",
+        "4,5"
       ],
-      "a": "Elementlararo munosabat va samaradorlikka"
+      "a": "10"
     },
     {
       "id": 14,
-      "q": "Qidirish nima?",
+      "q": "G'altakdagi tok 0,4 s ichida 5 A ga o'zgarganda, 15 V o'zinduksiya EYuK yuzaga keldi. G'altak induktivligi nimaga teng (H)?",
       "options": [
-        "O'chirish",
-        "Kiritish",
-        "Saralash",
-        "Element joylashuvini aniqlash"
+        "4",
+        "1,5",
+        "2,5",
+        "1,2"
       ],
-      "a": "Element joylashuvini aniqlash"
+      "a": "1,2"
     },
     {
       "id": 15,
-      "q": "Saralash nima?",
+      "q": "Tok kuchi 0,8 A bo'lganda g'altakda yuzaga kelgan magnit oqimi 240 mWb ga teng. G'altak induktivligi nimaga teng (H)?",
       "options": [
-        "Tartiblash amali",
-        "O'chirish",
-        "Qidirish",
-        "Birlashtirish"
+        "0,3",
+        "1,2",
+        "0,5",
+        "0,4"
       ],
-      "a": "Tartiblash amali"
+      "a": "0,3"
     },
     {
       "id": 16,
-      "q": "Algoritm nima?",
+      "q": "G'altakka kiritilgan ferromagnit o'zagi qanday vazifani bajaradi?",
       "options": [
-        "Fayl",
-        "Ma'lumot",
-        "Masalani yechish ketma-ketligi",
-        "Xotira"
+        "magnit maydonni susaytiradi",
+        "magnit maydonni kuchaytiradi",
+        "elektr maydonni susaytiradi",
+        "elektr maydonni kuchaytiradi"
       ],
-      "a": "Masalani yechish ketma-ketligi"
+      "a": "magnit maydonni kuchaytiradi"
     },
     {
       "id": 17,
-      "q": "Abstrakt bosqich nima?",
+      "q": "Induktivligi 30 mH bo'lgan g'altakdan 0,8 A tok o'tmoqda. G'altak mаgnit mаydоnining enеrgiyasini hisoblang (mJ).",
       "options": [
-        "Fizik daraja",
-        "Xotira darajasi",
-        "Matematika model darajasi",
-        "Dastur darajasi"
+        "1,2",
+        "2",
+        "4",
+        "9,6"
       ],
-      "a": "Matematika model darajasi"
+      "a": "9,6"
     },
     {
       "id": 18,
-      "q": "Mantiqiy bosqich nima?",
+      "q": "G'altakdan 2 A tok o'tganda uning magnit maydon energiyasi 40 mJ ga teng bo'lsa, g'altak induktivligi nimaga teng (mH)?",
       "options": [
-        "Dasturlash tilida ifodalash",
-        "Xotira",
-        "Matematika model",
-        "Fizik qurilma"
+        "40",
+        "10",
+        "20",
+        "25"
       ],
-      "a": "Dasturlash tilida ifodalash"
+      "a": "20"
     },
     {
       "id": 19,
-      "q": "Fizik bosqich nima?",
+      "q": "Tebranish konturidagi kondensatordagi elektr zaryadi q = 10⁻³·cos100πt (C) qonuniyat bo'yicha o'zgarmoqda. Konturda hosil bo'layotgan elektromagnit tebranishlari chastotasini toping.",
       "options": [
-        "Model",
-        "Xotirada akslantirish",
-        "Algoritm",
-        "Kod"
+        "50π Hz",
+        "100π Hz",
+        "100 Hz",
+        "50 Hz"
       ],
-      "a": "Xotirada akslantirish"
+      "a": "50 Hz"
     },
     {
       "id": 20,
-      "q": "Daraxt qanday tuzilma?",
+      "q": "Tebranish konturidagi kondensatorda elektr zaryadi q = 10⁻³·cos1000t (C) qonuniyat bo'yicha o'zgarmoqda. Konturda hosil bo'layotgan tok kuchining amplitudasini toping.",
       "options": [
-        "Chiziqli",
-        "Ierarxik",
-        "Tasodifiy",
-        "Matritsa"
+        "1 A",
+        "10⁻³ A",
+        "10 A",
+        "π A"
       ],
-      "a": "Ierarxik"
+      "a": "1 A"
     },
     {
       "id": 21,
-      "q": "Graf qanday tuzilma?",
+      "q": "Ideal tebranish konturida kondensator sig'imini 9 marta kamaytirilsa, konturning tebranish chastotasi qanday o'zgaradi?",
       "options": [
-        "Chiziqli",
-        "Binar munosabatli tuzilma",
-        "Faqat daraxt",
-        "Matritsa"
+        "3 marta ortadi",
+        "9 marta kamayadi",
+        "9 marta ortadi",
+        "3 marta kamayadi"
       ],
-      "a": "Binar munosabatli tuzilma"
+      "a": "3 marta ortadi"
     },
     {
       "id": 22,
-      "q": "Dinamik ma'lumotlar tuzilmasi nima?",
+      "q": "Rezistor, induktiv g'altak va sig'im ketma-ket ulangan zanjirning to'la qarshiligi rezonans davrida qanday bo'ladi?",
       "options": [
-        "O'zgarmaydigan",
-        "Faqat massiv",
-        "Elementlari o'zgaradigan tuzilma",
-        "Faqat fayl"
+        "aktiv qarshilikka teng bo'ladi",
+        "aktiv qarshilikdan ko'p marta kichik bo'ladi",
+        "aktiv qarshilikdan kichik bo'ladi",
+        "aktiv qarshilikdan katta bo'ladi"
       ],
-      "a": "Elementlari o'zgaradigan tuzilma"
+      "a": "aktiv qarshilikka teng bo'ladi"
     },
     {
       "id": 23,
-      "q": "Yarimstatik ma'lumotlar tuzilmasi nima?",
+      "q": "Quyida keltirilgan xossalardan qaysilari so'nuvchi tebranishlarga tegishli? 1. Garmonik tebranishlar. 2. Ideal tebranish konturidagi tebranishlar. 3. Real tebranish konturidagi tebranishlar.",
       "options": [
-        "Faqat statik tuzilma",
-        "Statik va dinamik xususiyatlarni birlashtirgan tuzilma",
-        "Faqat dinamik tuzilma",
-        "Faqat massiv"
-      ],
-      "a": "Statik va dinamik xususiyatlarni birlashtirgan tuzilma"
-    },
-    {
-      "id": 24,
-      "q": "Yarimstatik tuzilmalarga qaysilar kiradi?",
-      "options": [
-        "Daraxt va graf",
-        "Matritsa va massiv",
-        "Fayl va yozuv",
-        "Stek, navbat, dek"
-      ],
-      "a": "Stek, navbat, dek"
-    },
-    {
-      "id": 25,
-      "q": "Yarimstatik tuzilmalarning asosiy xususiyati nima?",
-      "options": [
-        "Faqat o'zgarmas",
-        "Uzunligi o'zgaradi, lekin elementlar ketma-ket joylashadi",
-        "Faqat o'zgaruvchan",
-        "Faqat graf"
-      ],
-      "a": "Uzunligi o'zgaradi, lekin elementlar ketma-ket joylashadi"
-    },
-    {
-      "id": 26,
-      "q": "Stek qanday tuzilma?",
-      "options": [
-        "Ierarxik",
-        "Graf",
-        "Chiziqli",
-        "Matritsa"
-      ],
-      "a": "Chiziqli"
-    },
-    {
-      "id": 27,
-      "q": "Stek qanday prinsip asosida ishlaydi?",
-      "options": [
-        "FIFO",
-        "LIFO",
-        "Random",
-        "Parallel"
-      ],
-      "a": "LIFO"
-    },
-    {
-      "id": 28,
-      "q": "LIFO nimani anglatadi?",
-      "options": [
-        "Birinchi kelgan birinchi ketadi",
-        "Oxirgi kelgan birinchi ketadi",
-        "Tasodifiy tanlash",
-        "Doimiy tartib"
-      ],
-      "a": "Oxirgi kelgan birinchi ketadi"
-    },
-    {
-      "id": 29,
-      "q": "Stekga element qo'shish amali qanday ataladi?",
-      "options": [
-        "pop",
-        "push",
-        "enqueue",
-        "dequeue"
-      ],
-      "a": "push"
-    },
-    {
-      "id": 30,
-      "q": "Stekdan element olish amali qanday ataladi?",
-      "options": [
-        "push",
-        "pop",
-        "insert",
-        "search"
-      ],
-      "a": "pop"
-    },
-    {
-      "id": 31,
-      "q": "Stekda element qayerdan qo'shiladi va olinadi?",
-      "options": [
-        "Har ikki tomondan",
-        "Faqat boshidan",
-        "Bitta tomondan qo'shilib, o'sha tomondan olinadi",
-        "Faqat oxiridan"
-      ],
-      "a": "Bitta tomondan qo'shilib, o'sha tomondan olinadi"
-    },
-    {
-      "id": 32,
-      "q": "Navbat qanday tuzilma?",
-      "options": [
-        "Ierarxik",
-        "LIFO",
-        "Graf",
-        "FIFO asosida ishlovchi tuzilma"
-      ],
-      "a": "FIFO asosida ishlovchi tuzilma"
-    },
-    {
-      "id": 33,
-      "q": "FIFO nimani bildiradi?",
-      "options": [
-        "Oxirgi kelgan birinchi ketadi",
-        "Birinchi kelgan birinchi ketadi",
-        "Tasodifiy",
-        "Parallel"
-      ],
-      "a": "Birinchi kelgan birinchi ketadi"
-    },
-    {
-      "id": 34,
-      "q": "Navbatga element qo'shish amali?",
-      "options": [
-        "push",
-        "enqueue",
-        "pop",
-        "top"
-      ],
-      "a": "enqueue"
-    },
-    {
-      "id": 35,
-      "q": "Navbatdan element olish amali?",
-      "options": [
-        "push",
-        "dequeue",
-        "insert",
-        "clear"
-      ],
-      "a": "dequeue"
-    },
-    {
-      "id": 36,
-      "q": "Navbatda element qayerdan qo'shiladi?",
-      "options": [
-        "Boshidan",
-        "Oxiridan",
-        "Har ikkala tomondan",
-        "O'rtasidan"
-      ],
-      "a": "Oxiridan"
-    },
-    {
-      "id": 37,
-      "q": "Navbatdan element qayerdan olinadi?",
-      "options": [
-        "Boshidan",
-        "Oxiridan",
-        "O'rtasidan",
-        "Har ikkala tomondan"
-      ],
-      "a": "Boshidan"
-    },
-    {
-      "id": 38,
-      "q": "Dek nima?",
-      "options": [
-        "Stekning turi",
-        "Ikkala tomondan ishlovchi navbat",
-        "Graf",
-        "Daraxt"
-      ],
-      "a": "Ikkala tomondan ishlovchi navbat"
-    },
-    {
-      "id": 39,
-      "q": "DEQ nimani anglatadi?",
-      "options": [
-        "Double Queue",
-        "Double Ended Queue",
-        "Data Queue",
-        "Direct Queue"
-      ],
-      "a": "Double Ended Queue"
-    },
-    {
-      "id": 40,
-      "q": "Dekda element qayerdan qo'shiladi?",
-      "options": [
-        "Faqat boshidan",
-        "Faqat oxiridan",
-        "Har ikkala tomondan",
-        "O'rtasidan"
-      ],
-      "a": "Har ikkala tomondan"
-    },
-    {
-      "id": 41,
-      "q": "Dekda element qayerdan olinadi?",
-      "options": [
-        "Faqat boshidan",
-        "Faqat oxiridan",
-        "Har ikkala tomondan",
-        "Faqat o'rtadan"
-      ],
-      "a": "Har ikkala tomondan"
-    },
-    {
-      "id": 42,
-      "q": "Dekda boshidan qo'shish amali?",
-      "options": [
-        "push_back",
-        "pop_back",
-        "push_front",
-        "dequeue"
-      ],
-      "a": "push_front"
-    },
-    {
-      "id": 43,
-      "q": "Dekda oxiridan qo'shish amali?",
-      "options": [
-        "push_front",
-        "push_back",
-        "pop_front",
-        "clear"
-      ],
-      "a": "push_back"
-    },
-    {
-      "id": 44,
-      "q": "Stek qayerda qo'llaniladi?",
-      "options": [
-        "Faqat grafda",
-        "Ajratkichlarni tekshirishda",
-        "Faqat faylda",
-        "Faqat matritsada"
-      ],
-      "a": "Ajratkichlarni tekshirishda"
-    },
-    {
-      "id": 45,
-      "q": "Navbat qayerda qo'llaniladi?",
-      "options": [
-        "Rekursiyada",
-        "Jarayonlarni boshqarishda (masalan, navbat tizimi)",
-        "Faqat massivda",
-        "Faqat grafda"
-      ],
-      "a": "Jarayonlarni boshqarishda (masalan, navbat tizimi)"
-    },
-    {
-      "id": 46,
-      "q": "Dek qanday tuzilma sifatida qaralishi mumkin?",
-      "options": [
-        "Ikkita birlashtirilgan stek",
-        "Ikkita bog'langan graf",
-        "Matritsa",
-        "Fayl"
-      ],
-      "a": "Ikkita birlashtirilgan stek"
-    },
-    {
-      "id": 47,
-      "q": "Dinamik ma'lumotlar tuzilmasi nima?",
-      "options": [
-        "O'lchami o'zgarmaydigan tuzilma",
-        "Faqat massiv",
-        "O'lchami va bog'lanishlari o'zgaradigan tuzilma",
-        "Faqat fayl"
-      ],
-      "a": "O'lchami va bog'lanishlari o'zgaradigan tuzilma"
-    },
-    {
-      "id": 48,
-      "q": "Massivning asosiy kamchiligi nima?",
-      "options": [
-        "O'lchamini o'zgartirib bo'lmaydi",
-        "Tez ishlaydi",
-        "Xotirada kam joy egallaydi",
-        "Qidirish oson"
-      ],
-      "a": "O'lchamini o'zgartirib bo'lmaydi"
-    },
-    {
-      "id": 49,
-      "q": "Bog'langan ro'yxat nima?",
-      "options": [
-        "Ketma-ket massiv",
-        "Ko'rsatkichlar orqali bog'langan elementlar to'plami",
-        "Graf",
-        "Fayl"
-      ],
-      "a": "Ko'rsatkichlar orqali bog'langan elementlar to'plami"
-    },
-    {
-      "id": 50,
-      "q": "Bog'langan ro'yxatda elementlar qayerda joylashadi?",
-      "options": [
-        "Faqat ketma-ket",
-        "Xotiraning istalgan joyida",
-        "Faqat boshida",
-        "Faqat oxirida"
-      ],
-      "a": "Xotiraning istalgan joyida"
-    },
-    {
-      "id": 51,
-      "q": "Tugun (node) nimadan iborat?",
-      "options": [
-        "Faqat qiymat",
-        "Faqat ko'rsatkich",
-        "Ma'lumot va ko'rsatkich maydoni",
-        "Faqat indeks"
-      ],
-      "a": "Ma'lumot va ko'rsatkich maydoni"
-    },
-    {
-      "id": 52,
-      "q": "Ko'rsatkichli maydon nimani saqlaydi?",
-      "options": [
-        "Son",
-        "Keyingi element manzili",
-        "Matn",
-        "Fayl"
-      ],
-      "a": "Keyingi element manzili"
-    },
-    {
-      "id": 53,
-      "q": "Dinamik tuzilmaning afzalligi nimada?",
-      "options": [
-        "O'lchami o'zgarmaydi",
-        "Oson o'chirish va qo'shish mumkin",
-        "Faqat tez ishlaydi",
-        "Faqat massiv"
-      ],
-      "a": "Oson o'chirish va qo'shish mumkin"
-    },
-    {
-      "id": 54,
-      "q": "Dinamik tuzilmaning kamchiligi nimada?",
-      "options": [
-        "To'g'ridan-to'g'ri murojaat yo'q",
-        "Xotira ko'p",
-        "Sekin ishlaydi",
-        "O'zgarmaydi"
-      ],
-      "a": "To'g'ridan-to'g'ri murojaat yo'q"
-    },
-    {
-      "id": 55,
-      "q": "Chiziqli ro'yxat nima?",
-      "options": [
-        "Bog'lanmagan",
-        "Tartiblangan bog'lanishga ega tuzilma",
-        "Tasodifiy",
-        "Graf"
-      ],
-      "a": "Tartiblangan bog'lanishga ega tuzilma"
-    },
-    {
-      "id": 56,
-      "q": "Chiziqsiz ro'yxat nima?",
-      "options": [
-        "Faqat bitta ko'rsatkichli",
-        "Bir nechta bog'lanishga ega tuzilma",
-        "Faqat massiv",
-        "Statik"
-      ],
-      "a": "Bir nechta bog'lanishga ega tuzilma"
-    },
-    {
-      "id": 57,
-      "q": "Bir bog'lamli ro'yxat nima?",
-      "options": [
-        "Har tugun faqat keyingi elementga bog'lanadi",
-        "Har tugun ikkita bog'lanadi",
-        "Har tugun oldingiga bog'lanadi",
-        "Bog'lanmaydi"
-      ],
-      "a": "Har tugun faqat keyingi elementga bog'lanadi"
-    },
-    {
-      "id": 58,
-      "q": "Ikki bog'lamli ro'yxat nima?",
-      "options": [
-        "Faqat oldinga bog'lanadi",
-        "Oldingi va keyingi elementga bog'lanadi",
-        "Faqat orqaga bog'lanadi",
-        "Bog'lanmaydi"
-      ],
-      "a": "Oldingi va keyingi elementga bog'lanadi"
-    },
-    {
-      "id": 59,
-      "q": "Halqasimon ro'yxat nima?",
-      "options": [
-        "Oxiri NULL",
-        "Bog'lanmagan",
-        "Oxiri boshiga bog'langan",
-        "Faqat bitta element"
-      ],
-      "a": "Oxiri boshiga bog'langan"
-    },
-    {
-      "id": 60,
-      "q": "Ro'yxat boshi ko'rsatkichi nima deyiladi?",
-      "options": [
-        "last",
-        "lst",
-        "first",
-        "node"
-      ],
-      "a": "lst"
-    },
-    {
-      "id": 61,
-      "q": "Agar ro'yxat bo'sh bo'lsa, lst nimaga teng?",
-      "options": [
-        "0",
-        "NULL",
         "1",
-        "-1"
-      ],
-      "a": "NULL"
-    },
-    {
-      "id": 62,
-      "q": "Node strukturasi qanday maydonlardan iborat?",
-      "options": [
-        "Faqat info",
-        "info va next",
-        "Faqat next",
-        "index va data"
-      ],
-      "a": "info va next"
-    },
-    {
-      "id": 63,
-      "q": "Yangi element qo'shishda xotira qanday ajratiladi?",
-      "options": [
-        "statik",
-        "dinamik (new operatori bilan)",
-        "fayldan",
-        "massivdan"
-      ],
-      "a": "dinamik (new operatori bilan)"
-    },
-    {
-      "id": 64,
-      "q": "Ro'yxat boshiga element qo'shishda birinchi amal?",
-      "options": [
-        "O'chirish",
-        "Yangi element yaratish",
-        "Qidirish",
-        "Saralash"
-      ],
-      "a": "Yangi element yaratish"
-    },
-    {
-      "id": 65,
-      "q": "Boshiga qo'shishda p->next nimaga teng bo'ladi?",
-      "options": [
-        "NULL",
-        "last",
-        "lst ga teng bo'ladi",
-        "index"
-      ],
-      "a": "lst ga teng bo'ladi"
-    },
-    {
-      "id": 66,
-      "q": "Boshiga qo'shilgandan keyin lst nimaga teng bo'ladi?",
-      "options": [
-        "eski qiymat",
-        "p ga teng bo'ladi",
-        "NULL",
-        "last"
-      ],
-      "a": "p ga teng bo'ladi"
-    },
-    {
-      "id": 67,
-      "q": "Elementni o'chirishda delete nima qiladi?",
-      "options": [
-        "Qo'shadi",
-        "Xotirani bo'shatadi",
-        "Qidiradi",
-        "Ayuradi"
-      ],
-      "a": "Xotirani bo'shatadi"
-    },
-    {
-      "id": 68,
-      "q": "Ro'yxatda kalit nima uchun kerak?",
-      "options": [
-        "Saralash",
-        "Xotira ajratish",
-        "Elementni identifikatsiya qilish uchun",
-        "Qo'shish"
-      ],
-      "a": "Elementni identifikatsiya qilish uchun"
-    },
-    {
-      "id": 69,
-      "q": "Chiziqsiz ma'lumotlar tuzilmasi nima?",
-      "options": [
-        "Tartibli bog'langan tuzilma",
-        "Tartiblanmagan bog'lanishga ega tuzilma",
-        "Faqat massiv",
-        "Faqat fayl"
-      ],
-      "a": "Tartiblanmagan bog'lanishga ega tuzilma"
-    },
-    {
-      "id": 70,
-      "q": "Chiziqsiz tuzilmada elementlar qanday bog'lanadi?",
-      "options": [
-        "Faqat ketma-ket",
-        "Ixtiyoriy bog'lanadi",
-        "Faqat boshdan",
-        "Faqat oxiridan"
-      ],
-      "a": "Ixtiyoriy bog'lanadi"
-    },
-    {
-      "id": 71,
-      "q": "Chiziqsiz tuzilmaning nechta asosiy belgisi bor?",
-      "options": [
+        "1 va 3",
         "2",
-        "3",
-        "4",
-        "5"
+        "3"
       ],
       "a": "3"
     },
     {
-      "id": 72,
-      "q": "Chiziqsiz tuzilmaning belgilaridan biri qaysi?",
+      "id": 24,
+      "q": "Mexanik tebranishlar bilan elektromagnit tebranishlar analogiyasiga ko'ra, prujinali mayatnikdagi yuk massasi, elektromagnit tebranishlardagi qaysi fizik kattalikka mos keladi?",
       "options": [
-        "Faqat bitta elementga murojaat",
-        "Har bir element boshqa ixtiyoriy elementga murojaat qilishi mumkin",
-        "Faqat ketma-ket bog'lanish",
-        "Faqat massiv"
+        "tok kuchi",
+        "sig'imga teskari bo'lgan kattalik",
+        "induktivlik",
+        "zaryad"
       ],
-      "a": "Har bir element boshqa ixtiyoriy elementga murojaat qilishi mumkin"
+      "a": "induktivlik"
+    },
+    {
+      "id": 25,
+      "q": "Mexanik tebranishlar bilan elektromagnit tebranishlar analogiyasiga ko'ra, tebranish konturidagi tok kuchi, mexanik tebranishlardagi qaysi fizik kattalikka mos keladi?",
+      "options": [
+        "massa",
+        "tezlik",
+        "koordinata",
+        "prujinaning bikrligi"
+      ],
+      "a": "tezlik"
+    },
+    {
+      "id": 26,
+      "q": "Nur sindirish ko'rsatkichining yorug'lik to'lqin uzunligiga bog'liqligiga ... deyiladi.",
+      "options": [
+        "difraksiya",
+        "qutblanish",
+        "dispersiya",
+        "interferensiya"
+      ],
+      "a": "dispersiya"
+    },
+    {
+      "id": 27,
+      "q": "Quyidagi nurlanishlarning qaysi biri eng kichik to'lqin uzunligiga ega?",
+      "options": [
+        "ko'rinadigan nurlar",
+        "infraqizil nurlar",
+        "ultrabinafsha nurlar",
+        "rentgen nurlari"
+      ],
+      "a": "rentgen nurlari"
+    },
+    {
+      "id": 28,
+      "q": "Quyidagi hodisalardan qaysi biri yorug'likning ko'ndalang to'lqinlar ekanligini tasdiqlaydi?",
+      "options": [
+        "yorug'lik interferensiyasi",
+        "yorug'lik dispersiyasi",
+        "yorug'likning qutblanishi",
+        "yorug'lik difraksiyasi"
+      ],
+      "a": "yorug'likning qutblanishi"
+    },
+    {
+      "id": 29,
+      "q": "1 mm da 1000 ta shtrixi bor bo'lgan difraksion panjaraning doimiysini aniqlang (mkm).",
+      "options": [
+        "0,1",
+        "10",
+        "1",
+        "2"
+      ],
+      "a": "1"
+    },
+    {
+      "id": 30,
+      "q": "Suvning nur sindirish ko'rsatkichi 1,33 ga teng. Yorug'likning suvdagi tezligini toping.",
+      "options": [
+        "225000 km/s",
+        "300000 km/s",
+        "150000 km/s",
+        "398000 km/s"
+      ],
+      "a": "225000 km/s"
+    },
+    {
+      "id": 31,
+      "q": "Prizmadan oq yorug'lik o'tganda spektrga ajralishi qanday hodisa tufayli ro'y beradi?",
+      "options": [
+        "yorug'likning qaytishi",
+        "yorug'lik dispersiyasi",
+        "yorug'lik difraksiyasi",
+        "yorug'lik interferensiyasi"
+      ],
+      "a": "yorug'lik dispersiyasi"
+    },
+    {
+      "id": 32,
+      "q": "Yorug'likning jismlardan elektronni chiqarish hodisasi … deyiladi.",
+      "options": [
+        "fotoeffekt",
+        "dispersiya",
+        "difraksiya",
+        "qutblanish"
+      ],
+      "a": "fotoeffekt"
+    },
+    {
+      "id": 33,
+      "q": "Tushayotgan yorug'likning intensivligi 4 marta kamaysa, fotoeffektda chiqayotgan elektronlar soni qanday o'zgaradi?",
+      "options": [
+        "4 marta kamayadi",
+        "4 marta ortadi",
+        "2 marta kamayadi",
+        "o'zgarmaydi"
+      ],
+      "a": "4 marta kamayadi"
+    },
+    {
+      "id": 34,
+      "q": "Magnit maydon kuchlanganligi birligi qanday?",
+      "options": [
+        "N (Nyuton)",
+        "W (Vatt)",
+        "A/m",
+        "J (Joul)"
+      ],
+      "a": "A/m"
+    },
+    {
+      "id": 35,
+      "q": "Magnit maydon kuchlanganligini qanday harf bilan belgilaymiz?",
+      "options": [
+        "B",
+        "F",
+        "H",
+        "I"
+      ],
+      "a": "H"
+    },
+    {
+      "id": 36,
+      "q": "Eng katta magnitlilik xususiyati to'g'ri ko'rsatilgan javobni aniqlang.",
+      "options": [
+        "Paramagnit",
+        "Diamagnit",
+        "Antiferromagnetlar",
+        "Ferromagnit"
+      ],
+      "a": "Ferromagnit"
+    },
+    {
+      "id": 37,
+      "q": "Magnit maydonning tokli o'tkazgichga ta'sir kuchi qanday nomlanadi?",
+      "options": [
+        "Og'irlik kuchi",
+        "Amper kuchi",
+        "Elastiklik kuchi",
+        "Ishqalanish kuchi"
+      ],
+      "a": "Amper kuchi"
+    },
+    {
+      "id": 38,
+      "q": "Magnit maydonni zaryadli zarrachaga ta'sir kuchi qanday nomlanadi?",
+      "options": [
+        "Lorens kuchi",
+        "Elastiklik kuchi",
+        "Og'irlik kuchi",
+        "Ishqalanish kuchi"
+      ],
+      "a": "Lorens kuchi"
+    },
+    {
+      "id": 39,
+      "q": "Magnit induksiya oqimining birligi qanday?",
+      "options": [
+        "N (Nyuton)",
+        "Vb (Veber)",
+        "W (Vatt)",
+        "J (Joul)"
+      ],
+      "a": "Vb (Veber)"
+    },
+    {
+      "id": 40,
+      "q": "Tok kuchini o'lchovchi asbob nomi qanday?",
+      "options": [
+        "Akselerometr",
+        "Voltmetr",
+        "Ommetr",
+        "Ampermetr"
+      ],
+      "a": "Ampermetr"
+    },
+    {
+      "id": 41,
+      "q": "Tok zichligi qanday kattalik?",
+      "options": [
+        "Oddiy kattalik",
+        "Skalyar kattalik",
+        "Vektor kattalik",
+        "Murakkab kattalik"
+      ],
+      "a": "Vektor kattalik"
+    },
+    {
+      "id": 42,
+      "q": "Elektr qarshilik birligi to'g'ri ko'rsatilgan javobni belgilang.",
+      "options": [
+        "V",
+        "A",
+        "Ω",
+        "W"
+      ],
+      "a": "Ω"
+    },
+    {
+      "id": 43,
+      "q": "I = EMF/(R+r) formula nimani ifodalaydi?",
+      "options": [
+        "Kirchgof qoidasini",
+        "Zanjirning bir qismi uchun Om qonunini",
+        "Joul-Lens qonunini",
+        "Butun zanjir uchun Om qonunini"
+      ],
+      "a": "Butun zanjir uchun Om qonunini"
+    },
+    {
+      "id": 44,
+      "q": "Kondensatorga ta'rif bering.",
+      "options": [
+        "Modda haroratini aniqlovchi asbob",
+        "Ikkita qoplamadan iborat bo'lgan yassi o'tkazgich",
+        "Tovushlarni qabul qiluvchi asbob",
+        "Modda zichligini aniqlovchi asbob"
+      ],
+      "a": "Ikkita qoplamadan iborat bo'lgan yassi o'tkazgich"
+    },
+    {
+      "id": 45,
+      "q": "Kondensatorlar sig'imining birligi qanday?",
+      "options": [
+        "V",
+        "F",
+        "J",
+        "A"
+      ],
+      "a": "F"
+    },
+    {
+      "id": 46,
+      "q": "Biz kattaroq sig'imga erishish uchun kondensatorlarni qanday ulashimiz kerak?",
+      "options": [
+        "aralash",
+        "parallel",
+        "birin-ketin",
+        "ketma-ket"
+      ],
+      "a": "parallel"
+    },
+    {
+      "id": 47,
+      "q": "Elektr zanjir elementlarini aralash ulash qanday ulash?",
+      "options": [
+        "ketma-ket",
+        "birin-ketin",
+        "parallel",
+        "ham ketma-ket ham parallel ulash"
+      ],
+      "a": "ham ketma-ket ham parallel ulash"
+    },
+    {
+      "id": 48,
+      "q": "Bajariladigan ish qanday fizik kattalik?",
+      "options": [
+        "Vektor kattalik",
+        "murakkab kattalik",
+        "Skalyar kattalik",
+        "oddiy kattalik"
+      ],
+      "a": "Skalyar kattalik"
+    },
+    {
+      "id": 49,
+      "q": "Jismning og'irlik kuchi Yerning tortish maydonining mazkur nuqtasi uchun ............... kattalikdir.",
+      "options": [
+        "kamayuvchi",
+        "o'zgarmas",
+        "o'zgaruvchan",
+        "ortuvchi"
+      ],
+      "a": "o'zgarmas"
+    },
+    {
+      "id": 50,
+      "q": "O'ta yuklanish deb nimaga aytiladi?",
+      "options": [
+        "Vazn og'irlik kuchiga tenglashib qolgan holatlarga aytiladi",
+        "Vazn og'irlik kuchidan kamayib ketgan holatlarga aytiladi",
+        "Vazn og'irlik kuchidan juda ko'p marta kamayib ketgan holatlarga aytiladi",
+        "Vazn og'irlik kuchidan ortib ketgan holatlarga aytiladi"
+      ],
+      "a": "Vazn og'irlik kuchidan ortib ketgan holatlarga aytiladi"
+    },
+    {
+      "id": 51,
+      "q": "Potensial energiya deb nimaga aytiladi?",
+      "options": [
+        "Joylashuv va harakat tezligiga bog'liq bo'lgan energiya",
+        "Jismlarning harakat tezligiga bog'liq bo'lgan energiya",
+        "Jismlarning ish bajarish qobiliyatiga bog'liq bo'lgan energiya",
+        "Jismlarning bir-biriga nisbatan joylashishiga (holatiga) bog'liq bo'lgan energiya"
+      ],
+      "a": "Jismlarning bir-biriga nisbatan joylashishiga (holatiga) bog'liq bo'lgan energiya"
+    },
+    {
+      "id": 52,
+      "q": "Energiyaning saqlanish qonunini eng umumiy shakldagi ta'rifini ko'rsating?",
+      "options": [
+        "Energiya hech qachon yo'qolmaydi, ya'ni ishga, quvvatga va issiqlikka aylanadi",
+        "Energiya hamisha yo'qoladi va bir ko'rinishdagi energiya boshqa ko'rinishdagi energiyaga aylanmaydi",
+        "Energiya bir ko'rinishdagi energiya boshqa ko'rinishdagi energiyaga aylanmaydi",
+        "Energiya hech qachon yo'qolmaydi va yo'qdan paydo bo'lib qolmaydi, balki bir ko'rinishdagi energiya boshqa ko'rinishdagi energiyaga aylanadi"
+      ],
+      "a": "Energiya hech qachon yo'qolmaydi va yo'qdan paydo bo'lib qolmaydi, balki bir ko'rinishdagi energiya boshqa ko'rinishdagi energiyaga aylanadi"
+    },
+    {
+      "id": 53,
+      "q": "Absolyut noelastik urilishga anchagina yaqin bo'lgan urilishlar to'g'ri ko'rsatilgan javobni aniqlang?",
+      "options": [
+        "Plastilin, loy, qo'rg'oshin kabi moddalardan iborat jismlarning urilishi",
+        "Po'lat, fil suyagi kabi moddalardan iborat jismlarning urilishi",
+        "Plastilin, po'lat, loy, qo'rg'oshin kabi moddalardan iborat jismlarning urilishi",
+        "Po'lat, qo'rg'oshin, fil suyagi kabi moddalardan iborat jismlarning urilishi"
+      ],
+      "a": "Plastilin, loy, qo'rg'oshin kabi moddalardan iborat jismlarning urilishi"
+    },
+    {
+      "id": 54,
+      "q": "Absolyut elastik urilishga anchagina yaqin bo'lgan urilishlar to'g'ri ko'rsatilgan javobni aniqlang?",
+      "options": [
+        "Po'lat, fil suyagi kabi moddalardan iborat jismlarning urilishi",
+        "Plastilin, po'lat, loy, qo'rg'oshin kabi moddalardan iborat jismlarning urilishi",
+        "Po'lat, qo'rg'oshin, fil suyagi kabi moddalardan iborat jismlarning urilishi",
+        "Plastilin, loy, qo'rg'oshin kabi moddalardan iborat jismlarning urilishi"
+      ],
+      "a": "Po'lat, fil suyagi kabi moddalardan iborat jismlarning urilishi"
+    },
+    {
+      "id": 55,
+      "q": "36 km/soat ni m/s ga aylantiring.",
+      "options": [
+        "15",
+        "10",
+        "30",
+        "20"
+      ],
+      "a": "10"
+    },
+    {
+      "id": 56,
+      "q": "Statika nimani o'rganadi?",
+      "options": [
+        "Muvozanat shartlarini o'rganadigan mexanikaning bir bo'limi",
+        "Faqat tekis harakatni o'rganadigan bo'lim",
+        "Harakat turlarini yuzaga kelish sababi bilan qiziqmagan holatda o'rganadigan mexanikaning bir bo'limi",
+        "Harakat turlarini yuzaga kelish sababi bilan birgalikda o'rganadigan mexanikaning bir bo'limi"
+      ],
+      "a": "Muvozanat shartlarini o'rganadigan mexanikaning bir bo'limi"
+    },
+    {
+      "id": 57,
+      "q": "Aylana bo'ylab harakatda bir marta to'liq aylanishi uchun sarflangan vaqtga nima deyiladi?",
+      "options": [
+        "Aylanish davri",
+        "Aylanish chastotasi",
+        "burchakli tezlik",
+        "burchakli tezlanish"
+      ],
+      "a": "Aylanish davri"
+    },
+    {
+      "id": 58,
+      "q": "Jismning muvozanat vaziyatdan goh bir tomonga, goh qarama-qarshi tomonga harakatlanishi davriy ravishda takrorlanadigan jarayon .......... deyiladi.",
+      "options": [
+        "tebranma-aylanma harakat",
+        "ilgarilanma harakat",
+        "to'lqin harakat",
+        "tebranma harakat"
+      ],
+      "a": "tebranma harakat"
+    },
+    {
+      "id": 59,
+      "q": "Biror jismning tebranma harakati amalga oshishi uchun bajarilishi lozim bo'lgan shartlar qaysi javobda to'g'ri ko'rsatilgan?",
+      "options": [
+        "Qaytaruvchi va yana vaziyatdan chiqaruvchi kuch bo'lishi kerak",
+        "Faqat vaziyatdan chiqaruvchi kuch bo'lishi kerak",
+        "Faqat qaytaruvchi kuch bo'lishi kerak",
+        "1) jism muvozanat vaziyatiga ega bo'lishi kerak; 2) jism muvozanat vaziyatidan chiqarilgach, uni avvalgi vaziyati tomon qaytaruvchi kuch vujudga kelishi kerak"
+      ],
+      "a": "1) jism muvozanat vaziyatiga ega bo'lishi kerak; 2) jism muvozanat vaziyatidan chiqarilgach, uni avvalgi vaziyati tomon qaytaruvchi kuch vujudga kelishi kerak"
+    },
+    {
+      "id": 60,
+      "q": "Jismning siljishiga proporsional ravishda muvozanat vaziyati tomon yo'nalgan kuch ta'sirida sodir bo'luvchi tebranishlarni ........ tebranishlar deb ataladi.",
+      "options": [
+        "boshlang'ich",
+        "garmonik",
+        "angarmonik",
+        "nogarmonik"
+      ],
+      "a": "garmonik"
+    },
+    {
+      "id": 61,
+      "q": "Tashqi muhit bilan issiqlik almashinmay sodir bo'ladigan prosessni .......... prosess deb ataladi.",
+      "options": [
+        "izobarik",
+        "izotermik",
+        "izoxorik",
+        "adiabatik"
+      ],
+      "a": "adiabatik"
+    },
+    {
+      "id": 62,
+      "q": "1 kg massali gaz temperaturasini 1 K ga oshirish uchun kerak bo'ladigan issiqlik miqdori bilan aniqlanuvchi kattalikka ............ deyiladi.",
+      "options": [
+        "gazning politropik issiqlik sig'imi",
+        "gazning adiabatik issiqlik sig'imi",
+        "gazning solishtirma issiqlik sig'imi",
+        "gazning molyar issiqlik sig'imi"
+      ],
+      "a": "gazning solishtirma issiqlik sig'imi"
+    },
+    {
+      "id": 63,
+      "q": "Jismlarning zaryadi elektron (yoki proton)ning zaryadiga nisbatan qanday qiymatlarda bo'ladi?",
+      "options": [
+        "Har qanday zaryadlangan jismlarning zaryadi elektronga nisbatan nolga teng bo'ladi",
+        "Elektron zaryadiga karrasiz, ya'ni kvantlanmagan bo'ladi",
+        "Har qanday manfiy (yoki musbat) zaryadlangan jismlarning zaryadi elektron (yoki proton)ning zaryadiga karrali, ya'ni kvantlangan bo'ladi",
+        "Kvantlanmagan holda bog'liq bo'ladi"
+      ],
+      "a": "Har qanday manfiy (yoki musbat) zaryadlangan jismlarning zaryadi elektron (yoki proton)ning zaryadiga karrali, ya'ni kvantlangan bo'ladi"
+    },
+    {
+      "id": 64,
+      "q": "Proton va elektronning zaryadlari kattaliklari va ishoralari jihatidan qanday nisbatda?",
+      "options": [
+        "Zaryadlari teng, ishoralari qarama-qarshi",
+        "Protonning zaryadi katta, ishoralari qarama–qarshi",
+        "Elektronning zaryadi kichik, ishoralari qarama–qarshi",
+        "Elektronning zaryadi katta, ishoralari qarama–qarshi"
+      ],
+      "a": "Zaryadlari teng, ishoralari qarama-qarshi"
+    },
+    {
+      "id": 65,
+      "q": "Elektr zaryadining o'lchov birligini ko'rsating?",
+      "options": [
+        "Volt/metr",
+        "Kulon",
+        "Volt",
+        "Amper"
+      ],
+      "a": "Kulon"
+    },
+    {
+      "id": 66,
+      "q": "O'tkаzgichdаn o'zgаrmаs tоk o'tgаndа uning аtrоfidа qаndаy mаydоn hоsil bo'lаdi?",
+      "options": [
+        "grаvitаsiоn mаydоn",
+        "elеktr mаydоn",
+        "mаgnit mаydоn",
+        "elеktrоmаgnit mаydоn"
+      ],
+      "a": "mаgnit mаydоn"
+    },
+    {
+      "id": 67,
+      "q": "Zaryadlarning saqlanish qonuni ta'rifini ko'rsating?",
+      "options": [
+        "Izolyasiyalangan sistemada zaryadlarning algebraik yig'indisi doimo kamayib turadi",
+        "Izolyasiyalangan sistemada zaryadlarning algebraik yig'indisi doimo o'zgarib turadi",
+        "Har qanday izolyasiyalangan sistemada elektr zaryadlarining algebraik yig'indisi o'zgarmaydi",
+        "Izolyasiyalangan sistemada zaryadlarning algebraik yig'indisi oshib boradi"
+      ],
+      "a": "Har qanday izolyasiyalangan sistemada elektr zaryadlarining algebraik yig'indisi o'zgarmaydi"
+    },
+    {
+      "id": 68,
+      "q": "Qo'zg'almas elektr zaryad atrofidagi elektr kuchlar ta'siri seziladigan fazo sohasi mazkur zaryadning ................ maydoni deb ataladi.",
+      "options": [
+        "gravitasiya",
+        "Tortishish",
+        "Itarishish",
+        "Elektr"
+      ],
+      "a": "Elektr"
+    },
+    {
+      "id": 69,
+      "q": "Chаp qo'l qоidаsi yordаmidа qаndаy kаttаliklаrning yo'nаlishi аniqlаnаdi?",
+      "options": [
+        "Аmpеr vа Lоrеns kuchlаri",
+        "Lоrеns kuchi",
+        "Аmpеr kuchi",
+        "Induksiоn tоk"
+      ],
+      "a": "Аmpеr vа Lоrеns kuchlаri"
+    },
+    {
+      "id": 70,
+      "q": "Elektr maydonning ixtiyoriy nuqtasidagi .............. deganda shu nuqtaga olib kirilgan birlik zaryadga ta'sir etuvchi kuch bilan xarakterlanuvchi fizik kattalik tushuniladi.",
+      "options": [
+        "maydon superpozisiyasi",
+        "maydon kuchlanganligi",
+        "maydon kuchlanishi",
+        "maydon potensiali"
+      ],
+      "a": "maydon kuchlanganligi"
+    },
+    {
+      "id": 71,
+      "q": "Quyidаgi kеltirilgаn kuchlаrning qаysi biri ish bаjаrmаydi?",
+      "options": [
+        "Аmpеr kuchi",
+        "Kulоn kuchi",
+        "ishqаlаnish kuchi",
+        "Lоrеns kuchi"
+      ],
+      "a": "Lоrеns kuchi"
+    },
+    {
+      "id": 72,
+      "q": "Elektr maydon kuchlanganlik vektorining ixtiyoriy shakldagi berk sirt orqali oqimi shu sirt ichida joylashgan zaryadlar algebraik yig'indisining ε₀ ga bo'lgan nisbatiga tengdir. Ushbu teorema kimning nomi bilan ataladi?",
+      "options": [
+        "Amper",
+        "Lorents",
+        "Gauss",
+        "Kulon"
+      ],
+      "a": "Gauss"
     },
     {
       "id": 73,
-      "q": "Chiziqsiz tuzilmalarga qaysilar kiradi?",
+      "q": "Lоrеns kuchi hаrаkаtdаgi zаryadli zаrrаning tеzligini qаndаy o'zgаrtirаdi?",
       "options": [
-        "Massivlar",
-        "Faqat stek",
-        "Ro'yxatlar, daraxtlar, graflar",
-        "Faqat navbat"
+        "Tеzligini kаmаytirаdi",
+        "Tеzligini o'zgаrtirmаydi",
+        "Tеzlik yo'nаlishini o'zgаrtirаdi",
+        "Tеzligini оrttirаdi"
       ],
-      "a": "Ro'yxatlar, daraxtlar, graflar"
+      "a": "Tеzlik yo'nаlishini o'zgаrtirаdi"
     },
     {
       "id": 74,
-      "q": "Daraxt qanday tuzilma hisoblanadi?",
+      "q": "O'tkazgichlarning dielektriklardan asosiy farqi nimada?",
       "options": [
-        "Chiziqli",
-        "Yo'naltirilgan graf sifatida qaraladi",
-        "Faqat massiv",
-        "Statik"
+        "O'tkazgichlarda erkin neytronlarning mavjudligi",
+        "O'tkazgichlarda zaryad tashuvchilar vazifasini bajaruvchi erkin elektronlarning mavjudligi",
+        "O'tkazgichlarda erkin protonlarning mavjudligi",
+        "O'tkazgichlarda erkin proton va neytronlarning mavjudligi"
       ],
-      "a": "Yo'naltirilgan graf sifatida qaraladi"
+      "a": "O'tkazgichlarda zaryad tashuvchilar vazifasini bajaruvchi erkin elektronlarning mavjudligi"
     },
     {
       "id": 75,
-      "q": "Graf turlari qaysilar?",
+      "q": "Lоrеns kuchi ifоdаsini ko'rsаting.",
       "options": [
-        "Yo'naltirilgan va yo'naltirilmagan",
-        "Faqat yo'naltirilgan",
-        "Faqat halqasimon",
-        "Faqat daraxt"
+        "F = I·B·l",
+        "F = q·v·B·sinα",
+        "F = I·B·l·cosα",
+        "F = mv²"
       ],
-      "a": "Yo'naltirilgan va yo'naltirilmagan"
+      "a": "F = q·v·B·sinα"
     },
     {
       "id": 76,
-      "q": "Ko'p bog'lamli ro'yxat nima?",
+      "q": "Turli shakldagi metall o'tkazgichlarda ortiqcha zaryad uning ...................... bo'ylab taqsimlanadi.",
       "options": [
-        "Bitta ko'rsatkichli ro'yxat",
-        "Bir nechta ko'rsatkichli ro'yxat",
-        "Faqat massiv",
-        "Faqat daraxt"
+        "tashqi va ichki sirtlari",
+        "ichki sirtlari",
+        "hajmi",
+        "tashqi sirtlari"
       ],
-      "a": "Bir nechta ko'rsatkichli ro'yxat"
+      "a": "tashqi sirtlari"
     },
     {
       "id": 77,
-      "q": "Ko'p bog'lamli ro'yxatning afzalligi nimada?",
+      "q": "Elektromagnit induksiya hodisasini kim kashf qilgan?",
       "options": [
-        "Sekin ishlaydi",
-        "Qidirish qiyin",
-        "Xotira tejaladi",
-        "O'zgarmaydi"
+        "Amper",
+        "Lens",
+        "Ersted",
+        "Faradey"
       ],
-      "a": "Xotira tejaladi"
+      "a": "Faradey"
     },
     {
       "id": 78,
-      "q": "Bir element bir nechta ro'yxatda ishlatilsa nima qilinadi?",
+      "q": "Elektr tokining magnit ta'siri qachon va kim tomonidan aniqlangan?",
       "options": [
-        "Nusxa olinadi",
-        "Chiziqsiz ro'yxat yaratiladi",
-        "O'chiriladi",
-        "Saralanadi"
+        "1620 y. Nyuton",
+        "1920 y. Eynshteyn",
+        "1831 y. Faradey",
+        "1820 y. Ersted"
       ],
-      "a": "Chiziqsiz ro'yxat yaratiladi"
+      "a": "1820 y. Ersted"
     },
     {
       "id": 79,
-      "q": "Ko'p bog'lamli ro'yxatda o'zgarish qayerga ta'sir qiladi?",
+      "q": "Induksiya EYuKning birligini ko'rsating.",
       "options": [
-        "Barcha ro'yxatlarga",
-        "Faqat bitta ro'yxatga",
-        "Hech qayerga",
-        "Faqat massivga"
+        "Wb/s",
+        "H",
+        "T/s",
+        "A/s"
       ],
-      "a": "Barcha ro'yxatlarga"
+      "a": "Wb/s"
     },
     {
       "id": 80,
-      "q": "Ko'p bog'lamli ro'yxatda elementni qachon o'chirish mumkin?",
+      "q": "Magnit maydon induksiyasining o'lchov birligini ko'rsating?",
       "options": [
-        "Har doim",
-        "Hech qachon",
-        "Hech bir qism ro'yxatda qolmaganda",
-        "Faqat boshidan"
+        "Veber (Vb)",
+        "Tesla (Tl)",
+        "Genri (Gn)",
+        "Amper (A)"
       ],
-      "a": "Hech bir qism ro'yxatda qolmaganda"
+      "a": "Tesla (Tl)"
     },
     {
       "id": 81,
-      "q": "Chiziqsiz tarmoqlanuvchi ro'yxat nima?",
+      "q": "Konturdаn o'tаyotgаn mаgnit oqimi 0,3 s dаvоmidа 15 dаn 12 Wb gаchа tеkis kаmаygаn, konturda hosil bo'lgаn induksiya EYuK ni toping (V).",
       "options": [
-        "Faqat massiv",
-        "Elementlari ham ro'yxat bo'lishi mumkin bo'lgan tuzilma",
-        "Faqat graf",
-        "Faqat daraxt"
+        "4,5",
+        "10",
+        "5",
+        "9"
       ],
-      "a": "Elementlari ham ro'yxat bo'lishi mumkin bo'lgan tuzilma"
+      "a": "10"
     },
     {
       "id": 82,
-      "q": "Bo'sh ro'yxat qanday yoziladi?",
+      "q": "G'altakka kiritilgan ferromagnit o'zagi qanday vazifani bajaradi?",
       "options": [
-        "()",
-        "{}",
-        "[]",
-        "NULL"
+        "magnit maydonni kuchaytiradi",
+        "magnit maydonni susaytiradi",
+        "elektr maydonni susaytiradi",
+        "elektr maydonni kuchaytiradi"
       ],
-      "a": "()"
+      "a": "magnit maydonni kuchaytiradi"
     },
     {
       "id": 83,
-      "q": "Node strukturasi qanday maydonlarga ega?",
+      "q": "Induktivligi 30 mH bo'lgan g'altakdan 0,8 A tok o'tmoqda. G'altak magnit maydonining energiyasini hisoblang (mJ).",
       "options": [
-        "info va next",
-        "info, down, next",
-        "faqat info",
-        "index"
+        "9,6",
+        "3",
+        "2",
+        "4"
       ],
-      "a": "info, down, next"
+      "a": "9,6"
     },
     {
       "id": 84,
-      "q": "Chiziqsiz ro'yxatda qidirish qanday yaxshilanadi?",
+      "q": "Agar o'ng vint dastasini aylanma tok yo'nalishida aylantirsak, vintning ilgarilanma harakati aylanma tok ichidagi ................larining yo'nalishini ko'rsatadi.",
       "options": [
-        "Indeks orqali",
-        "Skip list orqali",
-        "Fayl orqali",
-        "Massiv orqali"
+        "elektr va magnit kuch chiziqlar",
+        "elektr maydon kuch chiziqlar",
+        "magnit induksiya chiziqlari",
+        "to'lqin chiziqlar"
       ],
-      "a": "Skip list orqali"
+      "a": "magnit induksiya chiziqlari"
     },
     {
       "id": 85,
-      "q": "Chiziqsiz tuzilmaning asosiy ustunligi nimada?",
+      "q": "Tebranish konturidagi kondensatorda elektr zaryadi q = 10⁻³·cos1000t (C) qonuniyat bo'yicha o'zgarmoqda. Konturda hosil bo'layotgan tok kuchining amplitudasini toping.",
       "options": [
-        "Moslashuvchanlik va samarali murojaat",
-        "Sekin ishlash",
-        "Faqat kichik hajm",
-        "Faqat statik"
+        "28 A",
+        "10 A",
+        "1 A",
+        "10⁻³ A"
       ],
-      "a": "Moslashuvchanlik va samarali murojaat"
+      "a": "1 A"
     },
     {
       "id": 86,
-      "q": "Rekursiya nima?",
+      "q": "Ideal tebranish konturida kondensator sig'imini 9 marta kamaytirilsa, konturning tebranish chastotasi qanday o'zgaradi?",
       "options": [
-        "Takroriy sikl",
-        "Massiv turi",
-        "Funksiyaning o'z-o'zini chaqirishi",
-        "Saralash usuli"
+        "3 marta kamayadi",
+        "9 marta ortadi",
+        "3 marta ortadi",
+        "9 marta kamayadi"
       ],
-      "a": "Funksiyaning o'z-o'zini chaqirishi"
+      "a": "3 marta ortadi"
     },
     {
       "id": 87,
-      "q": "Rekursiv ta'rif nechta qismdan iborat?",
+      "q": "Quyida keltirilgan xossalardan qaysilari so'nuvchi tebranishlarga tegishli? 1. Garmonik tebranishlar. 2. Ideal tebranish konturidagi tebranishlar. 3. Real tebranish konturidagi tebranishlar.",
       "options": [
         "1",
-        "2",
         "3",
-        "4"
+        "2",
+        "1 va 3"
       ],
-      "a": "2"
+      "a": "3"
     },
     {
       "id": 88,
-      "q": "Rekursiv ta'rifning birinchi qismi nima?",
+      "q": "Magnit induksiya chiziqlari magnit maydonni vujudga keltiruvchi tokli o'tkazgichlarning shaklidan qat'iy nazar ............. chiziqlardir.",
       "options": [
-        "Asosiy holat (base case)",
-        "Qoidalar",
-        "Sikl",
-        "Iteratsiya"
+        "ochiq",
+        "egri",
+        "to'g'ri",
+        "berk"
       ],
-      "a": "Asosiy holat (base case)"
+      "a": "berk"
     },
     {
       "id": 89,
-      "q": "Rekursiv ta'rifning ikkinchi qismi nima?",
+      "q": "Magnit oqimining xalqaro birliklar sistemasi (XBC)dagi o'lchov birligini ko'rsating?",
       "options": [
-        "Asosiy element",
-        "Yangi elementlar hosil qilish qoidasi",
-        "Qaytarish operatori",
-        "Funksiya nomi"
+        "Amper (A)",
+        "Tesla (Tl)",
+        "Veber (Vb)",
+        "Genri (Gn)"
       ],
-      "a": "Yangi elementlar hosil qilish qoidasi"
+      "a": "Veber (Vb)"
     },
     {
       "id": 90,
-      "q": "Faktorial funksiyaning asosiy holati qaysi?",
+      "q": "Magnit maydon induksiyasi vektorining ixtiyoriy shakldagi berk sirt orqali oqimi nolga teng. Ushbu teorema qanday nomlanadi?",
       "options": [
-        "n=0",
-        "n=1",
-        "n=2",
-        "n=10"
+        "Koshi teoremasi",
+        "Gauss teoremasi",
+        "Kirchgof qoidasi",
+        "Eyler teoremasi"
       ],
-      "a": "n=0"
+      "a": "Gauss teoremasi"
     },
     {
       "id": 91,
-      "q": "Rekursiv algoritmning asosiy kamchiligi nima?",
+      "q": "Qanday hodisaga anomal dispersiya deyiladi?",
       "options": [
-        "Tez ishlaydi",
-        "Ko'p xotira talab qiladi",
-        "Har doim to'g'ri ishlaydi",
-        "Oddiy tuziladi"
+        "Yorug'likning yutilish sohasida to'lqin uzunligining ortishi bilan sindirish ko'rsatkichining kamayib borishiga",
+        "Yorug'likning yutilish sohasida yorug'lik to'lqin uzunligining ortishi bilan modda sindirish ko'rsatkichining ham ortib borishiga",
+        "Yorug'lik to'lqin uzunligi ortishi bilan modda sindirish ko'rsatkichining kamayib borishiga",
+        "Yutilish sohasiga tegishli bo'lmagan qismlarida to'lqin uzunligi ortishi bilan sindirish ko'rsatkichining oshishiga"
       ],
-      "a": "Ko'p xotira talab qiladi"
+      "a": "Yorug'likning yutilish sohasida yorug'lik to'lqin uzunligining ortishi bilan modda sindirish ko'rsatkichining ham ortib borishiga"
     },
     {
       "id": 92,
-      "q": "Rekursiya bajarilishida qaysi tuzilma ishlatiladi?",
+      "q": "Tushirib qoldirilgan so'zni toping: Protonlar va neytronlar bir joyga to'planib yadro hosil bo'lishida yo'qolgan massaga … deyiladi.",
       "options": [
-        "Queue",
-        "Stack",
-        "Tree",
-        "Graph"
+        "inert massa",
+        "gravitasion massa",
+        "atomar massa",
+        "massa defekti"
       ],
-      "a": "Stack"
+      "a": "massa defekti"
     },
     {
       "id": 93,
-      "q": "Rekursiyada qaytish adresi qayerda saqlanadi?",
+      "q": "Qanday yorug'lik nurlari uchrashganda interferensiya hodisasi ro'y beradi?",
       "options": [
-        "Faylda",
-        "Registrda",
-        "Stackda",
-        "Diskda"
+        "Har xil rangli yorug'lik nurlari",
+        "Bir xil rangli yorug'lik nurlari",
+        "Kogerent yorug'lik nurlari",
+        "Monoxromatik nurlar"
       ],
-      "a": "Stackda"
+      "a": "Kogerent yorug'lik nurlari"
     },
     {
       "id": 94,
-      "q": "Rekursiya qachon to'xtaydi?",
+      "q": "Yorug'likning to'lqin uzunligi deb nimaga aytiladi?",
       "options": [
-        "Har doim",
-        "Sikl tugaganda",
-        "Xotira tugaganda",
-        "Base case bajarilganda"
+        "Yorug'lik to'lqinining bir xil fazada tebranayotgan 2 ta eng yaqin nuqtalari orasidagi masofaga",
+        "Vaqt birligi ichidagi tebranishlar soniga",
+        "Bir marta tebranish uchun ketgan vaqtga",
+        "Bir xil fazada tebranayotgan istalgan 2 ta nuqta orasidagi masofaga"
       ],
-      "a": "Base case bajarilganda"
+      "a": "Yorug'lik to'lqinining bir xil fazada tebranayotgan 2 ta eng yaqin nuqtalari orasidagi masofaga"
     },
     {
       "id": 95,
-      "q": "Daraxt qanday tuzilma?",
+      "q": "Mexanik tebranishlar bilan elektromagnit tebranishlar analogiyasiga ko'ra, prujinali mayatnikdagi yuk massasi, elektromagnit tebranishlardagi qaysi fizik kattalikka mos keladi?",
       "options": [
-        "Chiziqli",
-        "Chiziqsiz",
-        "Statik",
-        "Massiv"
+        "induktivlik",
+        "sig'imga teskari bo'lgan kattalik",
+        "tok kuchi",
+        "zaryad"
       ],
-      "a": "Chiziqsiz"
+      "a": "induktivlik"
     },
     {
       "id": 96,
-      "q": "Daraxtning ildizi nima?",
+      "q": "Qanday prizmada tabiiy nurdan qutblangan nurni hosil qilishi mumkin?",
       "options": [
-        "Boshlang'ich tugun",
-        "Oxirgi tugun",
-        "Eng katta tugun",
-        "Barg tugun"
+        "Abbe prizmasida",
+        "Nikol prizmasida",
+        "Frenel prizmasida",
+        "Uch qirrali shisha prizmada"
       ],
-      "a": "Boshlang'ich tugun"
+      "a": "Nikol prizmasida"
     },
     {
       "id": 97,
-      "q": "Daraxtdagi barg tugun nima?",
+      "q": "Yorug'lik nurlarining havodan shishaga o'tishida qaysi rangli yorug'lik uchun shishaning sindirish ko'rsatkichi eng katta bo'ladi?",
       "options": [
-        "Ota tugun",
-        "Shoxi yo'q tugun",
-        "Farzand tugun",
-        "Ildiz"
+        "Qizil",
+        "Yashil",
+        "Havo rang",
+        "Binafsha"
       ],
-      "a": "Shoxi yo'q tugun"
+      "a": "Binafsha"
     },
     {
       "id": 98,
-      "q": "Daraxt balandligi nima?",
+      "q": "Yashil shisha orqali qizil harflarga qaralsa ular qanday rangda ko'rinadi?",
       "options": [
-        "Bosqichlar soni",
-        "Tugunlar soni",
-        "Qirralar soni",
-        "Ildizlar soni"
+        "Sariq",
+        "Oq",
+        "Ko'k",
+        "Qora"
       ],
-      "a": "Bosqichlar soni"
+      "a": "Qora"
     },
     {
       "id": 99,
-      "q": "Tugundan chiqadigan shoxlar soni nima deyiladi?",
+      "q": "Fotoelement qanday vazifani bajaradi?",
       "options": [
-        "Uzunlik",
-        "Indeks",
-        "Daraja",
-        "Kalit"
+        "Elektr energiyasini yorug'lik energiyasiga aylantirib beradi",
+        "Yorug'likni tanlab yutadi, ya'ni filtr vazifasini bajaradi",
+        "Yorug'lik energiyasini elektr energiyasiga aylantirib beradi",
+        "Yorug'lik energiyasini ichki energiyaga aylantiradi"
       ],
-      "a": "Daraja"
+      "a": "Yorug'lik energiyasini elektr energiyasiga aylantirib beradi"
     },
     {
       "id": 100,
-      "q": "Maksimal darajasi 2 bo'lgan daraxt nima?",
+      "q": "Mexanik tebranishlar bilan elektromagnit tebranishlar analogiyasiga ko'ra, tebranish konturidagi tok kuchi, mexanik tebranishlardagi qaysi fizik kattalikka mos keladi?",
       "options": [
-        "Binar daraxt",
-        "Oddiy daraxt",
-        "Graf",
-        "Ro'yxat"
+        "massa",
+        "koordinata",
+        "prujinaning bikrligi",
+        "tezlik"
       ],
-      "a": "Binar daraxt"
+      "a": "tezlik"
     },
     {
       "id": 101,
-      "q": "To'liq binar daraxtda tugun darajasi qanday bo'ladi?",
+      "q": "Katta chastotali elektromagnit to'lqinlar erkin elektronlarga kelib urilganda o'z yo'nalishini va energiyasini o'zgartiradi. Bu hodisa qanday nom bilan yuritiladi?",
       "options": [
-        "1 yoki 3",
-        "2 yoki 4",
-        "0 yoki 2",
-        "1 yoki 2"
+        "Shtark effekti",
+        "Fotoeffekt",
+        "Kompton effekt",
+        "Vavilov-Cherenkov effekti"
       ],
-      "a": "0 yoki 2"
+      "a": "Kompton effekt"
     },
     {
       "id": 102,
-      "q": "Daraxtda \"ota\" tushunchasi nimani bildiradi?",
+      "q": "Vin qonuniga asosan, absolyut qora jism nurlanishi spektral zichligining to'lqin uzunligiga bog'lanish grafigida maksimal qiymati temperatura ortishi bilan qaysi tomonga siljiydi?",
       "options": [
-        "Pastki tugun",
-        "Barg",
-        "Yuqori tugun",
-        "Oxirgi tugun"
+        "Faqat to'lqin uzunligiga bog'liq bo'ladi",
+        "Qisqa to'lqin tomonga siljiydi",
+        "Uzun to'lqin tomonga siljiydi",
+        "Temperaturaga bog'liq bo'lmaydi"
       ],
-      "a": "Yuqori tugun"
+      "a": "Qisqa to'lqin tomonga siljiydi"
     },
     {
       "id": 103,
-      "q": "\"Farzand\" tugun nima?",
+      "q": "Jumlani to'ldiring. Nur sindirish ko'rsatkichining yorug'lik to'lqin uzunligiga bog'liqligiga ... deyiladi.",
       "options": [
-        "Ildiz",
-        "Pastki bog'langan tugun",
-        "Ota tugun",
-        "Bo'sh tugun"
+        "difraksiya",
+        "dispersiya",
+        "qutblanish",
+        "interferensiya"
       ],
-      "a": "Pastki bog'langan tugun"
+      "a": "dispersiya"
     },
     {
       "id": 104,
-      "q": "Rekursiv algoritmning alternativasi nima?",
+      "q": "Foton qanday xossaga ega?",
       "options": [
-        "Iterativ algoritm",
-        "Daraxt",
-        "Graf",
-        "Stack"
+        "Foton faqat korpuskulyar xossaga ega",
+        "Foton ham korpuskulyar (zarracha xossasiga), ham elektromagnit to'lqin xossasiga ega",
+        "Foton faqat to'lqin xossaga ega",
+        "Fotonni ham zarracha, ham to'lqin deb qarash mumkin, tinchlikdagi massasi nolga teng emas"
       ],
-      "a": "Iterativ algoritm"
+      "a": "Foton ham korpuskulyar (zarracha xossasiga), ham elektromagnit to'lqin xossasiga ega"
     },
     {
       "id": 105,
-      "q": "Rekursiyada lokal o'zgaruvchilar qayerda saqlanadi?",
+      "q": "Keltirilgan quyidagi nurlanishlarning qaysi biri eng kichik to'lqin uzunligiga ega?",
       "options": [
-        "Diskda",
-        "Stackda",
-        "Faylda",
-        "Registrda"
+        "infraqizil nurlar",
+        "ultrabinafsha nurlar",
+        "ko'rinadigan nurlar",
+        "rentgen nurlari"
       ],
-      "a": "Stackda"
+      "a": "rentgen nurlari"
     },
     {
       "id": 106,
-      "q": "Rekursiv chaqiriqlar zanjiri nimaga olib keladi?",
+      "q": "Tushirib qoldirilgan so'zni toping: Yorug'lik nurlarining yo'lida uchragan ingichka (tor) tirqish yoki to'siqlarni aylanib o'tish hodisasiga … deyiladi.",
       "options": [
-        "Cheksizlikka",
-        "Xatoga",
-        "Ildiz (base case)ga",
-        "Diskga"
+        "fotoeffekt",
+        "yorug'lik difraksiyasi",
+        "yorug'lik interferensiyasi",
+        "yorug'likning qutblanishi"
       ],
-      "a": "Ildiz (base case)ga"
+      "a": "yorug'lik difraksiyasi"
+    },
+    {
+      "id": 107,
+      "q": "Quyidagi hodisalardan qaysi biri yorug'likning ko'ndalang to'lqinlar ekanligini tasdiqlaydi?",
+      "options": [
+        "yorug'lik interferensiyasi",
+        "yorug'lik difraksiyasi",
+        "yorug'likning qutblanishi",
+        "yorug'lik dispersiyasi"
+      ],
+      "a": "yorug'likning qutblanishi"
+    },
+    {
+      "id": 108,
+      "q": "Tushirib qoldirilgan so'zni toping: Yorug'lik ta'sirida metall (katod) sirtidan elektronlarning uzilib chiqish hodisasiga … deyiladi.",
+      "options": [
+        "ichki fotoeffekt",
+        "tashqi fotoeffekt",
+        "issiqlik nurlanish",
+        "Kompton effekti"
+      ],
+      "a": "tashqi fotoeffekt"
+    },
+    {
+      "id": 109,
+      "q": "Fotoeffekt uchun Eynshteyn tenglamasidagi m qanday kattalik?",
+      "options": [
+        "gravitatsion massa",
+        "fotonning massasi",
+        "fononning massasi",
+        "elektronning massasi"
+      ],
+      "a": "elektronning massasi"
+    },
+    {
+      "id": 110,
+      "q": "Suvning nur sindirish ko'rsatkichi 1,33 ga teng. Yorug'likning suvdagi tezligini toping.",
+      "options": [
+        "300000 km/s",
+        "398000 km/s",
+        "225000 km/s",
+        "150000 km/s"
+      ],
+      "a": "225000 km/s"
+    },
+    {
+      "id": 111,
+      "q": "Absolyut sindirish ko'rsatkich deb nimaga aytiladi?",
+      "options": [
+        "Moddaning suvga nisbatan sindirish ko'rsatkichiga",
+        "Moddaning shishaga nisbatan sindirish ko'rsatkichiga",
+        "Moddaning havosiz bo'shliq (vakuum)ga nisbatan sindirish ko'rsatkichiga",
+        "Moddaning boshqa moddaga nisbatan sindirish ko'rsatkichiga"
+      ],
+      "a": "Moddaning havosiz bo'shliq (vakuum)ga nisbatan sindirish ko'rsatkichiga"
+    },
+    {
+      "id": 112,
+      "q": "Prizmadan oq yorug'lik o'tganda spektrga ajralishi qanday hodisa tufayli ro'y beradi?",
+      "options": [
+        "yorug'lik dispersiyasi",
+        "yorug'lik interferensiyasi",
+        "yorug'likning qaytishi",
+        "yorug'lik difraksiyasi"
+      ],
+      "a": "yorug'lik dispersiyasi"
+    },
+    {
+      "id": 113,
+      "q": "Yarim o'tkazgichli diod asosan qanday vazifani bajaradi?",
+      "options": [
+        "kuchaytirgich",
+        "tokni to'g'irlagich",
+        "tokni o'zgartiruvchi",
+        "kuchlanishni oshiruvchi"
+      ],
+      "a": "tokni to'g'irlagich"
+    },
+    {
+      "id": 114,
+      "q": "Yorug'likning jismlardan elektronni chiqarish hodisasi … deyiladi.",
+      "options": [
+        "qutblanish",
+        "difraksiya",
+        "dispersiya",
+        "fotoeffekt"
+      ],
+      "a": "fotoeffekt"
+    },
+    {
+      "id": 115,
+      "q": "Agar yig'uvchi linzani havodan suvga ko'chirilsa, uning bosh fokus masofasi qanday o'zgaradi?",
+      "options": [
+        "Kichiklashadi",
+        "Cheksiz kichiklashadi",
+        "O'zgarmaydi",
+        "Kattalashadi"
+      ],
+      "a": "Kattalashadi"
+    },
+    {
+      "id": 116,
+      "q": "Yarim o'tkazgichning solishtirma qarshiligi temperaturaga qanday bog'liq?",
+      "options": [
+        "Temperatura ortishi bilan ortib boradi",
+        "Temperaturaga bog'liq bo'lmaydi",
+        "Temperatura ortishi bilan kamayib boradi",
+        "Temperatura kvadratiga bog'liq bo'ladi"
+      ],
+      "a": "Temperatura ortishi bilan kamayib boradi"
+    },
+    {
+      "id": 117,
+      "q": "Tushayotgan yorug'likning intensivligi 4 marta kamaysa, fotoeffektda chiqayotgan elektronlar soni qanday o'zgaradi?",
+      "options": [
+        "o'zgarmaydi",
+        "4 marta kamayadi",
+        "4 marta ortadi",
+        "2 marta kamayadi"
+      ],
+      "a": "4 marta kamayadi"
+    },
+    {
+      "id": 118,
+      "q": "Aralashmali yarim o'tkazgichlarda qaysi o'tkazuvchanlik n–tipdagi o'tkazuvchanlik deyiladi?",
+      "options": [
+        "Akseptorli aralashmadagi teshikli o'tkazuvchanlik",
+        "Akseptorli aralashmadagi elektron o'tkazuvchanlik",
+        "Donorli aralashmadagi elektron o'tkazuvchanlik",
+        "Donorli aralashmadagi teshikli o'tkazuvchanlik"
+      ],
+      "a": "Donorli aralashmadagi elektron o'tkazuvchanlik"
+    },
+    {
+      "id": 119,
+      "q": "Rezistor, induktiv g'altak va sig'im ketma-ket ulangan zanjirning to'la qarshiligi rezonans davrida qanday bo'ladi?",
+      "options": [
+        "aktiv qarshilikdan ko'p marta kichik bo'ladi",
+        "aktiv qarshilikdan kichik bo'ladi",
+        "aktiv qarshilikdan katta bo'ladi",
+        "aktiv qarshilikka teng bo'ladi"
+      ],
+      "a": "aktiv qarshilikka teng bo'ladi"
+    },
+    {
+      "id": 120,
+      "q": "Atom yadrosi qanday zarrachalardan tuzilgan?",
+      "options": [
+        "Neytronlar va elektronlardan",
+        "Protonlar va nuklonlardan",
+        "Protonlar va neytronlardan",
+        "Elektronlar va protonlardan"
+      ],
+      "a": "Protonlar va neytronlardan"
+    },
+    {
+      "id": 121,
+      "q": "α-zarrachalar qanday xossaga ega?",
+      "options": [
+        "α-zarrachalar o'z elektronlarini yo'qotgan geliy atomlaridir, magnit maydoni ta'sir qilmaydi",
+        "α-zarrachalar o'z elektronlarini yo'qotgan geliy atomlari, magnit maydonida og'adi",
+        "α-zarrachalar manfiy zaryadga ega bo'lgan elektronlar oqimidir, magnit maydon ta'sir etmaydi",
+        "β-zarrachalar manfiy zaryadga ega bo'lgan elektronlar oqimidir, magnit maydon ta'sirida o'z yo'nalishidan chetga og'adi"
+      ],
+      "a": "α-zarrachalar o'z elektronlarini yo'qotgan geliy atomlari, magnit maydonida og'adi"
     }
   ]
 }
