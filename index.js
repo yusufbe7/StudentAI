@@ -15,8 +15,8 @@ const ADMIN_ID  = parseInt(process.env.ADMIN_ID);
 const PORT      = process.env.PORT || 3000;
 
 const REQUIRED_CHANNELS = [
-    { id: '@yusufbe_dev',   name: 'Yusufbe Dev',        link: 'https://t.me/yusufbe_dev'   },
-    { id: '@student_aitex', name: 'AI Simulyator News', link: 'https://t.me/student_aitex' },
+    { id: '@yusufbe_dev',   name: 'Yusufbe Dev',        link: 'https://t.me/yusufbe_dev',   type: 'verify' },
+    { id: '@student_aitex', name: 'AI Simulyator News', link: 'https://t.me/student_aitex', type: 'verify' },
 ];
 
 if (!BOT_TOKEN) throw new Error("BOT_TOKEN env o'zgaruvchisi topilmadi!");
@@ -458,6 +458,8 @@ function getLeaderboard(requesterId = null) {
 async function checkSubscription(ctx) {
     const channels = getRequiredChannels();
     for (const ch of channels) {
+        // 🔓 Majburiy emas (faqat link) — tekshirilmaydi, bloklamaydi
+        if (ch.type === 'link') continue;
         // Maxfiy (invite) linklarni tekshirib bo'lmaydi — o'tkazib yuboramiz
         const idStr = String(ch.id || '');
         if (!ch.id || (!idStr.startsWith('@') && !/^-?\d+$/.test(idStr))) continue;
@@ -475,6 +477,8 @@ async function getSubKeyboard(ctx) {
     for (const ch of channels) {
         const link = ch.link || (ch.id && String(ch.id).startsWith('@') ? 'https://t.me/' + String(ch.id).slice(1) : null);
         if (!link) continue;
+        // 🔓 Majburiy emas — har doim ko'rsatamiz (tekshirib bo'lmaydi)
+        if (ch.type === 'link') { buttons.push([Markup.button.url(`🔗 ${ch.name || 'Havola'}`, link)]); continue; }
         const idStr = String(ch.id || '');
         const canCheck = ch.id && (idStr.startsWith('@') || /^-?\d+$/.test(idStr));
         if (!canCheck) { buttons.push([Markup.button.url(`📢 ${ch.name || 'Kanal'}`, link)]); continue; }
@@ -1897,7 +1901,8 @@ bot.hears('📡 Majburiy kanallar', async (ctx) => {
     } else {
         chs.forEach((c, i) => {
             const idLabel = c.id ? `<code>${escapeHTML(String(c.id))}</code>` : `<code>${escapeHTML(c.link || '—')}</code>`;
-            text += `${i+1}. ${escapeHTML(c.name || 'Kanal')} — ${idLabel}\n`;
+            const typeLabel = c.type === 'link' ? '🔓 majburiy emas' : '🔒 majburiy';
+            text += `${i+1}. ${escapeHTML(c.name || 'Kanal')} (${typeLabel}) — ${idLabel}\n`;
         });
         text += `\nJami: <b>${chs.length} ta</b>`;
     }
@@ -1913,9 +1918,58 @@ bot.action('admin_ch_add', async (ctx) => {
     await ctx.answerCbQuery();
     ctx.session.adminStep = 'wait_new_channel';
     return ctx.reply(
-        "Kanal linkini yoki @username ni yuboring:\n\nMasalan:\nhttps://t.me/kanal\n@kanal\n\n⚠️ Tekshiruv ishlashi uchun bot kanalda admin bo'lishi kerak.",
+        "Kanal linkini yoki @username ni yuboring:\n\nMasalan:\nhttps://t.me/kanal\n@kanal\nhttps://t.me/boshqa_bot?start=xxx\n\nSo'ngra turini tanlaysiz (majburiy / majburiy emas).",
         Markup.keyboard([['🚫 Bekor qilish']]).resize()
     );
+});
+
+// Kanal turini tanlash: 🔒 majburiy (tekshiriladi)
+bot.action('ch_type_verify', async (ctx) => {
+    if (!isAdmin(ctx.from.id)) return ctx.answerCbQuery();
+    await ctx.answerCbQuery();
+    const tmp = ctx.session.adminTmpChannel;
+    if (!tmp) return ctx.reply("⚠️ Avval kanal linkini yuboring.", adminMainKeyboard(getDb()));
+    ctx.session.adminTmpChannel = null;
+
+    let name = tmp.name;
+    let link = tmp.parsedLink || tmp.fullLink;
+    if (tmp.id) {
+        try {
+            const chat = await ctx.telegram.getChat(tmp.id);
+            if (chat?.title) name = chat.title;
+            if (chat?.username) link = 'https://t.me/' + chat.username;
+        } catch (e) {
+            await ctx.reply("⚠️ Ogohlantirish: kanalga ulanib bo'lmadi. Tekshiruv ishlashi uchun bot kanalda admin bo'lishi kerak. Kanal baribir qo'shildi.");
+        }
+    }
+    const chs = getRequiredChannels();
+    chs.push({
+        id: tmp.id || link,
+        name: name || 'Kanal',
+        link: link || (tmp.id ? 'https://t.me/' + String(tmp.id).replace('@','') : ''),
+        type: 'verify'
+    });
+    saveRequiredChannels(chs);
+    return ctx.replyWithHTML(`✅ <b>"${escapeHTML(name || 'Kanal')}"</b> 🔒 majburiy kanal sifatida qo'shildi.`, adminMainKeyboard(getDb()));
+});
+
+// Kanal turini tanlash: 🔓 majburiy emas (faqat link, tekshirilmaydi)
+bot.action('ch_type_link', async (ctx) => {
+    if (!isAdmin(ctx.from.id)) return ctx.answerCbQuery();
+    await ctx.answerCbQuery();
+    const tmp = ctx.session.adminTmpChannel;
+    if (!tmp) return ctx.reply("⚠️ Avval kanal linkini yuboring.", adminMainKeyboard(getDb()));
+    ctx.session.adminTmpChannel = null;
+
+    const chs = getRequiredChannels();
+    chs.push({
+        id: tmp.id || null,
+        name: tmp.name || 'Havola',
+        link: tmp.fullLink || tmp.parsedLink || '',
+        type: 'link'
+    });
+    saveRequiredChannels(chs);
+    return ctx.replyWithHTML(`✅ <b>"${escapeHTML(tmp.name || 'Havola')}"</b> 🔓 majburiy emas (faqat link) sifatida qo'shildi.`, adminMainKeyboard(getDb()));
 });
 
 bot.action('admin_ch_del_list', async (ctx) => {
@@ -2204,6 +2258,7 @@ bot.on(['text','photo','video','animation','document'], async (ctx, next) => {
         s.waitingForForward = s.waitingForTime = s.waitingForSubjectName = s.waitingForSubjectQuestions = s.waitingForName = false;
         s.waitingForSubjectDir = s.waitingForSubjectNewDir = s.waitingForSubjectIcon = false;
         s.adminStep = null; s.fakeScoreTarget = null; s.fakeScoreUserId = null;
+        s.adminTmpChannel = null;
         s.adminTmpUniv = null; s.adminTmpKurs = null; s.adminTmpDir = null; s.adminTmpFanName = null;
         s.newSubName = null; s.newSubDir = null; s.newSubKey = null; s.newSubIcon = null;
         s.addQData = {};
@@ -2336,24 +2391,27 @@ bot.on(['text','photo','video','animation','document'], async (ctx, next) => {
             (c.id && parsed.id && String(c.id).toLowerCase() === String(parsed.id).toLowerCase()) ||
             (c.link && parsed.link && c.link.toLowerCase() === parsed.link.toLowerCase())
         );
-        if (dup) return ctx.reply("❌ Bu kanal allaqachon majburiy ro'yxatda mavjud!", adminMainKeyboard(getDb()));
+        if (dup) return ctx.reply("❌ Bu kanal allaqachon ro'yxatda mavjud!", adminMainKeyboard(getDb()));
 
-        // Kanal nomini (va username) Telegram'dan olishga harakat qilamiz
-        let name = parsed.name;
-        let link = parsed.link;
-        if (parsed.id) {
-            try {
-                const chat = await ctx.telegram.getChat(parsed.id);
-                if (chat?.title) name = chat.title;
-                if (chat?.username) link = 'https://t.me/' + chat.username;
-            } catch (e) {
-                await ctx.reply("⚠️ Ogohlantirish: kanalga ulanib bo'lmadi. Bot kanalda admin ekanligiga ishonch hosil qiling. Kanal baribir qo'shildi.");
-            }
+        // To'liq original linkni saqlaymiz (masalan bot start linki: ...?start=xxx)
+        let fullLink = msgText.trim();
+        if (!/^https?:\/\//i.test(fullLink)) {
+            if (fullLink.startsWith('@')) fullLink = 'https://t.me/' + fullLink.slice(1);
+            else if (/t(?:elegram)?\.me\//i.test(fullLink)) fullLink = 'https://' + fullLink.replace(/^\/+/, '');
+            else if (parsed.link) fullLink = parsed.link;
         }
 
-        chs.push({ id: parsed.id || link, name: name || 'Kanal', link: link || (parsed.id ? 'https://t.me/' + String(parsed.id).replace('@','') : '') });
-        saveRequiredChannels(chs);
-        return ctx.replyWithHTML(`✅ <b>"${escapeHTML(name || 'Kanal')}"</b> majburiy kanallarga qo'shildi.`, adminMainKeyboard(getDb()));
+        // Tanlovni saqlab, turini so'raymiz
+        s.adminTmpChannel = { id: parsed.id, name: parsed.name, parsedLink: parsed.link, fullLink };
+        return ctx.replyWithHTML(
+            "Bu kanal qanday bo'lsin?\n\n" +
+            "🔒 <b>Majburiy</b> — bot kanalda admin bo'lishi va obunani tekshiradi (qo'shilmaganlar o'tolmaydi).\n" +
+            "🔓 <b>Majburiy emas</b> — boshqa bot/link uchun. Tekshirib bo'lmaydi — foydalanuvchi shunchaki linkka kirib start bosadi.",
+            Markup.inlineKeyboard([
+                [Markup.button.callback('🔒 Majburiy', 'ch_type_verify')],
+                [Markup.button.callback('🔓 Majburiy emas', 'ch_type_link')],
+            ])
+        );
     }
     if (isAdmin(userId) && s.adminStep === 'wait_new_dir_kurs') {
         const kurs = msgText;
