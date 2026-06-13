@@ -455,12 +455,19 @@ function getLeaderboard(requesterId = null) {
     return res;
 }
 
-async function checkSubscription(ctx) {
+// Link-tur (majburiy emas) kanallar uchun "imzo" — ro'yxat o'zgarsa o'zgaradi.
+// Shu imzo orqali foydalanuvchidan bir marta so'raymiz; admin yangi kanal qo'shsa qayta so'raladi.
+function linkChannelsSignature(channels) {
+    const linkChs = (channels || []).filter(c => c.type === 'link');
+    if (!linkChs.length) return '';
+    return linkChs.map(c => String(c.id || c.link || '')).sort().join('|');
+}
+
+// Faqat 🔒 majburiy kanallarni jonli tekshiradi (link-turdagilarni tekshirmaydi)
+async function checkVerifyChannels(ctx) {
     const channels = getRequiredChannels();
     for (const ch of channels) {
-        // 🔓 Majburiy emas (faqat link) — tekshirilmaydi, bloklamaydi
         if (ch.type === 'link') continue;
-        // Maxfiy (invite) linklarni tekshirib bo'lmaydi — o'tkazib yuboramiz
         const idStr = String(ch.id || '');
         if (!ch.id || (!idStr.startsWith('@') && !/^-?\d+$/.test(idStr))) continue;
         try {
@@ -468,6 +475,17 @@ async function checkSubscription(ctx) {
             if (['left','kicked'].includes(m.status)) return false;
         } catch { return false; }
     }
+    return true;
+}
+
+async function checkSubscription(ctx) {
+    // 1) Majburiy kanallar — har safar jonli tekshiriladi
+    const verifyOk = await checkVerifyChannels(ctx);
+    if (!verifyOk) return false;
+    // 2) Majburiy emas (link) kanallar — bir marta so'raymiz (imzo orqali)
+    const channels = getRequiredChannels();
+    const sig = linkChannelsSignature(channels);
+    if (sig && ctx.session?.channelsAck !== sig) return false;
     return true;
 }
 
@@ -1056,8 +1074,14 @@ bot.command('admin', (ctx) => {
 // CALLBACK QUERY HANDLERLARI
 // ============================================================
 bot.action('check_sub', async (ctx) => {
-    const subscribed = await checkSubscription(ctx);
-    if (subscribed) { await ctx.answerCbQuery('✅ Rahmat!'); await ctx.deleteMessage().catch(()=>{}); return showSubjectMenu(ctx); }
+    // Avval majburiy kanallarni jonli tekshiramiz
+    const verifyOk = await checkVerifyChannels(ctx);
+    if (verifyOk) {
+        // "Tekshirish" bosildi — majburiy emas (link) kanallarni tasdiqlangan deb belgilaymiz
+        const sig = linkChannelsSignature(getRequiredChannels());
+        if (ctx.session) ctx.session.channelsAck = sig;
+        await ctx.answerCbQuery('✅ Rahmat!'); await ctx.deleteMessage().catch(()=>{}); return showSubjectMenu(ctx);
+    }
     const keyboard = await getSubKeyboard(ctx);
     await ctx.answerCbQuery("❌ Hali ham obuna bo'lmadingiz!", {show_alert:true});
     return ctx.editMessageReplyMarkup(keyboard.reply_markup).catch(()=>{});
