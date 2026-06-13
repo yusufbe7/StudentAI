@@ -125,6 +125,7 @@ const DEFAULT_CONFIG = {
         }
     },
     vipPrice: 10000, // Pullik VIP narxi (so'mda)
+    requiredChannels: REQUIRED_CHANNELS, // Majburiy obuna kanallari (admin paneldan boshqariladi)
     semesters: ['2-semestr'],
     activeSemesters: ['2-semestr'],
     subjectsByDirection: {
@@ -221,6 +222,59 @@ const getConfig = () => {
 };
 
 const saveConfig = (c) => writeJSON(PATHS.config, c);
+
+// ─── Majburiy kanallar (dinamik) ──────────────────────────
+// Kanallar bot_config.json ichida saqlanadi va admin paneldan boshqariladi.
+function getRequiredChannels() {
+    const cfg = getConfig();
+    if (!Array.isArray(cfg.requiredChannels)) {
+        cfg.requiredChannels = REQUIRED_CHANNELS.slice();
+        saveConfig(cfg);
+    }
+    return cfg.requiredChannels;
+}
+function saveRequiredChannels(arr) {
+    const cfg = getConfig();
+    cfg.requiredChannels = Array.isArray(arr) ? arr : [];
+    saveConfig(cfg);
+}
+
+// Kanal linki / @username / chat_id ni { id, name, link } ko'rinishiga keltiradi
+function parseChannelInput(input) {
+    let raw = (input || '').trim();
+    if (!raw) return null;
+
+    // 1) @username
+    if (raw.startsWith('@')) {
+        const uname = raw.slice(1).split(/[?\/\s]/)[0];
+        if (!uname) return null;
+        return { id: '@' + uname, name: uname, link: 'https://t.me/' + uname };
+    }
+
+    // 2) t.me / telegram.me linklari
+    if (/t(?:elegram)?\.me\//i.test(raw)) {
+        const m = raw.match(/t(?:elegram)?\.me\/(.+)$/i);
+        let part = (m ? m[1] : '').replace(/\/+$/, '');
+        // Maxfiy (invite) link: t.me/+xxxx yoki t.me/joinchat/xxxx
+        if (part.startsWith('+') || /^joinchat/i.test(part)) {
+            const link = raw.startsWith('http') ? raw : 'https://' + raw;
+            return { id: null, name: 'Maxfiy kanal', link };
+        }
+        const uname = part.split(/[?\/\s]/)[0];
+        if (!uname) return null;
+        return { id: '@' + uname, name: uname, link: 'https://t.me/' + uname };
+    }
+
+    // 3) Raqamli chat id (masalan -1001234567890)
+    if (/^-?\d+$/.test(raw)) {
+        return { id: raw, name: 'Kanal', link: null };
+    }
+
+    // 4) @ siz username deb qabul qilamiz
+    const uname = raw.replace(/^@/, '').split(/[?\/\s]/)[0];
+    if (!uname) return null;
+    return { id: '@' + uname, name: uname, link: 'https://t.me/' + uname };
+}
 
 // saveConfig(DEFAULT_CONFIG);
 if (!fs.existsSync(PATHS.config)) {
@@ -402,7 +456,11 @@ function getLeaderboard(requesterId = null) {
 }
 
 async function checkSubscription(ctx) {
-    for (const ch of REQUIRED_CHANNELS) {
+    const channels = getRequiredChannels();
+    for (const ch of channels) {
+        // Maxfiy (invite) linklarni tekshirib bo'lmaydi — o'tkazib yuboramiz
+        const idStr = String(ch.id || '');
+        if (!ch.id || (!idStr.startsWith('@') && !/^-?\d+$/.test(idStr))) continue;
         try {
             const m = await ctx.telegram.getChatMember(ch.id, ctx.from.id);
             if (['left','kicked'].includes(m.status)) return false;
@@ -412,12 +470,18 @@ async function checkSubscription(ctx) {
 }
 
 async function getSubKeyboard(ctx) {
+    const channels = getRequiredChannels();
     const buttons = [];
-    for (const ch of REQUIRED_CHANNELS) {
+    for (const ch of channels) {
+        const link = ch.link || (ch.id && String(ch.id).startsWith('@') ? 'https://t.me/' + String(ch.id).slice(1) : null);
+        if (!link) continue;
+        const idStr = String(ch.id || '');
+        const canCheck = ch.id && (idStr.startsWith('@') || /^-?\d+$/.test(idStr));
+        if (!canCheck) { buttons.push([Markup.button.url(`📢 ${ch.name || 'Kanal'}`, link)]); continue; }
         try {
             const m = await ctx.telegram.getChatMember(ch.id, ctx.from.id);
-            if (['left','kicked'].includes(m.status)) buttons.push([Markup.button.url(`📢 ${ch.name}`, ch.link)]);
-        } catch { buttons.push([Markup.button.url(`📢 ${ch.name}`, ch.link)]); }
+            if (['left','kicked'].includes(m.status)) buttons.push([Markup.button.url(`📢 ${ch.name || 'Kanal'}`, link)]);
+        } catch { buttons.push([Markup.button.url(`📢 ${ch.name || 'Kanal'}`, link)]); }
     }
     buttons.push([Markup.button.callback('🟢 Tekshirish','check_sub')]);
     return Markup.inlineKeyboard(buttons);
@@ -473,6 +537,7 @@ function adminMainKeyboard(db) {
         ['📊 Statistika', statusBtn],
         [turboBtn, `⏱ Vaqt: ${tl}s`],
         ['🏛 Universitetlar','🎓 Yo\'nalishlar'],
+        ['📡 Majburiy kanallar'],
         ['📖 Fanlar boshqaruvi','📅 Semestrlar'],
         ['➕ Yangi fan qoshish',"🗑 Botni Restart qilish"],
         ['🧹 Reytingni tozalash','📣 Xabar tarqatish'],
@@ -1822,6 +1887,79 @@ bot.action(/^del_univ_(.+)$/, async (ctx) => {
     return ctx.reply(`✅ "${escapeHTML(found)}" o'chirildi.`, adminMainKeyboard(getDb()));
 });
 
+// ─── ADMIN: MAJBURIY KANALLAR ──────────────────────────────
+bot.hears('📡 Majburiy kanallar', async (ctx) => {
+    if (!isAdmin(ctx.from.id)) return;
+    const chs = getRequiredChannels();
+    let text = '📡 <b>Majburiy kanallar ro\'yxati:</b>\n\n';
+    if (!chs.length) {
+        text += "Hozircha majburiy kanal yo'q.\n";
+    } else {
+        chs.forEach((c, i) => {
+            const idLabel = c.id ? `<code>${escapeHTML(String(c.id))}</code>` : `<code>${escapeHTML(c.link || '—')}</code>`;
+            text += `${i+1}. ${escapeHTML(c.name || 'Kanal')} — ${idLabel}\n`;
+        });
+        text += `\nJami: <b>${chs.length} ta</b>`;
+    }
+    text += '\n\n<b>Nima qilmoqchisiz?</b>';
+    return ctx.replyWithHTML(text, Markup.inlineKeyboard([
+        [Markup.button.callback("➕ Kanal qo'shish", 'admin_ch_add')],
+        [Markup.button.callback("🗑 Kanal o'chirish", 'admin_ch_del_list')],
+    ]));
+});
+
+bot.action('admin_ch_add', async (ctx) => {
+    if (!isAdmin(ctx.from.id)) return ctx.answerCbQuery();
+    await ctx.answerCbQuery();
+    ctx.session.adminStep = 'wait_new_channel';
+    return ctx.reply(
+        "Kanal linkini yoki @username ni yuboring:\n\nMasalan:\nhttps://t.me/kanal\n@kanal\n\n⚠️ Tekshiruv ishlashi uchun bot kanalda admin bo'lishi kerak.",
+        Markup.keyboard([['🚫 Bekor qilish']]).resize()
+    );
+});
+
+bot.action('admin_ch_del_list', async (ctx) => {
+    if (!isAdmin(ctx.from.id)) return ctx.answerCbQuery();
+    await ctx.answerCbQuery();
+    const chs = getRequiredChannels();
+    if (!chs.length) return ctx.reply("Hozircha majburiy kanal yo'q.");
+    const btns = chs.map((c, i) => [Markup.button.callback(`🗑 ${c.name || c.id || 'Kanal'}`, `ch_del_${i}`)]);
+    return ctx.reply("O'chirmoqchi bo'lgan kanalni tanlang:", Markup.inlineKeyboard(btns));
+});
+
+bot.action(/^ch_del_(\d+)$/, async (ctx) => {
+    if (!isAdmin(ctx.from.id)) return ctx.answerCbQuery();
+    await ctx.answerCbQuery();
+    const idx = parseInt(ctx.match[1], 10);
+    const chs = getRequiredChannels();
+    const ch = chs[idx];
+    if (!ch) return ctx.reply("Topilmadi.");
+    return ctx.replyWithHTML(
+        `❓ "<b>${escapeHTML(ch.name || ch.id || 'Kanal')}</b>" kanalini majburiy ro'yxatdan o'chirasizmi?`,
+        Markup.inlineKeyboard([
+            [Markup.button.callback('✅ Ha', `ch_delyes_${idx}`), Markup.button.callback("❌ Yo'q", 'ch_delno')]
+        ])
+    );
+});
+
+bot.action(/^ch_delyes_(\d+)$/, async (ctx) => {
+    if (!isAdmin(ctx.from.id)) return ctx.answerCbQuery();
+    await ctx.answerCbQuery();
+    const idx = parseInt(ctx.match[1], 10);
+    const chs = getRequiredChannels();
+    const ch = chs[idx];
+    if (!ch) return ctx.reply("Topilmadi.");
+    chs.splice(idx, 1);
+    saveRequiredChannels(chs);
+    return ctx.reply(`✅ "${ch.name || ch.id || 'Kanal'}" majburiy kanallardan o'chirildi.`, adminMainKeyboard(getDb()));
+});
+
+bot.action('ch_delno', async (ctx) => {
+    if (!isAdmin(ctx.from.id)) return ctx.answerCbQuery();
+    await ctx.answerCbQuery();
+    return ctx.editMessageText("❌ Bekor qilindi. Kanal o'chirilmadi.").catch(() => ctx.reply("❌ Bekor qilindi."));
+});
+
 // ─── ADMIN: YO'NALISHLAR ───────────────────────────────────
 bot.hears("🎓 Yo'nalishlar", async (ctx) => {
     if (!isAdmin(ctx.from.id)) return;
@@ -2185,6 +2323,37 @@ bot.on(['text','photo','video','animation','document'], async (ctx, next) => {
         if (!cfg.directionsByUniv[msgText]) cfg.directionsByUniv[msgText] = {'1-kurs':[],'2-kurs':[],'3-kurs':[],'4-kurs':[]};
         saveConfig(cfg);
         return ctx.replyWithHTML(`✅ <b>"${escapeHTML(msgText)}"</b> qo'shildi!\nEndi 🎓 Yo'nalishlar orqali yo'nalish qo'shing.`, adminMainKeyboard(getDb()));
+    }
+    // ─── ADMIN: Yangi majburiy kanal qo'shish ────────────────
+    if (isAdmin(userId) && s.adminStep === 'wait_new_channel') {
+        s.adminStep = null;
+        const parsed = parseChannelInput(msgText);
+        if (!parsed || (!parsed.id && !parsed.link)) {
+            return ctx.reply("❌ Noto'g'ri link. Masalan: https://t.me/kanal yoki @kanal", adminMainKeyboard(getDb()));
+        }
+        const chs = getRequiredChannels();
+        const dup = chs.some(c =>
+            (c.id && parsed.id && String(c.id).toLowerCase() === String(parsed.id).toLowerCase()) ||
+            (c.link && parsed.link && c.link.toLowerCase() === parsed.link.toLowerCase())
+        );
+        if (dup) return ctx.reply("❌ Bu kanal allaqachon majburiy ro'yxatda mavjud!", adminMainKeyboard(getDb()));
+
+        // Kanal nomini (va username) Telegram'dan olishga harakat qilamiz
+        let name = parsed.name;
+        let link = parsed.link;
+        if (parsed.id) {
+            try {
+                const chat = await ctx.telegram.getChat(parsed.id);
+                if (chat?.title) name = chat.title;
+                if (chat?.username) link = 'https://t.me/' + chat.username;
+            } catch (e) {
+                await ctx.reply("⚠️ Ogohlantirish: kanalga ulanib bo'lmadi. Bot kanalda admin ekanligiga ishonch hosil qiling. Kanal baribir qo'shildi.");
+            }
+        }
+
+        chs.push({ id: parsed.id || link, name: name || 'Kanal', link: link || (parsed.id ? 'https://t.me/' + String(parsed.id).replace('@','') : '') });
+        saveRequiredChannels(chs);
+        return ctx.replyWithHTML(`✅ <b>"${escapeHTML(name || 'Kanal')}"</b> majburiy kanallarga qo'shildi.`, adminMainKeyboard(getDb()));
     }
     if (isAdmin(userId) && s.adminStep === 'wait_new_dir_kurs') {
         const kurs = msgText;
