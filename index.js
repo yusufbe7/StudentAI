@@ -1593,13 +1593,72 @@ bot.action('tour_add_one', async (ctx) => {
 //     }
 // });
 
+// ============================================================
+// MAVZULAR (masalan: Kompyuter tarmoqlari → 21 ta mavzu)
+// Savollarda "topic" maydoni bo'lsa, fan tanlanganda mavzu menyusi chiqadi
+// ============================================================
+function subjectTopics(key) {
+    const map = new Map();
+    for (const q of SUBJECTS[key]?.questions || []) if (q.topic) map.set(q.topic, (map.get(q.topic) || 0) + 1);
+    return [...map.entries()].map(([name, count]) => ({ name, count }))
+        .sort((a, b) => (parseInt(a.name) || 0) - (parseInt(b.name) || 0));
+}
+function topicQuestions(key, topic) {
+    const qs = SUBJECTS[key]?.questions || [];
+    return topic ? qs.filter((q) => q.topic === topic) : qs;
+}
+const shortTopic = (t, max = 48) => {
+    const m = t.match(/^(\d+)-mavzu\.?\s*(.*)$/i);
+    const label = m ? `${m[1]}. ${m[2]}` : t;
+    return label.length > max ? label.slice(0, max - 1).trimEnd() + '…' : label;
+};
+function showTopicMenu(ctx, key, edit = false) {
+    const topics = subjectTopics(key);
+    const total = SUBJECTS[key]?.questions?.length || 0;
+    const rows = [[Markup.button.callback(`📚 Barcha mavzular (${total} savol)`, 'topic_all')]];
+    topics.forEach((t, i) => rows.push([Markup.button.callback(`${shortTopic(t.name)} (${t.count})`, `topic_${i}`)]));
+    const name = SUBJECTS[key]?.name || 'Fan';
+    const text = `📖 <b>${escapeHTML(name)}</b>\n\n${topics.length} ta mavzu · ${total} ta savol\n\nQaysi mavzudan test ishlaysiz?`;
+    if (edit) return ctx.editMessageText(text, { parse_mode: 'HTML', ...Markup.inlineKeyboard(rows) }).catch(() => ctx.replyWithHTML(text, Markup.inlineKeyboard(rows)));
+    return ctx.replyWithHTML(text, Markup.inlineKeyboard(rows));
+}
+bot.action(/^topic_(all|\d+)$/, async (ctx) => {
+    const s = ctx.session;
+    const key = s.currentSubject;
+    if (!key || !SUBJECTS[key]) { await ctx.answerCbQuery('⚠️ Fanni qaytadan tanlang').catch(() => {}); return showSubjectMenu(ctx); }
+    const topics = subjectTopics(key);
+    const pick = ctx.match[1];
+    const topic = pick === 'all' ? null : topics[parseInt(pick)]?.name;
+    if (pick !== 'all' && !topic) return ctx.answerCbQuery('⚠️ Mavzu topilmadi').catch(() => {});
+    s.currentTopic = topic || null;
+    await ctx.answerCbQuery().catch(() => {});
+    const qs = topicQuestions(key, s.currentTopic);
+    const title = topic ? `📖 ${escapeHTML(topic)}` : `📚 Barcha mavzular`;
+
+    // Turbo yodlash rejimi yoqilgan bo'lsa — darhol boshlanadi
+    if (s.isTurbo) {
+        s.activeList = shuffle([...qs]); s.index = 0; s.score = 0; s.wrongs = [];
+        return sendQuestion(ctx, true);
+    }
+    await ctx.editMessageText(`${title}\n\n📝 ${qs.length} ta savol`, { parse_mode: 'HTML' }).catch(() => {});
+    return ctx.reply(
+        `Tayyormisiz?\n\n${SUBJECTS[key].name}${topic ? `\n${shortTopic(topic, 80)}` : ''}`,
+        Markup.keyboard([["⚡️ Blitz (25)", "📝 To'liq test"], ['📑 Mavzular', '⬅️ Orqaga (Fanlar)']]).resize(),
+    );
+});
+bot.hears('📑 Mavzular', (ctx) => {
+    const key = ctx.session?.currentSubject;
+    if (!key || !subjectTopics(key).length) return showSubjectMenu(ctx);
+    return showTopicMenu(ctx, key);
+});
+
 bot.hears(["⚡️ Blitz (25)","📝 To'liq test"], async (ctx) => {
     const s = ctx.session;
     const userId = ctx.from.id;
     s.isTurbo = false;
     if (isBotPaidMode && !vipUsers.includes(userId) && !isAdmin(userId)) return ctx.reply("⚠️ Bot hozirda pullik rejimda.", Markup.inlineKeyboard([[Markup.button.callback('💎 VIP sotib olish ✨','buy_vip')]]));
     if (!s.currentSubject || !SUBJECTS[s.currentSubject]) return showSubjectMenu(ctx);
-    const questions = SUBJECTS[s.currentSubject].questions;
+    const questions = topicQuestions(s.currentSubject, s.currentTopic);
     if (!questions?.length) return ctx.reply("Bu fanda savollar yo'q.");
 
     // ── Kunlik test limiti (VIP va admin uchun cheksiz) ──────────
@@ -3010,12 +3069,18 @@ bot.on(['text','photo','video','animation','document'], async (ctx, next) => {
             ) {
 
                 s.currentSubject = finalKey;
+                s.currentTopic = null;
 
                 s.userName =
                     (user0.name &&
                      isValidName(user0.name))
                     ? user0.name
                     : (ctx.from.first_name || 'Talaba');
+
+                // MAVZULAR BO'LSA — avval mavzu tanlanadi
+                if (subjectTopics(finalKey).length) {
+                    return showTopicMenu(ctx, finalKey);
+                }
 
                 // TURBO
                 if (s.isTurbo) {
