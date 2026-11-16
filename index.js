@@ -25,7 +25,8 @@ if (!ADMIN_ID)  throw new Error("ADMIN_ID env o'zgaruvchisi topilmadi!");
 // ============================================================
 // FAYL YO'LLARI
 // ============================================================
-const DATA_DIR = fs.existsSync('/data') ? '/data' : __dirname;
+// DATA_DIR env (Render + Postgres sinxron uchun) → /data (Railway Volume) → loyiha papkasi
+const DATA_DIR = process.env.DATA_DIR || (fs.existsSync('/data') ? '/data' : __dirname);
 if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
 
 const PATHS = {
@@ -5357,7 +5358,10 @@ app.get('/api/online-count', (req, res) => {
     res.json({ count: onlineUsers.size, users: Array.from(onlineUsers.values()).map(u => u.name) });
 });
 
-const WEBHOOK_URL = process.env.WEBHOOK_URL || process.env.RAILWAY_STATIC_URL || null;
+const WEBHOOK_URL = process.env.WEBHOOK_URL || process.env.RENDER_EXTERNAL_URL || process.env.RAILWAY_STATIC_URL || null;
+
+// Server tirikligini tekshirish (Render health check / UptimeRobot)
+app.get('/health', (req, res) => res.json({ ok: true, uptime: Math.round(process.uptime()) }));
 
 // Mercury va boshqa default akkauntlarni yaratish
 function ensureDefaultChallenges(){
@@ -5420,15 +5424,20 @@ function ensureDefaultAccounts() {
 ensureDefaultAccounts();
 
 async function startBot() {
-    try { await bot.telegram.deleteWebhook(); } catch {}
     if (WEBHOOK_URL) {
         const webhookPath = `/webhook/${BOT_TOKEN}`;
-        const fullUrl = `${WEBHOOK_URL.replace(/\/$/,'')}${webhookPath}`;
+        const fullUrl = `${(WEBHOOK_URL.startsWith('http') ? WEBHOOK_URL : 'https://' + WEBHOOK_URL).replace(/\/$/,'')}${webhookPath}`;
         app.use(bot.webhookCallback(webhookPath));
-        await bot.telegram.setWebhook(fullUrl, { allowed_updates:['message','callback_query','inline_query'], drop_pending_updates:true });
+        // Server uyg'onganda (Render) kelgan xabarlar yo'qolmasligi uchun: webhook o'zgarmagan bo'lsa qayta o'rnatmaymiz
+        // va navbatdagi xabarlarni o'chirmaymiz
+        const info = await bot.telegram.getWebhookInfo().catch(() => null);
+        if (info?.url !== fullUrl) {
+            await bot.telegram.setWebhook(fullUrl, { allowed_updates:['message','callback_query','inline_query'], drop_pending_updates: process.env.DROP_PENDING_UPDATES === '1' });
+        }
         console.log(`✅ Bot WEBHOOK rejimida ishga tushdi!`);
         console.log(`🔗 Webhook URL: ${fullUrl}`);
     } else {
+        try { await bot.telegram.deleteWebhook(); } catch {}
         let attempt = 0;
         const maxAttempts = 5;
         const tryLaunch = async () => {
@@ -5445,5 +5454,12 @@ async function startBot() {
 }
 
 startBot().catch(err => console.error('❌ startBot xatolik:', err.message));
-process.once('SIGINT',  () => { bot.stop('SIGINT');  process.exit(0); });
-process.once('SIGTERM', () => { bot.stop('SIGTERM'); process.exit(0); });
+// To'xtashda: botni to'xtatish va (bo'lsa) ma'lumotlarni Postgres'ga oxirgi marta yozish
+async function shutdown(sig) {
+    try { bot.stop(sig); } catch {}
+    try { stats.flush(); } catch {}
+    if (typeof global.__beforeExit === 'function') { try { await global.__beforeExit(sig); } catch (e) { console.error('[shutdown]', e.message); } }
+    process.exit(0);
+}
+process.once('SIGINT',  () => shutdown('SIGINT'));
+process.once('SIGTERM', () => shutdown('SIGTERM'));
