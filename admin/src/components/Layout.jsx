@@ -1,28 +1,25 @@
-import { useState, createContext, useContext, useCallback } from 'react';
-import { NavLink, useLocation, Outlet } from 'react-router-dom';
+import { useState, createContext, useContext, useCallback, useRef } from 'react';
+import { NavLink, useLocation, useNavigate, Outlet, Navigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   LayoutDashboard, Wallet, Users, Gem, Megaphone, ShieldCheck, BookOpen, Trophy,
-  Radio, ScrollText, Settings, Search, Bell, Bot, Menu, X, GraduationCap,
+  Radio, ScrollText, Settings, Search, Bot, Menu, X, GraduationCap, LogOut, RefreshCw,
 } from 'lucide-react';
-import { Avatar, Toast } from './ui.jsx';
-import { payments, uploads, reports, botSettings } from '../data/mock.js';
+import { Avatar, Toast, usd } from './ui.jsx';
+import { useApi, getSession, getAdmin, clearSession, api } from '../data/api.js';
 
-const pendingPayments = payments.filter((p) => p.status === 'pending').length;
-const pendingModeration = uploads.filter((u) => u.status === 'pending').length + reports.length;
-
-const NAV = [
+const NAV = (c = {}) => [
   { group: 'Asosiy', items: [
     { to: '/', label: "Umumiy ko'rinish", icon: LayoutDashboard },
     { to: '/finance', label: 'Moliya va AI', icon: Wallet },
   ] },
   { group: 'Foydalanuvchilar', items: [
     { to: '/users', label: 'Foydalanuvchilar', icon: Users },
-    { to: '/payments', label: "VIP va to'lovlar", icon: Gem, badge: pendingPayments },
+    { to: '/payments', label: "VIP va to'lovlar", icon: Gem, badge: c.pendingPayments },
     { to: '/broadcast', label: 'Xabar tarqatish', icon: Megaphone },
   ] },
   { group: 'Kontent', items: [
-    { to: '/moderation', label: 'Moderatsiya', icon: ShieldCheck, badge: pendingModeration },
+    { to: '/moderation', label: 'Moderatsiya', icon: ShieldCheck, badge: c.openReports },
     { to: '/content', label: 'Fanlar va savollar', icon: BookOpen },
     { to: '/tournament', label: 'Musobaqalar', icon: Trophy },
   ] },
@@ -33,11 +30,31 @@ const NAV = [
   ] },
 ];
 
-// Butun panel uchun toast
+// Toast va umumiy hisoblagichlar (badge) — barcha sahifalar uchun
 const ToastCtx = createContext(() => {});
 export const useToast = () => useContext(ToastCtx);
+const CountsCtx = createContext({ reload: () => {} });
+export const useCounts = () => useContext(CountsCtx);
 
-function Sidebar({ onNavigate }) {
+// Amal bajarish: muvaffaqiyat/xatolik toast'i bilan
+export function useAction() {
+  const toast = useToast();
+  const counts = useCounts();
+  return useCallback(async (fn, okMsg) => {
+    try {
+      const r = await fn();
+      if (okMsg) toast(typeof okMsg === 'function' ? okMsg(r) : okMsg);
+      counts.reload?.();
+      return r;
+    } catch (e) {
+      toast(`❌ ${e.message}`);
+      return null;
+    }
+  }, [toast, counts]);
+}
+
+function Sidebar({ counts, onNavigate }) {
+  const aiPct = counts.aiBudget ? Math.min(100, Math.round((counts.aiCostMonth / counts.aiBudget) * 100)) : null;
   return (
     <div className="flex h-full flex-col">
       <div className="flex items-center gap-3 px-3 pb-6 pt-1">
@@ -51,7 +68,7 @@ function Sidebar({ onNavigate }) {
       </div>
 
       <nav className="flex-1 space-y-5 overflow-y-auto pr-1">
-        {NAV.map((g) => (
+        {NAV(counts).map((g) => (
           <div key={g.group}>
             <p className="mb-1.5 px-3 text-[11px] font-semibold uppercase tracking-wider text-slate-500/80">{g.group}</p>
             <ul className="space-y-0.5">
@@ -61,11 +78,7 @@ function Sidebar({ onNavigate }) {
                     to={to}
                     end={to === '/'}
                     onClick={onNavigate}
-                    className={({ isActive }) =>
-                      `group relative flex items-center gap-3 rounded-xl px-3 py-2 text-sm transition ${
-                        isActive ? 'font-semibold text-slate-900' : 'text-slate-600 hover:bg-white/40 hover:text-slate-900'
-                      }`
-                    }
+                    className={({ isActive }) => `group relative flex items-center gap-3 rounded-xl px-3 py-2 text-sm transition ${isActive ? 'font-semibold text-slate-900' : 'text-slate-600 hover:bg-white/40 hover:text-slate-900'}`}
                   >
                     {({ isActive }) => (
                       <>
@@ -83,20 +96,23 @@ function Sidebar({ onNavigate }) {
         ))}
       </nav>
 
-      {/* Bot holati (videodagi "Business plan" bloki o'rnida) */}
       <div className="mt-4 rounded-xl bg-white/60 p-3">
         <div className="flex items-center gap-2">
           <Bot size={16} className="text-sky-600" />
           <p className="text-xs font-semibold text-slate-800">Bot holati</p>
-          <span className={`ml-auto h-2 w-2 rounded-full ${botSettings.isMaintenance ? 'bg-rose-500' : 'bg-emerald-500'} shadow-[0_0_0_3px_rgba(16,185,129,.2)]`} />
+          <span className={`ml-auto h-2 w-2 rounded-full ${counts.isMaintenance ? 'bg-rose-500' : 'bg-emerald-500'}`} />
         </div>
         <p className="mt-1 text-xs text-slate-500">
-          {botSettings.isMaintenance ? "To'xtatilgan" : 'Ishlayapti'} · {botSettings.isPaidMode ? 'Pullik' : 'Bepul'} rejim
+          {counts.loaded ? `${counts.isMaintenance ? "To'xtatilgan" : 'Ishlayapti'} · ${counts.isPaidMode ? 'Pullik' : 'Bepul'} rejim` : '...'}
         </p>
-        <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-slate-200/80">
-          <div className="h-full w-[57%] rounded-full bg-gradient-to-r from-sky-400 to-blue-600" />
-        </div>
-        <p className="mt-1 text-[11px] text-slate-500">AI budjet: $85 / $150 (oy)</p>
+        {aiPct !== null && (
+          <>
+            <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-slate-200/80">
+              <div className={`h-full rounded-full ${aiPct > 85 ? 'bg-rose-500' : 'bg-gradient-to-r from-sky-400 to-blue-600'}`} style={{ width: `${aiPct}%` }} />
+            </div>
+            <p className="mt-1 text-[11px] text-slate-500">AI budjet: {usd(counts.aiCostMonth)} / {usd(counts.aiBudget)} (oy)</p>
+          </>
+        )}
       </div>
     </div>
   );
@@ -104,69 +120,74 @@ function Sidebar({ onNavigate }) {
 
 export default function Layout() {
   const location = useLocation();
+  const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [toast, setToast] = useState(null);
+  const [q, setQ] = useState('');
+  const toastTimer = useRef();
+  const dash = useApi(getSession() ? '/dashboard' : null, { refreshMs: 60000 });
   const showToast = useCallback((msg) => {
     setToast(msg);
-    clearTimeout(window.__toastT);
-    window.__toastT = setTimeout(() => setToast(null), 2200);
+    clearTimeout(toastTimer.current);
+    toastTimer.current = setTimeout(() => setToast(null), 2600);
   }, []);
+
+  if (!getSession()) return <Navigate to="/login" replace />;
+  const admin = getAdmin() || { name: 'Admin' };
+  const counts = { ...(dash.data || {}), loaded: !!dash.data, reload: dash.reload };
+
+  const logout = async () => {
+    await api('/logout', { method: 'POST' }).catch(() => {});
+    clearSession();
+    navigate('/login');
+  };
 
   return (
     <ToastCtx.Provider value={showToast}>
-      <div className="flex min-h-full gap-5 p-3 sm:p-5">
-        {/* Desktop sidebar */}
-        <aside className="glass sticky top-5 hidden h-[calc(100vh-2.5rem)] w-64 shrink-0 rounded-2xl p-4 lg:block">
-          <Sidebar />
-        </aside>
+      <CountsCtx.Provider value={counts}>
+        <div className="flex min-h-full gap-5 p-3 sm:p-5">
+          <aside className="glass sticky top-5 hidden h-[calc(100vh-2.5rem)] w-64 shrink-0 rounded-2xl p-4 lg:block">
+            <Sidebar counts={counts} />
+          </aside>
 
-        {/* Mobil sidebar */}
-        <AnimatePresence>
-          {mobileOpen && (
-            <motion.div className="fixed inset-0 z-40 bg-slate-900/40 backdrop-blur-sm lg:hidden" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setMobileOpen(false)}>
-              <motion.aside
-                className="glass-strong h-full w-72 rounded-r-2xl p-4"
-                initial={{ x: -300 }} animate={{ x: 0 }} exit={{ x: -300 }}
-                onClick={(e) => e.stopPropagation()}
-              >
-                <button className="absolute right-3 top-3 rounded-lg p-1 text-slate-500" onClick={() => setMobileOpen(false)}><X size={18} /></button>
-                <Sidebar onNavigate={() => setMobileOpen(false)} />
-              </motion.aside>
-            </motion.div>
-          )}
-        </AnimatePresence>
+          <AnimatePresence>
+            {mobileOpen && (
+              <motion.div className="fixed inset-0 z-40 bg-slate-900/40 backdrop-blur-sm lg:hidden" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setMobileOpen(false)}>
+                <motion.aside className="glass-strong h-full w-72 rounded-r-2xl p-4" initial={{ x: -300 }} animate={{ x: 0 }} exit={{ x: -300 }} onClick={(e) => e.stopPropagation()}>
+                  <button className="absolute right-3 top-3 rounded-lg p-1 text-slate-500" onClick={() => setMobileOpen(false)}><X size={18} /></button>
+                  <Sidebar counts={counts} onNavigate={() => setMobileOpen(false)} />
+                </motion.aside>
+              </motion.div>
+            )}
+          </AnimatePresence>
 
-        <div className="min-w-0 flex-1">
-          {/* Topbar */}
-          <header className="glass mb-6 flex items-center gap-3 rounded-2xl px-3 py-2.5 sm:px-4">
-            <button className="rounded-lg p-1.5 text-slate-600 hover:bg-white/60 lg:hidden" onClick={() => setMobileOpen(true)}><Menu size={20} /></button>
-            <div className="relative flex-1 max-w-xl">
-              <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-              <input className="input pl-9" placeholder="Foydalanuvchi, ID, fan yoki fayl qidirish..." />
-              <kbd className="absolute right-3 top-1/2 hidden -translate-y-1/2 rounded-md bg-white/80 px-1.5 text-[11px] text-slate-500 sm:block">⌘K</kbd>
-            </div>
-            <div className="ml-auto flex items-center gap-2">
-              <button className="relative rounded-xl bg-white/60 p-2 text-slate-600 hover:bg-white">
-                <Bell size={18} />
-                <span className="absolute right-1.5 top-1.5 h-2 w-2 rounded-full bg-rose-500" />
-              </button>
-              <div className="hidden items-center gap-2 rounded-xl bg-white/60 py-1 pl-1 pr-3 sm:flex">
-                <Avatar name="Yusuf Admin" size={30} />
-                <div className="leading-tight">
-                  <p className="text-sm font-semibold">Yusuf</p>
-                  <p className="text-[11px] text-slate-500">Bosh admin</p>
+          <div className="min-w-0 flex-1">
+            <header className="glass mb-6 flex items-center gap-3 rounded-2xl px-3 py-2.5 sm:px-4">
+              <button className="rounded-lg p-1.5 text-slate-600 hover:bg-white/60 lg:hidden" onClick={() => setMobileOpen(true)}><Menu size={20} /></button>
+              <form className="relative max-w-xl flex-1" onSubmit={(e) => { e.preventDefault(); navigate(`/users?q=${encodeURIComponent(q)}`); }}>
+                <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                <input className="input pl-9" placeholder="Foydalanuvchi ismi, ID yoki @username..." value={q} onChange={(e) => setQ(e.target.value)} />
+              </form>
+              <div className="ml-auto flex items-center gap-2">
+                <button title="Yangilash" className="rounded-xl bg-white/60 p-2 text-slate-600 hover:bg-white" onClick={() => { dash.reload(); window.dispatchEvent(new Event('panel:refresh')); }}><RefreshCw size={18} /></button>
+                <div className="hidden items-center gap-2 rounded-xl bg-white/60 py-1 pl-1 pr-3 sm:flex">
+                  <Avatar name={admin.name || 'Admin'} size={30} />
+                  <div className="leading-tight">
+                    <p className="text-sm font-semibold">{admin.name || 'Admin'}</p>
+                    <p className="text-[11px] text-slate-500">Admin</p>
+                  </div>
                 </div>
+                <button title="Chiqish" className="rounded-xl bg-white/60 p-2 text-slate-600 hover:bg-white hover:text-rose-600" onClick={logout}><LogOut size={18} /></button>
               </div>
-            </div>
-          </header>
+            </header>
 
-          {/* Har sahifaga kirishda yengil animatsiya (exit animatsiyasi orqaga qaytishda sahifani yashirib qo'yardi) */}
-          <motion.main key={location.pathname} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.22 }}>
-            <Outlet />
-          </motion.main>
+            <motion.main key={location.pathname} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.22 }}>
+              <Outlet />
+            </motion.main>
+          </div>
         </div>
-      </div>
-      <Toast message={toast} />
+        <Toast message={toast} />
+      </CountsCtx.Provider>
     </ToastCtx.Provider>
   );
 }
