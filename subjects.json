@@ -20843,5 +20843,2530 @@
         "a": "B) player"
       }
     ]
+  },
+  "kompyuter_tarmoqlari": {
+    "name": "Kompyuter tarmoqlari",
+    "questions": [
+      {
+        "id": 1,
+        "q": "Quyidagilardan qaysi javob Mainframe tushunchasiga mos keladi?",
+        "options": [
+          "Internetda ma'lumot almashishni ta'minlaydigan asosiy protokollar oilasi.",
+          "Hisoblash resurslarini tarmoq orqali xizmat sifatida taqdim etish modeli.",
+          "Markazlashgan hisoblash resurslariga ega yirik kompyuter tizimi.",
+          "Nosozlik yuz berganda ham xizmatni davom ettirish qobiliyati."
+        ],
+        "a": "Markazlashgan hisoblash resurslariga ega yirik kompyuter tizimi.",
+        "topic": "1-mavzu. Hisoblash tizimi va tarmoq texnologiyasining rivojlanish evolyutsiyasi"
+      },
+      {
+        "id": 2,
+        "q": "Quyidagilardan qaysi javob Terminal tushunchasiga mos keladi?",
+        "options": [
+          "Paketli kommutatsiya va tarmoqlararo ulanish g'oyalarini rivojlantirgan tarixiy tarmoq.",
+          "Hisoblash resurslarini tarmoq orqali xizmat sifatida taqdim etish modeli.",
+          "Ma'lumotni paketlarga bo'lib, mustaqil yo'nalishlar orqali uzatish usuli.",
+          "Markaziy kompyuterga ulanib, kiritish-chiqarish vazifasini bajaruvchi qurilma."
+        ],
+        "a": "Markaziy kompyuterga ulanib, kiritish-chiqarish vazifasini bajaruvchi qurilma.",
+        "topic": "1-mavzu. Hisoblash tizimi va tarmoq texnologiyasining rivojlanish evolyutsiyasi"
+      },
+      {
+        "id": 3,
+        "q": "Quyidagilardan qaysi javob Paketli kommutatsiya tushunchasiga mos keladi?",
+        "options": [
+          "Ma'lumotni paketlarga bo'lib, mustaqil yo'nalishlar orqali uzatish usuli.",
+          "Tizim yuklama oshganda resurslarni qo'shib rivojlana olish xususiyati.",
+          "Internetda ma'lumot almashishni ta'minlaydigan asosiy protokollar oilasi.",
+          "Hisoblash resurslarini tarmoq orqali xizmat sifatida taqdim etish modeli."
+        ],
+        "a": "Ma'lumotni paketlarga bo'lib, mustaqil yo'nalishlar orqali uzatish usuli.",
+        "topic": "1-mavzu. Hisoblash tizimi va tarmoq texnologiyasining rivojlanish evolyutsiyasi"
+      },
+      {
+        "id": 4,
+        "q": "Quyidagilardan qaysi javob ARPANET tushunchasiga mos keladi?",
+        "options": [
+          "Markazlashgan hisoblash resurslariga ega yirik kompyuter tizimi.",
+          "Paketli kommutatsiya va tarmoqlararo ulanish g'oyalarini rivojlantirgan tarixiy tarmoq.",
+          "Internetda ma'lumot almashishni ta'minlaydigan asosiy protokollar oilasi.",
+          "Hisoblash resurslarini tarmoq orqali xizmat sifatida taqdim etish modeli."
+        ],
+        "a": "Paketli kommutatsiya va tarmoqlararo ulanish g'oyalarini rivojlantirgan tarixiy tarmoq.",
+        "topic": "1-mavzu. Hisoblash tizimi va tarmoq texnologiyasining rivojlanish evolyutsiyasi"
+      },
+      {
+        "id": 5,
+        "q": "Quyidagilardan qaysi javob TCP/IP tushunchasiga mos keladi?",
+        "options": [
+          "Hisoblash resurslarini tarmoq orqali xizmat sifatida taqdim etish modeli.",
+          "Markaziy kompyuterga ulanib, kiritish-chiqarish vazifasini bajaruvchi qurilma.",
+          "Internetda ma'lumot almashishni ta'minlaydigan asosiy protokollar oilasi.",
+          "Markazlashgan hisoblash resurslariga ega yirik kompyuter tizimi."
+        ],
+        "a": "Internetda ma'lumot almashishni ta'minlaydigan asosiy protokollar oilasi.",
+        "topic": "1-mavzu. Hisoblash tizimi va tarmoq texnologiyasining rivojlanish evolyutsiyasi"
+      },
+      {
+        "id": 6,
+        "q": "Quyidagilardan qaysi javob Taqsimlangan hisoblash tushunchasiga mos keladi?",
+        "options": [
+          "Tizim yuklama oshganda resurslarni qo'shib rivojlana olish xususiyati.",
+          "Markazlashgan hisoblash resurslariga ega yirik kompyuter tizimi.",
+          "Internetda ma'lumot almashishni ta'minlaydigan asosiy protokollar oilasi.",
+          "Hisoblash vazifalarini bir nechta tugunlar o'rtasida taqsimlash yondashuvi."
+        ],
+        "a": "Hisoblash vazifalarini bir nechta tugunlar o'rtasida taqsimlash yondashuvi.",
+        "topic": "1-mavzu. Hisoblash tizimi va tarmoq texnologiyasining rivojlanish evolyutsiyasi"
+      },
+      {
+        "id": 7,
+        "q": "Quyidagilardan qaysi javob Bulutli hisoblash tushunchasiga mos keladi?",
+        "options": [
+          "Hisoblash resurslarini tarmoq orqali xizmat sifatida taqdim etish modeli.",
+          "Paketli kommutatsiya va tarmoqlararo ulanish g'oyalarini rivojlantirgan tarixiy tarmoq.",
+          "Ma'lumotni manbaga yaqin joyda qayta ishlash yondashuvi.",
+          "Nosozlik yuz berganda ham xizmatni davom ettirish qobiliyati."
+        ],
+        "a": "Hisoblash resurslarini tarmoq orqali xizmat sifatida taqdim etish modeli.",
+        "topic": "1-mavzu. Hisoblash tizimi va tarmoq texnologiyasining rivojlanish evolyutsiyasi"
+      },
+      {
+        "id": 8,
+        "q": "Quyidagilardan qaysi javob Edge computing tushunchasiga mos keladi?",
+        "options": [
+          "Ma'lumotni paketlarga bo'lib, mustaqil yo'nalishlar orqali uzatish usuli.",
+          "Ma'lumotni manbaga yaqin joyda qayta ishlash yondashuvi.",
+          "Markaziy kompyuterga ulanib, kiritish-chiqarish vazifasini bajaruvchi qurilma.",
+          "Hisoblash vazifalarini bir nechta tugunlar o'rtasida taqsimlash yondashuvi."
+        ],
+        "a": "Ma'lumotni manbaga yaqin joyda qayta ishlash yondashuvi.",
+        "topic": "1-mavzu. Hisoblash tizimi va tarmoq texnologiyasining rivojlanish evolyutsiyasi"
+      },
+      {
+        "id": 9,
+        "q": "Quyidagilardan qaysi javob Kengayuvchanlik tushunchasiga mos keladi?",
+        "options": [
+          "Internetda ma'lumot almashishni ta'minlaydigan asosiy protokollar oilasi.",
+          "Paketli kommutatsiya va tarmoqlararo ulanish g'oyalarini rivojlantirgan tarixiy tarmoq.",
+          "Tizim yuklama oshganda resurslarni qo'shib rivojlana olish xususiyati.",
+          "Ma'lumotni manbaga yaqin joyda qayta ishlash yondashuvi."
+        ],
+        "a": "Tizim yuklama oshganda resurslarni qo'shib rivojlana olish xususiyati.",
+        "topic": "1-mavzu. Hisoblash tizimi va tarmoq texnologiyasining rivojlanish evolyutsiyasi"
+      },
+      {
+        "id": 10,
+        "q": "Quyidagilardan qaysi javob Xatoga chidamlilik tushunchasiga mos keladi?",
+        "options": [
+          "Hisoblash resurslarini tarmoq orqali xizmat sifatida taqdim etish modeli.",
+          "Paketli kommutatsiya va tarmoqlararo ulanish g'oyalarini rivojlantirgan tarixiy tarmoq.",
+          "Ma'lumotni manbaga yaqin joyda qayta ishlash yondashuvi.",
+          "Nosozlik yuz berganda ham xizmatni davom ettirish qobiliyati."
+        ],
+        "a": "Nosozlik yuz berganda ham xizmatni davom ettirish qobiliyati.",
+        "topic": "1-mavzu. Hisoblash tizimi va tarmoq texnologiyasining rivojlanish evolyutsiyasi"
+      },
+      {
+        "id": 11,
+        "q": "Quyidagilardan qaysi javob Kompyuter tarmog'i tushunchasiga mos keladi?",
+        "options": [
+          "Tugunlar o'rtasida signal uzatiladigan fizik yoki simsiz muhit.",
+          "Uzoq masofadagi tarmoqlarni bog'lovchi keng hududli tarmoq.",
+          "Cheklangan hududdagi lokal kompyuter tarmog'i.",
+          "Ma'lumot almashish uchun bog'langan qurilmalar va xizmatlar tizimi."
+        ],
+        "a": "Ma'lumot almashish uchun bog'langan qurilmalar va xizmatlar tizimi.",
+        "topic": "2-mavzu. Kompyuter tarmoqlari haqida umumiy ma'lumot"
+      },
+      {
+        "id": 12,
+        "q": "Quyidagilardan qaysi javob Tugun tushunchasiga mos keladi?",
+        "options": [
+          "Tarmoqda ma'lumot yuboradigan yoki qabul qiladigan qurilma.",
+          "Mijozlarga xizmat yoki resurs taqdim etuvchi kompyuter tizimi.",
+          "Server xizmatidan foydalanuvchi qurilma yoki dastur.",
+          "Cheklangan hududdagi lokal kompyuter tarmog'i."
+        ],
+        "a": "Tarmoqda ma'lumot yuboradigan yoki qabul qiladigan qurilma.",
+        "topic": "2-mavzu. Kompyuter tarmoqlari haqida umumiy ma'lumot"
+      },
+      {
+        "id": 13,
+        "q": "Quyidagilardan qaysi javob Aloqa kanali tushunchasiga mos keladi?",
+        "options": [
+          "Tarmoqda ma'lumot yuboradigan yoki qabul qiladigan qurilma.",
+          "Tugunlar o'rtasida signal uzatiladigan fizik yoki simsiz muhit.",
+          "Ma'lumot almashish uchun bog'langan qurilmalar va xizmatlar tizimi.",
+          "Mijozlarga xizmat yoki resurs taqdim etuvchi kompyuter tizimi."
+        ],
+        "a": "Tugunlar o'rtasida signal uzatiladigan fizik yoki simsiz muhit.",
+        "topic": "2-mavzu. Kompyuter tarmoqlari haqida umumiy ma'lumot"
+      },
+      {
+        "id": 14,
+        "q": "Quyidagilardan qaysi javob Protokol tushunchasiga mos keladi?",
+        "options": [
+          "Mijozlarga xizmat yoki resurs taqdim etuvchi kompyuter tizimi.",
+          "Tarmoqda ma'lumot yuboradigan yoki qabul qiladigan qurilma.",
+          "Qurilmalar o'rtasida axborot almashish qoidalari majmuasi.",
+          "Shahar yoki kampus miqyosidagi mintaqaviy tarmoq."
+        ],
+        "a": "Qurilmalar o'rtasida axborot almashish qoidalari majmuasi.",
+        "topic": "2-mavzu. Kompyuter tarmoqlari haqida umumiy ma'lumot"
+      },
+      {
+        "id": 15,
+        "q": "Quyidagilardan qaysi javob LAN tushunchasiga mos keladi?",
+        "options": [
+          "Mijozlarga xizmat yoki resurs taqdim etuvchi kompyuter tizimi.",
+          "Server xizmatidan foydalanuvchi qurilma yoki dastur.",
+          "Uzoq masofadagi tarmoqlarni bog'lovchi keng hududli tarmoq.",
+          "Cheklangan hududdagi lokal kompyuter tarmog'i."
+        ],
+        "a": "Cheklangan hududdagi lokal kompyuter tarmog'i.",
+        "topic": "2-mavzu. Kompyuter tarmoqlari haqida umumiy ma'lumot"
+      },
+      {
+        "id": 16,
+        "q": "Quyidagilardan qaysi javob MAN tushunchasiga mos keladi?",
+        "options": [
+          "Shahar yoki kampus miqyosidagi mintaqaviy tarmoq.",
+          "Ma'lumot almashish uchun bog'langan qurilmalar va xizmatlar tizimi.",
+          "Tarmoqda ma'lumot yuboradigan yoki qabul qiladigan qurilma.",
+          "Tugunlar o'rtasida signal uzatiladigan fizik yoki simsiz muhit."
+        ],
+        "a": "Shahar yoki kampus miqyosidagi mintaqaviy tarmoq.",
+        "topic": "2-mavzu. Kompyuter tarmoqlari haqida umumiy ma'lumot"
+      },
+      {
+        "id": 17,
+        "q": "Quyidagilardan qaysi javob WAN tushunchasiga mos keladi?",
+        "options": [
+          "Fayl, printer, internet yoki xizmatlardan umumiy foydalanish jarayoni.",
+          "Uzoq masofadagi tarmoqlarni bog'lovchi keng hududli tarmoq.",
+          "Qurilmalar o'rtasida axborot almashish qoidalari majmuasi.",
+          "Shahar yoki kampus miqyosidagi mintaqaviy tarmoq."
+        ],
+        "a": "Uzoq masofadagi tarmoqlarni bog'lovchi keng hududli tarmoq.",
+        "topic": "2-mavzu. Kompyuter tarmoqlari haqida umumiy ma'lumot"
+      },
+      {
+        "id": 18,
+        "q": "Quyidagilardan qaysi javob Server tushunchasiga mos keladi?",
+        "options": [
+          "Cheklangan hududdagi lokal kompyuter tarmog'i.",
+          "Qurilmalar o'rtasida axborot almashish qoidalari majmuasi.",
+          "Mijozlarga xizmat yoki resurs taqdim etuvchi kompyuter tizimi.",
+          "Ma'lumot almashish uchun bog'langan qurilmalar va xizmatlar tizimi."
+        ],
+        "a": "Mijozlarga xizmat yoki resurs taqdim etuvchi kompyuter tizimi.",
+        "topic": "2-mavzu. Kompyuter tarmoqlari haqida umumiy ma'lumot"
+      },
+      {
+        "id": 19,
+        "q": "Quyidagilardan qaysi javob Mijoz tushunchasiga mos keladi?",
+        "options": [
+          "Fayl, printer, internet yoki xizmatlardan umumiy foydalanish jarayoni.",
+          "Ma'lumot almashish uchun bog'langan qurilmalar va xizmatlar tizimi.",
+          "Tarmoqda ma'lumot yuboradigan yoki qabul qiladigan qurilma.",
+          "Server xizmatidan foydalanuvchi qurilma yoki dastur."
+        ],
+        "a": "Server xizmatidan foydalanuvchi qurilma yoki dastur.",
+        "topic": "2-mavzu. Kompyuter tarmoqlari haqida umumiy ma'lumot"
+      },
+      {
+        "id": 20,
+        "q": "Quyidagilardan qaysi javob Resurs almashish tushunchasiga mos keladi?",
+        "options": [
+          "Fayl, printer, internet yoki xizmatlardan umumiy foydalanish jarayoni.",
+          "Uzoq masofadagi tarmoqlarni bog'lovchi keng hududli tarmoq.",
+          "Ma'lumot almashish uchun bog'langan qurilmalar va xizmatlar tizimi.",
+          "Shahar yoki kampus miqyosidagi mintaqaviy tarmoq."
+        ],
+        "a": "Fayl, printer, internet yoki xizmatlardan umumiy foydalanish jarayoni.",
+        "topic": "2-mavzu. Kompyuter tarmoqlari haqida umumiy ma'lumot"
+      },
+      {
+        "id": 21,
+        "q": "Quyidagilardan qaysi javob Tarmoq arxitekturasi tushunchasiga mos keladi?",
+        "options": [
+          "Tarmoq elementlari, xizmatlari va boshqaruvining umumiy tuzilmasi.",
+          "Tarmoq resurslari foydalanuvchiga qanday shaklda berilishini belgilovchi yondashuv.",
+          "Tarmoqqa yangi segment va xizmatlarni qo'shish imkoniyati.",
+          "Foydalanuvchi, xizmat va siyosatlarni yagona markazdan boshqarish."
+        ],
+        "a": "Tarmoq elementlari, xizmatlari va boshqaruvining umumiy tuzilmasi.",
+        "topic": "3-mavzu. Kompyuter tarmoqlari arxitekturasi va ularning tasniflanishi"
+      },
+      {
+        "id": 22,
+        "q": "Quyidagilardan qaysi javob Client-server tushunchasiga mos keladi?",
+        "options": [
+          "Tarmoq holatini nazorat qilish va sozlash qulayligi.",
+          "Xizmatlar serverda markazlashib, mijozlar ulardan foydalanadigan model.",
+          "Tarmoq resurslari foydalanuvchiga qanday shaklda berilishini belgilovchi yondashuv.",
+          "Tashkilot resurslarini hamkorlarga cheklangan tartibda ochuvchi tarmoq."
+        ],
+        "a": "Xizmatlar serverda markazlashib, mijozlar ulardan foydalanadigan model.",
+        "topic": "3-mavzu. Kompyuter tarmoqlari arxitekturasi va ularning tasniflanishi"
+      },
+      {
+        "id": 23,
+        "q": "Quyidagilardan qaysi javob Peer-to-peer tushunchasiga mos keladi?",
+        "options": [
+          "Tarmoq elementlari, xizmatlari va boshqaruvining umumiy tuzilmasi.",
+          "Tashkilot resurslarini hamkorlarga cheklangan tartibda ochuvchi tarmoq.",
+          "Tugunlar teng huquqli xizmat ko'rsatuvchi va foydalanuvchi bo'ladigan model.",
+          "Vazifalar bir nechta tugunlar o'rtasida bo'lingan tizim."
+        ],
+        "a": "Tugunlar teng huquqli xizmat ko'rsatuvchi va foydalanuvchi bo'ladigan model.",
+        "topic": "3-mavzu. Kompyuter tarmoqlari arxitekturasi va ularning tasniflanishi"
+      },
+      {
+        "id": 24,
+        "q": "Quyidagilardan qaysi javob Intranet tushunchasiga mos keladi?",
+        "options": [
+          "Tugunlar teng huquqli xizmat ko'rsatuvchi va foydalanuvchi bo'ladigan model.",
+          "Tashkilot resurslarini hamkorlarga cheklangan tartibda ochuvchi tarmoq.",
+          "Tarmoqqa yangi segment va xizmatlarni qo'shish imkoniyati.",
+          "Tashkilot ichida ishlatiladigan xususiy tarmoq muhiti."
+        ],
+        "a": "Tashkilot ichida ishlatiladigan xususiy tarmoq muhiti.",
+        "topic": "3-mavzu. Kompyuter tarmoqlari arxitekturasi va ularning tasniflanishi"
+      },
+      {
+        "id": 25,
+        "q": "Quyidagilardan qaysi javob Ekstranet tushunchasiga mos keladi?",
+        "options": [
+          "Tashkilot resurslarini hamkorlarga cheklangan tartibda ochuvchi tarmoq.",
+          "Tugunlar teng huquqli xizmat ko'rsatuvchi va foydalanuvchi bo'ladigan model.",
+          "Tarmoq resurslari foydalanuvchiga qanday shaklda berilishini belgilovchi yondashuv.",
+          "Vazifalar bir nechta tugunlar o'rtasida bo'lingan tizim."
+        ],
+        "a": "Tashkilot resurslarini hamkorlarga cheklangan tartibda ochuvchi tarmoq.",
+        "topic": "3-mavzu. Kompyuter tarmoqlari arxitekturasi va ularning tasniflanishi"
+      },
+      {
+        "id": 26,
+        "q": "Quyidagilardan qaysi javob Markazlashgan boshqaruv tushunchasiga mos keladi?",
+        "options": [
+          "Tarmoq resurslari foydalanuvchiga qanday shaklda berilishini belgilovchi yondashuv.",
+          "Foydalanuvchi, xizmat va siyosatlarni yagona markazdan boshqarish.",
+          "Tashkilot ichida ishlatiladigan xususiy tarmoq muhiti.",
+          "Tugunlar teng huquqli xizmat ko'rsatuvchi va foydalanuvchi bo'ladigan model."
+        ],
+        "a": "Foydalanuvchi, xizmat va siyosatlarni yagona markazdan boshqarish.",
+        "topic": "3-mavzu. Kompyuter tarmoqlari arxitekturasi va ularning tasniflanishi"
+      },
+      {
+        "id": 27,
+        "q": "Quyidagilardan qaysi javob Taqsimlangan tizim tushunchasiga mos keladi?",
+        "options": [
+          "Tarmoq holatini nazorat qilish va sozlash qulayligi.",
+          "Tashkilot resurslarini hamkorlarga cheklangan tartibda ochuvchi tarmoq.",
+          "Vazifalar bir nechta tugunlar o'rtasida bo'lingan tizim.",
+          "Tarmoq resurslari foydalanuvchiga qanday shaklda berilishini belgilovchi yondashuv."
+        ],
+        "a": "Vazifalar bir nechta tugunlar o'rtasida bo'lingan tizim.",
+        "topic": "3-mavzu. Kompyuter tarmoqlari arxitekturasi va ularning tasniflanishi"
+      },
+      {
+        "id": 28,
+        "q": "Quyidagilardan qaysi javob Xizmat modeli tushunchasiga mos keladi?",
+        "options": [
+          "Tugunlar teng huquqli xizmat ko'rsatuvchi va foydalanuvchi bo'ladigan model.",
+          "Tarmoq holatini nazorat qilish va sozlash qulayligi.",
+          "Tashkilot ichida ishlatiladigan xususiy tarmoq muhiti.",
+          "Tarmoq resurslari foydalanuvchiga qanday shaklda berilishini belgilovchi yondashuv."
+        ],
+        "a": "Tarmoq resurslari foydalanuvchiga qanday shaklda berilishini belgilovchi yondashuv.",
+        "topic": "3-mavzu. Kompyuter tarmoqlari arxitekturasi va ularning tasniflanishi"
+      },
+      {
+        "id": 29,
+        "q": "Quyidagilardan qaysi javob Kengayish tushunchasiga mos keladi?",
+        "options": [
+          "Tarmoqqa yangi segment va xizmatlarni qo'shish imkoniyati.",
+          "Xizmatlar serverda markazlashib, mijozlar ulardan foydalanadigan model.",
+          "Tashkilot resurslarini hamkorlarga cheklangan tartibda ochuvchi tarmoq.",
+          "Tarmoq elementlari, xizmatlari va boshqaruvining umumiy tuzilmasi."
+        ],
+        "a": "Tarmoqqa yangi segment va xizmatlarni qo'shish imkoniyati.",
+        "topic": "3-mavzu. Kompyuter tarmoqlari arxitekturasi va ularning tasniflanishi"
+      },
+      {
+        "id": 30,
+        "q": "Quyidagilardan qaysi javob Boshqariluvchanlik tushunchasiga mos keladi?",
+        "options": [
+          "Tarmoqqa yangi segment va xizmatlarni qo'shish imkoniyati.",
+          "Tarmoq holatini nazorat qilish va sozlash qulayligi.",
+          "Xizmatlar serverda markazlashib, mijozlar ulardan foydalanadigan model.",
+          "Tarmoq resurslari foydalanuvchiga qanday shaklda berilishini belgilovchi yondashuv."
+        ],
+        "a": "Tarmoq holatini nazorat qilish va sozlash qulayligi.",
+        "topic": "3-mavzu. Kompyuter tarmoqlari arxitekturasi va ularning tasniflanishi"
+      },
+      {
+        "id": 31,
+        "q": "Quyidagilardan qaysi javob Topologiya tushunchasiga mos keladi?",
+        "options": [
+          "Bitta nosozlik butun segmentga ta'sir qiladigan joy.",
+          "Tarmoq qurilmalari bog'lanishining fizik yoki mantiqiy shakli.",
+          "Tugunlar umumiy aloqa magistraliga ulangan tuzilma.",
+          "Tugunlar ko'p zaxira yo'llar orqali bog'langan tuzilma."
+        ],
+        "a": "Tarmoq qurilmalari bog'lanishining fizik yoki mantiqiy shakli.",
+        "topic": "4-mavzu. Tarmoq topologiyalari"
+      },
+      {
+        "id": 32,
+        "q": "Quyidagilardan qaysi javob Yulduz topologiyasi tushunchasiga mos keladi?",
+        "options": [
+          "Bitta nosozlik butun segmentga ta'sir qiladigan joy.",
+          "Tugunlar umumiy aloqa magistraliga ulangan tuzilma.",
+          "Tugunlar markaziy kommutatorga ulangan tuzilma.",
+          "Kabel va qurilmalarning real joylashuv shakli."
+        ],
+        "a": "Tugunlar markaziy kommutatorga ulangan tuzilma.",
+        "topic": "4-mavzu. Tarmoq topologiyalari"
+      },
+      {
+        "id": 33,
+        "q": "Quyidagilardan qaysi javob Shina topologiyasi tushunchasiga mos keladi?",
+        "options": [
+          "Tugunlar ko'p zaxira yo'llar orqali bog'langan tuzilma.",
+          "Kabel va qurilmalarning real joylashuv shakli.",
+          "Tarmoq qurilmalari bog'lanishining fizik yoki mantiqiy shakli.",
+          "Tugunlar umumiy aloqa magistraliga ulangan tuzilma."
+        ],
+        "a": "Tugunlar umumiy aloqa magistraliga ulangan tuzilma.",
+        "topic": "4-mavzu. Tarmoq topologiyalari"
+      },
+      {
+        "id": 34,
+        "q": "Quyidagilardan qaysi javob Halqa topologiyasi tushunchasiga mos keladi?",
+        "options": [
+          "Tugunlar yopiq aylana bo'yicha bog'langan tuzilma.",
+          "Tugunlar markaziy kommutatorga ulangan tuzilma.",
+          "Ma'lumot oqimining protokol darajasidagi harakat shakli.",
+          "Tarmoq qurilmalari bog'lanishining fizik yoki mantiqiy shakli."
+        ],
+        "a": "Tugunlar yopiq aylana bo'yicha bog'langan tuzilma.",
+        "topic": "4-mavzu. Tarmoq topologiyalari"
+      },
+      {
+        "id": 35,
+        "q": "Quyidagilardan qaysi javob Mesh topologiyasi tushunchasiga mos keladi?",
+        "options": [
+          "Tarmoq qurilmalari bog'lanishining fizik yoki mantiqiy shakli.",
+          "Tugunlar ko'p zaxira yo'llar orqali bog'langan tuzilma.",
+          "Tugunlar umumiy aloqa magistraliga ulangan tuzilma.",
+          "Kabel va qurilmalarning real joylashuv shakli."
+        ],
+        "a": "Tugunlar ko'p zaxira yo'llar orqali bog'langan tuzilma.",
+        "topic": "4-mavzu. Tarmoq topologiyalari"
+      },
+      {
+        "id": 36,
+        "q": "Quyidagilardan qaysi javob Daraxt topologiyasi tushunchasiga mos keladi?",
+        "options": [
+          "Ma'lumot oqimining protokol darajasidagi harakat shakli.",
+          "Nosozlikda muqobil yo'l yoki qurilma orqali ishlashni davom ettirish.",
+          "Ierarxik darajalar asosida qurilgan tarmoq tuzilmasi.",
+          "Bitta nosozlik butun segmentga ta'sir qiladigan joy."
+        ],
+        "a": "Ierarxik darajalar asosida qurilgan tarmoq tuzilmasi.",
+        "topic": "4-mavzu. Tarmoq topologiyalari"
+      },
+      {
+        "id": 37,
+        "q": "Quyidagilardan qaysi javob Fizik topologiya tushunchasiga mos keladi?",
+        "options": [
+          "Tugunlar markaziy kommutatorga ulangan tuzilma.",
+          "Tugunlar ko'p zaxira yo'llar orqali bog'langan tuzilma.",
+          "Bitta nosozlik butun segmentga ta'sir qiladigan joy.",
+          "Kabel va qurilmalarning real joylashuv shakli."
+        ],
+        "a": "Kabel va qurilmalarning real joylashuv shakli.",
+        "topic": "4-mavzu. Tarmoq topologiyalari"
+      },
+      {
+        "id": 38,
+        "q": "Quyidagilardan qaysi javob Mantiqiy topologiya tushunchasiga mos keladi?",
+        "options": [
+          "Ma'lumot oqimining protokol darajasidagi harakat shakli.",
+          "Bitta nosozlik butun segmentga ta'sir qiladigan joy.",
+          "Tugunlar ko'p zaxira yo'llar orqali bog'langan tuzilma.",
+          "Nosozlikda muqobil yo'l yoki qurilma orqali ishlashni davom ettirish."
+        ],
+        "a": "Ma'lumot oqimining protokol darajasidagi harakat shakli.",
+        "topic": "4-mavzu. Tarmoq topologiyalari"
+      },
+      {
+        "id": 39,
+        "q": "Quyidagilardan qaysi javob Uzilish nuqtasi tushunchasiga mos keladi?",
+        "options": [
+          "Nosozlikda muqobil yo'l yoki qurilma orqali ishlashni davom ettirish.",
+          "Bitta nosozlik butun segmentga ta'sir qiladigan joy.",
+          "Ma'lumot oqimining protokol darajasidagi harakat shakli.",
+          "Tugunlar markaziy kommutatorga ulangan tuzilma."
+        ],
+        "a": "Bitta nosozlik butun segmentga ta'sir qiladigan joy.",
+        "topic": "4-mavzu. Tarmoq topologiyalari"
+      },
+      {
+        "id": 40,
+        "q": "Quyidagilardan qaysi javob Zaxiralash tushunchasiga mos keladi?",
+        "options": [
+          "Tugunlar umumiy aloqa magistraliga ulangan tuzilma.",
+          "Tugunlar ko'p zaxira yo'llar orqali bog'langan tuzilma.",
+          "Nosozlikda muqobil yo'l yoki qurilma orqali ishlashni davom ettirish.",
+          "Tarmoq qurilmalari bog'lanishining fizik yoki mantiqiy shakli."
+        ],
+        "a": "Nosozlikda muqobil yo'l yoki qurilma orqali ishlashni davom ettirish.",
+        "topic": "4-mavzu. Tarmoq topologiyalari"
+      },
+      {
+        "id": 41,
+        "q": "Quyidagilardan qaysi javob Kommutator tushunchasiga mos keladi?",
+        "options": [
+          "Kompyuterni tarmoqqa ulash uchun xizmat qiluvchi interfeys.",
+          "Kommutatorda mac manzil va port mosligini saqlaydigan jadval.",
+          "Mac manzil asosida kadrlarni kerakli portga uzatuvchi qurilma.",
+          "Turli tarmoq yoki protokollar o'rtasida moslashtirish vazifasini bajaruvchi tugun."
+        ],
+        "a": "Mac manzil asosida kadrlarni kerakli portga uzatuvchi qurilma.",
+        "topic": "5-mavzu. Tarmoq qurilmalari va komponentlari"
+      },
+      {
+        "id": 42,
+        "q": "Quyidagilardan qaysi javob Marshrutizator tushunchasiga mos keladi?",
+        "options": [
+          "Tarmoq kabeli orqali qurilmaga elektr quvvati berish texnologiyasi.",
+          "Kommutatorda mac manzil va port mosligini saqlaydigan jadval.",
+          "Turli tarmoq yoki protokollar o'rtasida moslashtirish vazifasini bajaruvchi tugun.",
+          "Ip paketlarni tarmoqlar o'rtasida yo'naltiruvchi qurilma."
+        ],
+        "a": "Ip paketlarni tarmoqlar o'rtasida yo'naltiruvchi qurilma.",
+        "topic": "5-mavzu. Tarmoq qurilmalari va komponentlari"
+      },
+      {
+        "id": 43,
+        "q": "Quyidagilardan qaysi javob Shlyuz tushunchasiga mos keladi?",
+        "options": [
+          "Turli tarmoq yoki protokollar o'rtasida moslashtirish vazifasini bajaruvchi tugun.",
+          "Tarmoq segmentlarini kanal qatlamida bog'lovchi qurilma.",
+          "Tarmoq kabeli orqali qurilmaga elektr quvvati berish texnologiyasi.",
+          "Qurilmaning kabel yoki mantiqiy xizmat ulanish nuqtasi."
+        ],
+        "a": "Turli tarmoq yoki protokollar o'rtasida moslashtirish vazifasini bajaruvchi tugun.",
+        "topic": "5-mavzu. Tarmoq qurilmalari va komponentlari"
+      },
+      {
+        "id": 44,
+        "q": "Quyidagilardan qaysi javob Ko'prik tushunchasiga mos keladi?",
+        "options": [
+          "Qurilmaning kabel yoki mantiqiy xizmat ulanish nuqtasi.",
+          "Tarmoq segmentlarini kanal qatlamida bog'lovchi qurilma.",
+          "Kommutatorda mac manzil va port mosligini saqlaydigan jadval.",
+          "Marshrutizator paket yo'lini tanlashda ishlatadigan jadval."
+        ],
+        "a": "Tarmoq segmentlarini kanal qatlamida bog'lovchi qurilma.",
+        "topic": "5-mavzu. Tarmoq qurilmalari va komponentlari"
+      },
+      {
+        "id": 45,
+        "q": "Quyidagilardan qaysi javob Access point tushunchasiga mos keladi?",
+        "options": [
+          "Turli tarmoq yoki protokollar o'rtasida moslashtirish vazifasini bajaruvchi tugun.",
+          "Kompyuterni tarmoqqa ulash uchun xizmat qiluvchi interfeys.",
+          "Simsiz mijozlarni lokal tarmoqqa ulovchi qurilma.",
+          "Marshrutizator paket yo'lini tanlashda ishlatadigan jadval."
+        ],
+        "a": "Simsiz mijozlarni lokal tarmoqqa ulovchi qurilma.",
+        "topic": "5-mavzu. Tarmoq qurilmalari va komponentlari"
+      },
+      {
+        "id": 46,
+        "q": "Quyidagilardan qaysi javob Tarmoq adapteri tushunchasiga mos keladi?",
+        "options": [
+          "Qurilmaning kabel yoki mantiqiy xizmat ulanish nuqtasi.",
+          "Simsiz mijozlarni lokal tarmoqqa ulovchi qurilma.",
+          "Tarmoq segmentlarini kanal qatlamida bog'lovchi qurilma.",
+          "Kompyuterni tarmoqqa ulash uchun xizmat qiluvchi interfeys."
+        ],
+        "a": "Kompyuterni tarmoqqa ulash uchun xizmat qiluvchi interfeys.",
+        "topic": "5-mavzu. Tarmoq qurilmalari va komponentlari"
+      },
+      {
+        "id": 47,
+        "q": "Quyidagilardan qaysi javob MAC jadval tushunchasiga mos keladi?",
+        "options": [
+          "Kommutatorda mac manzil va port mosligini saqlaydigan jadval.",
+          "Qurilmaning kabel yoki mantiqiy xizmat ulanish nuqtasi.",
+          "Turli tarmoq yoki protokollar o'rtasida moslashtirish vazifasini bajaruvchi tugun.",
+          "Tarmoq segmentlarini kanal qatlamida bog'lovchi qurilma."
+        ],
+        "a": "Kommutatorda mac manzil va port mosligini saqlaydigan jadval.",
+        "topic": "5-mavzu. Tarmoq qurilmalari va komponentlari"
+      },
+      {
+        "id": 48,
+        "q": "Quyidagilardan qaysi javob Routing jadvali tushunchasiga mos keladi?",
+        "options": [
+          "Tarmoq kabeli orqali qurilmaga elektr quvvati berish texnologiyasi.",
+          "Marshrutizator paket yo'lini tanlashda ishlatadigan jadval.",
+          "Kommutatorda mac manzil va port mosligini saqlaydigan jadval.",
+          "Tarmoq segmentlarini kanal qatlamida bog'lovchi qurilma."
+        ],
+        "a": "Marshrutizator paket yo'lini tanlashda ishlatadigan jadval.",
+        "topic": "5-mavzu. Tarmoq qurilmalari va komponentlari"
+      },
+      {
+        "id": 49,
+        "q": "Quyidagilardan qaysi javob Port tushunchasiga mos keladi?",
+        "options": [
+          "Kommutatorda mac manzil va port mosligini saqlaydigan jadval.",
+          "Tarmoq segmentlarini kanal qatlamida bog'lovchi qurilma.",
+          "Qurilmaning kabel yoki mantiqiy xizmat ulanish nuqtasi.",
+          "Ip paketlarni tarmoqlar o'rtasida yo'naltiruvchi qurilma."
+        ],
+        "a": "Qurilmaning kabel yoki mantiqiy xizmat ulanish nuqtasi.",
+        "topic": "5-mavzu. Tarmoq qurilmalari va komponentlari"
+      },
+      {
+        "id": 50,
+        "q": "Quyidagilardan qaysi javob PoE tushunchasiga mos keladi?",
+        "options": [
+          "Qurilmaning kabel yoki mantiqiy xizmat ulanish nuqtasi.",
+          "Simsiz mijozlarni lokal tarmoqqa ulovchi qurilma.",
+          "Kommutatorda mac manzil va port mosligini saqlaydigan jadval.",
+          "Tarmoq kabeli orqali qurilmaga elektr quvvati berish texnologiyasi."
+        ],
+        "a": "Tarmoq kabeli orqali qurilmaga elektr quvvati berish texnologiyasi.",
+        "topic": "5-mavzu. Tarmoq qurilmalari va komponentlari"
+      },
+      {
+        "id": 51,
+        "q": "Quyidagilardan qaysi javob UTP tushunchasiga mos keladi?",
+        "options": [
+          "Ethernet ulangan juftlik kabelida ishlatiladigan konnektor.",
+          "Elektromagnit shovqindan himoyalangan ekranli ulangan juftlik kabeli.",
+          "Kabel ulanishi va juftlik tartibini tekshiruvchi asbob.",
+          "Ekranlanmagan ulangan juftlik kabeli."
+        ],
+        "a": "Ekranlanmagan ulangan juftlik kabeli.",
+        "topic": "6-mavzu. Tarmoq kabellari"
+      },
+      {
+        "id": 52,
+        "q": "Quyidagilardan qaysi javob STP tushunchasiga mos keladi?",
+        "options": [
+          "Elektromagnit shovqindan himoyalangan ekranli ulangan juftlik kabeli.",
+          "Masofa oshganda signal quvvatining kamayishi.",
+          "Yorug'lik impulslari orqali ma'lumot uzatadigan kabel muhiti.",
+          "Kabel ulanishi va juftlik tartibini tekshiruvchi asbob."
+        ],
+        "a": "Elektromagnit shovqindan himoyalangan ekranli ulangan juftlik kabeli.",
+        "topic": "6-mavzu. Tarmoq kabellari"
+      },
+      {
+        "id": 53,
+        "q": "Quyidagilardan qaysi javob Koaksial kabel tushunchasiga mos keladi?",
+        "options": [
+          "Yorug'lik impulslari orqali ma'lumot uzatadigan kabel muhiti.",
+          "Markaziy o'tkazgich va ekran qatlamiga ega kabel turi.",
+          "Qurilmani rozetka yoki patch-panelga ulovchi qisqa kabel.",
+          "Ethernet ulangan juftlik kabelida ishlatiladigan konnektor."
+        ],
+        "a": "Markaziy o'tkazgich va ekran qatlamiga ega kabel turi.",
+        "topic": "6-mavzu. Tarmoq kabellari"
+      },
+      {
+        "id": 54,
+        "q": "Quyidagilardan qaysi javob Optik tola tushunchasiga mos keladi?",
+        "options": [
+          "Elektromagnit shovqindan himoyalangan ekranli ulangan juftlik kabeli.",
+          "Ethernet ulangan juftlik kabelida ishlatiladigan konnektor.",
+          "Yorug'lik impulslari orqali ma'lumot uzatadigan kabel muhiti.",
+          "Kabel ulanishi va juftlik tartibini tekshiruvchi asbob."
+        ],
+        "a": "Yorug'lik impulslari orqali ma'lumot uzatadigan kabel muhiti.",
+        "topic": "6-mavzu. Tarmoq kabellari"
+      },
+      {
+        "id": 55,
+        "q": "Quyidagilardan qaysi javob RJ-45 tushunchasiga mos keladi?",
+        "options": [
+          "Markaziy o'tkazgich va ekran qatlamiga ega kabel turi.",
+          "Masofa oshganda signal quvvatining kamayishi.",
+          "Yuqori tezlikdagi ethernet uchun qo'llanadigan kabel kategoriyasi.",
+          "Ethernet ulangan juftlik kabelida ishlatiladigan konnektor."
+        ],
+        "a": "Ethernet ulangan juftlik kabelida ishlatiladigan konnektor.",
+        "topic": "6-mavzu. Tarmoq kabellari"
+      },
+      {
+        "id": 56,
+        "q": "Quyidagilardan qaysi javob Cat6 tushunchasiga mos keladi?",
+        "options": [
+          "Yuqori tezlikdagi ethernet uchun qo'llanadigan kabel kategoriyasi.",
+          "Ekranlanmagan ulangan juftlik kabeli.",
+          "Qurilmani rozetka yoki patch-panelga ulovchi qisqa kabel.",
+          "Kabel ulanishi va juftlik tartibini tekshiruvchi asbob."
+        ],
+        "a": "Yuqori tezlikdagi ethernet uchun qo'llanadigan kabel kategoriyasi.",
+        "topic": "6-mavzu. Tarmoq kabellari"
+      },
+      {
+        "id": 57,
+        "q": "Quyidagilardan qaysi javob Patch cord tushunchasiga mos keladi?",
+        "options": [
+          "Elektromagnit shovqindan himoyalangan ekranli ulangan juftlik kabeli.",
+          "Qurilmani rozetka yoki patch-panelga ulovchi qisqa kabel.",
+          "Kabel liniyalarini tartibga solib ulashga xizmat qiluvchi panel.",
+          "Kabel ulanishi va juftlik tartibini tekshiruvchi asbob."
+        ],
+        "a": "Qurilmani rozetka yoki patch-panelga ulovchi qisqa kabel.",
+        "topic": "6-mavzu. Tarmoq kabellari"
+      },
+      {
+        "id": 58,
+        "q": "Quyidagilardan qaysi javob Signal so'nishi tushunchasiga mos keladi?",
+        "options": [
+          "Markaziy o'tkazgich va ekran qatlamiga ega kabel turi.",
+          "Yorug'lik impulslari orqali ma'lumot uzatadigan kabel muhiti.",
+          "Masofa oshganda signal quvvatining kamayishi.",
+          "Yuqori tezlikdagi ethernet uchun qo'llanadigan kabel kategoriyasi."
+        ],
+        "a": "Masofa oshganda signal quvvatining kamayishi.",
+        "topic": "6-mavzu. Tarmoq kabellari"
+      },
+      {
+        "id": 59,
+        "q": "Quyidagilardan qaysi javob Kabel testeri tushunchasiga mos keladi?",
+        "options": [
+          "Ethernet ulangan juftlik kabelida ishlatiladigan konnektor.",
+          "Ekranlanmagan ulangan juftlik kabeli.",
+          "Elektromagnit shovqindan himoyalangan ekranli ulangan juftlik kabeli.",
+          "Kabel ulanishi va juftlik tartibini tekshiruvchi asbob."
+        ],
+        "a": "Kabel ulanishi va juftlik tartibini tekshiruvchi asbob.",
+        "topic": "6-mavzu. Tarmoq kabellari"
+      },
+      {
+        "id": 60,
+        "q": "Quyidagilardan qaysi javob Patch-panel tushunchasiga mos keladi?",
+        "options": [
+          "Kabel liniyalarini tartibga solib ulashga xizmat qiluvchi panel.",
+          "Masofa oshganda signal quvvatining kamayishi.",
+          "Qurilmani rozetka yoki patch-panelga ulovchi qisqa kabel.",
+          "Markaziy o'tkazgich va ekran qatlamiga ega kabel turi."
+        ],
+        "a": "Kabel liniyalarini tartibga solib ulashga xizmat qiluvchi panel.",
+        "topic": "6-mavzu. Tarmoq kabellari"
+      },
+      {
+        "id": 61,
+        "q": "Quyidagilardan qaysi javob Ethernet tushunchasiga mos keladi?",
+        "options": [
+          "Simli lokal tarmoqlarda keng ishlatiladigan ieee 802.3 texnologiyasi.",
+          "Wi-fi tarmog'ining nomini bildiruvchi identifikator.",
+          "Simsiz signal yetib boradigan hudud.",
+          "Qisqa masofali shaxsiy simsiz aloqa texnologiyasi."
+        ],
+        "a": "Simli lokal tarmoqlarda keng ishlatiladigan ieee 802.3 texnologiyasi.",
+        "topic": "7-mavzu. Simli va simsiz texnologiyalar: Ethernet, Bluetooth, Wi-Fi va 4G/5G"
+      },
+      {
+        "id": 62,
+        "q": "Quyidagilardan qaysi javob Bluetooth tushunchasiga mos keladi?",
+        "options": [
+          "Ieee 802.11 oilasiga mansub lokal simsiz tarmoq texnologiyasi.",
+          "Qisqa masofali shaxsiy simsiz aloqa texnologiyasi.",
+          "Mobil keng polosali ma'lumot uzatish avlodi.",
+          "Simli lokal tarmoqlarda keng ishlatiladigan ieee 802.3 texnologiyasi."
+        ],
+        "a": "Qisqa masofali shaxsiy simsiz aloqa texnologiyasi.",
+        "topic": "7-mavzu. Simli va simsiz texnologiyalar: Ethernet, Bluetooth, Wi-Fi va 4G/5G"
+      },
+      {
+        "id": 63,
+        "q": "Quyidagilardan qaysi javob Wi-Fi tushunchasiga mos keladi?",
+        "options": [
+          "Simli lokal tarmoqlarda keng ishlatiladigan ieee 802.3 texnologiyasi.",
+          "Simsiz signal uzatiladigan elektromagnit chastota diapazoni.",
+          "Ieee 802.11 oilasiga mansub lokal simsiz tarmoq texnologiyasi.",
+          "Qisqa masofali shaxsiy simsiz aloqa texnologiyasi."
+        ],
+        "a": "Ieee 802.11 oilasiga mansub lokal simsiz tarmoq texnologiyasi.",
+        "topic": "7-mavzu. Simli va simsiz texnologiyalar: Ethernet, Bluetooth, Wi-Fi va 4G/5G"
+      },
+      {
+        "id": 64,
+        "q": "Quyidagilardan qaysi javob 4G tushunchasiga mos keladi?",
+        "options": [
+          "Simsiz signal uzatiladigan elektromagnit chastota diapazoni.",
+          "Wi-fi tarmog'ining nomini bildiruvchi identifikator.",
+          "Ma'lumot almashishning bir yoki ikki yo'nalishli rejimi.",
+          "Mobil keng polosali ma'lumot uzatish avlodi."
+        ],
+        "a": "Mobil keng polosali ma'lumot uzatish avlodi.",
+        "topic": "7-mavzu. Simli va simsiz texnologiyalar: Ethernet, Bluetooth, Wi-Fi va 4G/5G"
+      },
+      {
+        "id": 65,
+        "q": "Quyidagilardan qaysi javob 5G tushunchasiga mos keladi?",
+        "options": [
+          "Past kechikish va yuqori ulanish zichligini qo'llaydigan mobil tarmoq avlodi.",
+          "Wi-fi tarmog'ining nomini bildiruvchi identifikator.",
+          "Simli lokal tarmoqlarda keng ishlatiladigan ieee 802.3 texnologiyasi.",
+          "Ieee 802.11 oilasiga mansub lokal simsiz tarmoq texnologiyasi."
+        ],
+        "a": "Past kechikish va yuqori ulanish zichligini qo'llaydigan mobil tarmoq avlodi.",
+        "topic": "7-mavzu. Simli va simsiz texnologiyalar: Ethernet, Bluetooth, Wi-Fi va 4G/5G"
+      },
+      {
+        "id": 66,
+        "q": "Quyidagilardan qaysi javob SSID tushunchasiga mos keladi?",
+        "options": [
+          "Past kechikish va yuqori ulanish zichligini qo'llaydigan mobil tarmoq avlodi.",
+          "Wi-fi tarmog'ining nomini bildiruvchi identifikator.",
+          "Simsiz signal yetib boradigan hudud.",
+          "Simli lokal tarmoqlarda keng ishlatiladigan ieee 802.3 texnologiyasi."
+        ],
+        "a": "Wi-fi tarmog'ining nomini bildiruvchi identifikator.",
+        "topic": "7-mavzu. Simli va simsiz texnologiyalar: Ethernet, Bluetooth, Wi-Fi va 4G/5G"
+      },
+      {
+        "id": 67,
+        "q": "Quyidagilardan qaysi javob Radiochastota tushunchasiga mos keladi?",
+        "options": [
+          "Simli lokal tarmoqlarda keng ishlatiladigan ieee 802.3 texnologiyasi.",
+          "Wi-fi tarmog'ining nomini bildiruvchi identifikator.",
+          "Simsiz signal uzatiladigan elektromagnit chastota diapazoni.",
+          "Past kechikish va yuqori ulanish zichligini qo'llaydigan mobil tarmoq avlodi."
+        ],
+        "a": "Simsiz signal uzatiladigan elektromagnit chastota diapazoni.",
+        "topic": "7-mavzu. Simli va simsiz texnologiyalar: Ethernet, Bluetooth, Wi-Fi va 4G/5G"
+      },
+      {
+        "id": 68,
+        "q": "Quyidagilardan qaysi javob Dupleks tushunchasiga mos keladi?",
+        "options": [
+          "Qisqa masofali shaxsiy simsiz aloqa texnologiyasi.",
+          "Wi-fi tarmog'ining nomini bildiruvchi identifikator.",
+          "Ieee 802.11 oilasiga mansub lokal simsiz tarmoq texnologiyasi.",
+          "Ma'lumot almashishning bir yoki ikki yo'nalishli rejimi."
+        ],
+        "a": "Ma'lumot almashishning bir yoki ikki yo'nalishli rejimi.",
+        "topic": "7-mavzu. Simli va simsiz texnologiyalar: Ethernet, Bluetooth, Wi-Fi va 4G/5G"
+      },
+      {
+        "id": 69,
+        "q": "Quyidagilardan qaysi javob Qamrov tushunchasiga mos keladi?",
+        "options": [
+          "Simsiz signal yetib boradigan hudud.",
+          "Kanalning vaqt birligida uzata oladigan ma'lumot hajmi.",
+          "Past kechikish va yuqori ulanish zichligini qo'llaydigan mobil tarmoq avlodi.",
+          "Simli lokal tarmoqlarda keng ishlatiladigan ieee 802.3 texnologiyasi."
+        ],
+        "a": "Simsiz signal yetib boradigan hudud.",
+        "topic": "7-mavzu. Simli va simsiz texnologiyalar: Ethernet, Bluetooth, Wi-Fi va 4G/5G"
+      },
+      {
+        "id": 70,
+        "q": "Quyidagilardan qaysi javob O'tkazish qobiliyati tushunchasiga mos keladi?",
+        "options": [
+          "Simsiz signal uzatiladigan elektromagnit chastota diapazoni.",
+          "Kanalning vaqt birligida uzata oladigan ma'lumot hajmi.",
+          "Ma'lumot almashishning bir yoki ikki yo'nalishli rejimi.",
+          "Wi-fi tarmog'ining nomini bildiruvchi identifikator."
+        ],
+        "a": "Kanalning vaqt birligida uzata oladigan ma'lumot hajmi.",
+        "topic": "7-mavzu. Simli va simsiz texnologiyalar: Ethernet, Bluetooth, Wi-Fi va 4G/5G"
+      },
+      {
+        "id": 71,
+        "q": "Quyidagilardan qaysi javob VLAN tushunchasiga mos keladi?",
+        "options": [
+          "Broadcast kadrlar tarqaladigan mantiqiy tarmoq hududi.",
+          "Fizik tarmoq ichida yaratilgan mantiqiy lokal tarmoq segmenti.",
+          "Bir nechta vlan trafikini tashuvchi port.",
+          "Bitta vlanga tegishli foydalanuvchi porti."
+        ],
+        "a": "Fizik tarmoq ichida yaratilgan mantiqiy lokal tarmoq segmenti.",
+        "topic": "8-mavzu. Virtual lokal tarmoqlar"
+      },
+      {
+        "id": 72,
+        "q": "Quyidagilardan qaysi javob Segmentatsiya tushunchasiga mos keladi?",
+        "options": [
+          "Virtual tarmoqni raqamli identifikatsiya qiluvchi qiymat.",
+          "Bitta vlanga tegishli foydalanuvchi porti.",
+          "Tarmoqni boshqaruv yoki xavfsizlik maqsadida bo'laklarga ajratish.",
+          "Vlan teglarini ethernet kadriga qo'shish standarti."
+        ],
+        "a": "Tarmoqni boshqaruv yoki xavfsizlik maqsadida bo'laklarga ajratish.",
+        "topic": "8-mavzu. Virtual lokal tarmoqlar"
+      },
+      {
+        "id": 73,
+        "q": "Quyidagilardan qaysi javob Broadcast domen tushunchasiga mos keladi?",
+        "options": [
+          "Tarmoqni boshqaruv yoki xavfsizlik maqsadida bo'laklarga ajratish.",
+          "Bitta vlanga tegishli foydalanuvchi porti.",
+          "Bir nechta vlan trafikini tashuvchi port.",
+          "Broadcast kadrlar tarqaladigan mantiqiy tarmoq hududi."
+        ],
+        "a": "Broadcast kadrlar tarqaladigan mantiqiy tarmoq hududi.",
+        "topic": "8-mavzu. Virtual lokal tarmoqlar"
+      },
+      {
+        "id": 74,
+        "q": "Quyidagilardan qaysi javob Access port tushunchasiga mos keladi?",
+        "options": [
+          "Bitta vlanga tegishli foydalanuvchi porti.",
+          "Trunk portda tegsiz kadrlar qabul qilinadigan vlan.",
+          "Virtual tarmoqni raqamli identifikatsiya qiluvchi qiymat.",
+          "Fizik tarmoq ichida yaratilgan mantiqiy lokal tarmoq segmenti."
+        ],
+        "a": "Bitta vlanga tegishli foydalanuvchi porti.",
+        "topic": "8-mavzu. Virtual lokal tarmoqlar"
+      },
+      {
+        "id": 75,
+        "q": "Quyidagilardan qaysi javob Trunk port tushunchasiga mos keladi?",
+        "options": [
+          "Trunk portda tegsiz kadrlar qabul qilinadigan vlan.",
+          "Bir nechta vlan trafikini tashuvchi port.",
+          "Bitta vlanga tegishli foydalanuvchi porti.",
+          "Turli vlanlar o'rtasida marshrutlash orqali aloqa qilish."
+        ],
+        "a": "Bir nechta vlan trafikini tashuvchi port.",
+        "topic": "8-mavzu. Virtual lokal tarmoqlar"
+      },
+      {
+        "id": 76,
+        "q": "Quyidagilardan qaysi javob 802.1Q tushunchasiga mos keladi?",
+        "options": [
+          "Trunk portda tegsiz kadrlar qabul qilinadigan vlan.",
+          "Fizik tarmoq ichida yaratilgan mantiqiy lokal tarmoq segmenti.",
+          "Vlan teglarini ethernet kadriga qo'shish standarti.",
+          "Bir nechta vlan trafikini tashuvchi port."
+        ],
+        "a": "Vlan teglarini ethernet kadriga qo'shish standarti.",
+        "topic": "8-mavzu. Virtual lokal tarmoqlar"
+      },
+      {
+        "id": 77,
+        "q": "Quyidagilardan qaysi javob Tag tushunchasiga mos keladi?",
+        "options": [
+          "Vlan teglarini ethernet kadriga qo'shish standarti.",
+          "Tarmoqni boshqaruv yoki xavfsizlik maqsadida bo'laklarga ajratish.",
+          "Turli vlanlar o'rtasida marshrutlash orqali aloqa qilish.",
+          "Kadr qaysi vlanga tegishli ekanini ko'rsatuvchi belgi."
+        ],
+        "a": "Kadr qaysi vlanga tegishli ekanini ko'rsatuvchi belgi.",
+        "topic": "8-mavzu. Virtual lokal tarmoqlar"
+      },
+      {
+        "id": 78,
+        "q": "Quyidagilardan qaysi javob Inter-VLAN routing tushunchasiga mos keladi?",
+        "options": [
+          "Turli vlanlar o'rtasida marshrutlash orqali aloqa qilish.",
+          "Vlan teglarini ethernet kadriga qo'shish standarti.",
+          "Trunk portda tegsiz kadrlar qabul qilinadigan vlan.",
+          "Virtual tarmoqni raqamli identifikatsiya qiluvchi qiymat."
+        ],
+        "a": "Turli vlanlar o'rtasida marshrutlash orqali aloqa qilish.",
+        "topic": "8-mavzu. Virtual lokal tarmoqlar"
+      },
+      {
+        "id": 79,
+        "q": "Quyidagilardan qaysi javob Native VLAN tushunchasiga mos keladi?",
+        "options": [
+          "Fizik tarmoq ichida yaratilgan mantiqiy lokal tarmoq segmenti.",
+          "Trunk portda tegsiz kadrlar qabul qilinadigan vlan.",
+          "Kadr qaysi vlanga tegishli ekanini ko'rsatuvchi belgi.",
+          "Tarmoqni boshqaruv yoki xavfsizlik maqsadida bo'laklarga ajratish."
+        ],
+        "a": "Trunk portda tegsiz kadrlar qabul qilinadigan vlan.",
+        "topic": "8-mavzu. Virtual lokal tarmoqlar"
+      },
+      {
+        "id": 80,
+        "q": "Quyidagilardan qaysi javob VLAN ID tushunchasiga mos keladi?",
+        "options": [
+          "Turli vlanlar o'rtasida marshrutlash orqali aloqa qilish.",
+          "Fizik tarmoq ichida yaratilgan mantiqiy lokal tarmoq segmenti.",
+          "Virtual tarmoqni raqamli identifikatsiya qiluvchi qiymat.",
+          "Tarmoqni boshqaruv yoki xavfsizlik maqsadida bo'laklarga ajratish."
+        ],
+        "a": "Virtual tarmoqni raqamli identifikatsiya qiluvchi qiymat.",
+        "topic": "8-mavzu. Virtual lokal tarmoqlar"
+      },
+      {
+        "id": 81,
+        "q": "Quyidagilardan qaysi javob Standart tushunchasiga mos keladi?",
+        "options": [
+          "Ethernet texnologiyalari standartlari oilasi.",
+          "Turli ishlab chiqaruvchi qurilmalarining birga ishlay olish xususiyati.",
+          "Texnologiyalar mos ishlashi uchun belgilangan umumiy talab va qoidalar.",
+          "Ethernet va wi-fi kabi tarmoq standartlarini ishlab chiqadigan tashkilot."
+        ],
+        "a": "Texnologiyalar mos ishlashi uchun belgilangan umumiy talab va qoidalar.",
+        "topic": "9-mavzu. Zamonaviy kompyuterlar va tarmoq standartlari"
+      },
+      {
+        "id": 82,
+        "q": "Quyidagilardan qaysi javob IEEE tushunchasiga mos keladi?",
+        "options": [
+          "Turli ishlab chiqaruvchi qurilmalarining birga ishlay olish xususiyati.",
+          "Ethernet texnologiyalari standartlari oilasi.",
+          "Internet texnologiyalari bo'yicha texnik hujjatlar seriyasi.",
+          "Ethernet va wi-fi kabi tarmoq standartlarini ishlab chiqadigan tashkilot."
+        ],
+        "a": "Ethernet va wi-fi kabi tarmoq standartlarini ishlab chiqadigan tashkilot.",
+        "topic": "9-mavzu. Zamonaviy kompyuterlar va tarmoq standartlari"
+      },
+      {
+        "id": 83,
+        "q": "Quyidagilardan qaysi javob IETF tushunchasiga mos keladi?",
+        "options": [
+          "Internet protokollari va rfc hujjatlari bilan shug'ullanuvchi ochiq hamjamiyat.",
+          "Texnologiyalar mos ishlashi uchun belgilangan umumiy talab va qoidalar.",
+          "Ethernet va wi-fi kabi tarmoq standartlarini ishlab chiqadigan tashkilot.",
+          "Xalqaro standartlashtirish bilan shug'ullanuvchi tashkilot."
+        ],
+        "a": "Internet protokollari va rfc hujjatlari bilan shug'ullanuvchi ochiq hamjamiyat.",
+        "topic": "9-mavzu. Zamonaviy kompyuterlar va tarmoq standartlari"
+      },
+      {
+        "id": 84,
+        "q": "Quyidagilardan qaysi javob ISO tushunchasiga mos keladi?",
+        "options": [
+          "Turli ishlab chiqaruvchi qurilmalarining birga ishlay olish xususiyati.",
+          "Xalqaro standartlashtirish bilan shug'ullanuvchi tashkilot.",
+          "Ethernet texnologiyalari standartlari oilasi.",
+          "Internet aloqasini ta'minlovchi protokollar to'plami."
+        ],
+        "a": "Xalqaro standartlashtirish bilan shug'ullanuvchi tashkilot.",
+        "topic": "9-mavzu. Zamonaviy kompyuterlar va tarmoq standartlari"
+      },
+      {
+        "id": 85,
+        "q": "Quyidagilardan qaysi javob RFC tushunchasiga mos keladi?",
+        "options": [
+          "Qurilma yoki texnologiyaning standart talablariga mosligini tasdiqlash.",
+          "Internet aloqasini ta'minlovchi protokollar to'plami.",
+          "Internet texnologiyalari bo'yicha texnik hujjatlar seriyasi.",
+          "Ethernet texnologiyalari standartlari oilasi."
+        ],
+        "a": "Internet texnologiyalari bo'yicha texnik hujjatlar seriyasi.",
+        "topic": "9-mavzu. Zamonaviy kompyuterlar va tarmoq standartlari"
+      },
+      {
+        "id": 86,
+        "q": "Quyidagilardan qaysi javob Interoperabellik tushunchasiga mos keladi?",
+        "options": [
+          "Texnologiyalar mos ishlashi uchun belgilangan umumiy talab va qoidalar.",
+          "Internet texnologiyalari bo'yicha texnik hujjatlar seriyasi.",
+          "Wi-fi texnologiyalari standartlari oilasi.",
+          "Turli ishlab chiqaruvchi qurilmalarining birga ishlay olish xususiyati."
+        ],
+        "a": "Turli ishlab chiqaruvchi qurilmalarining birga ishlay olish xususiyati.",
+        "topic": "9-mavzu. Zamonaviy kompyuterlar va tarmoq standartlari"
+      },
+      {
+        "id": 87,
+        "q": "Quyidagilardan qaysi javob Sertifikatsiya tushunchasiga mos keladi?",
+        "options": [
+          "Qurilma yoki texnologiyaning standart talablariga mosligini tasdiqlash.",
+          "Ethernet texnologiyalari standartlari oilasi.",
+          "Texnologiyalar mos ishlashi uchun belgilangan umumiy talab va qoidalar.",
+          "Ethernet va wi-fi kabi tarmoq standartlarini ishlab chiqadigan tashkilot."
+        ],
+        "a": "Qurilma yoki texnologiyaning standart talablariga mosligini tasdiqlash.",
+        "topic": "9-mavzu. Zamonaviy kompyuterlar va tarmoq standartlari"
+      },
+      {
+        "id": 88,
+        "q": "Quyidagilardan qaysi javob IEEE 802.3 tushunchasiga mos keladi?",
+        "options": [
+          "Texnologiyalar mos ishlashi uchun belgilangan umumiy talab va qoidalar.",
+          "Ethernet texnologiyalari standartlari oilasi.",
+          "Qurilma yoki texnologiyaning standart talablariga mosligini tasdiqlash.",
+          "Ethernet va wi-fi kabi tarmoq standartlarini ishlab chiqadigan tashkilot."
+        ],
+        "a": "Ethernet texnologiyalari standartlari oilasi.",
+        "topic": "9-mavzu. Zamonaviy kompyuterlar va tarmoq standartlari"
+      },
+      {
+        "id": 89,
+        "q": "Quyidagilardan qaysi javob IEEE 802.11 tushunchasiga mos keladi?",
+        "options": [
+          "Xalqaro standartlashtirish bilan shug'ullanuvchi tashkilot.",
+          "Qurilma yoki texnologiyaning standart talablariga mosligini tasdiqlash.",
+          "Wi-fi texnologiyalari standartlari oilasi.",
+          "Turli ishlab chiqaruvchi qurilmalarining birga ishlay olish xususiyati."
+        ],
+        "a": "Wi-fi texnologiyalari standartlari oilasi.",
+        "topic": "9-mavzu. Zamonaviy kompyuterlar va tarmoq standartlari"
+      },
+      {
+        "id": 90,
+        "q": "Quyidagilardan qaysi javob TCP/IP steki tushunchasiga mos keladi?",
+        "options": [
+          "Ethernet texnologiyalari standartlari oilasi.",
+          "Ethernet va wi-fi kabi tarmoq standartlarini ishlab chiqadigan tashkilot.",
+          "Internet texnologiyalari bo'yicha texnik hujjatlar seriyasi.",
+          "Internet aloqasini ta'minlovchi protokollar to'plami."
+        ],
+        "a": "Internet aloqasini ta'minlovchi protokollar to'plami.",
+        "topic": "9-mavzu. Zamonaviy kompyuterlar va tarmoq standartlari"
+      },
+      {
+        "id": 91,
+        "q": "Quyidagilardan qaysi javob Cisco Packet Tracer tushunchasiga mos keladi?",
+        "options": [
+          "Real jarayonni kompyuter muhitida modellashtiruvchi dastur.",
+          "Buyruq satri orqali qurilmani sozlash interfeysi.",
+          "Simulyatsiyada protokol ma'lumot birligini kuzatish elementi.",
+          "Tarmoq texnologiyalarini virtual o'rganish uchun simulyator."
+        ],
+        "a": "Tarmoq texnologiyalarini virtual o'rganish uchun simulyator.",
+        "topic": "10-mavzu. Cisco simulyatoridan foydalangan holda tarmoq texnologiyalarini o'rganishning nazariy va amaliy jihatlari"
+      },
+      {
+        "id": 92,
+        "q": "Quyidagilardan qaysi javob Simulyator tushunchasiga mos keladi?",
+        "options": [
+          "Real jarayonni kompyuter muhitida modellashtiruvchi dastur.",
+          "Tarmoq muammolarini aniqlash va bartaraf etish jarayoni.",
+          "Simulyatsiyada protokol ma'lumot birligini kuzatish elementi.",
+          "Virtual yoki real tarmoqlar o'rtasida paketlarni yo'naltiruvchi qurilma."
+        ],
+        "a": "Real jarayonni kompyuter muhitida modellashtiruvchi dastur.",
+        "topic": "10-mavzu. Cisco simulyatoridan foydalangan holda tarmoq texnologiyalarini o'rganishning nazariy va amaliy jihatlari"
+      },
+      {
+        "id": 93,
+        "q": "Quyidagilardan qaysi javob Router tushunchasiga mos keladi?",
+        "options": [
+          "Qurilmaning ishlash parametrlarini belgilash jarayoni.",
+          "Virtual yoki real tarmoqlar o'rtasida paketlarni yo'naltiruvchi qurilma.",
+          "Tarmoq ulanishini icmp orqali tekshiruvchi diagnostika buyrug'i.",
+          "Real jarayonni kompyuter muhitida modellashtiruvchi dastur."
+        ],
+        "a": "Virtual yoki real tarmoqlar o'rtasida paketlarni yo'naltiruvchi qurilma.",
+        "topic": "10-mavzu. Cisco simulyatoridan foydalangan holda tarmoq texnologiyalarini o'rganishning nazariy va amaliy jihatlari"
+      },
+      {
+        "id": 94,
+        "q": "Quyidagilardan qaysi javob Switch tushunchasiga mos keladi?",
+        "options": [
+          "Simulyatsiyada protokol ma'lumot birligini kuzatish elementi.",
+          "Real jarayonni kompyuter muhitida modellashtiruvchi dastur.",
+          "Lokal tarmoqda kadrlarni portlar o'rtasida uzatuvchi qurilma.",
+          "Tarmoq ulanishini icmp orqali tekshiruvchi diagnostika buyrug'i."
+        ],
+        "a": "Lokal tarmoqda kadrlarni portlar o'rtasida uzatuvchi qurilma.",
+        "topic": "10-mavzu. Cisco simulyatoridan foydalangan holda tarmoq texnologiyalarini o'rganishning nazariy va amaliy jihatlari"
+      },
+      {
+        "id": 95,
+        "q": "Quyidagilardan qaysi javob CLI tushunchasiga mos keladi?",
+        "options": [
+          "Qurilmaning ishlash parametrlarini belgilash jarayoni.",
+          "Simulyatsiyada protokol ma'lumot birligini kuzatish elementi.",
+          "Simulyatorda qurilmalar va ulanishlar joylashtiriladigan maydon.",
+          "Buyruq satri orqali qurilmani sozlash interfeysi."
+        ],
+        "a": "Buyruq satri orqali qurilmani sozlash interfeysi.",
+        "topic": "10-mavzu. Cisco simulyatoridan foydalangan holda tarmoq texnologiyalarini o'rganishning nazariy va amaliy jihatlari"
+      },
+      {
+        "id": 96,
+        "q": "Quyidagilardan qaysi javob Topologiya oynasi tushunchasiga mos keladi?",
+        "options": [
+          "Simulyatorda qurilmalar va ulanishlar joylashtiriladigan maydon.",
+          "Tarmoq ulanishini icmp orqali tekshiruvchi diagnostika buyrug'i.",
+          "Tarmoq texnologiyalarini virtual o'rganish uchun simulyator.",
+          "Real jarayonni kompyuter muhitida modellashtiruvchi dastur."
+        ],
+        "a": "Simulyatorda qurilmalar va ulanishlar joylashtiriladigan maydon.",
+        "topic": "10-mavzu. Cisco simulyatoridan foydalangan holda tarmoq texnologiyalarini o'rganishning nazariy va amaliy jihatlari"
+      },
+      {
+        "id": 97,
+        "q": "Quyidagilardan qaysi javob Ping tushunchasiga mos keladi?",
+        "options": [
+          "Tarmoq texnologiyalarini virtual o'rganish uchun simulyator.",
+          "Tarmoq ulanishini icmp orqali tekshiruvchi diagnostika buyrug'i.",
+          "Virtual yoki real tarmoqlar o'rtasida paketlarni yo'naltiruvchi qurilma.",
+          "Qurilmaning ishlash parametrlarini belgilash jarayoni."
+        ],
+        "a": "Tarmoq ulanishini icmp orqali tekshiruvchi diagnostika buyrug'i.",
+        "topic": "10-mavzu. Cisco simulyatoridan foydalangan holda tarmoq texnologiyalarini o'rganishning nazariy va amaliy jihatlari"
+      },
+      {
+        "id": 98,
+        "q": "Quyidagilardan qaysi javob PDU tushunchasiga mos keladi?",
+        "options": [
+          "Tarmoq muammolarini aniqlash va bartaraf etish jarayoni.",
+          "Qurilmaning ishlash parametrlarini belgilash jarayoni.",
+          "Simulyatsiyada protokol ma'lumot birligini kuzatish elementi.",
+          "Virtual yoki real tarmoqlar o'rtasida paketlarni yo'naltiruvchi qurilma."
+        ],
+        "a": "Simulyatsiyada protokol ma'lumot birligini kuzatish elementi.",
+        "topic": "10-mavzu. Cisco simulyatoridan foydalangan holda tarmoq texnologiyalarini o'rganishning nazariy va amaliy jihatlari"
+      },
+      {
+        "id": 99,
+        "q": "Quyidagilardan qaysi javob Konfiguratsiya tushunchasiga mos keladi?",
+        "options": [
+          "Virtual yoki real tarmoqlar o'rtasida paketlarni yo'naltiruvchi qurilma.",
+          "Tarmoq texnologiyalarini virtual o'rganish uchun simulyator.",
+          "Lokal tarmoqda kadrlarni portlar o'rtasida uzatuvchi qurilma.",
+          "Qurilmaning ishlash parametrlarini belgilash jarayoni."
+        ],
+        "a": "Qurilmaning ishlash parametrlarini belgilash jarayoni.",
+        "topic": "10-mavzu. Cisco simulyatoridan foydalangan holda tarmoq texnologiyalarini o'rganishning nazariy va amaliy jihatlari"
+      },
+      {
+        "id": 100,
+        "q": "Quyidagilardan qaysi javob Troubleshooting tushunchasiga mos keladi?",
+        "options": [
+          "Tarmoq muammolarini aniqlash va bartaraf etish jarayoni.",
+          "Lokal tarmoqda kadrlarni portlar o'rtasida uzatuvchi qurilma.",
+          "Real jarayonni kompyuter muhitida modellashtiruvchi dastur.",
+          "Qurilmaning ishlash parametrlarini belgilash jarayoni."
+        ],
+        "a": "Tarmoq muammolarini aniqlash va bartaraf etish jarayoni.",
+        "topic": "10-mavzu. Cisco simulyatoridan foydalangan holda tarmoq texnologiyalarini o'rganishning nazariy va amaliy jihatlari"
+      },
+      {
+        "id": 101,
+        "q": "Quyidagilardan qaysi javob OSI modeli tushunchasiga mos keladi?",
+        "options": [
+          "Tarmoq aloqasini yetti qatlamda tushuntiruvchi konseptual model.",
+          "Muloqot seansini tashkil etish va boshqarish qatlamidir.",
+          "Ma'lumot formatini moslashtirish, kodlash yoki shifrlash qatlamidir.",
+          "Bir segmentda kadrlarni uzatishga mas'ul qatlam."
+        ],
+        "a": "Tarmoq aloqasini yetti qatlamda tushuntiruvchi konseptual model.",
+        "topic": "11-mavzu. Ochiq tizimlarning o'zaro ishlash modeli: tarixi, model pog'onalari va vazifalari"
+      },
+      {
+        "id": 102,
+        "q": "Quyidagilardan qaysi javob Qatlam tushunchasiga mos keladi?",
+        "options": [
+          "Muloqot seansini tashkil etish va boshqarish qatlamidir.",
+          "Aniq vazifaga ega bo'lgan tarmoq funksional bosqichi.",
+          "Bir segmentda kadrlarni uzatishga mas'ul qatlam.",
+          "Bir qatlamdagi qurilmalar o'rtasida aloqa qoidalari."
+        ],
+        "a": "Aniq vazifaga ega bo'lgan tarmoq funksional bosqichi.",
+        "topic": "11-mavzu. Ochiq tizimlarning o'zaro ishlash modeli: tarixi, model pog'onalari va vazifalari"
+      },
+      {
+        "id": 103,
+        "q": "Quyidagilardan qaysi javob Fizik qatlam tushunchasiga mos keladi?",
+        "options": [
+          "Ma'lumot formatini moslashtirish, kodlash yoki shifrlash qatlamidir.",
+          "Foydalanuvchi tarmoq xizmatlariga eng yaqin qatlam.",
+          "Bitlarni signal ko'rinishida uzatishga mas'ul qatlam.",
+          "Muloqot seansini tashkil etish va boshqarish qatlamidir."
+        ],
+        "a": "Bitlarni signal ko'rinishida uzatishga mas'ul qatlam.",
+        "topic": "11-mavzu. Ochiq tizimlarning o'zaro ishlash modeli: tarixi, model pog'onalari va vazifalari"
+      },
+      {
+        "id": 104,
+        "q": "Quyidagilardan qaysi javob Kanal qatlami tushunchasiga mos keladi?",
+        "options": [
+          "Oxirgi tugunlar o'rtasida ma'lumot yetkazishni boshqaruvchi qatlam.",
+          "Bir qatlamdagi qurilmalar o'rtasida aloqa qoidalari.",
+          "Bitlarni signal ko'rinishida uzatishga mas'ul qatlam.",
+          "Bir segmentda kadrlarni uzatishga mas'ul qatlam."
+        ],
+        "a": "Bir segmentda kadrlarni uzatishga mas'ul qatlam.",
+        "topic": "11-mavzu. Ochiq tizimlarning o'zaro ishlash modeli: tarixi, model pog'onalari va vazifalari"
+      },
+      {
+        "id": 105,
+        "q": "Quyidagilardan qaysi javob Tarmoq qatlami tushunchasiga mos keladi?",
+        "options": [
+          "Paketlarni tarmoqlar o'rtasida yo'naltiruvchi qatlam.",
+          "Tarmoq aloqasini yetti qatlamda tushuntiruvchi konseptual model.",
+          "Aniq vazifaga ega bo'lgan tarmoq funksional bosqichi.",
+          "Bitlarni signal ko'rinishida uzatishga mas'ul qatlam."
+        ],
+        "a": "Paketlarni tarmoqlar o'rtasida yo'naltiruvchi qatlam.",
+        "topic": "11-mavzu. Ochiq tizimlarning o'zaro ishlash modeli: tarixi, model pog'onalari va vazifalari"
+      },
+      {
+        "id": 106,
+        "q": "Quyidagilardan qaysi javob Transport qatlami tushunchasiga mos keladi?",
+        "options": [
+          "Foydalanuvchi tarmoq xizmatlariga eng yaqin qatlam.",
+          "Oxirgi tugunlar o'rtasida ma'lumot yetkazishni boshqaruvchi qatlam.",
+          "Ma'lumot formatini moslashtirish, kodlash yoki shifrlash qatlamidir.",
+          "Bitlarni signal ko'rinishida uzatishga mas'ul qatlam."
+        ],
+        "a": "Oxirgi tugunlar o'rtasida ma'lumot yetkazishni boshqaruvchi qatlam.",
+        "topic": "11-mavzu. Ochiq tizimlarning o'zaro ishlash modeli: tarixi, model pog'onalari va vazifalari"
+      },
+      {
+        "id": 107,
+        "q": "Quyidagilardan qaysi javob Seans qatlami tushunchasiga mos keladi?",
+        "options": [
+          "Bitlarni signal ko'rinishida uzatishga mas'ul qatlam.",
+          "Ma'lumot formatini moslashtirish, kodlash yoki shifrlash qatlamidir.",
+          "Muloqot seansini tashkil etish va boshqarish qatlamidir.",
+          "Bir qatlamdagi qurilmalar o'rtasida aloqa qoidalari."
+        ],
+        "a": "Muloqot seansini tashkil etish va boshqarish qatlamidir.",
+        "topic": "11-mavzu. Ochiq tizimlarning o'zaro ishlash modeli: tarixi, model pog'onalari va vazifalari"
+      },
+      {
+        "id": 108,
+        "q": "Quyidagilardan qaysi javob Taqdimot qatlami tushunchasiga mos keladi?",
+        "options": [
+          "Bir segmentda kadrlarni uzatishga mas'ul qatlam.",
+          "Paketlarni tarmoqlar o'rtasida yo'naltiruvchi qatlam.",
+          "Muloqot seansini tashkil etish va boshqarish qatlamidir.",
+          "Ma'lumot formatini moslashtirish, kodlash yoki shifrlash qatlamidir."
+        ],
+        "a": "Ma'lumot formatini moslashtirish, kodlash yoki shifrlash qatlamidir.",
+        "topic": "11-mavzu. Ochiq tizimlarning o'zaro ishlash modeli: tarixi, model pog'onalari va vazifalari"
+      },
+      {
+        "id": 109,
+        "q": "Quyidagilardan qaysi javob Ilova qatlami tushunchasiga mos keladi?",
+        "options": [
+          "Foydalanuvchi tarmoq xizmatlariga eng yaqin qatlam.",
+          "Muloqot seansini tashkil etish va boshqarish qatlamidir.",
+          "Aniq vazifaga ega bo'lgan tarmoq funksional bosqichi.",
+          "Bir segmentda kadrlarni uzatishga mas'ul qatlam."
+        ],
+        "a": "Foydalanuvchi tarmoq xizmatlariga eng yaqin qatlam.",
+        "topic": "11-mavzu. Ochiq tizimlarning o'zaro ishlash modeli: tarixi, model pog'onalari va vazifalari"
+      },
+      {
+        "id": 110,
+        "q": "Quyidagilardan qaysi javob Protokol tushunchasiga mos keladi?",
+        "options": [
+          "Ma'lumot formatini moslashtirish, kodlash yoki shifrlash qatlamidir.",
+          "Bir qatlamdagi qurilmalar o'rtasida aloqa qoidalari.",
+          "Bir segmentda kadrlarni uzatishga mas'ul qatlam.",
+          "Oxirgi tugunlar o'rtasida ma'lumot yetkazishni boshqaruvchi qatlam."
+        ],
+        "a": "Bir qatlamdagi qurilmalar o'rtasida aloqa qoidalari.",
+        "topic": "11-mavzu. Ochiq tizimlarning o'zaro ishlash modeli: tarixi, model pog'onalari va vazifalari"
+      },
+      {
+        "id": 111,
+        "q": "Quyidagilardan qaysi javob Fizik qatlam tushunchasiga mos keladi?",
+        "options": [
+          "Tarmoq adapterining kanal qatlamidagi apparat manzili.",
+          "Bitlarni elektr, optik yoki radio signalga aylantiruvchi qatlam.",
+          "Kanal qatlamida uzatiladigan ma'lumot birligi.",
+          "Ikki qurilma o'rtasidagi faol ulanish holati."
+        ],
+        "a": "Bitlarni elektr, optik yoki radio signalga aylantiruvchi qatlam.",
+        "topic": "12-mavzu. Ochiq tizimlarning o'zaro ishlash modeli: fizik va kanal qatlamlari"
+      },
+      {
+        "id": 112,
+        "q": "Quyidagilardan qaysi javob Signal tushunchasiga mos keladi?",
+        "options": [
+          "Kadrdagi xatoni aniqlash uchun ishlatiladigan nazorat kodi.",
+          "Ikki qurilma o'rtasidagi faol ulanish holati.",
+          "Ma'lumotni fizik muhitda ifodalovchi elektr, optik yoki radio shakl.",
+          "Tarmoq adapterining kanal qatlamidagi apparat manzili."
+        ],
+        "a": "Ma'lumotni fizik muhitda ifodalovchi elektr, optik yoki radio shakl.",
+        "topic": "12-mavzu. Ochiq tizimlarning o'zaro ishlash modeli: fizik va kanal qatlamlari"
+      },
+      {
+        "id": 113,
+        "q": "Quyidagilardan qaysi javob Bit tushunchasiga mos keladi?",
+        "options": [
+          "Tarmoq adapterining kanal qatlamidagi apparat manzili.",
+          "Umumiy uzatish muhitidan foydalanish tartibini belgilovchi mexanizm.",
+          "Ma'lumotni fizik muhitda ifodalovchi elektr, optik yoki radio shakl.",
+          "Raqamli ma'lumotning eng kichik birligi."
+        ],
+        "a": "Raqamli ma'lumotning eng kichik birligi.",
+        "topic": "12-mavzu. Ochiq tizimlarning o'zaro ishlash modeli: fizik va kanal qatlamlari"
+      },
+      {
+        "id": 114,
+        "q": "Quyidagilardan qaysi javob Kadr tushunchasiga mos keladi?",
+        "options": [
+          "Kanal qatlamida uzatiladigan ma'lumot birligi.",
+          "Aloqaning bir vaqtda ikki yo'nalishda ishlash darajasi.",
+          "Ethernet kanal qatlamida uzatiladigan kadr formati.",
+          "Kadrdagi xatoni aniqlash uchun ishlatiladigan nazorat kodi."
+        ],
+        "a": "Kanal qatlamida uzatiladigan ma'lumot birligi.",
+        "topic": "12-mavzu. Ochiq tizimlarning o'zaro ishlash modeli: fizik va kanal qatlamlari"
+      },
+      {
+        "id": 115,
+        "q": "Quyidagilardan qaysi javob MAC manzil tushunchasiga mos keladi?",
+        "options": [
+          "Aloqaning bir vaqtda ikki yo'nalishda ishlash darajasi.",
+          "Tarmoq adapterining kanal qatlamidagi apparat manzili.",
+          "Ethernet kanal qatlamida uzatiladigan kadr formati.",
+          "Umumiy uzatish muhitidan foydalanish tartibini belgilovchi mexanizm."
+        ],
+        "a": "Tarmoq adapterining kanal qatlamidagi apparat manzili.",
+        "topic": "12-mavzu. Ochiq tizimlarning o'zaro ishlash modeli: fizik va kanal qatlamlari"
+      },
+      {
+        "id": 116,
+        "q": "Quyidagilardan qaysi javob CRC tushunchasiga mos keladi?",
+        "options": [
+          "Umumiy uzatish muhitidan foydalanish tartibini belgilovchi mexanizm.",
+          "Ikki qurilma o'rtasidagi faol ulanish holati.",
+          "Kadrdagi xatoni aniqlash uchun ishlatiladigan nazorat kodi.",
+          "Raqamli ma'lumotning eng kichik birligi."
+        ],
+        "a": "Kadrdagi xatoni aniqlash uchun ishlatiladigan nazorat kodi.",
+        "topic": "12-mavzu. Ochiq tizimlarning o'zaro ishlash modeli: fizik va kanal qatlamlari"
+      },
+      {
+        "id": 117,
+        "q": "Quyidagilardan qaysi javob Media access control tushunchasiga mos keladi?",
+        "options": [
+          "Bitlarni elektr, optik yoki radio signalga aylantiruvchi qatlam.",
+          "Ethernet kanal qatlamida uzatiladigan kadr formati.",
+          "Aloqaning bir vaqtda ikki yo'nalishda ishlash darajasi.",
+          "Umumiy uzatish muhitidan foydalanish tartibini belgilovchi mexanizm."
+        ],
+        "a": "Umumiy uzatish muhitidan foydalanish tartibini belgilovchi mexanizm.",
+        "topic": "12-mavzu. Ochiq tizimlarning o'zaro ishlash modeli: fizik va kanal qatlamlari"
+      },
+      {
+        "id": 118,
+        "q": "Quyidagilardan qaysi javob Dupleks rejim tushunchasiga mos keladi?",
+        "options": [
+          "Aloqaning bir vaqtda ikki yo'nalishda ishlash darajasi.",
+          "Bitlarni elektr, optik yoki radio signalga aylantiruvchi qatlam.",
+          "Ma'lumotni fizik muhitda ifodalovchi elektr, optik yoki radio shakl.",
+          "Kadrdagi xatoni aniqlash uchun ishlatiladigan nazorat kodi."
+        ],
+        "a": "Aloqaning bir vaqtda ikki yo'nalishda ishlash darajasi.",
+        "topic": "12-mavzu. Ochiq tizimlarning o'zaro ishlash modeli: fizik va kanal qatlamlari"
+      },
+      {
+        "id": 119,
+        "q": "Quyidagilardan qaysi javob Link tushunchasiga mos keladi?",
+        "options": [
+          "Ethernet kanal qatlamida uzatiladigan kadr formati.",
+          "Ikki qurilma o'rtasidagi faol ulanish holati.",
+          "Bitlarni elektr, optik yoki radio signalga aylantiruvchi qatlam.",
+          "Raqamli ma'lumotning eng kichik birligi."
+        ],
+        "a": "Ikki qurilma o'rtasidagi faol ulanish holati.",
+        "topic": "12-mavzu. Ochiq tizimlarning o'zaro ishlash modeli: fizik va kanal qatlamlari"
+      },
+      {
+        "id": 120,
+        "q": "Quyidagilardan qaysi javob Ethernet frame tushunchasiga mos keladi?",
+        "options": [
+          "Ma'lumotni fizik muhitda ifodalovchi elektr, optik yoki radio shakl.",
+          "Aloqaning bir vaqtda ikki yo'nalishda ishlash darajasi.",
+          "Ethernet kanal qatlamida uzatiladigan kadr formati.",
+          "Tarmoq adapterining kanal qatlamidagi apparat manzili."
+        ],
+        "a": "Ethernet kanal qatlamida uzatiladigan kadr formati.",
+        "topic": "12-mavzu. Ochiq tizimlarning o'zaro ishlash modeli: fizik va kanal qatlamlari"
+      },
+      {
+        "id": 121,
+        "q": "Quyidagilardan qaysi javob Tarmoq qatlami tushunchasiga mos keladi?",
+        "options": [
+          "Diagnostika va xatolik xabarlarini uzatishda ishlatiladigan protokol.",
+          "Katta tarmoq ichida ajratilgan kichik mantiqiy tarmoq.",
+          "Paketlarni turli tarmoqlar o'rtasida yetkazish uchun mas'ul qatlam.",
+          "Paket manzilga yetguncha bosib o'tadigan yo'l."
+        ],
+        "a": "Paketlarni turli tarmoqlar o'rtasida yetkazish uchun mas'ul qatlam.",
+        "topic": "13-mavzu. Ochiq tizimlarning o'zaro ishlash modeli: tarmoq qatlami"
+      },
+      {
+        "id": 122,
+        "q": "Quyidagilardan qaysi javob IP manzil tushunchasiga mos keladi?",
+        "options": [
+          "Katta tarmoq ichida ajratilgan kichik mantiqiy tarmoq.",
+          "Tarmoq qatlamida uzatiladigan ma'lumot birligi.",
+          "Mahalliy tarmoqdan tashqariga chiqish uchun asosiy yo'naltiruvchi manzil.",
+          "Qurilmaning tarmoq qatlamidagi mantiqiy manzili."
+        ],
+        "a": "Qurilmaning tarmoq qatlamidagi mantiqiy manzili.",
+        "topic": "13-mavzu. Ochiq tizimlarning o'zaro ishlash modeli: tarmoq qatlami"
+      },
+      {
+        "id": 123,
+        "q": "Quyidagilardan qaysi javob Paket tushunchasiga mos keladi?",
+        "options": [
+          "Tarmoq qatlamida uzatiladigan ma'lumot birligi.",
+          "Paketning tarmoqda maksimal yashash muddatini cheklovchi qiymat.",
+          "Mahalliy tarmoqdan tashqariga chiqish uchun asosiy yo'naltiruvchi manzil.",
+          "Diagnostika va xatolik xabarlarini uzatishda ishlatiladigan protokol."
+        ],
+        "a": "Tarmoq qatlamida uzatiladigan ma'lumot birligi.",
+        "topic": "13-mavzu. Ochiq tizimlarning o'zaro ishlash modeli: tarmoq qatlami"
+      },
+      {
+        "id": 124,
+        "q": "Quyidagilardan qaysi javob Router tushunchasiga mos keladi?",
+        "options": [
+          "Diagnostika va xatolik xabarlarini uzatishda ishlatiladigan protokol.",
+          "Paketlar uchun keyingi yo'lni tanlovchi qurilma.",
+          "Mahalliy tarmoqdan tashqariga chiqish uchun asosiy yo'naltiruvchi manzil.",
+          "Paket manzilga yetguncha bosib o'tadigan yo'l."
+        ],
+        "a": "Paketlar uchun keyingi yo'lni tanlovchi qurilma.",
+        "topic": "13-mavzu. Ochiq tizimlarning o'zaro ishlash modeli: tarmoq qatlami"
+      },
+      {
+        "id": 125,
+        "q": "Quyidagilardan qaysi javob Routing jadvali tushunchasiga mos keladi?",
+        "options": [
+          "Tarmoq qatlamida uzatiladigan ma'lumot birligi.",
+          "Katta tarmoq ichida ajratilgan kichik mantiqiy tarmoq.",
+          "Qaysi tarmoqqa qaysi yo'l bilan borishni ko'rsatuvchi jadval.",
+          "Paketlar uchun keyingi yo'lni tanlovchi qurilma."
+        ],
+        "a": "Qaysi tarmoqqa qaysi yo'l bilan borishni ko'rsatuvchi jadval.",
+        "topic": "13-mavzu. Ochiq tizimlarning o'zaro ishlash modeli: tarmoq qatlami"
+      },
+      {
+        "id": 126,
+        "q": "Quyidagilardan qaysi javob Default gateway tushunchasiga mos keladi?",
+        "options": [
+          "Katta tarmoq ichida ajratilgan kichik mantiqiy tarmoq.",
+          "Qurilmaning tarmoq qatlamidagi mantiqiy manzili.",
+          "Paket manzilga yetguncha bosib o'tadigan yo'l.",
+          "Mahalliy tarmoqdan tashqariga chiqish uchun asosiy yo'naltiruvchi manzil."
+        ],
+        "a": "Mahalliy tarmoqdan tashqariga chiqish uchun asosiy yo'naltiruvchi manzil.",
+        "topic": "13-mavzu. Ochiq tizimlarning o'zaro ishlash modeli: tarmoq qatlami"
+      },
+      {
+        "id": 127,
+        "q": "Quyidagilardan qaysi javob TTL tushunchasiga mos keladi?",
+        "options": [
+          "Paketning tarmoqda maksimal yashash muddatini cheklovchi qiymat.",
+          "Tarmoq qatlamida uzatiladigan ma'lumot birligi.",
+          "Diagnostika va xatolik xabarlarini uzatishda ishlatiladigan protokol.",
+          "Paket manzilga yetguncha bosib o'tadigan yo'l."
+        ],
+        "a": "Paketning tarmoqda maksimal yashash muddatini cheklovchi qiymat.",
+        "topic": "13-mavzu. Ochiq tizimlarning o'zaro ishlash modeli: tarmoq qatlami"
+      },
+      {
+        "id": 128,
+        "q": "Quyidagilardan qaysi javob ICMP tushunchasiga mos keladi?",
+        "options": [
+          "Katta tarmoq ichida ajratilgan kichik mantiqiy tarmoq.",
+          "Diagnostika va xatolik xabarlarini uzatishda ishlatiladigan protokol.",
+          "Tarmoq qatlamida uzatiladigan ma'lumot birligi.",
+          "Mahalliy tarmoqdan tashqariga chiqish uchun asosiy yo'naltiruvchi manzil."
+        ],
+        "a": "Diagnostika va xatolik xabarlarini uzatishda ishlatiladigan protokol.",
+        "topic": "13-mavzu. Ochiq tizimlarning o'zaro ishlash modeli: tarmoq qatlami"
+      },
+      {
+        "id": 129,
+        "q": "Quyidagilardan qaysi javob Subnet tushunchasiga mos keladi?",
+        "options": [
+          "Diagnostika va xatolik xabarlarini uzatishda ishlatiladigan protokol.",
+          "Paket manzilga yetguncha bosib o'tadigan yo'l.",
+          "Katta tarmoq ichida ajratilgan kichik mantiqiy tarmoq.",
+          "Mahalliy tarmoqdan tashqariga chiqish uchun asosiy yo'naltiruvchi manzil."
+        ],
+        "a": "Katta tarmoq ichida ajratilgan kichik mantiqiy tarmoq.",
+        "topic": "13-mavzu. Ochiq tizimlarning o'zaro ishlash modeli: tarmoq qatlami"
+      },
+      {
+        "id": 130,
+        "q": "Quyidagilardan qaysi javob Marshrut tushunchasiga mos keladi?",
+        "options": [
+          "Paketlar uchun keyingi yo'lni tanlovchi qurilma.",
+          "Qaysi tarmoqqa qaysi yo'l bilan borishni ko'rsatuvchi jadval.",
+          "Paketlarni turli tarmoqlar o'rtasida yetkazish uchun mas'ul qatlam.",
+          "Paket manzilga yetguncha bosib o'tadigan yo'l."
+        ],
+        "a": "Paket manzilga yetguncha bosib o'tadigan yo'l.",
+        "topic": "13-mavzu. Ochiq tizimlarning o'zaro ishlash modeli: tarmoq qatlami"
+      },
+      {
+        "id": 131,
+        "q": "Quyidagilardan qaysi javob Transport qatlami tushunchasiga mos keladi?",
+        "options": [
+          "Yo'qolgan segmentni yana yuborish mexanizmi.",
+          "Ishonchli va ulanishga yo'naltirilgan transport protokoli.",
+          "Tcp ulanishini o'rnatishdagi uch bosqichli almashuv.",
+          "Ilovalar o'rtasida oxirgi nuqtali ma'lumot yetkazishni boshqaruvchi qatlam."
+        ],
+        "a": "Ilovalar o'rtasida oxirgi nuqtali ma'lumot yetkazishni boshqaruvchi qatlam.",
+        "topic": "14-mavzu. Ochiq tizimlarning o'zaro ishlash modeli: transport qatlami"
+      },
+      {
+        "id": 132,
+        "q": "Quyidagilardan qaysi javob TCP tushunchasiga mos keladi?",
+        "options": [
+          "Ishonchli va ulanishga yo'naltirilgan transport protokoli.",
+          "Ilovalar o'rtasida oxirgi nuqtali ma'lumot yetkazishni boshqaruvchi qatlam.",
+          "Ma'lumot bir nuqtadan ikkinchisiga yetguncha o'tadigan vaqt.",
+          "Ilova xizmatini ajratish uchun ishlatiladigan mantiqiy raqam."
+        ],
+        "a": "Ishonchli va ulanishga yo'naltirilgan transport protokoli.",
+        "topic": "14-mavzu. Ochiq tizimlarning o'zaro ishlash modeli: transport qatlami"
+      },
+      {
+        "id": 133,
+        "q": "Quyidagilardan qaysi javob UDP tushunchasiga mos keladi?",
+        "options": [
+          "Tcp ulanishini o'rnatishdagi uch bosqichli almashuv.",
+          "Tezkor va ulanishsiz transport protokoli.",
+          "Yo'qolgan segmentni yana yuborish mexanizmi.",
+          "Ishonchli va ulanishga yo'naltirilgan transport protokoli."
+        ],
+        "a": "Tezkor va ulanishsiz transport protokoli.",
+        "topic": "14-mavzu. Ochiq tizimlarning o'zaro ishlash modeli: transport qatlami"
+      },
+      {
+        "id": 134,
+        "q": "Quyidagilardan qaysi javob Port tushunchasiga mos keladi?",
+        "options": [
+          "Ishonchli va ulanishga yo'naltirilgan transport protokoli.",
+          "Tezkor va ulanishsiz transport protokoli.",
+          "Ilova xizmatini ajratish uchun ishlatiladigan mantiqiy raqam.",
+          "Ilovalar o'rtasida oxirgi nuqtali ma'lumot yetkazishni boshqaruvchi qatlam."
+        ],
+        "a": "Ilova xizmatini ajratish uchun ishlatiladigan mantiqiy raqam.",
+        "topic": "14-mavzu. Ochiq tizimlarning o'zaro ishlash modeli: transport qatlami"
+      },
+      {
+        "id": 135,
+        "q": "Quyidagilardan qaysi javob Soket tushunchasiga mos keladi?",
+        "options": [
+          "Qabul qiluvchi imkoniyatiga mos uzatish tezligini boshqarish.",
+          "Ilova xizmatini ajratish uchun ishlatiladigan mantiqiy raqam.",
+          "Transport qatlamidagi ma'lumot birligi.",
+          "Ip manzil va port birikmasidan iborat aloqa nuqtasi."
+        ],
+        "a": "Ip manzil va port birikmasidan iborat aloqa nuqtasi.",
+        "topic": "14-mavzu. Ochiq tizimlarning o'zaro ishlash modeli: transport qatlami"
+      },
+      {
+        "id": 136,
+        "q": "Quyidagilardan qaysi javob Segment tushunchasiga mos keladi?",
+        "options": [
+          "Transport qatlamidagi ma'lumot birligi.",
+          "Tezkor va ulanishsiz transport protokoli.",
+          "Yo'qolgan segmentni yana yuborish mexanizmi.",
+          "Ilova xizmatini ajratish uchun ishlatiladigan mantiqiy raqam."
+        ],
+        "a": "Transport qatlamidagi ma'lumot birligi.",
+        "topic": "14-mavzu. Ochiq tizimlarning o'zaro ishlash modeli: transport qatlami"
+      },
+      {
+        "id": 137,
+        "q": "Quyidagilardan qaysi javob Three-way handshake tushunchasiga mos keladi?",
+        "options": [
+          "Ishonchli va ulanishga yo'naltirilgan transport protokoli.",
+          "Tcp ulanishini o'rnatishdagi uch bosqichli almashuv.",
+          "Yo'qolgan segmentni yana yuborish mexanizmi.",
+          "Ilovalar o'rtasida oxirgi nuqtali ma'lumot yetkazishni boshqaruvchi qatlam."
+        ],
+        "a": "Tcp ulanishini o'rnatishdagi uch bosqichli almashuv.",
+        "topic": "14-mavzu. Ochiq tizimlarning o'zaro ishlash modeli: transport qatlami"
+      },
+      {
+        "id": 138,
+        "q": "Quyidagilardan qaysi javob Oqim nazorati tushunchasiga mos keladi?",
+        "options": [
+          "Yo'qolgan segmentni yana yuborish mexanizmi.",
+          "Ip manzil va port birikmasidan iborat aloqa nuqtasi.",
+          "Qabul qiluvchi imkoniyatiga mos uzatish tezligini boshqarish.",
+          "Ilovalar o'rtasida oxirgi nuqtali ma'lumot yetkazishni boshqaruvchi qatlam."
+        ],
+        "a": "Qabul qiluvchi imkoniyatiga mos uzatish tezligini boshqarish.",
+        "topic": "14-mavzu. Ochiq tizimlarning o'zaro ishlash modeli: transport qatlami"
+      },
+      {
+        "id": 139,
+        "q": "Quyidagilardan qaysi javob Qayta uzatish tushunchasiga mos keladi?",
+        "options": [
+          "Ilovalar o'rtasida oxirgi nuqtali ma'lumot yetkazishni boshqaruvchi qatlam.",
+          "Ma'lumot bir nuqtadan ikkinchisiga yetguncha o'tadigan vaqt.",
+          "Ip manzil va port birikmasidan iborat aloqa nuqtasi.",
+          "Yo'qolgan segmentni yana yuborish mexanizmi."
+        ],
+        "a": "Yo'qolgan segmentni yana yuborish mexanizmi.",
+        "topic": "14-mavzu. Ochiq tizimlarning o'zaro ishlash modeli: transport qatlami"
+      },
+      {
+        "id": 140,
+        "q": "Quyidagilardan qaysi javob Kechikish tushunchasiga mos keladi?",
+        "options": [
+          "Ma'lumot bir nuqtadan ikkinchisiga yetguncha o'tadigan vaqt.",
+          "Ip manzil va port birikmasidan iborat aloqa nuqtasi.",
+          "Transport qatlamidagi ma'lumot birligi.",
+          "Ilova xizmatini ajratish uchun ishlatiladigan mantiqiy raqam."
+        ],
+        "a": "Ma'lumot bir nuqtadan ikkinchisiga yetguncha o'tadigan vaqt.",
+        "topic": "14-mavzu. Ochiq tizimlarning o'zaro ishlash modeli: transport qatlami"
+      },
+      {
+        "id": 141,
+        "q": "Quyidagilardan qaysi javob Seans qatlami tushunchasiga mos keladi?",
+        "options": [
+          "Muloqot seansini boshlash, saqlash va yakunlashni ifodalovchi qatlam.",
+          "Ma'lumotning tuzilishi va ko'rinishini belgilovchi tartib.",
+          "Domen nomlarini ip manzillarga moslovchi xizmat.",
+          "Foydalanuvchiga tarmoq xizmatlarini taqdim etuvchi qatlam."
+        ],
+        "a": "Muloqot seansini boshlash, saqlash va yakunlashni ifodalovchi qatlam.",
+        "topic": "15-mavzu. Ochiq tizimlarning o'zaro ishlash modeli: seans, taqdimot va ilovalar qatlami"
+      },
+      {
+        "id": 142,
+        "q": "Quyidagilardan qaysi javob Taqdimot qatlami tushunchasiga mos keladi?",
+        "options": [
+          "Ma'lumotni belgilangan format yoki belgilar tizimiga o'tkazish.",
+          "Ma'lumot formatini moslashtirish, kodlash, siqish va shifrlash vazifalarini bajaruvchi qatlam.",
+          "Elektron pochtani jo'natish protokoli.",
+          "Dasturlar o'rtasida standart muloqot interfeysi."
+        ],
+        "a": "Ma'lumot formatini moslashtirish, kodlash, siqish va shifrlash vazifalarini bajaruvchi qatlam.",
+        "topic": "15-mavzu. Ochiq tizimlarning o'zaro ishlash modeli: seans, taqdimot va ilovalar qatlami"
+      },
+      {
+        "id": 143,
+        "q": "Quyidagilardan qaysi javob Ilova qatlami tushunchasiga mos keladi?",
+        "options": [
+          "Elektron pochtani jo'natish protokoli.",
+          "Ma'lumotni belgilangan format yoki belgilar tizimiga o'tkazish.",
+          "Foydalanuvchiga tarmoq xizmatlarini taqdim etuvchi qatlam.",
+          "Ma'lumot formatini moslashtirish, kodlash, siqish va shifrlash vazifalarini bajaruvchi qatlam."
+        ],
+        "a": "Foydalanuvchiga tarmoq xizmatlarini taqdim etuvchi qatlam.",
+        "topic": "15-mavzu. Ochiq tizimlarning o'zaro ishlash modeli: seans, taqdimot va ilovalar qatlami"
+      },
+      {
+        "id": 144,
+        "q": "Quyidagilardan qaysi javob Kodlash tushunchasiga mos keladi?",
+        "options": [
+          "Domen nomlarini ip manzillarga moslovchi xizmat.",
+          "Foydalanuvchiga tarmoq xizmatlarini taqdim etuvchi qatlam.",
+          "Ma'lumotni maxfiy ko'rinishga o'tkazish jarayoni.",
+          "Ma'lumotni belgilangan format yoki belgilar tizimiga o'tkazish."
+        ],
+        "a": "Ma'lumotni belgilangan format yoki belgilar tizimiga o'tkazish.",
+        "topic": "15-mavzu. Ochiq tizimlarning o'zaro ishlash modeli: seans, taqdimot va ilovalar qatlami"
+      },
+      {
+        "id": 145,
+        "q": "Quyidagilardan qaysi javob Format tushunchasiga mos keladi?",
+        "options": [
+          "Ma'lumotning tuzilishi va ko'rinishini belgilovchi tartib.",
+          "Ma'lumot formatini moslashtirish, kodlash, siqish va shifrlash vazifalarini bajaruvchi qatlam.",
+          "Dasturlar o'rtasida standart muloqot interfeysi.",
+          "Ma'lumotni maxfiy ko'rinishga o'tkazish jarayoni."
+        ],
+        "a": "Ma'lumotning tuzilishi va ko'rinishini belgilovchi tartib.",
+        "topic": "15-mavzu. Ochiq tizimlarning o'zaro ishlash modeli: seans, taqdimot va ilovalar qatlami"
+      },
+      {
+        "id": 146,
+        "q": "Quyidagilardan qaysi javob Shifrlash tushunchasiga mos keladi?",
+        "options": [
+          "Foydalanuvchiga tarmoq xizmatlarini taqdim etuvchi qatlam.",
+          "Ma'lumotni maxfiy ko'rinishga o'tkazish jarayoni.",
+          "Elektron pochtani jo'natish protokoli.",
+          "Ma'lumotning tuzilishi va ko'rinishini belgilovchi tartib."
+        ],
+        "a": "Ma'lumotni maxfiy ko'rinishga o'tkazish jarayoni.",
+        "topic": "15-mavzu. Ochiq tizimlarning o'zaro ishlash modeli: seans, taqdimot va ilovalar qatlami"
+      },
+      {
+        "id": 147,
+        "q": "Quyidagilardan qaysi javob HTTP tushunchasiga mos keladi?",
+        "options": [
+          "Muloqot seansini boshlash, saqlash va yakunlashni ifodalovchi qatlam.",
+          "Domen nomlarini ip manzillarga moslovchi xizmat.",
+          "Veb-resurslar bilan almashish uchun ishlatiladigan ilova protokoli.",
+          "Ma'lumotning tuzilishi va ko'rinishini belgilovchi tartib."
+        ],
+        "a": "Veb-resurslar bilan almashish uchun ishlatiladigan ilova protokoli.",
+        "topic": "15-mavzu. Ochiq tizimlarning o'zaro ishlash modeli: seans, taqdimot va ilovalar qatlami"
+      },
+      {
+        "id": 148,
+        "q": "Quyidagilardan qaysi javob DNS tushunchasiga mos keladi?",
+        "options": [
+          "Ma'lumotning tuzilishi va ko'rinishini belgilovchi tartib.",
+          "Ma'lumotni belgilangan format yoki belgilar tizimiga o'tkazish.",
+          "Ma'lumot formatini moslashtirish, kodlash, siqish va shifrlash vazifalarini bajaruvchi qatlam.",
+          "Domen nomlarini ip manzillarga moslovchi xizmat."
+        ],
+        "a": "Domen nomlarini ip manzillarga moslovchi xizmat.",
+        "topic": "15-mavzu. Ochiq tizimlarning o'zaro ishlash modeli: seans, taqdimot va ilovalar qatlami"
+      },
+      {
+        "id": 149,
+        "q": "Quyidagilardan qaysi javob SMTP tushunchasiga mos keladi?",
+        "options": [
+          "Elektron pochtani jo'natish protokoli.",
+          "Ma'lumotning tuzilishi va ko'rinishini belgilovchi tartib.",
+          "Foydalanuvchiga tarmoq xizmatlarini taqdim etuvchi qatlam.",
+          "Domen nomlarini ip manzillarga moslovchi xizmat."
+        ],
+        "a": "Elektron pochtani jo'natish protokoli.",
+        "topic": "15-mavzu. Ochiq tizimlarning o'zaro ishlash modeli: seans, taqdimot va ilovalar qatlami"
+      },
+      {
+        "id": 150,
+        "q": "Quyidagilardan qaysi javob API tushunchasiga mos keladi?",
+        "options": [
+          "Veb-resurslar bilan almashish uchun ishlatiladigan ilova protokoli.",
+          "Dasturlar o'rtasida standart muloqot interfeysi.",
+          "Domen nomlarini ip manzillarga moslovchi xizmat.",
+          "Ma'lumotni belgilangan format yoki belgilar tizimiga o'tkazish."
+        ],
+        "a": "Dasturlar o'rtasida standart muloqot interfeysi.",
+        "topic": "15-mavzu. Ochiq tizimlarning o'zaro ishlash modeli: seans, taqdimot va ilovalar qatlami"
+      },
+      {
+        "id": 151,
+        "q": "Quyidagilardan qaysi javob Inkapsulyatsiya tushunchasiga mos keladi?",
+        "options": [
+          "Qatlam nazorati uchun ma'lumot oldiga qo'shiladigan sarlavha.",
+          "Yuqori qatlam ma'lumotiga quyi qatlam sarlavhasini qo'shish jarayoni.",
+          "Ba'zi qatlamlarda ma'lumot oxiriga qo'shiladigan nazorat maydoni.",
+          "Yuqori qatlamdan kelgan foydali ma'lumot qismi."
+        ],
+        "a": "Yuqori qatlam ma'lumotiga quyi qatlam sarlavhasini qo'shish jarayoni.",
+        "topic": "16-mavzu. Dekapsulyatsiya va Inkapsulyatsiya tushunchalari"
+      },
+      {
+        "id": 152,
+        "q": "Quyidagilardan qaysi javob Dekapsulyatsiya tushunchasiga mos keladi?",
+        "options": [
+          "Kanal qatlamidagi pdu.",
+          "Yuqori qatlamdan kelgan foydali ma'lumot qismi.",
+          "Qabul qiluvchi tomonda qatlam sarlavhalarini olib tashlash jarayoni.",
+          "Tarmoq qatlamidagi pdu."
+        ],
+        "a": "Qabul qiluvchi tomonda qatlam sarlavhalarini olib tashlash jarayoni.",
+        "topic": "16-mavzu. Dekapsulyatsiya va Inkapsulyatsiya tushunchalari"
+      },
+      {
+        "id": 153,
+        "q": "Quyidagilardan qaysi javob PDU tushunchasiga mos keladi?",
+        "options": [
+          "Yuqori qatlamdan kelgan foydali ma'lumot qismi.",
+          "Yuqori qatlam ma'lumotiga quyi qatlam sarlavhasini qo'shish jarayoni.",
+          "Fizik qatlamda uzatiladigan raqamli birlik.",
+          "Har bir qatlamda ma'lumot birligini bildiruvchi umumiy atama."
+        ],
+        "a": "Har bir qatlamda ma'lumot birligini bildiruvchi umumiy atama.",
+        "topic": "16-mavzu. Dekapsulyatsiya va Inkapsulyatsiya tushunchalari"
+      },
+      {
+        "id": 154,
+        "q": "Quyidagilardan qaysi javob Segment tushunchasiga mos keladi?",
+        "options": [
+          "Transport qatlamidagi pdu.",
+          "Yuqori qatlam ma'lumotiga quyi qatlam sarlavhasini qo'shish jarayoni.",
+          "Kanal qatlamidagi pdu.",
+          "Qatlam nazorati uchun ma'lumot oldiga qo'shiladigan sarlavha."
+        ],
+        "a": "Transport qatlamidagi pdu.",
+        "topic": "16-mavzu. Dekapsulyatsiya va Inkapsulyatsiya tushunchalari"
+      },
+      {
+        "id": 155,
+        "q": "Quyidagilardan qaysi javob Paket tushunchasiga mos keladi?",
+        "options": [
+          "Har bir qatlamda ma'lumot birligini bildiruvchi umumiy atama.",
+          "Tarmoq qatlamidagi pdu.",
+          "Qabul qiluvchi tomonda qatlam sarlavhalarini olib tashlash jarayoni.",
+          "Transport qatlamidagi pdu."
+        ],
+        "a": "Tarmoq qatlamidagi pdu.",
+        "topic": "16-mavzu. Dekapsulyatsiya va Inkapsulyatsiya tushunchalari"
+      },
+      {
+        "id": 156,
+        "q": "Quyidagilardan qaysi javob Kadr tushunchasiga mos keladi?",
+        "options": [
+          "Yuqori qatlamdan kelgan foydali ma'lumot qismi.",
+          "Ba'zi qatlamlarda ma'lumot oxiriga qo'shiladigan nazorat maydoni.",
+          "Kanal qatlamidagi pdu.",
+          "Qatlam nazorati uchun ma'lumot oldiga qo'shiladigan sarlavha."
+        ],
+        "a": "Kanal qatlamidagi pdu.",
+        "topic": "16-mavzu. Dekapsulyatsiya va Inkapsulyatsiya tushunchalari"
+      },
+      {
+        "id": 157,
+        "q": "Quyidagilardan qaysi javob Bit tushunchasiga mos keladi?",
+        "options": [
+          "Qabul qiluvchi tomonda qatlam sarlavhalarini olib tashlash jarayoni.",
+          "Tarmoq qatlamidagi pdu.",
+          "Transport qatlamidagi pdu.",
+          "Fizik qatlamda uzatiladigan raqamli birlik."
+        ],
+        "a": "Fizik qatlamda uzatiladigan raqamli birlik.",
+        "topic": "16-mavzu. Dekapsulyatsiya va Inkapsulyatsiya tushunchalari"
+      },
+      {
+        "id": 158,
+        "q": "Quyidagilardan qaysi javob Header tushunchasiga mos keladi?",
+        "options": [
+          "Qatlam nazorati uchun ma'lumot oldiga qo'shiladigan sarlavha.",
+          "Har bir qatlamda ma'lumot birligini bildiruvchi umumiy atama.",
+          "Kanal qatlamidagi pdu.",
+          "Tarmoq qatlamidagi pdu."
+        ],
+        "a": "Qatlam nazorati uchun ma'lumot oldiga qo'shiladigan sarlavha.",
+        "topic": "16-mavzu. Dekapsulyatsiya va Inkapsulyatsiya tushunchalari"
+      },
+      {
+        "id": 159,
+        "q": "Quyidagilardan qaysi javob Trailer tushunchasiga mos keladi?",
+        "options": [
+          "Fizik qatlamda uzatiladigan raqamli birlik.",
+          "Ba'zi qatlamlarda ma'lumot oxiriga qo'shiladigan nazorat maydoni.",
+          "Transport qatlamidagi pdu.",
+          "Yuqori qatlam ma'lumotiga quyi qatlam sarlavhasini qo'shish jarayoni."
+        ],
+        "a": "Ba'zi qatlamlarda ma'lumot oxiriga qo'shiladigan nazorat maydoni.",
+        "topic": "16-mavzu. Dekapsulyatsiya va Inkapsulyatsiya tushunchalari"
+      },
+      {
+        "id": 160,
+        "q": "Quyidagilardan qaysi javob Payload tushunchasiga mos keladi?",
+        "options": [
+          "Tarmoq qatlamidagi pdu.",
+          "Fizik qatlamda uzatiladigan raqamli birlik.",
+          "Yuqori qatlamdan kelgan foydali ma'lumot qismi.",
+          "Qabul qiluvchi tomonda qatlam sarlavhalarini olib tashlash jarayoni."
+        ],
+        "a": "Yuqori qatlamdan kelgan foydali ma'lumot qismi.",
+        "topic": "16-mavzu. Dekapsulyatsiya va Inkapsulyatsiya tushunchalari"
+      },
+      {
+        "id": 161,
+        "q": "Quyidagilardan qaysi javob DNS tushunchasiga mos keladi?",
+        "options": [
+          "Ovozli aloqani ip tarmoq orqali uzatish texnologiyasi.",
+          "Pochta xabarlarini mijozga yuklab olish protokoli.",
+          "Domen nomini ip manzilga moslovchi tarmoq xizmati.",
+          "Elektron xabar almashish tizimi."
+        ],
+        "a": "Domen nomini ip manzilga moslovchi tarmoq xizmati.",
+        "topic": "17-mavzu. Tarmoq xizmatlari: DNS, DHCP, FTP, HTTP, Email, VoIP"
+      },
+      {
+        "id": 162,
+        "q": "Quyidagilardan qaysi javob DHCP tushunchasiga mos keladi?",
+        "options": [
+          "Pochta xabarlarini mijozga yuklab olish protokoli.",
+          "Elektron xabar almashish tizimi.",
+          "Veb-resurslarni uzatish protokoli.",
+          "Mijozlarga avtomatik ip konfiguratsiya beruvchi xizmat."
+        ],
+        "a": "Mijozlarga avtomatik ip konfiguratsiya beruvchi xizmat.",
+        "topic": "17-mavzu. Tarmoq xizmatlari: DNS, DHCP, FTP, HTTP, Email, VoIP"
+      },
+      {
+        "id": 163,
+        "q": "Quyidagilardan qaysi javob FTP tushunchasiga mos keladi?",
+        "options": [
+          "Fayllarni tarmoq orqali uzatish protokoli.",
+          "Voip seanslarini tashkil etishda ishlatiladigan signalizatsiya protokoli.",
+          "Pochta xabarlarini mijozga yuklab olish protokoli.",
+          "Ovozli aloqani ip tarmoq orqali uzatish texnologiyasi."
+        ],
+        "a": "Fayllarni tarmoq orqali uzatish protokoli.",
+        "topic": "17-mavzu. Tarmoq xizmatlari: DNS, DHCP, FTP, HTTP, Email, VoIP"
+      },
+      {
+        "id": 164,
+        "q": "Quyidagilardan qaysi javob HTTP tushunchasiga mos keladi?",
+        "options": [
+          "Voip seanslarini tashkil etishda ishlatiladigan signalizatsiya protokoli.",
+          "Veb-resurslarni uzatish protokoli.",
+          "Elektron xabar almashish tizimi.",
+          "Elektron pochtani jo'natishda ishlatiladigan protokol."
+        ],
+        "a": "Veb-resurslarni uzatish protokoli.",
+        "topic": "17-mavzu. Tarmoq xizmatlari: DNS, DHCP, FTP, HTTP, Email, VoIP"
+      },
+      {
+        "id": 165,
+        "q": "Quyidagilardan qaysi javob Email tushunchasiga mos keladi?",
+        "options": [
+          "Mijozlarga avtomatik ip konfiguratsiya beruvchi xizmat.",
+          "Domen nomini ip manzilga moslovchi tarmoq xizmati.",
+          "Elektron xabar almashish tizimi.",
+          "Veb-resurslarni uzatish protokoli."
+        ],
+        "a": "Elektron xabar almashish tizimi.",
+        "topic": "17-mavzu. Tarmoq xizmatlari: DNS, DHCP, FTP, HTTP, Email, VoIP"
+      },
+      {
+        "id": 166,
+        "q": "Quyidagilardan qaysi javob SMTP tushunchasiga mos keladi?",
+        "options": [
+          "Ovozli aloqani ip tarmoq orqali uzatish texnologiyasi.",
+          "Voip seanslarini tashkil etishda ishlatiladigan signalizatsiya protokoli.",
+          "Pochta xabarlarini serverda saqlab boshqarish protokoli.",
+          "Elektron pochtani jo'natishda ishlatiladigan protokol."
+        ],
+        "a": "Elektron pochtani jo'natishda ishlatiladigan protokol.",
+        "topic": "17-mavzu. Tarmoq xizmatlari: DNS, DHCP, FTP, HTTP, Email, VoIP"
+      },
+      {
+        "id": 167,
+        "q": "Quyidagilardan qaysi javob IMAP tushunchasiga mos keladi?",
+        "options": [
+          "Pochta xabarlarini serverda saqlab boshqarish protokoli.",
+          "Fayllarni tarmoq orqali uzatish protokoli.",
+          "Mijozlarga avtomatik ip konfiguratsiya beruvchi xizmat.",
+          "Domen nomini ip manzilga moslovchi tarmoq xizmati."
+        ],
+        "a": "Pochta xabarlarini serverda saqlab boshqarish protokoli.",
+        "topic": "17-mavzu. Tarmoq xizmatlari: DNS, DHCP, FTP, HTTP, Email, VoIP"
+      },
+      {
+        "id": 168,
+        "q": "Quyidagilardan qaysi javob POP3 tushunchasiga mos keladi?",
+        "options": [
+          "Elektron pochtani jo'natishda ishlatiladigan protokol.",
+          "Pochta xabarlarini mijozga yuklab olish protokoli.",
+          "Mijozlarga avtomatik ip konfiguratsiya beruvchi xizmat.",
+          "Veb-resurslarni uzatish protokoli."
+        ],
+        "a": "Pochta xabarlarini mijozga yuklab olish protokoli.",
+        "topic": "17-mavzu. Tarmoq xizmatlari: DNS, DHCP, FTP, HTTP, Email, VoIP"
+      },
+      {
+        "id": 169,
+        "q": "Quyidagilardan qaysi javob VoIP tushunchasiga mos keladi?",
+        "options": [
+          "Domen nomini ip manzilga moslovchi tarmoq xizmati.",
+          "Pochta xabarlarini mijozga yuklab olish protokoli.",
+          "Ovozli aloqani ip tarmoq orqali uzatish texnologiyasi.",
+          "Voip seanslarini tashkil etishda ishlatiladigan signalizatsiya protokoli."
+        ],
+        "a": "Ovozli aloqani ip tarmoq orqali uzatish texnologiyasi.",
+        "topic": "17-mavzu. Tarmoq xizmatlari: DNS, DHCP, FTP, HTTP, Email, VoIP"
+      },
+      {
+        "id": 170,
+        "q": "Quyidagilardan qaysi javob SIP tushunchasiga mos keladi?",
+        "options": [
+          "Pochta xabarlarini serverda saqlab boshqarish protokoli.",
+          "Domen nomini ip manzilga moslovchi tarmoq xizmati.",
+          "Ovozli aloqani ip tarmoq orqali uzatish texnologiyasi.",
+          "Voip seanslarini tashkil etishda ishlatiladigan signalizatsiya protokoli."
+        ],
+        "a": "Voip seanslarini tashkil etishda ishlatiladigan signalizatsiya protokoli.",
+        "topic": "17-mavzu. Tarmoq xizmatlari: DNS, DHCP, FTP, HTTP, Email, VoIP"
+      },
+      {
+        "id": 171,
+        "q": "Quyidagilardan qaysi javob IP manzil tushunchasiga mos keladi?",
+        "options": [
+          "32 bitli ip manzillash versiyasi.",
+          "Ipv6 yoki cidr yozuvida tarmoq qismi uzunligini bildiruvchi qiymat.",
+          "Kanal qatlamida tarmoq adapterini aniqlovchi apparat manzil.",
+          "Tarmoq qatlamida qurilmani aniqlovchi mantiqiy manzil."
+        ],
+        "a": "Tarmoq qatlamida qurilmani aniqlovchi mantiqiy manzil.",
+        "topic": "18-mavzu. IP manzillash, nimtarmoq niqobi va MAC manzil. IPv4 va IPv6"
+      },
+      {
+        "id": 172,
+        "q": "Quyidagilardan qaysi javob MAC manzil tushunchasiga mos keladi?",
+        "options": [
+          "Kanal qatlamida tarmoq adapterini aniqlovchi apparat manzil.",
+          "Belgilangan guruh manzillariga uzatish turi.",
+          "Ipv4 manzilga mos mac manzilni aniqlovchi protokol.",
+          "Ipv4 manzilda tarmoq va host qismini ajratuvchi niqob."
+        ],
+        "a": "Kanal qatlamida tarmoq adapterini aniqlovchi apparat manzil.",
+        "topic": "18-mavzu. IP manzillash, nimtarmoq niqobi va MAC manzil. IPv4 va IPv6"
+      },
+      {
+        "id": 173,
+        "q": "Quyidagilardan qaysi javob IPv4 tushunchasiga mos keladi?",
+        "options": [
+          "Belgilangan guruh manzillariga uzatish turi.",
+          "32 bitli ip manzillash versiyasi.",
+          "Ipv6 yoki cidr yozuvida tarmoq qismi uzunligini bildiruvchi qiymat.",
+          "Mahalliy tarmoqdan boshqa tarmoqqa chiqish nuqtasi."
+        ],
+        "a": "32 bitli ip manzillash versiyasi.",
+        "topic": "18-mavzu. IP manzillash, nimtarmoq niqobi va MAC manzil. IPv4 va IPv6"
+      },
+      {
+        "id": 174,
+        "q": "Quyidagilardan qaysi javob IPv6 tushunchasiga mos keladi?",
+        "options": [
+          "Ipv6 yoki cidr yozuvida tarmoq qismi uzunligini bildiruvchi qiymat.",
+          "Mahalliy tarmoqdan boshqa tarmoqqa chiqish nuqtasi.",
+          "128 bitli ip manzillash versiyasi.",
+          "Ipv4 manzilga mos mac manzilni aniqlovchi protokol."
+        ],
+        "a": "128 bitli ip manzillash versiyasi.",
+        "topic": "18-mavzu. IP manzillash, nimtarmoq niqobi va MAC manzil. IPv4 va IPv6"
+      },
+      {
+        "id": 175,
+        "q": "Quyidagilardan qaysi javob Subnet mask tushunchasiga mos keladi?",
+        "options": [
+          "Mahalliy tarmoqdan boshqa tarmoqqa chiqish nuqtasi.",
+          "128 bitli ip manzillash versiyasi.",
+          "Ipv6 yoki cidr yozuvida tarmoq qismi uzunligini bildiruvchi qiymat.",
+          "Ipv4 manzilda tarmoq va host qismini ajratuvchi niqob."
+        ],
+        "a": "Ipv4 manzilda tarmoq va host qismini ajratuvchi niqob.",
+        "topic": "18-mavzu. IP manzillash, nimtarmoq niqobi va MAC manzil. IPv4 va IPv6"
+      },
+      {
+        "id": 176,
+        "q": "Quyidagilardan qaysi javob Prefix tushunchasiga mos keladi?",
+        "options": [
+          "Ipv6 yoki cidr yozuvida tarmoq qismi uzunligini bildiruvchi qiymat.",
+          "Kanal qatlamida tarmoq adapterini aniqlovchi apparat manzil.",
+          "Ipv4 manzilda tarmoq va host qismini ajratuvchi niqob.",
+          "32 bitli ip manzillash versiyasi."
+        ],
+        "a": "Ipv6 yoki cidr yozuvida tarmoq qismi uzunligini bildiruvchi qiymat.",
+        "topic": "18-mavzu. IP manzillash, nimtarmoq niqobi va MAC manzil. IPv4 va IPv6"
+      },
+      {
+        "id": 177,
+        "q": "Quyidagilardan qaysi javob Gateway tushunchasiga mos keladi?",
+        "options": [
+          "Belgilangan guruh manzillariga uzatish turi.",
+          "Mahalliy tarmoqdan boshqa tarmoqqa chiqish nuqtasi.",
+          "32 bitli ip manzillash versiyasi.",
+          "Ipv6 yoki cidr yozuvida tarmoq qismi uzunligini bildiruvchi qiymat."
+        ],
+        "a": "Mahalliy tarmoqdan boshqa tarmoqqa chiqish nuqtasi.",
+        "topic": "18-mavzu. IP manzillash, nimtarmoq niqobi va MAC manzil. IPv4 va IPv6"
+      },
+      {
+        "id": 178,
+        "q": "Quyidagilardan qaysi javob ARP tushunchasiga mos keladi?",
+        "options": [
+          "Tarmoq qatlamida qurilmani aniqlovchi mantiqiy manzil.",
+          "Belgilangan guruh manzillariga uzatish turi.",
+          "Ipv4 manzilga mos mac manzilni aniqlovchi protokol.",
+          "Ipv6 yoki cidr yozuvida tarmoq qismi uzunligini bildiruvchi qiymat."
+        ],
+        "a": "Ipv4 manzilga mos mac manzilni aniqlovchi protokol.",
+        "topic": "18-mavzu. IP manzillash, nimtarmoq niqobi va MAC manzil. IPv4 va IPv6"
+      },
+      {
+        "id": 179,
+        "q": "Quyidagilardan qaysi javob Unicast tushunchasiga mos keladi?",
+        "options": [
+          "Ipv4 manzilda tarmoq va host qismini ajratuvchi niqob.",
+          "Kanal qatlamida tarmoq adapterini aniqlovchi apparat manzil.",
+          "Ipv4 manzilga mos mac manzilni aniqlovchi protokol.",
+          "Bitta manzilga yo'naltirilgan uzatish turi."
+        ],
+        "a": "Bitta manzilga yo'naltirilgan uzatish turi.",
+        "topic": "18-mavzu. IP manzillash, nimtarmoq niqobi va MAC manzil. IPv4 va IPv6"
+      },
+      {
+        "id": 180,
+        "q": "Quyidagilardan qaysi javob Multicast tushunchasiga mos keladi?",
+        "options": [
+          "Belgilangan guruh manzillariga uzatish turi.",
+          "Kanal qatlamida tarmoq adapterini aniqlovchi apparat manzil.",
+          "Tarmoq qatlamida qurilmani aniqlovchi mantiqiy manzil.",
+          "Bitta manzilga yo'naltirilgan uzatish turi."
+        ],
+        "a": "Belgilangan guruh manzillariga uzatish turi.",
+        "topic": "18-mavzu. IP manzillash, nimtarmoq niqobi va MAC manzil. IPv4 va IPv6"
+      },
+      {
+        "id": 181,
+        "q": "Quyidagilardan qaysi javob IP-paket tushunchasiga mos keladi?",
+        "options": [
+          "Tarmoq qatlamida uzatiladigan sarlavha va payloaddan iborat ma'lumot birligi.",
+          "Kanalda uzatilishi mumkin bo'lgan maksimal paket hajmi.",
+          "Paket ichidagi foydali yuqori qatlam ma'lumoti.",
+          "Paketning tarmoqda ortiqcha aylanib yurishini cheklovchi qiymat."
+        ],
+        "a": "Tarmoq qatlamida uzatiladigan sarlavha va payloaddan iborat ma'lumot birligi.",
+        "topic": "19-mavzu. IP-paket va uning tuzilishi"
+      },
+      {
+        "id": 182,
+        "q": "Quyidagilardan qaysi javob Header tushunchasiga mos keladi?",
+        "options": [
+          "Tarmoq qatlamida uzatiladigan sarlavha va payloaddan iborat ma'lumot birligi.",
+          "Paketni boshqarish uchun zarur xizmat maydonlari to'plami.",
+          "Kanalda uzatilishi mumkin bo'lgan maksimal paket hajmi.",
+          "Payload qaysi yuqori protokolga tegishli ekanini bildiruvchi maydon."
+        ],
+        "a": "Paketni boshqarish uchun zarur xizmat maydonlari to'plami.",
+        "topic": "19-mavzu. IP-paket va uning tuzilishi"
+      },
+      {
+        "id": 183,
+        "q": "Quyidagilardan qaysi javob Payload tushunchasiga mos keladi?",
+        "options": [
+          "Paketning tarmoqda ortiqcha aylanib yurishini cheklovchi qiymat.",
+          "Katta paketni kichik qismlarga ajratish jarayoni.",
+          "Paket ichidagi foydali yuqori qatlam ma'lumoti.",
+          "Paketni boshqarish uchun zarur xizmat maydonlari to'plami."
+        ],
+        "a": "Paket ichidagi foydali yuqori qatlam ma'lumoti.",
+        "topic": "19-mavzu. IP-paket va uning tuzilishi"
+      },
+      {
+        "id": 184,
+        "q": "Quyidagilardan qaysi javob TTL tushunchasiga mos keladi?",
+        "options": [
+          "Paket qabul qiluvchi qurilmaning ip manzili.",
+          "Paket jo'natuvchi qurilmaning ip manzili.",
+          "Paketni boshqarish uchun zarur xizmat maydonlari to'plami.",
+          "Paketning tarmoqda ortiqcha aylanib yurishini cheklovchi qiymat."
+        ],
+        "a": "Paketning tarmoqda ortiqcha aylanib yurishini cheklovchi qiymat.",
+        "topic": "19-mavzu. IP-paket va uning tuzilishi"
+      },
+      {
+        "id": 185,
+        "q": "Quyidagilardan qaysi javob Protocol field tushunchasiga mos keladi?",
+        "options": [
+          "Payload qaysi yuqori protokolga tegishli ekanini bildiruvchi maydon.",
+          "Paketni boshqarish uchun zarur xizmat maydonlari to'plami.",
+          "Tarmoq qatlamida uzatiladigan sarlavha va payloaddan iborat ma'lumot birligi.",
+          "Paket qabul qiluvchi qurilmaning ip manzili."
+        ],
+        "a": "Payload qaysi yuqori protokolga tegishli ekanini bildiruvchi maydon.",
+        "topic": "19-mavzu. IP-paket va uning tuzilishi"
+      },
+      {
+        "id": 186,
+        "q": "Quyidagilardan qaysi javob Fragmentatsiya tushunchasiga mos keladi?",
+        "options": [
+          "Paketning tarmoqda ortiqcha aylanib yurishini cheklovchi qiymat.",
+          "Katta paketni kichik qismlarga ajratish jarayoni.",
+          "Paket jo'natuvchi qurilmaning ip manzili.",
+          "Paketni boshqarish uchun zarur xizmat maydonlari to'plami."
+        ],
+        "a": "Katta paketni kichik qismlarga ajratish jarayoni.",
+        "topic": "19-mavzu. IP-paket va uning tuzilishi"
+      },
+      {
+        "id": 187,
+        "q": "Quyidagilardan qaysi javob Checksum tushunchasiga mos keladi?",
+        "options": [
+          "Paketning tarmoqda ortiqcha aylanib yurishini cheklovchi qiymat.",
+          "Paket ichidagi foydali yuqori qatlam ma'lumoti.",
+          "Sarlavha xatosini aniqlash uchun nazorat qiymati.",
+          "Payload qaysi yuqori protokolga tegishli ekanini bildiruvchi maydon."
+        ],
+        "a": "Sarlavha xatosini aniqlash uchun nazorat qiymati.",
+        "topic": "19-mavzu. IP-paket va uning tuzilishi"
+      },
+      {
+        "id": 188,
+        "q": "Quyidagilardan qaysi javob Source IP tushunchasiga mos keladi?",
+        "options": [
+          "Paketning tarmoqda ortiqcha aylanib yurishini cheklovchi qiymat.",
+          "Paket qabul qiluvchi qurilmaning ip manzili.",
+          "Payload qaysi yuqori protokolga tegishli ekanini bildiruvchi maydon.",
+          "Paket jo'natuvchi qurilmaning ip manzili."
+        ],
+        "a": "Paket jo'natuvchi qurilmaning ip manzili.",
+        "topic": "19-mavzu. IP-paket va uning tuzilishi"
+      },
+      {
+        "id": 189,
+        "q": "Quyidagilardan qaysi javob Destination IP tushunchasiga mos keladi?",
+        "options": [
+          "Paket qabul qiluvchi qurilmaning ip manzili.",
+          "Payload qaysi yuqori protokolga tegishli ekanini bildiruvchi maydon.",
+          "Paket ichidagi foydali yuqori qatlam ma'lumoti.",
+          "Katta paketni kichik qismlarga ajratish jarayoni."
+        ],
+        "a": "Paket qabul qiluvchi qurilmaning ip manzili.",
+        "topic": "19-mavzu. IP-paket va uning tuzilishi"
+      },
+      {
+        "id": 190,
+        "q": "Quyidagilardan qaysi javob MTU tushunchasiga mos keladi?",
+        "options": [
+          "Tarmoq qatlamida uzatiladigan sarlavha va payloaddan iborat ma'lumot birligi.",
+          "Kanalda uzatilishi mumkin bo'lgan maksimal paket hajmi.",
+          "Paket jo'natuvchi qurilmaning ip manzili.",
+          "Katta paketni kichik qismlarga ajratish jarayoni."
+        ],
+        "a": "Kanalda uzatilishi mumkin bo'lgan maksimal paket hajmi.",
+        "topic": "19-mavzu. IP-paket va uning tuzilishi"
+      },
+      {
+        "id": 191,
+        "q": "Quyidagilardan qaysi javob IoT tushunchasiga mos keladi?",
+        "options": [
+          "Tarmoq boshqaruvini dasturiy markazlashtirish yondashuvi.",
+          "Tarmoqqa ulangan sensor, aktuator va aqlli qurilmalar ekotizimi.",
+          "Sdn muhitida boshqaruv qarorlarini markazlashtiruvchi komponent.",
+          "Tarmoq holati haqidagi o'lchov ma'lumotlarini yig'ish jarayoni."
+        ],
+        "a": "Tarmoqqa ulangan sensor, aktuator va aqlli qurilmalar ekotizimi.",
+        "topic": "20-mavzu. Kompyuter tarmoqlarining rivojlanish istiqbollari: IoT, SDN, bulutli hisoblash va sun'iy intellekt asosida tarmoq boshqaruvi"
+      },
+      {
+        "id": 192,
+        "q": "Quyidagilardan qaysi javob SDN tushunchasiga mos keladi?",
+        "options": [
+          "Tarmoqqa ulangan sensor, aktuator va aqlli qurilmalar ekotizimi.",
+          "Sdn muhitida boshqaruv qarorlarini markazlashtiruvchi komponent.",
+          "Tarmoq boshqaruvini dasturiy markazlashtirish yondashuvi.",
+          "Tarmoq holati haqidagi o'lchov ma'lumotlarini yig'ish jarayoni."
+        ],
+        "a": "Tarmoq boshqaruvini dasturiy markazlashtirish yondashuvi.",
+        "topic": "20-mavzu. Kompyuter tarmoqlarining rivojlanish istiqbollari: IoT, SDN, bulutli hisoblash va sun'iy intellekt asosida tarmoq boshqaruvi"
+      },
+      {
+        "id": 193,
+        "q": "Quyidagilardan qaysi javob Bulutli hisoblash tushunchasiga mos keladi?",
+        "options": [
+          "Tarmoq boshqaruvini dasturiy markazlashtirish yondashuvi.",
+          "Tarmoq ma'lumotlarini tahlil qilib qaror qabul qilishga yordam beruvchi intellektual yondashuv.",
+          "Hisoblashni ma'lumot manbasiga yaqinlashtirish yondashuvi.",
+          "Resurslarni internet orqali xizmat sifatida taqdim etish modeli."
+        ],
+        "a": "Resurslarni internet orqali xizmat sifatida taqdim etish modeli.",
+        "topic": "20-mavzu. Kompyuter tarmoqlarining rivojlanish istiqbollari: IoT, SDN, bulutli hisoblash va sun'iy intellekt asosida tarmoq boshqaruvi"
+      },
+      {
+        "id": 194,
+        "q": "Quyidagilardan qaysi javob Edge computing tushunchasiga mos keladi?",
+        "options": [
+          "Hisoblashni ma'lumot manbasiga yaqinlashtirish yondashuvi.",
+          "Qurilmani minimal qo'l mehnati bilan avtomatik ishga tushirish.",
+          "Tarmoqqa ulangan sensor, aktuator va aqlli qurilmalar ekotizimi.",
+          "Tarmoq holati haqidagi o'lchov ma'lumotlarini yig'ish jarayoni."
+        ],
+        "a": "Hisoblashni ma'lumot manbasiga yaqinlashtirish yondashuvi.",
+        "topic": "20-mavzu. Kompyuter tarmoqlarining rivojlanish istiqbollari: IoT, SDN, bulutli hisoblash va sun'iy intellekt asosida tarmoq boshqaruvi"
+      },
+      {
+        "id": 195,
+        "q": "Quyidagilardan qaysi javob AI tushunchasiga mos keladi?",
+        "options": [
+          "Bir nechta xizmat va resurslarni yagona jarayon sifatida boshqarish.",
+          "Tarmoq ma'lumotlarini tahlil qilib qaror qabul qilishga yordam beruvchi intellektual yondashuv.",
+          "Tarmoqqa ulangan sensor, aktuator va aqlli qurilmalar ekotizimi.",
+          "Qurilmani minimal qo'l mehnati bilan avtomatik ishga tushirish."
+        ],
+        "a": "Tarmoq ma'lumotlarini tahlil qilib qaror qabul qilishga yordam beruvchi intellektual yondashuv.",
+        "topic": "20-mavzu. Kompyuter tarmoqlarining rivojlanish istiqbollari: IoT, SDN, bulutli hisoblash va sun'iy intellekt asosida tarmoq boshqaruvi"
+      },
+      {
+        "id": 196,
+        "q": "Quyidagilardan qaysi javob Network automation tushunchasiga mos keladi?",
+        "options": [
+          "Qurilmani minimal qo'l mehnati bilan avtomatik ishga tushirish.",
+          "Tarmoq holati haqidagi o'lchov ma'lumotlarini yig'ish jarayoni.",
+          "Tarmoq sozlash va boshqaruv vazifalarini avtomatlashtirish.",
+          "Tarmoqqa ulangan sensor, aktuator va aqlli qurilmalar ekotizimi."
+        ],
+        "a": "Tarmoq sozlash va boshqaruv vazifalarini avtomatlashtirish.",
+        "topic": "20-mavzu. Kompyuter tarmoqlarining rivojlanish istiqbollari: IoT, SDN, bulutli hisoblash va sun'iy intellekt asosida tarmoq boshqaruvi"
+      },
+      {
+        "id": 197,
+        "q": "Quyidagilardan qaysi javob Controller tushunchasiga mos keladi?",
+        "options": [
+          "Hisoblashni ma'lumot manbasiga yaqinlashtirish yondashuvi.",
+          "Tarmoq boshqaruvini dasturiy markazlashtirish yondashuvi.",
+          "Qurilmani minimal qo'l mehnati bilan avtomatik ishga tushirish.",
+          "Sdn muhitida boshqaruv qarorlarini markazlashtiruvchi komponent."
+        ],
+        "a": "Sdn muhitida boshqaruv qarorlarini markazlashtiruvchi komponent.",
+        "topic": "20-mavzu. Kompyuter tarmoqlarining rivojlanish istiqbollari: IoT, SDN, bulutli hisoblash va sun'iy intellekt asosida tarmoq boshqaruvi"
+      },
+      {
+        "id": 198,
+        "q": "Quyidagilardan qaysi javob Telemetriya tushunchasiga mos keladi?",
+        "options": [
+          "Tarmoq holati haqidagi o'lchov ma'lumotlarini yig'ish jarayoni.",
+          "Resurslarni internet orqali xizmat sifatida taqdim etish modeli.",
+          "Sdn muhitida boshqaruv qarorlarini markazlashtiruvchi komponent.",
+          "Tarmoqqa ulangan sensor, aktuator va aqlli qurilmalar ekotizimi."
+        ],
+        "a": "Tarmoq holati haqidagi o'lchov ma'lumotlarini yig'ish jarayoni.",
+        "topic": "20-mavzu. Kompyuter tarmoqlarining rivojlanish istiqbollari: IoT, SDN, bulutli hisoblash va sun'iy intellekt asosida tarmoq boshqaruvi"
+      },
+      {
+        "id": 199,
+        "q": "Quyidagilardan qaysi javob Orkestratsiya tushunchasiga mos keladi?",
+        "options": [
+          "Tarmoq ma'lumotlarini tahlil qilib qaror qabul qilishga yordam beruvchi intellektual yondashuv.",
+          "Bir nechta xizmat va resurslarni yagona jarayon sifatida boshqarish.",
+          "Resurslarni internet orqali xizmat sifatida taqdim etish modeli.",
+          "Hisoblashni ma'lumot manbasiga yaqinlashtirish yondashuvi."
+        ],
+        "a": "Bir nechta xizmat va resurslarni yagona jarayon sifatida boshqarish.",
+        "topic": "20-mavzu. Kompyuter tarmoqlarining rivojlanish istiqbollari: IoT, SDN, bulutli hisoblash va sun'iy intellekt asosida tarmoq boshqaruvi"
+      },
+      {
+        "id": 200,
+        "q": "Quyidagilardan qaysi javob Zero-touch provisioning tushunchasiga mos keladi?",
+        "options": [
+          "Resurslarni internet orqali xizmat sifatida taqdim etish modeli.",
+          "Tarmoq holati haqidagi o'lchov ma'lumotlarini yig'ish jarayoni.",
+          "Qurilmani minimal qo'l mehnati bilan avtomatik ishga tushirish.",
+          "Hisoblashni ma'lumot manbasiga yaqinlashtirish yondashuvi."
+        ],
+        "a": "Qurilmani minimal qo'l mehnati bilan avtomatik ishga tushirish.",
+        "topic": "20-mavzu. Kompyuter tarmoqlarining rivojlanish istiqbollari: IoT, SDN, bulutli hisoblash va sun'iy intellekt asosida tarmoq boshqaruvi"
+      },
+      {
+        "id": 201,
+        "q": "Quyidagilardan qaysi javob Tarmoq xavfsizligi tushunchasiga mos keladi?",
+        "options": [
+          "Ma'lumotni ruxsatsiz o'qilishdan himoyalash uchun kodlash jarayoni.",
+          "Aniqlangan zararli trafikni bloklashga yordam beruvchi tizim.",
+          "Tarmoq xizmatlari va ma'lumotlarini tahdidlardan himoya qilish choralari.",
+          "Trafikni qoidalar asosida ruxsat beruvchi yoki bloklovchi himoya vositasi."
+        ],
+        "a": "Tarmoq xizmatlari va ma'lumotlarini tahdidlardan himoya qilish choralari.",
+        "topic": "21-mavzu. Tarmoq xavfsizligi: asosiy tahdidlar va himoya vositalari"
+      },
+      {
+        "id": 202,
+        "q": "Quyidagilardan qaysi javob Firewall tushunchasiga mos keladi?",
+        "options": [
+          "Foydalanuvchi yoki qurilma kimligini tekshirish jarayoni.",
+          "Shubhali faoliyatni aniqlash uchun ishlatiladigan tizim.",
+          "Masofaviy ulanishni shifrlangan kanal orqali himoyalash texnologiyasi.",
+          "Trafikni qoidalar asosida ruxsat beruvchi yoki bloklovchi himoya vositasi."
+        ],
+        "a": "Trafikni qoidalar asosida ruxsat beruvchi yoki bloklovchi himoya vositasi.",
+        "topic": "21-mavzu. Tarmoq xavfsizligi: asosiy tahdidlar va himoya vositalari"
+      },
+      {
+        "id": 203,
+        "q": "Quyidagilardan qaysi javob IDS tushunchasiga mos keladi?",
+        "options": [
+          "Shubhali faoliyatni aniqlash uchun ishlatiladigan tizim.",
+          "Trafikni qoidalar asosida ruxsat beruvchi yoki bloklovchi himoya vositasi.",
+          "Ma'lumotni ruxsatsiz o'qilishdan himoyalash uchun kodlash jarayoni.",
+          "Tarmoq xizmatlari va ma'lumotlarini tahdidlardan himoya qilish choralari."
+        ],
+        "a": "Shubhali faoliyatni aniqlash uchun ishlatiladigan tizim.",
+        "topic": "21-mavzu. Tarmoq xavfsizligi: asosiy tahdidlar va himoya vositalari"
+      },
+      {
+        "id": 204,
+        "q": "Quyidagilardan qaysi javob IPS tushunchasiga mos keladi?",
+        "options": [
+          "Shubhali faoliyatni aniqlash uchun ishlatiladigan tizim.",
+          "Aniqlangan zararli trafikni bloklashga yordam beruvchi tizim.",
+          "Masofaviy ulanishni shifrlangan kanal orqali himoyalash texnologiyasi.",
+          "Xavfsizlikni oshirish uchun tarmoqni mantiqiy qismlarga ajratish."
+        ],
+        "a": "Aniqlangan zararli trafikni bloklashga yordam beruvchi tizim.",
+        "topic": "21-mavzu. Tarmoq xavfsizligi: asosiy tahdidlar va himoya vositalari"
+      },
+      {
+        "id": 205,
+        "q": "Quyidagilardan qaysi javob VPN tushunchasiga mos keladi?",
+        "options": [
+          "Shubhali faoliyatni aniqlash uchun ishlatiladigan tizim.",
+          "Xizmatni haddan tashqari so'rovlar bilan ishlamay qolishga olib keluvchi hujum turi.",
+          "Masofaviy ulanishni shifrlangan kanal orqali himoyalash texnologiyasi.",
+          "Xavfsizlikni oshirish uchun tarmoqni mantiqiy qismlarga ajratish."
+        ],
+        "a": "Masofaviy ulanishni shifrlangan kanal orqali himoyalash texnologiyasi.",
+        "topic": "21-mavzu. Tarmoq xavfsizligi: asosiy tahdidlar va himoya vositalari"
+      },
+      {
+        "id": 206,
+        "q": "Quyidagilardan qaysi javob Autentifikatsiya tushunchasiga mos keladi?",
+        "options": [
+          "Xizmatni haddan tashqari so'rovlar bilan ishlamay qolishga olib keluvchi hujum turi.",
+          "Aniqlangan zararli trafikni bloklashga yordam beruvchi tizim.",
+          "Shubhali faoliyatni aniqlash uchun ishlatiladigan tizim.",
+          "Foydalanuvchi yoki qurilma kimligini tekshirish jarayoni."
+        ],
+        "a": "Foydalanuvchi yoki qurilma kimligini tekshirish jarayoni.",
+        "topic": "21-mavzu. Tarmoq xavfsizligi: asosiy tahdidlar va himoya vositalari"
+      },
+      {
+        "id": 207,
+        "q": "Quyidagilardan qaysi javob Shifrlash tushunchasiga mos keladi?",
+        "options": [
+          "Ma'lumotni ruxsatsiz o'qilishdan himoyalash uchun kodlash jarayoni.",
+          "Tarmoq xizmatlari va ma'lumotlarini tahdidlardan himoya qilish choralari.",
+          "Aniqlangan zararli trafikni bloklashga yordam beruvchi tizim.",
+          "Xizmatni haddan tashqari so'rovlar bilan ishlamay qolishga olib keluvchi hujum turi."
+        ],
+        "a": "Ma'lumotni ruxsatsiz o'qilishdan himoyalash uchun kodlash jarayoni.",
+        "topic": "21-mavzu. Tarmoq xavfsizligi: asosiy tahdidlar va himoya vositalari"
+      },
+      {
+        "id": 208,
+        "q": "Quyidagilardan qaysi javob DDoS tushunchasiga mos keladi?",
+        "options": [
+          "Masofaviy ulanishni shifrlangan kanal orqali himoyalash texnologiyasi.",
+          "Xizmatni haddan tashqari so'rovlar bilan ishlamay qolishga olib keluvchi hujum turi.",
+          "Shubhali faoliyatni aniqlash uchun ishlatiladigan tizim.",
+          "Xavfsizlikni oshirish uchun tarmoqni mantiqiy qismlarga ajratish."
+        ],
+        "a": "Xizmatni haddan tashqari so'rovlar bilan ishlamay qolishga olib keluvchi hujum turi.",
+        "topic": "21-mavzu. Tarmoq xavfsizligi: asosiy tahdidlar va himoya vositalari"
+      },
+      {
+        "id": 209,
+        "q": "Quyidagilardan qaysi javob Segmentatsiya tushunchasiga mos keladi?",
+        "options": [
+          "Ma'lumotni ruxsatsiz o'qilishdan himoyalash uchun kodlash jarayoni.",
+          "Tarmoq holati va hodisalarini uzluksiz kuzatish jarayoni.",
+          "Xavfsizlikni oshirish uchun tarmoqni mantiqiy qismlarga ajratish.",
+          "Shubhali faoliyatni aniqlash uchun ishlatiladigan tizim."
+        ],
+        "a": "Xavfsizlikni oshirish uchun tarmoqni mantiqiy qismlarga ajratish.",
+        "topic": "21-mavzu. Tarmoq xavfsizligi: asosiy tahdidlar va himoya vositalari"
+      },
+      {
+        "id": 210,
+        "q": "Quyidagilardan qaysi javob Monitoring tushunchasiga mos keladi?",
+        "options": [
+          "Trafikni qoidalar asosida ruxsat beruvchi yoki bloklovchi himoya vositasi.",
+          "Aniqlangan zararli trafikni bloklashga yordam beruvchi tizim.",
+          "Xizmatni haddan tashqari so'rovlar bilan ishlamay qolishga olib keluvchi hujum turi.",
+          "Tarmoq holati va hodisalarini uzluksiz kuzatish jarayoni."
+        ],
+        "a": "Tarmoq holati va hodisalarini uzluksiz kuzatish jarayoni.",
+        "topic": "21-mavzu. Tarmoq xavfsizligi: asosiy tahdidlar va himoya vositalari"
+      }
+    ]
   }
 }
