@@ -2,10 +2,10 @@
   "name": "student-simulator-bot",
   "version": "1.0.0",
   "description": "Telegram bot simulator",
-  "main": "index.js",
+  "main": "start.js",
   "type": "commonjs",
   "scripts": {
-    "start": "node index.js",
+    "start": "node start.js",
     "dev": "nodemon index.js"
   },
   "dependencies": {
