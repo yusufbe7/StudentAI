@@ -15,3 +15,7 @@ custom_questions.json
 # Tizim fayllari
 .DS_Store
 npm-debug.log*
+# Foydalanuvchi testlari va AI loglari (Railway Volume'da saqlanadi)
+user_tests/
+ai_usage.json
+ai_hints.json
