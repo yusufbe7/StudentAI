@@ -39,7 +39,7 @@ export async function api(path, { method = 'GET', body } = {}) {
     throw new ApiError("Serverga ulanib bo'lmadi. Internet yoki server manzilini tekshiring.", 0);
   }
   const data = await res.json().catch(() => ({}));
-  if (res.status === 401 && path !== '/auth') {
+  if (res.status === 401 && path !== '/auth' && path !== '/login') {
     clearSession();
     if (!location.hash.startsWith('#/login')) location.hash = '#/login';
   }

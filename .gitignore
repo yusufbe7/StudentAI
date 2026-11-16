@@ -27,3 +27,4 @@ reports.json
 audit_log.json
 broadcasts.json
 admin_sessions.json
+admin_credentials.json
