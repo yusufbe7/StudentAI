@@ -343,6 +343,73 @@ const getWebUsers  = () => readJSON(WEB_USERS_PATH, {});
 const saveWebUsers = (d) => writeJSON(WEB_USERS_PATH, d);
 
 // ============================================================
+// KONFIGURATSIYA MIGRATSIYALARI (bir marta bajariladi, cfg.migrations da belgilanadi)
+// ============================================================
+const ALF = 'Alfraganus Universiteti';
+const BASE_DIRS = ['Dasturiy Injiniring', 'Kiberxavfsizlik', "Sun'iy intelekt"];
+(function runConfigMigrations() {
+    const cfg = getConfig();
+    cfg.migrations ||= [];
+    if (!cfg.migrations.includes('alfraganus_2kurs_v1')) {
+        // Hozircha faqat Alfraganus; boshqa universitetlar ma'lumoti o'chirilmaydi (keyin qaytarish oson)
+        cfg.universities = [ALF];
+        cfg.directionsByUniv ||= {};
+        cfg.directionsByUniv[ALF] = { '1-kurs': [...BASE_DIRS], '2-kurs': [...BASE_DIRS] };
+        // Kurs → semestr (ro'yxatdan o'tishda avtomatik)
+        cfg.kursSemester = { '1-kurs': '2-semestr', '2-kurs': '3-semestr' };
+        cfg.semesters = [...new Set([...(cfg.semesters || []), '1-semestr', '2-semestr', '3-semestr'])].sort((a, b) => parseInt(a) - parseInt(b));
+        cfg.activeSemesters = [...new Set([...(cfg.activeSemesters || []), '2-semestr', '3-semestr'])];
+        // 2-kurs, 3-semestr: Kompyuter tarmoqlari (uchala yo'nalishda bitta savollar bazasi)
+        cfg.subjectsByDirection ||= {};
+        for (const dir of BASE_DIRS) {
+            let d = cfg.subjectsByDirection[dir];
+            if (!d || Array.isArray(d)) d = cfg.subjectsByDirection[dir] = { '2-semestr': Array.isArray(d) ? d : [] };
+            d['3-semestr'] ||= [];
+            if (!d['3-semestr'].some((x) => x.key === 'kompyuter_tarmoqlari')) {
+                d['3-semestr'].push({ name: 'Kompyuter tarmoqlari', icon: '🌐', key: 'kompyuter_tarmoqlari' });
+            }
+        }
+        cfg.migrations.push('alfraganus_2kurs_v1');
+        saveConfig(cfg);
+        // Mavjud 2-kurs talabalarini 3-semestrga o'tkazish
+        const db = getDb();
+        let moved = 0;
+        for (const u of Object.values(db.users || {})) {
+            if (u.kurs === '2-kurs' && u.semester !== '3-semestr') { u.semester = '3-semestr'; moved++; }
+        }
+        if (moved) saveDb(db);
+        console.log(`✅ [Migratsiya] Alfraganus + 2-kurs/3-semestr (Kompyuter tarmoqlari). ${moved} ta 2-kurs talabasi 3-semestrga o'tkazildi`);
+    }
+})();
+
+// Ro'yxatdan o'tish: kurs bo'yicha semestr va mavjud kurslar
+const semesterForKurs = (kurs) => getConfig().kursSemester?.[kurs] || '2-semestr';
+function kursOptions(univ) {
+    const map = getConfig().directionsByUniv?.[univ] || {};
+    const list = ['1-kurs', '2-kurs', '3-kurs', '4-kurs'].filter((k) => (map[k] || []).length);
+    return list.length ? list : ['1-kurs', '2-kurs', '3-kurs', '4-kurs'];
+}
+// Universitet bitta bo'lsa — so'ramasdan qo'yamiz va kursga o'tamiz
+async function askUnivOrKurs(ctx, cu, db, greeting = '') {
+    const cfg = getConfig();
+    if ((cfg.universities || []).length === 1) {
+        cu.univ = cfg.universities[0];
+        cu.step = 'wait_kurs';
+        saveDb(db);
+        const ks = kursOptions(cu.univ);
+        const rows = []; for (let i = 0; i < ks.length; i += 2) rows.push(ks.slice(i, i + 2));
+        return ctx.reply(`${greeting}🎓 ${cu.univ}
+
+Nechanchi kursda o'qiysiz?`, Markup.keyboard(rows).oneTime().resize());
+    }
+    cu.step = 'wait_univ';
+    saveDb(db);
+    const univRows = [];
+    for (let i = 0; i < cfg.universities.length; i += 2) { const r = [cfg.universities[i]]; if (cfg.universities[i + 1]) r.push(cfg.universities[i + 1]); univRows.push(r); }
+    return ctx.reply(`${greeting}O'qish joyingizni tanlang:`, Markup.keyboard(univRows).oneTime().resize());
+}
+
+// ============================================================
 // XOTIRA
 // ============================================================
 let SUBJECTS    = readJSON(PATHS.subjects, {});
@@ -1584,11 +1651,8 @@ bot.hears("📅 Semestrni o'zgartirish", (ctx) => showSubjectMenu(ctx));
 bot.hears('⬅️ Orqaga (Sozlamalar)', (ctx) => ctx.reply('Sozlamalar:', Markup.keyboard([["📝 Ismni o'zgartirish"],["🎓 Yo'nalishni qayta tanlash"],['⬅️ Orqaga (Fanlar)']]).resize()));
 bot.hears("🎓 Yo'nalishni qayta tanlash", (ctx) => {
     const db=getDb(); const user=db.users[ctx.from.id]; if(!user)return;
-    user.isRegistered=false; user.step='wait_univ'; saveDb(db);
-    const cfgR = getConfig();
-    const univRows = [];
-    for (let i=0; i<cfgR.universities.length; i+=2) { const r=[cfgR.universities[i]]; if(cfgR.universities[i+1]) r.push(cfgR.universities[i+1]); univRows.push(r); }
-    return ctx.reply("OTMni qayta tanlang:", Markup.keyboard(univRows).oneTime().resize());
+    user.isRegistered=false;
+    return askUnivOrKurs(ctx, user, db);
 });
 
 // ─── ADMIN HANDLERLARI ─────────────────────────────────────
@@ -3007,22 +3071,18 @@ bot.on(['text','photo','video','animation','document'], async (ctx, next) => {
             const forbidden = ['💡 Dasturlash 2','🕌 Dinshunoslik','💭 Falsafa','⚡ Fizika 2','🔢 Hisob',"🗄️ Ma'lumotlar tuzilmasi",'🌐 English','📊 Reyting','👤 Profil','⚙️ Sozlamalar'];
             if (forbidden.includes(msgText)) return ctx.reply("❌ Menyu tugmalarini bosmang! Ism va familiyangizni yozing:", Markup.removeKeyboard());
             if (!isValidName(msgText)) return ctx.replyWithHTML(`❌ <b>Bu ism sifatida qabul qilinmadi!</b>\n\nHaqiqiy ism va familiyangizni kiriting.\nMasalan: <i>Abdullayev Jasur</i>`, Markup.removeKeyboard());
-            cu.name=msgText.trim(); cu.step='wait_univ'; saveDb(db);
-            const cfgU = getConfig();
-            const univRows = [];
-            for (let i=0; i<cfgU.universities.length; i+=2) {
-                const r=[cfgU.universities[i]]; if(cfgU.universities[i+1]) r.push(cfgU.universities[i+1]); univRows.push(r);
-            }
-            return ctx.reply(`Rahmat, ${escapeHTML(msgText.trim())}!\n\nO'qish joyingizni tanlang:`, Markup.keyboard(univRows).oneTime().resize());
+            cu.name=msgText.trim();
+            return askUnivOrKurs(ctx, cu, db, `Rahmat, ${msgText.trim()}!\n\n`);
         }
         if (cu.step === 'wait_univ') {
             const cfgU2 = getConfig();
             if(!cfgU2.universities.includes(msgText)) return ctx.reply('⚠️ Ro\'yxatdagi universitetni tanlang:');
             cu.univ=msgText; cu.step='wait_kurs'; saveDb(db);
-            return ctx.reply('Nechanchi kurs?', Markup.keyboard([['1-kurs','2-kurs'],['3-kurs','4-kurs']]).oneTime().resize());
+            const ks = kursOptions(cu.univ); const kRows = []; for (let i=0; i<ks.length; i+=2) kRows.push(ks.slice(i, i+2));
+            return ctx.reply('Nechanchi kurs?', Markup.keyboard(kRows).oneTime().resize());
         }
         if (cu.step === 'wait_kurs') {
-            if(!['1-kurs','2-kurs','3-kurs','4-kurs'].includes(msgText)) return ctx.reply('⚠️ Kursni tanlang:');
+            if(!kursOptions(cu.univ).includes(msgText)) return ctx.reply('⚠️ Kursni tugmalardan tanlang:');
             cu.kurs=msgText; cu.step='wait_yonalish'; saveDb(db);
             const cfgK = getConfig();
             const univDirs = cfgK.directionsByUniv?.[cu.univ] || {};
@@ -3037,8 +3097,10 @@ bot.on(['text','photo','video','animation','document'], async (ctx, next) => {
             return ctx.reply("Yo'nalishingizni tanlang:", Markup.keyboard(dirRows).oneTime().resize());
         }
         if (cu.step === 'wait_yonalish') {
+            const allowedDirs = getConfig().directionsByUniv?.[cu.univ]?.[cu.kurs] || [];
+            if (allowedDirs.length && !allowedDirs.includes(msgText)) return ctx.reply("⚠️ Yo'nalishni tugmalardan tanlang:");
             cu.yonalish = msgText;
-            cu.semester = '2-semestr';
+            cu.semester = semesterForKurs(cu.kurs);
             cu.isRegistered = true;
             cu.step = 'completed';
             saveDb(db);
