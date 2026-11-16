@@ -5425,17 +5425,20 @@ ensureDefaultAccounts();
 
 async function startBot() {
     if (WEBHOOK_URL) {
-        const webhookPath = `/webhook/${BOT_TOKEN}`;
+        // Manzilda token emas, uning hashi; Telegram har so'rovga maxfiy kalit qo'shadi (secret_token)
+        const tokenHash = require('crypto').createHash('sha256').update(BOT_TOKEN).digest('hex');
+        const webhookPath = `/webhook/${tokenHash.slice(0, 32)}`;
+        const secretToken = tokenHash.slice(32, 64);
         const fullUrl = `${(WEBHOOK_URL.startsWith('http') ? WEBHOOK_URL : 'https://' + WEBHOOK_URL).replace(/\/$/,'')}${webhookPath}`;
-        app.use(bot.webhookCallback(webhookPath));
+        app.use(bot.webhookCallback(webhookPath, { secretToken }));
         // Server uyg'onganda (Render) kelgan xabarlar yo'qolmasligi uchun: webhook o'zgarmagan bo'lsa qayta o'rnatmaymiz
         // va navbatdagi xabarlarni o'chirmaymiz
         const info = await bot.telegram.getWebhookInfo().catch(() => null);
         if (info?.url !== fullUrl) {
-            await bot.telegram.setWebhook(fullUrl, { allowed_updates:['message','callback_query','inline_query'], drop_pending_updates: process.env.DROP_PENDING_UPDATES === '1' });
+            await bot.telegram.setWebhook(fullUrl, { allowed_updates:['message','callback_query','inline_query'], drop_pending_updates: process.env.DROP_PENDING_UPDATES === '1', secret_token: secretToken });
         }
         console.log(`✅ Bot WEBHOOK rejimida ishga tushdi!`);
-        console.log(`🔗 Webhook URL: ${fullUrl}`);
+        console.log(`🔗 Webhook: ${fullUrl.replace(webhookPath, '/webhook/***')}`);
     } else {
         try { await bot.telegram.deleteWebhook(); } catch {}
         let attempt = 0;
