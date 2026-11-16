@@ -19,3 +19,11 @@ npm-debug.log*
 user_tests/
 ai_usage.json
 ai_hints.json
+
+# Admin panel ma'lumotlari
+stats.json
+payments.json
+reports.json
+audit_log.json
+broadcasts.json
+admin_sessions.json

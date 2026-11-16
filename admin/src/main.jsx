@@ -14,11 +14,13 @@ import Tournament from './pages/Tournament.jsx';
 import Channels from './pages/Channels.jsx';
 import Activity from './pages/Activity.jsx';
 import SettingsPage from './pages/Settings.jsx';
+import Login from './pages/Login.jsx';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <HashRouter>
       <Routes>
+        <Route path="login" element={<Login />} />
         <Route element={<Layout />}>
           <Route index element={<Dashboard />} />
           <Route path="finance" element={<Finance />} />

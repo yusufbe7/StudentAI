@@ -190,3 +190,33 @@ export const pageMotion = {
   exit: { opacity: 0, y: -8 },
   transition: { duration: 0.25 },
 };
+
+// ─── Yuklanish / xatolik holatlari ────────────────────────
+export function Loading({ label = 'Yuklanmoqda...' }) {
+  return (
+    <div className="grid place-items-center py-20 text-white/90">
+      <div className="h-8 w-8 animate-spin rounded-full border-2 border-white/40 border-t-white" />
+      <p className="mt-3 text-sm">{label}</p>
+    </div>
+  );
+}
+
+export function ErrorBox({ error, onRetry }) {
+  return (
+    <Card className="mx-auto max-w-lg p-6 text-center">
+      <p className="text-3xl">⚠️</p>
+      <p className="mt-2 font-semibold">Ma'lumotni yuklab bo'lmadi</p>
+      <p className="mt-1 text-sm text-slate-600">{error}</p>
+      {onRetry && <button className="btn-dark mx-auto mt-4" onClick={onRetry}>Qayta urinish</button>}
+    </Card>
+  );
+}
+
+export function Empty({ icon = '📭', text }) {
+  return (
+    <div className="grid place-items-center px-6 py-12 text-center text-sm text-slate-500">
+      <span className="text-3xl">{icon}</span>
+      <p className="mt-2">{text}</p>
+    </div>
+  );
+}
