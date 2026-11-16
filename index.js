@@ -50,6 +50,9 @@ fs.copyFileSync(
     PATHS.subjects
 );
 
+// Faollik statistikasi (admin panel dashboard)
+const stats = require('./lib/stats').createStats(DATA_DIR);
+
 console.log('✅ subjects.json uiipdated');
 
 // ============================================================
@@ -752,7 +755,7 @@ async function sendQuestion(ctx, isNew = false) {
     if (!s.activeList || s.index >= s.activeList.length) {
         if (s.personalTestId && s.currentSubject === `ut_${s.personalTestId}`) return uploadFeature.finishPersonalTest(ctx, s);
         const wrongCount = (s.wrongs || []).length;
-        if (!s.isTurbo) updateGlobalScore(userId, s.userName, ctx.from.username||'Lichka yopiq', s.score, s.activeList?.length||0, wrongCount, s.currentSubject||null);
+        if (!s.isTurbo) { updateGlobalScore(userId, s.userName, ctx.from.username||'Lichka yopiq', s.score, s.activeList?.length||0, wrongCount, s.currentSubject||null); stats.testFinished(); }
         const total = s.activeList?.length || 1;
         const percent = ((s.score / total) * 100).toFixed(1);
         let resultMsg = s.isTurbo
@@ -958,6 +961,7 @@ bot.use(async (ctx, next) => {
     if (ctx.session && ctx.from?.id) {
         ctx.session._lastActivity = Date.now();
     }
+    if (ctx.from?.id) stats.touch(ctx.from.id);
     return next();
 });
 bot.use(async (ctx, next) => {
@@ -1083,7 +1087,7 @@ bot.start(async (ctx) => {
 
 bot.command('admin', (ctx) => {
     if (!isAdmin(ctx.from.id)) return ctx.reply("❌ Ruxsat yo'q!");
-    return ctx.reply('🛠 <b>Admin Panel</b>', {parse_mode:'HTML', ...adminMainKeyboard(getDb())});
+    return ctx.reply('🛠 <b>Admin Panel</b>\n\n🖥 Web panel uchun: /panel', {parse_mode:'HTML', ...adminMainKeyboard(getDb())});
 });
 
 // ============================================================
@@ -1145,6 +1149,7 @@ bot.action('report_q', async (ctx) => {
     const db = getDb(); 
     const userName = db.users[userId]?.name || ctx.from.first_name || 'Foydalanuvchi';
     const falseCount = db.users[userId]?.falseReportCount || 0;
+    adminPanel.recordReport({ userId, userName, subject: s.currentSubject || null, q: qData.q, a: qData.a, options: qData.options });
     const msg = `⚠️ <b>XATO SAVOL XABARI</b>\n\n👤 Foydalanuvchi: <b>${escapeHTML(userName)}</b>\n🆔 ID: <code>${userId}</code>\n📚 Fan: <b>${escapeHTML(s.currentSubject||"Noma'lum")}</b>\n⚠️ Noto'g'ri shikoyatlar: <b>${falseCount} ta</b>\n\n❓ Savol: ${escapeHTML(qData.q)}\n✅ To'g'ri javob: <b>${escapeHTML(qData.a)}</b>`;
     await ctx.telegram.sendMessage(ADMIN_ID, msg, {
         parse_mode: 'HTML',
@@ -1157,6 +1162,7 @@ bot.action('report_q', async (ctx) => {
 
 bot.action(/^rpt_ok_(\d+)$/, async (ctx) => {
     if (!isAdmin(ctx.from.id)) return ctx.answerCbQuery("Ruxsat yo'q!");
+    adminPanel.closeReportsOf(ctx.match[1], 'resolved');
     await ctx.answerCbQuery('✅ Shikoyat to\'g\'ri deb belgilandi');
     await ctx.editMessageReplyMarkup({inline_keyboard:[]}).catch(()=>{});
 });
@@ -1167,6 +1173,7 @@ bot.action(/^rpt_fine_(\d+)$/, async (ctx) => {
     const db = getDb();
     const user = db.users[targetId];
     if (!user) { await ctx.answerCbQuery('Foydalanuvchi topilmadi!'); return; }
+    adminPanel.closeReportsOf(targetId, 'fined');
     const falseCount = (user.falseReportCount || 0) + 1;
     user.falseReportCount = falseCount;
     const fine = falseCount === 1 ? 100 : falseCount === 2 ? 200 : 300;
@@ -1216,48 +1223,25 @@ bot.action('buy_vip', (ctx) => {
 });
 
 bot.action(/^approve_(\d+)$/, async (ctx) => {
+    if (!isAdmin(ctx.from.id)) return ctx.answerCbQuery("Ruxsat yo'q!");
     const targetId = parseInt(ctx.match[1]);
-    const db = getDb();
-    const now = Date.now();
-    const vipEnd = now + 30*24*60*60*1000;
-    if (db.users[targetId]) { db.users[targetId].isVip = true; db.users[targetId].vipStart = now; db.users[targetId].vipEnd = vipEnd; saveDb(db); }
-    if (!vipUsers.includes(targetId)) { vipUsers.push(targetId); saveVip(); }
+    const out = await adminPanel.decidePayment({ userId: targetId, approve: true, by: ctx.from.id });
+    await ctx.answerCbQuery('✅ Tasdiqlandi').catch(()=>{});
     const fmt = ts => new Date(ts).toLocaleDateString('ru-RU',{day:'2-digit',month:'2-digit',year:'numeric'});
-    await ctx.telegram.sendMessage(targetId,`🎉 <b>VIP a'zolik tasdiqlandi!</b>\n\n📅 To'lov: <b>${fmt(now)}</b>\n⏳ Tugaydi: <b>${fmt(vipEnd)}</b>`,{parse_mode:'HTML'}).catch(()=>{});
-    return ctx.editMessageCaption(`✅ <b>Tasdiqlandi:</b> ${fmt(now)} dan ${fmt(vipEnd)} gacha.`,{parse_mode:'HTML'});
+    if (out.already) return ctx.editMessageCaption(`ℹ️ Bu to'lov allaqachon ko'rib chiqilgan (${out.payment.status === 'approved' ? 'tasdiqlangan' : 'rad etilgan'}).`).catch(()=>{});
+    return ctx.editMessageCaption(`✅ <b>Tasdiqlandi:</b> ${fmt(Date.now())} dan ${fmt(out.vipEnd)} gacha.`,{parse_mode:'HTML'}).catch(()=>{});
 });
 bot.action(/^reject_vip_(\d+)$/, async (ctx) => {
+    if (!isAdmin(ctx.from.id)) return ctx.answerCbQuery("Ruxsat yo'q!");
     const targetId = parseInt(ctx.match[1]);
-    const db = getDb();
-    if (!db.users[targetId]) db.users[targetId] = {};
-    const u = db.users[targetId];
-    u.fakeCheckCount = (u.fakeCheckCount || 0) + 1;
-    saveDb(db);
-
-    const remaining = 3 - u.fakeCheckCount;
-
-    if (u.fakeCheckCount >= 3) {
-        // Bloklash
-        const blocked = getBlocked();
-        if (!blocked.includes(targetId) && !blocked.includes(String(targetId))) {
-            blocked.push(targetId);
-            saveBlocked(blocked);
-        }
-        await ctx.telegram.sendMessage(targetId,
-            `🚫 <b>Siz botdan bloklangansiz!</b>\n\n❌ Chekingiz admin tomonidan rad etildi.\nSiz ko'p marta soxta chek yuborganligi sababli <b>botdan bloklandingiz</b>.\n\nBlokdan chiqish uchun admin bilan bog'laning.`,
-            {parse_mode:'HTML'}
-        ).catch(()=>{});
+    const out = await adminPanel.decidePayment({ userId: targetId, approve: false, fake: true, by: ctx.from.id });
+    await ctx.answerCbQuery('Rad etildi').catch(()=>{});
+    if (out.already) return ctx.editMessageCaption("ℹ️ Bu to'lov allaqachon ko'rib chiqilgan.").catch(()=>{});
+    if (out.autoBlocked) {
         await ctx.editMessageCaption(`❌ To'lov rad etildi. Foydalanuvchi (ID: ${targetId}) avtomatik bloklandi.`).catch(()=>{});
-        // Adminga xabar
-        const name = u.name || `ID: ${targetId}`;
-        return ctx.reply(`🚫 <b>${escapeHTML(name)}</b> (ID: <code>${targetId}</code>) 3 marta soxta chek yuborgani uchun avtomatik bloklandi.`, {parse_mode:'HTML'});
-    } else {
-        await ctx.telegram.sendMessage(targetId,
-            `❌ <b>Chekingiz tasdiqlanmadi.</b>\n\n⚠️ <b>Diqqat!</b> Sizga yana <b>${remaining} ta imkoniyat</b> qoldi.\nAgar yana soxta chek tashlasangiz, <b>botdan umuman bloklanasiz!</b>`,
-            {parse_mode:'HTML'}
-        ).catch(()=>{});
-        return ctx.editMessageCaption(`❌ To'lov rad etildi. Foydalanuvchiga ogohlantirish yuborildi (${u.fakeCheckCount}/3).`).catch(()=>{});
+        return ctx.reply(`🚫 ID <code>${targetId}</code> 3 marta soxta chek yuborgani uchun avtomatik bloklandi.`, {parse_mode:'HTML'});
     }
+    return ctx.editMessageCaption(`❌ To'lov rad etildi. Foydalanuvchiga ogohlantirish yuborildi (${out.fakeCount}/3).`).catch(()=>{});
 });
 
 bot.action('confirm_tour', async (ctx) => {
@@ -1625,13 +1609,13 @@ bot.hears('📊 Statistika', async (ctx) => {
 bot.hears('💰 Pullik versiya', (ctx) => {
     if(!isAdmin(ctx.from.id)) return;
     isBotPaidMode = true;
-    const s = getSettings(); s.isPaidMode = true; saveSettings(s);
+    const s = getSettings(); s.isPaidMode = true; saveSettings(s); botSettings.isPaidMode = true;
     return ctx.reply("✅ Bot PULLIK REJIMGA o'tkazildi.\n💎 Faqat VIP foydalanuvchilar ishlatishi mumkin.");
 });
 bot.hears('🆓 Bepul versiya', (ctx) => {
     if(!isAdmin(ctx.from.id)) return;
     isBotPaidMode = false;
-    const s = getSettings(); s.isPaidMode = false; saveSettings(s);
+    const s = getSettings(); s.isPaidMode = false; saveSettings(s); botSettings.isPaidMode = false;
     return ctx.reply("✅ Bot BEPUL REJIMGA o'tkazildi.\n👥 Barcha foydalanuvchilar ishlatishi mumkin.");
 });
 bot.hears(["🛑 Botni To'xtatish",'🟢 Botni Yoqish'], async (ctx) => {
@@ -2275,7 +2259,26 @@ const isVipUser = (id) => vipUsers.includes(id) || vipUsers.includes(String(id))
 const uploadFeature = require('./lib/uploadFeature')(bot, {
     DATA_DIR, getDb, saveDb, isAdmin, isVip: isVipUser, escapeHTML, shuffle, sendQuestion, showSubjectMenu, isValidName, timers,
     isPaidModeBlocked: (id) => isBotPaidMode && !isVipUser(id) && !isAdmin(id),
+    getAiSettings: () => getSettings().ai || {},
+    onTestFinished: () => stats.testFinished(),
 });
+
+// ============================================================
+// 🖥 ADMIN PANEL API (lib/adminPanel.js) — /api/panel/*, kirish: botda /panel
+// ============================================================
+const adminPanel = require('./lib/adminPanel')({
+    bot, Markup, ADMIN_ID, DATA_DIR, PATHS, escapeHTML,
+    getDb, saveDb, getConfig, saveConfig, getSettings, saveSettings, botSettings,
+    getBlocked, saveBlocked, getVipUsers: () => vipUsers, setVipUsers: (a) => { vipUsers = a; }, saveVip,
+    getPaidMode: () => isBotPaidMode, setPaidMode: (v) => { isBotPaidMode = !!v; },
+    getSubjects: () => SUBJECTS, getRequiredChannels, saveRequiredChannels, parseChannelInput,
+    getWebUsers, saveWebUsers, getWebScores, saveWebScores,
+    prepareTournamentQuestions, finalizeTournament,
+    clearTourDeadline: () => { if (tourDeadlineTimer) { clearTimeout(tourDeadlineTimer); tourDeadlineTimer = null; } },
+    userTests: uploadFeature.store, stats, readJSON, writeJSON,
+    LIMITS: uploadFeature.LIMITS, LIMIT_KEYS: uploadFeature.LIMIT_KEYS,
+});
+app.use('/api/panel', adminPanel.router);
 
 bot.on(['text','photo','video','animation','document'], async (ctx, next) => {
     const msgText = ctx.message.text || ctx.message.caption || '';
@@ -2297,8 +2300,10 @@ bot.on(['text','photo','video','animation','document'], async (ctx, next) => {
     if (s.waitingForReceipt && ctx.message.photo) {
         s.waitingForReceipt = false;
         const fileId = ctx.message.photo[ctx.message.photo.length-1].file_id;
+        const payAmount = getConfig().vipPrice || 10000;
+        adminPanel.recordPayment({ userId, name: getDb().users[userId]?.name || ctx.from.first_name || '', username: ctx.from.username || '', fileId, amount: payAmount });
         await ctx.telegram.sendPhoto(ADMIN_ID, fileId, {
-            caption:`🔔 <b>Yangi to'lov!</b>\n👤 ${escapeHTML(ctx.from.first_name)}\n🆔 <code>${userId}</code>`,
+            caption:`🔔 <b>Yangi to'lov!</b>\n👤 ${escapeHTML(ctx.from.first_name)}\n🆔 <code>${userId}</code>\n💰 ${payAmount.toLocaleString('uz-UZ')} so'm`,
             parse_mode:'HTML',
             ...Markup.inlineKeyboard([[Markup.button.callback('🟢 Tasdiqlash',`approve_${userId}`)],[Markup.button.callback('🔴 Rad etish',`reject_vip_${userId}`)]])
         });
@@ -2321,7 +2326,7 @@ bot.on(['text','photo','video','animation','document'], async (ctx, next) => {
     if (isAdmin(userId) && s.waitingForTime) {
         const val = parseInt(msgText);
         if (isNaN(val) || val < 5) return ctx.reply('❌ Xato raqam! Kamida 5 kiriting:');
-        botSettings.timeLimit = val; saveSettings(botSettings); s.waitingForTime = false;
+        botSettings.timeLimit = val; saveSettings({ ...getSettings(), timeLimit: val }); s.waitingForTime = false;
         await ctx.reply(`✅ Savol vaqti <b>${val} sekund</b>ga yangilandi.`,{parse_mode:'HTML'});
         return ctx.reply('🛠 Admin Panel:', adminMainKeyboard(getDb()));
     }
@@ -2383,7 +2388,7 @@ bot.on(['text','photo','video','animation','document'], async (ctx, next) => {
 
             // 1. subjects.json ga qo'shish
             SUBJECTS[finalKey] = { name: `${icon} ${fanName} (${dir.substring(0,20)})`, questions: qs };
-            writeJSON(PATHS.subjects, SUBJECTS);
+            adminPanel.persistSubject(finalKey);
 
             // 2. Config ga qo'shish (subjectsByDirection)
             const cfg = getConfig();
@@ -2515,7 +2520,7 @@ bot.on(['text','photo','video','animation','document'], async (ctx, next) => {
         if (!already) cfg.subjectsByDirection[dir][sem].push({name:fanName, icon, key:subKey});
         saveConfig(cfg);
         // subjects.json ga bo'sh fan qo'shish (savolsiz)
-        if (!SUBJECTS[finalKey]) { SUBJECTS[finalKey] = {name:`${icon} ${fanName}`, questions:[]}; writeJSON(PATHS.subjects, SUBJECTS); }
+        if (!SUBJECTS[finalKey]) { SUBJECTS[finalKey] = {name:`${icon} ${fanName}`, questions:[]}; adminPanel.persistSubject(finalKey); }
         return ctx.replyWithHTML(
             `✅ <b>${icon} ${escapeHTML(fanName)}</b> fani qo'shildi!\n` +
             `📅 Semestr: <b>${sem}</b>\n` +
@@ -2849,7 +2854,7 @@ bot.on(['text','photo','video','animation','document'], async (ctx, next) => {
         const newQ = { q: d.q, options: [d.a, d.wrong1, d.wrong2, d.wrong3], a: d.a };
         if (!SUBJECTS[d.subjectKey]) { s.addQData = {}; return ctx.reply('❌ Fan topilmadi!'); }
         SUBJECTS[d.subjectKey].questions.push(newQ);
-        writeJSON(PATHS.subjects, SUBJECTS);
+        adminPanel.persistSubject(d.subjectKey);
         s.addQData = {};
         const total = SUBJECTS[d.subjectKey].questions.length;
         return ctx.replyWithHTML(
@@ -3036,6 +3041,7 @@ bot.on(['text','photo','video','animation','document'], async (ctx, next) => {
             cu.isRegistered = true;
             cu.step = 'completed';
             saveDb(db);
+            stats.newUser();
             await ctx.reply("✅ Ro'yxatdan o'tildi!");
             await ctx.replyWithHTML(uploadFeature.FEATURE_INTRO).catch(()=>{});
  
