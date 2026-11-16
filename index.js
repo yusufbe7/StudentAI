@@ -682,6 +682,12 @@ function showSubjectMenu(ctx) {
             ]);
         }
 
+        // TEST YUKLASH (AI)
+        keyboard.push([
+            '📤 Test yuklash',
+            '📚 Mening testlarim'
+        ]);
+
         // ODDIY MENYU
         keyboard.push([
             '📊 Reyting',
@@ -744,6 +750,7 @@ async function sendQuestion(ctx, isNew = false) {
     if (timers[userId]) clearTimeout(timers[userId]);
 
     if (!s.activeList || s.index >= s.activeList.length) {
+        if (s.personalTestId && s.currentSubject === `ut_${s.personalTestId}`) return uploadFeature.finishPersonalTest(ctx, s);
         const wrongCount = (s.wrongs || []).length;
         if (!s.isTurbo) updateGlobalScore(userId, s.userName, ctx.from.username||'Lichka yopiq', s.score, s.activeList?.length||0, wrongCount, s.currentSubject||null);
         const total = s.activeList?.length || 1;
@@ -790,7 +797,8 @@ async function sendQuestion(ctx, isNew = false) {
     }
 
     if (s.isTurbo) {
-        const turboText = `🚀 <b>TURBO YODLASH</b>\n📊 [${progress}]\n🔢 Savol: <b>${s.index+1}/${s.activeList.length}</b>\n_________________________\n\n❓ <b>${safe}</b>\n\n✅ <b>TO'G'RI JAVOB:</b>\n<code>${escapeHTML(qData.a)}</code>\n_________________________\n👇 Keyingi savol:`;
+        const turboTitle = (s.personalTestId && s.currentSubject === `ut_${s.personalTestId}`) ? '🧠 <b>YODLASH REJIMI</b>' : '🚀 <b>TURBO YODLASH</b>';
+        const turboText = `${turboTitle}\n📊 [${progress}]\n🔢 Savol: <b>${s.index+1}/${s.activeList.length}</b>\n_________________________\n\n❓ <b>${safe}</b>\n\n✅ <b>TO'G'RI JAVOB:</b>\n<code>${escapeHTML(qData.a)}</code>\n_________________________\n👇 Keyingi savol:`;
         const turboBtn = Markup.inlineKeyboard([[Markup.button.callback('▶️ Keyingi savol','next_turbo_q')],[Markup.button.callback('🛑 To\'xtatish','stop_test')]]);
         if (hasImage) return ctx.replyWithPhoto({source:imageSource},{caption:turboText,parse_mode:'HTML',...turboBtn});
         try { return isNew ? ctx.replyWithHTML(turboText,turboBtn) : ctx.editMessageText(turboText,{parse_mode:'HTML',...turboBtn}); }
@@ -799,12 +807,12 @@ async function sendQuestion(ctx, isNew = false) {
 
     const timeLimit = s.userTimeLimit || botSettings.timeLimit || 30;
     s.currentOptions = shuffle([...qData.options]);
-    const labels = ['A','B','C','D'];
+    const labels = ['A','B','C','D','E','F'];
     let text = `📊 Progress: [${progress}]\n🔢 Savol: <b>${s.index+1}/${s.activeList.length}</b>\n⏱ <b>VAQT: ${timeLimit}s</b>\n\n❓ <b>${safe}</b>\n\n`;
     s.currentOptions.forEach((opt, i) => { text += `<b>${labels[i]})</b> ${escapeHTML(opt)}\n\n`; });
     const inlineBtn = Markup.inlineKeyboard([
-        s.currentOptions.map((_,i) => Markup.button.callback(['🔵','🟢','🟡','🔴'][i]+' '+labels[i],`ans_${i}`)),
-        [Markup.button.callback('💡 Tushuntirish (VIP)','show_explanation')],
+        s.currentOptions.map((_,i) => Markup.button.callback(['🔵','🟢','🟡','🔴','🟣','🟠'][i]+' '+labels[i],`ans_${i}`)),
+        [Markup.button.callback('💡 Tushuntirish','show_explanation')],
         [Markup.button.callback('🛑 Testni to\'xtatish','stop_test')],
     ]);
     if (hasImage) { await ctx.replyWithPhoto({source:imageSource},{caption:text,parse_mode:'HTML',...inlineBtn}); }
@@ -1006,7 +1014,15 @@ bot.start(async (ctx) => {
             `Xush kelibsiz, ${escapeHTML(user.name)}! 😊`
         );
 
-        return showSubjectMenu(ctx);
+        await showSubjectMenu(ctx);
+
+        // Yangi imkoniyatlar haqida bir marta xabar
+        if (!user.featureIntroShown) {
+            user.featureIntroShown = true;
+            saveDb(db);
+            await ctx.replyWithHTML(uploadFeature.FEATURE_INTRO).catch(()=>{});
+        }
+        return;
     }
 
     // YANGI USER YARATISH
@@ -1098,9 +1114,9 @@ bot.action(/^ans_(\d+)$/, async (ctx) => {
     if (timers[userId]) clearTimeout(timers[userId]);
     const selIdx = parseInt(ctx.match[1]);
     const currentQ = s.activeList[s.index];
-    const labels = ['A','B','C','D'];
+    const labels = ['A','B','C','D','E','F'];
 
-    const normalize = str => (str || '').replace(/^[A-D]\)\s*/i, '').trim();
+    const normalize = str => (str || '').replace(/^[A-F]\)\s*/i, '').trim();
 
     try {
         const userAnswer = s.currentOptions[selIdx];
@@ -1187,29 +1203,9 @@ bot.action('retry_wrongs', async (ctx) => {
 });
 
 bot.action('show_explanation', async (ctx) => {
-    const s = ctx.session;
-    const userId = ctx.from.id;
-    const db = getDb();
-    const user = db.users[userId] || {};
-    if (!user.isVip && !vipUsers.includes(userId) && !isAdmin(userId)) {
-        await ctx.answerCbQuery("🔒 Faqat VIP a'zolar uchun!", {show_alert:true});
-        return ctx.replyWithHTML("⭐ <b>Tushuntirishlar faqat VIP a'zolar uchun!</b>", Markup.inlineKeyboard([[Markup.button.callback('💎 VIP sotib olish ✨','buy_vip')]]));
-    }
-    const qData = s.activeList?.[s.index];
-    if (!qData) return ctx.answerCbQuery('Xatolik: savol topilmadi.');
-    if (!qData.hint?.trim()) return ctx.answerCbQuery("⚠️ Bu savolga tushuntirish qo'shilmagan.", {show_alert:true});
-    await ctx.answerCbQuery('🔍 Tushuntirish');
-    const progress = getProgressBar(s.index+1, s.activeList.length);
-    const labels = ['A','B','C','D'];
-    let updText = `📊 [${progress}]\n🔢 <b>${s.index+1}/${s.activeList.length}</b>\n\n❓ <b>${escapeHTML(qData.q)}</b>\n\n━━━━━━━━━━\n💡 <b>TUSHUNTIRISH:</b>\n${escapeHTML(qData.hint)}\n━━━━━━━━━━\n\n`;
-    if (!s.isTurbo) (s.currentOptions||[]).forEach((opt,i) => { updText += `<b>${labels[i]})</b> ${escapeHTML(opt)}\n\n`; });
-    else updText += `✅ <b>TO'G'RI JAVOB:</b>\n<code>${escapeHTML(qData.a)}</code>`;
-    const keyboard = ctx.callbackQuery.message.reply_markup;
-    try {
-        ctx.callbackQuery.message.photo
-            ? await ctx.editMessageCaption(updText,{parse_mode:'HTML',reply_markup:keyboard})
-            : await ctx.editMessageText(updText,{parse_mode:'HTML',reply_markup:keyboard});
-    } catch {}
+    // Tayyor izoh bo'lmasa AI yozadi va keshlaydi (lib/uploadFeature.js → handleExplanation)
+    try { return await uploadFeature.handleExplanation(ctx); }
+    catch (err) { console.error('[explain]', err.message); return ctx.answerCbQuery('Xatolik.').catch(()=>{}); }
 });
 
 bot.action('buy_vip', (ctx) => {
@@ -2272,6 +2268,15 @@ bot.action('sem_add', async (ctx) => {
 // ============================================================
 // ASOSIY MATN / MEDIA HANDLER
 // ============================================================
+// ============================================================
+// 📤 TEST YUKLASH + AI (lib/uploadFeature.js)
+// ============================================================
+const isVipUser = (id) => vipUsers.includes(id) || vipUsers.includes(String(id)) || !!getDb().users[id]?.isVip;
+const uploadFeature = require('./lib/uploadFeature')(bot, {
+    DATA_DIR, getDb, saveDb, isAdmin, isVip: isVipUser, escapeHTML, shuffle, sendQuestion, showSubjectMenu, isValidName, timers,
+    isPaidModeBlocked: (id) => isBotPaidMode && !isVipUser(id) && !isAdmin(id),
+});
+
 bot.on(['text','photo','video','animation','document'], async (ctx, next) => {
     const msgText = ctx.message.text || ctx.message.caption || '';
     const userId  = ctx.from.id;
@@ -3032,6 +3037,7 @@ bot.on(['text','photo','video','animation','document'], async (ctx, next) => {
             cu.step = 'completed';
             saveDb(db);
             await ctx.reply("✅ Ro'yxatdan o'tildi!");
+            await ctx.replyWithHTML(uploadFeature.FEATURE_INTRO).catch(()=>{});
  
             // ── Referral bonus ────────────────────────────────────
             if (cu.referralBonusPending && cu.referredBy) {
