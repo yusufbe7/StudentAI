@@ -21,12 +21,26 @@ Bot ma'lumotlarni fayllarda saqlaydi. Ular yo'qolmasligi uchun bepul **Neon Post
    ```
    Bu satr maxfiy, uni hech kimga bermang.
 
-## 2-qadam. (Ixtiyoriy) Railway'dagi ma'lumotlarni ko'chirish
+## 2-qadam. (Ixtiyoriy) Railway'dagi foydalanuvchilarni ko'chirish
 
-Railway'da foydalanuvchilar, VIP'lar va testlar to'plangan bo'lsa:
-1. Railway → bot → **Variables** bo'limiga `SYNC_DATABASE_URL` = Neon satrini qo'shing.
-2. Bot qayta ishga tushadi va `/data` dagi hamma fayllarni Neon'ga yuklaydi. Logda `🗄 [pgSync] saqlandi: N ta yangilandi` chiqadi.
-3. 1–2 daqiqa kuting, keyin Railway'dagi botni **to'xtating**. Bitta bot ikki joyda ishlamasligi kerak.
+Avval shu o'zgarishlar `main` ga birlashtirilgan bo'lishi kerak, chunki Railway `main` dagi kodni ishga tushiradi. Railway'ga pul to'lash shart emas. Trial tugagan bo'lsa ham **30 kun ichida** ma'lumotni olish mumkin. 30 kundan keyin Railway uni o'chiradi.
+
+1. Railway → **Plans** (railway.com/workspace/plans) → **Free** planni tanlang. U bepul, karta talab qilinmasligi mumkin.
+2. Railway → bot servisi → **Variables** bo'limiga ikkita o'zgaruvchi qo'shing:
+   - `SYNC_DATABASE_URL` = Neon satri (Render'dagi bilan bir xil)
+   - `SYNC_MODE` = `export`
+
+   ⚠️ `SYNC_MODE=export` ni **albatta** qo'shing. Bu rejimda Railway faqat o'z ma'lumotini Neon'ga alohida joyga yuklaydi: hech narsani o'chirmaydi va botni ishga tushirmaydi, shuning uchun Render bilan to'qnashmaydi.
+3. Servisni qayta deploy qiling (**Deploy** yoki **Redeploy**). Logda shu qator chiqishi kerak:
+   ```
+   ✅ [EKSPORT] 12 ta fayl (340 KB), 857 ta foydalanuvchi → Neon "import/railway/"
+   ```
+4. Railway servisini o'chirmang. Faqat aktiv deploy'ni to'xtating: **⋯ → Remove deployment**. Volume'dagi ma'lumot zaxira bo'lib qoladi. **Remove service** ni bosmang, u volume'ni ham o'chirishi mumkin.
+5. Ma'lumotni birlashtiring, buning ikki yo'li bor:
+   - admin panel (`kairohub.pro`) → **Sozlamalar** → **Railway'dan foydalanuvchilarni ko'chirish** → **Birlashtirish**;
+   - yoki botga `/import_railway` yozing va **✅ Birlashtirish** tugmasini bosing.
+
+Birlashtirishda hech kim o'chmaydi. Ikkala joyda ham bor talabalarda ball va testlarning kattasi, VIP muddatining esa uzunrog'i saqlanadi.
 
 ## 3-qadam. Render'da bot yaratish
 

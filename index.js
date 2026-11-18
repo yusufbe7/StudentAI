@@ -2342,6 +2342,7 @@ const adminPanel = require('./lib/adminPanel')({
     clearTourDeadline: () => { if (tourDeadlineTimer) { clearTimeout(tourDeadlineTimer); tourDeadlineTimer = null; } },
     userTests: uploadFeature.store, stats, readJSON, writeJSON,
     LIMITS: uploadFeature.LIMITS, LIMIT_KEYS: uploadFeature.LIMIT_KEYS,
+    semesterForKurs,
 });
 app.use('/api/panel', adminPanel.router);
 
