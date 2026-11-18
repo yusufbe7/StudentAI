@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Power, Timer, Cpu, Gift, Save, RotateCcw, Trash2, AlertTriangle, ShieldAlert, Trophy, Users } from 'lucide-react';
+import { Power, Timer, Cpu, Gift, Save, RotateCcw, Trash2, AlertTriangle, ShieldAlert, Trophy, Users, DatabaseBackup } from 'lucide-react';
 import { Card, PageHeader, Toggle, Modal, Loading, ErrorBox, usd } from '../components/ui.jsx';
 import { useAction } from '../components/Layout.jsx';
 import { api, useApi } from '../data/api.js';
@@ -27,6 +27,44 @@ const DANGER = {
   'clear-expired-vip': { title: "Muddati o'tgan VIP'larni tozalash", text: "Muddati tugagan VIP obunalar o'chiriladi. Faol VIP'larga ta'sir qilmaydi.", icon: Trash2 },
   'reset-tournament-scores': { title: 'Musobaqa ballarini tozalash', text: 'Barcha foydalanuvchilarning musobaqa bali va "yakunladi" belgisi tozalanadi.', icon: Trophy },
 };
+
+// Eski server (Railway) ma'lumotlarini birlashtirish
+function ImportCard() {
+  const act = useAction();
+  const { data, reload } = useApi('/import');
+  const [confirm, setConfirm] = useState(false);
+  const [report, setReport] = useState(null);
+  if (!data) return null;
+  return (
+    <Card className="p-5 xl:col-span-2">
+      <div className="mb-2 flex items-center gap-2"><DatabaseBackup size={18} className="text-sky-600" /><h3 className="font-semibold">Railway'dan foydalanuvchilarni ko'chirish</h3></div>
+      {!data.available ? (
+        <p className="text-sm text-slate-600">{data.reason}</p>
+      ) : !data.ready ? (
+        <div className="space-y-1 text-sm text-slate-600">
+          <p>Railway ma'lumotlari hali yuklanmagan. Railway'da servisga ikkita o'zgaruvchi qo'shing va qayta deploy qiling:</p>
+          <p><code className="rounded bg-white/70 px-1">SYNC_DATABASE_URL</code> = Neon manzili (Render'dagi bilan bir xil), <code className="rounded bg-white/70 px-1">SYNC_MODE</code> = <code className="rounded bg-white/70 px-1">export</code></p>
+          <button className="btn-light mt-2" onClick={reload}>Qayta tekshirish</button>
+        </div>
+      ) : (
+        <div className="flex flex-wrap items-center gap-4">
+          <div className="grid flex-1 grid-cols-2 gap-2 text-center sm:grid-cols-4">
+            <div className="rounded-xl bg-white/70 p-2"><p className="text-lg font-bold">{data.oldUsers}</p><p className="text-[11px] text-slate-500">Railway'da</p></div>
+            <div className="rounded-xl bg-white/70 p-2"><p className="text-lg font-bold text-emerald-600">+{data.newUsers}</p><p className="text-[11px] text-slate-500">Yangi qo'shiladi</p></div>
+            <div className="rounded-xl bg-white/70 p-2"><p className="text-lg font-bold">{data.bothUsers}</p><p className="text-[11px] text-slate-500">Birlashtiriladi</p></div>
+            <div className="rounded-xl bg-white/70 p-2"><p className="text-lg font-bold">{data.currentUsers}</p><p className="text-[11px] text-slate-500">Hozir botda</p></div>
+          </div>
+          <button className="btn-dark" onClick={() => setConfirm(true)}><DatabaseBackup size={16} /> Birlashtirish</button>
+        </div>
+      )}
+      {report && <p className="mt-3 rounded-xl bg-emerald-500/10 p-3 text-sm text-emerald-800">✅ +{report.usersAdded} yangi, {report.usersMerged} birlashtirildi. Jami: {report.usersTotal} ta foydalanuvchi.</p>}
+      <Modal open={confirm} onClose={() => setConfirm(false)} title="Railway ma'lumotlarini birlashtirish"
+        footer={<><button className="btn-light" onClick={() => setConfirm(false)}>Bekor qilish</button><button className="btn-dark" onClick={() => act(() => api('/import/merge', { method: 'POST' }), '✅ Birlashtirildi').then((r) => { setConfirm(false); if (r) { setReport(r.report); reload(); } })}>Tasdiqlayman</button></>}>
+        <p className="text-sm">Hech kim o'chirilmaydi. Ikkala joyda ham bor talabalarda ball va testlar — kattasi, VIP — uzoqrog'i saqlanadi. Qayta bosilsa takrorlanmaydi.</p>
+      </Modal>
+    </Card>
+  );
+}
 
 function Section({ icon: Icon, title, children }) {
   return (
@@ -102,6 +140,8 @@ export default function SettingsPage() {
             ))}
           </div>
         </Section>
+
+        <ImportCard />
 
         <Card className="border-rose-300/70 p-5 xl:col-span-2">
           <div className="mb-3 flex items-center gap-2"><ShieldAlert size={18} className="text-rose-600" /><h3 className="font-semibold text-rose-700">Xavfli amallar</h3></div>

@@ -50,20 +50,55 @@ async function main() {
     const sync = createPgSync({ dataDir: process.env.DATA_DIR, pool });
 
     console.log(`🗄 [pgSync] Bazaga ulanmoqda: ${describeUrl(url)} ...`);
-    let lastErr;
-    for (let attempt = 1; attempt <= 3; attempt++) {
-        try {
-            await sync.restore();
-            lastErr = null;
-            break;
-        } catch (e) {
-            lastErr = e;
-            console.error(`🗄 [pgSync] ${attempt}/3 urinish muvaffaqiyatsiz: ${e.message}`);
-            if (attempt < 3) await sleep(5000);
+    const mode = String(process.env.SYNC_MODE || '').trim().toLowerCase();
+    const withRetry = async (fn) => {
+        let lastErr;
+        for (let attempt = 1; attempt <= 3; attempt++) {
+            try { return await fn(); } catch (e) {
+                lastErr = e;
+                console.error(`🗄 [pgSync] ${attempt}/3 urinish muvaffaqiyatsiz: ${e.message}`);
+                if (attempt < 3) await sleep(5000);
+            }
+        }
+        throw lastErr;
+    };
+
+    // ── EKSPORT: eski serverdagi (masalan Railway /data) ma'lumotlarni Neon'ga
+    //    alohida joyga yuklash. Hech narsa tiklanmaydi va o'chirilmaydi, bot ishga tushmaydi.
+    if (mode === 'export') {
+        const { IMPORT_PREFIX } = require('./lib/pgSync');
+        const source = (process.env.EXPORT_NAME || 'railway').replace(/[^a-z0-9_-]/gi, '') || 'railway';
+        const prefix = `${IMPORT_PREFIX}${source}/`;
+        const r = await withRetry(() => sync.exportAll(prefix));
+        let users = 0;
+        try { users = Object.keys(JSON.parse(fs.readFileSync(path.join(process.env.DATA_DIR, 'ranking_db.json'), 'utf8')).users || {}).length; } catch { /* yo'q */ }
+        console.log(`✅ [EKSPORT] ${r.files} ta fayl (${(r.bytes / 1024).toFixed(0)} KB), ${users} ta foydalanuvchi → Neon "${prefix}"`);
+        console.log("✅ [EKSPORT] Tayyor. Endi bu servisni to'xtating va Render'dagi admin panelda (yoki botda /import_railway) birlashtiring.");
+        await pool.end().catch(() => {});
+        // Bot ishga tushmaydi (Render'dagi bot bilan to'qnashmasligi uchun); servis qayta-qayta ishga tushmasin deb kutib turadi
+        setInterval(() => {}, 1 << 30);
+        return;
+    }
+
+    // ── HIMOYA: diskda allaqachon ma'lumot bo'lsa (masalan Railway Volume) va bazada ham bo'lsa —
+    //    ustidan yozib yubormaymiz. Bilib turib tiklash kerak bo'lsa: SYNC_MODE=restore
+    const localDb = path.join(process.env.DATA_DIR, 'ranking_db.json');
+    let localUsers = 0;
+    try { localUsers = Object.keys(JSON.parse(fs.readFileSync(localDb, 'utf8')).users || {}).length; } catch { /* yo'q */ }
+    if (localUsers > 0 && mode !== 'restore') {
+        const live = await withRetry(() => sync.countLive());
+        if (live > 0) {
+            throw new Error(
+                `Diskda ${localUsers} ta foydalanuvchi bor, bazada ham ma'lumot bor — ustidan yozilmadi (ma'lumot yo'qolmasligi uchun).\n` +
+                "   Eski ma'lumotni ko'chirish uchun: SYNC_MODE=export qo'shing (Render'da birlashtiriladi).\n" +
+                "   Bazadagini diskka yozish kerak bo'lsa (ehtiyot bo'ling!): SYNC_MODE=restore",
+            );
         }
     }
-    if (lastErr) throw lastErr;
 
+    await withRetry(() => sync.restore());
+
+    global.__pgSync = sync; // admin panel: Railway importini birlashtirish uchun
     require('./index.js');
     sync.start();
     global.__beforeExit = (sig) => sync.stop(sig);
